@@ -1,7 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.linguanodon.com/api'
+const API_URL = import.meta.env.VITE_API_URL 
 
 export async function getLearningGoalsForLanguage(
-  languageCode: string = 'arz',
+  languageCode: string = 'ar-EG',
   page: number = 1,
   pageSize: number = 10
 ) {
