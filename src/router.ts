@@ -1,19 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ListOfLearningGoals from './modules/learning-goals/ListOfLearningGoals.vue'
-import ShowLearningGoal from './modules/learning-goals/ShowLearningGoal.vue'
+import SelfLearning from './modules/self-learning/SelfLearning.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/debug/learning-goals',
-      name: 'learning-goals',
-      component: ListOfLearningGoals
-    },
-    {
-      path: '/debug/learning-goals/:id',
-      name: 'learning-goal-detail',
-      component: ShowLearningGoal
+      path: '/debug/self-learning',
+      name: 'self-learning',
+      component: SelfLearning
     }
   ]
 })
