@@ -4,7 +4,22 @@ import type { LearningGoal, UnitOfMeaning, Exercise } from '@/types/learning'
 import { useExerciseGenerator } from '@/composables/useExerciseGenerator'
 
 // Create database instance with IndexedDB adapter
-const db = new PouchDB('linguanodon-learning', { adapter: 'idb' })
+const db = new PouchDB('linguanodon-learning', { 
+  adapter: 'idb',
+  auto_compaction: true
+})
+
+// Enable PouchDB debugging
+if (process.env.NODE_ENV === 'development') {
+  (window as any).PouchDB = PouchDB
+  // Debug database info
+  db.info().then(info => {
+    console.log('Database info:', info)
+  }).catch(err => {
+    console.error('Failed to get database info:', err)
+  })
+}
+
 const exerciseGenerator = useExerciseGenerator()
 
 // Type guard to ensure document has required PouchDB fields
@@ -19,7 +34,8 @@ export const useLearningStore = defineStore('learning', {
     currentGoal: null as LearningGoal | null,
     goals: [] as LearningGoal[],
     unitsOfMeaning: [] as UnitOfMeaning[],
-    exercises: [] as Exercise[]
+    exercises: [] as Exercise[],
+    isInitialized: false
   }),
 
   getters: {
@@ -30,46 +46,106 @@ export const useLearningStore = defineStore('learning', {
 
   actions: {
     async init() {
+      if (this.isInitialized) return
+
       try {
-        // Use allDocs instead of find for initial queries
-        const goals = await db.allDocs({
-          include_docs: true,
-          startkey: 'learning_goal',
-          endkey: 'learning_goal\ufff0'
-        })
-        this.goals = goals.rows
-          .filter(row => row.doc && hasPouchDBFields(row.doc))
+        console.log('Initializing store...')
+        
+        // Debug: List all documents
+        const allDocs = await db.allDocs({ include_docs: true })
+        console.log('All documents in database:', allDocs.rows.map(row => ({
+          id: row.id,
+          doc: row.doc ? {
+            type: (row.doc as any).type,
+            deleted: (row.doc as any)._deleted
+          } : null
+        })))
+
+        // Load all documents and filter by type
+        const goals = allDocs.rows
+          .filter(row => row.doc && (row.doc as any).type === 'learning_goal')
           .map(row => row.doc as LearningGoal)
+        console.log('Loaded goals:', goals.length)
+        console.log('Goal documents:', goals)
+        this.goals = goals
 
-        const units = await db.allDocs({
-          include_docs: true,
-          startkey: 'unit_of_meaning',
-          endkey: 'unit_of_meaning\ufff0'
-        })
-        this.unitsOfMeaning = units.rows
-          .filter(row => row.doc && hasPouchDBFields(row.doc))
+        const units = allDocs.rows
+          .filter(row => row.doc && (row.doc as any).type === 'unit_of_meaning')
           .map(row => row.doc as UnitOfMeaning)
+        console.log('Loaded units:', units.length)
+        console.log('Unit documents:', units)
+        this.unitsOfMeaning = units
 
-        const exercises = await db.allDocs({
-          include_docs: true,
-          startkey: 'exercise',
-          endkey: 'exercise\ufff0'
-        })
-        this.exercises = exercises.rows
-          .filter(row => row.doc && hasPouchDBFields(row.doc))
+        const exercises = allDocs.rows
+          .filter(row => row.doc && (row.doc as any).type === 'exercise')
           .map(row => row.doc as Exercise)
+        console.log('Loaded exercises:', exercises.length)
+        console.log('Exercise documents:', exercises)
+        this.exercises = exercises
+
+        // Set up change listener
+        db.changes({
+          since: 'now',
+          live: true,
+          include_docs: true
+        }).on('change', (change) => {
+          console.log('Database change:', change)
+          if (!change.doc) return
+          
+          const doc = change.doc as any
+          if (doc.type === 'learning_goal') {
+            if (change.deleted) {
+              this.goals = this.goals.filter(g => g._id !== doc._id)
+            } else if (hasPouchDBFields(doc)) {
+              const index = this.goals.findIndex(g => g._id === doc._id)
+              if (index === -1) {
+                this.goals.push(doc as LearningGoal)
+              } else {
+                this.goals[index] = doc as LearningGoal
+              }
+            }
+          } else if (doc.type === 'unit_of_meaning') {
+            if (change.deleted) {
+              this.unitsOfMeaning = this.unitsOfMeaning.filter(u => u._id !== doc._id)
+            } else if (hasPouchDBFields(doc)) {
+              const index = this.unitsOfMeaning.findIndex(u => u._id === doc._id)
+              if (index === -1) {
+                this.unitsOfMeaning.push(doc as UnitOfMeaning)
+              } else {
+                this.unitsOfMeaning[index] = doc as UnitOfMeaning
+              }
+            }
+          } else if (doc.type === 'exercise') {
+            if (change.deleted) {
+              this.exercises = this.exercises.filter(e => e._id !== doc._id)
+            } else if (hasPouchDBFields(doc)) {
+              const index = this.exercises.findIndex(e => e._id === doc._id)
+              if (index === -1) {
+                this.exercises.push(doc as Exercise)
+              } else {
+                this.exercises[index] = doc as Exercise
+              }
+            }
+          }
+        })
+
+        this.isInitialized = true
+        console.log('Store initialized successfully')
       } catch (error) {
         console.error('Failed to initialize store:', error)
+        throw error
       }
     },
 
     async createGoal(goal: Omit<LearningGoal, '_id' | '_rev'>) {
       try {
+        console.log('Creating goal:', goal)
         const doc = await db.post({
           ...goal,
           type: 'learning_goal',
           parentIds: goal.parentIds || []
         })
+        console.log('Created goal document:', doc)
         const newGoal = { ...goal, _id: doc.id, _rev: doc.rev } as LearningGoal
         this.goals.push(newGoal)
         return newGoal
