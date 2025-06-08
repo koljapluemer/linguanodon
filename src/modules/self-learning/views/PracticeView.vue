@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLearningStore } from '@/stores/learning'
-import type { Exercise, ExerciseFlashcard, ExerciseCloze, ExerciseFindTranslation } from '@/types/learning'
+import type { Exercise } from '@/types/learning'
 
 const route = useRoute()
 const router = useRouter()
@@ -13,37 +13,37 @@ const parentGoal = computed(() =>
 )
 
 const exercises = computed(() => {
-  const subGoals = store.subGoals.filter(sg => sg.parentId === route.params.goalId)
+  // Get all child goals
+  const childGoals = store.childGoals(route.params.goalId as string)
+  const allGoalIds = [route.params.goalId as string, ...childGoals.map(g => g._id)]
+  
+  // Get all units for these goals
   const units = store.unitsOfMeaning.filter(u => 
-    subGoals.some(sg => sg._id === u.subGoalId)
+    allGoalIds.includes(u.subGoalId)
   )
+  
+  // Get all exercises for these units
   return store.exercises.filter(e => 
-    units.some(u => u._id === e.unitId) && !e.done
+    units.some(u => u._id === e.unitId)
   )
 })
 
 const currentExercise = ref<Exercise | null>(null)
 const showAnswer = ref(false)
 const exerciseCount = ref(0)
-const totalExercises = ref(5)
+const totalExercises = computed(() => exercises.value.length)
 
 const handleNext = async () => {
-  if (!currentExercise.value) return
+  if (!currentExercise.value?._id) return
   
   try {
     await store.markExerciseDone(currentExercise.value._id)
     exerciseCount.value++
     
-    if (exerciseCount.value >= totalExercises.value) {
+    if (exerciseCount.value >= 5) {
       router.push({ name: 'random-goal' })
     } else {
-      const remainingExercises = exercises.value.filter(e => e._id !== currentExercise.value!._id)
-      if (remainingExercises.length > 0) {
-        currentExercise.value = remainingExercises[Math.floor(Math.random() * remainingExercises.length)]
-        showAnswer.value = false
-      } else {
-        router.push({ name: 'random-goal' })
-      }
+      loadRandomExercise()
     }
   } catch (error) {
     console.error('Failed to mark exercise as done:', error)
@@ -52,41 +52,34 @@ const handleNext = async () => {
 
 const handleNotNow = () => {
   exerciseCount.value++
-  
-  if (exerciseCount.value >= totalExercises.value) {
+  if (exerciseCount.value >= 5) {
     router.push({ name: 'random-goal' })
   } else {
-    const remainingExercises = exercises.value.filter(e => e._id !== currentExercise.value!._id)
-    if (remainingExercises.length > 0) {
-      currentExercise.value = remainingExercises[Math.floor(Math.random() * remainingExercises.length)]
-      showAnswer.value = false
-    } else {
-      router.push({ name: 'random-goal' })
-    }
+    loadRandomExercise()
   }
 }
 
 const handleDelete = async () => {
-  if (!currentExercise.value) return
+  if (!currentExercise.value?._id) return
   
   try {
     await store.deleteExercise(currentExercise.value._id)
-    exerciseCount.value++
-    
-    if (exerciseCount.value >= totalExercises.value) {
-      router.push({ name: 'random-goal' })
-    } else {
-      const remainingExercises = exercises.value.filter(e => e._id !== currentExercise.value!._id)
-      if (remainingExercises.length > 0) {
-        currentExercise.value = remainingExercises[Math.floor(Math.random() * remainingExercises.length)]
-        showAnswer.value = false
-      } else {
-        router.push({ name: 'random-goal' })
-      }
-    }
+    loadRandomExercise()
   } catch (error) {
     console.error('Failed to delete exercise:', error)
   }
+}
+
+const loadRandomExercise = () => {
+  const availableExercises = exercises.value.filter(e => !e.done)
+  if (availableExercises.length === 0) {
+    router.push({ name: 'random-goal' })
+    return
+  }
+  
+  const randomIndex = Math.floor(Math.random() * availableExercises.length)
+  currentExercise.value = availableExercises[randomIndex]
+  showAnswer.value = false
 }
 
 onMounted(() => {
@@ -95,107 +88,79 @@ onMounted(() => {
     return
   }
   
-  if (exercises.value.length === 0) {
-    router.push({ name: 'random-goal' })
-    return
-  }
-  
-  currentExercise.value = exercises.value[Math.floor(Math.random() * exercises.value.length)]
+  loadRandomExercise()
 })
 </script>
 
 <template>
   <div class="practice-view">
-    <div class="header">
-      <div class="parent-info">
-        <h2>Practice</h2>
-        <div class="breadcrumb">
-          <span>{{ parentGoal?.title }}</span>
-        </div>
+    <div class="progress">
+      <div class="progress-bar">
+        <div 
+          class="progress-fill"
+          :style="{ width: `${(exerciseCount / totalExercises) * 100}%` }"
+        ></div>
       </div>
-      <div class="progress">
-        <div class="progress-text">
-          Exercise {{ exerciseCount + 1 }} of {{ totalExercises }}
-        </div>
-        <div class="progress-bar">
-          <div 
-            class="progress-fill"
-            :style="{ width: `${((exerciseCount + 1) / totalExercises) * 100}%` }"
-          ></div>
-        </div>
-      </div>
+      <p class="progress-text">
+        Exercise {{ exerciseCount + 1 }} of {{ totalExercises }}
+      </p>
     </div>
     
     <div v-if="currentExercise" class="exercise-card">
       <div class="exercise-content">
         <h3>{{ currentExercise.instruction }}</h3>
         
-        <!-- Flashcard Exercise -->
-        <div v-if="currentExercise.exerciseType === 'FLASHCARD'" class="flashcard">
-          <div class="flashcard-front">
-            {{ (currentExercise as ExerciseFlashcard).front }}
+        <div v-if="currentExercise.exerciseType === 'flashcard'" class="flashcard">
+          <div class="front">
+            {{ (currentExercise as any).front }}
           </div>
-          <div v-if="showAnswer" class="flashcard-back">
-            {{ (currentExercise as ExerciseFlashcard).back }}
+          <div v-if="showAnswer" class="back">
+            {{ (currentExercise as any).back }}
           </div>
+          <button 
+            v-if="!showAnswer" 
+            @click="showAnswer = true"
+            class="reveal-button"
+          >
+            Reveal Answer
+          </button>
         </div>
         
-        <!-- Cloze Exercise -->
-        <div v-else-if="currentExercise.exerciseType === 'CLOZE'" class="cloze">
-          <div class="cloze-content">
-            {{ (currentExercise as ExerciseCloze).content }}
-          </div>
+        <div v-else-if="currentExercise.exerciseType === 'cloze'" class="cloze">
+          {{ (currentExercise as any).content }}
         </div>
         
-        <!-- Find Translation Exercise -->
-        <div v-else-if="currentExercise.exerciseType === 'FIND_TRANSLATION'" class="find-translation">
-          <div class="target-language">
-            {{ (currentExercise as ExerciseFindTranslation).targetLanguage }}
+        <div v-else-if="currentExercise.exerciseType === 'find_translation'" class="find-translation">
+          <div v-if="(currentExercise as any).targetLanguage">
+            Find the translation for: {{ (currentExercise as any).targetLanguage }}
           </div>
-          <div v-if="showAnswer" class="translation">
-            {{ (currentExercise as ExerciseFindTranslation).translation }}
+          <div v-else>
+            Find the target language for: {{ (currentExercise as any).translation }}
           </div>
         </div>
       </div>
       
       <div class="exercise-actions">
-        <template v-if="currentExercise.exerciseType === 'FLASHCARD'">
-          <button
-            v-if="!showAnswer"
-            @click="showAnswer = true"
-            class="action-button reveal"
-          >
-            Reveal Answer
-          </button>
-          <button
-            v-else
-            @click="handleNext"
-            class="action-button next"
-          >
-            Next Exercise
-          </button>
-        </template>
-        
-        <template v-else>
-          <button
-            v-if="!showAnswer"
-            @click="showAnswer = true"
-            class="action-button reveal"
-          >
-            Show Answer
-          </button>
-          <template v-else>
-            <button @click="handleNext" class="action-button done">
-              Done
-            </button>
-            <button @click="handleNotNow" class="action-button not-now">
-              Not Now
-            </button>
-            <button @click="handleDelete" class="action-button delete">
-              Delete
-            </button>
-          </template>
-        </template>
+        <button 
+          v-if="showAnswer || currentExercise.exerciseType !== 'flashcard'"
+          @click="handleNext"
+          class="action-button next"
+        >
+          Next
+        </button>
+        <button 
+          v-if="showAnswer || currentExercise.exerciseType !== 'flashcard'"
+          @click="handleNotNow"
+          class="action-button not-now"
+        >
+          Not Now
+        </button>
+        <button 
+          @click="handleDelete"
+          class="action-button delete"
+        >
+          Delete
+        </button>
       </div>
     </div>
     
@@ -210,63 +175,38 @@ onMounted(() => {
 
 <style scoped>
 .practice-view {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.progress {
   margin-bottom: 2rem;
 }
 
-.parent-info {
-  flex: 1;
-}
-
-.parent-info h2 {
-  margin: 0 0 0.5rem 0;
-}
-
-.breadcrumb {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.progress {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
-
-.progress-text {
-  background: #e3f2fd;
-  color: #1976D2;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-}
-
 .progress-bar {
-  width: 200px;
-  height: 4px;
-  background: #e3f2fd;
-  border-radius: 2px;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
   overflow: hidden;
+  margin-bottom: 0.5rem;
 }
 
 .progress-fill {
   height: 100%;
-  background: #1976D2;
+  background: #4CAF50;
   transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: center;
+  color: #666;
+  margin: 0;
 }
 
 .exercise-card {
   background: white;
-  padding: 2rem;
   border-radius: 8px;
+  padding: 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -276,53 +216,45 @@ onMounted(() => {
 
 .exercise-content h3 {
   margin: 0 0 1rem 0;
-  color: #666;
-  font-size: 1.1rem;
+  color: #333;
 }
 
 .flashcard {
-  background: #f5f5f5;
-  padding: 2rem;
-  border-radius: 8px;
   text-align: center;
-  font-size: 1.5rem;
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.flashcard-back {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #ddd;
-  color: #666;
+.front,
+.back {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.reveal-button {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.reveal-button:hover {
+  background: #1976D2;
 }
 
 .cloze {
-  background: #f5f5f5;
-  padding: 2rem;
-  border-radius: 8px;
   font-size: 1.2rem;
   line-height: 1.6;
   white-space: pre-wrap;
 }
 
 .find-translation {
-  background: #f5f5f5;
-  padding: 2rem;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.target-language {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.translation {
-  color: #666;
   font-size: 1.2rem;
+  line-height: 1.6;
 }
 
 .exercise-actions {
@@ -339,30 +271,12 @@ onMounted(() => {
   font-size: 1rem;
 }
 
-.reveal {
-  background: #2196F3;
-  color: white;
-}
-
-.reveal:hover {
-  background: #1976D2;
-}
-
 .next {
   background: #4CAF50;
   color: white;
 }
 
 .next:hover {
-  background: #45a049;
-}
-
-.done {
-  background: #4CAF50;
-  color: white;
-}
-
-.done:hover {
   background: #45a049;
 }
 
