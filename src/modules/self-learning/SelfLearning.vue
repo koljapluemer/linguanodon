@@ -14,8 +14,8 @@ onMounted(() => {
     <header class="header">
       <h1>Self Learning Mode</h1>
       <nav class="nav">
-        <router-link to="/debug/self-learning" class="nav-link">Goals</router-link>
-        <router-link to="/debug/self-learning/random" class="nav-link">Practice</router-link>
+        <router-link :to="{ name: 'goals' }" class="nav-link">Goals</router-link>
+        <router-link :to="{ name: 'random-goal' }" class="nav-link">Practice</router-link>
       </nav>
     </header>
     

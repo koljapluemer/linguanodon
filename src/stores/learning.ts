@@ -1,21 +1,32 @@
 import { defineStore } from 'pinia'
 import PouchDB from 'pouchdb/dist/pouchdb'
-import type { LearningGoal, SubGoal, UnitOfMeaning, Exercise } from '@/types/learning'
+import type { LearningGoal, UnitOfMeaning, Exercise } from '@/types/learning'
 import { useExerciseGenerator } from '@/composables/useExerciseGenerator'
 
-// Create database instance
-const db = new PouchDB('linguanodon-learning')
+// Create database instance with IndexedDB adapter
+const db = new PouchDB('linguanodon-learning', { adapter: 'idb' })
 const exerciseGenerator = useExerciseGenerator()
+
+// Type guard to ensure document has required PouchDB fields
+function hasPouchDBFields<T extends { _id?: string; _rev?: string }>(
+  doc: T
+): doc is T & { _id: string; _rev: string } {
+  return typeof doc._id === 'string' && typeof doc._rev === 'string'
+}
 
 export const useLearningStore = defineStore('learning', {
   state: () => ({
     currentGoal: null as LearningGoal | null,
-    currentSubGoal: null as SubGoal | null,
     goals: [] as LearningGoal[],
-    subGoals: [] as SubGoal[],
     unitsOfMeaning: [] as UnitOfMeaning[],
     exercises: [] as Exercise[]
   }),
+
+  getters: {
+    mainGoals: (state) => state.goals.filter(g => !g.parentIds || g.parentIds.length === 0),
+    childGoals: (state) => (parentId: string) => 
+      state.goals.filter(g => g.parentIds?.includes(parentId))
+  },
 
   actions: {
     async init() {
@@ -26,28 +37,27 @@ export const useLearningStore = defineStore('learning', {
           startkey: 'learning_goal',
           endkey: 'learning_goal\ufff0'
         })
-        this.goals = goals.rows.map((row: { doc: LearningGoal }) => row.doc)
-
-        const subGoals = await db.allDocs({
-          include_docs: true,
-          startkey: 'sub_goal',
-          endkey: 'sub_goal\ufff0'
-        })
-        this.subGoals = subGoals.rows.map((row: { doc: SubGoal }) => row.doc)
+        this.goals = goals.rows
+          .filter(row => row.doc && hasPouchDBFields(row.doc))
+          .map(row => row.doc as LearningGoal)
 
         const units = await db.allDocs({
           include_docs: true,
           startkey: 'unit_of_meaning',
           endkey: 'unit_of_meaning\ufff0'
         })
-        this.unitsOfMeaning = units.rows.map((row: { doc: UnitOfMeaning }) => row.doc)
+        this.unitsOfMeaning = units.rows
+          .filter(row => row.doc && hasPouchDBFields(row.doc))
+          .map(row => row.doc as UnitOfMeaning)
 
         const exercises = await db.allDocs({
           include_docs: true,
           startkey: 'exercise',
           endkey: 'exercise\ufff0'
         })
-        this.exercises = exercises.rows.map((row: { doc: Exercise }) => row.doc)
+        this.exercises = exercises.rows
+          .filter(row => row.doc && hasPouchDBFields(row.doc))
+          .map(row => row.doc as Exercise)
       } catch (error) {
         console.error('Failed to initialize store:', error)
       }
@@ -57,28 +67,14 @@ export const useLearningStore = defineStore('learning', {
       try {
         const doc = await db.post({
           ...goal,
-          type: 'learning_goal'
+          type: 'learning_goal',
+          parentIds: goal.parentIds || []
         })
         const newGoal = { ...goal, _id: doc.id, _rev: doc.rev } as LearningGoal
         this.goals.push(newGoal)
         return newGoal
       } catch (error) {
         console.error('Failed to create goal:', error)
-        throw error
-      }
-    },
-
-    async createSubGoal(subGoal: Omit<SubGoal, '_id' | '_rev'>) {
-      try {
-        const doc = await db.post({
-          ...subGoal,
-          type: 'sub_goal'
-        })
-        const newSubGoal = { ...subGoal, _id: doc.id, _rev: doc.rev } as SubGoal
-        this.subGoals.push(newSubGoal)
-        return newSubGoal
-      } catch (error) {
-        console.error('Failed to create subgoal:', error)
         throw error
       }
     },
@@ -123,7 +119,9 @@ export const useLearningStore = defineStore('learning', {
     async deleteExercise(exerciseId: string) {
       try {
         const exercise = this.exercises.find(e => e._id === exerciseId)
-        if (!exercise) throw new Error('Exercise not found')
+        if (!exercise || !hasPouchDBFields(exercise)) {
+          throw new Error('Exercise not found or invalid')
+        }
         
         await db.remove(exercise)
         this.exercises = this.exercises.filter(e => e._id !== exerciseId)
@@ -136,12 +134,16 @@ export const useLearningStore = defineStore('learning', {
     async deleteUnitOfMeaning(unitId: string) {
       try {
         const unit = this.unitsOfMeaning.find(u => u._id === unitId)
-        if (!unit) throw new Error('Unit of meaning not found')
+        if (!unit || !hasPouchDBFields(unit)) {
+          throw new Error('Unit of meaning not found or invalid')
+        }
         
         // Delete all associated exercises first
         const exercises = this.getExercisesForUnit(unitId)
         for (const exercise of exercises) {
-          await this.deleteExercise(exercise._id!)
+          if (hasPouchDBFields(exercise)) {
+            await this.deleteExercise(exercise._id)
+          }
         }
         
         await db.remove(unit)
@@ -152,34 +154,27 @@ export const useLearningStore = defineStore('learning', {
       }
     },
 
-    async deleteSubGoal(subGoalId: string) {
-      try {
-        const subGoal = this.subGoals.find(sg => sg._id === subGoalId)
-        if (!subGoal) throw new Error('Subgoal not found')
-        
-        // Delete all associated units and their exercises
-        const units = this.unitsOfMeaning.filter(u => u.subGoalId === subGoalId)
-        for (const unit of units) {
-          await this.deleteUnitOfMeaning(unit._id!)
-        }
-        
-        await db.remove(subGoal)
-        this.subGoals = this.subGoals.filter(sg => sg._id !== subGoalId)
-      } catch (error) {
-        console.error('Failed to delete subgoal:', error)
-        throw error
-      }
-    },
-
     async deleteGoal(goalId: string) {
       try {
         const goal = this.goals.find(g => g._id === goalId)
-        if (!goal) throw new Error('Goal not found')
+        if (!goal || !hasPouchDBFields(goal)) {
+          throw new Error('Goal not found or invalid')
+        }
         
-        // Delete all associated subgoals, units, and exercises
-        const subGoals = this.subGoals.filter(sg => sg.parentId === goalId)
-        for (const subGoal of subGoals) {
-          await this.deleteSubGoal(subGoal._id!)
+        // Delete all child goals first
+        const childGoals = this.goals.filter(g => g.parentIds?.includes(goalId))
+        for (const childGoal of childGoals) {
+          if (hasPouchDBFields(childGoal)) {
+            await this.deleteGoal(childGoal._id)
+          }
+        }
+        
+        // Delete all associated units and their exercises
+        const units = this.unitsOfMeaning.filter(u => u.subGoalId === goalId)
+        for (const unit of units) {
+          if (hasPouchDBFields(unit)) {
+            await this.deleteUnitOfMeaning(unit._id)
+          }
         }
         
         await db.remove(goal)
@@ -193,7 +188,9 @@ export const useLearningStore = defineStore('learning', {
     async markExerciseDone(exerciseId: string) {
       try {
         const exercise = this.exercises.find(e => e._id === exerciseId)
-        if (!exercise) throw new Error('Exercise not found')
+        if (!exercise || !hasPouchDBFields(exercise)) {
+          throw new Error('Exercise not found or invalid')
+        }
         
         const updatedExercise = { ...exercise, done: true }
         await db.put(updatedExercise)
@@ -210,8 +207,8 @@ export const useLearningStore = defineStore('learning', {
       return this.exercises.filter(e => e.unitId === unitId)
     },
 
-    getExercisesForSubGoal(subGoalId: string) {
-      const units = this.unitsOfMeaning.filter(u => u.subGoalId === subGoalId)
+    getExercisesForGoal(goalId: string) {
+      const units = this.unitsOfMeaning.filter(u => u.subGoalId === goalId)
       return this.exercises.filter(e => 
         units.some(u => u._id === e.unitId)
       )

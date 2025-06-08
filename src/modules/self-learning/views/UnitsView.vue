@@ -1,23 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLearningStore } from '@/stores/learning'
-import type { UnitOfMeaning } from '@/types/learning'
+import type { UnitOfMeaning, LearningGoal } from '@/types/learning'
 
 const route = useRoute()
 const router = useRouter()
 const store = useLearningStore()
 
-const parentSubGoal = computed(() => 
-  store.subGoals.find(sg => sg._id === route.params.subGoalId)
-)
+const parentId = computed(() => route.params.subGoalId as string)
+const parentGoal = computed(() => store.goals.find(g => g._id === parentId.value))
 
-const parentGoal = computed(() => 
-  parentSubGoal.value ? store.goals.find(g => g._id === parentSubGoal.value!.parentId) : null
-)
+const parentTitle = computed(() => parentGoal.value?.title || '')
 
 const units = computed(() => 
-  store.unitsOfMeaning.filter(u => u.subGoalId === route.params.subGoalId)
+  store.unitsOfMeaning.filter(u => u.subGoalId === parentId.value)
 )
 
 const newUnit = ref({
@@ -26,13 +23,13 @@ const newUnit = ref({
 })
 
 const handleSubmit = async () => {
-  if (!newUnit.value.targetLanguage.trim() && !newUnit.value.translation.trim()) return
+  if (!newUnit.value.targetLanguage && !newUnit.value.translation) return
   
   try {
     await store.createUnitOfMeaning({
+      subGoalId: parentId.value,
       targetLanguage: newUnit.value.targetLanguage,
       translation: newUnit.value.translation,
-      subGoalId: route.params.subGoalId as string,
       type: 'unit_of_meaning'
     })
     newUnit.value = { targetLanguage: '', translation: '' }
@@ -41,16 +38,16 @@ const handleSubmit = async () => {
   }
 }
 
-const handleDelete = async (unit: UnitOfMeaning) => {
+const handleDelete = async (unitId: string) => {
   try {
-    await store.deleteUnitOfMeaning(unit._id)
+    await store.deleteUnitOfMeaning(unitId)
   } catch (error) {
     console.error('Failed to delete unit of meaning:', error)
   }
 }
 
 onMounted(() => {
-  if (!parentSubGoal.value) {
+  if (!parentGoal.value) {
     router.push({ name: 'goals' })
   }
 })
@@ -59,17 +56,8 @@ onMounted(() => {
 <template>
   <div class="units-view">
     <div class="header">
-      <div class="parent-info">
-        <h2>Learning Units</h2>
-        <div class="breadcrumb">
-          <span>{{ parentGoal?.title }}</span>
-          <span class="separator">›</span>
-          <span>{{ parentSubGoal?.title }}</span>
-        </div>
-      </div>
-      <button @click="router.push({ name: 'subgoals', params: { goalId: parentGoal?._id } })" class="back-button">
-        Back to Subgoals
-      </button>
+      <h2>Units of Meaning</h2>
+      <p class="parent-title">for {{ parentTitle }}</p>
     </div>
     
     <form @submit.prevent="handleSubmit" class="unit-form">
@@ -79,7 +67,7 @@ onMounted(() => {
           id="targetLanguage"
           v-model="newUnit.targetLanguage"
           type="text"
-          placeholder="Enter word or phrase in target language"
+          placeholder="Enter target language text..."
         />
       </div>
       
@@ -89,13 +77,11 @@ onMounted(() => {
           id="translation"
           v-model="newUnit.translation"
           type="text"
-          placeholder="Enter translation in your language"
+          placeholder="Enter translation..."
         />
       </div>
       
-      <p class="form-hint">
-        Note: You can fill in either or both fields. Each field will generate appropriate exercises.
-      </p>
+      <p class="hint">Note: You can fill in either or both fields</p>
       
       <button type="submit" class="submit-button">Add Unit</button>
     </form>
@@ -103,16 +89,16 @@ onMounted(() => {
     <div class="units-list">
       <div v-for="unit in units" :key="unit._id" class="unit-card">
         <div class="unit-content">
-          <div class="unit-field">
+          <div v-if="unit.targetLanguage" class="target-language">
             <span class="flag">🇪🇬</span>
-            <span class="text">{{ unit.targetLanguage }}</span>
+            {{ unit.targetLanguage }}
           </div>
-          <div class="unit-field">
+          <div v-if="unit.translation" class="translation">
             <span class="flag">🇬🇧</span>
-            <span class="text">{{ unit.translation }}</span>
+            {{ unit.translation }}
           </div>
         </div>
-        <button @click="handleDelete(unit)" class="delete-button">
+        <button @click="handleDelete(unit._id)" class="delete-button">
           Delete
         </button>
       </div>
@@ -127,43 +113,13 @@ onMounted(() => {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
-.parent-info {
-  flex: 1;
-}
-
-.parent-info h2 {
-  margin: 0 0 0.5rem 0;
-}
-
-.breadcrumb {
+.parent-title {
   color: #666;
-  font-size: 0.9rem;
-}
-
-.separator {
-  margin: 0 0.5rem;
-  color: #999;
-}
-
-.back-button {
-  background: #9e9e9e;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-left: 1rem;
-}
-
-.back-button:hover {
-  background: #757575;
+  margin-top: 0.5rem;
 }
 
 .unit-form {
@@ -192,10 +148,10 @@ onMounted(() => {
   font-size: 1rem;
 }
 
-.form-hint {
+.hint {
   color: #666;
   font-size: 0.9rem;
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 }
 
 .submit-button {
@@ -230,23 +186,16 @@ onMounted(() => {
 
 .unit-content {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
-.unit-field {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.target-language,
+.translation {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
 }
 
 .flag {
-  font-size: 1.2rem;
-}
-
-.text {
-  color: #333;
+  margin-right: 0.5rem;
 }
 
 .delete-button {
@@ -257,7 +206,6 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
-  margin-left: 1rem;
 }
 
 .delete-button:hover {

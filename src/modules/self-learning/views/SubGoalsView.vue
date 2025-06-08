@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLearningStore } from '@/stores/learning'
-import type { SubGoal } from '@/types/learning'
+import type { LearningGoal } from '@/types/learning'
 
 const route = useRoute()
 const router = useRouter()
@@ -12,44 +12,51 @@ const parentGoal = computed(() =>
   store.goals.find(g => g._id === route.params.goalId)
 )
 
-const subGoals = computed(() => 
-  store.subGoals.filter(sg => sg.parentId === route.params.goalId)
+const childGoals = computed(() => 
+  store.childGoals(route.params.goalId as string)
 )
 
-const newSubGoal = ref({
+const newGoal = ref({
   title: '',
-  description: ''
+  description: '',
+  parentIds: [route.params.goalId as string]
 })
 
 const handleSubmit = async () => {
-  if (!newSubGoal.value.title.trim()) return
+  if (!newGoal.value.title.trim()) return
   
   try {
-    await store.createSubGoal({
-      title: newSubGoal.value.title,
-      description: newSubGoal.value.description,
-      parentId: route.params.goalId as string,
-      type: 'sub_goal'
+    await store.createGoal({
+      ...newGoal.value,
+      type: 'learning_goal'
     })
-    newSubGoal.value = { title: '', description: '' }
+    newGoal.value = {
+      title: '',
+      description: '',
+      parentIds: [route.params.goalId as string]
+    }
   } catch (error) {
-    console.error('Failed to create subgoal:', error)
+    console.error('Failed to create goal:', error)
   }
 }
 
-const handleDelete = async (subGoal: SubGoal) => {
+const handleDelete = async (goal: LearningGoal) => {
   try {
-    await store.deleteSubGoal(subGoal._id)
+    if (goal._id) {
+      await store.deleteGoal(goal._id)
+    }
   } catch (error) {
-    console.error('Failed to delete subgoal:', error)
+    console.error('Failed to delete goal:', error)
   }
 }
 
-const handleAddUnits = (subGoal: SubGoal) => {
-  router.push({ 
-    name: 'units', 
-    params: { subGoalId: subGoal._id } 
-  })
+const handleAddUnits = (goal: LearningGoal) => {
+  if (goal._id) {
+    router.push({ 
+      name: 'units', 
+      params: { subGoalId: goal._id } 
+    })
+  }
 }
 
 onMounted(() => {
@@ -62,25 +69,18 @@ onMounted(() => {
 <template>
   <div class="subgoals-view">
     <div class="header">
-      <div class="parent-goal">
-        <h2>Subgoals for: {{ parentGoal?.title }}</h2>
-        <p v-if="parentGoal?.description" class="parent-description">
-          {{ parentGoal.description }}
-        </p>
-      </div>
-      <button @click="router.push({ name: 'goals' })" class="back-button">
-        Back to Goals
-      </button>
+      <h2>Child Goals</h2>
+      <p class="parent-title">for {{ parentGoal?.title }}</p>
     </div>
     
-    <form @submit.prevent="handleSubmit" class="subgoal-form">
+    <form @submit.prevent="handleSubmit" class="goal-form">
       <div class="form-group">
-        <label for="title">New Subgoal Title</label>
+        <label for="title">New Child Goal Title</label>
         <input
           id="title"
-          v-model="newSubGoal.title"
+          v-model="newGoal.title"
           type="text"
-          placeholder="What specific aspect do you want to learn?"
+          placeholder="What do you want to learn?"
           required
         />
       </div>
@@ -89,30 +89,30 @@ onMounted(() => {
         <label for="description">Description (optional)</label>
         <textarea
           id="description"
-          v-model="newSubGoal.description"
-          placeholder="Add some details about this subgoal..."
+          v-model="newGoal.description"
+          placeholder="Add some details about your goal..."
           rows="3"
         />
       </div>
       
-      <button type="submit" class="submit-button">Add Subgoal</button>
+      <button type="submit" class="submit-button">Add Child Goal</button>
     </form>
     
-    <div class="subgoals-list">
-      <div v-for="subGoal in subGoals" :key="subGoal._id" class="subgoal-card">
-        <div class="subgoal-header">
-          <h3>{{ subGoal.title }}</h3>
-          <div class="subgoal-actions">
-            <button @click="handleAddUnits(subGoal)" class="action-button add">
+    <div class="goals-list">
+      <div v-for="goal in childGoals" :key="goal._id" class="goal-card">
+        <div class="goal-header">
+          <h3>{{ goal.title }}</h3>
+          <div class="goal-actions">
+            <button @click="handleAddUnits(goal)" class="action-button add-units">
               Add Units
             </button>
-            <button @click="handleDelete(subGoal)" class="action-button delete">
+            <button @click="handleDelete(goal)" class="action-button delete">
               Delete
             </button>
           </div>
         </div>
-        <p v-if="subGoal.description" class="subgoal-description">
-          {{ subGoal.description }}
+        <p v-if="goal.description" class="goal-description">
+          {{ goal.description }}
         </p>
       </div>
     </div>
@@ -126,42 +126,16 @@ onMounted(() => {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
-.parent-goal {
-  flex: 1;
-}
-
-.parent-goal h2 {
-  margin: 0 0 0.5rem 0;
-}
-
-.parent-description {
+.parent-title {
   color: #666;
-  margin: 0;
-  line-height: 1.6;
+  margin-top: 0.5rem;
 }
 
-.back-button {
-  background: #9e9e9e;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-left: 1rem;
-}
-
-.back-button:hover {
-  background: #757575;
-}
-
-.subgoal-form {
+.goal-form {
   background: white;
   padding: 2rem;
   border-radius: 8px;
@@ -207,36 +181,36 @@ onMounted(() => {
   background: #45a049;
 }
 
-.subgoals-list {
+.goals-list {
   display: grid;
   gap: 1rem;
 }
 
-.subgoal-card {
+.goal-card {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.subgoal-header {
+.goal-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 0.5rem;
 }
 
-.subgoal-header h3 {
+.goal-header h3 {
   margin: 0;
   font-size: 1.25rem;
 }
 
-.subgoal-actions {
+.goal-actions {
   display: flex;
   gap: 0.5rem;
 }
 
-.subgoal-description {
+.goal-description {
   color: #666;
   margin: 0;
   line-height: 1.6;
@@ -250,12 +224,12 @@ onMounted(() => {
   font-size: 0.9rem;
 }
 
-.add {
+.add-units {
   background: #2196F3;
   color: white;
 }
 
-.add:hover {
+.add-units:hover {
   background: #1976D2;
 }
 

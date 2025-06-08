@@ -4,7 +4,7 @@ export interface LearningGoal {
   type: 'learning_goal';
   title: string;
   description: string;
-  parentId?: string;
+  parentIds?: string[];
 }
 
 export interface SubGoal {
@@ -21,35 +21,35 @@ export interface UnitOfMeaning {
   _rev: string;
   type: 'unit_of_meaning';
   subGoalId: string;
-  targetLanguage: string;
-  translation: string;
+  targetLanguage?: string;
+  translation?: string;
 }
 
 export interface Exercise {
   _id: string;
   _rev: string;
   type: 'exercise';
-  exerciseType: 'FLASHCARD' | 'CLOZE' | 'FIND_TRANSLATION';
-  instruction: string;
   unitId: string;
+  exerciseType: 'flashcard' | 'cloze' | 'find_translation';
+  instruction: string;
   done?: boolean;
 }
 
 export interface ExerciseFlashcard extends Exercise {
-  exerciseType: 'FLASHCARD';
+  exerciseType: 'flashcard';
   front: string;
   back: string;
 }
 
 export interface ExerciseCloze extends Exercise {
-  exerciseType: 'CLOZE';
+  exerciseType: 'cloze';
   content: string;
   clozeStart: number;
   clozeEnd: number;
 }
 
 export interface ExerciseFindTranslation extends Exercise {
-  exerciseType: 'FIND_TRANSLATION';
-  targetLanguage: string;
-  translation: string;
+  exerciseType: 'find_translation';
+  targetLanguage?: string;
+  translation?: string;
 } 

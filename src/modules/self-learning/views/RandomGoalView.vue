@@ -10,19 +10,16 @@ const store = useLearningStore()
 const selectedGoal = ref<LearningGoal | null>(null)
 const showDeleteConfirm = ref(false)
 
-// Get a random goal that has no parent (is a main goal)
+// Get a random goal that has no parents (is a main goal)
 const randomGoal = computed(() => {
-  const mainGoals = store.goals.filter(g => !('parentId' in g))
+  const mainGoals = store.goals.filter(g => !g.parentIds || g.parentIds.length === 0)
   if (mainGoals.length === 0) return null
   return mainGoals[Math.floor(Math.random() * mainGoals.length)]
 })
 
 const hasUnits = computed(() => {
   if (!selectedGoal.value) return false
-  const subGoals = store.subGoals.filter(sg => sg.parentId === selectedGoal.value!._id)
-  const units = store.unitsOfMeaning.filter(u => 
-    subGoals.some(sg => sg._id === u.subGoalId)
-  )
+  const units = store.unitsOfMeaning.filter(u => u.subGoalId === selectedGoal.value!._id)
   return units.length > 0
 })
 
@@ -36,25 +33,33 @@ const handleEdit = () => {
 }
 
 const handleDelete = async () => {
-  if (!selectedGoal.value) return
+  if (!selectedGoal.value?._id) return
   
   try {
-    // Delete all related subgoals and their units
-    const subGoals = store.subGoals.filter(sg => sg.parentId === selectedGoal.value!._id)
-    for (const subGoal of subGoals) {
-      const units = store.unitsOfMeaning.filter(u => u.subGoalId === subGoal._id)
-      for (const unit of units) {
-        const exercises = store.getExercisesForUnit(unit._id!)
-        for (const exercise of exercises) {
-          await store.deleteExercise(exercise._id!)
-        }
-        await store.deleteUnitOfMeaning(unit._id!)
+    // Delete all child goals first
+    const childGoals = store.goals.filter(g => g.parentIds?.includes(selectedGoal.value!._id!))
+    for (const childGoal of childGoals) {
+      if (childGoal._id) {
+        await store.deleteGoal(childGoal._id)
       }
-      await store.deleteSubGoal(subGoal._id!)
+    }
+    
+    // Delete all associated units and their exercises
+    const units = store.unitsOfMeaning.filter(u => u.subGoalId === selectedGoal.value!._id)
+    for (const unit of units) {
+      if (unit._id) {
+        const exercises = store.getExercisesForUnit(unit._id)
+        for (const exercise of exercises) {
+          if (exercise._id) {
+            await store.deleteExercise(exercise._id)
+          }
+        }
+        await store.deleteUnitOfMeaning(unit._id)
+      }
     }
     
     // Delete the goal itself
-    await store.deleteGoal(selectedGoal.value._id!)
+    await store.deleteGoal(selectedGoal.value._id)
     selectedGoal.value = null
     showDeleteConfirm.value = false
   } catch (error) {
@@ -73,18 +78,10 @@ const handlePractice = () => {
 
 const handleAddUnits = () => {
   if (selectedGoal.value) {
-    const subGoals = store.subGoals.filter(sg => sg.parentId === selectedGoal.value!._id)
-    if (subGoals.length > 0) {
-      router.push({ 
-        name: 'units', 
-        params: { subGoalId: subGoals[0]._id } 
-      })
-    } else {
-      router.push({ 
-        name: 'subgoals', 
-        params: { goalId: selectedGoal.value._id } 
-      })
-    }
+    router.push({ 
+      name: 'units', 
+      params: { subGoalId: selectedGoal.value._id } 
+    })
   }
 }
 
