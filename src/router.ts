@@ -10,7 +10,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/debug/self-learning',
+      path: '/',
       component: SelfLearning,
       children: [
         {

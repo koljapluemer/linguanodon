@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import PouchDB from 'pouchdb'
+import PouchDB from 'pouchdb/dist/pouchdb'
 import type { LearningGoal, SubGoal, UnitOfMeaning, Exercise } from '@/types/learning'
 import { useExerciseGenerator } from '@/composables/useExerciseGenerator'
 
+// Create database instance
 const db = new PouchDB('linguanodon-learning')
 const exerciseGenerator = useExerciseGenerator()
 
@@ -19,33 +20,34 @@ export const useLearningStore = defineStore('learning', {
   actions: {
     async init() {
       try {
-        const goals = await db.find({
-          selector: {
-            type: 'learning_goal'
-          }
+        // Use allDocs instead of find for initial queries
+        const goals = await db.allDocs({
+          include_docs: true,
+          startkey: 'learning_goal',
+          endkey: 'learning_goal\ufff0'
         })
-        this.goals = goals.docs as LearningGoal[]
+        this.goals = goals.rows.map((row: { doc: LearningGoal }) => row.doc)
 
-        const subGoals = await db.find({
-          selector: {
-            type: 'sub_goal'
-          }
+        const subGoals = await db.allDocs({
+          include_docs: true,
+          startkey: 'sub_goal',
+          endkey: 'sub_goal\ufff0'
         })
-        this.subGoals = subGoals.docs as SubGoal[]
+        this.subGoals = subGoals.rows.map((row: { doc: SubGoal }) => row.doc)
 
-        const units = await db.find({
-          selector: {
-            type: 'unit_of_meaning'
-          }
+        const units = await db.allDocs({
+          include_docs: true,
+          startkey: 'unit_of_meaning',
+          endkey: 'unit_of_meaning\ufff0'
         })
-        this.unitsOfMeaning = units.docs as UnitOfMeaning[]
+        this.unitsOfMeaning = units.rows.map((row: { doc: UnitOfMeaning }) => row.doc)
 
-        const exercises = await db.find({
-          selector: {
-            type: 'exercise'
-          }
+        const exercises = await db.allDocs({
+          include_docs: true,
+          startkey: 'exercise',
+          endkey: 'exercise\ufff0'
         })
-        this.exercises = exercises.docs as Exercise[]
+        this.exercises = exercises.rows.map((row: { doc: Exercise }) => row.doc)
       } catch (error) {
         console.error('Failed to initialize store:', error)
       }
