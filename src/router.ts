@@ -5,7 +5,7 @@ import ListUnitOfMeanings from './views/unitOfMeaning/ListUnitOfMeanings.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/unit-of-meaning/add',
+    path: '/unit-of-meaning/add/:id?',
     name: 'AddUnitOfMeaning',
     component: EditUnitOfMeaning
   },

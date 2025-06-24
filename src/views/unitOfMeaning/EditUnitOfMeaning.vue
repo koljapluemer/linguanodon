@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <div class="container">
-      <h1 class="title">Add Unit Of Meaning</h1>
+      <h1 class="title">{{ isEdit ? 'Edit' : 'Add' }} Unit Of Meaning</h1>
       <form @submit.prevent="onSubmit" class="box">
         <div class="field">
           <label class="label">Language Code</label>
@@ -35,10 +35,10 @@
         </div>
         <div class="field">
           <div class="control">
-            <button class="button is-primary" type="submit" :disabled="loading">Add</button>
+            <button class="button is-primary" type="submit" :disabled="loading">{{ isEdit ? 'Update' : 'Add' }}</button>
           </div>
         </div>
-        <p v-if="success" class="has-text-success">Unit of Meaning added!</p>
+        <p v-if="success" class="has-text-success">Unit of Meaning {{ isEdit ? 'updated' : 'added' }}!</p>
         <p v-if="error" class="has-text-danger">{{ error }}</p>
       </form>
     </div>
@@ -46,8 +46,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { addUnitOfMeaning } from '../../dexie/useUnitOfMeaningTable'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { addUnitOfMeaning, getUnitOfMeaningById, db } from '../../dexie/useUnitOfMeaningTable'
+
+const route = useRoute()
+const id = route.params.id ? Number(route.params.id) : undefined
+const isEdit = !!id
 
 const form = ref({
   languageCode: '',
@@ -61,22 +66,50 @@ const loading = ref(false)
 const success = ref(false)
 const error = ref('')
 
+onMounted(async () => {
+  if (isEdit && id) {
+    loading.value = true
+    const uom = await getUnitOfMeaningById(id)
+    if (uom) {
+      form.value = {
+        languageCode: uom.languageCode || '',
+        content: uom.content || '',
+        wordType: uom.wordType || '',
+        pronunciation: uom.pronunciation || '',
+        notes: uom.notes || ''
+      }
+    }
+    loading.value = false
+  }
+})
+
 async function onSubmit() {
   loading.value = true
   success.value = false
   error.value = ''
   try {
-    await addUnitOfMeaning({
-      languageCode: form.value.languageCode,
-      content: form.value.content,
-      wordType: form.value.wordType,
-      pronunciation: form.value.pronunciation || undefined,
-      notes: form.value.notes || undefined
-    })
-    success.value = true
-    form.value = { languageCode: '', content: '', wordType: '', pronunciation: '', notes: '' }
+    if (isEdit && id) {
+      await db.unitOfMeanings.update(id, {
+        languageCode: form.value.languageCode,
+        content: form.value.content,
+        wordType: form.value.wordType,
+        pronunciation: form.value.pronunciation || undefined,
+        notes: form.value.notes || undefined
+      })
+      success.value = true
+    } else {
+      await addUnitOfMeaning({
+        languageCode: form.value.languageCode,
+        content: form.value.content,
+        wordType: form.value.wordType,
+        pronunciation: form.value.pronunciation || undefined,
+        notes: form.value.notes || undefined
+      })
+      success.value = true
+      form.value = { languageCode: '', content: '', wordType: '', pronunciation: '', notes: '' }
+    }
   } catch (e: any) {
-    error.value = e?.message || 'Failed to add.'
+    error.value = e?.message || 'Failed to save.'
   } finally {
     loading.value = false
   }
