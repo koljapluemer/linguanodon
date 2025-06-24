@@ -10,7 +10,7 @@ export class AppDatabase extends Dexie {
   constructor() {
     super('AppDatabase')
     this.version(1).stores({
-      unitOfMeanings: '++id, languageCode, content, wordType',
+      unitOfMeanings: '++id, languageName, content, wordType',
       languages: 'name, abbreviation, requiredByApp, position, isTargetLanguage',
     })
   }

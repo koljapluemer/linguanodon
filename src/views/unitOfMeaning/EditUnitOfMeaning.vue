@@ -4,9 +4,15 @@
       <h1 class="title">{{ isEdit ? 'Edit' : 'Add' }} Unit Of Meaning</h1>
       <form @submit.prevent="onSubmit" class="box">
         <div class="field">
-          <label class="label">Language Code</label>
+          <label class="label">Language</label>
           <div class="control">
-            <input v-model="form.languageCode" class="input" required placeholder="e.g. en, ar" />
+            <div class="select is-fullwidth">
+              <select v-model="form.languageName" required>
+                <option v-for="lang in orderedLanguages" :key="lang.name" :value="lang.name">
+                  {{ lang.abbreviation }} {{ lang.name }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="field">
@@ -46,34 +52,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { addUnitOfMeaning, getUnitOfMeaningById } from '../../dexie/useUnitOfMeaningTable'
 import { db } from '../../dexie/db'
+import { getLanguages } from '../../dexie/useLanguageTable'
+import type { Language } from '../../types/Language'
 
 const route = useRoute()
 const id = route.params.id ? Number(route.params.id) : undefined
 const isEdit = !!id
 
 const form = ref({
-  languageCode: '',
+  languageName: '',
   content: '',
   wordType: '',
   pronunciation: '',
   notes: ''
 })
 
+const languages = ref<Language[]>([])
 const loading = ref(false)
 const success = ref(false)
 const error = ref('')
 
+const orderedLanguages = computed(() => {
+  // Target languages first, then native, each ordered by position
+  const targets = languages.value.filter(l => l.isTargetLanguage).sort((a, b) => a.position - b.position)
+  const natives = languages.value.filter(l => !l.isTargetLanguage).sort((a, b) => a.position - b.position)
+  return [...targets, ...natives]
+})
+
 onMounted(async () => {
+  languages.value = await getLanguages()
   if (isEdit && id) {
     loading.value = true
     const uom = await getUnitOfMeaningById(id)
     if (uom) {
       form.value = {
-        languageCode: uom.languageCode || '',
+        languageName: uom.languageName || '',
         content: uom.content || '',
         wordType: uom.wordType || '',
         pronunciation: uom.pronunciation || '',
@@ -91,7 +108,7 @@ async function onSubmit() {
   try {
     if (isEdit && id) {
       await db.unitOfMeanings.update(id, {
-        languageCode: form.value.languageCode,
+        languageName: form.value.languageName,
         content: form.value.content,
         wordType: form.value.wordType,
         pronunciation: form.value.pronunciation || undefined,
@@ -100,14 +117,14 @@ async function onSubmit() {
       success.value = true
     } else {
       await addUnitOfMeaning({
-        languageCode: form.value.languageCode,
+        languageName: form.value.languageName,
         content: form.value.content,
         wordType: form.value.wordType,
         pronunciation: form.value.pronunciation || undefined,
         notes: form.value.notes || undefined
       })
       success.value = true
-      form.value = { languageCode: '', content: '', wordType: '', pronunciation: '', notes: '' }
+      form.value = { languageName: '', content: '', wordType: '', pronunciation: '', notes: '' }
     }
   } catch (e: any) {
     error.value = e?.message || 'Failed to save.'
