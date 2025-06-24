@@ -18,6 +18,7 @@
               <th>Word Type</th>
               <th>Pronunciation</th>
               <th>Notes</th>
+              <th>Translations</th>
             </tr>
           </thead>
           <tbody>
@@ -27,6 +28,15 @@
               <td>{{ uom.wordType }}</td>
               <td>{{ uom.pronunciation }}</td>
               <td>{{ uom.notes }}</td>
+              <td>
+                <div v-if="uom.translations && uom.translations.length" style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+                  <DisplayTranslation
+                    v-for="tid in uom.translations"
+                    :key="tid"
+                    :name="getTranslationContent(tid)"
+                  />
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -44,6 +54,7 @@ import { getLanguages } from '../../dexie/useLanguageTable'
 import { getLanguageAbbreviation } from '../../utils/languageUtils'
 import type { UnitOfMeaning } from '../../types/UnitOfMeaning'
 import type { Language } from '../../types/Language'
+import DisplayTranslation from '@/components/unitsOfMeaning/manageTranslations/translationWidgets/DisplayTranslation.vue'
 
 const units = ref<UnitOfMeaning[]>([])
 const languages = ref<Language[]>([])
@@ -71,6 +82,11 @@ const filteredUnits = computed(() => {
     return lang ? lang.isTargetLanguage === showTarget.value : false
   })
 })
+
+function getTranslationContent(tid: number) {
+  const t = units.value.find(u => u.id === tid)
+  return t ? t.content : ''
+}
 
 onMounted(fetchUnits)
 </script>

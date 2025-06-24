@@ -1,5 +1,13 @@
 <template>
   <div>
+    <h2 class="title">Translations</h2>
+    <div v-if="currentUnit && currentUnit.translations && currentUnit.translations.length" class="mb-3" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+      <DisplayTranslation
+        v-for="tid in currentUnit.translations"
+        :key="tid"
+        :name="getTranslationContent(tid)"
+      />
+    </div>
     <button class="button is-link" @click="openModal = true">Connect Existing Word or Sentence</button>
     <ConnectExistingUnitOfMeaning
       :open="openModal"
@@ -13,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import ConnectExistingUnitOfMeaning from './translationWidgets/ConnectExistingUnitOfMeaning.vue'
 import { getUnitOfMeaningById, connectUnitsAsTranslations } from '../../../dexie/useUnitOfMeaningTable'
 import { getLanguages } from '../../../dexie/useLanguageTable'
@@ -21,6 +29,7 @@ import { db } from '../../../dexie/db'
 import { filterEligibleTranslationUnits } from '../../../utils/unitOfMeaningUtils'
 import type { UnitOfMeaning } from '../../../types/UnitOfMeaning'
 import type { Language } from '../../../types/Language'
+import DisplayTranslation from './translationWidgets/DisplayTranslation.vue'
 
 
 const props = defineProps<{ unitId: number }>()
@@ -65,6 +74,11 @@ async function onSelect(selectedId: number) {
   await connectUnitsAsTranslations(currentUnit.value.id!, selectedId)
   await loadData()
   openModal.value = false
+}
+
+function getTranslationContent(tid: number) {
+  const t = allUnits.value.find(u => u.id === tid)
+  return t ? t.content : ''
 }
 
 watch(() => props.unitId, loadData, { immediate: true })
