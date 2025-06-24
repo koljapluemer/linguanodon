@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import EditUnitOfMeaning from './views/unitOfMeaning/EditUnitOfMeaning.vue'
 import ListUnitOfMeanings from './views/unitOfMeaning/ListUnitOfMeanings.vue'
+import ManageLanguages from './views/language/ManageLanguages.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -14,7 +15,11 @@ const routes: RouteRecordRaw[] = [
     name: 'ListUnitOfMeanings',
     component: ListUnitOfMeanings
   },
-  // Future routes can be added here
+  {
+    path: '/languages',
+    name: 'ManageLanguages',
+    component: ManageLanguages
+  }
 ]
 
 const router = createRouter({

@@ -1,1 +1,0 @@
-export type LanguageCodeDefault = "EN" | "EG" | "MS"

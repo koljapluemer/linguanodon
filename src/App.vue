@@ -3,20 +3,17 @@
 </script>
 
 <template>
-  <router-view />
+  <header class="navbar is-primary">
+    <nav class="navbar-menu is-active">
+      <div class="navbar-start">
+        <router-link class="navbar-item" to="/languages">Languages</router-link>
+        <router-link class="navbar-item" to="/unit-of-meaning/list">Words & Sentences</router-link>
+      </div>
+    </nav>
+  </header>
+  <section class="section">
+    <div class="container">
+      <router-view />
+    </div>
+  </section>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>

@@ -48,7 +48,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { addUnitOfMeaning, getUnitOfMeaningById, db } from '../../dexie/useUnitOfMeaningTable'
+import { addUnitOfMeaning, getUnitOfMeaningById } from '../../dexie/useUnitOfMeaningTable'
+import { db } from '../../dexie/db'
 
 const route = useRoute()
 const id = route.params.id ? Number(route.params.id) : undefined

@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { db } from '../../dexie/useUnitOfMeaningTable'
+import { db } from '../../dexie/db'
 import type { UnitOfMeaning } from '../../types/UnitOfMeaning'
 
 const units = ref<UnitOfMeaning[]>([])
