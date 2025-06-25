@@ -10,10 +10,10 @@ Your ultimate app to learn Egyptian Arabic.
 
 - `Vue3`
 - ts
-- Bulma
+- Bulma CSS
 - Dexie
 - Vue Router
-
+- Lucide Icons
 
 ### Folder Structure
 

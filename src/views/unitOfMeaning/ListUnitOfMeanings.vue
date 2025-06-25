@@ -2,10 +2,10 @@
   <section class="section">
     <div class="container">
       <div class="mb-4">
-        <router-link :to="{ name: 'AddUnitOfMeaning' }" class="button is-link">Add Unit Of Meaning</router-link>
+        <router-link :to="{ name: 'AddUnitOfMeaning' }" class="button is-link">Add Word or Sentence</router-link>
       </div>
 
-      <h1 class="title">All Units Of Meaning</h1>
+      <h1 class="title">All Words & Sentences</h1>
       <div class="mb-4">
         <div class="buttons has-addons">
           <button class="button" :class="{ 'is-primary': showTarget }" @click="showTarget = true">Show target language</button>
@@ -24,10 +24,11 @@
               <th>Pronunciation</th>
               <th>Notes</th>
               <th>Translations</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="uom in filteredUnits" :key="uom.id" @click="goToEdit(uom.id)" style="cursor:pointer">
+            <tr v-for="uom in filteredUnits" :key="uom.id">
               <td>{{ getLanguageAbbreviation(uom.languageName, languages) }}</td>
               <td>{{ uom.content }}</td>
               <td>{{ uom.wordType }}</td>
@@ -38,6 +39,24 @@
                   <div class="tag" v-for="tid in uom.translations" :key="tid">
                     {{ getTranslationContent(tid) }}
                   </div>
+                </div>
+              </td>
+              <td>
+                <div class="buttons are-small">
+                  <router-link 
+                    :to="{ name: 'AddUnitOfMeaning', params: { id: uom.id } }" 
+                    class="button is-info is-light"
+                    title="Edit"
+                  >
+                    <Edit class="icon is-small" />
+                  </router-link>
+                  <button 
+                    class="button is-danger is-light" 
+                    @click="handleDelete(uom.id)"
+                    title="Delete"
+                  >
+                    <Trash2 class="icon is-small" />
+                  </button>
                 </div>
               </td>
             </tr>
@@ -51,7 +70,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { Edit, Trash2 } from 'lucide-vue-next'
 import { db } from '../../dexie/db'
 import { getLanguages } from '../../dexie/useLanguageTable'
 import { getLanguageAbbreviation } from '../../utils/languageUtils'
@@ -62,7 +81,6 @@ const units = ref<UnitOfMeaning[]>([])
 const languages = ref<Language[]>([])
 const loading = ref(true)
 const showTarget = ref(true)
-const router = useRouter()
 
 async function fetchUnits() {
   loading.value = true
@@ -71,10 +89,9 @@ async function fetchUnits() {
   loading.value = false
 }
 
-function goToEdit(id: number | undefined) {
-  if (id !== undefined) {
-    router.push({ name: 'AddUnitOfMeaning', params: { id } })
-  }
+function handleDelete(id: number | undefined) {
+  // TODO: Implement delete functionality
+  console.log('Delete unit with id:', id)
 }
 
 const filteredUnits = computed(() => {
@@ -94,7 +111,8 @@ onMounted(fetchUnits)
 </script>
 
 <style scoped>
-tr[style*="cursor:pointer"]:hover {
-  background-color: #f5f5f5;
+.icon {
+  width: 1rem;
+  height: 1rem;
 }
 </style> 
