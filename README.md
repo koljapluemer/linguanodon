@@ -1,5 +1,30 @@
-# Vue 3 + TypeScript + Vite
+# The Masry App
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Your ultimate app to learn Egyptian Arabic.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+*work in progress*.
+
+## Development
+
+### Stack
+
+- `Vue3`
+- ts
+- Bulma
+- Dexie
+- Vue Router
+
+
+### Folder Structure
+
+- Standard folder-by-type
+    - (because I'm not yet sure what the modules would be)
+
+
+### Data Flow
+
+- our data model is defined in `types/`
+- Dexie databases are the source of truth, running fully local
+    - defined in `src/dexie`
+- `utils/` contain functions to work with types
+- views such as `EditUnitOfMeaning` then allow users to manipulate data
