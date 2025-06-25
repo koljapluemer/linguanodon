@@ -1,50 +1,54 @@
 <template>
-  <h1 class="title" v-if="isEdit">{{ form.content }}</h1>
-  <form @submit.prevent="onSubmit" class="box">
-    <div class="field">
-      <label class="label">Language</label>
-      <div class="control">
-        <div class="select is-fullwidth">
-          <select v-model="form.languageName" required>
-            <option v-for="lang in orderedLanguages" :key="lang.name" :value="lang.name">
-              {{ lang.abbreviation }} {{ lang.name }}
-            </option>
-          </select>
+  <details :open="!initiallyCollapsed && !isCollapsed" @toggle="onToggle" class="box">
+    <summary class="title is-4 is-clickable m-0">
+      {{ summaryText }}
+    </summary>
+    <form @submit.prevent="onSubmit" class="mt-4">
+      <div class="field">
+        <label class="label">Language</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select v-model="form.languageName" required>
+              <option v-for="lang in orderedLanguages" :key="lang.name" :value="lang.name">
+                {{ lang.abbreviation }} {{ lang.name }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Content</label>
-      <div class="control">
-        <input v-model="form.content" class="input" required placeholder="Word or phrase" />
+      <div class="field">
+        <label class="label">Content</label>
+        <div class="control">
+          <input v-model="form.content" class="input" required placeholder="Word or phrase" />
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Word Type</label>
-      <div class="control">
-        <input v-model="form.wordType" class="input" required placeholder="e.g. noun, verb" />
+      <div class="field">
+        <label class="label">Word Type</label>
+        <div class="control">
+          <input v-model="form.wordType" class="input" required placeholder="e.g. noun, verb" />
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Pronunciation <span class="has-text-grey-light">(optional)</span></label>
-      <div class="control">
-        <input v-model="form.pronunciation" class="input" placeholder="Pronunciation" />
+      <div class="field">
+        <label class="label">Pronunciation <span class="has-text-grey-light">(optional)</span></label>
+        <div class="control">
+          <input v-model="form.pronunciation" class="input" placeholder="Pronunciation" />
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Notes <span class="has-text-grey-light">(optional)</span></label>
-      <div class="control">
-        <textarea v-model="form.notes" class="textarea" placeholder="Any notes"></textarea>
+      <div class="field">
+        <label class="label">Notes <span class="has-text-grey-light">(optional)</span></label>
+        <div class="control">
+          <textarea v-model="form.notes" class="textarea" placeholder="Any notes"></textarea>
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-primary" type="submit" :disabled="loading">{{ isEdit ? 'Update' : 'Add' }}</button>
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary" type="submit" :disabled="loading">{{ isEdit ? 'Update' : 'Add' }}</button>
+        </div>
       </div>
-    </div>
-    <p v-if="success" class="has-text-success">Unit of Meaning {{ isEdit ? 'updated' : 'added' }}!</p>
-    <p v-if="error" class="has-text-danger">{{ error }}</p>
-  </form>
+      <p v-if="success" class="has-text-success">Unit of Meaning {{ isEdit ? 'updated' : 'added' }}!</p>
+      <p v-if="error" class="has-text-danger">{{ error }}</p>
+    </form>
+  </details>
 </template>
 
 <script setup lang="ts">
@@ -54,7 +58,7 @@ import { db } from '../../dexie/db'
 import { getLanguages } from '../../dexie/useLanguageTable'
 import type { Language } from '../../types/Language'
 
-const props = defineProps<{ id?: number }>()
+const props = defineProps<{ id?: number, initiallyCollapsed: boolean, translationsInitiallyCollapsed: boolean }>()
 const isEdit = computed(() => !!props.id)
 
 const form = ref({
@@ -69,12 +73,22 @@ const languages = ref<Language[]>([])
 const loading = ref(false)
 const success = ref(false)
 const error = ref('')
+const isCollapsed = ref(props.initiallyCollapsed)
+
+const summaryText = computed(() => {
+  return form.value.content || 'Add Word or Sentence'
+})
 
 const orderedLanguages = computed(() => {
   const targets = languages.value.filter(l => l.isTargetLanguage).sort((a, b) => a.position - b.position)
   const natives = languages.value.filter(l => !l.isTargetLanguage).sort((a, b) => a.position - b.position)
   return [...targets, ...natives]
 })
+
+function onToggle(event: Event) {
+  const details = event.target as HTMLDetailsElement
+  isCollapsed.value = !details.open
+}
 
 async function fetchLanguages() {
   languages.value = await getLanguages()
@@ -104,6 +118,8 @@ onMounted(async () => {
 
 watch(() => props.id, async (newId, oldId) => {
   if (newId !== oldId) {
+    // Reset to collapsed state when switching between add/edit modes
+    isCollapsed.value = props.initiallyCollapsed
     if (newId) {
       await fetchUnitOfMeaning(newId)
     } else {
