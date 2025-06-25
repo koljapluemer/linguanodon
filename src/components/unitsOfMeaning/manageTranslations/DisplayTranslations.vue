@@ -10,7 +10,20 @@
         :showTranslations="false"
       />
     </div>
-    <button class="button is-link" @click="openModal = true">Connect Existing Word or Sentence</button>
+    
+    <div class="buttons">
+      <button class="button is-link" @click="openModal = true">Connect Existing Word or Sentence</button>
+      <button class="button is-success" @click="showAddForm = true" v-if="!showAddForm">Add New Translation</button>
+    </div>
+    
+    <AddTranslationForm
+      v-if="showAddForm && currentUnit"
+      :current-unit="currentUnit"
+      :all-languages="allLanguages"
+      @saved="onNewTranslationSaved"
+      @cancelled="showAddForm = false"
+    />
+    
     <ConnectExistingUnitOfMeaning
       :open="openModal"
       :eligible-units="visibleEligibleUnits"
@@ -25,6 +38,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import ConnectExistingUnitOfMeaning from './translationWidgets/ConnectExistingUnitOfMeaning.vue'
+import AddTranslationForm from './translationWidgets/AddTranslationForm.vue'
 import { getUnitOfMeaningById, connectUnitsAsTranslations } from '../../../dexie/useUnitOfMeaningTable'
 import { getLanguages } from '../../../dexie/useLanguageTable'
 import { db } from '../../../dexie/db'
@@ -44,6 +58,7 @@ const eligibleUnits = ref<UnitOfMeaning[]>([])
 const visibleEligibleUnits = ref<UnitOfMeaning[]>([])
 const page = ref(0)
 const PAGE_SIZE = 20
+const showAddForm = ref(false)
 
 async function loadData() {
   const u = await getUnitOfMeaningById(props.unitId)
@@ -81,6 +96,25 @@ async function onSelect(selectedId: number) {
 function getTranslationContent(tid: number) {
   const t = allUnits.value.find(u => u.id === tid)
   return t ? t.content : ''
+}
+
+async function onNewTranslationSaved(newUnitId: number) {
+  if (!currentUnit.value) return
+  
+  try {
+    // Connect the new unit as a translation to the current unit
+    await connectUnitsAsTranslations(currentUnit.value.id!, newUnitId)
+    
+    // Refresh the data to show the new translation
+    await loadData()
+    
+    // Hide the add form
+    showAddForm.value = false
+  } catch (error) {
+    console.error('Failed to connect new translation:', error)
+    // In a real app, you might want to show an error message to the user
+    // For now, we'll just log it since this should be very rare with a local DB
+  }
 }
 
 watch(() => props.unitId, loadData, { immediate: true })

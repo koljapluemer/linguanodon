@@ -65,7 +65,16 @@ import { getLanguages } from '../../dexie/useLanguageTable'
 import type { Language } from '../../types/Language'
 import DisplayTranslations from './manageTranslations/DisplayTranslations.vue'
 
-const props = defineProps<{ id?: number, initiallyCollapsed: boolean, showTranslations: boolean }>()
+const props = defineProps<{ 
+  id?: number, 
+  initiallyCollapsed: boolean, 
+  showTranslations: boolean,
+  filteredLanguages?: Language[]
+}>()
+const emit = defineEmits<{
+  saved: [unitId: number]
+  cancelled: []
+}>()
 const isEdit = computed(() => !!props.id)
 
 const form = ref({
@@ -87,6 +96,12 @@ const summaryText = computed(() => {
 })
 
 const orderedLanguages = computed(() => {
+  // Use filtered languages if provided (for translation forms)
+  if (props.filteredLanguages) {
+    return props.filteredLanguages
+  }
+  
+  // Otherwise use all languages with normal ordering
   const targets = languages.value.filter(l => l.isTargetLanguage).sort((a, b) => a.position - b.position)
   const natives = languages.value.filter(l => !l.isTargetLanguage).sort((a, b) => a.position - b.position)
   return [...targets, ...natives]
@@ -95,6 +110,11 @@ const orderedLanguages = computed(() => {
 function onToggle(event: Event) {
   const details = event.target as HTMLDetailsElement
   isCollapsed.value = !details.open
+  
+  // Emit cancelled event when form is collapsed and we're in add mode
+  if (!details.open && !isEdit.value) {
+    emit('cancelled')
+  }
 }
 
 async function fetchLanguages() {
@@ -150,7 +170,7 @@ async function onSubmit() {
       })
       success.value = true
     } else {
-      await addUnitOfMeaning({
+      const newId = await addUnitOfMeaning({
         languageName: form.value.languageName,
         content: form.value.content,
         wordType: form.value.wordType,
@@ -159,6 +179,9 @@ async function onSubmit() {
       })
       success.value = true
       form.value = { languageName: '', content: '', wordType: '', pronunciation: '', notes: '' }
+      
+      // Emit saved event with the new unit ID
+      emit('saved', newId)
     }
   } catch (e: any) {
     error.value = e?.message || 'Failed to save.'
