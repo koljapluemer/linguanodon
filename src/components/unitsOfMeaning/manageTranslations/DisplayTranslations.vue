@@ -7,7 +7,7 @@
         :key="tid"
         :id="tid"
         :initially-collapsed="true"
-        :translations-initially-collapsed="true"
+        :showTranslations="false"
       />
     </div>
     <button class="button is-link" @click="openModal = true">Connect Existing Word or Sentence</button>

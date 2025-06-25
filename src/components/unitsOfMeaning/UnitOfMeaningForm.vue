@@ -48,6 +48,12 @@
       <p v-if="success" class="has-text-success">Unit of Meaning {{ isEdit ? 'updated' : 'added' }}!</p>
       <p v-if="error" class="has-text-danger">{{ error }}</p>
     </form>
+
+    <div class="" v-if="showTranslations">
+      <hr>
+      <DisplayTranslations v-if="id" :unit-id="id" class="mt-5" />
+    </div>
+
   </details>
 </template>
 
@@ -57,8 +63,9 @@ import { addUnitOfMeaning, getUnitOfMeaningById } from '../../dexie/useUnitOfMea
 import { db } from '../../dexie/db'
 import { getLanguages } from '../../dexie/useLanguageTable'
 import type { Language } from '../../types/Language'
+import DisplayTranslations from './manageTranslations/DisplayTranslations.vue'
 
-const props = defineProps<{ id?: number, initiallyCollapsed: boolean, translationsInitiallyCollapsed: boolean }>()
+const props = defineProps<{ id?: number, initiallyCollapsed: boolean, showTranslations: boolean }>()
 const isEdit = computed(() => !!props.id)
 
 const form = ref({
