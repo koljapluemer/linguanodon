@@ -2,10 +2,12 @@
   <div>
     <h2 class="title">Translations</h2>
     <div v-if="currentUnit && currentUnit.translations && currentUnit.translations.length" class="mb-3" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-      <DisplayTranslation
+      <UnitOfMeaningForm
         v-for="tid in currentUnit.translations"
         :key="tid"
-        :name="getTranslationContent(tid)"
+        :id="tid"
+        :initially-collapsed="true"
+        :translations-initially-collapsed="true"
       />
     </div>
     <button class="button is-link" @click="openModal = true">Connect Existing Word or Sentence</button>
@@ -29,7 +31,7 @@ import { db } from '../../../dexie/db'
 import { filterEligibleTranslationUnits } from '../../../utils/unitOfMeaningUtils'
 import type { UnitOfMeaning } from '../../../types/UnitOfMeaning'
 import type { Language } from '../../../types/Language'
-import DisplayTranslation from './translationWidgets/DisplayTranslation.vue'
+import UnitOfMeaningForm from '@/components/unitsOfMeaning/UnitOfMeaningForm.vue'
 
 
 const props = defineProps<{ unitId: number }>()
