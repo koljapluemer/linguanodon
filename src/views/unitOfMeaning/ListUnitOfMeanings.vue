@@ -1,6 +1,10 @@
 <template>
   <section class="section">
     <div class="container">
+      <div class="mb-4">
+        <router-link :to="{ name: 'AddUnitOfMeaning' }" class="button is-link">Add Unit Of Meaning</router-link>
+      </div>
+
       <h1 class="title">All Units Of Meaning</h1>
       <div class="mb-4">
         <div class="buttons has-addons">
@@ -8,6 +12,7 @@
           <button class="button" :class="{ 'is-primary': !showTarget }" @click="showTarget = false">Show native language</button>
         </div>
       </div>
+
       <div v-if="loading" class="has-text-grey">Loading...</div>
       <div v-else>
         <table class="table is-fullwidth is-striped">
