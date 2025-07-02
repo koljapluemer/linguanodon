@@ -4,6 +4,8 @@ Your ultimate app to learn Egyptian Arabic.
 
 *work in progress*.
 
+*possible best shot for linguanodon in general, may just expand scope here*
+
 ## Development
 
 ### Stack
