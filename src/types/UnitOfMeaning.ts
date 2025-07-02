@@ -2,7 +2,7 @@ export interface UnitOfMeaning {
     id?: number
     languageName: string | null // references Language.name, or null if deleted
     content: string
-    wordType: string
+    linguType: string
     pronunciation?: string
     notes?: string
 
