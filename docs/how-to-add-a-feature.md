@@ -19,6 +19,8 @@ As a rule:
 
 - Types and interfaces live in `/types` unless they are 100% only usable in one file or page. Do NOT, EVER, copypaste types in component files
 
+- ALWAYS use `@/...` import syntax, except if the the imported thing is in the same directory. That's way more robust, and way more readable.
+
 ## Documentation
 
 - Write conceptual stuff in `doc/` as a markdown guide
