@@ -72,7 +72,6 @@
 import { ref, onMounted, computed } from 'vue'
 import { Edit, Trash2 } from 'lucide-vue-next'
 import { db } from '../../dexie/db'
-import { getLanguages } from '../../dexie/useLanguageTable'
 import { getLanguageAbbreviation } from '../../utils/languageUtils'
 import type { UnitOfMeaning } from '@/types/persistent-general-data/UnitOfMeaning'
 import type { Language } from '@/types/persistent-general-data/Language'

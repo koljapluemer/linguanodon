@@ -1,178 +1,131 @@
 <template>
-  <div class="manage-languages">
-    <div class="columns">
-      <div class="column">
-        <div class="box">
-          <h2 class="title is-5">Native Languages</h2>
-          <ul>
-            <li v-for="(lang, idx) in nativeLanguages" :key="lang.name" class="mb-2">
-              <div class="is-flex is-align-items-center">
-                <template v-if="editName === lang.name">
-                  <div class="field is-grouped is-grouped-multiline mr-2">
-                    <div class="control">
-                      <input class="input is-small" v-model="editForm.name" placeholder="Name" :disabled="lang.requiredByApp" />
-                    </div>
-                    <div class="control">
-                      <input class="input is-small" v-model="editForm.abbreviation" placeholder="Abbreviation" />
-                    </div>
-                  </div>
-                  <div class="buttons are-small">
-                    <button class="button is-primary is-light" @click="saveEdit(lang)">Save</button>
-                    <button class="button is-light" @click="cancelEdit">Cancel</button>
-                  </div>
-                </template>
-                <template v-else>
-                  <span class="mr-3">{{ lang.name }} <span class="has-text-grey">({{ lang.abbreviation }})</span></span>
-                  <div class="buttons are-small">
-                    <button class="button is-light" @click="move(lang, 'up')" :disabled="idx === 0">↑</button>
-                    <button class="button is-light" @click="move(lang, 'down')" :disabled="idx === nativeLanguages.length - 1">↓</button>
-                    <button v-if="!lang.requiredByApp" class="button is-info is-light" @click="startEdit(lang)">Edit</button>
-                    <button v-if="!lang.requiredByApp" class="button is-danger is-light" @click="remove(lang)">Delete</button>
-                  </div>
-                </template>
-              </div>
-            </li>
-          </ul>
-          <form class="mt-4" @submit.prevent="addNative">
-            <div class="field is-grouped">
-              <div class="control is-expanded">
-                <input class="input is-small" v-model="addFormNative.name" placeholder="Name" />
-              </div>
-              <div class="control">
-                <input class="input is-small" v-model="addFormNative.abbreviation" placeholder="Abbreviation" />
-              </div>
-              <div class="control">
-                <button class="button is-primary is-small" type="submit">Add</button>
-              </div>
-            </div>
-          </form>
-        </div>
+  <div v-if="allLanguages.length" class="p-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Native Languages -->
+    <div>
+      <h2 class="text-xl font-bold mb-2">Native Languages</h2>
+      <div class="mb-6">
+        <h3 class="font-semibold mb-1">Primary</h3>
+        <LanguageGroup
+          :all-languages="allLanguages"
+          :selected-tags="primaryNative"
+          @add="(tag: string) => addLanguage('primaryNative', tag)"
+          @remove="(tag: string) => removeLanguage('primaryNative', tag)"
+        />
       </div>
-      <div class="column">
-        <div class="box">
-          <h2 class="title is-5">Target Languages</h2>
-          <ul>
-            <li v-for="(lang, idx) in targetLanguages" :key="lang.name" class="mb-2">
-              <div class="is-flex is-align-items-center">
-                <template v-if="editName === lang.name">
-                  <div class="field is-grouped is-grouped-multiline mr-2">
-                    <div class="control">
-                      <input class="input is-small" v-model="editForm.name" placeholder="Name" :disabled="lang.requiredByApp" />
-                    </div>
-                    <div class="control">
-                      <input class="input is-small" v-model="editForm.abbreviation" placeholder="Abbreviation" />
-                    </div>
-                  </div>
-                  <div class="buttons are-small">
-                    <button class="button is-primary is-light" @click="saveEdit(lang)">Save</button>
-                    <button class="button is-light" @click="cancelEdit">Cancel</button>
-                  </div>
-                </template>
-                <template v-else>
-                  <span class="mr-3">{{ lang.name }} <span class="has-text-grey">({{ lang.abbreviation }})</span></span>
-                  <div class="buttons are-small">
-                    <button class="button is-light" @click="move(lang, 'up')" :disabled="idx === 0">↑</button>
-                    <button class="button is-light" @click="move(lang, 'down')" :disabled="idx === targetLanguages.length - 1">↓</button>
-                    <button v-if="!lang.requiredByApp" class="button is-info is-light" @click="startEdit(lang)">Edit</button>
-                    <button v-if="!lang.requiredByApp" class="button is-danger is-light" @click="remove(lang)">Delete</button>
-                  </div>
-                </template>
-              </div>
-            </li>
-          </ul>
-          <form class="mt-4" @submit.prevent="addTarget">
-            <div class="field is-grouped">
-              <div class="control is-expanded">
-                <input class="input is-small" v-model="addFormTarget.name" placeholder="Name" />
-              </div>
-              <div class="control">
-                <input class="input is-small" v-model="addFormTarget.abbreviation" placeholder="Abbreviation" />
-              </div>
-              <div class="control">
-                <button class="button is-primary is-small" type="submit">Add</button>
-              </div>
-            </div>
-          </form>
-        </div>
+      <div>
+        <h3 class="font-semibold mb-1">Secondary</h3>
+        <LanguageGroup
+          :all-languages="allLanguages"
+          :selected-tags="secondaryNative"
+          @add="(tag: string) => addLanguage('secondaryNative', tag)"
+          @remove="(tag: string) => removeLanguage('secondaryNative', tag)"
+        />
       </div>
     </div>
+    <!-- Target Languages -->
+    <div>
+      <h2 class="text-xl font-bold mb-2">Target Languages</h2>
+      <div class="mb-6">
+        <h3 class="font-semibold mb-1">Primary</h3>
+        <LanguageGroup
+          :all-languages="allLanguages"
+          :selected-tags="primaryTarget"
+          @add="(tag: string) => addLanguage('primaryTarget', tag)"
+          @remove="(tag: string) => removeLanguage('primaryTarget', tag)"
+        />
+      </div>
+      <div>
+        <h3 class="font-semibold mb-1">Secondary</h3>
+        <LanguageGroup
+          :all-languages="allLanguages"
+          :selected-tags="secondaryTarget"
+          @add="(tag: string) => addLanguage('secondaryTarget', tag)"
+          @remove="(tag: string) => removeLanguage('secondaryTarget', tag)"
+        />
+      </div>
+    </div>
+  </div>
+  <div v-else class="flex justify-center items-center h-32">
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { getLanguages, addLanguage, updateLanguage, deleteLanguage, moveLanguage, ensureDefaultLanguages } from '../../dexie/useLanguageTable'
+import { ref, onMounted } from 'vue'
+import { db } from '@/dexie/db'
 import type { Language } from '@/types/persistent-general-data/Language'
-import type { UnitOfMeaning } from '@/types/persistent-general-data/UnitOfMeaning'
+import LanguageGroup from '@/components/languages/LanguageGroup.vue'
 
-const languages = ref<Language[]>([])
-const editName = ref<string | null>(null)
-const editForm = ref({ name: '', abbreviation: '' })
-const addFormNative = ref({ name: '', abbreviation: '' })
-const addFormTarget = ref({ name: '', abbreviation: '' })
+const BACKEND_LANG_URL = 'https://scintillating-empanada-73O0581.netlify.app/language_tags.json'
+const allLanguages = ref<Language[]>([])
 
-const load = async () => {
-  await ensureDefaultLanguages()
-  languages.value = await getLanguages()
+const primaryNative = ref<string[]>([])
+const secondaryNative = ref<string[]>([])
+const primaryTarget = ref<string[]>([])
+const secondaryTarget = ref<string[]>([])
+
+async function seedLanguagesIfNeeded() {
+  const count = await db.languages.count()
+  if (count === 0) {
+    const res = await fetch(BACKEND_LANG_URL)
+    const langs: Language[] = await res.json()
+    await db.languages.bulkAdd(langs)
+  }
 }
 
-onMounted(load)
-
-const nativeLanguages = computed(() => languages.value.filter(l => !l.isTargetLanguage).sort((a, b) => a.position - b.position))
-const targetLanguages = computed(() => languages.value.filter(l => l.isTargetLanguage).sort((a, b) => a.position - b.position))
-
-const addNative = async () => {
-  if (!addFormNative.value.name.trim()) return
-  if (languages.value.some(l => l.name === addFormNative.value.name.trim())) return
-  await addLanguage({
-    name: addFormNative.value.name.trim(),
-    abbreviation: addFormNative.value.abbreviation.trim(),
-  }, false)
-  addFormNative.value.name = ''
-  addFormNative.value.abbreviation = ''
-  await load()
+async function loadAllLanguages() {
+  await seedLanguagesIfNeeded()
+  allLanguages.value = await db.languages.toArray()
 }
 
-const addTarget = async () => {
-  if (!addFormTarget.value.name.trim()) return
-  if (languages.value.some(l => l.name === addFormTarget.value.name.trim())) return
-  await addLanguage({
-    name: addFormTarget.value.name.trim(),
-    abbreviation: addFormTarget.value.abbreviation.trim(),
-  }, true)
-  addFormTarget.value.name = ''
-  addFormTarget.value.abbreviation = ''
-  await load()
+async function loadUserLanguages() {
+  const settings = await db.userSettings.get(0)
+  primaryNative.value = settings?.primaryNativeLanguages ?? []
+  secondaryNative.value = settings?.secondaryNativeLanguages ?? []
+  primaryTarget.value = settings?.primaryTargetLanguages ?? []
+  secondaryTarget.value = settings?.secondaryTargetLanguages ?? []
 }
 
-const startEdit = (lang: Language) => {
-  editName.value = lang.name
-  editForm.value = { name: lang.name, abbreviation: lang.abbreviation }
-}
-
-const saveEdit = async (lang: Language) => {
-  if (!editForm.value.name.trim()) return
-  if (editForm.value.name !== lang.name && languages.value.some(l => l.name === editForm.value.name.trim())) return
-  await updateLanguage(lang.name, {
-    abbreviation: editForm.value.abbreviation.trim(),
+async function saveUserLanguages() {
+  await db.userSettings.put({
+    id: 0,
+    primaryNativeLanguages: primaryNative.value,
+    secondaryNativeLanguages: secondaryNative.value,
+    primaryTargetLanguages: primaryTarget.value,
+    secondaryTargetLanguages: secondaryTarget.value,
   })
-  editName.value = null
-  await load()
 }
 
-const cancelEdit = () => {
-  editName.value = null
+async function addLanguage(group: string, tag: string) {
+  const arr = getGroupRef(group)
+  if (!arr.value.includes(tag)) {
+    arr.value.push(tag)
+    await saveUserLanguages()
+  }
 }
 
-const remove = async (lang: Language) => {
-  await deleteLanguage(lang.name)
-  await load()
+async function removeLanguage(group: string, tag: string) {
+  const arr = getGroupRef(group)
+  const idx = arr.value.indexOf(tag)
+  if (idx !== -1) {
+    arr.value.splice(idx, 1)
+    await saveUserLanguages()
+  }
 }
 
-const move = async (lang: Language, dir: 'up'|'down') => {
-  await moveLanguage(lang.name, dir)
-  await load()
+function getGroupRef(group: string) {
+  switch (group) {
+    case 'primaryNative': return primaryNative
+    case 'secondaryNative': return secondaryNative
+    case 'primaryTarget': return primaryTarget
+    case 'secondaryTarget': return secondaryTarget
+    default: throw new Error('Invalid group')
+  }
 }
+
+onMounted(async () => {
+  await loadAllLanguages()
+  await loadUserLanguages()
+})
 </script>
 
-<!-- No custom CSS needed, Bulma handles layout and style -->

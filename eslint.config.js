@@ -6,12 +6,20 @@ import pluginImport from "eslint-plugin-import";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"], plugins: { js }, extends: ["js/recommended"] },
+  { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], plugins: { js }, extends: ["js/recommended"] },
   { files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,
-  pluginVue.configs["flat/essential"],
   {
-    files: ["**/*.vue", "**/*.ts"],
+    files: ["**/*.vue"],
+    languageOptions: {
+      parser: "vue-eslint-parser",
+      parserOptions: {
+        parser: "@typescript-eslint/parser",
+        ecmaVersion: 2022,
+        sourceType: "module",
+        extraFileExtensions: [".vue"],
+      },
+    },
     plugins: {
       vue: pluginVue,
       '@typescript-eslint': tseslint.plugin,
@@ -29,6 +37,22 @@ export default defineConfig([
     },
   },
   {
+    files: ["**/*.ts"],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+      import: pluginImport,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      'import/no-unresolved': 'error',
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {},
+      },
+    },
+  },
+  {
     files: ["vite.config.ts"],
     languageOptions: { globals: globals.node },
     parserOptions: {
@@ -36,7 +60,7 @@ export default defineConfig([
       sourceType: 'module',
     },
     rules: {
-      'import/no-unresolved': 'off', // Vite plugins and Node built-ins may not resolve in import plugin
+      'import/no-unresolved': 'off',
     },
   },
 ]);

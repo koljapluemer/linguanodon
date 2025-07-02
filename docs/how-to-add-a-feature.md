@@ -9,7 +9,7 @@ As a rule:
 
 ## Development
 
-- Add unit tests via the configured `vitest` environment (see config in `nuxt.config.ts` and `vitest.config.ts`)
+- Add unit tests via the configured `vitest` environment
   - It's not required to use TDD, but it may make sense, especially when working on logic-heave features
   - However, each added feature should at least be convered in regards to basic happy path
 
@@ -29,19 +29,15 @@ As a rule:
 
 ## Tech Stack
 
-- Standard Nuxt app
+- Standard Vue + Vite app
     - Meaning, per-default, we are doing things *server-side*
 
 ### Nuxt Plugins
 
 - `eslint` is setup. Don't forget to run linter.
-- utilize `@nuxt/fonts` for fonts. keep it basic.
-- use `@nuxt/icon`, so icons should be valid [iconify](https://iconify.design/)
-- use `@nuxt/test-utils` to get good unit test coverage
 - we have `Tailwind` + `Daisy UI` installed, utilize that for design
     - Avoid manual CSS when possible
 
 ### Data
 
 - source of truth is a local, per-user `dexie.js` database
-    - must, of course, be used with `ClientOnly`
