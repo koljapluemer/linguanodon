@@ -1,4 +1,6 @@
 export interface UserSettings {
-    nativeLanguages: string[] // array of Language.name
-    targetLanguages: string[] // array of Language.name
+    primaryNativeLanguages: string[] // array of Language.name
+    secondaryNativeLanguages: string[] // array of Language.name
+    primaryTargetLanguages: string[] // array of Language.name
+    secondaryTargetLanguages: string[] // array of Language.name
 }
