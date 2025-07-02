@@ -28,4 +28,15 @@ export default defineConfig([
       },
     },
   },
+  {
+    files: ["vite.config.ts"],
+    languageOptions: { globals: globals.node },
+    parserOptions: {
+      project: './tsconfig.node.json',
+      sourceType: 'module',
+    },
+    rules: {
+      'import/no-unresolved': 'off', // Vite plugins and Node built-ins may not resolve in import plugin
+    },
+  },
 ]);

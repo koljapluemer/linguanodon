@@ -17,3 +17,8 @@
     </div>
   </section>
 </template>
+
+<style>
+@import "tailwindcss";
+@plugin "daisyui";
+</style>
