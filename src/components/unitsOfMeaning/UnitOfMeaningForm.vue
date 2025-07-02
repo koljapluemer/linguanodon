@@ -62,7 +62,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { addUnitOfMeaning, getUnitOfMeaningById } from '../../dexie/useUnitOfMeaningTable'
 import { db } from '../../dexie/db'
 import { getLanguages } from '../../dexie/useLanguageTable'
-import type { Language } from '../../types/Language'
+import type { Language } from '@/types/persistent-general-data/Language'
 import DisplayTranslations from './manageTranslations/DisplayTranslations.vue'
 
 const props = defineProps<{ 

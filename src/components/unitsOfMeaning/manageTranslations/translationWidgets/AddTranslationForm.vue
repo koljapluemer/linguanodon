@@ -14,8 +14,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import UnitOfMeaningForm from '../../UnitOfMeaningForm.vue'
-import type { Language } from '../../../../types/Language'
-import type { UnitOfMeaning } from '../../../../types/UnitOfMeaning'
+import type { Language } from '@/types/persistent-general-data/Language'
+import type { UnitOfMeaning } from '@/types/persistent-general-data/UnitOfMeaning'
 
 const props = defineProps<{
   currentUnit: UnitOfMeaning

@@ -102,7 +102,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { getLanguages, addLanguage, updateLanguage, deleteLanguage, moveLanguage, ensureDefaultLanguages } from '../../dexie/useLanguageTable'
-import type { Language } from '../../types/Language'
+import type { Language } from '@/types/persistent-general-data/Language'
+import type { UnitOfMeaning } from '@/types/persistent-general-data/UnitOfMeaning'
 
 const languages = ref<Language[]>([])
 const editName = ref<string | null>(null)

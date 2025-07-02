@@ -43,8 +43,8 @@ import { getUnitOfMeaningById, connectUnitsAsTranslations } from '../../../dexie
 import { getLanguages } from '../../../dexie/useLanguageTable'
 import { db } from '../../../dexie/db'
 import { filterEligibleTranslationUnits } from '../../../utils/unitOfMeaningUtils'
-import type { UnitOfMeaning } from '../../../types/UnitOfMeaning'
-import type { Language } from '../../../types/Language'
+import type { UnitOfMeaning } from '@/types/persistent-general-data/UnitOfMeaning'
+import type { Language } from '@/types/persistent-general-data/Language'
 import UnitOfMeaningForm from '@/components/unitsOfMeaning/UnitOfMeaningForm.vue'
 
 

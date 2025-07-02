@@ -74,8 +74,8 @@ import { Edit, Trash2 } from 'lucide-vue-next'
 import { db } from '../../dexie/db'
 import { getLanguages } from '../../dexie/useLanguageTable'
 import { getLanguageAbbreviation } from '../../utils/languageUtils'
-import type { UnitOfMeaning } from '../../types/UnitOfMeaning'
-import type { Language } from '../../types/Language'
+import type { UnitOfMeaning } from '@/types/persistent-general-data/UnitOfMeaning'
+import type { Language } from '@/types/persistent-general-data/Language'
 
 const units = ref<UnitOfMeaning[]>([])
 const languages = ref<Language[]>([])

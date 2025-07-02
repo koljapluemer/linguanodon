@@ -37,7 +37,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { UnitOfMeaning } from '../../../../types/UnitOfMeaning'
+import type { UnitOfMeaning } from '@/types/persistent-general-data/UnitOfMeaning'
+import type { Language } from '@/types/persistent-general-data/Language'
 
 const props = defineProps<{
   open: boolean,
