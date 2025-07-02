@@ -51,7 +51,7 @@ export async function moveLanguage(name: string, direction: 'up'|'down') {
   const all = (await db.languages.toArray()).filter(l => l.isTargetLanguage === lang.isTargetLanguage).sort((a, b) => a.position - b.position)
   const idx = all.findIndex(l => l.name === name)
   if (idx === -1) return
-  let swapIdx = direction === 'up' ? idx - 1 : idx + 1
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1
   if (swapIdx < 0 || swapIdx >= all.length) return
   const swapLang = all[swapIdx]
   await db.languages.update(lang.name, { position: swapLang.position })

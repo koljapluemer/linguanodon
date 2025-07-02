@@ -183,8 +183,12 @@ async function onSubmit() {
       // Emit saved event with the new unit ID
       emit('saved', newId)
     }
-  } catch (e: any) {
-    error.value = e?.message || 'Failed to save.'
+  } catch (e: unknown) {
+    if (typeof e === 'object' && e !== null && 'message' in e && typeof (e as Record<string, unknown>).message === 'string') {
+      error.value = (e as { message: string }).message
+    } else {
+      error.value = 'Failed to save.'
+    }
   } finally {
     loading.value = false
   }

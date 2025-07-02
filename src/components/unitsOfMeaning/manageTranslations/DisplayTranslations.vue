@@ -93,11 +93,6 @@ async function onSelect(selectedId: number) {
   openModal.value = false
 }
 
-function getTranslationContent(tid: number) {
-  const t = allUnits.value.find(u => u.id === tid)
-  return t ? t.content : ''
-}
-
 async function onNewTranslationSaved(newUnitId: number) {
   if (!currentUnit.value) return
   
