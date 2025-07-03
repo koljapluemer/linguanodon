@@ -28,10 +28,19 @@ export async function addLearningGoalWithUnitsAndTranslations(
 ) {
   const uniqueUnits = dedupeByUid(units)
   const uniqueTranslations = dedupeByUid(translations)
+
+  // Filter out already-existing units and translations
+  const unitUids = uniqueUnits.map(u => u.uid)
+  const translationUids = uniqueTranslations.map(t => t.uid)
+  const existingUnits = await db.unitsOfMeaning.bulkGet(unitUids)
+  const existingTranslations = await db.unitsOfMeaning.bulkGet(translationUids)
+  const newUnits = uniqueUnits.filter((u, i) => !existingUnits[i])
+  const newTranslations = uniqueTranslations.filter((t, i) => !existingTranslations[i])
+
   return db.transaction('rw', db.learningGoals, db.unitsOfMeaning, async () => {
     if (goal) await db.learningGoals.add(goal)
-    if (uniqueUnits.length) await db.unitsOfMeaning.bulkAdd(uniqueUnits)
-    if (uniqueTranslations.length) await db.unitsOfMeaning.bulkAdd(uniqueTranslations)
+    if (newUnits.length) await db.unitsOfMeaning.bulkAdd(newUnits)
+    if (newTranslations.length) await db.unitsOfMeaning.bulkAdd(newTranslations)
   })
 }
 
