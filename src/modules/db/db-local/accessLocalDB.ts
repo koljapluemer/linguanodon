@@ -18,6 +18,7 @@ import Dexie, { type Table } from 'dexie'
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 import type { Language } from '@/modules/languages/types/Language'
+import type { UserSettings } from '@/modules/user-settings/UserSettings'
 
 /**
  * Local Dexie DB instance for all user data; centralizes schema and access for per-user storage.
@@ -27,6 +28,7 @@ export class LinguanodonDB extends Dexie {
   unitsOfMeaning!: Table<UnitOfMeaning, string>
   canonicalLanguages!: Table<Language, string>
   canonicalLanguagesMeta!: Table<{ id: string, lastFetched: number }, string>
+  userSettings!: Table<UserSettings & { id: string }, string>
 
   /**
    * Ensures schema changes are managed in one place for all learning data.
@@ -42,6 +44,13 @@ export class LinguanodonDB extends Dexie {
       unitsOfMeaning: 'uid',
       canonicalLanguages: 'tag',
       canonicalLanguagesMeta: 'id'
+    })
+    this.version(3).stores({
+      learningGoals: 'uid',
+      unitsOfMeaning: 'uid',
+      canonicalLanguages: 'tag',
+      canonicalLanguagesMeta: 'id',
+      userSettings: 'id'
     })
   }
 }
