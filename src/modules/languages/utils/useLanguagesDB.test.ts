@@ -71,9 +71,34 @@ describe('useCanonicalLanguageList', () => {
   })
 
   it('fetches a new list if cache is stale or on manual refresh', async () => {
-    // TODO: Pre-populate Dexie with stale data
-    // TODO: Call composable and ensure fetch is made
-    expect(false).toBe(true) // RED
+    // Pre-populate Dexie with stale data
+    const oldLanguages: Language[] = [
+      { tag: 'es', name: 'Spanish' },
+      { tag: 'it', name: 'Italian' }
+    ]
+    const stale = Date.now() - (25 * 60 * 60 * 1000) // 25h ago
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguages.bulkAdd(oldLanguages)
+    await db.canonicalLanguagesMeta.put({ id: 'meta', lastFetched: stale })
+    // Mock fetchCanonicalLanguages to return mockLanguages (new data)
+    vi.spyOn(remoteDB, 'fetchCanonicalLanguages').mockResolvedValue(mockLanguages)
+    const { languages, refresh } = useCanonicalLanguageList()
+    // Wait for new data to be fetched and stored
+    const dbLangs = await waitForDbLanguages(mockLanguages.length)
+    const reactiveLangs = await waitForLanguages(languages, mockLanguages.length)
+    expect(sortByTag(reactiveLangs)).toEqual(sortByTag(mockLanguages))
+    expect(sortByTag(dbLangs)).toEqual(sortByTag(mockLanguages))
+    // Now test manual refresh
+    const newLanguages: Language[] = [
+      { tag: 'ar', name: 'Arabic' },
+      { tag: 'ru', name: 'Russian' }
+    ]
+    vi.spyOn(remoteDB, 'fetchCanonicalLanguages').mockResolvedValue(newLanguages)
+    await refresh()
+    const dbLangs2 = await waitForDbLanguages(newLanguages.length)
+    const reactiveLangs2 = await waitForLanguages(languages, newLanguages.length)
+    expect(sortByTag(reactiveLangs2)).toEqual(sortByTag(newLanguages))
+    expect(sortByTag(dbLangs2)).toEqual(sortByTag(newLanguages))
   })
 
   it('exposes the list reactively via composable', async () => {
