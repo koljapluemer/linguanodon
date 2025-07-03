@@ -1,7 +1,9 @@
 import { ref } from 'vue'
 import { useToast } from '@/modules/ui/toast/useToast'
-import { getRemoteLearningGoalByUID } from './getRemoteLearningGoalByUID'
+import { fetchLearningGoalData } from './fetchLearningGoalData'
 import { addLearningGoalWithUnitsAndTranslations, removeLearningGoalWithUnitsAndTranslations, checkExistingItems } from '@/modules/learning-goals/utils/useLearningGoalDB'
+import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
+import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
 /**
  * Composable for orchestrating remote learning goal download and UI state.
@@ -16,46 +18,39 @@ export function useRemoteLearningGoalDownloader(language: string) {
   async function downloadLearningGoal(uid: string) {
     if (isDownloading.value) return
     isDownloading.value = uid
+    let learningGoal: LearningGoal
+    let units: UnitOfMeaning[]
+    let translations: UnitOfMeaning[]
+    let missingGoal: LearningGoal | null
+    let missingUnits: UnitOfMeaning[]
+    let missingTranslations: UnitOfMeaning[]
     try {
-      // Fetch full learning goal, units, translations
-      const { learningGoal, units, translations } = await getRemoteLearningGoalByUID(language, uid)
-      if (!learningGoal) {
-        showToast({ type: 'error', message: 'Remote learning goal data is malformed or missing.', duration: 6000 })
-        isDownloading.value = null
-        return
-      }
+      // Fetch phase (abort on any error)
+      const fetchResult = await fetchLearningGoalData(language, uid)
+      learningGoal = fetchResult.learningGoal
+      units = fetchResult.units
+      translations = fetchResult.translations
       // Validate against local DB
-      const { missingGoal, missingUnits, missingTranslations, existingNames } = await checkExistingItems(learningGoal, units, translations)
+      const checkResult = await checkExistingItems(learningGoal, units, translations)
+      missingGoal = checkResult.missingGoal
+      missingUnits = checkResult.missingUnits
+      missingTranslations = checkResult.missingTranslations
       if (!missingGoal && missingUnits.length === 0 && missingTranslations.length === 0) {
         showToast({ type: 'info', message: 'All items already exist locally.', duration: 4000 })
         isDownloading.value = null
         return
       }
-      // Atomic write
-      if (missingGoal) {
-        await addLearningGoalWithUnitsAndTranslations(missingGoal, missingUnits, missingTranslations)
-      } else if (missingUnits.length || missingTranslations.length) {
-        // Only add units/translations if goal already exists
-        // (should not happen in normal workflow, but for completeness)
-        await addLearningGoalWithUnitsAndTranslations(learningGoal, missingUnits, missingTranslations)
-      }
-      // Toast with undo
-      showUndoToast(
-        `Downloaded '${learningGoal.name}'. ${existingNames.length ? 'Some items already existed: ' + existingNames.join(', ') : ''}`,
-        async () => {
-          if (missingGoal) {
-            await removeLearningGoalWithUnitsAndTranslations(missingGoal, missingUnits, missingTranslations)
-          } else if (missingUnits.length || missingTranslations.length) {
-            await removeLearningGoalWithUnitsAndTranslations(learningGoal, missingUnits, missingTranslations)
-          }
-          showToast({ type: 'info', message: `Undo: Removed '${learningGoal.name}' and related items.`, duration: 4000 })
-        }
-      )
+      // Atomic write (abort on any error)
+      await addLearningGoalWithUnitsAndTranslations(missingGoal || learningGoal, missingUnits, missingTranslations)
+      // Toast with undo (undo only removes newly added items)
+      showUndoToast('Download successful', async () => {
+        await removeLearningGoalWithUnitsAndTranslations(missingGoal || learningGoal, missingUnits, missingTranslations)
+        showToast({ type: 'info', message: `Undo: Removed '${learningGoal.name}' and related items.`, duration: 4000 })
+      })
     } catch (e) {
-      showToast({ type: 'error', message: 'Download failed. See console for details.', duration: 6000 })
-      if (e instanceof Error) {
-        console.error(e)
-      }
+      showToast({ type: 'error', message: 'Download failed', duration: 6000 })
+      // Log full error for developer
+      console.error('Download failed for learning goal', { uid, error: e })
     } finally {
       isDownloading.value = null
     }

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { useRemoteLearningGoalDownloader } from './useRemoteLearningGoalDownloader'
+import { fetchLearningGoalData } from './fetchLearningGoalData'
 
 vi.mock('@/modules/ui/toast/useToast', () => ({
   useToast: () => ({
@@ -7,8 +8,8 @@ vi.mock('@/modules/ui/toast/useToast', () => ({
     showUndoToast: vi.fn()
   })
 }))
-vi.mock('./getRemoteLearningGoalByUID', () => ({
-  getRemoteLearningGoalByUID: vi.fn(async () => ({
+vi.mock('./fetchLearningGoalData', () => ({
+  fetchLearningGoalData: vi.fn(async () => ({
     learningGoal: { uid: '1', name: 'Goal' },
     units: [],
     translations: []
@@ -20,8 +21,7 @@ vi.mock('@/modules/learning-goals/utils/useLearningGoalDB', () => ({
   checkExistingItems: vi.fn(async () => ({
     missingGoal: { uid: '1', name: 'Goal' },
     missingUnits: [],
-    missingTranslations: [],
-    existingNames: []
+    missingTranslations: []
   }))
 }))
 
@@ -34,6 +34,13 @@ describe('useRemoteLearningGoalDownloader', () => {
    */
   it('downloads and shows toast', async () => {
     const { downloadLearningGoal, isDownloading } = useRemoteLearningGoalDownloader('en')
+    await downloadLearningGoal('1')
+    expect(isDownloading.value).toBe(null)
+  })
+
+  it('handles fetch error and shows error toast', async () => {
+    const { downloadLearningGoal, isDownloading } = useRemoteLearningGoalDownloader('en')
+    vi.mocked(fetchLearningGoalData).mockImplementationOnce(() => { throw new Error('fetch failed') })
     await downloadLearningGoal('1')
     expect(isDownloading.value).toBe(null)
   })

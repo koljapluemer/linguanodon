@@ -154,4 +154,48 @@ describe('useLearningGoalDB', () => {
     result = await checkExistingItems(goal, [unit1, unit2], [translation])
     expect(result.missingGoal).toEqual(goal)
   })
+
+  it('adds only the goal if all units/translations already exist', async () => {
+    await db.unitsOfMeaning.bulkAdd([unit1, unit2, translation])
+    await addLearningGoalWithUnitsAndTranslations(goal, [unit1, unit2], [translation])
+    const storedGoal = await db.learningGoals.get(goal.uid)
+    expect(storedGoal).toBeTruthy()
+    const allUnits = await db.unitsOfMeaning.toArray()
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === unit1.uid).length).toBe(1)
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === unit2.uid).length).toBe(1)
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === translation.uid).length).toBe(1)
+  })
+
+  it('adds only units/translations if goal already exists', async () => {
+    await db.learningGoals.add(goal)
+    await addLearningGoalWithUnitsAndTranslations(goal, [unit1, unit2], [translation])
+    const storedGoal = await db.learningGoals.get(goal.uid)
+    expect(storedGoal).toBeTruthy()
+    const allUnits = await db.unitsOfMeaning.toArray()
+    expect(allUnits.find((u: UnitOfMeaning) => u.uid === unit1.uid)).toBeTruthy()
+    expect(allUnits.find((u: UnitOfMeaning) => u.uid === unit2.uid)).toBeTruthy()
+    expect(allUnits.find((u: UnitOfMeaning) => u.uid === translation.uid)).toBeTruthy()
+  })
+
+  it('does nothing and does not error if all items already exist', async () => {
+    await addLearningGoalWithUnitsAndTranslations(goal, [unit1, unit2], [translation])
+    // Try to add again
+    await addLearningGoalWithUnitsAndTranslations(goal, [unit1, unit2], [translation])
+    const storedGoal = await db.learningGoals.get(goal.uid)
+    expect(storedGoal).toBeTruthy()
+    const allUnits = await db.unitsOfMeaning.toArray()
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === unit1.uid).length).toBe(1)
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === unit2.uid).length).toBe(1)
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === translation.uid).length).toBe(1)
+  })
+
+  it('adding exact duplicates in input does not error and only one copy is in DB', async () => {
+    await addLearningGoalWithUnitsAndTranslations(goal, [unit1, unit1, unit2, unit2], [translation, translation])
+    const storedGoal = await db.learningGoals.get(goal.uid)
+    expect(storedGoal).toBeTruthy()
+    const allUnits = await db.unitsOfMeaning.toArray()
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === unit1.uid).length).toBe(1)
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === unit2.uid).length).toBe(1)
+    expect(allUnits.filter((u: UnitOfMeaning) => u.uid === translation.uid).length).toBe(1)
+  })
 }) 
