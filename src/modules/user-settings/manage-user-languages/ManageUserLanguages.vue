@@ -7,7 +7,7 @@
  */
 import { ref } from 'vue'
 import RenderLanguageGroup from './RenderLanguageGroup.vue'
-import RenderLanguageDropdown from './RenderLanguageDropdown.vue'
+import LanguageAutocompleteInput from './LanguageAutocompleteInput.vue'
 import { useUserSettings, addLanguageToGroup, removeLanguageFromGroup, promoteLanguage, demoteLanguage } from '@/modules/user-settings/utils/useUserSettingsDB'
 import { useCanonicalLanguageList } from '@/modules/languages/utils/useLanguagesDB'
 import type { UserSettingsGroup } from '@/modules/user-settings/types/UserSettingsGroup'
@@ -97,6 +97,11 @@ async function handleDemote(lang: string, type: 'native' | 'target') {
   await demoteLanguage(lang, type)
   await load()
 }
+
+async function handleAddImmediate(lang: { tag: string }, group: GroupKey) {
+  await addLanguageToGroup(lang.tag, groupKeyToSettingsGroup[group])
+  await load()
+}
 </script>
 
 <template>
@@ -115,16 +120,11 @@ async function handleDemote(lang: string, type: 'native' | 'target') {
             :onDemote="lang => handleDemote(lang, 'native')"
             :showDemote="true"
           />
-          <RenderLanguageDropdown
+          <LanguageAutocompleteInput
             :languages="getAvailableLangs('primaryNative')"
-            v-model="selected.primaryNative"
             placeholder="Add primary native language"
+            @select="lang => handleAddImmediate(lang, 'primaryNative')"
           />
-          <button
-            class="btn btn-primary btn-sm mt-2"
-            :disabled="!selected.primaryNative"
-            @click="handleAdd('primaryNative')"
-          >Add</button>
         </div>
         <!-- Secondary Native -->
         <div class="flex-1 flex flex-col justify-between">
@@ -136,16 +136,11 @@ async function handleDemote(lang: string, type: 'native' | 'target') {
             :onPromote="lang => handlePromote(lang, 'native')"
             :showPromote="true"
           />
-          <RenderLanguageDropdown
+          <LanguageAutocompleteInput
             :languages="getAvailableLangs('secondaryNative')"
-            v-model="selected.secondaryNative"
             placeholder="Add secondary native language"
+            @select="lang => handleAddImmediate(lang, 'secondaryNative')"
           />
-          <button
-            class="btn btn-primary btn-sm mt-2"
-            :disabled="!selected.secondaryNative"
-            @click="handleAdd('secondaryNative')"
-          >Add</button>
         </div>
       </div>
       <!-- Target Languages Column -->
@@ -160,16 +155,11 @@ async function handleDemote(lang: string, type: 'native' | 'target') {
             :onDemote="lang => handleDemote(lang, 'target')"
             :showDemote="true"
           />
-          <RenderLanguageDropdown
+          <LanguageAutocompleteInput
             :languages="getAvailableLangs('primaryTarget')"
-            v-model="selected.primaryTarget"
             placeholder="Add primary target language"
+            @select="lang => handleAddImmediate(lang, 'primaryTarget')"
           />
-          <button
-            class="btn btn-primary btn-sm mt-2"
-            :disabled="!selected.primaryTarget"
-            @click="handleAdd('primaryTarget')"
-          >Add</button>
         </div>
         <!-- Secondary Target -->
         <div class="flex-1 flex flex-col justify-between">
@@ -181,16 +171,11 @@ async function handleDemote(lang: string, type: 'native' | 'target') {
             :onPromote="lang => handlePromote(lang, 'target')"
             :showPromote="true"
           />
-          <RenderLanguageDropdown
+          <LanguageAutocompleteInput
             :languages="getAvailableLangs('secondaryTarget')"
-            v-model="selected.secondaryTarget"
             placeholder="Add secondary target language"
+            @select="lang => handleAddImmediate(lang, 'secondaryTarget')"
           />
-          <button
-            class="btn btn-primary btn-sm mt-2"
-            :disabled="!selected.secondaryTarget"
-            @click="handleAdd('secondaryTarget')"
-          >Add</button>
         </div>
       </div>
     </div>
