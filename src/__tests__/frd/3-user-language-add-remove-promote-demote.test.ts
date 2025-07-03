@@ -1,7 +1,17 @@
-import { describe, it, beforeEach } from 'vitest'
+import { describe, it, beforeEach, expect } from 'vitest'
+import { addLanguageToGroup, useUserSettings } from '@/modules/user-settings/utils/useUserSettingsDB'
+import { db } from '@/modules/db/db-local/accessLocalDB'
+import { ALL_USER_SETTINGS_GROUPS } from '@/modules/user-settings/types/UserSettingsGroup'
 // import { mount } from '@vue/test-utils'
 // import ManageUserSettings from '@/modules/user-settings/ManageUserSettings.vue'
 // import { db } from '@/modules/db/db-local/accessLocalDB'
+
+// Helper: wait for reactivity
+async function waitForLoaded(loadedRef: { value: boolean }) {
+  while (!loadedRef.value) {
+    await new Promise(r => setTimeout(r, 0))
+  }
+}
 
 // TODO: Mock canonical language list and Dexie as needed
 
@@ -18,42 +28,61 @@ import { describe, it, beforeEach } from 'vitest'
  */
 describe('User Language Preferences UI (FRD 3)', () => {
   beforeEach(async () => {
-    // TODO: Clear Dexie and reset mocks
+    await db.userSettings.clear()
   })
 
   it('can add a language to each group via the UI', async () => {
-    // TODO: Mount, simulate add, assert UI and Dexie state
+    // We'll use logic-level helpers since UI is not implemented yet
+    const testLangs = ['en', 'fr', 'de', 'es']
+    const groups = [...ALL_USER_SETTINGS_GROUPS]
+    const { userSettings, loaded, load } = useUserSettings()
+    await waitForLoaded(loaded)
+
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i]
+      const lang = testLangs[i]
+      await addLanguageToGroup(lang, group)
+      await load() // reload from Dexie
+      // Assert language is in the correct group
+      expect(userSettings.value[group]).toContain(lang)
+      // Assert language is not in any other group
+      for (let j = 0; j < groups.length; j++) {
+        if (j !== i) {
+          expect(userSettings.value[groups[j]]).not.toContain(lang)
+        }
+      }
+    }
   })
 
   it('removes a language from a group via the UI', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 
   it('promotes/demotes a language between primary/secondary', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 
   it('prevents duplicates within/across groups', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 
   it('dropdown only shows available canonical languages', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 
   it('shows warning when a primary group is empty', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 
   it('reactively updates UI and persists to Dexie on all changes', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 
   it('restores correct state after remount/reload', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 
   it('handles edge cases: removing from empty, all groups empty, etc.', async () => {
-    // TODO
+    expect(false).toBe(true)
   })
 })
