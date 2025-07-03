@@ -35,7 +35,8 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/units-of-meaning/:uid',
-    component: ManageUnitOfMeaning
+    component: ManageUnitOfMeaning,
+    props: true
   }
 ]
 

@@ -29,7 +29,7 @@
         <tr v-for="unit in filteredUnits" :key="unit.uid">
           <td class="text-lg font-semibold">
             <RouterLink
-              :to="`/units-of-meaning/${unit.uid}`"
+              :to="`/units-of-meaning/${encodeURIComponent(unit.uid)}`"
               class="link link-primary hover:underline cursor-pointer"
             >
               {{ unit.content }}

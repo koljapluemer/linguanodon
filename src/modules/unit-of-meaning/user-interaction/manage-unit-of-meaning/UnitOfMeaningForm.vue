@@ -4,31 +4,31 @@
       <label class="label">
         <span class="label-text">Content</span>
       </label>
-      <input class="input input-bordered w-full" type="text" :value="unit.content" disabled />
+      <input class="input input-bordered w-full" type="text" v-model="unit.content" />
     </div>
     <div class="form-control">
       <label class="label">
         <span class="label-text">Linguistic Type</span>
       </label>
-      <input class="input input-bordered w-full" type="text" :value="unit.linguType" disabled />
+      <input class="input input-bordered w-full" type="text" v-model="unit.linguType" />
     </div>
     <div class="form-control">
       <label class="label">
         <span class="label-text">Pronunciation</span>
       </label>
-      <input class="input input-bordered w-full" type="text" :value="unit.pronunciation || ''" disabled />
+      <input class="input input-bordered w-full" type="text" v-model="unit.pronunciation" />
     </div>
     <div class="form-control">
       <label class="label">
         <span class="label-text">Notes</span>
       </label>
-      <textarea class="textarea textarea-bordered w-full" :value="unit.notes || ''" disabled></textarea>
+      <textarea class="textarea textarea-bordered w-full" v-model="unit.notes"></textarea>
     </div>
     <div class="form-control">
       <label class="label">
         <span class="label-text">Language</span>
       </label>
-      <select class="select select-bordered w-full" :value="unit.language" disabled>
+      <select class="select select-bordered w-full" v-model="unit.language">
         <optgroup label="Primary Target Languages">
           <option v-for="lang in mockUserSettings.primaryTargetLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
         </optgroup>

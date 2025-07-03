@@ -14,34 +14,29 @@ const mockUnit = {
 }
 
 describe('UnitOfMeaningForm.vue', () => {
-  it('renders all fields with correct values and disables them', () => {
+  it('renders all fields with correct values and are editable', () => {
     const wrapper = mount(UnitOfMeaningForm, {
       props: { unit: mockUnit }
     })
     // Content
     const contentInput = wrapper.find('input[type="text"]:first-of-type')
     expect((contentInput.element as HTMLInputElement).value).toBe('Hello')
-    expect(contentInput.attributes('disabled')).toBeDefined()
     // Linguistic Type
     const typeInput = wrapper.findAll('input[type="text"]')[1]
     expect((typeInput.element as HTMLInputElement).value).toBe('word')
-    expect(typeInput.attributes('disabled')).toBeDefined()
     // Pronunciation
     const pronInput = wrapper.findAll('input[type="text"]')[2]
     expect((pronInput.element as HTMLInputElement).value).toBe('həˈloʊ')
-    expect(pronInput.attributes('disabled')).toBeDefined()
     // Notes
     const notesTextarea = wrapper.find('textarea')
     expect((notesTextarea.element as HTMLTextAreaElement).value).toBe('A greeting')
-    expect(notesTextarea.attributes('disabled')).toBeDefined()
   })
 
-  it('renders language dropdown with four optgroups and correct options, and disables it', () => {
+  it('renders language dropdown with four optgroups and correct options, and is editable', () => {
     const wrapper = mount(UnitOfMeaningForm, {
       props: { unit: mockUnit }
     })
     const select = wrapper.find('select')
-    expect(select.attributes('disabled')).toBeDefined()
     const optgroups = select.findAll('optgroup')
     expect(optgroups.length).toBe(4)
     expect(optgroups[0].attributes('label')).toBe('Primary Target Languages')

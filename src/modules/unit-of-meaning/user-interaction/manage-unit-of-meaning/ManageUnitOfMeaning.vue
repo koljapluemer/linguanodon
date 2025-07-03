@@ -46,7 +46,7 @@
 import { ref, watch, onMounted } from 'vue'
 import UnitOfMeaningForm from './UnitOfMeaningForm.vue'
 import TranslationsWidget from './TranslationsWidget.vue'
-import { getUnitOfMeaningById, updateUnitOfMeaning } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
+import { getUnitOfMeaningById, updateUnitOfMeaning, getAllUnitsOfMeaning } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
 import { useAutoSaveUnitOfMeaning } from '@/modules/unit-of-meaning/utils/useAutoSaveUnitOfMeaning'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
@@ -70,6 +70,7 @@ const error = ref<unknown>(null)
  * Fetches the unit of meaning by UID and updates state.
  */
 async function fetchUnit() {
+  console.log('fetchUnit called with uid:', props.uid)
   if (!props.uid) {
     state.value = 'empty'
     unitLoaded.value = false
@@ -78,6 +79,7 @@ async function fetchUnit() {
   state.value = 'loading'
   try {
     const result = await getUnitOfMeaningById(props.uid)
+    console.log('getUnitOfMeaningById result:', result)
     if (!result) {
       state.value = 'empty'
       unitLoaded.value = false
@@ -88,7 +90,6 @@ async function fetchUnit() {
     unitLoaded.value = true
     fetchTranslations()
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e)
     state.value = 'error'
     unitLoaded.value = false
@@ -124,7 +125,11 @@ watch(unitLoaded, (loaded) => {
   }
 })
 
-onMounted(fetchUnit)
+onMounted(async () => {
+  const all = await getAllUnitsOfMeaning();
+  console.log('All units in DB:', all.map(u => u.uid));
+  fetchUnit();
+})
 </script>
 
 <style scoped>
