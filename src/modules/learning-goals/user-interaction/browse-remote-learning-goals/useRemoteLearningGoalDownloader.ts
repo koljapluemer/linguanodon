@@ -13,6 +13,11 @@ export function useRemoteLearningGoalDownloader(language: string) {
     try {
       // Fetch full learning goal, units, translations
       const { learningGoal, units, translations } = await getRemoteLearningGoalByUID(language, uid)
+      if (!learningGoal) {
+        showToast({ type: 'error', message: 'Remote learning goal data is malformed or missing.', duration: 6000 })
+        isDownloading.value = null
+        return
+      }
       // Validate against local DB
       const { missingGoal, missingUnits, missingTranslations, existingNames } = await checkExistingItems(learningGoal, units, translations)
       if (!missingGoal && missingUnits.length === 0 && missingTranslations.length === 0) {
