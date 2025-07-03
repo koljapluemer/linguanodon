@@ -48,7 +48,11 @@ function getLangObjs(tags: string[]) {
   return canonicalLanguages.value.filter(l => tags.includes(l.tag))
 }
 
-function getAvailableLangs(group: GroupKey) {
+/**
+ * Returns canonical languages not already present in any group for dropdowns.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getAvailableLangs(_group: GroupKey) {
   // Exclude languages already present in any group
   const allUsed = new Set([
     ...userSettings.value.primaryNativeLanguages,
@@ -70,16 +74,25 @@ async function handleAdd(group: GroupKey) {
   selected.value[group] = ''
 }
 
+/**
+ * Removes a language from the specified group and reloads user settings.
+ */
 async function handleRemove(lang: string, group: UserSettingsGroup) {
   await removeLanguageFromGroup(lang, group)
   await load()
 }
 
+/**
+ * Promotes a language from secondary to primary and reloads user settings.
+ */
 async function handlePromote(lang: string, type: 'native' | 'target') {
   await promoteLanguage(lang, type)
   await load()
 }
 
+/**
+ * Demotes a language from primary to secondary and reloads user settings.
+ */
 async function handleDemote(lang: string, type: 'native' | 'target') {
   await demoteLanguage(lang, type)
   await load()
@@ -90,89 +103,95 @@ async function handleDemote(lang: string, type: 'native' | 'target') {
   <div class="max-w-2xl mx-auto p-4 space-y-6">
     <h2 class="text-xl font-bold mb-4">Manage Your Languages</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Primary Native -->
-      <div>
-        <RenderLanguageGroup
-          groupName="Primary Native Languages"
-          :languages="getLangObjs(userSettings.primaryNativeLanguages)"
-          :isPrimary="true"
-          :onRemove="lang => handleRemove(lang, 'primaryNativeLanguages')"
-          :onDemote="lang => handleDemote(lang, 'native')"
-          :showDemote="true"
-        />
-        <RenderLanguageDropdown
-          :languages="getAvailableLangs('primaryNative')"
-          v-model="selected.primaryNative"
-          placeholder="Add primary native language"
-        />
-        <button
-          class="btn btn-primary btn-sm mt-2"
-          :disabled="!selected.primaryNative"
-          @click="handleAdd('primaryNative')"
-        >Add</button>
+      <!-- Native Languages Column -->
+      <div class="flex flex-col gap-6 min-h-[24rem]">
+        <!-- Primary Native -->
+        <div class="flex-1 flex flex-col justify-between">
+          <RenderLanguageGroup
+            groupName="Primary Native Languages"
+            :languages="getLangObjs(userSettings.primaryNativeLanguages)"
+            :isPrimary="true"
+            :onRemove="lang => handleRemove(lang, 'primaryNativeLanguages')"
+            :onDemote="lang => handleDemote(lang, 'native')"
+            :showDemote="true"
+          />
+          <RenderLanguageDropdown
+            :languages="getAvailableLangs('primaryNative')"
+            v-model="selected.primaryNative"
+            placeholder="Add primary native language"
+          />
+          <button
+            class="btn btn-primary btn-sm mt-2"
+            :disabled="!selected.primaryNative"
+            @click="handleAdd('primaryNative')"
+          >Add</button>
+        </div>
+        <!-- Secondary Native -->
+        <div class="flex-1 flex flex-col justify-between">
+          <RenderLanguageGroup
+            groupName="Secondary Native Languages"
+            :languages="getLangObjs(userSettings.secondaryNativeLanguages)"
+            :isPrimary="false"
+            :onRemove="lang => handleRemove(lang, 'secondaryNativeLanguages')"
+            :onPromote="lang => handlePromote(lang, 'native')"
+            :showPromote="true"
+          />
+          <RenderLanguageDropdown
+            :languages="getAvailableLangs('secondaryNative')"
+            v-model="selected.secondaryNative"
+            placeholder="Add secondary native language"
+          />
+          <button
+            class="btn btn-primary btn-sm mt-2"
+            :disabled="!selected.secondaryNative"
+            @click="handleAdd('secondaryNative')"
+          >Add</button>
+        </div>
       </div>
-      <!-- Secondary Native -->
-      <div>
-        <RenderLanguageGroup
-          groupName="Secondary Native Languages"
-          :languages="getLangObjs(userSettings.secondaryNativeLanguages)"
-          :isPrimary="false"
-          :onRemove="lang => handleRemove(lang, 'secondaryNativeLanguages')"
-          :onPromote="lang => handlePromote(lang, 'native')"
-          :showPromote="true"
-        />
-        <RenderLanguageDropdown
-          :languages="getAvailableLangs('secondaryNative')"
-          v-model="selected.secondaryNative"
-          placeholder="Add secondary native language"
-        />
-        <button
-          class="btn btn-primary btn-sm mt-2"
-          :disabled="!selected.secondaryNative"
-          @click="handleAdd('secondaryNative')"
-        >Add</button>
-      </div>
-      <!-- Primary Target -->
-      <div>
-        <RenderLanguageGroup
-          groupName="Primary Target Languages"
-          :languages="getLangObjs(userSettings.primaryTargetLanguages)"
-          :isPrimary="true"
-          :onRemove="lang => handleRemove(lang, 'primaryTargetLanguages')"
-          :onDemote="lang => handleDemote(lang, 'target')"
-          :showDemote="true"
-        />
-        <RenderLanguageDropdown
-          :languages="getAvailableLangs('primaryTarget')"
-          v-model="selected.primaryTarget"
-          placeholder="Add primary target language"
-        />
-        <button
-          class="btn btn-primary btn-sm mt-2"
-          :disabled="!selected.primaryTarget"
-          @click="handleAdd('primaryTarget')"
-        >Add</button>
-      </div>
-      <!-- Secondary Target -->
-      <div>
-        <RenderLanguageGroup
-          groupName="Secondary Target Languages"
-          :languages="getLangObjs(userSettings.secondaryTargetLanguages)"
-          :isPrimary="false"
-          :onRemove="lang => handleRemove(lang, 'secondaryTargetLanguages')"
-          :onPromote="lang => handlePromote(lang, 'target')"
-          :showPromote="true"
-        />
-        <RenderLanguageDropdown
-          :languages="getAvailableLangs('secondaryTarget')"
-          v-model="selected.secondaryTarget"
-          placeholder="Add secondary target language"
-        />
-        <button
-          class="btn btn-primary btn-sm mt-2"
-          :disabled="!selected.secondaryTarget"
-          @click="handleAdd('secondaryTarget')"
-        >Add</button>
+      <!-- Target Languages Column -->
+      <div class="flex flex-col gap-6 min-h-[24rem]">
+        <!-- Primary Target -->
+        <div class="flex-1 flex flex-col justify-between">
+          <RenderLanguageGroup
+            groupName="Primary Target Languages"
+            :languages="getLangObjs(userSettings.primaryTargetLanguages)"
+            :isPrimary="true"
+            :onRemove="lang => handleRemove(lang, 'primaryTargetLanguages')"
+            :onDemote="lang => handleDemote(lang, 'target')"
+            :showDemote="true"
+          />
+          <RenderLanguageDropdown
+            :languages="getAvailableLangs('primaryTarget')"
+            v-model="selected.primaryTarget"
+            placeholder="Add primary target language"
+          />
+          <button
+            class="btn btn-primary btn-sm mt-2"
+            :disabled="!selected.primaryTarget"
+            @click="handleAdd('primaryTarget')"
+          >Add</button>
+        </div>
+        <!-- Secondary Target -->
+        <div class="flex-1 flex flex-col justify-between">
+          <RenderLanguageGroup
+            groupName="Secondary Target Languages"
+            :languages="getLangObjs(userSettings.secondaryTargetLanguages)"
+            :isPrimary="false"
+            :onRemove="lang => handleRemove(lang, 'secondaryTargetLanguages')"
+            :onPromote="lang => handlePromote(lang, 'target')"
+            :showPromote="true"
+          />
+          <RenderLanguageDropdown
+            :languages="getAvailableLangs('secondaryTarget')"
+            v-model="selected.secondaryTarget"
+            placeholder="Add secondary target language"
+          />
+          <button
+            class="btn btn-primary btn-sm mt-2"
+            :disabled="!selected.secondaryTarget"
+            @click="handleAdd('secondaryTarget')"
+          >Add</button>
+        </div>
       </div>
     </div>
   </div>
