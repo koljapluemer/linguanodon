@@ -1,3 +1,4 @@
+- Follow a module-based architecture: Code is grouped by USE CASE, not type of file. We will NOT have global `components/`, `views/` or `types/` folders, or anything of that sort
 - Use Tailwind + Daisy UI for styling
 - follow Vue3/ts best practices
 - Our dexie database is the single source of truth

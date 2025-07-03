@@ -13,3 +13,22 @@
  * 
  * - Ensure that dexie DB is created and can be accessed
  */
+
+import Dexie, { Table } from 'dexie'
+import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
+import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
+
+export class LinguanodonDB extends Dexie {
+  learningGoals!: Table<LearningGoal, string>
+  unitsOfMeaning!: Table<UnitOfMeaning, string>
+
+  constructor() {
+    super('LinguanodonDB')
+    this.version(1).stores({
+      learningGoals: 'uid',
+      unitsOfMeaning: 'uid'
+    })
+  }
+}
+
+export const db = new LinguanodonDB()

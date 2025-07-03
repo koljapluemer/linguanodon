@@ -36,3 +36,44 @@ This feature enables users to download a learning goal and its associated units 
 - **No Concurrency**: Only one download can be in progress at a time to keep undo/redo simple.
 - **User Feedback**: All user-facing messages use names/content, not UIDs. Dev details go to the console.
 - **Extensibility**: The composable is structured for easy unit testing and future concurrency support.
+
+
+## Implementation
+
+## Documentation
+
+### Implementation Overview
+
+- **Routing:**
+  - Added a route `/learning-goals/remote/:language` in `src/router.ts` to display remote learning goals for a given language.
+
+- **View:**
+  - Implemented in `src/modules/learning-goals/user-interaction/browse-remote-learning-goals/BrowseRemoteLearningGoals.vue`.
+  - Displays a table of remote learning goals with a download button per row.
+  - Download button is disabled and shows a spinner while downloading.
+  - Uses Lucide icons, Tailwind, and Daisy UI for styling.
+
+- **Download Logic:**
+  - Encapsulated in `useRemoteLearningGoalDownloader.ts` in the same directory as the view.
+  - Handles fetching, validation, atomic Dexie write, and per-operation undo logic.
+  - Exposes status for UI feedback.
+
+- **Dexie Integration:**
+  - Dexie instance is set up in `src/modules/db/db-local/accessLocalDB.ts`.
+  - Learning goal-specific DB logic is in `src/modules/learning-goals/utils/useLearningGoalDB.ts`.
+
+- **Toasts/Notifications:**
+  - Global toast system implemented in `src/modules/ui/toast/useToast.ts` and `ToastContainer.vue`.
+  - Toasts appear at the bottom center of the screen (best practice for desktop and mobile).
+  - Toasts support success, error, info, and undo-action.
+  - Undo is per-toast: each download operation's toast includes an Undo button that reverts only that operation.
+
+- **Testing:**
+  - Unit tests for download logic and toast composable are placed alongside their respective code files using `vitest`.
+
+### Architectural Notes
+
+- All logic is grouped by use case/module, not by type, following the module-based architecture.
+- No global `components/`, `views/`, or `types/` folders are used.
+- All new code follows Vue3/TS best practices, uses Tailwind + Daisy UI, and is unit-testable.
+- Toast and undo logic are designed for easy extension and reuse in other modules.

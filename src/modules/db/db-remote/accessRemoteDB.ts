@@ -19,3 +19,25 @@
  * - Ensure that all proxy work
  * 
  */
+
+import type { LearningGoalSummary } from '@/modules/learning-goals/types/LearningGoalSummary'
+import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
+import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
+
+export async function fetchRemoteLearningGoalsByLanguage(language: string): Promise<LearningGoalSummary[]> {
+  const url = `https://scintillating-empanada-730581.netlify.app/learning_goals/${language}/index.json`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Failed to fetch remote learning goals for ${language}`)
+  return await res.json()
+}
+
+export async function fetchRemoteLearningGoalByUID(language: string, uid: string): Promise<{
+  learningGoal: LearningGoal,
+  units: UnitOfMeaning[],
+  translations: UnitOfMeaning[]
+}> {
+  const url = `https://scintillating-empanada-730581.netlify.app/learning_goals/${language}/${uid}.json`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Failed to fetch remote learning goal ${uid} for ${language}`)
+  return await res.json()
+}
