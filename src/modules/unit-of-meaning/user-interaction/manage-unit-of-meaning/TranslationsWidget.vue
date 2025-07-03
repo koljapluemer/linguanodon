@@ -23,8 +23,8 @@
       </tbody>
     </table>
     <div class="flex gap-2 justify-end">
-      <button class="btn btn-sm btn-outline" @click="showConnectModal = true">Add Existing Word or Sentence as Translation</button>
-      <button class="btn btn-sm btn-primary" @click="showAddModal = true">Add new Word or Sentence as Translation</button>
+      <button type="button" class="btn btn-sm btn-outline" @click="showConnectModal = true">Add Existing Word or Sentence as Translation</button>
+      <button type="button" class="btn btn-sm btn-primary" @click="showAddModal = true">Add new Word or Sentence as Translation</button>
     </div>
 
     <!-- Connect Existing Translation Modal -->

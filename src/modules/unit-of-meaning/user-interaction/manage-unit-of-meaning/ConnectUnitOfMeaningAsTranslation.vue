@@ -17,8 +17,8 @@
         </select>
       </div>
       <div class="modal-action">
-        <button class="btn btn-outline">Cancel</button>
-        <button class="btn btn-primary">Confirm</button>
+        <button type="button" class="btn btn-outline">Cancel</button>
+        <button type="button" class="btn btn-primary">Confirm</button>
       </div>
     </div>
   </dialog>

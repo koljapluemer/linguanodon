@@ -4,8 +4,8 @@
       <h3 class="font-bold text-lg mb-4">Add New Translation</h3>
       <UnitOfMeaningForm :unit="newUnit" :showTranslations="false" />
       <div class="modal-action mt-4">
-        <button class="btn btn-outline" @click="handleCancel">Cancel</button>
-        <button class="btn btn-primary" @click="handleSave" :disabled="!isValid">Save</button>
+        <button type="button" class="btn btn-outline" @click="handleCancel">Cancel</button>
+        <button type="button" class="btn btn-primary" @click="handleSave" :disabled="!isValid">Save</button>
       </div>
     </div>
   </dialog>
