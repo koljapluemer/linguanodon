@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { useCanonicalLanguageList } from './useLanguagesDB'
 import type { Language } from '../types/Language'
+import { db } from '@/modules/db/db-local/accessLocalDB'
+import * as remoteDB from '@/modules/db/db-remote/accessRemoteDB'
 
 // Helper: mock backend data
 const mockLanguages: Language[] = [
@@ -9,19 +11,38 @@ const mockLanguages: Language[] = [
   { tag: 'de', name: 'German' }
 ]
 
+function sortByTag(arr: Language[]) {
+  return [...arr].sort((a, b) => a.tag.localeCompare(b.tag))
+}
+
+async function waitForDbLanguages(expectedCount: number, timeout = 200) {
+  const start = Date.now()
+  while (Date.now() - start < timeout) {
+    const arr = await db.canonicalLanguages.toArray()
+    if (arr.length === expectedCount) return arr
+    await new Promise(r => setTimeout(r, 10))
+  }
+  return await db.canonicalLanguages.toArray()
+}
+
 // TODO: Setup Dexie test DB and clear before each test
 
 // TODO: Mock fetch for most tests, but allow one real backend fetch
 
 describe('useCanonicalLanguageList', () => {
-  beforeEach(() => {
-    // TODO: Clear Dexie language table and reset mocks
+  beforeEach(async () => {
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguagesMeta.clear()
+    vi.restoreAllMocks()
   })
 
   it('fetches and stores the language list in Dexie on first use', async () => {
-    // TODO: Mock fetch to return mockLanguages
-    // TODO: Call composable and check Dexie is populated
-    expect(false).toBe(true) // RED
+    vi.spyOn(remoteDB, 'fetchCanonicalLanguages').mockResolvedValue(mockLanguages)
+    const { languages } = useCanonicalLanguageList()
+    // Wait for Dexie to be populated
+    const dbLangs = await waitForDbLanguages(mockLanguages.length)
+    expect(sortByTag(languages.value)).toEqual(sortByTag(mockLanguages))
+    expect(sortByTag(dbLangs)).toEqual(sortByTag(mockLanguages))
   })
 
   it('uses cached list if it is fresh', async () => {

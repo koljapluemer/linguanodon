@@ -23,6 +23,7 @@
 import type { LearningGoalSummary } from '@/modules/learning-goals/types/LearningGoalSummary'
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
+import type { Language } from '@/modules/languages/types/Language'
 
 /**
  * Proxy for remote learning goal listing; isolates backend changes to this module.
@@ -52,5 +53,15 @@ export async function fetchRemoteUnitOfMeaningByUID(unitUid: string): Promise<Un
   const url = `https://scintillating-empanada-730581.netlify.app/units_of_meaning/${lang}/${unitUid}.json`
   const res = await fetch(url)
   if (!res.ok) throw new Error(`Failed to fetch unit ${unitUid} for ${lang}`)
+  return await res.json()
+}
+
+/**
+ * Fetches the canonical language list from the backend.
+ */
+export async function fetchCanonicalLanguages(): Promise<Language[]> {
+  const url = 'https://scintillating-empanada-730581.netlify.app/language_tags.json'
+  const res = await fetch(url)
+  if (!res.ok) throw new Error('Failed to fetch canonical language list')
   return await res.json()
 }
