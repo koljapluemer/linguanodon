@@ -1,4 +1,4 @@
-import type { ExerciseProgress } from "../exercises/user-progress/ExerciseProgress"
+import type { ExerciseProgress } from "@/modules/main-flow/exercises/user-progress/ExerciseProgress"
 
 export interface Lesson {
     exercises: ExerciseProgress[]
