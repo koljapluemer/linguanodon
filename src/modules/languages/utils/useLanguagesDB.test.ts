@@ -102,22 +102,97 @@ describe('useCanonicalLanguageList', () => {
   })
 
   it('exposes the list reactively via composable', async () => {
-    // TODO: Call composable, update Dexie, check reactivity
-    expect(false).toBe(true) // RED
+    // Pre-populate Dexie with initial data and a fresh timestamp
+    const initialLanguages: Language[] = [
+      { tag: 'es', name: 'Spanish' },
+      { tag: 'it', name: 'Italian' }
+    ]
+    const now = Date.now()
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguages.bulkAdd(initialLanguages)
+    await db.canonicalLanguagesMeta.put({ id: 'meta', lastFetched: now })
+    vi.spyOn(remoteDB, 'fetchCanonicalLanguages').mockResolvedValue(mockLanguages)
+    const { languages, refresh } = useCanonicalLanguageList()
+    // Wait for initial value
+    const initialReactive = await waitForLanguages(languages, initialLanguages.length)
+    expect(sortByTag(initialReactive)).toEqual(sortByTag(initialLanguages))
+    // Now update Dexie via refresh (which will fetch mockLanguages)
+    await refresh()
+    const updatedReactive = await waitForLanguages(languages, mockLanguages.length)
+    expect(sortByTag(updatedReactive)).toEqual(sortByTag(mockLanguages))
   })
 
   it('handles backend errors and falls back to cached data', async () => {
-    // TODO: Pre-populate Dexie, mock fetch to fail, call composable
-    expect(false).toBe(true) // RED
+    // Pre-populate Dexie with valid cached data
+    const cachedLanguages: Language[] = [
+      { tag: 'es', name: 'Spanish' },
+      { tag: 'it', name: 'Italian' }
+    ]
+    const now = Date.now()
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguages.bulkAdd(cachedLanguages)
+    await db.canonicalLanguagesMeta.put({ id: 'meta', lastFetched: now })
+    // Mock fetchCanonicalLanguages to throw
+    vi.spyOn(remoteDB, 'fetchCanonicalLanguages').mockRejectedValue(new Error('Backend error'))
+    const { languages, refresh } = useCanonicalLanguageList()
+    // Wait for initial value
+    const initialReactive = await waitForLanguages(languages, cachedLanguages.length)
+    expect(sortByTag(initialReactive)).toEqual(sortByTag(cachedLanguages))
+    // Force a manual refresh (should not clear cached data)
+    await refresh()
+    const afterRefresh = await waitForLanguages(languages, cachedLanguages.length)
+    expect(sortByTag(afterRefresh)).toEqual(sortByTag(cachedLanguages))
+    // Now clear Dexie and test fallback to empty array
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguagesMeta.clear()
+    const { languages: emptyLanguages, refresh: emptyRefresh } = useCanonicalLanguageList()
+    // Wait for empty value
+    await emptyRefresh()
+    // Wait a bit for async
+    await new Promise(r => setTimeout(r, 20))
+    expect(emptyLanguages.value).toEqual([])
   })
 
   it('manual refresh updates the cache and composable output', async () => {
-    // TODO: Call composable, trigger manual refresh, check Dexie and output
-    expect(false).toBe(true) // RED
+    // Pre-populate Dexie with initial data and a fresh timestamp
+    const initialLanguages: Language[] = [
+      { tag: 'es', name: 'Spanish' },
+      { tag: 'it', name: 'Italian' }
+    ]
+    const now = Date.now()
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguages.bulkAdd(initialLanguages)
+    await db.canonicalLanguagesMeta.put({ id: 'meta', lastFetched: now })
+    const { languages, refresh } = useCanonicalLanguageList()
+    // Wait for initial value
+    const initialReactive = await waitForLanguages(languages, initialLanguages.length)
+    expect(sortByTag(initialReactive)).toEqual(sortByTag(initialLanguages))
+    // Mock fetchCanonicalLanguages to return new data
+    const newLanguages: Language[] = [
+      { tag: 'ar', name: 'Arabic' },
+      { tag: 'ru', name: 'Russian' }
+    ]
+    vi.spyOn(remoteDB, 'fetchCanonicalLanguages').mockResolvedValue(newLanguages)
+    await refresh()
+    const updatedReactive = await waitForLanguages(languages, newLanguages.length)
+    expect(sortByTag(updatedReactive)).toEqual(sortByTag(newLanguages))
+    const dbLangs = await waitForDbLanguages(newLanguages.length)
+    expect(sortByTag(dbLangs)).toEqual(sortByTag(newLanguages))
   })
 
   it('fetches real backend and returns a well-formed array (integration)', async () => {
-    // TODO: Actually hit the backend URL and check for known languages
-    expect(false).toBe(true) // RED
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguagesMeta.clear()
+    const { languages } = useCanonicalLanguageList()
+    // Wait for the real backend fetch to complete
+    for (let i = 0; i < 20; i++) {
+      if (languages.value.length > 0) break
+      await new Promise(r => setTimeout(r, 50))
+    }
+    expect(languages.value.length).toBeGreaterThan(0)
+    for (const lang of languages.value) {
+      expect(typeof lang.tag).toBe('string')
+      expect(typeof lang.name).toBe('string')
+    }
   })
 }) 

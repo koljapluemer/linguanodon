@@ -46,14 +46,27 @@ export function useCanonicalLanguageList() {
 
   /**
    * Fetches the canonical language list from the backend, sorts, stores, and updates reactive value.
+   * Falls back to cached data or empty array on error.
    */
   async function fetchAndStore() {
-    const langs = await fetchCanonicalLanguages()
-    langs.sort((a, b) => a.tag.localeCompare(b.tag))
-    languages.value = langs
-    await db.canonicalLanguages.clear()
-    await db.canonicalLanguages.bulkAdd(langs)
-    await db.canonicalLanguagesMeta.put({ id: 'meta', lastFetched: Date.now() })
+    try {
+      const langs = await fetchCanonicalLanguages()
+      langs.sort((a, b) => a.tag.localeCompare(b.tag))
+      languages.value = langs
+      await db.canonicalLanguages.clear()
+      await db.canonicalLanguages.bulkAdd(langs)
+      await db.canonicalLanguagesMeta.put({ id: 'meta', lastFetched: Date.now() })
+    } catch {
+      // On error, try to load from Dexie, else set empty
+      const cached = await db.canonicalLanguages.toArray()
+      if (cached.length > 0) {
+        cached.sort((a, b) => a.tag.localeCompare(b.tag))
+        languages.value = cached
+      } else {
+        languages.value = []
+      }
+      // Optionally: log error or trigger toast here
+    }
   }
 
   /**
