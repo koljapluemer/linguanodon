@@ -5,6 +5,7 @@ import DebugLearningGoals from '@/modules/debug/DebugLearningGoals.vue'
 import DebugUnitsOfMeaning from '@/modules/debug/DebugUnitsOfMeaning.vue'
 import ManageUserSettings from '@/modules/user-settings/ManageUserSettings.vue'
 import ListUnitsOfMeaning from '@/modules/unit-of-meaning/user-interaction/list-units-of-meaning/ListUnitsOfMeaning.vue'
+import ListLearningGoals from '@/modules/learning-goals/user-interaction/list-learning-goals/ListLearningGoals.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -18,6 +19,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/units-of-meaning',
     component: ListUnitsOfMeaning
+  },
+  {
+    path: '/learning-goals',
+    component: ListLearningGoals
   },
   {
     path: '/debug/learning-goals',
