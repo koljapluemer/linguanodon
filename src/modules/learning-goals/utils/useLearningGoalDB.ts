@@ -2,16 +2,27 @@ import { db } from '@/modules/db/db-local/accessLocalDB'
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
+function dedupeByUid<T extends { uid: string }>(arr: T[]): T[] {
+  const seen = new Set<string>()
+  return arr.filter(item => {
+    if (seen.has(item.uid)) return false
+    seen.add(item.uid)
+    return true
+  })
+}
+
 // Stubs for DB logic, to be implemented with Dexie
 export async function addLearningGoalWithUnitsAndTranslations(
-  goal: LearningGoal,
+  goal: LearningGoal | null,
   units: UnitOfMeaning[],
   translations: UnitOfMeaning[]
 ) {
+  const uniqueUnits = dedupeByUid(units)
+  const uniqueTranslations = dedupeByUid(translations)
   return db.transaction('rw', db.learningGoals, db.unitsOfMeaning, async () => {
-    await db.learningGoals.add(goal)
-    if (units.length) await db.unitsOfMeaning.bulkAdd(units)
-    if (translations.length) await db.unitsOfMeaning.bulkAdd(translations)
+    if (goal) await db.learningGoals.add(goal)
+    if (uniqueUnits.length) await db.unitsOfMeaning.bulkAdd(uniqueUnits)
+    if (uniqueTranslations.length) await db.unitsOfMeaning.bulkAdd(uniqueTranslations)
   })
 }
 
