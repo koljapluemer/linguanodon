@@ -17,15 +17,17 @@
             <td>{{ goal.name }}</td>
             <td class="text-right">
               <button
-                class="btn btn-primary btn-sm flex items-center gap-1"
+                class="btn btn-primary btn-sm"
                 :disabled="isDownloading === goal.uid"
                 @click="download(goal.uid)"
               >
-                <lucide-icon name="download" class="w-4 h-4" />
                 <span v-if="isDownloading === goal.uid">
                   <span class="loading loading-spinner loading-xs"></span>
                 </span>
-                <span v-else>Download</span>
+                <span v-else class="flex items-center gap-1">
+                  <Download class="size-[1em]" />
+                  Download
+                </span>
               </button>
             </td>
           </tr>
@@ -37,6 +39,7 @@
 </template>
 
 <script setup lang="ts">
+import { Download } from 'lucide-vue-next'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRemoteLearningGoalDownloader } from './useRemoteLearningGoalDownloader'
