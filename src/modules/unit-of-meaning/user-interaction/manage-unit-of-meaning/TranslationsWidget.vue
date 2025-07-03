@@ -49,7 +49,7 @@
 import { ref, computed, onMounted } from 'vue'
 import ConnectUnitOfMeaningAsTranslation from './ConnectUnitOfMeaningAsTranslation.vue'
 import AddUnitOfMeaningAsTranslation from './AddUnitOfMeaningAsTranslation.vue'
-import { getUnitOfMeaningById } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
+import { getUnitOfMeaningById, linkUnitsAsTranslations } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
 const props = defineProps<{
@@ -95,10 +95,9 @@ function handleConnectTranslation(translationUid: string) {
 /**
  * Handles adding a new unit as a translation.
  */
-function handleAddTranslation(newUnit: UnitOfMeaning) {
-  // TODO: Implement new unit creation logic
-   
-  console.log('New unit to add:', newUnit)
+async function handleAddTranslation(newUnit: UnitOfMeaning) {
+  await linkUnitsAsTranslations(props.parentUnit.uid, newUnit.uid)
+  await fetchTranslations()
   showAddModal.value = false
 }
 

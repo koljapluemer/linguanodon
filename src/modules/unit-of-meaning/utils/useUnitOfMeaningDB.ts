@@ -59,3 +59,34 @@ export async function removeTranslation(parentUid: string, translationUid: strin
   const translations = unit.translations.filter(uid => uid !== translationUid)
   await db.unitsOfMeaning.update(parentUid, { translations })
 }
+
+/**
+ * Create bidirectional translation links between two units of meaning.
+ * Both units will have each other's UID in their translations array.
+ */
+export async function linkUnitsAsTranslations(unit1Uid: string, unit2Uid: string): Promise<void> {
+  const [unit1, unit2] = await Promise.all([
+    db.unitsOfMeaning.get(unit1Uid),
+    db.unitsOfMeaning.get(unit2Uid)
+  ])
+  
+  if (!unit1 || !unit2) return
+  
+  // Ensure both units have translations arrays
+  const unit1Translations = unit1.translations ? [...unit1.translations] : []
+  const unit2Translations = unit2.translations ? [...unit2.translations] : []
+  
+  // Add each other as translations if not already present
+  if (!unit1Translations.includes(unit2Uid)) {
+    unit1Translations.push(unit2Uid)
+  }
+  if (!unit2Translations.includes(unit1Uid)) {
+    unit2Translations.push(unit1Uid)
+  }
+  
+  // Update both units
+  await Promise.all([
+    db.unitsOfMeaning.update(unit1Uid, { translations: unit1Translations }),
+    db.unitsOfMeaning.update(unit2Uid, { translations: unit2Translations })
+  ])
+}
