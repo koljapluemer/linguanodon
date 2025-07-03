@@ -115,8 +115,17 @@ watch(unitLoaded, (loaded) => {
     autoSave = useAutoSaveUnitOfMeaning(
       unit,
       async (u: UnitOfMeaning) => {
-        await updateUnitOfMeaning(u)
-        await fetchTranslations()
+        console.log('Auto-save triggered with unit:', u)
+        try {
+          // Convert reactive Proxy to plain object for Dexie
+          const plainUnit = JSON.parse(JSON.stringify(u))
+          await updateUnitOfMeaning(plainUnit)
+          console.log('Auto-save successful')
+          await fetchTranslations()
+        } catch (e) {
+          console.error('Auto-save failed:', e)
+          throw e
+        }
       },
       { debounceMs: 500 }
     )
