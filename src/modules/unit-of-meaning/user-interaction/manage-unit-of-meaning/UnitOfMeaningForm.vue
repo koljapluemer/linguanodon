@@ -30,51 +30,88 @@
       </label>
       <select class="select select-bordered w-full" v-model="unit.language">
         <optgroup label="Primary Target Languages">
-          <option v-for="lang in mockUserSettings.primaryTargetLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
+          <option v-for="lang in primaryTargetLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
         </optgroup>
         <optgroup label="Primary Native Languages">
-          <option v-for="lang in mockUserSettings.primaryNativeLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
+          <option v-for="lang in primaryNativeLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
         </optgroup>
         <optgroup label="Secondary Target Languages">
-          <option v-for="lang in mockUserSettings.secondaryTargetLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
+          <option v-for="lang in secondaryTargetLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
         </optgroup>
         <optgroup label="Secondary Native Languages">
-          <option v-for="lang in mockUserSettings.secondaryNativeLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
+          <option v-for="lang in secondaryNativeLanguages" :key="lang.tag" :value="lang.tag">{{ lang.name }}</option>
         </optgroup>
       </select>
     </div>
     <div v-if="showTranslations" class="mt-6">
-      <div class="border border-dashed border-base-300 rounded p-4 text-center text-base-content/50">
-        TranslationsWidget goes here
-      </div>
+      <TranslationsWidget 
+        :parentUnit="props.unit"
+        @addTranslation="handleAddTranslation"
+        @removeTranslation="handleRemoveTranslation"
+      />
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useUserSettings } from '@/modules/user-settings/utils/useUserSettingsDB'
+import { useCanonicalLanguageList } from '@/modules/languages/utils/useLanguagesDB'
+import TranslationsWidget from './TranslationsWidget.vue'
+import { addTranslation, removeTranslation } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 import type { Language } from '@/modules/languages/types/Language'
 
-defineProps<{
+const props = defineProps<{
   unit: UnitOfMeaning
   showTranslations?: boolean
 }>()
 
-// Mock user settings and languages for the dropdown
-const mockUserSettings = {
-  primaryTargetLanguages: [
-    { tag: 'en', name: 'English' }
-  ],
-  primaryNativeLanguages: [
-    { tag: 'de', name: 'German' }
-  ],
-  secondaryTargetLanguages: [
-    { tag: 'es', name: 'Spanish' }
-  ],
-  secondaryNativeLanguages: [
-    { tag: 'fr', name: 'French' }
-  ]
-} as Record<string, Language[]>
+const { userSettings } = useUserSettings()
+const { languages: canonicalLanguages } = useCanonicalLanguageList()
+
+// Get language objects by tags from user settings
+const primaryTargetLanguages = computed(() => 
+  userSettings.value.primaryTargetLanguages
+    .map(tag => canonicalLanguages.value.find((lang: Language) => lang.tag === tag))
+    .filter(Boolean) as Language[]
+)
+
+const primaryNativeLanguages = computed(() => 
+  userSettings.value.primaryNativeLanguages
+    .map(tag => canonicalLanguages.value.find((lang: Language) => lang.tag === tag))
+    .filter(Boolean) as Language[]
+)
+
+const secondaryTargetLanguages = computed(() => 
+  userSettings.value.secondaryTargetLanguages
+    .map(tag => canonicalLanguages.value.find((lang: Language) => lang.tag === tag))
+    .filter(Boolean) as Language[]
+)
+
+const secondaryNativeLanguages = computed(() => 
+  userSettings.value.secondaryNativeLanguages
+    .map(tag => canonicalLanguages.value.find((lang: Language) => lang.tag === tag))
+    .filter(Boolean) as Language[]
+)
+
+/**
+ * Handles adding a translation to the current unit.
+ */
+async function handleAddTranslation(translationUid: string) {
+  if (!props.unit.uid) return
+  await addTranslation(props.unit.uid, translationUid)
+  // The parent will handle refreshing the unit
+}
+
+/**
+ * Handles removing a translation from the current unit.
+ */
+async function handleRemoveTranslation(translationUid: string) {
+  if (!props.unit.uid) return
+  await removeTranslation(props.unit.uid, translationUid)
+  // The parent will handle refreshing the unit
+}
 </script>
 
 <style scoped>

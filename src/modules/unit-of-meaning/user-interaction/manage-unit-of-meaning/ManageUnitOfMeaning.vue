@@ -25,10 +25,10 @@
             <div v-else class="text-xs text-base-content/60 mt-1 italic">No word or Sentence found</div>
           </div>
           <div v-if="unit">
-            <UnitOfMeaningForm :unit="unit" :showTranslations="true" />
-            <div class="mt-4">
-              <TranslationsWidget :translations="translations" />
-            </div>
+            <UnitOfMeaningForm 
+              :unit="unit" 
+              :showTranslations="true"
+            />
             <div class="mt-2 text-xs text-base-content/60">
               <span v-if="status === 'unsaved'">Unsaved changes</span>
               <span v-else-if="status === 'saving'">Saving...</span>
@@ -45,7 +45,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import UnitOfMeaningForm from './UnitOfMeaningForm.vue'
-import TranslationsWidget from './TranslationsWidget.vue'
 import { getUnitOfMeaningById, updateUnitOfMeaning, getAllUnitsOfMeaning } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
 import { useAutoSaveUnitOfMeaning } from '@/modules/unit-of-meaning/utils/useAutoSaveUnitOfMeaning'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
@@ -61,7 +60,6 @@ const unit = ref<UnitOfMeaning>({
   context: ''
 })
 const unitLoaded = ref(false)
-const translations = ref<UnitOfMeaning[]>([])
 
 const status = ref<'unsaved' | 'saving' | 'saved' | 'error'>('saved')
 const error = ref<unknown>(null)
@@ -88,25 +86,11 @@ async function fetchUnit() {
     Object.assign(unit.value, result)
     state.value = 'ready'
     unitLoaded.value = true
-    fetchTranslations()
   } catch (e) {
     console.error(e)
     state.value = 'error'
     unitLoaded.value = false
   }
-}
-
-/**
- * Fetches all translation units for the current unit.
- */
-async function fetchTranslations() {
-  if (!unit.value || !unit.value.translations) {
-    translations.value = []
-    return
-  }
-  // Fetch all translation units by UID
-  const promises = unit.value.translations.map(uid => getUnitOfMeaningById(uid))
-  translations.value = (await Promise.all(promises)).filter(Boolean) as UnitOfMeaning[]
 }
 
 let autoSave: ReturnType<typeof useAutoSaveUnitOfMeaning> | null = null
@@ -121,7 +105,6 @@ watch(unitLoaded, (loaded) => {
           const plainUnit = JSON.parse(JSON.stringify(u))
           await updateUnitOfMeaning(plainUnit)
           console.log('Auto-save successful')
-          await fetchTranslations()
         } catch (e) {
           console.error('Auto-save failed:', e)
           throw e

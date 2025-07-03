@@ -1,8 +1,38 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import UnitOfMeaningForm from './UnitOfMeaningForm.vue'
+import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
+import type { UserSettings } from '@/modules/user-settings/UserSettings'
+import type { Language } from '@/modules/languages/types/Language'
 
-const mockUnit = {
+const mockUserSettings: UserSettings = {
+  primaryTargetLanguages: ['en'],
+  primaryNativeLanguages: ['de', 'fr'],
+  secondaryTargetLanguages: ['es'],
+  secondaryNativeLanguages: ['it']
+}
+
+const mockLanguages: Language[] = [
+  { tag: 'en', name: 'English' },
+  { tag: 'de', name: 'German' },
+  { tag: 'fr', name: 'French' },
+  { tag: 'es', name: 'Spanish' },
+  { tag: 'it', name: 'Italian' }
+]
+
+vi.mock('@/modules/user-settings/utils/useUserSettingsDB', () => ({
+  useUserSettings: () => ({
+    userSettings: { value: mockUserSettings }
+  })
+}))
+
+vi.mock('@/modules/languages/utils/useLanguagesDB', () => ({
+  useCanonicalLanguageList: () => ({
+    languages: { value: mockLanguages }
+  })
+}))
+
+const mockUnit: UnitOfMeaning = {
   uid: 'u1',
   language: 'en',
   content: 'Hello',
@@ -14,6 +44,10 @@ const mockUnit = {
 }
 
 describe('UnitOfMeaningForm.vue', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it('renders all fields with correct values and are editable', () => {
     const wrapper = mount(UnitOfMeaningForm, {
       props: { unit: mockUnit }
@@ -45,19 +79,21 @@ describe('UnitOfMeaningForm.vue', () => {
     expect(optgroups[3].attributes('label')).toBe('Secondary Native Languages')
     // Check for correct options
     expect(optgroups[0].find('option').text()).toBe('English')
-    expect(optgroups[1].find('option').text()).toBe('German')
+    expect(optgroups[1].findAll('option')[0].text()).toBe('German')
+    expect(optgroups[1].findAll('option')[1].text()).toBe('French')
     expect(optgroups[2].find('option').text()).toBe('Spanish')
-    expect(optgroups[3].find('option').text()).toBe('French')
+    expect(optgroups[3].find('option').text()).toBe('Italian')
   })
 
-  it('renders translations widget placeholder only if showTranslations is true', () => {
+  it('renders translations widget only if showTranslations is true', () => {
     const wrapperWith = mount(UnitOfMeaningForm, {
       props: { unit: mockUnit, showTranslations: true }
     })
-    expect(wrapperWith.text()).toContain('TranslationsWidget goes here')
+    expect(wrapperWith.findComponent({ name: 'TranslationsWidget' }).exists()).toBe(true)
+    
     const wrapperWithout = mount(UnitOfMeaningForm, {
       props: { unit: mockUnit, showTranslations: false }
     })
-    expect(wrapperWithout.text()).not.toContain('TranslationsWidget goes here')
+    expect(wrapperWithout.findComponent({ name: 'TranslationsWidget' }).exists()).toBe(false)
   })
 }) 
