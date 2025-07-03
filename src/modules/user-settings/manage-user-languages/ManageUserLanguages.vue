@@ -2,13 +2,13 @@
 /**
  * Main UI for managing user language preferences.
  * - Renders all four language groups (primary/secondary native/target)
- * - Allows adding a language to each group via dropdown
+ * - Allows adding, removing, promoting, and demoting languages
  * - Uses real composables and state
  */
 import { ref } from 'vue'
 import RenderLanguageGroup from './RenderLanguageGroup.vue'
 import RenderLanguageDropdown from './RenderLanguageDropdown.vue'
-import { useUserSettings, addLanguageToGroup } from '@/modules/user-settings/utils/useUserSettingsDB'
+import { useUserSettings, addLanguageToGroup, removeLanguageFromGroup, promoteLanguage, demoteLanguage } from '@/modules/user-settings/utils/useUserSettingsDB'
 import { useCanonicalLanguageList } from '@/modules/languages/utils/useLanguagesDB'
 import type { UserSettingsGroup } from '@/modules/user-settings/types/UserSettingsGroup'
 
@@ -48,6 +48,17 @@ function getLangObjs(tags: string[]) {
   return canonicalLanguages.value.filter(l => tags.includes(l.tag))
 }
 
+function getAvailableLangs(group: GroupKey) {
+  // Exclude languages already present in any group
+  const allUsed = new Set([
+    ...userSettings.value.primaryNativeLanguages,
+    ...userSettings.value.secondaryNativeLanguages,
+    ...userSettings.value.primaryTargetLanguages,
+    ...userSettings.value.secondaryTargetLanguages,
+  ])
+  return canonicalLanguages.value.filter(l => !allUsed.has(l.tag))
+}
+
 /**
  * Adds a language to the specified group and reloads user settings.
  */
@@ -57,6 +68,21 @@ async function handleAdd(group: GroupKey) {
   await addLanguageToGroup(lang, groupKeyToSettingsGroup[group])
   await load()
   selected.value[group] = ''
+}
+
+async function handleRemove(lang: string, group: UserSettingsGroup) {
+  await removeLanguageFromGroup(lang, group)
+  await load()
+}
+
+async function handlePromote(lang: string, type: 'native' | 'target') {
+  await promoteLanguage(lang, type)
+  await load()
+}
+
+async function handleDemote(lang: string, type: 'native' | 'target') {
+  await demoteLanguage(lang, type)
+  await load()
 }
 </script>
 
@@ -70,9 +96,12 @@ async function handleAdd(group: GroupKey) {
           groupName="Primary Native Languages"
           :languages="getLangObjs(userSettings.primaryNativeLanguages)"
           :isPrimary="true"
+          :onRemove="lang => handleRemove(lang, 'primaryNativeLanguages')"
+          :onDemote="lang => handleDemote(lang, 'native')"
+          :showDemote="true"
         />
         <RenderLanguageDropdown
-          :languages="canonicalLanguages"
+          :languages="getAvailableLangs('primaryNative')"
           v-model="selected.primaryNative"
           placeholder="Add primary native language"
         />
@@ -88,9 +117,12 @@ async function handleAdd(group: GroupKey) {
           groupName="Secondary Native Languages"
           :languages="getLangObjs(userSettings.secondaryNativeLanguages)"
           :isPrimary="false"
+          :onRemove="lang => handleRemove(lang, 'secondaryNativeLanguages')"
+          :onPromote="lang => handlePromote(lang, 'native')"
+          :showPromote="true"
         />
         <RenderLanguageDropdown
-          :languages="canonicalLanguages"
+          :languages="getAvailableLangs('secondaryNative')"
           v-model="selected.secondaryNative"
           placeholder="Add secondary native language"
         />
@@ -106,9 +138,12 @@ async function handleAdd(group: GroupKey) {
           groupName="Primary Target Languages"
           :languages="getLangObjs(userSettings.primaryTargetLanguages)"
           :isPrimary="true"
+          :onRemove="lang => handleRemove(lang, 'primaryTargetLanguages')"
+          :onDemote="lang => handleDemote(lang, 'target')"
+          :showDemote="true"
         />
         <RenderLanguageDropdown
-          :languages="canonicalLanguages"
+          :languages="getAvailableLangs('primaryTarget')"
           v-model="selected.primaryTarget"
           placeholder="Add primary target language"
         />
@@ -124,9 +159,12 @@ async function handleAdd(group: GroupKey) {
           groupName="Secondary Target Languages"
           :languages="getLangObjs(userSettings.secondaryTargetLanguages)"
           :isPrimary="false"
+          :onRemove="lang => handleRemove(lang, 'secondaryTargetLanguages')"
+          :onPromote="lang => handlePromote(lang, 'target')"
+          :showPromote="true"
         />
         <RenderLanguageDropdown
-          :languages="canonicalLanguages"
+          :languages="getAvailableLangs('secondaryTarget')"
           v-model="selected.secondaryTarget"
           placeholder="Add secondary target language"
         />
