@@ -16,19 +16,24 @@
           <tr v-for="goal in remoteGoals" :key="goal.uid">
             <td>{{ goal.name }}</td>
             <td class="text-right">
-              <button
-                class="btn btn-primary btn-sm"
-                :disabled="isDownloading === goal.uid"
-                @click="download(goal.uid)"
-              >
-                <span v-if="isDownloading === goal.uid">
-                  <span class="loading loading-spinner loading-xs"></span>
-                </span>
-                <span v-else class="flex items-center gap-1">
-                  <Download class="size-[1em]" />
-                  Download
-                </span>
-              </button>
+              <template v-if="localGoalUids.has(goal.uid)">
+                <span class="badge badge-success">Already downloaded</span>
+              </template>
+              <template v-else>
+                <button
+                  class="btn btn-primary btn-sm"
+                  :disabled="isDownloading === goal.uid"
+                  @click="download(goal.uid)"
+                >
+                  <span v-if="isDownloading === goal.uid">
+                    <span class="loading loading-spinner loading-xs"></span>
+                  </span>
+                  <span v-else class="flex items-center gap-1">
+                    <Download class="size-[1em]" />
+                    Download
+                  </span>
+                </button>
+              </template>
             </td>
           </tr>
         </tbody>
@@ -46,11 +51,13 @@ import { useRemoteLearningGoalDownloader } from './useRemoteLearningGoalDownload
 import { getRemoteLearningGoalsByLanguage } from './getRemoteLearningGoalsByLanguage'
 import ToastContainer from '@/modules/ui/toast/ToastContainer.vue'
 import type { LearningGoalSummary } from '@/modules/learning-goals/types/LearningGoalSummary'
+import { db } from '@/modules/db/db-local/accessLocalDB'
 
 const route = useRoute()
 const language = route.params.language as string
 const remoteGoals = ref<LearningGoalSummary[]>([])
 const loading = ref(true)
+const localGoalUids = ref<Set<string>>(new Set())
 
 const { isDownloading, downloadLearningGoal } = useRemoteLearningGoalDownloader(language)
 
@@ -58,6 +65,8 @@ async function loadGoals() {
   loading.value = true
   try {
     remoteGoals.value = await getRemoteLearningGoalsByLanguage(language)
+    const localGoals = await db.learningGoals.toArray()
+    localGoalUids.value = new Set(localGoals.map(g => g.uid))
   } finally {
     loading.value = false
   }
