@@ -18,10 +18,16 @@ import Dexie, { type Table } from 'dexie'
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
+/**
+ * Local Dexie DB instance for all user data; centralizes schema and access for per-user storage.
+ */
 export class LinguanodonDB extends Dexie {
   learningGoals!: Table<LearningGoal, string>
   unitsOfMeaning!: Table<UnitOfMeaning, string>
 
+  /**
+   * Ensures schema changes are managed in one place for all learning data.
+   */
   constructor() {
     super('LinguanodonDB')
     this.version(1).stores({
@@ -31,4 +37,7 @@ export class LinguanodonDB extends Dexie {
   }
 }
 
+/**
+ * Shared DB instance for all local data operations.
+ */
 export const db = new LinguanodonDB()

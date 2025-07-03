@@ -24,6 +24,9 @@ import type { LearningGoalSummary } from '@/modules/learning-goals/types/Learnin
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
+/**
+ * Proxy for remote learning goal listing; isolates backend changes to this module.
+ */
 export async function fetchRemoteLearningGoalsByLanguage(language: string): Promise<LearningGoalSummary[]> {
   const url = `https://scintillating-empanada-730581.netlify.app/learning_goals/${language}/index.json`
   const res = await fetch(url)
@@ -31,6 +34,9 @@ export async function fetchRemoteLearningGoalsByLanguage(language: string): Prom
   return await res.json()
 }
 
+/**
+ * Centralizes remote learning goal detail access for future backend flexibility.
+ */
 export async function fetchRemoteLearningGoalByUID(language: string, uid: string): Promise<LearningGoal> {
   const url = `https://scintillating-empanada-730581.netlify.app/learning_goals/${language}/${uid}.json`
   const res = await fetch(url)
@@ -38,6 +44,9 @@ export async function fetchRemoteLearningGoalByUID(language: string, uid: string
   return await res.json()
 }
 
+/**
+ * Ensures all unit fetches are routed through a single backend abstraction.
+ */
 export async function fetchRemoteUnitOfMeaningByUID(unitUid: string): Promise<UnitOfMeaning> {
   const lang = unitUid.split('_')[0]
   const url = `https://scintillating-empanada-730581.netlify.app/units_of_meaning/${lang}/${unitUid}.json`

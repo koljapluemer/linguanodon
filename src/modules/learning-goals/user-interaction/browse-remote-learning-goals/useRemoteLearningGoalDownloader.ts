@@ -3,10 +3,16 @@ import { useToast } from '@/modules/ui/toast/useToast'
 import { getRemoteLearningGoalByUID } from './getRemoteLearningGoalByUID'
 import { addLearningGoalWithUnitsAndTranslations, removeLearningGoalWithUnitsAndTranslations, checkExistingItems } from '@/modules/learning-goals/utils/useLearningGoalDB'
 
+/**
+ * Composable for orchestrating remote learning goal download and UI state.
+ */
 export function useRemoteLearningGoalDownloader(language: string) {
   const isDownloading = ref<string | null>(null)
   const { showToast, showUndoToast } = useToast()
 
+  /**
+   * Handles the full remote download workflow, including validation and undo.
+   */
   async function downloadLearningGoal(uid: string) {
     if (isDownloading.value) return
     isDownloading.value = uid

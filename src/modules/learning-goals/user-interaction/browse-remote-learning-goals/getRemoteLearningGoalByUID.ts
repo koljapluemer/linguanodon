@@ -2,6 +2,9 @@ import { fetchRemoteLearningGoalByUID, fetchRemoteUnitOfMeaningByUID } from '@/m
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
+/**
+ * Orchestrates multi-step remote fetches for learning goal import, ensuring all related data is gathered.
+ */
 export async function getRemoteLearningGoalByUID(language: string, uid: string): Promise<{
   learningGoal: LearningGoal,
   units: UnitOfMeaning[],

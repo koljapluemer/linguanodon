@@ -61,6 +61,9 @@ const localGoalUids = ref<Set<string>>(new Set())
 
 const { isDownloading, downloadLearningGoal } = useRemoteLearningGoalDownloader(language)
 
+/**
+ * Loads remote learning goals and local UIDs for download status display.
+ */
 async function loadGoals() {
   loading.value = true
   try {
@@ -72,6 +75,9 @@ async function loadGoals() {
   }
 }
 
+/**
+ * Triggers download of a remote learning goal.
+ */
 function download(uid: string) {
   downloadLearningGoal(uid)
 }

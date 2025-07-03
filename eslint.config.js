@@ -5,6 +5,7 @@ import pluginVue from "eslint-plugin-vue";
 import pluginImport from "eslint-plugin-import";
 import vueParser from "vue-eslint-parser";
 import tsParser from "@typescript-eslint/parser";
+import pluginJsdoc from "eslint-plugin-jsdoc";
 import { defineConfig } from "eslint/config";
 
 const importResolverSettings = {
@@ -36,11 +37,35 @@ export default defineConfig([
       vue: pluginVue,
       '@typescript-eslint': tseslint.plugin,
       import: pluginImport,
+      jsdoc: pluginJsdoc,
     },
     rules: {
       ...pluginVue.configs["flat/recommended"].rules,
       ...tseslint.configs.recommended.rules,
       'import/no-unresolved': 'error',
+      'jsdoc/require-jsdoc': ["error", {
+        require: {
+          FunctionDeclaration: true,
+          MethodDefinition: true,
+          ClassDeclaration: true,
+          ArrowFunctionExpression: true,
+          FunctionExpression: true
+        },
+        contexts: [
+          "FunctionDeclaration",
+          "MethodDefinition",
+          "ClassDeclaration",
+          "ArrowFunctionExpression",
+          "FunctionExpression"
+        ]
+      }],
+      'jsdoc/require-description': "error",
+      'jsdoc/require-param': "off",
+      'jsdoc/require-returns': "off",
+      'jsdoc/require-param-type': "off",
+      'jsdoc/require-param-description': "off",
+      'jsdoc/require-returns-type': "off",
+      'jsdoc/require-returns-description': "off"
     },
     settings: importResolverSettings,
   },
@@ -56,10 +81,34 @@ export default defineConfig([
     plugins: {
       '@typescript-eslint': tseslint.plugin,
       import: pluginImport,
+      jsdoc: pluginJsdoc,
     },
     rules: {
       ...tseslint.configs.recommended.rules,
       'import/no-unresolved': 'error',
+      'jsdoc/require-jsdoc': ["error", {
+        require: {
+          FunctionDeclaration: true,
+          MethodDefinition: true,
+          ClassDeclaration: true,
+          ArrowFunctionExpression: true,
+          FunctionExpression: true
+        },
+        contexts: [
+          "FunctionDeclaration",
+          "MethodDefinition",
+          "ClassDeclaration",
+          "ArrowFunctionExpression",
+          "FunctionExpression"
+        ]
+      }],
+      'jsdoc/require-description': "error",
+      'jsdoc/require-param': "off",
+      'jsdoc/require-returns': "off",
+      'jsdoc/require-param-type': "off",
+      'jsdoc/require-param-description': "off",
+      'jsdoc/require-returns-type': "off",
+      'jsdoc/require-returns-description': "off"
     },
     settings: importResolverSettings,
   },
@@ -76,5 +125,11 @@ export default defineConfig([
       'import/no-unresolved': 'off',
     },
     settings: importResolverSettings,
+  },
+  {
+    files: ["**/*.test.ts", "**/*.spec.ts"],
+    rules: {
+      'jsdoc/require-jsdoc': 'off',
+    },
   },
 ]);

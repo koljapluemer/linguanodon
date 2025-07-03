@@ -30,10 +30,16 @@ import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 
 const learningGoals = ref<LearningGoal[]>([])
 
+/**
+ * Loads all learning goals for admin/debug inspection.
+ */
 async function loadGoals() {
   learningGoals.value = await db.learningGoals.toArray()
 }
 
+/**
+ * Clears all learning goals from the local DB for admin/debug reset.
+ */
 async function deleteAll() {
   await db.learningGoals.clear()
   await loadGoals()

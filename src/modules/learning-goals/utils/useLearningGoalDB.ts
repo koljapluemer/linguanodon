@@ -2,6 +2,13 @@ import { db } from '@/modules/db/db-local/accessLocalDB'
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
+/**
+ * Orchestrates all local DB operations for learning goals and units, ensuring transaction safety and deduplication.
+ */
+
+/**
+ * Deduplicates an array of objects by UID for transaction safety.
+ */
 function dedupeByUid<T extends { uid: string }>(arr: T[]): T[] {
   const seen = new Set<string>()
   return arr.filter(item => {
@@ -11,7 +18,9 @@ function dedupeByUid<T extends { uid: string }>(arr: T[]): T[] {
   })
 }
 
-// Stubs for DB logic, to be implemented with Dexie
+/**
+ * Adds new learning goals, units, and translations in a single transaction, deduplicating by UID.
+ */
 export async function addLearningGoalWithUnitsAndTranslations(
   goal: LearningGoal | null,
   units: UnitOfMeaning[],
@@ -26,6 +35,9 @@ export async function addLearningGoalWithUnitsAndTranslations(
   })
 }
 
+/**
+ * Removes a learning goal and all related units/translations in a single transaction.
+ */
 export async function removeLearningGoalWithUnitsAndTranslations(
   goal: LearningGoal,
   units: UnitOfMeaning[],
@@ -38,6 +50,9 @@ export async function removeLearningGoalWithUnitsAndTranslations(
   })
 }
 
+/**
+ * Checks which items are missing from the DB, for atomic import and user feedback.
+ */
 export async function checkExistingItems(
   goal: LearningGoal,
   units: UnitOfMeaning[],

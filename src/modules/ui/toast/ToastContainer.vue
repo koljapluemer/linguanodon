@@ -26,11 +26,17 @@
 import { useToast, type Toast } from './useToast'
 const { toasts, removeToast } = useToast()
 
+/**
+ * Handles undo action for a toast, invoking the callback and removing the toast.
+ */
 function handleUndo(toast: Toast) {
   if (toast.undoCallback) toast.undoCallback()
   removeToast(toast.id)
 }
 
+/**
+ * Maps toast type to Daisy UI classes for consistent feedback styling.
+ */
 function toastClass(type: string) {
   switch (type) {
     case 'success': return 'bg-success text-success-content';

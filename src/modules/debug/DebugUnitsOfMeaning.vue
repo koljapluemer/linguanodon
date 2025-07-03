@@ -30,10 +30,16 @@ import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeanin
 
 const units = ref<UnitOfMeaning[]>([])
 
+/**
+ * Loads all units of meaning for admin/debug inspection.
+ */
 async function loadUnits() {
   units.value = await db.unitsOfMeaning.toArray()
 }
 
+/**
+ * Clears all units of meaning from the local DB for admin/debug reset.
+ */
 async function deleteAll() {
   await db.unitsOfMeaning.clear()
   await loadUnits()

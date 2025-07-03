@@ -25,7 +25,13 @@ vi.mock('@/modules/learning-goals/utils/useLearningGoalDB', () => ({
   }))
 }))
 
+/**
+ * Ensures downloader integration and error handling for remote learning goal import.
+ */
 describe('useRemoteLearningGoalDownloader', () => {
+  /**
+   * Checks the happy path for remote download and toast feedback.
+   */
   it('downloads and shows toast', async () => {
     const { downloadLearningGoal, isDownloading } = useRemoteLearningGoalDownloader('en')
     await downloadLearningGoal('1')
