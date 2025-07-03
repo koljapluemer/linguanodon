@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import ConnectUnitOfMeaningAsTranslation from './ConnectUnitOfMeaningAsTranslation.vue'
 import AddUnitOfMeaningAsTranslation from './AddUnitOfMeaningAsTranslation.vue'
 import { getUnitOfMeaningById, linkUnitsAsTranslations } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
@@ -87,9 +87,11 @@ async function fetchTranslations() {
 /**
  * Handles connecting an existing unit as a translation.
  */
-function handleConnectTranslation(translationUid: string) {
-  emit('addTranslation', translationUid)
+async function handleConnectTranslation(translationUid: string) {
+  await linkUnitsAsTranslations(props.parentUnit.uid, translationUid)
   showConnectModal.value = false
+  // Small delay to ensure DB operations complete, then refresh
+  setTimeout(() => fetchTranslations(), 100)
 }
 
 /**
@@ -97,8 +99,9 @@ function handleConnectTranslation(translationUid: string) {
  */
 async function handleAddTranslation(newUnit: UnitOfMeaning) {
   await linkUnitsAsTranslations(props.parentUnit.uid, newUnit.uid)
-  await fetchTranslations()
   showAddModal.value = false
+  // Small delay to ensure DB operations complete, then refresh
+  setTimeout(() => fetchTranslations(), 100)
 }
 
 /**
@@ -109,6 +112,9 @@ function handleRemoveTranslation(translationUid: string) {
 }
 
 onMounted(fetchTranslations)
+
+// Watch for changes in parent unit's translations array
+watch(() => props.parentUnit.translations, fetchTranslations, { deep: true })
 </script>
 
 <style scoped>
