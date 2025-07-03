@@ -24,9 +24,17 @@
             <div v-if="uid" class="text-xs text-base-content/60 mt-1">UID: {{ uid }}</div>
             <div v-else class="text-xs text-base-content/60 mt-1 italic">No word or Sentence found</div>
           </div>
-          <!-- Placeholder for the form -->
-          <div class="border border-dashed border-base-300 rounded p-6 text-center text-base-content/50">
-            UnitOfMeaningForm goes here
+          <div v-if="unit">
+            <UnitOfMeaningForm :unit="unit" :showTranslations="true" />
+            <div class="mt-4">
+              <TranslationsWidget :translations="translations" />
+            </div>
+            <div class="mt-2 text-xs text-base-content/60">
+              <span v-if="status === 'unsaved'">Unsaved changes</span>
+              <span v-else-if="status === 'saving'">Saving...</span>
+              <span v-else-if="status === 'saved'">All changes saved</span>
+              <span v-else-if="status === 'error'">Error saving changes</span>
+            </div>
           </div>
         </template>
       </div>
@@ -35,12 +43,88 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import UnitOfMeaningForm from './UnitOfMeaningForm.vue'
+import TranslationsWidget from './TranslationsWidget.vue'
+import { getUnitOfMeaningById, updateUnitOfMeaning } from '@/modules/unit-of-meaning/utils/useUnitOfMeaningDB'
+import { useAutoSaveUnitOfMeaning } from '@/modules/unit-of-meaning/utils/useAutoSaveUnitOfMeaning'
+import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
-defineProps<{ uid?: string }>()
+const props = defineProps<{ uid?: string }>()
+const state = ref<'loading' | 'error' | 'empty' | 'ready'>('loading')
+const unit = ref<UnitOfMeaning>({
+  uid: '',
+  language: '',
+  content: '',
+  linguType: '',
+  userCreated: true,
+  context: ''
+})
+const unitLoaded = ref(false)
+const translations = ref<UnitOfMeaning[]>([])
 
-// Mock state: 'loading', 'error', 'empty', or 'ready'
-const state = ref<'loading' | 'error' | 'empty' | 'ready'>('ready')
+const status = ref<'unsaved' | 'saving' | 'saved' | 'error'>('saved')
+const error = ref<unknown>(null)
+
+/**
+ * Fetches the unit of meaning by UID and updates state.
+ */
+async function fetchUnit() {
+  if (!props.uid) {
+    state.value = 'empty'
+    unitLoaded.value = false
+    return
+  }
+  state.value = 'loading'
+  try {
+    const result = await getUnitOfMeaningById(props.uid)
+    if (!result) {
+      state.value = 'empty'
+      unitLoaded.value = false
+      return
+    }
+    Object.assign(unit.value, result)
+    state.value = 'ready'
+    unitLoaded.value = true
+    fetchTranslations()
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(e)
+    state.value = 'error'
+    unitLoaded.value = false
+  }
+}
+
+/**
+ * Fetches all translation units for the current unit.
+ */
+async function fetchTranslations() {
+  if (!unit.value || !unit.value.translations) {
+    translations.value = []
+    return
+  }
+  // Fetch all translation units by UID
+  const promises = unit.value.translations.map(uid => getUnitOfMeaningById(uid))
+  translations.value = (await Promise.all(promises)).filter(Boolean) as UnitOfMeaning[]
+}
+
+let autoSave: ReturnType<typeof useAutoSaveUnitOfMeaning> | null = null
+watch(unitLoaded, (loaded) => {
+  if (loaded && !autoSave) {
+    autoSave = useAutoSaveUnitOfMeaning(
+      unit,
+      async (u: UnitOfMeaning) => {
+        await updateUnitOfMeaning(u)
+        await fetchTranslations()
+      },
+      { debounceMs: 500 }
+    )
+    watch(autoSave.status, val => (status.value = val))
+    watch(autoSave.error, val => (error.value = val))
+  }
+})
+
+onMounted(fetchUnit)
 </script>
 
 <style scoped>
