@@ -6,6 +6,8 @@
  */
 import { defineProps } from 'vue'
 
+// Only used for type inference, not referenced directly
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   groupName: string
   languages: { tag: string; name: string }[]
