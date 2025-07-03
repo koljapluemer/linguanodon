@@ -14,7 +14,7 @@
  * - Ensure that dexie DB is created and can be accessed
  */
 
-import Dexie, { Table } from 'dexie'
+import Dexie, { type Table } from 'dexie'
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
