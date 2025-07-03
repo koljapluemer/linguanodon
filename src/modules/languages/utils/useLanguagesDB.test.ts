@@ -25,6 +25,15 @@ async function waitForDbLanguages(expectedCount: number, timeout = 200) {
   return await db.canonicalLanguages.toArray()
 }
 
+async function waitForLanguages(refValue: { value: Language[] }, expectedCount: number, timeout = 200) {
+  const start = Date.now()
+  while (Date.now() - start < timeout) {
+    if (refValue.value.length === expectedCount) return refValue.value
+    await new Promise(r => setTimeout(r, 10))
+  }
+  return refValue.value
+}
+
 // TODO: Setup Dexie test DB and clear before each test
 
 // TODO: Mock fetch for most tests, but allow one real backend fetch
@@ -46,9 +55,19 @@ describe('useCanonicalLanguageList', () => {
   })
 
   it('uses cached list if it is fresh', async () => {
-    // TODO: Pre-populate Dexie with fresh data
-    // TODO: Call composable and ensure no fetch is made
-    expect(false).toBe(true) // RED
+    // Pre-populate Dexie with fresh data
+    const now = Date.now()
+    await db.canonicalLanguages.clear()
+    await db.canonicalLanguages.bulkAdd(mockLanguages)
+    await db.canonicalLanguagesMeta.put({ id: 'meta', lastFetched: now })
+    // Mock fetchCanonicalLanguages to throw if called
+    vi.spyOn(remoteDB, 'fetchCanonicalLanguages').mockImplementation(() => { throw new Error('Should not fetch') })
+    const { languages } = useCanonicalLanguageList()
+    // Wait for composable to read from Dexie and update reactive value
+    const dbLangs = await waitForDbLanguages(mockLanguages.length)
+    const reactiveLangs = await waitForLanguages(languages, mockLanguages.length)
+    expect(sortByTag(reactiveLangs)).toEqual(sortByTag(mockLanguages))
+    expect(sortByTag(dbLangs)).toEqual(sortByTag(mockLanguages))
   })
 
   it('fetches a new list if cache is stale or on manual refresh', async () => {

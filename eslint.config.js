@@ -102,7 +102,7 @@ export default defineConfig([
           "FunctionExpression"
         ]
       }],
-      'jsdoc/require-description': "error",
+      'jsdoc/require-description': "error", // make sure to write non-obvious description that don't just repeat the name, but explain purpose and how the code ties into the big picture
       'jsdoc/require-param': "off",
       'jsdoc/require-returns': "off",
       'jsdoc/require-param-type': "off",
