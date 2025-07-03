@@ -36,22 +36,27 @@ const filtered = computed(() => {
   )
 })
 
+/** Opens the dropdown if input is not empty. */
 function openDropdown() {
   if (input.value) isOpen.value = true
 }
+/** Closes the dropdown and resets highlight. */
 function closeDropdown() {
   isOpen.value = false
   highlighted.value = -1
 }
+/** Emits the selected language, clears input, and closes dropdown. */
 function selectLang(lang: Language) {
   emit('select', lang)
   input.value = ''
   closeDropdown()
 }
+/** Handles input event and opens dropdown. */
 function onInput(e: Event) {
   input.value = (e.target as HTMLInputElement).value
   openDropdown()
 }
+/** Handles keyboard navigation and selection in dropdown. */
 function onKeydown(e: KeyboardEvent) {
   if (!isOpen.value && input.value) isOpen.value = true
   if (!filtered.value.length) return
@@ -70,13 +75,15 @@ function onKeydown(e: KeyboardEvent) {
     closeDropdown()
   }
 }
-function onBlur(e: FocusEvent) {
-  // Delay to allow click on dropdown
+/** Closes dropdown on blur (with delay for click). */
+function onBlur() {
   setTimeout(() => closeDropdown(), 100)
 }
+/** Opens dropdown on focus if input is not empty. */
 function onFocus() {
   if (input.value) isOpen.value = true
 }
+/** Scrolls dropdown to highlighted item. */
 function scrollToHighlighted() {
   nextTick(() => {
     if (!dropdownEl.value) return
@@ -84,11 +91,12 @@ function scrollToHighlighted() {
     if (item) item.scrollIntoView({ block: 'nearest' })
   })
 }
+/** Clears the input and closes dropdown. */
 function clearInput() {
   input.value = ''
   closeDropdown()
 }
-// Close dropdown on outside click
+/** Closes dropdown if click is outside input or dropdown. */
 function onClickOutside(e: MouseEvent) {
   if (
     !inputEl.value?.contains(e.target as Node) &&

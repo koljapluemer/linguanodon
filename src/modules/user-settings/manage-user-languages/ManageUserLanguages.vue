@@ -34,6 +34,7 @@ const groupKeyToSettingsGroup: Record<GroupKey, UserSettingsGroup> = {
 const { userSettings, load } = useUserSettings()
 const { languages: canonicalLanguages } = useCanonicalLanguageList()
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const selected = ref<Record<GroupKey, string>>({
   primaryNative: '',
   secondaryNative: '',
@@ -64,17 +65,6 @@ function getAvailableLangs(_group: GroupKey) {
 }
 
 /**
- * Adds a language to the specified group and reloads user settings.
- */
-async function handleAdd(group: GroupKey) {
-  const lang = selected.value[group]
-  if (!lang) return
-  await addLanguageToGroup(lang, groupKeyToSettingsGroup[group])
-  await load()
-  selected.value[group] = ''
-}
-
-/**
  * Removes a language from the specified group and reloads user settings.
  */
 async function handleRemove(lang: string, group: UserSettingsGroup) {
@@ -98,6 +88,9 @@ async function handleDemote(lang: string, type: 'native' | 'target') {
   await load()
 }
 
+/**
+ * Adds a language to the specified group immediately when selected from autocomplete.
+ */
 async function handleAddImmediate(lang: { tag: string }, group: GroupKey) {
   await addLanguageToGroup(lang.tag, groupKeyToSettingsGroup[group])
   await load()
