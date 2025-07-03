@@ -27,7 +27,14 @@
       </thead>
       <tbody>
         <tr v-for="unit in filteredUnits" :key="unit.uid">
-          <td class="text-lg font-semibold">{{ unit.content }}</td>
+          <td class="text-lg font-semibold">
+            <RouterLink
+              :to="`/units-of-meaning/${unit.uid}`"
+              class="link link-primary hover:underline cursor-pointer"
+            >
+              {{ unit.content }}
+            </RouterLink>
+          </td>
           <td>
             <template v-if="unit.translations && unit.translations.length">
               <span
@@ -47,6 +54,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { RouterLink } from 'vue-router'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
 
 const props = defineProps<{

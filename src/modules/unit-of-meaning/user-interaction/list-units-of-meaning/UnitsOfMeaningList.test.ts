@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { shallowMount, config } from '@vue/test-utils'
 import UnitsOfMeaningList from './UnitsOfMeaningList.vue'
 import type { UnitOfMeaning } from '@/modules/unit-of-meaning/types/UnitOfMeaning'
+
+// Stub RouterLink globally for all tests in this file
+config.global.stubs = config.global.stubs || {}
+config.global.stubs.RouterLink = {
+  template: '<a><slot /></a>'
+}
 
 const units: UnitOfMeaning[] = [
   { uid: 'u1', language: 'en', content: 'cat', linguType: 'noun', userCreated: true, context: '', translations: ['u2'] },
@@ -14,7 +20,7 @@ const nativeLangs = ['de']
 
 describe('UnitsOfMeaningList', () => {
   it('filters by target language by default (main content only)', () => {
-    const wrapper = mount(UnitsOfMeaningList, {
+    const wrapper = shallowMount(UnitsOfMeaningList, {
       props: { units, targetLangs, nativeLangs, initiallyFilterBy: 'target' }
     })
     const rows = wrapper.findAll('tbody tr')
@@ -25,7 +31,7 @@ describe('UnitsOfMeaningList', () => {
   })
 
   it('filters by native language when toggled (main content only)', async () => {
-    const wrapper = mount(UnitsOfMeaningList, {
+    const wrapper = shallowMount(UnitsOfMeaningList, {
       props: { units, targetLangs, nativeLangs, initiallyFilterBy: 'target' }
     })
     await wrapper.findAll('button')[1].trigger('click')
@@ -37,7 +43,7 @@ describe('UnitsOfMeaningList', () => {
   })
 
   it('renders translation badges for units with translations', () => {
-    const wrapper = mount(UnitsOfMeaningList, {
+    const wrapper = shallowMount(UnitsOfMeaningList, {
       props: { units, targetLangs, nativeLangs, initiallyFilterBy: 'target' }
     })
     // 'cat' has translation 'Katze'
@@ -51,7 +57,7 @@ describe('UnitsOfMeaningList', () => {
       { ...units[0], translations: ['notfound'] },
       ...units.slice(1)
     ]
-    const wrapper = mount(UnitsOfMeaningList, {
+    const wrapper = shallowMount(UnitsOfMeaningList, {
       props: { units: unitsWithMissing, targetLangs, nativeLangs, initiallyFilterBy: 'target' }
     })
     const catRow = wrapper.findAll('tbody tr').find(row => row.text().includes('cat'))
@@ -60,7 +66,7 @@ describe('UnitsOfMeaningList', () => {
   })
 
   it('reacts to prop changes (initiallyFilterBy, main content only)', async () => {
-    const wrapper = mount(UnitsOfMeaningList, {
+    const wrapper = shallowMount(UnitsOfMeaningList, {
       props: { units, targetLangs, nativeLangs, initiallyFilterBy: 'native' }
     })
     let rows = wrapper.findAll('tbody tr')
@@ -72,5 +78,32 @@ describe('UnitsOfMeaningList', () => {
     mainContents = rows.map(row => row.find('td').text())
     expect(mainContents).toContain('cat')
     expect(mainContents).not.toContain('Katze')
+  })
+
+  it('renders correct number of rows', () => {
+    const wrapper = shallowMount(UnitsOfMeaningList, {
+      props: {
+        units: units,
+        targetLangs: ['en'],
+        nativeLangs: ['de'],
+        initiallyFilterBy: 'target'
+      }
+    })
+    // 2 units in targetLangs
+    expect(wrapper.findAll('tbody tr').length).toBe(2)
+  })
+
+  it('filters by nativeLangs', async () => {
+    const wrapper = shallowMount(UnitsOfMeaningList, {
+      props: {
+        units: units,
+        targetLangs: ['en'],
+        nativeLangs: ['de'],
+        initiallyFilterBy: 'native'
+      }
+    })
+    // Only 1 unit in nativeLangs
+    expect(wrapper.findAll('tbody tr').length).toBe(1)
+    expect(wrapper.text()).toContain('Katze')
   })
 }) 
