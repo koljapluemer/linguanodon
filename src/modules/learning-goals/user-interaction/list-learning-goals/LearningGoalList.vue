@@ -10,7 +10,6 @@
 
 <script setup lang="ts">
 import type { LearningGoal } from '@/modules/learning-goals/types/LearningGoal'
-import { defineProps } from 'vue'
 
 defineProps<{ goals: LearningGoal[] }>()
 </script>

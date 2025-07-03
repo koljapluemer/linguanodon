@@ -5,7 +5,6 @@
  * - Supports remove, promote, and demote actions via props.
  * - Purely presentational; no business logic.
  */
-import { defineProps } from 'vue'
 import { X, ArrowUp, ArrowDown } from 'lucide-vue-next'
 
 // Only used for type inference, not referenced directly
