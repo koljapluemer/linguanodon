@@ -1,7 +1,0 @@
-- Use Bulma CSS for styling
-- follow Vue3/ts best practices
-- Our dexie database in `dexie/` is the single source of truth
-- Components should be representational
-- keep code unit-testable as much a possible
-- fix linter errors always
-- use lucide icons. Ensure!! icon names are valid ([icon list](https://raw.githubusercontent.com/mazeincoding/lucide-icons-list/refs/heads/main/icons.txt))
