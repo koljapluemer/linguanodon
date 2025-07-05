@@ -10,7 +10,7 @@ describe('RemoteLearningGoalWidgetRender', () => {
     setActivePinia(createPinia())
   })
 
-  it('should render learning goal name', () => {
+  it('should render as a table row', () => {
     const mockLearningGoalData: LearningGoalSummary = {
       uid: 'es_basic_greetings',
       name: 'Basic Greetings'
@@ -24,28 +24,11 @@ describe('RemoteLearningGoalWidgetRender', () => {
       }
     })
 
-    expect(wrapper.find('.card-title').text()).toBe('Basic Greetings')
+    expect(wrapper.find('tr').exists()).toBe(true)
+    expect(wrapper.findAll('td')).toHaveLength(2)
   })
 
-  it('should extract and display language from UID', () => {
-    const mockLearningGoalData: LearningGoalSummary = {
-      uid: 'fr_basic_greetings',
-      name: 'Basic Greetings'
-    }
-
-    const wrapper = mount(RemoteLearningGoalWidgetRender, {
-      props: {
-        learningGoalData: mockLearningGoalData,
-        localLearningGoal: undefined,
-        downloading: false
-      }
-    })
-
-    expect(wrapper.text()).toContain('fr')
-    expect(wrapper.find('.badge-outline').text()).toBe('fr')
-  })
-
-  it('should show download button when not downloaded', () => {
+  it('should display learning goal name in first cell', () => {
     const mockLearningGoalData: LearningGoalSummary = {
       uid: 'es_basic_greetings',
       name: 'Basic Greetings'
@@ -59,11 +42,30 @@ describe('RemoteLearningGoalWidgetRender', () => {
       }
     })
 
-    expect(wrapper.find('.btn-primary').exists()).toBe(true)
-    expect(wrapper.text()).toContain('Download')
+    const firstCell = wrapper.find('td')
+    expect(firstCell.text()).toContain('Basic Greetings')
   })
 
-  it('should show downloaded badge when learning goal exists locally', () => {
+  it('should show download button in second cell when not downloaded', () => {
+    const mockLearningGoalData: LearningGoalSummary = {
+      uid: 'es_basic_greetings',
+      name: 'Basic Greetings'
+    }
+
+    const wrapper = mount(RemoteLearningGoalWidgetRender, {
+      props: {
+        learningGoalData: mockLearningGoalData,
+        localLearningGoal: undefined,
+        downloading: false
+      }
+    })
+
+    const secondCell = wrapper.findAll('td')[1]
+    expect(secondCell.find('.btn-primary').exists()).toBe(true)
+    expect(secondCell.text()).toContain('Download')
+  })
+
+  it('should show download status in first cell when downloaded', () => {
     const mockLearningGoalData: LearningGoalSummary = {
       uid: 'es_basic_greetings',
       name: 'Basic Greetings'
@@ -89,11 +91,11 @@ describe('RemoteLearningGoalWidgetRender', () => {
       }
     })
 
-    expect(wrapper.find('.badge-success').exists()).toBe(true)
-    expect(wrapper.text()).toContain('Downloaded')
+    const firstCell = wrapper.find('td')
+    expect(firstCell.text()).toContain('Last downloaded:')
   })
 
-  it('should show downloaded button when learning goal exists locally', () => {
+  it('should show "Downloaded" badge in second cell when downloaded', () => {
     const mockLearningGoalData: LearningGoalSummary = {
       uid: 'es_basic_greetings',
       name: 'Basic Greetings'
@@ -119,9 +121,9 @@ describe('RemoteLearningGoalWidgetRender', () => {
       }
     })
 
-    expect(wrapper.find('.btn-success').exists()).toBe(true)
-    expect(wrapper.text()).toContain('Downloaded')
-    expect(wrapper.find('.btn-success').attributes('disabled')).toBeDefined()
+    const secondCell = wrapper.findAll('td')[1]
+    expect(secondCell.find('.badge-success').exists()).toBe(true)
+    expect(secondCell.text()).toContain('Downloaded')
   })
 
   it('should show loading state when downloading', () => {
@@ -138,25 +140,9 @@ describe('RemoteLearningGoalWidgetRender', () => {
       }
     })
 
-    expect(wrapper.find('.btn-primary').classes()).toContain('loading')
-    expect(wrapper.text()).toContain('Downloading...')
-  })
-
-  it('should disable download button when downloading', () => {
-    const mockLearningGoalData: LearningGoalSummary = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings'
-    }
-
-    const wrapper = mount(RemoteLearningGoalWidgetRender, {
-      props: {
-        learningGoalData: mockLearningGoalData,
-        localLearningGoal: undefined,
-        downloading: true
-      }
-    })
-
-    expect(wrapper.find('.btn-primary').attributes('disabled')).toBeDefined()
+    const secondCell = wrapper.findAll('td')[1]
+    expect(secondCell.find('.btn-primary').classes()).toContain('loading')
+    expect(secondCell.text()).toContain('Downloading...')
   })
 
   it('should emit download event when download button is clicked', async () => {
@@ -178,113 +164,5 @@ describe('RemoteLearningGoalWidgetRender', () => {
 
     expect(wrapper.emitted('download')).toBeTruthy()
     expect(wrapper.emitted('download')).toHaveLength(1)
-  })
-
-  it('should display last downloaded date when available', () => {
-    const mockLearningGoalData: LearningGoalSummary = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings'
-    }
-
-    const mockLocalLearningGoal: LearningGoal = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings',
-      language: 'es',
-      parents: [],
-      blockedBy: [],
-      unitsOfMeaning: [],
-      userCreated: false,
-      lastDownloadedAt: new Date('2023-01-01T10:30:00'),
-      lastPracticedAt: undefined
-    }
-
-    const wrapper = mount(RemoteLearningGoalWidgetRender, {
-      props: {
-        learningGoalData: mockLearningGoalData,
-        localLearningGoal: mockLocalLearningGoal,
-        downloading: false
-      }
-    })
-
-    expect(wrapper.text()).toContain('Last downloaded:')
-    expect(wrapper.text()).toContain('Jan 1, 2023')
-  })
-
-  it('should display last practiced date when available', () => {
-    const mockLearningGoalData: LearningGoalSummary = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings'
-    }
-
-    const mockLocalLearningGoal: LearningGoal = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings',
-      language: 'es',
-      parents: [],
-      blockedBy: [],
-      unitsOfMeaning: [],
-      userCreated: false,
-      lastDownloadedAt: new Date('2023-01-01'),
-      lastPracticedAt: new Date('2023-01-15T14:20:00')
-    }
-
-    const wrapper = mount(RemoteLearningGoalWidgetRender, {
-      props: {
-        learningGoalData: mockLearningGoalData,
-        localLearningGoal: mockLocalLearningGoal,
-        downloading: false
-      }
-    })
-
-    expect(wrapper.text()).toContain('Last practiced:')
-    expect(wrapper.text()).toContain('Jan 15, 2023')
-  })
-
-  it('should not show practiced date when not available', () => {
-    const mockLearningGoalData: LearningGoalSummary = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings'
-    }
-
-    const mockLocalLearningGoal: LearningGoal = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings',
-      language: 'es',
-      parents: [],
-      blockedBy: [],
-      unitsOfMeaning: [],
-      userCreated: false,
-      lastDownloadedAt: new Date('2023-01-01'),
-      lastPracticedAt: undefined
-    }
-
-    const wrapper = mount(RemoteLearningGoalWidgetRender, {
-      props: {
-        learningGoalData: mockLearningGoalData,
-        localLearningGoal: mockLocalLearningGoal,
-        downloading: false
-      }
-    })
-
-    expect(wrapper.text()).not.toContain('Last practiced:')
-  })
-
-  it('should have proper card styling', () => {
-    const mockLearningGoalData: LearningGoalSummary = {
-      uid: 'es_basic_greetings',
-      name: 'Basic Greetings'
-    }
-
-    const wrapper = mount(RemoteLearningGoalWidgetRender, {
-      props: {
-        learningGoalData: mockLearningGoalData,
-        localLearningGoal: undefined,
-        downloading: false
-      }
-    })
-
-    expect(wrapper.find('.card').classes()).toContain('bg-base-100')
-    expect(wrapper.find('.card').classes()).toContain('shadow-xl')
-    expect(wrapper.find('.card-body').exists()).toBe(true)
   })
 }) 

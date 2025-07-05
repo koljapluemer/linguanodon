@@ -4,8 +4,8 @@ import ViewRemoteLearningGoals from '@/pages/ViewRemoteLearningGoals.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/remote-learning-goals/:lang_code',
-    name: 'remote-learning-goals',
+    path: '/browse-learning-goals/:lang_code',
+    name: 'browse-learning-goals',
     component: ViewRemoteLearningGoals,
     props: true
   }

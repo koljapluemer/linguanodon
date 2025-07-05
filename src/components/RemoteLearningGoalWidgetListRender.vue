@@ -4,12 +4,17 @@
       No remote learning goals available for this language.
     </div>
     
-    <div v-else class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <RemoteLearningGoalWidgetController
-        v-for="learningGoal in learningGoals"
-        :key="learningGoal.uid"
-        :learning-goal="learningGoal"
-      />
+    <div v-else class="overflow-x-auto">
+      <table class="table table-zebra w-full">
+
+        <tbody>
+          <RemoteLearningGoalWidgetController
+            v-for="learningGoal in learningGoals"
+            :key="learningGoal.uid"
+            :learning-goal="learningGoal"
+          />
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
