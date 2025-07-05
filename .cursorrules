@@ -1,7 +1,7 @@
 - Follow a module-based architecture: Code is grouped by USE CASE, not type of file. We will NOT have global `components/`, `views/` or `types/` folders, or anything of that sort
 - Use Tailwind + Daisy UI for styling
 - follow Vue3/ts best practices
-- Our dexie database is the single source of truth
+- Our pinia stores are the source of truth
 - Components should be representational ONLY
 - keep code unit-testable as much a possible
 - fix linter errors always
@@ -42,6 +42,7 @@ As a rule:
 ### Testing
 
 - Write unit tests, component test and integration test when it's useful to improve our confidence
+- Test files should live alongside the code they are testing
 
 ### Tech Stack
 
@@ -50,7 +51,3 @@ As a rule:
 - `eslint` is setup. Don't forget to run linter.
 - we have `Tailwind` + `Daisy UI` installed, utilize that for design
     - Avoid manual CSS when possible
-
-### Data
-
-- source of truth is a local, per-user `dexie.js` database
