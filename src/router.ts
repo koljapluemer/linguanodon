@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import ViewRemoteLearningGoals from '@/pages/ViewRemoteLearningGoals.vue'
 import ViewLearningGoals from '@/pages/ViewLearningGoals.vue'
+import DoLessonByLearningGoal from '@/pages/DoLessonByLearningGoal.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -14,6 +15,12 @@ const routes: RouteRecordRaw[] = [
     path: '/learning-goals',
     name: 'learning-goals',
     component: ViewLearningGoals
+  },
+  {
+    path: '/do-lesson/:learningGoalUid',
+    name: 'do-lesson',
+    component: DoLessonByLearningGoal,
+    props: true
   }
 ]
 

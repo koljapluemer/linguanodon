@@ -6,7 +6,7 @@
 - keep code unit-testable as much a possible
 - fix linter errors always
 - do not replicate type files! types should always live in dedicated files (unless ONLY relevant hyper-locally), and existing types should be reused.
-- use lucide icons. Ensure!! icon names are valid ([icon list](https://raw.githubusercontent.com/mazeincoding/lucide-icons-list/refs/heads/main/icons.txt))
+- use lucide icons (lucide-vue-next). Ensure!! icon names are valid ([icon list](https://raw.githubusercontent.com/mazeincoding/lucide-icons-list/refs/heads/main/icons.txt))
 
 
 ## How to Add a Feature

@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { setActivePinia, createPinia } from 'pinia'
-// @ts-expect-error: flush-promises has no type declarations, JS-only helper
 import flushPromises from 'flush-promises'
 import LearningGoalWidgetListController from './LearningGoalWidgetListController.vue'
 import type { LearningGoal } from '@/entities/LearningGoal'

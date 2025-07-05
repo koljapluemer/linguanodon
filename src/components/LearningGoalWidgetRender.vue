@@ -7,13 +7,13 @@
     </td>
     <td>
       <div class="flex items-center gap-2">
-        <button
-          @click="$emit('study')"
+        <router-link
+          :to="{ name: 'do-lesson', params: { learningGoalUid: learningGoal.uid } }"
           class="btn btn-primary btn-sm"
           title="Study"
         >
           <BookOpen class="w-4 h-4" />
-        </button>
+        </router-link>
         
         <button
           @click="$emit('edit')"
