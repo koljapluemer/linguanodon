@@ -55,7 +55,7 @@ export const useLearningGoalStore = defineStore(
     }
 
     /**
-     * Gets all learning goals
+     * Gets all learning goals of the learner
      */
     function getAllLearningGoals(): LearningGoal[] {
       return learningGoals.value;
