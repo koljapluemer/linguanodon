@@ -4,7 +4,7 @@
 // disconnect translation
 
 import { defineStore } from "pinia";
-import { ref, readonly } from "vue";
+import { ref } from "vue";
 import type { UnitOfMeaning } from "@/entities/UnitOfMeaning";
 
 export const useUnitOfMeaningStore = defineStore(
@@ -183,7 +183,7 @@ export const useUnitOfMeaningStore = defineStore(
 
     return {
       // State
-      unitsOfMeaning: readonly(unitsOfMeaning),
+      unitsOfMeaning,
 
       // Actions
       createUnitOfMeaning,

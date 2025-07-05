@@ -40,13 +40,20 @@ defineProps<Props>()
 /**
  * Formats a date for display
  */
-function formatDate(date?: Date): string {
+function formatDate(date?: Date | string): string {
   if (!date) return 'Unknown'
+  
+  // Convert string to Date if needed
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  
+  // Check if the date is valid
+  if (isNaN(dateObj.getTime())) return 'Invalid date'
+  
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
-  }).format(date)
+  }).format(dateObj)
 }
 
 defineEmits<{

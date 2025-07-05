@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, readonly } from "vue";
+import { ref } from "vue";
 import type { LearningGoal } from "@/entities/LearningGoal";
 
 export const useLearningGoalStore = defineStore(
@@ -83,7 +83,7 @@ export const useLearningGoalStore = defineStore(
 
     return {
       // State
-      learningGoals: readonly(learningGoals),
+      learningGoals,
 
       // Actions
       createLearningGoal,
