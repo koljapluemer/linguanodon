@@ -20,6 +20,19 @@ export const useLearningGoalStore = defineStore(
     }
 
     /**
+     * Creates a learning goal with a specific UID (for remote data)
+     */
+    function createLearningGoalWithUID(goal: LearningGoal) {
+      // Check if learning goal already exists
+      const existing = learningGoals.value.find((g) => g.uid === goal.uid);
+      if (existing) {
+        return existing;
+      }
+      learningGoals.value.push(goal);
+      return goal;
+    }
+
+    /**
      * Updates an existing learning goal
      */
     function updateLearningGoal(uid: string, updates: Partial<LearningGoal>) {
@@ -74,6 +87,7 @@ export const useLearningGoalStore = defineStore(
 
       // Actions
       createLearningGoal,
+      createLearningGoalWithUID,
       updateLearningGoal,
       deleteLearningGoal,
       getLearningGoal,

@@ -94,14 +94,45 @@ export const useUnitOfMeaningStore = defineStore(
     }
 
     /**
-     * Adds multiple units of meaning in bulk
+     * Checks if a unit of meaning already exists based on language + content + linguType
+     */
+    function getUnitOfMeaningByContent(
+      language: string,
+      content: string,
+      linguType: string
+    ): UnitOfMeaning | undefined {
+      return unitsOfMeaning.value.find(
+        (unit) =>
+          unit.language === language &&
+          unit.content === content &&
+          unit.linguType === linguType
+      );
+    }
+
+    /**
+     * Adds multiple units of meaning in bulk, skipping existing ones
      */
     function addUnitsOfMeaningBulk(units: Omit<UnitOfMeaning, "uid">[]) {
-      const newUnits: UnitOfMeaning[] = units.map((unit) => ({
-        ...unit,
-        uid: crypto.randomUUID(),
-      }));
-      unitsOfMeaning.value.push(...newUnits);
+      const newUnits: UnitOfMeaning[] = [];
+      
+      for (const unit of units) {
+        // Check if unit already exists based on language + content + linguType
+        const existingUnit = getUnitOfMeaningByContent(
+          unit.language,
+          unit.content,
+          unit.linguType
+        );
+        
+        if (!existingUnit) {
+          const newUnit: UnitOfMeaning = {
+            ...unit,
+            uid: crypto.randomUUID(),
+          };
+          unitsOfMeaning.value.push(newUnit);
+          newUnits.push(newUnit);
+        }
+      }
+      
       return newUnits;
     }
 
@@ -163,6 +194,7 @@ export const useUnitOfMeaningStore = defineStore(
       getUnitsOfMeaningByLanguage,
       getUnitsOfMeaningByType,
       getUnitsOfMeaningByUserCreated,
+      getUnitOfMeaningByContent,
       addUnitsOfMeaningBulk,
       getTranslations,
       addTranslation,

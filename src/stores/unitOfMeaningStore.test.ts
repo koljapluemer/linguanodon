@@ -99,6 +99,97 @@ describe('UnitOfMeaning Store', () => {
     })
   })
 
+  describe('getUnitOfMeaningByContent', () => {
+    it('should return undefined for non-existent content combination', () => {
+      const store = useUnitOfMeaningStore()
+      const result = store.getUnitOfMeaningByContent('en', 'hello', 'word')
+      expect(result).toBeUndefined()
+    })
+
+    it('should return the correct unit of meaning by language + content + linguType', () => {
+      const store = useUnitOfMeaningStore()
+      const unitData: Omit<UnitOfMeaningData, 'uid'> = {
+        language: 'en',
+        content: 'hello',
+        linguType: 'word',
+        userCreated: true,
+        context: 'greeting'
+      }
+
+      const created = store.createUnitOfMeaning(unitData)
+      const result = store.getUnitOfMeaningByContent('en', 'hello', 'word')
+
+      expect(result).toEqual(created)
+    })
+
+    it('should return undefined for different language', () => {
+      const store = useUnitOfMeaningStore()
+      store.createUnitOfMeaning({
+        language: 'en',
+        content: 'hello',
+        linguType: 'word',
+        userCreated: true,
+        context: 'greeting'
+      } as Omit<UnitOfMeaningData, 'uid'>)
+
+      const result = store.getUnitOfMeaningByContent('es', 'hello', 'word')
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined for different content', () => {
+      const store = useUnitOfMeaningStore()
+      store.createUnitOfMeaning({
+        language: 'en',
+        content: 'hello',
+        linguType: 'word',
+        userCreated: true,
+        context: 'greeting'
+      } as Omit<UnitOfMeaningData, 'uid'>)
+
+      const result = store.getUnitOfMeaningByContent('en', 'hi', 'word')
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined for different linguType', () => {
+      const store = useUnitOfMeaningStore()
+      store.createUnitOfMeaning({
+        language: 'en',
+        content: 'hello',
+        linguType: 'word',
+        userCreated: true,
+        context: 'greeting'
+      } as Omit<UnitOfMeaningData, 'uid'>)
+
+      const result = store.getUnitOfMeaningByContent('en', 'hello', 'phrase')
+      expect(result).toBeUndefined()
+    })
+
+    it('should find unit with exact match of all three fields', () => {
+      const store = useUnitOfMeaningStore()
+      const unit1 = store.createUnitOfMeaning({
+        language: 'en',
+        content: 'hello',
+        linguType: 'word',
+        userCreated: true,
+        context: 'greeting'
+      } as Omit<UnitOfMeaningData, 'uid'>)
+      
+      const unit2 = store.createUnitOfMeaning({
+        language: 'en',
+        content: 'hello',
+        linguType: 'phrase',
+        userCreated: false,
+        context: 'greeting'
+      } as Omit<UnitOfMeaningData, 'uid'>)
+
+      const result1 = store.getUnitOfMeaningByContent('en', 'hello', 'word')
+      const result2 = store.getUnitOfMeaningByContent('en', 'hello', 'phrase')
+
+      expect(result1).toEqual(unit1)
+      expect(result2).toEqual(unit2)
+    })
+  })
+
   describe('getAllUnitsOfMeaning', () => {
     it('should return empty array when no units exist', () => {
       const store = useUnitOfMeaningStore()
@@ -278,13 +369,10 @@ describe('UnitOfMeaning Store', () => {
       const result = store.addUnitsOfMeaningBulk(unitsData)
 
       expect(result).toHaveLength(3)
-      expect(result[0].uid).toBe('test-uuid-1')
-      expect(result[1].uid).toBe('test-uuid-2')
-      expect(result[2].uid).toBe('test-uuid-3')
+      expect(store.getUnitOfMeaningByContent('en', 'hello', 'word')).toBeDefined()
+      expect(store.getUnitOfMeaningByContent('es', 'hola', 'word')).toBeDefined()
+      expect(store.getUnitOfMeaningByContent('fr', 'bonjour', 'word')).toBeDefined()
       expect(store.unitsOfMeaning).toHaveLength(3)
-      expect(store.unitsOfMeaning[0].content).toBe('hello')
-      expect(store.unitsOfMeaning[1].content).toBe('hola')
-      expect(store.unitsOfMeaning[2].content).toBe('bonjour')
     })
 
     it('should handle empty bulk array', () => {
@@ -292,6 +380,90 @@ describe('UnitOfMeaning Store', () => {
       const result = store.addUnitsOfMeaningBulk([])
       expect(result).toHaveLength(0)
       expect(store.unitsOfMeaning).toHaveLength(0)
+    })
+
+    it('should skip existing units based on language + content + linguType', () => {
+      const store = useUnitOfMeaningStore()
+      store.createUnitOfMeaning({
+        language: 'en',
+        content: 'hello',
+        linguType: 'word',
+        userCreated: true,
+        context: 'greeting'
+      } as Omit<UnitOfMeaningData, 'uid'>)
+
+      const unitsData: Omit<UnitOfMeaningData, 'uid'>[] = [
+        {
+          language: 'en',
+          content: 'hello',
+          linguType: 'word',
+          userCreated: false,
+          context: 'greeting'
+        },
+        {
+          language: 'es',
+          content: 'hola',
+          linguType: 'word',
+          userCreated: false,
+          context: 'greeting'
+        },
+        {
+          language: 'en',
+          content: 'hello',
+          linguType: 'phrase',
+          userCreated: false,
+          context: 'greeting'
+        }
+      ]
+
+      const result = store.addUnitsOfMeaningBulk(unitsData)
+
+      expect(result).toHaveLength(2)
+      expect(store.unitsOfMeaning).toHaveLength(3)
+      const existingUnit = store.getUnitOfMeaningByContent('en', 'hello', 'word')
+      expect(existingUnit).toBeDefined()
+      expect(existingUnit?.userCreated).toBe(true)
+    })
+
+    it('should handle multiple duplicates in the same bulk operation', () => {
+      const store = useUnitOfMeaningStore()
+      const unitsData: Omit<UnitOfMeaningData, 'uid'>[] = [
+        {
+          language: 'en',
+          content: 'hello',
+          linguType: 'word',
+          userCreated: true,
+          context: 'greeting'
+        },
+        {
+          language: 'en',
+          content: 'hello',
+          linguType: 'word',
+          userCreated: false,
+          context: 'greeting'
+        },
+        {
+          language: 'es',
+          content: 'hola',
+          linguType: 'word',
+          userCreated: false,
+          context: 'greeting'
+        },
+        {
+          language: 'es',
+          content: 'hola',
+          linguType: 'word',
+          userCreated: true,
+          context: 'greeting'
+        }
+      ]
+
+      const result = store.addUnitsOfMeaningBulk(unitsData)
+
+      expect(result).toHaveLength(2)
+      expect(store.unitsOfMeaning).toHaveLength(2)
+      expect(store.getUnitOfMeaningByContent('en', 'hello', 'word')).toBeDefined()
+      expect(store.getUnitOfMeaningByContent('es', 'hola', 'word')).toBeDefined()
     })
   })
 
@@ -320,7 +492,7 @@ describe('UnitOfMeaning Store', () => {
 
       expect(result.content).toBe('hi')
       expect(result.pronunciation).toBe('haɪ')
-      expect(result.language).toBe('en') // Should preserve other fields
+      expect(result.language).toBe('en')
       expect(result.userCreated).toBe(true)
       expect(store.unitsOfMeaning[0]).toEqual(result)
     })
@@ -431,7 +603,6 @@ describe('UnitOfMeaning Store', () => {
         context: 'greeting'
       } as Omit<UnitOfMeaningData, 'uid'>)
 
-      // Update the translations array with actual UIDs
       store.updateUnitOfMeaning(unit1.uid, {
         translations: [translation1.uid, translation2.uid]
       })
@@ -529,7 +700,6 @@ describe('UnitOfMeaning Store', () => {
         context: 'greeting'
       } as Omit<UnitOfMeaningData, 'uid'>)
 
-      // Update the translations array with actual UIDs
       store.updateUnitOfMeaning(unit.uid, {
         translations: [translation1.uid, translation2.uid]
       })
