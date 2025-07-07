@@ -1,4 +1,3 @@
-- Follow a module-based architecture: Code is grouped by USE CASE, not type of file. We will NOT have global `components/`, `views/` or `types/` folders, or anything of that sort
 - Use Tailwind + Daisy UI for styling
 - follow Vue3/ts best practices
 - Our pinia stores are the source of truth
@@ -8,6 +7,7 @@
 - do not replicate type files! types should always live in dedicated files (unless ONLY relevant hyper-locally), and existing types should be reused.
 - use lucide icons (lucide-vue-next). Ensure!! icon names are valid ([icon list](https://raw.githubusercontent.com/mazeincoding/lucide-icons-list/refs/heads/main/icons.txt))
 
+- do NOT run `npm run dev`. It's annoying and useless.
 
 ## How to Add a Feature
 
@@ -36,7 +36,7 @@ As a rule:
 
 - Write conceptual stuff in `docs/` as a markdown guide
 - Code should mostly document itself, see chapter above
-- Use JsDoc style annotation, but ONLY!! to explain purpose or non-obvious decisions. Do NOT! JS-Doc annotate params or returns, that is *already done* by typescript. Keep it short.
+- Use JsDoc style annotation, but ONLY!! to explain purpose or non-obvious decisions. Do NOT! JS-Doc annotate params or returns, that is *already done* by typescript. Keep it short. Explain how the code fits into the bigger picture.
 - Avoid! just reiterating the name of a function (or whatever), e.g. we do not want to see `downloadLatestLessons() // downloads the latest lessons`. That is wasteful. Focus on purpose and how it ties in!
 
 ### Testing

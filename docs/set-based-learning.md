@@ -60,7 +60,7 @@ We then want a page where we can see all these sets:
 - `PagePracticeSet` takes an url prop (`Set` uid) and passes that to [the control component](../src/components/practice/set/PracticeSet.vue)
 - This component gets the set from the store, and more importantly, its units of meaning.
 - Using those, it utilizes [this util](../src/utils/generateExercises.ts) to get `Exercise[]`, specifically `FlashcardExercise[]` (see types)
-- What we want is cloze-based flashcards, and specifically all clozes that are possible for a sentence-translation pair, on a per-word base. E.g., if we have  `I have to go. | أنا لازم أطلع `, we want the following cloze:
+- What we want is cloze-based flashcards, and specifically all clozes that are possible for a sentence-translation pair, on a per-word base. E.g., if we have  `I have to go. | أنا لازم أطلع `, we want the following clozes:
   - ؟؟؟ لازم أطلع 
   - أنا ؟؟؟ أطلع 
   - أنا لازم ؟؟؟ 
@@ -68,6 +68,9 @@ We then want a page where we can see all these sets:
   - I ??? to go.
   - I have ??? go.
   - I have to ???.
+- Based on these, create the following `FlashcardExercise` variations:
+  - `front`: target lang sentence with cloze, br, native sentence `back`: target lang sentence "unclozed", with `<mark>` surrounding the word that was clozed on the front
+  - `front`: native sentence with cloze, br, target lang sentence `back`: native sentence "unclozed" in the same way
 
 - Cloze cards should be specifically designed like this:
   - `front:` clozed sentence
