@@ -1,0 +1,680 @@
+{
+  "language": "ar",
+  "tasks": [
+    "Make a sentence with 'سيدي'."
+  ],
+  "unitsOfMeaning": [
+    {
+      "uid": "apc_لما كنت بالدراسه انا كنت كثير بحب سيدي هو شخص حساس_sentence",
+      "language": "apc",
+      "content": "لما كنت بالدراسه انا كنت كثير بحب سيدي هو شخص حساس",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_When I was studying, I really loved my grandpa, he is a sensitive person._sentence"
+      ]
+    },
+    {
+      "uid": "en_When I was studying, I really loved my grandpa, he is a sensitive person._sentence",
+      "language": "en",
+      "content": "When I was studying, I really loved my grandpa, he is a sensitive person.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_لما كنت بالدراسه انا كنت كثير بحب سيدي هو شخص حساس_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الفرق انه سيدي لما اجو الاحتلال وقالولو اطلع من البيت قلي مش طالع  من البيت على قبري  بطلع من البيت بطلع وانا ميت, اما سيدك هرب_sentence",
+      "language": "apc",
+      "content": "الفرق انه سيدي لما اجو الاحتلال وقالولو اطلع من البيت قلي مش طالع  من البيت على قبري  بطلع من البيت بطلع وانا ميت, اما سيدك هرب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The difference is that my grandfather, when the occupying forces came and told him to leave the house, he said, \"I'm not leaving the house; I'll only leave the house when I'm dead.\" But your grandfather ran away._sentence"
+      ]
+    },
+    {
+      "uid": "en_The difference is that my grandfather, when the occupying forces came and told him to leave the house, he said, \"I'm not leaving the house; I'll only leave the house when I'm dead.\" But your grandfather ran away._sentence",
+      "language": "en",
+      "content": "The difference is that my grandfather, when the occupying forces came and told him to leave the house, he said, \"I'm not leaving the house; I'll only leave the house when I'm dead.\" But your grandfather ran away.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الفرق انه سيدي لما اجو الاحتلال وقالولو اطلع من البيت قلي مش طالع  من البيت على قبري  بطلع من البيت بطلع وانا ميت, اما سيدك هرب_sentence"
+      ]
+    },
+    {
+      "uid": "apc_سيدي بالاخص هو_sentence",
+      "language": "apc",
+      "content": "سيدي بالاخص هو",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_My grandfather in particular is_sentence"
+      ]
+    },
+    {
+      "uid": "en_My grandfather in particular is_sentence",
+      "language": "en",
+      "content": "My grandfather in particular is",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_سيدي بالاخص هو_sentence"
+      ]
+    },
+    {
+      "uid": "apc_بسيطه سيدي بقتل خمسه بخمس طلقات وبقتل خمسه بالقنبله_sentence",
+      "language": "apc",
+      "content": "بسيطه سيدي بقتل خمسه بخمس طلقات وبقتل خمسه بالقنبله",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_It's very simple, sir. I'll kill five with five bullets and I'll kill five with the bomb._sentence"
+      ]
+    },
+    {
+      "uid": "en_It's very simple, sir. I'll kill five with five bullets and I'll kill five with the bomb._sentence",
+      "language": "en",
+      "content": "It's very simple, sir. I'll kill five with five bullets and I'll kill five with the bomb.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بسيطه سيدي بقتل خمسه بخمس طلقات وبقتل خمسه بالقنبله_sentence"
+      ]
+    },
+    {
+      "uid": "apc_قاله: يا سيدي متزعل انت وزوجتك_sentence",
+      "language": "apc",
+      "content": "قاله: يا سيدي متزعل انت وزوجتك",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_He said to him: Sir, you and your wife shouldn't be upset._sentence"
+      ]
+    },
+    {
+      "uid": "en_He said to him: Sir, you and your wife shouldn't be upset._sentence",
+      "language": "en",
+      "content": "He said to him: Sir, you and your wife shouldn't be upset.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_قاله: يا سيدي متزعل انت وزوجتك_sentence"
+      ]
+    },
+    {
+      "uid": "apc_فيا سيدي أنا بحكي بس ينشف البلاط بنفوت بنقبض عليها ع الخفيف وكذا وو_sentence",
+      "language": "apc",
+      "content": "فيا سيدي أنا بحكي بس ينشف البلاط بنفوت بنقبض عليها ع الخفيف وكذا وو",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_So sir, what I'm saying is, as soon as the floor dries, we'll go in and arrest her calmly and all._sentence"
+      ]
+    },
+    {
+      "uid": "en_So sir, what I'm saying is, as soon as the floor dries, we'll go in and arrest her calmly and all._sentence",
+      "language": "en",
+      "content": "So sir, what I'm saying is, as soon as the floor dries, we'll go in and arrest her calmly and all.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_فيا سيدي أنا بحكي بس ينشف البلاط بنفوت بنقبض عليها ع الخفيف وكذا وو_sentence"
+      ]
+    },
+    {
+      "uid": "apc_هاد يا سيدي أثناء الوحدة بين مصر وسوريا_sentence",
+      "language": "apc",
+      "content": "هاد يا سيدي أثناء الوحدة بين مصر وسوريا",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_This, sir, was during the union between Egypt and Syria._sentence"
+      ]
+    },
+    {
+      "uid": "en_This, sir, was during the union between Egypt and Syria._sentence",
+      "language": "en",
+      "content": "This, sir, was during the union between Egypt and Syria.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_هاد يا سيدي أثناء الوحدة بين مصر وسوريا_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الّي بيعتاز الكلب بيقول له: نهارك سعيد يا سيدي_sentence",
+      "language": "apc",
+      "content": "الّي بيعتاز الكلب بيقول له: نهارك سعيد يا سيدي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_He who needs the dog says to him: \"Good day, sir.\"_sentence"
+      ]
+    },
+    {
+      "uid": "en_He who needs the dog says to him: \"Good day, sir.\"_sentence",
+      "language": "en",
+      "content": "He who needs the dog says to him: \"Good day, sir.\"",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الّي بيعتاز الكلب بيقول له: نهارك سعيد يا سيدي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_فالموضوع أنا وما في انو قاعد بستنى أوامر منك سيدي_sentence",
+      "language": "apc",
+      "content": "فالموضوع أنا وما في انو قاعد بستنى أوامر منك سيدي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_So the thing is, basically, I'm not waiting for orders from you, sir._sentence"
+      ]
+    },
+    {
+      "uid": "en_So the thing is, basically, I'm not waiting for orders from you, sir._sentence",
+      "language": "en",
+      "content": "So the thing is, basically, I'm not waiting for orders from you, sir.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_فالموضوع أنا وما في انو قاعد بستنى أوامر منك سيدي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_والله قبل شوي الشّباب على غروب السّائقين حكوا إنّه بدخّلوا عادي. بارك الله فيك يا سيدي_sentence",
+      "language": "apc",
+      "content": "والله قبل شوي الشّباب على غروب السّائقين حكوا إنّه بدخّلوا عادي. بارك الله فيك يا سيدي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Honestly, a little while ago the guys in the drivers' group said they let people in as usual. God bless you, sir._sentence"
+      ]
+    },
+    {
+      "uid": "en_Honestly, a little while ago the guys in the drivers' group said they let people in as usual. God bless you, sir._sentence",
+      "language": "en",
+      "content": "Honestly, a little while ago the guys in the drivers' group said they let people in as usual. God bless you, sir.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_والله قبل شوي الشّباب على غروب السّائقين حكوا إنّه بدخّلوا عادي. بارك الله فيك يا سيدي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_هدا يا سيدي ملا إنت بعد ما انطردو الفلسطينيين من بيوتهم في النكبة والنكسة، في عوائل كتير انفصلو عن بعض_sentence",
+      "language": "apc",
+      "content": "هدا يا سيدي ملا إنت بعد ما انطردو الفلسطينيين من بيوتهم في النكبة والنكسة، في عوائل كتير انفصلو عن بعض",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Well sir, you know that after the Palestinians were expelled from their homes in the Nakba and the Naksa, many families were separated._sentence"
+      ]
+    },
+    {
+      "uid": "en_Well sir, you know that after the Palestinians were expelled from their homes in the Nakba and the Naksa, many families were separated._sentence",
+      "language": "en",
+      "content": "Well sir, you know that after the Palestinians were expelled from their homes in the Nakba and the Naksa, many families were separated.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_هدا يا سيدي ملا إنت بعد ما انطردو الفلسطينيين من بيوتهم في النكبة والنكسة، في عوائل كتير انفصلو عن بعض_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يا سيدي قبل طلوع الدرج باخذ شفطه كبيره_sentence",
+      "language": "apc",
+      "content": "يا سيدي قبل طلوع الدرج باخذ شفطه كبيره",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Sir, before going up the stairs, I take a big sip._sentence"
+      ]
+    },
+    {
+      "uid": "en_Sir, before going up the stairs, I take a big sip._sentence",
+      "language": "en",
+      "content": "Sir, before going up the stairs, I take a big sip.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يا سيدي قبل طلوع الدرج باخذ شفطه كبيره_sentence"
+      ]
+    },
+    {
+      "uid": "apc_رد عليه خلف وقال سيدي أحط الطلقه براسي ويلعن أبو هيك دوله ما فيها غير خلف_sentence",
+      "language": "apc",
+      "content": "رد عليه خلف وقال سيدي أحط الطلقه براسي ويلعن أبو هيك دوله ما فيها غير خلف",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Khalaf replied to him, \"Sir, I'll put a bullet in my head and damn this state that has no one but Khalaf.\"_sentence"
+      ]
+    },
+    {
+      "uid": "en_Khalaf replied to him, \"Sir, I'll put a bullet in my head and damn this state that has no one but Khalaf.\"_sentence",
+      "language": "en",
+      "content": "Khalaf replied to him, \"Sir, I'll put a bullet in my head and damn this state that has no one but Khalaf.\"",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_رد عليه خلف وقال سيدي أحط الطلقه براسي ويلعن أبو هيك دوله ما فيها غير خلف_sentence"
+      ]
+    },
+    {
+      "uid": "apc_رد عليه خلف وقال بدي أدافع عن وطني سيدي_sentence",
+      "language": "apc",
+      "content": "رد عليه خلف وقال بدي أدافع عن وطني سيدي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Khalaf replied to him and said, I want to defend my homeland, sir._sentence"
+      ]
+    },
+    {
+      "uid": "en_Khalaf replied to him and said, I want to defend my homeland, sir._sentence",
+      "language": "en",
+      "content": "Khalaf replied to him and said, I want to defend my homeland, sir.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_رد عليه خلف وقال بدي أدافع عن وطني سيدي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_سيدي لساتو طيب / لساتو طيب ‎_sentence",
+      "language": "apc",
+      "content": "سيدي لساتو طيب / لساتو طيب ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_My grandfather is still alive._sentence"
+      ]
+    },
+    {
+      "uid": "en_My grandfather is still alive._sentence",
+      "language": "en",
+      "content": "My grandfather is still alive.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_سيدي لساتو طيب / لساتو طيب ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_سيدي ضلو قاعد ببيتو_sentence",
+      "language": "apc",
+      "content": "سيدي ضلو قاعد ببيتو",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_My grandfather stayed sitting in his home._sentence"
+      ]
+    },
+    {
+      "uid": "en_My grandfather stayed sitting in his home._sentence",
+      "language": "en",
+      "content": "My grandfather stayed sitting in his home.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_سيدي ضلو قاعد ببيتو_sentence"
+      ]
+    },
+    {
+      "uid": "apc_أنا ربيت عند سيدي ‎_sentence",
+      "language": "apc",
+      "content": "أنا ربيت عند سيدي ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I was raised by my grandfather_sentence"
+      ]
+    },
+    {
+      "uid": "en_I was raised by my grandfather_sentence",
+      "language": "en",
+      "content": "I was raised by my grandfather",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_أنا ربيت عند سيدي ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يعطيك العافية يا سيدي_sentence",
+      "language": "apc",
+      "content": "يعطيك العافية يا سيدي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Hello sir_sentence"
+      ]
+    },
+    {
+      "uid": "en_Hello sir_sentence",
+      "language": "en",
+      "content": "Hello sir",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يعطيك العافية يا سيدي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يعني أنا كنت أروح على الفلافل أنا مع سيدي، الله يرحم سيدي ويرحم أموات المسلمين._sentence",
+      "language": "apc",
+      "content": "يعني أنا كنت أروح على الفلافل أنا مع سيدي، الله يرحم سيدي ويرحم أموات المسلمين.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_For example, I used to go to the falafel shop with my grandfather. May God have mercy on his soul and the souls of the Muslims._sentence"
+      ]
+    },
+    {
+      "uid": "en_For example, I used to go to the falafel shop with my grandfather. May God have mercy on his soul and the souls of the Muslims._sentence",
+      "language": "en",
+      "content": "For example, I used to go to the falafel shop with my grandfather. May God have mercy on his soul and the souls of the Muslims.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يعني أنا كنت أروح على الفلافل أنا مع سيدي، الله يرحم سيدي ويرحم أموات المسلمين._sentence"
+      ]
+    },
+    {
+      "uid": "apc_رد عليه وقال خلف سيدي_sentence",
+      "language": "apc",
+      "content": "رد عليه وقال خلف سيدي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_He replied to him and said, \"Khalaf, my master.\"_sentence"
+      ]
+    },
+    {
+      "uid": "en_He replied to him and said, \"Khalaf, my master.\"_sentence",
+      "language": "en",
+      "content": "He replied to him and said, \"Khalaf, my master.\"",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_رد عليه وقال خلف سيدي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يا سيدي هذا العقال دوار ، ودخلت السياره (باكيت الدخان)، ودخلت السياره الثانيه(القداحه) من الشمال وصدموا بعض ...._sentence",
+      "language": "apc",
+      "content": "يا سيدي هذا العقال دوار ، ودخلت السياره (باكيت الدخان)، ودخلت السياره الثانيه(القداحه) من الشمال وصدموا بعض ....",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Your Honor, this roundabout, the first car came (the cigarette pack) and from the north, another car came (the lighter) and they collided..._sentence"
+      ]
+    },
+    {
+      "uid": "en_Your Honor, this roundabout, the first car came (the cigarette pack) and from the north, another car came (the lighter) and they collided..._sentence",
+      "language": "en",
+      "content": "Your Honor, this roundabout, the first car came (the cigarette pack) and from the north, another car came (the lighter) and they collided...",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يا سيدي هذا العقال دوار ، ودخلت السياره (باكيت الدخان)، ودخلت السياره الثانيه(القداحه) من الشمال وصدموا بعض ...._sentence"
+      ]
+    },
+    {
+      "uid": "apc_سيدي إحنا وصلنا موقع الجريمة_sentence",
+      "language": "apc",
+      "content": "سيدي إحنا وصلنا موقع الجريمة",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Sir, we have arrived at the crime scene._sentence"
+      ]
+    },
+    {
+      "uid": "en_Sir, we have arrived at the crime scene._sentence",
+      "language": "en",
+      "content": "Sir, we have arrived at the crime scene.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_سيدي إحنا وصلنا موقع الجريمة_sentence"
+      ]
+    },
+    {
+      "uid": "apc_فانا بجيب محمصة من اقرب محل عندي بيحمصها بنفس اليوم أو قبل باليوم يا سيدي قبل بأسبوع._sentence",
+      "language": "apc",
+      "content": "فانا بجيب محمصة من اقرب محل عندي بيحمصها بنفس اليوم أو قبل باليوم يا سيدي قبل بأسبوع.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I bring it roasted from the nearest shop to me, they roast it the same day, or the day before, or a week before._sentence"
+      ]
+    },
+    {
+      "uid": "en_I bring it roasted from the nearest shop to me, they roast it the same day, or the day before, or a week before._sentence",
+      "language": "en",
+      "content": "I bring it roasted from the nearest shop to me, they roast it the same day, or the day before, or a week before.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_فانا بجيب محمصة من اقرب محل عندي بيحمصها بنفس اليوم أو قبل باليوم يا سيدي قبل بأسبوع._sentence"
+      ]
+    },
+    {
+      "uid": "apc_نعم سيدي_sentence",
+      "language": "apc",
+      "content": "نعم سيدي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Yes, sir._sentence"
+      ]
+    },
+    {
+      "uid": "en_Yes, sir._sentence",
+      "language": "en",
+      "content": "Yes, sir.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_نعم سيدي_sentence"
+      ]
+    }
+  ]
+}

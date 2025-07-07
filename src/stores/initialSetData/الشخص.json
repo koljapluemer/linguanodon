@@ -1,0 +1,1016 @@
+{
+  "language": "ar",
+  "tasks": [
+    "Make a sentence with 'الشخص'."
+  ],
+  "unitsOfMeaning": [
+    {
+      "uid": "apc_مع الفطور، الضريبة، و الخدمة، أربعة و خمسين دولار على الشخص بالليلة._sentence",
+      "language": "apc",
+      "content": "مع الفطور، الضريبة، و الخدمة، أربعة و خمسين دولار على الشخص بالليلة.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_With breakfast, taxes, and service charges, it’s fifty-four dollars per person per night._sentence"
+      ]
+    },
+    {
+      "uid": "en_With breakfast, taxes, and service charges, it’s fifty-four dollars per person per night._sentence",
+      "language": "en",
+      "content": "With breakfast, taxes, and service charges, it’s fifty-four dollars per person per night.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_مع الفطور، الضريبة، و الخدمة، أربعة و خمسين دولار على الشخص بالليلة._sentence"
+      ]
+    },
+    {
+      "uid": "apc_شايفين الشخص اللي استقبله في نهاية السجاد الأحمر؟_sentence",
+      "language": "apc",
+      "content": "شايفين الشخص اللي استقبله في نهاية السجاد الأحمر؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Do you see the person at the end of the red carpet who is welcoming him?_sentence"
+      ]
+    },
+    {
+      "uid": "en_Do you see the person at the end of the red carpet who is welcoming him?_sentence",
+      "language": "en",
+      "content": "Do you see the person at the end of the red carpet who is welcoming him?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شايفين الشخص اللي استقبله في نهاية السجاد الأحمر؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_شارك الفيديو مع الشخص بتنصحو يترك الدخان_sentence",
+      "language": "apc",
+      "content": "شارك الفيديو مع الشخص بتنصحو يترك الدخان",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Share the video with the person you advise to quit smoking._sentence"
+      ]
+    },
+    {
+      "uid": "en_Share the video with the person you advise to quit smoking._sentence",
+      "language": "en",
+      "content": "Share the video with the person you advise to quit smoking.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شارك الفيديو مع الشخص بتنصحو يترك الدخان_sentence"
+      ]
+    },
+    {
+      "uid": "apc_ما تخافو من الشخص العصبي_sentence",
+      "language": "apc",
+      "content": "ما تخافو من الشخص العصبي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Don't be afraid of an angry person._sentence"
+      ]
+    },
+    {
+      "uid": "en_Don't be afraid of an angry person._sentence",
+      "language": "en",
+      "content": "Don't be afraid of an angry person.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ما تخافو من الشخص العصبي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_شو قصه هذا الشخص الي بدمر اسود في قلب رام الله._sentence",
+      "language": "apc",
+      "content": "شو قصه هذا الشخص الي بدمر اسود في قلب رام الله.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What's the story of the person who is destroying lions in the center of Ramallah?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What's the story of the person who is destroying lions in the center of Ramallah?_sentence",
+      "language": "en",
+      "content": "What's the story of the person who is destroying lions in the center of Ramallah?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شو قصه هذا الشخص الي بدمر اسود في قلب رام الله._sentence"
+      ]
+    },
+    {
+      "uid": "apc_بدك تحكي مع حد، ترفع التلفون، تطلب بالبيت، الشخص اللي برد عليك تطلب الشخص اللي بدك تحكي معه._sentence",
+      "language": "apc",
+      "content": "بدك تحكي مع حد، ترفع التلفون، تطلب بالبيت، الشخص اللي برد عليك تطلب الشخص اللي بدك تحكي معه.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_You want to talk to someone, you pick up the phone, you call the house, and the person who answers, you ask for the person you want to talk to._sentence"
+      ]
+    },
+    {
+      "uid": "en_You want to talk to someone, you pick up the phone, you call the house, and the person who answers, you ask for the person you want to talk to._sentence",
+      "language": "en",
+      "content": "You want to talk to someone, you pick up the phone, you call the house, and the person who answers, you ask for the person you want to talk to.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بدك تحكي مع حد، ترفع التلفون، تطلب بالبيت، الشخص اللي برد عليك تطلب الشخص اللي بدك تحكي معه._sentence"
+      ]
+    },
+    {
+      "uid": "apc_بأنو سن على الأقل فيه الشخص يعمل هيك؟_sentence",
+      "language": "apc",
+      "content": "بأنو سن على الأقل فيه الشخص يعمل هيك؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What is the minimum age to do this?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What is the minimum age to do this?_sentence",
+      "language": "en",
+      "content": "What is the minimum age to do this?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بأنو سن على الأقل فيه الشخص يعمل هيك؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_احتياط، أعطيني رقم الشخص المسؤول._sentence",
+      "language": "apc",
+      "content": "احتياط، أعطيني رقم الشخص المسؤول.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Just in case, give me the number of the person in charge._sentence"
+      ]
+    },
+    {
+      "uid": "en_Just in case, give me the number of the person in charge._sentence",
+      "language": "en",
+      "content": "Just in case, give me the number of the person in charge.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_احتياط، أعطيني رقم الشخص المسؤول._sentence"
+      ]
+    },
+    {
+      "uid": "apc_هاي الناس بالتحديد بتكون بدها تبين إنه أنا الشخص اللي أعلى منك وأنا الشخص اللي ببين أخطائك قدام الجروب اللي انت فيه_sentence",
+      "language": "apc",
+      "content": "هاي الناس بالتحديد بتكون بدها تبين إنه أنا الشخص اللي أعلى منك وأنا الشخص اللي ببين أخطائك قدام الجروب اللي انت فيه",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_These people specifically want to show that they are superior to you and that they are the ones who point out your mistakes in front of the group you are in._sentence"
+      ]
+    },
+    {
+      "uid": "en_These people specifically want to show that they are superior to you and that they are the ones who point out your mistakes in front of the group you are in._sentence",
+      "language": "en",
+      "content": "These people specifically want to show that they are superior to you and that they are the ones who point out your mistakes in front of the group you are in.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_هاي الناس بالتحديد بتكون بدها تبين إنه أنا الشخص اللي أعلى منك وأنا الشخص اللي ببين أخطائك قدام الجروب اللي انت فيه_sentence"
+      ]
+    },
+    {
+      "uid": "apc_هاي المستشارة القانونية في الكنيست اللي بتوضح إنه اليوم القاتل بقدرش يورث الشخص اللي قتله، لإنه قانون الميراث اللي أقرته الكنيست عام بحدد ٢٠٠٠ مين الأشخاص المحرومين من الميراث ومنهم: \"الذي أدين بالتسبب بوفاة صاحب الميراث أو حاول التسبب بوفاته\"._sentence",
+      "language": "apc",
+      "content": "هاي المستشارة القانونية في الكنيست اللي بتوضح إنه اليوم القاتل بقدرش يورث الشخص اللي قتله، لإنه قانون الميراث اللي أقرته الكنيست عام بحدد ٢٠٠٠ مين الأشخاص المحرومين من الميراث ومنهم: \"الذي أدين بالتسبب بوفاة صاحب الميراث أو حاول التسبب بوفاته\".",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_This is the legal advisor to the Knesset, clarifying that as of today a murderer cannot inherit from the person they killed, because in the inheritance law legislated by the Knesset in the year 2000, it specifies who are disqualified from inheritance, including: \"Anyone convicted of intentionally causing the death of the owner of the inheritance or attempting to cause their death.\"_sentence"
+      ]
+    },
+    {
+      "uid": "en_This is the legal advisor to the Knesset, clarifying that as of today a murderer cannot inherit from the person they killed, because in the inheritance law legislated by the Knesset in the year 2000, it specifies who are disqualified from inheritance, including: \"Anyone convicted of intentionally causing the death of the owner of the inheritance or attempting to cause their death.\"_sentence",
+      "language": "en",
+      "content": "This is the legal advisor to the Knesset, clarifying that as of today a murderer cannot inherit from the person they killed, because in the inheritance law legislated by the Knesset in the year 2000, it specifies who are disqualified from inheritance, including: \"Anyone convicted of intentionally causing the death of the owner of the inheritance or attempting to cause their death.\"",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_هاي المستشارة القانونية في الكنيست اللي بتوضح إنه اليوم القاتل بقدرش يورث الشخص اللي قتله، لإنه قانون الميراث اللي أقرته الكنيست عام بحدد ٢٠٠٠ مين الأشخاص المحرومين من الميراث ومنهم: \"الذي أدين بالتسبب بوفاة صاحب الميراث أو حاول التسبب بوفاته\"._sentence"
+      ]
+    },
+    {
+      "uid": "apc_وبرضه إذا في شخص ببالغ في إظهار العيوب فيك فإعرف إنه هذا الشخص في عنده غيرة منك_sentence",
+      "language": "apc",
+      "content": "وبرضه إذا في شخص ببالغ في إظهار العيوب فيك فإعرف إنه هذا الشخص في عنده غيرة منك",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And also, if there is someone who exaggerates in highlighting your flaws, know that this person is jealous of you._sentence"
+      ]
+    },
+    {
+      "uid": "en_And also, if there is someone who exaggerates in highlighting your flaws, know that this person is jealous of you._sentence",
+      "language": "en",
+      "content": "And also, if there is someone who exaggerates in highlighting your flaws, know that this person is jealous of you.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وبرضه إذا في شخص ببالغ في إظهار العيوب فيك فإعرف إنه هذا الشخص في عنده غيرة منك_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الشخص الوحيد الي مقدرتش افهمو فكل الدنيا هو امي_sentence",
+      "language": "apc",
+      "content": "الشخص الوحيد الي مقدرتش افهمو فكل الدنيا هو امي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The only person I couldn't understand in the whole world is my mother._sentence"
+      ]
+    },
+    {
+      "uid": "en_The only person I couldn't understand in the whole world is my mother._sentence",
+      "language": "en",
+      "content": "The only person I couldn't understand in the whole world is my mother.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الشخص الوحيد الي مقدرتش افهمو فكل الدنيا هو امي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الشخص الواحد منهم بدفع على الاقل 1500 دولار كل سنه_sentence",
+      "language": "apc",
+      "content": "الشخص الواحد منهم بدفع على الاقل 1500 دولار كل سنه",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Each one of them pays at least 1500 dollars a year._sentence"
+      ]
+    },
+    {
+      "uid": "en_Each one of them pays at least 1500 dollars a year._sentence",
+      "language": "en",
+      "content": "Each one of them pays at least 1500 dollars a year.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الشخص الواحد منهم بدفع على الاقل 1500 دولار كل سنه_sentence"
+      ]
+    },
+    {
+      "uid": "apc_اسم الشخص_sentence",
+      "language": "apc",
+      "content": "اسم الشخص",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_First name_sentence"
+      ]
+    },
+    {
+      "uid": "en_First name_sentence",
+      "language": "en",
+      "content": "First name",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_اسم الشخص_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الشخص المنافق_sentence",
+      "language": "apc",
+      "content": "الشخص المنافق",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The hypocritical person_sentence"
+      ]
+    },
+    {
+      "uid": "en_The hypocritical person_sentence",
+      "language": "en",
+      "content": "The hypocritical person",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الشخص المنافق_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الشخص الوحيد إللي بستاهل إنك تسامحو هو إنت_sentence",
+      "language": "apc",
+      "content": "الشخص الوحيد إللي بستاهل إنك تسامحو هو إنت",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The only person who deserves your forgiveness is yourself._sentence"
+      ]
+    },
+    {
+      "uid": "en_The only person who deserves your forgiveness is yourself._sentence",
+      "language": "en",
+      "content": "The only person who deserves your forgiveness is yourself.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الشخص الوحيد إللي بستاهل إنك تسامحو هو إنت_sentence"
+      ]
+    },
+    {
+      "uid": "apc_احتياط، خلي يكون في معي رقم الشخص المسؤول ._sentence",
+      "language": "apc",
+      "content": "احتياط، خلي يكون في معي رقم الشخص المسؤول .",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Just in case, let me have the number of the person in charge._sentence"
+      ]
+    },
+    {
+      "uid": "en_Just in case, let me have the number of the person in charge._sentence",
+      "language": "en",
+      "content": "Just in case, let me have the number of the person in charge.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_احتياط، خلي يكون في معي رقم الشخص المسؤول ._sentence"
+      ]
+    },
+    {
+      "uid": "apc_الشخص الوحيد إللي بستاهل إنك تسامحو اليوم هو إنت_sentence",
+      "language": "apc",
+      "content": "الشخص الوحيد إللي بستاهل إنك تسامحو اليوم هو إنت",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The only person who deserves your forgiveness today is yourself._sentence"
+      ]
+    },
+    {
+      "uid": "en_The only person who deserves your forgiveness today is yourself._sentence",
+      "language": "en",
+      "content": "The only person who deserves your forgiveness today is yourself.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الشخص الوحيد إللي بستاهل إنك تسامحو اليوم هو إنت_sentence"
+      ]
+    },
+    {
+      "uid": "apc_ثبت انه صار عند الشخص وعيين_sentence",
+      "language": "apc",
+      "content": "ثبت انه صار عند الشخص وعيين",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_It has been established that the person has two consciousnesses._sentence"
+      ]
+    },
+    {
+      "uid": "en_It has been established that the person has two consciousnesses._sentence",
+      "language": "en",
+      "content": "It has been established that the person has two consciousnesses.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ثبت انه صار عند الشخص وعيين_sentence"
+      ]
+    },
+    {
+      "uid": "apc_بخلي الكل يضحك عليه أو يستلذ إنه هادا الشخص قاعد يشعر بالاحراج_sentence",
+      "language": "apc",
+      "content": "بخلي الكل يضحك عليه أو يستلذ إنه هادا الشخص قاعد يشعر بالاحراج",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Make everyone laugh at him or take pleasure in that person feeling embarrassed._sentence"
+      ]
+    },
+    {
+      "uid": "en_Make everyone laugh at him or take pleasure in that person feeling embarrassed._sentence",
+      "language": "en",
+      "content": "Make everyone laugh at him or take pleasure in that person feeling embarrassed.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بخلي الكل يضحك عليه أو يستلذ إنه هادا الشخص قاعد يشعر بالاحراج_sentence"
+      ]
+    },
+    {
+      "uid": "apc_بعد ساعات طويله وهي فرق الانقاذ تدور على هاد الشخص المفقود نادو عليه باسمه موطلو_sentence",
+      "language": "apc",
+      "content": "بعد ساعات طويله وهي فرق الانقاذ تدور على هاد الشخص المفقود نادو عليه باسمه موطلو",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_After long hours of the rescue team searching for the missing person, they called out his name – Motlu._sentence"
+      ]
+    },
+    {
+      "uid": "en_After long hours of the rescue team searching for the missing person, they called out his name – Motlu._sentence",
+      "language": "en",
+      "content": "After long hours of the rescue team searching for the missing person, they called out his name – Motlu.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بعد ساعات طويله وهي فرق الانقاذ تدور على هاد الشخص المفقود نادو عليه باسمه موطلو_sentence"
+      ]
+    },
+    {
+      "uid": "apc_شوفو يا جماعه عنجد حتى حتى التفرقة بقضيه الكورونا وفحص النتائج بالعربي والعبراني بتختلف لنفس الشخص_sentence",
+      "language": "apc",
+      "content": "شوفو يا جماعه عنجد حتى حتى التفرقة بقضيه الكورونا وفحص النتائج بالعربي والعبراني بتختلف لنفس الشخص",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Look guys, really, even the discrimination in the matter of corona, and the test results in Arabic and Hebrew are different for the same person._sentence"
+      ]
+    },
+    {
+      "uid": "en_Look guys, really, even the discrimination in the matter of corona, and the test results in Arabic and Hebrew are different for the same person._sentence",
+      "language": "en",
+      "content": "Look guys, really, even the discrimination in the matter of corona, and the test results in Arabic and Hebrew are different for the same person.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شوفو يا جماعه عنجد حتى حتى التفرقة بقضيه الكورونا وفحص النتائج بالعربي والعبراني بتختلف لنفس الشخص_sentence"
+      ]
+    },
+    {
+      "uid": "apc_اش اسم الشخص يلي بدك تحكي معو؟_sentence",
+      "language": "apc",
+      "content": "اش اسم الشخص يلي بدك تحكي معو؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What is the name of the person you want to talk to?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What is the name of the person you want to talk to?_sentence",
+      "language": "en",
+      "content": "What is the name of the person you want to talk to?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_اش اسم الشخص يلي بدك تحكي معو؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_شو إسم الشخص اللي بدك تحكي معو؟_sentence",
+      "language": "apc",
+      "content": "شو إسم الشخص اللي بدك تحكي معو؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What is the name of the person you want to talk to?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What is the name of the person you want to talk to?_sentence",
+      "language": "en",
+      "content": "What is the name of the person you want to talk to?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شو إسم الشخص اللي بدك تحكي معو؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_بس للاحتياط، أعطيني رقم الشخص المسؤول._sentence",
+      "language": "apc",
+      "content": "بس للاحتياط، أعطيني رقم الشخص المسؤول.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Just in case, give me the number of the person in charge._sentence"
+      ]
+    },
+    {
+      "uid": "en_Just in case, give me the number of the person in charge._sentence",
+      "language": "en",
+      "content": "Just in case, give me the number of the person in charge.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بس للاحتياط، أعطيني رقم الشخص المسؤول._sentence"
+      ]
+    },
+    {
+      "uid": "apc_ممكن انك إنت تتنرفز بشده وتفقد اعصابك وتروح تهاجم هاد الشخص_sentence",
+      "language": "apc",
+      "content": "ممكن انك إنت تتنرفز بشده وتفقد اعصابك وتروح تهاجم هاد الشخص",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_You may be very nervous and lose your temper and go attack this person._sentence"
+      ]
+    },
+    {
+      "uid": "en_You may be very nervous and lose your temper and go attack this person._sentence",
+      "language": "en",
+      "content": "You may be very nervous and lose your temper and go attack this person.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ممكن انك إنت تتنرفز بشده وتفقد اعصابك وتروح تهاجم هاد الشخص_sentence"
+      ]
+    },
+    {
+      "uid": "apc_أواعي الشخص بتدل كتير على شخصيتو ‎_sentence",
+      "language": "apc",
+      "content": "أواعي الشخص بتدل كتير على شخصيتو ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_A person's clothes tell a lot about their personality._sentence"
+      ]
+    },
+    {
+      "uid": "en_A person's clothes tell a lot about their personality._sentence",
+      "language": "en",
+      "content": "A person's clothes tell a lot about their personality.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_أواعي الشخص بتدل كتير على شخصيتو ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_حتى في بحكيلك مثال في ناس بصيروا يحكوا مع الله يعني و بصيروا يحكولوا انه ليش هذا الشخص توفى_sentence",
+      "language": "apc",
+      "content": "حتى في بحكيلك مثال في ناس بصيروا يحكوا مع الله يعني و بصيروا يحكولوا انه ليش هذا الشخص توفى",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_There are even, to give you an example, some people who start talking to God and asking Him why this person passed away._sentence"
+      ]
+    },
+    {
+      "uid": "en_There are even, to give you an example, some people who start talking to God and asking Him why this person passed away._sentence",
+      "language": "en",
+      "content": "There are even, to give you an example, some people who start talking to God and asking Him why this person passed away.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_حتى في بحكيلك مثال في ناس بصيروا يحكوا مع الله يعني و بصيروا يحكولوا انه ليش هذا الشخص توفى_sentence"
+      ]
+    },
+    {
+      "uid": "apc_شو اسم الشخص يلي بتتمنى تحكي معو؟_sentence",
+      "language": "apc",
+      "content": "شو اسم الشخص يلي بتتمنى تحكي معو؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What is the name of the person you want to talk to?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What is the name of the person you want to talk to?_sentence",
+      "language": "en",
+      "content": "What is the name of the person you want to talk to?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شو اسم الشخص يلي بتتمنى تحكي معو؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_شو اسم الشخص يللي بدك تحكي معه؟_sentence",
+      "language": "apc",
+      "content": "شو اسم الشخص يللي بدك تحكي معه؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What is the name of the person you want to talk to?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What is the name of the person you want to talk to?_sentence",
+      "language": "en",
+      "content": "What is the name of the person you want to talk to?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شو اسم الشخص يللي بدك تحكي معه؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_طيب هذا الشخص كتبلي فش مطار في فلسطين اصلا ._sentence",
+      "language": "apc",
+      "content": "طيب هذا الشخص كتبلي فش مطار في فلسطين اصلا .",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Okay, this person wrote to me that there is no airport in Palestine in the first place._sentence"
+      ]
+    },
+    {
+      "uid": "en_Okay, this person wrote to me that there is no airport in Palestine in the first place._sentence",
+      "language": "en",
+      "content": "Okay, this person wrote to me that there is no airport in Palestine in the first place.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_طيب هذا الشخص كتبلي فش مطار في فلسطين اصلا ._sentence"
+      ]
+    },
+    {
+      "uid": "apc_بس للإحتياط، عطيني رقم الشخص المسؤول._sentence",
+      "language": "apc",
+      "content": "بس للإحتياط، عطيني رقم الشخص المسؤول.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Just in case, give me the number of the person in charge._sentence"
+      ]
+    },
+    {
+      "uid": "en_Just in case, give me the number of the person in charge._sentence",
+      "language": "en",
+      "content": "Just in case, give me the number of the person in charge.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بس للإحتياط، عطيني رقم الشخص المسؤول._sentence"
+      ]
+    },
+    {
+      "uid": "apc_وطبعا باليوم الثاني لحتى عرفو أنو هاد الشخص لا طبيب ولا بطيخ_sentence",
+      "language": "apc",
+      "content": "وطبعا باليوم الثاني لحتى عرفو أنو هاد الشخص لا طبيب ولا بطيخ",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And of course, on the second day, they realized that this person was neither a doctor nor anything close._sentence"
+      ]
+    },
+    {
+      "uid": "en_And of course, on the second day, they realized that this person was neither a doctor nor anything close._sentence",
+      "language": "en",
+      "content": "And of course, on the second day, they realized that this person was neither a doctor nor anything close.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وطبعا باليوم الثاني لحتى عرفو أنو هاد الشخص لا طبيب ولا بطيخ_sentence"
+      ]
+    },
+    {
+      "uid": "apc_شو إسم الشخص اللي بتحب تحكي معه؟_sentence",
+      "language": "apc",
+      "content": "شو إسم الشخص اللي بتحب تحكي معه؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What's the name of the person you want to talk to?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What's the name of the person you want to talk to?_sentence",
+      "language": "en",
+      "content": "What's the name of the person you want to talk to?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شو إسم الشخص اللي بتحب تحكي معه؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_اسمه لهذا الشخص موطلو . شرب كحول وسكر._sentence",
+      "language": "apc",
+      "content": "اسمه لهذا الشخص موطلو . شرب كحول وسكر.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The name of this person is Motlo. He drank alcohol and got drunk._sentence"
+      ]
+    },
+    {
+      "uid": "en_The name of this person is Motlo. He drank alcohol and got drunk._sentence",
+      "language": "en",
+      "content": "The name of this person is Motlo. He drank alcohol and got drunk.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_اسمه لهذا الشخص موطلو . شرب كحول وسكر._sentence"
+      ]
+    },
+    {
+      "uid": "apc_وشغلة هادا الشخص قد ما تشوفها صغيرة ولكن عملت تأثير كتير كبير الصراحة_sentence",
+      "language": "apc",
+      "content": "وشغلة هادا الشخص قد ما تشوفها صغيرة ولكن عملت تأثير كتير كبير الصراحة",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And the work of this person, although you may see it as small, honestly had a very big impact._sentence"
+      ]
+    },
+    {
+      "uid": "en_And the work of this person, although you may see it as small, honestly had a very big impact._sentence",
+      "language": "en",
+      "content": "And the work of this person, although you may see it as small, honestly had a very big impact.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وشغلة هادا الشخص قد ما تشوفها صغيرة ولكن عملت تأثير كتير كبير الصراحة_sentence"
+      ]
+    }
+  ]
+}

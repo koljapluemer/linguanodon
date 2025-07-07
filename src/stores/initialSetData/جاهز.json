@@ -1,0 +1,960 @@
+{
+  "language": "ar",
+  "tasks": [
+    "Make a sentence with 'جاهز'."
+  ],
+  "unitsOfMeaning": [
+    {
+      "uid": "apc_انا اللي جاهز_sentence",
+      "language": "apc",
+      "content": "انا اللي جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I'm the one who's ready._sentence"
+      ]
+    },
+    {
+      "uid": "en_I'm the one who's ready._sentence",
+      "language": "en",
+      "content": "I'm the one who's ready.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_انا اللي جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_ما تقلقي كله جاهز_sentence",
+      "language": "apc",
+      "content": "ما تقلقي كله جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Don't worry, everything is ready._sentence"
+      ]
+    },
+    {
+      "uid": "en_Don't worry, everything is ready._sentence",
+      "language": "en",
+      "content": "Don't worry, everything is ready.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ما تقلقي كله جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_بتقدر تخليلي إياه جاهز بكرا الساعة خمسة المسا؟_sentence",
+      "language": "apc",
+      "content": "بتقدر تخليلي إياه جاهز بكرا الساعة خمسة المسا؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Can you have it ready for me tomorrow at 5 PM?_sentence"
+      ]
+    },
+    {
+      "uid": "en_Can you have it ready for me tomorrow at 5 PM?_sentence",
+      "language": "en",
+      "content": "Can you have it ready for me tomorrow at 5 PM?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بتقدر تخليلي إياه جاهز بكرا الساعة خمسة المسا؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_المخطوط جاهز يروح ع المطبعة ‎_sentence",
+      "language": "apc",
+      "content": "المخطوط جاهز يروح ع المطبعة ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The manuscript is ready to go to the press._sentence"
+      ]
+    },
+    {
+      "uid": "en_The manuscript is ready to go to the press._sentence",
+      "language": "en",
+      "content": "The manuscript is ready to go to the press.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_المخطوط جاهز يروح ع المطبعة ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_وهي الجروب جاهز والاهالي كثير تحمسوا_sentence",
+      "language": "apc",
+      "content": "وهي الجروب جاهز والاهالي كثير تحمسوا",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Here! The group is ready and the parents are very excited._sentence"
+      ]
+    },
+    {
+      "uid": "en_Here! The group is ready and the parents are very excited._sentence",
+      "language": "en",
+      "content": "Here! The group is ready and the parents are very excited.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وهي الجروب جاهز والاهالي كثير تحمسوا_sentence"
+      ]
+    },
+    {
+      "uid": "apc_راح يكون جاهز بعد بكرا المسا._sentence",
+      "language": "apc",
+      "content": "راح يكون جاهز بعد بكرا المسا.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_It will be ready the evening after tomorrow._sentence"
+      ]
+    },
+    {
+      "uid": "en_It will be ready the evening after tomorrow._sentence",
+      "language": "en",
+      "content": "It will be ready the evening after tomorrow.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_راح يكون جاهز بعد بكرا المسا._sentence"
+      ]
+    },
+    {
+      "uid": "apc_وفهمت كل شئ وانا جاهز للامتحان بكرا_sentence",
+      "language": "apc",
+      "content": "وفهمت كل شئ وانا جاهز للامتحان بكرا",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And I understood everything and I am ready for the exam tomorrow._sentence"
+      ]
+    },
+    {
+      "uid": "en_And I understood everything and I am ready for the exam tomorrow._sentence",
+      "language": "en",
+      "content": "And I understood everything and I am ready for the exam tomorrow.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وفهمت كل شئ وانا جاهز للامتحان بكرا_sentence"
+      ]
+    },
+    {
+      "uid": "apc_أنا جاهز عشان أطلب._sentence",
+      "language": "apc",
+      "content": "أنا جاهز عشان أطلب.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I'm ready to order._sentence"
+      ]
+    },
+    {
+      "uid": "en_I'm ready to order._sentence",
+      "language": "en",
+      "content": "I'm ready to order.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_أنا جاهز عشان أطلب._sentence"
+      ]
+    },
+    {
+      "uid": "apc_بعدين أنا قدمت على فيسا وجوازي جاهز_sentence",
+      "language": "apc",
+      "content": "بعدين أنا قدمت على فيسا وجوازي جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Later, I applied for a visa and my passport is ready._sentence"
+      ]
+    },
+    {
+      "uid": "en_Later, I applied for a visa and my passport is ready._sentence",
+      "language": "en",
+      "content": "Later, I applied for a visa and my passport is ready.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بعدين أنا قدمت على فيسا وجوازي جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يا خوي الفطور جاهز من بدري_sentence",
+      "language": "apc",
+      "content": "يا خوي الفطور جاهز من بدري",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Hey bro, breakfast is ready early_sentence"
+      ]
+    },
+    {
+      "uid": "en_Hey bro, breakfast is ready early_sentence",
+      "language": "en",
+      "content": "Hey bro, breakfast is ready early",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يا خوي الفطور جاهز من بدري_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يشوف كيف أبو سند دايما جاهز_sentence",
+      "language": "apc",
+      "content": "يشوف كيف أبو سند دايما جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_See how Abu Sand is always ready._sentence"
+      ]
+    },
+    {
+      "uid": "en_See how Abu Sand is always ready._sentence",
+      "language": "en",
+      "content": "See how Abu Sand is always ready.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يشوف كيف أبو سند دايما جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_رح يكون جاهز بعد بكرة المسا._sentence",
+      "language": "apc",
+      "content": "رح يكون جاهز بعد بكرة المسا.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_It will be ready the day after tomorrow in the evening._sentence"
+      ]
+    },
+    {
+      "uid": "en_It will be ready the day after tomorrow in the evening._sentence",
+      "language": "en",
+      "content": "It will be ready the day after tomorrow in the evening.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_رح يكون جاهز بعد بكرة المسا._sentence"
+      ]
+    },
+    {
+      "uid": "apc_جاهز ؟_sentence",
+      "language": "apc",
+      "content": "جاهز ؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Ready?_sentence"
+      ]
+    },
+    {
+      "uid": "en_Ready?_sentence",
+      "language": "en",
+      "content": "Ready?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_جاهز ؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الواحد الي بصحى من النوم وبلاقي الاكل جاهز_sentence",
+      "language": "apc",
+      "content": "الواحد الي بصحى من النوم وبلاقي الاكل جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The one who wakes up and finds the food ready_sentence"
+      ]
+    },
+    {
+      "uid": "en_The one who wakes up and finds the food ready_sentence",
+      "language": "en",
+      "content": "The one who wakes up and finds the food ready",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الواحد الي بصحى من النوم وبلاقي الاكل جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_بكون جاهز بعد بكرا المسا ._sentence",
+      "language": "apc",
+      "content": "بكون جاهز بعد بكرا المسا .",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I will be ready the evening after tomorrow._sentence"
+      ]
+    },
+    {
+      "uid": "en_I will be ready the evening after tomorrow._sentence",
+      "language": "en",
+      "content": "I will be ready the evening after tomorrow.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بكون جاهز بعد بكرا المسا ._sentence"
+      ]
+    },
+    {
+      "uid": "apc_إلا بحكيلي ياه هادي بسيطه الكفن جاهز بس التأخير منك_sentence",
+      "language": "apc",
+      "content": "إلا بحكيلي ياه هادي بسيطه الكفن جاهز بس التأخير منك",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_So he tells me, no problem, the shroud is ready, it's you who's delaying._sentence"
+      ]
+    },
+    {
+      "uid": "en_So he tells me, no problem, the shroud is ready, it's you who's delaying._sentence",
+      "language": "en",
+      "content": "So he tells me, no problem, the shroud is ready, it's you who's delaying.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_إلا بحكيلي ياه هادي بسيطه الكفن جاهز بس التأخير منك_sentence"
+      ]
+    },
+    {
+      "uid": "apc_‏بيوصلولنا بطون جاهز للورشة ‎_sentence",
+      "language": "apc",
+      "content": "‏بيوصلولنا بطون جاهز للورشة ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_They are bringing us ready-mixed concrete to the construction site._sentence"
+      ]
+    },
+    {
+      "uid": "en_They are bringing us ready-mixed concrete to the construction site._sentence",
+      "language": "en",
+      "content": "They are bringing us ready-mixed concrete to the construction site.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_‏بيوصلولنا بطون جاهز للورشة ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_رح يكون جاهز بعد بكرا المسا._sentence",
+      "language": "apc",
+      "content": "رح يكون جاهز بعد بكرا المسا.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_It will be ready the day after tomorrow in the evening._sentence"
+      ]
+    },
+    {
+      "uid": "en_It will be ready the day after tomorrow in the evening._sentence",
+      "language": "en",
+      "content": "It will be ready the day after tomorrow in the evening.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_رح يكون جاهز بعد بكرا المسا._sentence"
+      ]
+    },
+    {
+      "uid": "apc_وأنا جاهز لأعمال الصيانة اللي بدكم إياها_sentence",
+      "language": "apc",
+      "content": "وأنا جاهز لأعمال الصيانة اللي بدكم إياها",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And I am ready for any maintenance work you need._sentence"
+      ]
+    },
+    {
+      "uid": "en_And I am ready for any maintenance work you need._sentence",
+      "language": "en",
+      "content": "And I am ready for any maintenance work you need.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وأنا جاهز لأعمال الصيانة اللي بدكم إياها_sentence"
+      ]
+    },
+    {
+      "uid": "apc_أنا جاهز أطلب._sentence",
+      "language": "apc",
+      "content": "أنا جاهز أطلب.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I am ready to order._sentence"
+      ]
+    },
+    {
+      "uid": "en_I am ready to order._sentence",
+      "language": "en",
+      "content": "I am ready to order.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_أنا جاهز أطلب._sentence"
+      ]
+    },
+    {
+      "uid": "apc_حبيبتي طلبك كتير صعب بس اي شي تاني أنا جاهز_sentence",
+      "language": "apc",
+      "content": "حبيبتي طلبك كتير صعب بس اي شي تاني أنا جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_My love, your request is very difficult but I’m ready for anything else._sentence"
+      ]
+    },
+    {
+      "uid": "en_My love, your request is very difficult but I’m ready for anything else._sentence",
+      "language": "en",
+      "content": "My love, your request is very difficult but I’m ready for anything else.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_حبيبتي طلبك كتير صعب بس اي شي تاني أنا جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يلا جاهز ؟؟_sentence",
+      "language": "apc",
+      "content": "يلا جاهز ؟؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Ready?_sentence"
+      ]
+    },
+    {
+      "uid": "en_Ready?_sentence",
+      "language": "en",
+      "content": "Ready?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يلا جاهز ؟؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_أنا جاهز تإطلب._sentence",
+      "language": "apc",
+      "content": "أنا جاهز تإطلب.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I am ready to order._sentence"
+      ]
+    },
+    {
+      "uid": "en_I am ready to order._sentence",
+      "language": "en",
+      "content": "I am ready to order.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_أنا جاهز تإطلب._sentence"
+      ]
+    },
+    {
+      "uid": "apc_جاهز_sentence",
+      "language": "apc",
+      "content": "جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Ready!_sentence"
+      ]
+    },
+    {
+      "uid": "en_Ready!_sentence",
+      "language": "en",
+      "content": "Ready!",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_بده ربع ساعة وبكون جاهز_sentence",
+      "language": "apc",
+      "content": "بده ربع ساعة وبكون جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_He needs fifteen minutes and it will be ready._sentence"
+      ]
+    },
+    {
+      "uid": "en_He needs fifteen minutes and it will be ready._sentence",
+      "language": "en",
+      "content": "He needs fifteen minutes and it will be ready.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_بده ربع ساعة وبكون جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_عشان تكون جاهز للامتحانات_sentence",
+      "language": "apc",
+      "content": "عشان تكون جاهز للامتحانات",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_So that you are ready for the exams_sentence"
+      ]
+    },
+    {
+      "uid": "en_So that you are ready for the exams_sentence",
+      "language": "en",
+      "content": "So that you are ready for the exams",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_عشان تكون جاهز للامتحانات_sentence"
+      ]
+    },
+    {
+      "uid": "apc_معلش اليوم بدي هذا الملف يكون جاهز اذا سمحت_sentence",
+      "language": "apc",
+      "content": "معلش اليوم بدي هذا الملف يكون جاهز اذا سمحت",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Please have this file ready today if you can._sentence"
+      ]
+    },
+    {
+      "uid": "en_Please have this file ready today if you can._sentence",
+      "language": "en",
+      "content": "Please have this file ready today if you can.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_معلش اليوم بدي هذا الملف يكون جاهز اذا سمحت_sentence"
+      ]
+    },
+    {
+      "uid": "apc_أنا جاهز لأطلب._sentence",
+      "language": "apc",
+      "content": "أنا جاهز لأطلب.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I'm ready to order._sentence"
+      ]
+    },
+    {
+      "uid": "en_I'm ready to order._sentence",
+      "language": "en",
+      "content": "I'm ready to order.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_أنا جاهز لأطلب._sentence"
+      ]
+    },
+    {
+      "uid": "apc_انا جاهز_sentence",
+      "language": "apc",
+      "content": "انا جاهز",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I'm ready_sentence"
+      ]
+    },
+    {
+      "uid": "en_I'm ready_sentence",
+      "language": "en",
+      "content": "I'm ready",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_انا جاهز_sentence"
+      ]
+    },
+    {
+      "uid": "apc_وبعدين يا أخي اذا بدك الفطور هو جاهز من بكير_sentence",
+      "language": "apc",
+      "content": "وبعدين يا أخي اذا بدك الفطور هو جاهز من بكير",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And then, my brother, if you want breakfast, it will be ready early._sentence"
+      ]
+    },
+    {
+      "uid": "en_And then, my brother, if you want breakfast, it will be ready early._sentence",
+      "language": "en",
+      "content": "And then, my brother, if you want breakfast, it will be ready early.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وبعدين يا أخي اذا بدك الفطور هو جاهز من بكير_sentence"
+      ]
+    },
+    {
+      "uid": "apc_هلا بروح بجيب اشي جاهز بسرعة_sentence",
+      "language": "apc",
+      "content": "هلا بروح بجيب اشي جاهز بسرعة",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Sure, I'll go get something ready quickly._sentence"
+      ]
+    },
+    {
+      "uid": "en_Sure, I'll go get something ready quickly._sentence",
+      "language": "en",
+      "content": "Sure, I'll go get something ready quickly.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_هلا بروح بجيب اشي جاهز بسرعة_sentence"
+      ]
+    },
+    {
+      "uid": "apc_انا جاهز اوصلكم من هنا للمول عدل_sentence",
+      "language": "apc",
+      "content": "انا جاهز اوصلكم من هنا للمول عدل",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_I am ready to drive you from here to the mall now._sentence"
+      ]
+    },
+    {
+      "uid": "en_I am ready to drive you from here to the mall now._sentence",
+      "language": "en",
+      "content": "I am ready to drive you from here to the mall now.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_انا جاهز اوصلكم من هنا للمول عدل_sentence"
+      ]
+    },
+    {
+      "uid": "apc_هاها لازم الواحد يكون جاهز لكل شي_sentence",
+      "language": "apc",
+      "content": "هاها لازم الواحد يكون جاهز لكل شي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Haha, one must be ready for anything._sentence"
+      ]
+    },
+    {
+      "uid": "en_Haha, one must be ready for anything._sentence",
+      "language": "en",
+      "content": "Haha, one must be ready for anything.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_هاها لازم الواحد يكون جاهز لكل شي_sentence"
+      ]
+    },
+    {
+      "uid": "apc_زعل مني وبطل يفيقني اعمله اي شي وصار يعمل القهوة لحالو ويتغدا بالدوام والعشا صار دايما يجيبه جاهز ..مو مخليني اعمله اي شيييي_sentence",
+      "language": "apc",
+      "content": "زعل مني وبطل يفيقني اعمله اي شي وصار يعمل القهوة لحالو ويتغدا بالدوام والعشا صار دايما يجيبه جاهز ..مو مخليني اعمله اي شيييي",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_He got mad at me and stopped waking me up to do anything for him. He started making his own coffee, having lunch at work, and always bringing dinner ready-made. He won't let me do anything for him._sentence"
+      ]
+    },
+    {
+      "uid": "en_He got mad at me and stopped waking me up to do anything for him. He started making his own coffee, having lunch at work, and always bringing dinner ready-made. He won't let me do anything for him._sentence",
+      "language": "en",
+      "content": "He got mad at me and stopped waking me up to do anything for him. He started making his own coffee, having lunch at work, and always bringing dinner ready-made. He won't let me do anything for him.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_زعل مني وبطل يفيقني اعمله اي شي وصار يعمل القهوة لحالو ويتغدا بالدوام والعشا صار دايما يجيبه جاهز ..مو مخليني اعمله اي شيييي_sentence"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,680 @@
+{
+  "language": "ar",
+  "tasks": [
+    "Make a sentence with 'الحزب'."
+  ],
+  "unitsOfMeaning": [
+    {
+      "uid": "apc_التقارير الصادرة عن الحزب_sentence",
+      "language": "apc",
+      "content": "التقارير الصادرة عن الحزب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The reports of the party_sentence"
+      ]
+    },
+    {
+      "uid": "en_The reports of the party_sentence",
+      "language": "en",
+      "content": "The reports of the party",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_التقارير الصادرة عن الحزب_sentence"
+      ]
+    },
+    {
+      "uid": "apc_الحزب اللي فاز بالانتخابات ‎_sentence",
+      "language": "apc",
+      "content": "الحزب اللي فاز بالانتخابات ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The party that won the elections_sentence"
+      ]
+    },
+    {
+      "uid": "en_The party that won the elections_sentence",
+      "language": "en",
+      "content": "The party that won the elections",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_الحزب اللي فاز بالانتخابات ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_أما الحزب والمؤسسات المدنية والشعبية_sentence",
+      "language": "apc",
+      "content": "أما الحزب والمؤسسات المدنية والشعبية",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_But the party, the civil institutions, and the popular institutions_sentence"
+      ]
+    },
+    {
+      "uid": "en_But the party, the civil institutions, and the popular institutions_sentence",
+      "language": "en",
+      "content": "But the party, the civil institutions, and the popular institutions",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_أما الحزب والمؤسسات المدنية والشعبية_sentence"
+      ]
+    },
+    {
+      "uid": "apc_ومو مهتم بتطوير الحزب_sentence",
+      "language": "apc",
+      "content": "ومو مهتم بتطوير الحزب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And he is not interested in developing the party._sentence"
+      ]
+    },
+    {
+      "uid": "en_And he is not interested in developing the party._sentence",
+      "language": "en",
+      "content": "And he is not interested in developing the party.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ومو مهتم بتطوير الحزب_sentence"
+      ]
+    },
+    {
+      "uid": "apc_عنا سؤال لألكو: مين هو الحزب اليهودي اللي حصل على أكبر عدد من الأصوات  عند المواطنين العرب بعد الأحزاب العربية؟_sentence",
+      "language": "apc",
+      "content": "عنا سؤال لألكو: مين هو الحزب اليهودي اللي حصل على أكبر عدد من الأصوات  عند المواطنين العرب بعد الأحزاب العربية؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_We have a question for you: Which Jewish party received the most votes from Arab citizens after the Arab parties?_sentence"
+      ]
+    },
+    {
+      "uid": "en_We have a question for you: Which Jewish party received the most votes from Arab citizens after the Arab parties?_sentence",
+      "language": "en",
+      "content": "We have a question for you: Which Jewish party received the most votes from Arab citizens after the Arab parties?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_عنا سؤال لألكو: مين هو الحزب اليهودي اللي حصل على أكبر عدد من الأصوات  عند المواطنين العرب بعد الأحزاب العربية؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_طيب شو كمان في إنجازات الحزب \"عوتسما يهوديت\"؟_sentence",
+      "language": "apc",
+      "content": "طيب شو كمان في إنجازات الحزب \"عوتسما يهوديت\"؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Okay, what other achievements does the \"Otzma Yehudit\" party have?_sentence"
+      ]
+    },
+    {
+      "uid": "en_Okay, what other achievements does the \"Otzma Yehudit\" party have?_sentence",
+      "language": "en",
+      "content": "Okay, what other achievements does the \"Otzma Yehudit\" party have?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_طيب شو كمان في إنجازات الحزب \"عوتسما يهوديت\"؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_وصلاح جديد وقيادة الحزب المدنية_sentence",
+      "language": "apc",
+      "content": "وصلاح جديد وقيادة الحزب المدنية",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Salah Jadid and the civilian party leadership_sentence"
+      ]
+    },
+    {
+      "uid": "en_Salah Jadid and the civilian party leadership_sentence",
+      "language": "en",
+      "content": "Salah Jadid and the civilian party leadership",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_وصلاح جديد وقيادة الحزب المدنية_sentence"
+      ]
+    },
+    {
+      "uid": "apc_التجمع هو الحزب الوحيد اللي كان يحكي عن بناء قائمة مستقلة عن المشتركة من شيء شهرين وكان يدور ع مرشحين لخوض الانتخابات معه والتجمع رفض يتعهد بالحفاظ على المشتركة._sentence",
+      "language": "apc",
+      "content": "التجمع هو الحزب الوحيد اللي كان يحكي عن بناء قائمة مستقلة عن المشتركة من شيء شهرين وكان يدور ع مرشحين لخوض الانتخابات معه والتجمع رفض يتعهد بالحفاظ على المشتركة.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Balad is the only party that for the past two months has been talking about building an independent list separate from the Joint List. They talked about candidates running alongside it in the elections and refused to commit to preserving the Joint List._sentence"
+      ]
+    },
+    {
+      "uid": "en_Balad is the only party that for the past two months has been talking about building an independent list separate from the Joint List. They talked about candidates running alongside it in the elections and refused to commit to preserving the Joint List._sentence",
+      "language": "en",
+      "content": "Balad is the only party that for the past two months has been talking about building an independent list separate from the Joint List. They talked about candidates running alongside it in the elections and refused to commit to preserving the Joint List.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_التجمع هو الحزب الوحيد اللي كان يحكي عن بناء قائمة مستقلة عن المشتركة من شيء شهرين وكان يدور ع مرشحين لخوض الانتخابات معه والتجمع رفض يتعهد بالحفاظ على المشتركة._sentence"
+      ]
+    },
+    {
+      "uid": "apc_خلونا نشوف شو رأي رئيسة الحزب میراف میخائیلی._sentence",
+      "language": "apc",
+      "content": "خلونا نشوف شو رأي رئيسة الحزب میراف میخائیلی.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Let's see what the party leader Merav Michaeli thinks._sentence"
+      ]
+    },
+    {
+      "uid": "en_Let's see what the party leader Merav Michaeli thinks._sentence",
+      "language": "en",
+      "content": "Let's see what the party leader Merav Michaeli thinks.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_خلونا نشوف شو رأي رئيسة الحزب میراف میخائیلی._sentence"
+      ]
+    },
+    {
+      "uid": "apc_شو تعملوا يا قيادة الحزب والدولة_sentence",
+      "language": "apc",
+      "content": "شو تعملوا يا قيادة الحزب والدولة",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_What will you do now, leaders of the party and the state?_sentence"
+      ]
+    },
+    {
+      "uid": "en_What will you do now, leaders of the party and the state?_sentence",
+      "language": "en",
+      "content": "What will you do now, leaders of the party and the state?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شو تعملوا يا قيادة الحزب والدولة_sentence"
+      ]
+    },
+    {
+      "uid": "apc_حتى يمنعوا انشقاق الحزب ‎_sentence",
+      "language": "apc",
+      "content": "حتى يمنعوا انشقاق الحزب ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_In order to prevent a split in the party_sentence"
+      ]
+    },
+    {
+      "uid": "en_In order to prevent a split in the party_sentence",
+      "language": "en",
+      "content": "In order to prevent a split in the party",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_حتى يمنعوا انشقاق الحزب ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_لحتى يصحح مسار الحزب_sentence",
+      "language": "apc",
+      "content": "لحتى يصحح مسار الحزب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_In order to correct the party's course_sentence"
+      ]
+    },
+    {
+      "uid": "en_In order to correct the party's course_sentence",
+      "language": "en",
+      "content": "In order to correct the party's course",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_لحتى يصحح مسار الحزب_sentence"
+      ]
+    },
+    {
+      "uid": "apc_والإعلانات اللي صادرة عن قادة الحزب_sentence",
+      "language": "apc",
+      "content": "والإعلانات اللي صادرة عن قادة الحزب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And the announcements published by the party leaders_sentence"
+      ]
+    },
+    {
+      "uid": "en_And the announcements published by the party leaders_sentence",
+      "language": "en",
+      "content": "And the announcements published by the party leaders",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_والإعلانات اللي صادرة عن قادة الحزب_sentence"
+      ]
+    },
+    {
+      "uid": "apc_صلاح جديد وقيادة الحزب المدنية_sentence",
+      "language": "apc",
+      "content": "صلاح جديد وقيادة الحزب المدنية",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Salah Jadid and the civilian leadership of the party_sentence"
+      ]
+    },
+    {
+      "uid": "en_Salah Jadid and the civilian leadership of the party_sentence",
+      "language": "en",
+      "content": "Salah Jadid and the civilian leadership of the party",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_صلاح جديد وقيادة الحزب المدنية_sentence"
+      ]
+    },
+    {
+      "uid": "apc_حلوا الحزب بطلب من عبد الناصر_sentence",
+      "language": "apc",
+      "content": "حلوا الحزب بطلب من عبد الناصر",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_They dissolved the party at Nasser's request._sentence"
+      ]
+    },
+    {
+      "uid": "en_They dissolved the party at Nasser's request._sentence",
+      "language": "en",
+      "content": "They dissolved the party at Nasser's request.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_حلوا الحزب بطلب من عبد الناصر_sentence"
+      ]
+    },
+    {
+      "uid": "apc_فبعد الأحزاب العربية حزب ميرتس الحزب الذي يحصل اكبر عدد من أصوات العرب._sentence",
+      "language": "apc",
+      "content": "فبعد الأحزاب العربية حزب ميرتس الحزب الذي يحصل اكبر عدد من أصوات العرب.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_So after the Arab parties, Meretz is the party that receives the most Arab votes._sentence"
+      ]
+    },
+    {
+      "uid": "en_So after the Arab parties, Meretz is the party that receives the most Arab votes._sentence",
+      "language": "en",
+      "content": "So after the Arab parties, Meretz is the party that receives the most Arab votes.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_فبعد الأحزاب العربية حزب ميرتس الحزب الذي يحصل اكبر عدد من أصوات العرب._sentence"
+      ]
+    },
+    {
+      "uid": "apc_لعند الألاعيب والمتآمرين على مسيرة الحزب_sentence",
+      "language": "apc",
+      "content": "لعند الألاعيب والمتآمرين على مسيرة الحزب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_We have reached the tricks and conspiracies on the party's path._sentence"
+      ]
+    },
+    {
+      "uid": "en_We have reached the tricks and conspiracies on the party's path._sentence",
+      "language": "en",
+      "content": "We have reached the tricks and conspiracies on the party's path.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_لعند الألاعيب والمتآمرين على مسيرة الحزب_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يعني الليكود هو الحزب اليهودي الأكثر شعبية عند المواطنين العرب وبعده بيجي ميرتس._sentence",
+      "language": "apc",
+      "content": "يعني الليكود هو الحزب اليهودي الأكثر شعبية عند المواطنين العرب وبعده بيجي ميرتس.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_That is, Likud is the most popular Jewish party among Arab citizens, followed by Meretz._sentence"
+      ]
+    },
+    {
+      "uid": "en_That is, Likud is the most popular Jewish party among Arab citizens, followed by Meretz._sentence",
+      "language": "en",
+      "content": "That is, Likud is the most popular Jewish party among Arab citizens, followed by Meretz.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يعني الليكود هو الحزب اليهودي الأكثر شعبية عند المواطنين العرب وبعده بيجي ميرتس._sentence"
+      ]
+    },
+    {
+      "uid": "apc_ولا إنه يكون الحزب_sentence",
+      "language": "apc",
+      "content": "ولا إنه يكون الحزب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Nor is it that the party_sentence"
+      ]
+    },
+    {
+      "uid": "en_Nor is it that the party_sentence",
+      "language": "en",
+      "content": "Nor is it that the party",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ولا إنه يكون الحزب_sentence"
+      ]
+    },
+    {
+      "uid": "apc_‏الجناح اليساري تبع الحزب عم يقوى باطراد ‎_sentence",
+      "language": "apc",
+      "content": "‏الجناح اليساري تبع الحزب عم يقوى باطراد ‎",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The left wing of the party is consistently gaining strength._sentence"
+      ]
+    },
+    {
+      "uid": "en_The left wing of the party is consistently gaining strength._sentence",
+      "language": "en",
+      "content": "The left wing of the party is consistently gaining strength.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_‏الجناح اليساري تبع الحزب عم يقوى باطراد ‎_sentence"
+      ]
+    },
+    {
+      "uid": "apc_واعتقلت أمين الحزب المساعد صلاح جديد_sentence",
+      "language": "apc",
+      "content": "واعتقلت أمين الحزب المساعد صلاح جديد",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_And arrested the assistant party secretary Salah Jadid._sentence"
+      ]
+    },
+    {
+      "uid": "en_And arrested the assistant party secretary Salah Jadid._sentence",
+      "language": "en",
+      "content": "And arrested the assistant party secretary Salah Jadid.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_واعتقلت أمين الحزب المساعد صلاح جديد_sentence"
+      ]
+    },
+    {
+      "uid": "apc_اجتمعت قيادة الحزب وقالت لا بد لنا_sentence",
+      "language": "apc",
+      "content": "اجتمعت قيادة الحزب وقالت لا بد لنا",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_The party leaders met and said: We must_sentence"
+      ]
+    },
+    {
+      "uid": "en_The party leaders met and said: We must_sentence",
+      "language": "en",
+      "content": "The party leaders met and said: We must",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_اجتمعت قيادة الحزب وقالت لا بد لنا_sentence"
+      ]
+    },
+    {
+      "uid": "apc_ضمن الحزب نفسه_sentence",
+      "language": "apc",
+      "content": "ضمن الحزب نفسه",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Within the party itself_sentence"
+      ]
+    },
+    {
+      "uid": "en_Within the party itself_sentence",
+      "language": "en",
+      "content": "Within the party itself",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ضمن الحزب نفسه_sentence"
+      ]
+    },
+    {
+      "uid": "apc_إنت عم تبعد عن مبادئ الحزب_sentence",
+      "language": "apc",
+      "content": "إنت عم تبعد عن مبادئ الحزب",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_You are straying from the principles of the party._sentence"
+      ]
+    },
+    {
+      "uid": "en_You are straying from the principles of the party._sentence",
+      "language": "en",
+      "content": "You are straying from the principles of the party.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_إنت عم تبعد عن مبادئ الحزب_sentence"
+      ]
+    }
+  ]
+}
