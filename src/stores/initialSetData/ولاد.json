@@ -1,14 +1,14 @@
 {
-  "language": "ar",
-  "uid": "جاهز",
+  "uid": "ولاد",
+  "language": "apc",
   "tasks": [
-    "Make a sentence with 'جاهز'."
+    "Make a sentence with 'ولاد'."
   ],
   "unitsOfMeaning": [
     {
-      "uid": "apc_انا اللي جاهز_sentence",
+      "uid": "apc_وإذا مش نسايبنا ولاد عمّنا!_sentence",
       "language": "apc",
-      "content": "انا اللي جاهز",
+      "content": "وإذا مش نسايبنا ولاد عمّنا!",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -16,13 +16,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I'm the one who's ready._sentence"
+        "en_And if they are not our relatives, they are our cousins!_sentence"
       ]
     },
     {
-      "uid": "en_I'm the one who's ready._sentence",
+      "uid": "en_And if they are not our relatives, they are our cousins!_sentence",
       "language": "en",
-      "content": "I'm the one who's ready.",
+      "content": "And if they are not our relatives, they are our cousins!",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -30,13 +30,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_انا اللي جاهز_sentence"
+        "apc_وإذا مش نسايبنا ولاد عمّنا!_sentence"
       ]
     },
     {
-      "uid": "apc_ما تقلقي كله جاهز_sentence",
+      "uid": "apc_يا ولاد يلا تأخرنا، شو بتساوا؟_sentence",
       "language": "apc",
-      "content": "ما تقلقي كله جاهز",
+      "content": "يا ولاد يلا تأخرنا، شو بتساوا؟",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -44,13 +44,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Don't worry, everything is ready._sentence"
+        "en_Kids, let's go, we're late! What are you doing?_sentence"
       ]
     },
     {
-      "uid": "en_Don't worry, everything is ready._sentence",
+      "uid": "en_Kids, let's go, we're late! What are you doing?_sentence",
       "language": "en",
-      "content": "Don't worry, everything is ready.",
+      "content": "Kids, let's go, we're late! What are you doing?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -58,13 +58,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_ما تقلقي كله جاهز_sentence"
+        "apc_يا ولاد يلا تأخرنا، شو بتساوا؟_sentence"
       ]
     },
     {
-      "uid": "apc_بتقدر تخليلي إياه جاهز بكرا الساعة خمسة المسا؟_sentence",
+      "uid": "apc_افتحوا افتحوا يا ولاد_sentence",
       "language": "apc",
-      "content": "بتقدر تخليلي إياه جاهز بكرا الساعة خمسة المسا؟",
+      "content": "افتحوا افتحوا يا ولاد",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -72,13 +72,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Can you have it ready for me tomorrow at 5 PM?_sentence"
+        "en_Open, open, kids._sentence"
       ]
     },
     {
-      "uid": "en_Can you have it ready for me tomorrow at 5 PM?_sentence",
+      "uid": "en_Open, open, kids._sentence",
       "language": "en",
-      "content": "Can you have it ready for me tomorrow at 5 PM?",
+      "content": "Open, open, kids.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -86,13 +86,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_بتقدر تخليلي إياه جاهز بكرا الساعة خمسة المسا؟_sentence"
+        "apc_افتحوا افتحوا يا ولاد_sentence"
       ]
     },
     {
-      "uid": "apc_المخطوط جاهز يروح ع المطبعة ‎_sentence",
+      "uid": "apc_شوفوا يا ولاد_sentence",
       "language": "apc",
-      "content": "المخطوط جاهز يروح ع المطبعة ‎",
+      "content": "شوفوا يا ولاد",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -100,13 +100,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_The manuscript is ready to go to the press._sentence"
+        "en_Look, kids_sentence"
       ]
     },
     {
-      "uid": "en_The manuscript is ready to go to the press._sentence",
+      "uid": "en_Look, kids_sentence",
       "language": "en",
-      "content": "The manuscript is ready to go to the press.",
+      "content": "Look, kids",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -114,13 +114,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_المخطوط جاهز يروح ع المطبعة ‎_sentence"
+        "apc_شوفوا يا ولاد_sentence"
       ]
     },
     {
-      "uid": "apc_وهي الجروب جاهز والاهالي كثير تحمسوا_sentence",
+      "uid": "apc_بس يا ولاد_sentence",
       "language": "apc",
-      "content": "وهي الجروب جاهز والاهالي كثير تحمسوا",
+      "content": "بس يا ولاد",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -128,13 +128,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Here! The group is ready and the parents are very excited._sentence"
+        "en_Enough, kids._sentence"
       ]
     },
     {
-      "uid": "en_Here! The group is ready and the parents are very excited._sentence",
+      "uid": "en_Enough, kids._sentence",
       "language": "en",
-      "content": "Here! The group is ready and the parents are very excited.",
+      "content": "Enough, kids.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -142,13 +142,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_وهي الجروب جاهز والاهالي كثير تحمسوا_sentence"
+        "apc_بس يا ولاد_sentence"
       ]
     },
     {
-      "uid": "apc_راح يكون جاهز بعد بكرا المسا._sentence",
+      "uid": "apc_خلص، ولا يهمك.. شو منلعب؟ ولاد احنا؟_sentence",
       "language": "apc",
-      "content": "راح يكون جاهز بعد بكرا المسا.",
+      "content": "خلص، ولا يهمك.. شو منلعب؟ ولاد احنا؟",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -156,13 +156,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_It will be ready the evening after tomorrow._sentence"
+        "en_That's it, don't worry.. What are we playing? Are we kids?_sentence"
       ]
     },
     {
-      "uid": "en_It will be ready the evening after tomorrow._sentence",
+      "uid": "en_That's it, don't worry.. What are we playing? Are we kids?_sentence",
       "language": "en",
-      "content": "It will be ready the evening after tomorrow.",
+      "content": "That's it, don't worry.. What are we playing? Are we kids?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -170,13 +170,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_راح يكون جاهز بعد بكرا المسا._sentence"
+        "apc_خلص، ولا يهمك.. شو منلعب؟ ولاد احنا؟_sentence"
       ]
     },
     {
-      "uid": "apc_وفهمت كل شئ وانا جاهز للامتحان بكرا_sentence",
+      "uid": "apc_شوي شوي يا ولاد ههههههه_sentence",
       "language": "apc",
-      "content": "وفهمت كل شئ وانا جاهز للامتحان بكرا",
+      "content": "شوي شوي يا ولاد ههههههه",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -184,13 +184,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_And I understood everything and I am ready for the exam tomorrow._sentence"
+        "en_Slowly, slowly, kids. Hahahaha._sentence"
       ]
     },
     {
-      "uid": "en_And I understood everything and I am ready for the exam tomorrow._sentence",
+      "uid": "en_Slowly, slowly, kids. Hahahaha._sentence",
       "language": "en",
-      "content": "And I understood everything and I am ready for the exam tomorrow.",
+      "content": "Slowly, slowly, kids. Hahahaha.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -198,13 +198,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_وفهمت كل شئ وانا جاهز للامتحان بكرا_sentence"
+        "apc_شوي شوي يا ولاد ههههههه_sentence"
       ]
     },
     {
-      "uid": "apc_أنا جاهز عشان أطلب._sentence",
+      "uid": "apc_يلا يا ولاد تأخرنا_sentence",
       "language": "apc",
-      "content": "أنا جاهز عشان أطلب.",
+      "content": "يلا يا ولاد تأخرنا",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -212,13 +212,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I'm ready to order._sentence"
+        "en_Come on, kids, we're late._sentence"
       ]
     },
     {
-      "uid": "en_I'm ready to order._sentence",
+      "uid": "en_Come on, kids, we're late._sentence",
       "language": "en",
-      "content": "I'm ready to order.",
+      "content": "Come on, kids, we're late.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -226,13 +226,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_أنا جاهز عشان أطلب._sentence"
+        "apc_يلا يا ولاد تأخرنا_sentence"
       ]
     },
     {
-      "uid": "apc_بعدين أنا قدمت على فيسا وجوازي جاهز_sentence",
+      "uid": "apc_اهلين يا ولاد ليش تأخرتوا_sentence",
       "language": "apc",
-      "content": "بعدين أنا قدمت على فيسا وجوازي جاهز",
+      "content": "اهلين يا ولاد ليش تأخرتوا",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -240,13 +240,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Later, I applied for a visa and my passport is ready._sentence"
+        "en_Hi kids, why are you late?_sentence"
       ]
     },
     {
-      "uid": "en_Later, I applied for a visa and my passport is ready._sentence",
+      "uid": "en_Hi kids, why are you late?_sentence",
       "language": "en",
-      "content": "Later, I applied for a visa and my passport is ready.",
+      "content": "Hi kids, why are you late?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -254,13 +254,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_بعدين أنا قدمت على فيسا وجوازي جاهز_sentence"
+        "apc_اهلين يا ولاد ليش تأخرتوا_sentence"
       ]
     },
     {
-      "uid": "apc_يا خوي الفطور جاهز من بدري_sentence",
+      "uid": "apc_شو أعمل معه، يا ولاد الحلال؟_sentence",
       "language": "apc",
-      "content": "يا خوي الفطور جاهز من بدري",
+      "content": "شو أعمل معه، يا ولاد الحلال؟",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -268,13 +268,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Hey bro, breakfast is ready early_sentence"
+        "en_What should I do with him, good people?_sentence"
       ]
     },
     {
-      "uid": "en_Hey bro, breakfast is ready early_sentence",
+      "uid": "en_What should I do with him, good people?_sentence",
       "language": "en",
-      "content": "Hey bro, breakfast is ready early",
+      "content": "What should I do with him, good people?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -282,13 +282,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_يا خوي الفطور جاهز من بدري_sentence"
+        "apc_شو أعمل معه، يا ولاد الحلال؟_sentence"
       ]
     },
     {
-      "uid": "apc_يشوف كيف أبو سند دايما جاهز_sentence",
+      "uid": "apc_واستلبسوه ولاد الصف_sentence",
       "language": "apc",
-      "content": "يشوف كيف أبو سند دايما جاهز",
+      "content": "واستلبسوه ولاد الصف",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -296,13 +296,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_See how Abu Sand is always ready._sentence"
+        "en_And his classmates continued to bully him._sentence"
       ]
     },
     {
-      "uid": "en_See how Abu Sand is always ready._sentence",
+      "uid": "en_And his classmates continued to bully him._sentence",
       "language": "en",
-      "content": "See how Abu Sand is always ready.",
+      "content": "And his classmates continued to bully him.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -310,13 +310,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_يشوف كيف أبو سند دايما جاهز_sentence"
+        "apc_واستلبسوه ولاد الصف_sentence"
       ]
     },
     {
-      "uid": "apc_رح يكون جاهز بعد بكرة المسا._sentence",
+      "uid": "apc_ازا تزوجتو توأم رح تجيبو ولاد توأم؟_sentence",
       "language": "apc",
-      "content": "رح يكون جاهز بعد بكرة المسا.",
+      "content": "ازا تزوجتو توأم رح تجيبو ولاد توأم؟",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -324,13 +324,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_It will be ready the day after tomorrow in the evening._sentence"
+        "en_If you marry twins, will your children be twins?_sentence"
       ]
     },
     {
-      "uid": "en_It will be ready the day after tomorrow in the evening._sentence",
+      "uid": "en_If you marry twins, will your children be twins?_sentence",
       "language": "en",
-      "content": "It will be ready the day after tomorrow in the evening.",
+      "content": "If you marry twins, will your children be twins?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -338,13 +338,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_رح يكون جاهز بعد بكرة المسا._sentence"
+        "apc_ازا تزوجتو توأم رح تجيبو ولاد توأم؟_sentence"
       ]
     },
     {
-      "uid": "apc_جاهز ؟_sentence",
+      "uid": "apc_يا ولاد ليش مش ماكلين أكلكم ؟_sentence",
       "language": "apc",
-      "content": "جاهز ؟",
+      "content": "يا ولاد ليش مش ماكلين أكلكم ؟",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -352,13 +352,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Ready?_sentence"
+        "en_Kids, why haven't you eaten your food?_sentence"
       ]
     },
     {
-      "uid": "en_Ready?_sentence",
+      "uid": "en_Kids, why haven't you eaten your food?_sentence",
       "language": "en",
-      "content": "Ready?",
+      "content": "Kids, why haven't you eaten your food?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -366,13 +366,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_جاهز ؟_sentence"
+        "apc_يا ولاد ليش مش ماكلين أكلكم ؟_sentence"
       ]
     },
     {
-      "uid": "apc_الواحد الي بصحى من النوم وبلاقي الاكل جاهز_sentence",
+      "uid": "apc_ولاد الحارة اللي فوق_sentence",
       "language": "apc",
-      "content": "الواحد الي بصحى من النوم وبلاقي الاكل جاهز",
+      "content": "ولاد الحارة اللي فوق",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -380,13 +380,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_The one who wakes up and finds the food ready_sentence"
+        "en_The kids from the upper neighborhood_sentence"
       ]
     },
     {
-      "uid": "en_The one who wakes up and finds the food ready_sentence",
+      "uid": "en_The kids from the upper neighborhood_sentence",
       "language": "en",
-      "content": "The one who wakes up and finds the food ready",
+      "content": "The kids from the upper neighborhood",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -394,13 +394,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_الواحد الي بصحى من النوم وبلاقي الاكل جاهز_sentence"
+        "apc_ولاد الحارة اللي فوق_sentence"
       ]
     },
     {
-      "uid": "apc_بكون جاهز بعد بكرا المسا ._sentence",
+      "uid": "apc_يا ولاد تعالوا تغذوا في معكرونا_sentence",
       "language": "apc",
-      "content": "بكون جاهز بعد بكرا المسا .",
+      "content": "يا ولاد تعالوا تغذوا في معكرونا",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -408,13 +408,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I will be ready the evening after tomorrow._sentence"
+        "en_Kids, come have lunch, we have pasta._sentence"
       ]
     },
     {
-      "uid": "en_I will be ready the evening after tomorrow._sentence",
+      "uid": "en_Kids, come have lunch, we have pasta._sentence",
       "language": "en",
-      "content": "I will be ready the evening after tomorrow.",
+      "content": "Kids, come have lunch, we have pasta.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -422,13 +422,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_بكون جاهز بعد بكرا المسا ._sentence"
+        "apc_يا ولاد تعالوا تغذوا في معكرونا_sentence"
       ]
     },
     {
-      "uid": "apc_إلا بحكيلي ياه هادي بسيطه الكفن جاهز بس التأخير منك_sentence",
+      "uid": "apc_‏هي متجوزة وعندها ولاد ‎_sentence",
       "language": "apc",
-      "content": "إلا بحكيلي ياه هادي بسيطه الكفن جاهز بس التأخير منك",
+      "content": "‏هي متجوزة وعندها ولاد ‎",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -436,13 +436,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_So he tells me, no problem, the shroud is ready, it's you who's delaying._sentence"
+        "en_She is married and has children._sentence"
       ]
     },
     {
-      "uid": "en_So he tells me, no problem, the shroud is ready, it's you who's delaying._sentence",
+      "uid": "en_She is married and has children._sentence",
       "language": "en",
-      "content": "So he tells me, no problem, the shroud is ready, it's you who's delaying.",
+      "content": "She is married and has children.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -450,13 +450,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_إلا بحكيلي ياه هادي بسيطه الكفن جاهز بس التأخير منك_sentence"
+        "apc_‏هي متجوزة وعندها ولاد ‎_sentence"
       ]
     },
     {
-      "uid": "apc_‏بيوصلولنا بطون جاهز للورشة ‎_sentence",
+      "uid": "apc_ولاد قاعدين هوني بالضّفّة بتبرطعوا تبرطع،_sentence",
       "language": "apc",
-      "content": "‏بيوصلولنا بطون جاهز للورشة ‎",
+      "content": "ولاد قاعدين هوني بالضّفّة بتبرطعوا تبرطع،",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -464,13 +464,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_They are bringing us ready-mixed concrete to the construction site._sentence"
+        "en_Young people are causing a ruckus here in the West Bank._sentence"
       ]
     },
     {
-      "uid": "en_They are bringing us ready-mixed concrete to the construction site._sentence",
+      "uid": "en_Young people are causing a ruckus here in the West Bank._sentence",
       "language": "en",
-      "content": "They are bringing us ready-mixed concrete to the construction site.",
+      "content": "Young people are causing a ruckus here in the West Bank.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -478,13 +478,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_‏بيوصلولنا بطون جاهز للورشة ‎_sentence"
+        "apc_ولاد قاعدين هوني بالضّفّة بتبرطعوا تبرطع،_sentence"
       ]
     },
     {
-      "uid": "apc_رح يكون جاهز بعد بكرا المسا._sentence",
+      "uid": "apc_يا ولاد شو عملتو_sentence",
       "language": "apc",
-      "content": "رح يكون جاهز بعد بكرا المسا.",
+      "content": "يا ولاد شو عملتو",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -492,13 +492,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_It will be ready the day after tomorrow in the evening._sentence"
+        "en_Kids, what did you do!?!_sentence"
       ]
     },
     {
-      "uid": "en_It will be ready the day after tomorrow in the evening._sentence",
+      "uid": "en_Kids, what did you do!?!_sentence",
       "language": "en",
-      "content": "It will be ready the day after tomorrow in the evening.",
+      "content": "Kids, what did you do!?!",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -506,13 +506,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_رح يكون جاهز بعد بكرا المسا._sentence"
+        "apc_يا ولاد شو عملتو_sentence"
       ]
     },
     {
-      "uid": "apc_وأنا جاهز لأعمال الصيانة اللي بدكم إياها_sentence",
+      "uid": "apc_كل ولاد العمارة عم بحضرولك مطالبنا_sentence",
       "language": "apc",
-      "content": "وأنا جاهز لأعمال الصيانة اللي بدكم إياها",
+      "content": "كل ولاد العمارة عم بحضرولك مطالبنا",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -520,13 +520,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_And I am ready for any maintenance work you need._sentence"
+        "en_All the kids in the building are preparing our list of demands._sentence"
       ]
     },
     {
-      "uid": "en_And I am ready for any maintenance work you need._sentence",
+      "uid": "en_All the kids in the building are preparing our list of demands._sentence",
       "language": "en",
-      "content": "And I am ready for any maintenance work you need.",
+      "content": "All the kids in the building are preparing our list of demands.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -534,13 +534,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_وأنا جاهز لأعمال الصيانة اللي بدكم إياها_sentence"
+        "apc_كل ولاد العمارة عم بحضرولك مطالبنا_sentence"
       ]
     },
     {
-      "uid": "apc_أنا جاهز أطلب._sentence",
+      "uid": "apc_فش مزח مع ولاد البلد، بعكّا._sentence",
       "language": "apc",
-      "content": "أنا جاهز أطلب.",
+      "content": "فش مزח مع ولاد البلد، بعكّا.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -548,13 +548,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I am ready to order._sentence"
+        "en_No joke with the locals, in Akka._sentence"
       ]
     },
     {
-      "uid": "en_I am ready to order._sentence",
+      "uid": "en_No joke with the locals, in Akka._sentence",
       "language": "en",
-      "content": "I am ready to order.",
+      "content": "No joke with the locals, in Akka.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -562,13 +562,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_أنا جاهز أطلب._sentence"
+        "apc_فش مزח مع ولاد البلد، بعكّا._sentence"
       ]
     },
     {
-      "uid": "apc_حبيبتي طلبك كتير صعب بس اي شي تاني أنا جاهز_sentence",
+      "uid": "apc_‏هالنوع من الكتب خرج ولاد بس ‎_sentence",
       "language": "apc",
-      "content": "حبيبتي طلبك كتير صعب بس اي شي تاني أنا جاهز",
+      "content": "‏هالنوع من الكتب خرج ولاد بس ‎",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -576,13 +576,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_My love, your request is very difficult but I’m ready for anything else._sentence"
+        "en_This type of books is suitable only for children._sentence"
       ]
     },
     {
-      "uid": "en_My love, your request is very difficult but I’m ready for anything else._sentence",
+      "uid": "en_This type of books is suitable only for children._sentence",
       "language": "en",
-      "content": "My love, your request is very difficult but I’m ready for anything else.",
+      "content": "This type of books is suitable only for children.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -590,13 +590,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_حبيبتي طلبك كتير صعب بس اي شي تاني أنا جاهز_sentence"
+        "apc_‏هالنوع من الكتب خرج ولاد بس ‎_sentence"
       ]
     },
     {
-      "uid": "apc_يلا جاهز ؟؟_sentence",
+      "uid": "apc_طب خبريني شو أسماء ولاد صفك_sentence",
       "language": "apc",
-      "content": "يلا جاهز ؟؟",
+      "content": "طب خبريني شو أسماء ولاد صفك",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -604,13 +604,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Ready?_sentence"
+        "en_So tell me the names of the kids in your class._sentence"
       ]
     },
     {
-      "uid": "en_Ready?_sentence",
+      "uid": "en_So tell me the names of the kids in your class._sentence",
       "language": "en",
-      "content": "Ready?",
+      "content": "So tell me the names of the kids in your class.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -618,13 +618,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_يلا جاهز ؟؟_sentence"
+        "apc_طب خبريني شو أسماء ولاد صفك_sentence"
       ]
     },
     {
-      "uid": "apc_أنا جاهز تإطلب._sentence",
+      "uid": "apc_شو انتوا ولاد صغار؟_sentence",
       "language": "apc",
-      "content": "أنا جاهز تإطلب.",
+      "content": "شو انتوا ولاد صغار؟",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -632,13 +632,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I am ready to order._sentence"
+        "en_Are you guys little kids?_sentence"
       ]
     },
     {
-      "uid": "en_I am ready to order._sentence",
+      "uid": "en_Are you guys little kids?_sentence",
       "language": "en",
-      "content": "I am ready to order.",
+      "content": "Are you guys little kids?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -646,13 +646,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_أنا جاهز تإطلب._sentence"
+        "apc_شو انتوا ولاد صغار؟_sentence"
       ]
     },
     {
-      "uid": "apc_جاهز_sentence",
+      "uid": "apc_‏عندهن تلتة ولاد زغار ‎_sentence",
       "language": "apc",
-      "content": "جاهز",
+      "content": "‏عندهن تلتة ولاد زغار ‎",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -660,13 +660,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Ready!_sentence"
+        "en_They have three small children._sentence"
       ]
     },
     {
-      "uid": "en_Ready!_sentence",
+      "uid": "en_They have three small children._sentence",
       "language": "en",
-      "content": "Ready!",
+      "content": "They have three small children.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -674,13 +674,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_جاهز_sentence"
+        "apc_‏عندهن تلتة ولاد زغار ‎_sentence"
       ]
     },
     {
-      "uid": "apc_بده ربع ساعة وبكون جاهز_sentence",
+      "uid": "apc_ضبّوا سيارتكو لأنّه ولاد الحرام كتار!_sentence",
       "language": "apc",
-      "content": "بده ربع ساعة وبكون جاهز",
+      "content": "ضبّوا سيارتكو لأنّه ولاد الحرام كتار!",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -688,13 +688,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_He needs fifteen minutes and it will be ready._sentence"
+        "en_Put away your car because there are a lot of scoundrels!_sentence"
       ]
     },
     {
-      "uid": "en_He needs fifteen minutes and it will be ready._sentence",
+      "uid": "en_Put away your car because there are a lot of scoundrels!_sentence",
       "language": "en",
-      "content": "He needs fifteen minutes and it will be ready.",
+      "content": "Put away your car because there are a lot of scoundrels!",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -702,13 +702,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_بده ربع ساعة وبكون جاهز_sentence"
+        "apc_ضبّوا سيارتكو لأنّه ولاد الحرام كتار!_sentence"
       ]
     },
     {
-      "uid": "apc_عشان تكون جاهز للامتحانات_sentence",
+      "uid": "apc_يعني ولاد عمومتكم, ترا, زين؟_sentence",
       "language": "apc",
-      "content": "عشان تكون جاهز للامتحانات",
+      "content": "يعني ولاد عمومتكم, ترا, زين؟",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -716,13 +716,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_So that you are ready for the exams_sentence"
+        "en_I mean, they're your cousins, right?_sentence"
       ]
     },
     {
-      "uid": "en_So that you are ready for the exams_sentence",
+      "uid": "en_I mean, they're your cousins, right?_sentence",
       "language": "en",
-      "content": "So that you are ready for the exams",
+      "content": "I mean, they're your cousins, right?",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -730,13 +730,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_عشان تكون جاهز للامتحانات_sentence"
+        "apc_يعني ولاد عمومتكم, ترا, زين؟_sentence"
       ]
     },
     {
-      "uid": "apc_معلش اليوم بدي هذا الملف يكون جاهز اذا سمحت_sentence",
+      "uid": "apc_اركبوا اركبوا يا ولاد_sentence",
       "language": "apc",
-      "content": "معلش اليوم بدي هذا الملف يكون جاهز اذا سمحت",
+      "content": "اركبوا اركبوا يا ولاد",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -744,13 +744,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Please have this file ready today if you can._sentence"
+        "en_Come on kids, get on._sentence"
       ]
     },
     {
-      "uid": "en_Please have this file ready today if you can._sentence",
+      "uid": "en_Come on kids, get on._sentence",
       "language": "en",
-      "content": "Please have this file ready today if you can.",
+      "content": "Come on kids, get on.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -758,13 +758,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_معلش اليوم بدي هذا الملف يكون جاهز اذا سمحت_sentence"
+        "apc_اركبوا اركبوا يا ولاد_sentence"
       ]
     },
     {
-      "uid": "apc_أنا جاهز لأطلب._sentence",
+      "uid": "apc_يا ولاد_sentence",
       "language": "apc",
-      "content": "أنا جاهز لأطلب.",
+      "content": "يا ولاد",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -772,13 +772,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I'm ready to order._sentence"
+        "en_Kids_sentence"
       ]
     },
     {
-      "uid": "en_I'm ready to order._sentence",
+      "uid": "en_Kids_sentence",
       "language": "en",
-      "content": "I'm ready to order.",
+      "content": "Kids",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -786,13 +786,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_أنا جاهز لأطلب._sentence"
+        "apc_يا ولاد_sentence"
       ]
     },
     {
-      "uid": "apc_انا جاهز_sentence",
+      "uid": "apc_يلا يا ولاد عملتلكم البيض اللي بتحبوا_sentence",
       "language": "apc",
-      "content": "انا جاهز",
+      "content": "يلا يا ولاد عملتلكم البيض اللي بتحبوا",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -800,13 +800,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I'm ready_sentence"
+        "en_Come on, kids, I've made you the eggs you like._sentence"
       ]
     },
     {
-      "uid": "en_I'm ready_sentence",
+      "uid": "en_Come on, kids, I've made you the eggs you like._sentence",
       "language": "en",
-      "content": "I'm ready",
+      "content": "Come on, kids, I've made you the eggs you like.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -814,13 +814,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_انا جاهز_sentence"
+        "apc_يلا يا ولاد عملتلكم البيض اللي بتحبوا_sentence"
       ]
     },
     {
-      "uid": "apc_وبعدين يا أخي اذا بدك الفطور هو جاهز من بكير_sentence",
+      "uid": "apc_إحنا ولاد القدس مشهورين ومعروفين مين إحنا._sentence",
       "language": "apc",
-      "content": "وبعدين يا أخي اذا بدك الفطور هو جاهز من بكير",
+      "content": "إحنا ولاد القدس مشهورين ومعروفين مين إحنا.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -828,13 +828,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_And then, my brother, if you want breakfast, it will be ready early._sentence"
+        "en_We, the children of Jerusalem, are famous and well-known for who we are._sentence"
       ]
     },
     {
-      "uid": "en_And then, my brother, if you want breakfast, it will be ready early._sentence",
+      "uid": "en_We, the children of Jerusalem, are famous and well-known for who we are._sentence",
       "language": "en",
-      "content": "And then, my brother, if you want breakfast, it will be ready early.",
+      "content": "We, the children of Jerusalem, are famous and well-known for who we are.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -842,13 +842,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_وبعدين يا أخي اذا بدك الفطور هو جاهز من بكير_sentence"
+        "apc_إحنا ولاد القدس مشهورين ومعروفين مين إحنا._sentence"
       ]
     },
     {
-      "uid": "apc_هلا بروح بجيب اشي جاهز بسرعة_sentence",
+      "uid": "apc_‏عندهن ولاد شباب وصبايا ‎_sentence",
       "language": "apc",
-      "content": "هلا بروح بجيب اشي جاهز بسرعة",
+      "content": "‏عندهن ولاد شباب وصبايا ‎",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -856,13 +856,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Sure, I'll go get something ready quickly._sentence"
+        "en_They have grown-up children._sentence"
       ]
     },
     {
-      "uid": "en_Sure, I'll go get something ready quickly._sentence",
+      "uid": "en_They have grown-up children._sentence",
       "language": "en",
-      "content": "Sure, I'll go get something ready quickly.",
+      "content": "They have grown-up children.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -870,13 +870,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_هلا بروح بجيب اشي جاهز بسرعة_sentence"
+        "apc_‏عندهن ولاد شباب وصبايا ‎_sentence"
       ]
     },
     {
-      "uid": "apc_انا جاهز اوصلكم من هنا للمول عدل_sentence",
+      "uid": "apc_قررت أعزم كل ولاد الصف_sentence",
       "language": "apc",
-      "content": "انا جاهز اوصلكم من هنا للمول عدل",
+      "content": "قررت أعزم كل ولاد الصف",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -884,13 +884,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_I am ready to drive you from here to the mall now._sentence"
+        "en_I decided to invite all my classmates._sentence"
       ]
     },
     {
-      "uid": "en_I am ready to drive you from here to the mall now._sentence",
+      "uid": "en_I decided to invite all my classmates._sentence",
       "language": "en",
-      "content": "I am ready to drive you from here to the mall now.",
+      "content": "I decided to invite all my classmates.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -898,13 +898,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_انا جاهز اوصلكم من هنا للمول عدل_sentence"
+        "apc_قررت أعزم كل ولاد الصف_sentence"
       ]
     },
     {
-      "uid": "apc_هاها لازم الواحد يكون جاهز لكل شي_sentence",
+      "uid": "apc_‏حطوا الأحزمة يا ولاد ‎_sentence",
       "language": "apc",
-      "content": "هاها لازم الواحد يكون جاهز لكل شي",
+      "content": "‏حطوا الأحزمة يا ولاد ‎",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -912,13 +912,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_Haha, one must be ready for anything._sentence"
+        "en_Put on your seatbelts, kids!_sentence"
       ]
     },
     {
-      "uid": "en_Haha, one must be ready for anything._sentence",
+      "uid": "en_Put on your seatbelts, kids!_sentence",
       "language": "en",
-      "content": "Haha, one must be ready for anything.",
+      "content": "Put on your seatbelts, kids!",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -926,13 +926,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_هاها لازم الواحد يكون جاهز لكل شي_sentence"
+        "apc_‏حطوا الأحزمة يا ولاد ‎_sentence"
       ]
     },
     {
-      "uid": "apc_زعل مني وبطل يفيقني اعمله اي شي وصار يعمل القهوة لحالو ويتغدا بالدوام والعشا صار دايما يجيبه جاهز ..مو مخليني اعمله اي شيييي_sentence",
+      "uid": "apc_مثل ولاد البسّة_sentence",
       "language": "apc",
-      "content": "زعل مني وبطل يفيقني اعمله اي شي وصار يعمل القهوة لحالو ويتغدا بالدوام والعشا صار دايما يجيبه جاهز ..مو مخليني اعمله اي شيييي",
+      "content": "مثل ولاد البسّة",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -940,13 +940,13 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "en_He got mad at me and stopped waking me up to do anything for him. He started making his own coffee, having lunch at work, and always bringing dinner ready-made. He won't let me do anything for him._sentence"
+        "en_Like kittens_sentence"
       ]
     },
     {
-      "uid": "en_He got mad at me and stopped waking me up to do anything for him. He started making his own coffee, having lunch at work, and always bringing dinner ready-made. He won't let me do anything for him._sentence",
+      "uid": "en_Like kittens_sentence",
       "language": "en",
-      "content": "He got mad at me and stopped waking me up to do anything for him. He started making his own coffee, having lunch at work, and always bringing dinner ready-made. He won't let me do anything for him.",
+      "content": "Like kittens",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",
       "owner": "Guy Mor-Lan",
@@ -954,7 +954,175 @@
       "source": "Levanti Dataset",
       "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
       "translations": [
-        "apc_زعل مني وبطل يفيقني اعمله اي شي وصار يعمل القهوة لحالو ويتغدا بالدوام والعشا صار دايما يجيبه جاهز ..مو مخليني اعمله اي شيييي_sentence"
+        "apc_مثل ولاد البسّة_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يلا باي يا ولاد_sentence",
+      "language": "apc",
+      "content": "يلا باي يا ولاد",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Come on, bye kids_sentence"
+      ]
+    },
+    {
+      "uid": "en_Come on, bye kids_sentence",
+      "language": "en",
+      "content": "Come on, bye kids",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يلا باي يا ولاد_sentence"
+      ]
+    },
+    {
+      "uid": "apc_ونعمل دوري ونعزم ولاد وبنات الصف_sentence",
+      "language": "apc",
+      "content": "ونعمل دوري ونعزم ولاد وبنات الصف",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_We can hold a tournament and invite the boys and girls from the class._sentence"
+      ]
+    },
+    {
+      "uid": "en_We can hold a tournament and invite the boys and girls from the class._sentence",
+      "language": "en",
+      "content": "We can hold a tournament and invite the boys and girls from the class.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_ونعمل دوري ونعزم ولاد وبنات الصف_sentence"
+      ]
+    },
+    {
+      "uid": "apc_يا ولاد تعالوا تغدوا في معكرونة_sentence",
+      "language": "apc",
+      "content": "يا ولاد تعالوا تغدوا في معكرونة",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Kids, come have lunch, there's macaroni._sentence"
+      ]
+    },
+    {
+      "uid": "en_Kids, come have lunch, there's macaroni._sentence",
+      "language": "en",
+      "content": "Kids, come have lunch, there's macaroni.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_يا ولاد تعالوا تغدوا في معكرونة_sentence"
+      ]
+    },
+    {
+      "uid": "apc_سبحان الله، ولاد حلال._sentence",
+      "language": "apc",
+      "content": "سبحان الله، ولاد حلال.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Glory to God, you are good kids!_sentence"
+      ]
+    },
+    {
+      "uid": "en_Glory to God, you are good kids!_sentence",
+      "language": "en",
+      "content": "Glory to God, you are good kids!",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_سبحان الله، ولاد حلال._sentence"
+      ]
+    },
+    {
+      "uid": "apc_شو يا ولاد كيف المدرسة؟_sentence",
+      "language": "apc",
+      "content": "شو يا ولاد كيف المدرسة؟",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_So kids, how is school?_sentence"
+      ]
+    },
+    {
+      "uid": "en_So kids, how is school?_sentence",
+      "language": "en",
+      "content": "So kids, how is school?",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_شو يا ولاد كيف المدرسة؟_sentence"
+      ]
+    },
+    {
+      "uid": "apc_طفوا الكهربا يا ولاد_sentence",
+      "language": "apc",
+      "content": "طفوا الكهربا يا ولاد",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "en_Turn off the electricity, kids._sentence"
+      ]
+    },
+    {
+      "uid": "en_Turn off the electricity, kids._sentence",
+      "language": "en",
+      "content": "Turn off the electricity, kids.",
+      "linguType": "sentence",
+      "license": "CC-BY-NC-4.0",
+      "owner": "Guy Mor-Lan",
+      "ownerLink": "https://huggingface.co/guymorlan",
+      "source": "Levanti Dataset",
+      "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti",
+      "translations": [
+        "apc_طفوا الكهربا يا ولاد_sentence"
       ]
     }
   ]

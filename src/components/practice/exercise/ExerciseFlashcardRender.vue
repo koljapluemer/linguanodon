@@ -5,7 +5,7 @@
         <!-- Front side (cloze) -->
         <div v-if="!isRevealed" class="text-center">
           <h2 class="card-title justify-center mb-4">Fill in the blank</h2>
-          <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="formattedFront"></div>
+          <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="exercise.front"></div>
           <button 
             @click="reveal" 
             class="btn btn-primary"
@@ -17,20 +17,20 @@
         <!-- Back side (answer + scoring) -->
         <div v-else class="text-center">
           <h2 class="card-title justify-center mb-4">Answer</h2>
-          <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="formattedBack"></div>
+          <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="exercise.back"></div>
           
           <div class="flex flex-wrap gap-2 justify-center">
             <button 
-              @click="score('hard')" 
+              @click="score('wrong')" 
               class="btn btn-error"
             >
-              Hard
+              Wrong
             </button>
             <button 
-              @click="score('wrong')" 
+              @click="score('hard')" 
               class="btn btn-warning"
             >
-              Wrong
+              Hard
             </button>
             <button 
               @click="score('correct')" 
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 
 interface Props {
@@ -63,24 +63,10 @@ interface Emits {
   (e: 'score', score: string): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const isRevealed = ref(false)
-
-/**
- * Formats front content with proper line breaks
- */
-const formattedFront = computed(() => {
-  return props.exercise.front.replace(/<br>/g, '<br>')
-})
-
-/**
- * Formats back content with proper highlighting
- */
-const formattedBack = computed(() => {
-  return props.exercise.back
-})
 
 /**
  * Reveals the answer side of the flashcard
@@ -105,5 +91,16 @@ function score(scoreValue: string) {
   padding: 2px 4px;
   border-radius: 3px;
   font-weight: bold;
+}
+
+/* Ensure proper text sizing for the main cloze sentence */
+:deep(div[dir]) {
+  font-size: 1.875rem; /* text-3xl */
+  margin-bottom: 1.25rem; /* mb-5 */
+}
+
+/* Ensure proper text sizing for the context sentence */
+:deep(div[dir] + div[dir]) {
+  font-size: 1.5rem; /* text-2xl */
 }
 </style>

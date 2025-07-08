@@ -18,6 +18,21 @@ function getClozePlaceholder(language: string): string {
 }
 
 /**
+ * Determines if a language is RTL based on Unicode ranges
+ */
+function isRTL(language: string): boolean {
+  return /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(language)
+}
+
+/**
+ * Wraps text in appropriate dir attribute based on language
+ */
+function wrapWithDirection(text: string, language: string): string {
+  const direction = isRTL(language) ? 'rtl' : 'ltr'
+  return `<div dir="${direction}">${text}</div>`
+}
+
+/**
  * Generates all possible clozes for a sentence-translation pair
  * Creates variations for both target->native and native->target directions
  */
@@ -36,9 +51,9 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
       clozeWords[index] = clozePlaceholder
       
       // Front: target lang sentence with cloze, <br>, native sentence
-      const front = `${clozeWords.join(' ')}<br>${unit2.content}`
+      const front = `${wrapWithDirection(clozeWords.join(' '), unit1.language)}<div class="text-2xl">${wrapWithDirection(unit2.content, unit2.language)}</div>`
       // Back: target lang sentence "unclozed", with <mark> surrounding the word that was clozed, <br>, native sentence
-      const back = `${unit1.content.replace(word, `<mark>${word}</mark>`)}<br>${unit2.content}`
+      const back = `${wrapWithDirection(unit1.content.replace(word, `<mark>${word}</mark>`), unit1.language)}<div class="text-2xl">${wrapWithDirection(unit2.content, unit2.language)}</div>`
       
       exercises.push({
         uid: `cloze_${unit1.uid}_${index}`,
@@ -60,9 +75,9 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
       clozeWords[index] = clozePlaceholder
       
       // Front: native sentence with cloze, <br>, target lang sentence
-      const front = `${clozeWords.join(' ')}<br>${unit1.content}`
+      const front = `${wrapWithDirection(clozeWords.join(' '), unit2.language)}<div class="text-2xl">${wrapWithDirection(unit1.content, unit1.language)}</div>`
       // Back: native sentence "unclozed", with <mark> surrounding the word that was clozed, <br>, target lang sentence
-      const back = `${unit2.content.replace(word, `<mark>${word}</mark>`)}<br>${unit1.content}`
+      const back = `${wrapWithDirection(unit2.content.replace(word, `<mark>${word}</mark>`), unit2.language)}<div class="text-2xl">${wrapWithDirection(unit1.content, unit1.language)}</div>`
       
       exercises.push({
         uid: `cloze_${unit2.uid}_${index}`,

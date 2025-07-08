@@ -5,12 +5,12 @@ import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaning as UnitOfMeaningEntity } from '@/entities/UnitOfMeaning'
 
 // Import all initial set data
-import setData1 from './initialSetData/أطلع.json'
-import setData2 from './initialSetData/الشخص.json'
-import setData3 from './initialSetData/جاهز.json'
-import setData4 from './initialSetData/سيدي.json'
-import setData5 from './initialSetData/الحزب.json'
-import setData6 from './initialSetData/بتطلع.json'
+import setData1 from './initialSetData/جلال.json'
+import setData2 from './initialSetData/احكي.json'
+import setData3 from './initialSetData/حابب.json'
+import setData4 from './initialSetData/موضوع.json'
+import setData5 from './initialSetData/ولاد.json'
+import setData6 from './initialSetData/موضوع.json'
 
 interface InitialSetData {
   uid: string
