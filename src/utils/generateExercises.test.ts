@@ -7,10 +7,9 @@ describe('makeClozeTokens', () => {
     // tokens = ["واستلبسوه", " ", "ولاد", " ", "الصف"]
     // Cloze first word (index 0)
     const tokens = ["واستلبسوه", " ", "ولاد", " ", "الصف"]
-    const language = 'ar' // Arabic
-    const clozed = makeClozeTokens(tokens, 0, language)
+    const clozed = makeClozeTokens(tokens, 0)
     // The expected output should have the placeholder in the correct position
-    const expected = '<span dir="rtl">؟؟؟</span> ولاد الصف'
+    const expected = '؟؟؟ ولاد الصف'
     expect(clozed).toBe(expected)
   })
 })

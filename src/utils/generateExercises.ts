@@ -21,31 +21,23 @@ function isWordToken(token: string): boolean {
 }
 
 /**
- * Creates cloze placeholders based on language direction, wrapped in a direction-aware span
+ * Creates cloze placeholders based on token direction (no span, just the placeholder string)
  */
-function getClozePlaceholder(languageOrToken: string): string {
-  const dir = detectTextDirection(languageOrToken)
-  const placeholder = dir === 'rtl' ? '؟؟؟' : '???'
-  return `<span dir="${dir}">${placeholder}</span>`
+function getClozePlaceholder(token: string): string {
+  const dir = detectTextDirection(token)
+  return dir === 'rtl' ? '؟؟؟' : '???'
 }
 
 /**
- * Determines if a language is RTL based on Unicode ranges
+ * Wraps text in appropriate dir attribute based on detected direction of the text
  */
-function isRTL(language: string): boolean {
-  return /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(language)
-}
-
-/**
- * Wraps text in appropriate dir attribute based on language
- */
-function wrapWithDirection(text: string, language: string): string {
-  const direction = isRTL(language) ? 'rtl' : 'ltr'
+function wrapWithDirection(text: string): string {
+  const direction = detectTextDirection(text)
   return `<div dir="${direction}">${text}</div>`
 }
 
 /**
- * Replace the word token at wordIdx with a direction-aware cloze placeholder, preserving punctuation and spacing.
+ * Replace the word token at wordIdx with a cloze placeholder, preserving punctuation and spacing.
  */
 export function makeClozeTokens(tokens: string[], wordIdx: number): string {
   const clozeTokens = [...tokens]
@@ -67,8 +59,8 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
     wordIndexes1.forEach((wordIdx) => {
       const word = tokens1[wordIdx]
       if (word.length < 3) return
-      const front = `${wrapWithDirection(makeClozeTokens(tokens1, wordIdx), unit1.language)}<div class="text-2xl">${wrapWithDirection(unit2.content, unit2.language)}</div>`
-      const back = `${wrapWithDirection(unit1.content.replace(word, `<mark>${word}</mark>`), unit1.language)}<div class="text-2xl">${wrapWithDirection(unit2.content, unit2.language)}</div>`
+      const front = `${wrapWithDirection(makeClozeTokens(tokens1, wordIdx))}<div class="text-2xl">${wrapWithDirection(unit2.content)}</div>`
+      const back = `${wrapWithDirection(unit1.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(unit2.content)}</div>`
       exercises.push({
         uid: `cloze_${unit1.uid}_${wordIdx}`,
         front,
@@ -85,8 +77,8 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
     wordIndexes2.forEach((wordIdx) => {
       const word = tokens2[wordIdx]
       if (word.length < 3) return
-      const front = `${wrapWithDirection(makeClozeTokens(tokens2, wordIdx), unit2.language)}<div class="text-2xl">${wrapWithDirection(unit1.content, unit1.language)}</div>`
-      const back = `${wrapWithDirection(unit2.content.replace(word, `<mark>${word}</mark>`), unit2.language)}<div class="text-2xl">${wrapWithDirection(unit1.content, unit1.language)}</div>`
+      const front = `${wrapWithDirection(makeClozeTokens(tokens2, wordIdx))}<div class="text-2xl">${wrapWithDirection(unit1.content)}</div>`
+      const back = `${wrapWithDirection(unit2.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(unit1.content)}</div>`
       exercises.push({
         uid: `cloze_${unit2.uid}_${wordIdx}`,
         front,
