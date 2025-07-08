@@ -82,5 +82,5 @@ We then want a page where we can see all these sets:
 - From those generated exercises, we want to pick 20 at random, and shuffle them. These are passed back to `PracticeSet.vue`
 - The component then manages to go from one Exercise to the next, and always loads the renderer `ExerciseFlashcardRender`
 - Flow for this component is the following: show front side and a reveal button, once revealed, show back and "Hard", "Wrong", "Correct", "Easy", then send score event up
-- This event will then, *later*, handled by `exerciseStore` (but not yet implemented)
+- This event will then, *later*, handled by `exerciseStore` (see [this doc](storing-learning-data.md) for how to implement)
 - After 20 exercises done, go back to the list of sets, sending a friendly [toast](../src/components/ui/toasts/useToasts.ts)

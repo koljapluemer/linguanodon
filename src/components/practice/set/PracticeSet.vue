@@ -32,7 +32,7 @@
     </div>
     
     <!-- Current exercise -->
-    <ExerciseFlashcardRender
+    <ExerciseFlashcardControl
       :exercise="currentExercise"
       @score="handleScore"
     />
@@ -45,7 +45,7 @@ import { useRouter } from 'vue-router'
 import { useSetStore } from '@/stores/setStore'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { generateExercises } from '@/utils/generateExercises'
-import ExerciseFlashcardRender from '@/components/practice/exercise/ExerciseFlashcardRender.vue'
+import ExerciseFlashcardControl from '@/components/practice/exercise/ExerciseFlashcardControl.vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 
 interface Props {
