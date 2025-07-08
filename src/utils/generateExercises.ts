@@ -1,6 +1,7 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import { createEmptyCard } from 'ts-fsrs'
+import { useExerciseStore } from '@/stores/exerciseStore'
 
 /**
  * Splits a sentence into words, handling any language
@@ -136,6 +137,65 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 /**
+ * Categorize exercises as due, new, or not due
+ */
+function categorizeExercises(
+  exercises: ExerciseFlashcard[],
+  storeExercises: Record<string, ExerciseFlashcard>
+) {
+  const now = new Date()
+  const due: ExerciseFlashcard[] = []
+  const newExercises: ExerciseFlashcard[] = []
+  const notDue: ExerciseFlashcard[] = []
+
+  for (const ex of exercises) {
+    const stored = storeExercises[ex.uid]
+    if (!stored) {
+      newExercises.push(ex)
+    } else if (stored.card && stored.card.due && new Date(stored.card.due) <= now) {
+      due.push({ ...ex, card: stored.card })
+    } else if (stored.card && stored.card.due && new Date(stored.card.due) > now) {
+      notDue.push({ ...ex, card: stored.card })
+    } else {
+      newExercises.push(ex)
+    }
+  }
+  return { due, newExercises, notDue }
+}
+
+/**
+ * Select up to 20 exercises: due > new > not due (by soonest due date)
+ */
+function pickSessionExercises(
+  allExercises: ExerciseFlashcard[],
+  storeExercises: Record<string, ExerciseFlashcard>
+): ExerciseFlashcard[] {
+  const { due, newExercises, notDue } = categorizeExercises(allExercises, storeExercises)
+  console.info(
+    `Exercise selection: due=${due.length}, new=${newExercises.length}, not due=${notDue.length}`
+  )
+  const result: ExerciseFlashcard[] = []
+  // 1. Fill with due (random if more than 20)
+  if (due.length >= 20) {
+    return shuffleArray(due).slice(0, 20)
+  }
+  result.push(...shuffleArray(due))
+  // 2. Fill with new
+  if (result.length < 20) {
+    const needed = 20 - result.length
+    result.push(...shuffleArray(newExercises).slice(0, needed))
+  }
+  // 3. Fill with not due (sorted by due date)
+  if (result.length < 20) {
+    const needed = 20 - result.length
+    const sortedNotDue = [...notDue].sort((a, b) => new Date(a.card.due).getTime() - new Date(b.card.due).getTime())
+    result.push(...sortedNotDue.slice(0, needed))
+  }
+  // 4. If fewer than 20 total, just return all available
+  return result
+}
+
+/**
  * Generates cloze-based flashcard exercises from units of meaning
  * Returns 20 randomly selected and shuffled exercises
  */
@@ -149,7 +209,7 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
     allExercises.push(...pairExercises)
   })
   
-  // Shuffle and select 20 exercises
-  const shuffled = shuffleArray(allExercises)
-  return shuffled.slice(0, 20)
+  // Use store to select session exercises
+  const store = useExerciseStore()
+  return pickSessionExercises(allExercises, store.exercises)
 }
