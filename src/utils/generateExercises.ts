@@ -4,19 +4,29 @@ import { createEmptyCard } from 'ts-fsrs'
 import { useExerciseStore } from '@/stores/exerciseStore'
 
 /**
- * Splits a sentence into words, handling any language
+ * Splits a sentence into tokens: words and punctuation, preserving order
  */
-function splitIntoWords(sentence: string): string[] {
-  // Remove punctuation and split by whitespace
-  return sentence.replace(/[.,!?;:]/g, '').trim().split(/\s+/)
+function splitIntoTokens(sentence: string): string[] {
+  // Match words (\p{L} = any letter, \p{N} = any number), or punctuation, or whitespace
+  // This will keep punctuation as separate tokens
+  return sentence.match(/\p{L}+[\p{N}\p{L}'’-]*|[.,!?;:،؟…-]+|\s+/gu) || []
 }
 
 /**
- * Creates cloze placeholders based on language direction
+ * Determines if a token is a word (not punctuation or whitespace)
  */
-function getClozePlaceholder(language: string): string {
-  // Use RTL-aware placeholder for RTL languages, LTR for others
-  return /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(language) ? '؟؟؟' : '???'
+function isWordToken(token: string): boolean {
+  // Word if it contains at least one letter or number
+  return /[\p{L}\p{N}]/u.test(token)
+}
+
+/**
+ * Creates cloze placeholders based on language direction, wrapped in a direction-aware span
+ */
+function getClozePlaceholder(languageOrToken: string): string {
+  const dir = detectTextDirection(languageOrToken)
+  const placeholder = dir === 'rtl' ? '؟؟؟' : '???'
+  return `<span dir="${dir}">${placeholder}</span>`
 }
 
 /**
@@ -35,6 +45,15 @@ function wrapWithDirection(text: string, language: string): string {
 }
 
 /**
+ * Replace the word token at wordIdx with a direction-aware cloze placeholder, preserving punctuation and spacing.
+ */
+export function makeClozeTokens(tokens: string[], wordIdx: number): string {
+  const clozeTokens = [...tokens]
+  clozeTokens[wordIdx] = getClozePlaceholder(tokens[wordIdx])
+  return clozeTokens.join('')
+}
+
+/**
  * Generates all possible clozes for a sentence-translation pair
  * Creates variations for both target->native and native->target directions
  */
@@ -42,23 +61,16 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
   const exercises: ExerciseFlashcard[] = []
   
   // Generate clozes for unit1 (target language)
-  const words1 = splitIntoWords(unit1.content)
-  if (words1.length > 1) {
-    words1.forEach((word, index) => {
-      // Skip words with less than 3 characters
-      if (word.length <= 3) return
-      
-      const clozePlaceholder = getClozePlaceholder(unit1.language)
-      const clozeWords = [...words1]
-      clozeWords[index] = clozePlaceholder
-      
-      // Front: target lang sentence with cloze, <br>, native sentence
-      const front = `${wrapWithDirection(clozeWords.join(' '), unit1.language)}<div class="text-2xl">${wrapWithDirection(unit2.content, unit2.language)}</div>`
-      // Back: target lang sentence "unclozed", with <mark> surrounding the word that was clozed, <br>, native sentence
+  const tokens1 = splitIntoTokens(unit1.content)
+  const wordIndexes1 = tokens1.map((t, i) => isWordToken(t) ? i : -1).filter(i => i !== -1)
+  if (wordIndexes1.length > 1) {
+    wordIndexes1.forEach((wordIdx) => {
+      const word = tokens1[wordIdx]
+      if (word.length < 3) return
+      const front = `${wrapWithDirection(makeClozeTokens(tokens1, wordIdx), unit1.language)}<div class="text-2xl">${wrapWithDirection(unit2.content, unit2.language)}</div>`
       const back = `${wrapWithDirection(unit1.content.replace(word, `<mark>${word}</mark>`), unit1.language)}<div class="text-2xl">${wrapWithDirection(unit2.content, unit2.language)}</div>`
-      
       exercises.push({
-        uid: `cloze_${unit1.uid}_${index}`,
+        uid: `cloze_${unit1.uid}_${wordIdx}`,
         front,
         back,
         card: createEmptyCard()
@@ -67,23 +79,16 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
   }
   
   // Generate clozes for unit2 (native language)
-  const words2 = splitIntoWords(unit2.content)
-  if (words2.length > 1) {
-    words2.forEach((word, index) => {
-      // Skip words with less than 3 characters
-      if (word.length <= 3) return
-      
-      const clozePlaceholder = getClozePlaceholder(unit2.language)
-      const clozeWords = [...words2]
-      clozeWords[index] = clozePlaceholder
-      
-      // Front: native sentence with cloze, <br>, target lang sentence
-      const front = `${wrapWithDirection(clozeWords.join(' '), unit2.language)}<div class="text-2xl">${wrapWithDirection(unit1.content, unit1.language)}</div>`
-      // Back: native sentence "unclozed", with <mark> surrounding the word that was clozed, <br>, target lang sentence
+  const tokens2 = splitIntoTokens(unit2.content)
+  const wordIndexes2 = tokens2.map((t, i) => isWordToken(t) ? i : -1).filter(i => i !== -1)
+  if (wordIndexes2.length > 1) {
+    wordIndexes2.forEach((wordIdx) => {
+      const word = tokens2[wordIdx]
+      if (word.length < 3) return
+      const front = `${wrapWithDirection(makeClozeTokens(tokens2, wordIdx), unit2.language)}<div class="text-2xl">${wrapWithDirection(unit1.content, unit1.language)}</div>`
       const back = `${wrapWithDirection(unit2.content.replace(word, `<mark>${word}</mark>`), unit2.language)}<div class="text-2xl">${wrapWithDirection(unit1.content, unit1.language)}</div>`
-      
       exercises.push({
-        uid: `cloze_${unit2.uid}_${index}`,
+        uid: `cloze_${unit2.uid}_${wordIdx}`,
         front,
         back,
         card: createEmptyCard()
@@ -212,4 +217,17 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
   // Use store to select session exercises
   const store = useExerciseStore()
   return pickSessionExercises(allExercises, store.exercises)
+}
+
+/**
+ * Detect text direction ('rtl' or 'ltr') by majority vote of characters
+ */
+export function detectTextDirection(text: string): 'rtl' | 'ltr' {
+  let rtl = 0, ltr = 0
+  for (const char of text) {
+    if (/[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(char)) rtl++
+    else if (/[A-Za-z\u0041-\u007A\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF]/.test(char)) ltr++
+  }
+  // If more rtl, return 'rtl', else 'ltr'
+  return rtl > ltr ? 'rtl' : 'ltr'
 }
