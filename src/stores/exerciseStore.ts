@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { fsrs, Rating } from 'ts-fsrs'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { Grade } from 'ts-fsrs'
 
 export const useExerciseStore = defineStore('exercise', () => {
   const exercises = ref<Record<string, ExerciseFlashcard>>({})
@@ -12,7 +13,7 @@ export const useExerciseStore = defineStore('exercise', () => {
    */
   function recordExerciseRating(exercise: ExerciseFlashcard, rating: Rating) {
     const now = new Date()
-    const { card: updatedCard } = scheduler.next(exercise.card, now, rating)
+    const { card: updatedCard } = scheduler.next(exercise.card, now, rating as Grade)
     exercises.value[exercise.uid] = { ...exercise, card: updatedCard }
   }
 
