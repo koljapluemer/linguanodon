@@ -8,22 +8,23 @@
 <script setup lang="ts">
 import ExerciseFlashcardRender from './ExerciseFlashcardRender.vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import { Rating } from 'ts-fsrs'
 
 interface Props {
   exercise: ExerciseFlashcard
 }
 
 interface Emits {
-  (e: 'score', score: string): void
+  (e: 'score', exercise: ExerciseFlashcard, score: Rating): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 /**
  * Forwards score event up to parent
  */
-function onScore(score: string) {
-  emit('score', score)
+function onScore(score: Rating) {
+  emit('score', props.exercise, score)
 }
 </script>

@@ -1,22 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { fsrs, Rating } from 'ts-fsrs'
+import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 
 export const useExerciseStore = defineStore('exercise', () => {
-  const exerciseHistory = ref<Record<string, unknown>[]>([])
+  const exercises = ref<Record<string, ExerciseFlashcard>>({})
+  const scheduler = fsrs() // default params
 
   /**
-   * Records exercise completion (placeholder for future implementation)
+   * Records exercise completion and updates card using ts-fsrs
    */
-  function recordExerciseCompletion(exerciseData: Record<string, unknown>) {
-    exerciseHistory.value.push({
-      ...exerciseData,
-      timestamp: new Date()
-    })
+  function recordExerciseRating(exercise: ExerciseFlashcard, rating: Rating) {
+    const now = new Date()
+    const { card: updatedCard } = scheduler.next(exercise.card, now, rating)
+    exercises.value[exercise.uid] = { ...exercise, card: updatedCard }
   }
 
   return {
-    exerciseHistory,
-    recordExerciseCompletion
+    exercises,
+    recordExerciseRating
   }
 }, {
   persist: true

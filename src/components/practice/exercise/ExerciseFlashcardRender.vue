@@ -21,25 +21,25 @@
           
           <div class="flex flex-wrap gap-2 justify-center">
             <button 
-              @click="score('wrong')" 
+              @click="score(Rating.Again)" 
               class="btn btn-error"
             >
               Wrong
             </button>
             <button 
-              @click="score('hard')" 
+              @click="score(Rating.Hard)" 
               class="btn btn-warning"
             >
               Hard
             </button>
             <button 
-              @click="score('correct')" 
+              @click="score(Rating.Good)" 
               class="btn btn-success"
             >
               Correct
             </button>
             <button 
-              @click="score('easy')" 
+              @click="score(Rating.Easy)" 
               class="btn btn-info"
             >
               Easy
@@ -54,13 +54,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import { Rating } from 'ts-fsrs'
 
 interface Props {
   exercise: ExerciseFlashcard
 }
 
 interface Emits {
-  (e: 'score', score: string): void
+  (e: 'score', score: Rating): void
 }
 
 defineProps<Props>()
@@ -78,7 +79,7 @@ function reveal() {
 /**
  * Emits score event and resets for next exercise
  */
-function score(scoreValue: string) {
+function score(scoreValue: Rating) {
   emit('score', scoreValue)
   isRevealed.value = false
 }

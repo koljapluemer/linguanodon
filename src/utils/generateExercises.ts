@@ -1,5 +1,6 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import { createEmptyCard } from 'ts-fsrs'
 
 /**
  * Splits a sentence into words, handling any language
@@ -58,7 +59,8 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
       exercises.push({
         uid: `cloze_${unit1.uid}_${index}`,
         front,
-        back
+        back,
+        card: createEmptyCard()
       })
     })
   }
@@ -82,7 +84,8 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
       exercises.push({
         uid: `cloze_${unit2.uid}_${index}`,
         front,
-        back
+        back,
+        card: createEmptyCard()
       })
     })
   }

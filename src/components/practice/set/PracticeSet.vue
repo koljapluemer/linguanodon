@@ -47,6 +47,8 @@ import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { generateExercises } from '@/utils/generateExercises'
 import ExerciseFlashcardControl from '@/components/practice/exercise/ExerciseFlashcardControl.vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import { useExerciseStore } from '@/stores/exerciseStore'
+import { Rating } from 'ts-fsrs'
 
 interface Props {
   setUid: string
@@ -57,6 +59,7 @@ const props = defineProps<Props>()
 const router = useRouter()
 const setStore = useSetStore()
 const toastsStore = useToastsStore()
+const exerciseStore = useExerciseStore()
 
 const exercises = ref<ExerciseFlashcard[]>([])
 const currentExerciseIndex = ref(0)
@@ -94,9 +97,8 @@ function initializeExercises() {
 /**
  * Handles exercise scoring and progression
  */
-function handleScore(score: string) {
-  // TODO: Send to exerciseStore when implemented
-  console.log('Exercise scored:', score)
+function handleScore(exercise, rating: Rating) {
+  exerciseStore.recordExerciseRating(exercise, rating)
   
   // Move to next exercise or complete
   if (currentExerciseIndex.value < exercises.value.length - 1) {

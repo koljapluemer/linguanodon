@@ -20,7 +20,7 @@ As the learner goes through exercises, we want to store and utilize learning dat
 ## Debug
 
 - We want a [debug page](../src/pages/debug/DebugExerciseData.vue) tabulating the saved exercise and its data
-- Since this is a debug page, it can be designed as simple dexie table, all on the page component (don't spam components into the rest of the app for this)
+- Since this is a debug page, it can be designed as simple DaisyUI table, all on the page component (don't spam components into the rest of the app for this)
 
 ## Utilizing the learning data
 

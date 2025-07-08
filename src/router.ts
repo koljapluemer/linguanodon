@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import PageListAllSets from '@/pages/PageListAllSets.vue'
 import PagePracticeSet from '@/pages/PagePracticeSet.vue'
+import PageDebugExerciseData from '@/pages/debug/PageDebugExerciseData.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -20,7 +21,18 @@ const routes: RouteRecordRaw[] = [
     name: 'practice',
     component: PagePracticeSet,
     props: true
+  },
+
+
+  // DEBUG ROUTES
+  {
+    path: '/debug/exercise-data',
+    name: 'debug-exercise-data',
+    component: PageDebugExerciseData
   }
+
+
+
 ]
 
 const router = createRouter({
