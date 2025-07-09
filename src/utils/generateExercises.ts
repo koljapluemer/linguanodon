@@ -219,16 +219,6 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
 }
 
 /**
- * Converts legacy string format to new object format
- * "apc_احكي_unit" -> { language: "apc", content: "احكي" }
- */
-function parseLegacyUnitString(str: string): { language: string, content: string } {
-  const clean = str.replace(/_unit$/, '')
-  const [language, ...contentParts] = clean.split('_')
-  return { language, content: contentParts.join('_') }
-}
-
-/**
  * Generates exercises for a specific task with weighted selection
  * 70% from primary units of meaning, 30% from regular units
  */
@@ -240,16 +230,7 @@ export function generateExercisesForTask(
   const allUnitPairs = [...task.primaryUnitsOfMeaning, ...task.unitsOfMeaning]
   console.debug('[generateExercisesForTask] Requested unit pairs:', allUnitPairs)
   
-  // Convert legacy string format to new object format if needed
-  const convertedPairs = allUnitPairs.map(pair => {
-    if (typeof pair === 'string') {
-      return parseLegacyUnitString(pair)
-    }
-    return pair
-  })
-  console.debug('[generateExercisesForTask] Converted pairs:', convertedPairs)
-  
-  const allUnits = convertedPairs
+  const allUnits = allUnitPairs
     .map(pair => unitStore.getUnitByLanguageAndContent(pair.language, pair.content))
     .filter(Boolean) as UnitOfMeaning[]
   console.debug('[generateExercisesForTask] Units returned:', allUnits)
@@ -298,7 +279,7 @@ export function generateExercisesForTask(
   }
 
   // Apply weighted selection: 70% primary, 30% regular
-  const primaryKeys = convertedPairs.slice(0, task.primaryUnitsOfMeaning.length).map(pair => `${pair.language}:${pair.content}`)
+  const primaryKeys = allUnitPairs.slice(0, task.primaryUnitsOfMeaning.length).map(pair => `${pair.language}:${pair.content}`)
   const primaryExercises = allExercises.filter(exercise => {
     const parts = exercise.uid.split('_')
     const unitLanguage = parts[1]
