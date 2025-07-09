@@ -2,5 +2,6 @@
 export interface Set {
     uid: string;
     language: string;
+    lastDownloadedAt: Date;
 }
 

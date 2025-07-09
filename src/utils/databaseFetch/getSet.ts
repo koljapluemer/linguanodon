@@ -18,13 +18,13 @@ interface RemoteUnitOfMeaning {
     content: string,
     notes?: string,
     translations?: string[] // array of other unit of meanings referenced by "$language_$content"
-    credits: RemoteCredit[]
+    credits?: RemoteCredit[]
 }
 
 interface RemoteCredit {
     license: string
-    owner: string
-    ownerLink: string
-    source: string
-    sourceLink: string
+    owner?: string
+    ownerLink?: string
+    source?: string
+    sourceLink?: string
 }

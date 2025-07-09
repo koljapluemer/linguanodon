@@ -20,4 +20,4 @@ Users can download tasks (with attached data) from remote.
   - The available languages will be passed to [this representational component](../src/components/lists/parts/ListPartFilterByLanguage.vue) which renders a dropdown with the available languages and emits up which one the learner chooses
   - Using the learner-selected languages, the controller `ListPartFilterByLanguage` gets the available sets for this language (using the function described above) and passes them as props to [this render component](../src/components/lists/render/ListRenderRemoteSets.vue)
   - ...which in turn renders them as a DaisyUI table, each row being made from [this widget](../src/components/lists/widgets/ListWidgetRemoteSet.vue)
-- This widget shows the name of the set, as well as a Download button (which does nothing yet)
+- This widget shows the name of the set, as well as a Download button (we will implement that in the next step)

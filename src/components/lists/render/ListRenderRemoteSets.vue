@@ -7,6 +7,7 @@
           :key="filename"
           :set-name="setName"
           :filename="filename"
+          :language="language"
         />
       </tbody>
     </table>

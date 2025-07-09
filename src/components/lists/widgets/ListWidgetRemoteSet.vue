@@ -20,6 +20,7 @@ import { Download } from 'lucide-vue-next'
 interface Props {
   setName: string
   filename: string
+  language: string
 }
 
 defineProps<Props>()
