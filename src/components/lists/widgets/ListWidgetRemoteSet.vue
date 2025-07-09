@@ -2,7 +2,7 @@
   <tr>
     <td class="font-medium">{{ setName }}</td>
     <td>{{ language }}</td>
-    <td class="text-sm text-gray-600">{{ filename }}</td>
+    <td class="text-sm ">{{ filename }}</td>
     <td>
       <!-- Show download date if already downloaded -->
       <div v-if="isDownloaded" class="text-sm text-green-600">

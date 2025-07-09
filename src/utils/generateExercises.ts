@@ -1,5 +1,6 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { Task } from '@/entities/Task'
 import { createEmptyCard } from 'ts-fsrs'
 import { useExerciseStore } from '@/stores/exerciseStore'
 
@@ -209,6 +210,65 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
   // Use store to select session exercises
   const store = useExerciseStore()
   return pickSessionExercises(allExercises, store.exercises)
+}
+
+/**
+ * Generates exercises for a specific task with weighted selection
+ * 70% from primary units of meaning, 30% from regular units
+ */
+export function generateExercisesForTask(
+  task: Task,
+  unitStore: ReturnType<typeof import('@/stores/unitOfMeaningStore').useUnitOfMeaningStore>
+): ExerciseFlashcard[] {
+  // Get all units for this task
+  const allUnitUids = [...task.primaryUnitsOfMeaning, ...task.unitsOfMeaning]
+  const allUnits = unitStore.getUnitsByUids(allUnitUids)
+  
+  if (allUnits.length === 0) {
+    return []
+  }
+
+  // Generate exercises from all units
+  const allExercises: ExerciseFlashcard[] = []
+  const pairs = groupIntoPairs(allUnits)
+  
+  pairs.forEach(([unit1, unit2]) => {
+    const pairExercises = generateClozesForPair(unit1, unit2)
+    allExercises.push(...pairExercises)
+  })
+
+  if (allExercises.length === 0) {
+    return []
+  }
+
+  // Apply weighted selection: 70% primary, 30% regular
+  const primaryExercises = allExercises.filter(exercise => {
+    const unitUid = exercise.uid.split('_')[1] // Extract unit UID from exercise UID
+    return task.primaryUnitsOfMeaning.includes(unitUid)
+  })
+  
+  const regularExercises = allExercises.filter(exercise => {
+    const unitUid = exercise.uid.split('_')[1]
+    return !task.primaryUnitsOfMeaning.includes(unitUid)
+  })
+
+  // Calculate target counts (70% of 20 = 14, 30% of 20 = 6)
+  const targetPrimary = Math.min(14, primaryExercises.length)
+  const targetRegular = Math.min(6, regularExercises.length)
+  
+  // If we don't have enough primary exercises, fill with regular
+  const remainingSlots = 20 - targetPrimary - targetRegular
+  const additionalRegular = Math.min(remainingSlots, regularExercises.length - targetRegular)
+
+  // Select exercises
+  const selectedPrimary = shuffleArray(primaryExercises).slice(0, targetPrimary)
+  const selectedRegular = shuffleArray(regularExercises).slice(0, targetRegular + additionalRegular)
+  
+  const selectedExercises = [...selectedPrimary, ...selectedRegular]
+  
+  // Use store to select session exercises (this handles due/new/not due logic)
+  const store = useExerciseStore()
+  return pickSessionExercises(selectedExercises, store.exercises)
 }
 
 /**

@@ -8,6 +8,7 @@
           <th>Units of Meaning</th>
           <th>Primary Units</th>
           <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>

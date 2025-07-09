@@ -45,13 +45,21 @@ export const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
     return unitsOfMeaning.value.find(unit => unit.uid === uid)
   }
 
+  /**
+   * Gets multiple units by their UIDs
+   */
+  function getUnitsByUids(uids: string[]): UnitOfMeaning[] {
+    return unitsOfMeaning.value.filter(unit => uids.includes(unit.uid))
+  }
+
   return {
     unitsOfMeaning,
     addUnit,
     isUnitExists,
     getAllUnits,
     getUnitsByLanguage,
-    getUnitByUid
+    getUnitByUid,
+    getUnitsByUids
   }
 }, {
   persist: true

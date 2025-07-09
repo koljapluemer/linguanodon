@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Task } from '@/entities/Task'
+import type { Task, TaskAttempt } from '@/entities/Task'
 
 export const useTaskStore = defineStore('task', () => {
   const tasks = ref<Task[]>([])
@@ -38,12 +38,44 @@ export const useTaskStore = defineStore('task', () => {
     return tasks.value.filter(task => task.language === language)
   }
 
+  /**
+   * Gets a task by its content and language (used as ID)
+   */
+  function getTaskById(language: string, content: string): Task | undefined {
+    return tasks.value.find(task => 
+      task.language === language && task.content === content
+    )
+  }
+
+  /**
+   * Adds a task attempt to a specific task
+   */
+  function addTaskAttempt(language: string, content: string, attempt: TaskAttempt) {
+    const task = getTaskById(language, content)
+    if (task) {
+      task.attempts.push(attempt)
+    }
+  }
+
+  /**
+   * Updates the last practiced timestamp for a task
+   */
+  function updateTaskLastPracticedAt(language: string, content: string) {
+    const task = getTaskById(language, content)
+    if (task) {
+      task.lastPracticedAt = new Date()
+    }
+  }
+
   return {
     tasks,
     addTask,
     isTaskExists,
     getAllTasks,
-    getTasksByLanguage
+    getTasksByLanguage,
+    getTaskById,
+    addTaskAttempt,
+    updateTaskLastPracticedAt
   }
 }, {
   persist: true

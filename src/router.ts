@@ -4,6 +4,7 @@ import PageDebugExerciseData from '@/pages/debug/PageDebugExerciseData.vue'
 import PageRemoteListAllSets from '@/pages/PageRemoteListAllSets.vue'
 import PageListAllUnitsOfMeaning from '@/pages/PageListAllUnitsOfMeaning.vue'
 import PageListAllTasks from '@/pages/PageListAllTasks.vue'
+import PagePracticeTask from '@/pages/PagePracticeTask.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -30,6 +31,13 @@ const routes: RouteRecordRaw[] = [
     path: '/tasks',
     name: 'tasks',
     component: PageListAllTasks
+  },
+
+  {
+    /** Route for practicing a specific task */
+    path: '/practice-task/:taskId',
+    name: 'practice-task',
+    component: PagePracticeTask
   },
 
   // DEBUG ROUTES
