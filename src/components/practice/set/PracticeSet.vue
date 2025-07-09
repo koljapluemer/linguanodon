@@ -44,7 +44,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSetStore } from '@/stores/setStore'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
-import { generateExercises } from '@/utils/generateExercises'
 import ExerciseFlashcardControl from '@/components/practice/exercise/ExerciseFlashcardControl.vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import { useExerciseStore } from '@/stores/exerciseStore'
@@ -79,25 +78,15 @@ function initializeExercises() {
     return
   }
   
-  const units = setStore.getUnitsOfMeaningForSet(props.setUid)
-  if (units.length === 0) {
-    error.value = 'No units of meaning found for this set'
-    return
-  }
-  
-  const generatedExercises = generateExercises(units)
-  if (generatedExercises.length === 0) {
-    error.value = 'No exercises could be generated for this set'
-    return
-  }
-  
-  exercises.value = generatedExercises
+  // For now, we'll show an error since we don't have the units linked to sets yet
+  // This would need to be implemented based on how sets relate to units
+  error.value = 'Practice functionality not yet implemented for downloaded sets'
 }
 
 /**
  * Handles exercise scoring and progression
  */
-function handleScore(exercise, rating: Rating) {
+function handleScore(exercise: ExerciseFlashcard, rating: Rating) {
   exerciseStore.recordExerciseRating(exercise, rating)
   
   // Move to next exercise or complete
@@ -117,15 +106,10 @@ function handleScore(exercise, rating: Rating) {
  * Navigates back to sets list
  */
 function goBack() {
-  router.push('/sets')
+  router.push('/remote-sets')
 }
 
 onMounted(() => {
-  // Seed data if needed
-  if (setStore.getAllSets.length === 0) {
-    setStore.seedInitialData()
-  }
-  
   initializeExercises()
 })
 </script>

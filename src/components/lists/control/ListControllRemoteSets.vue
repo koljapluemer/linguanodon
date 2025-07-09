@@ -42,10 +42,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
-import { getAvailableLanguages, getSetsForLanguage } from '@/utils/databaseFetch/getSets'
+import { getAvailableLanguages, getSetsForLanguage } from '@/utils/getRemoteSets'
 import ListPartFilterByLanguage from '@/components/lists/parts/ListPartFilterByLanguage.vue'
 import ListRenderRemoteSets from '@/components/lists/render/ListRenderRemoteSets.vue'
-import type { RemoteSets } from '@/utils/databaseFetch/getSets'
+import type { RemoteSets } from '@/utils/getRemoteSets'
 
 const toastsStore = useToastsStore()
 

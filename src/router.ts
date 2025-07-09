@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import PageDebugExerciseData from '@/pages/debug/PageDebugExerciseData.vue'
 import PageRemoteListAllSets from '@/pages/PageRemoteListAllSets.vue'
+import PageListAllUnitsOfMeaning from '@/pages/PageListAllUnitsOfMeaning.vue'
+import PageListAllTasks from '@/pages/PageListAllTasks.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -16,6 +18,19 @@ const routes: RouteRecordRaw[] = [
     component: PageRemoteListAllSets
   },
 
+  {
+    /** Route for listing all units of meaning */
+    path: '/units',
+    name: 'units',
+    component: PageListAllUnitsOfMeaning
+  },
+
+  {
+    /** Route for listing all tasks */
+    path: '/tasks',
+    name: 'tasks',
+    component: PageListAllTasks
+  },
 
   // DEBUG ROUTES
   {
@@ -23,9 +38,6 @@ const routes: RouteRecordRaw[] = [
     name: 'debug-exercise-data',
     component: PageDebugExerciseData
   }
-
-
-
 ]
 
 const router = createRouter({

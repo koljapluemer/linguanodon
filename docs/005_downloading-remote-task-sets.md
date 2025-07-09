@@ -10,6 +10,8 @@
 
 - When clicking "Download" in [this component](../src/components/lists/widgets/ListWidgetRemoteSet.vue), the given set should be downloaded
 - The fetch etc. is handled by [this util](../src/utils/databaseFetch/getSet.ts), which also contains some relevant types, and should house all the functions
+  - uses an endpoint like GET https://scintillating-empanada-730581.netlify.app/apc/natural_sentences_2.json
+  - data is typed `RemoteSet` (defined in the util)
 - A set contains the following data, all of which should be persisted in their own store
     - (minimal) data for the (local) [set itself](../src/entities/Set.ts)
         - this is such a minimal type because "Set" isn't really a meaningful entity locally — we just have it so we can track on the download page which sets we have downloaded
