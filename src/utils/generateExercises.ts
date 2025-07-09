@@ -252,19 +252,45 @@ export function generateExercisesForTask(
     return !task.primaryUnitsOfMeaning.includes(unitUid)
   })
 
-  // Calculate target counts (70% of 20 = 14, 30% of 20 = 6)
-  const targetPrimary = Math.min(14, primaryExercises.length)
-  const targetRegular = Math.min(6, regularExercises.length)
+  // Use weighted random selection to pick up to 20 exercises
+  const selectedExercises: ExerciseFlashcard[] = []
+  const maxExercises = 20
   
-  // If we don't have enough primary exercises, fill with regular
-  const remainingSlots = 20 - targetPrimary - targetRegular
-  const additionalRegular = Math.min(remainingSlots, regularExercises.length - targetRegular)
-
-  // Select exercises
-  const selectedPrimary = shuffleArray(primaryExercises).slice(0, targetPrimary)
-  const selectedRegular = shuffleArray(regularExercises).slice(0, targetRegular + additionalRegular)
+  // Create weighted array: 70% chance for primary, 30% chance for regular
+  const weightedChoices: ('primary' | 'regular')[] = []
+  for (let i = 0; i < 70; i++) weightedChoices.push('primary')
+  for (let i = 0; i < 30; i++) weightedChoices.push('regular')
   
-  const selectedExercises = [...selectedPrimary, ...selectedRegular]
+  // Shuffle the weighted choices
+  const shuffledChoices = shuffleArray(weightedChoices)
+  
+  // Pick exercises based on weighted random selection
+  for (const choice of shuffledChoices) {
+    if (selectedExercises.length >= maxExercises) break
+    
+    if (choice === 'primary' && primaryExercises.length > 0) {
+      const randomIndex = Math.floor(Math.random() * primaryExercises.length)
+      const exercise = primaryExercises.splice(randomIndex, 1)[0]
+      selectedExercises.push(exercise)
+    } else if (choice === 'regular' && regularExercises.length > 0) {
+      const randomIndex = Math.floor(Math.random() * regularExercises.length)
+      const exercise = regularExercises.splice(randomIndex, 1)[0]
+      selectedExercises.push(exercise)
+    }
+  }
+  
+  // If we still have room and exercises available, fill with whatever is left
+  while (selectedExercises.length < maxExercises && (primaryExercises.length > 0 || regularExercises.length > 0)) {
+    if (primaryExercises.length > 0) {
+      const randomIndex = Math.floor(Math.random() * primaryExercises.length)
+      const exercise = primaryExercises.splice(randomIndex, 1)[0]
+      selectedExercises.push(exercise)
+    } else if (regularExercises.length > 0) {
+      const randomIndex = Math.floor(Math.random() * regularExercises.length)
+      const exercise = regularExercises.splice(randomIndex, 1)[0]
+      selectedExercises.push(exercise)
+    }
+  }
   
   // Use store to select session exercises (this handles due/new/not due logic)
   const store = useExerciseStore()
