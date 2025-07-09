@@ -63,7 +63,7 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
       const front = `${wrapWithDirection(makeClozeTokens(tokens1, wordIdx))}<div class="text-2xl">${wrapWithDirection(unit2.content)}</div>`
       const back = `${wrapWithDirection(unit1.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(unit2.content)}</div>`
       exercises.push({
-        uid: `cloze_${unit1.uid}_${wordIdx}`,
+        uid: `cloze_${unit1.language}_${unit1.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}`,
         front,
         back,
         card: createEmptyCard()
@@ -81,7 +81,7 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
       const front = `${wrapWithDirection(makeClozeTokens(tokens2, wordIdx))}<div class="text-2xl">${wrapWithDirection(unit1.content)}</div>`
       const back = `${wrapWithDirection(unit2.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(unit1.content)}</div>`
       exercises.push({
-        uid: `cloze_${unit2.uid}_${wordIdx}`,
+        uid: `cloze_${unit2.language}_${unit2.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}`,
         front,
         back,
         card: createEmptyCard()
@@ -100,15 +100,21 @@ function groupIntoPairs(units: UnitOfMeaning[]): UnitOfMeaning[][] {
   const processed = new Set<string>()
   
   units.forEach(unit => {
-    if (processed.has(unit.uid)) return
+    const unitKey = `${unit.language}:${unit.content}`
+    if (processed.has(unitKey)) return
     
     // Find translation pair
     const pair = [unit]
-    unit.translations.forEach(translationUid => {
-      const translation = units.find(u => u.uid === translationUid)
-      if (translation && !processed.has(translation.uid)) {
-        pair.push(translation)
-        processed.add(translation.uid)
+    unit.translations.forEach(translationRef => {
+      const [translationLanguage, translationContent] = translationRef.split(':', 2)
+      if (translationLanguage && translationContent) {
+        const translation = units.find(u => 
+          u.language === translationLanguage && u.content === translationContent
+        )
+        if (translation && !processed.has(`${translation.language}:${translation.content}`)) {
+          pair.push(translation)
+          processed.add(`${translation.language}:${translation.content}`)
+        }
       }
     })
     
@@ -116,7 +122,7 @@ function groupIntoPairs(units: UnitOfMeaning[]): UnitOfMeaning[][] {
       pairs.push(pair)
     }
     
-    processed.add(unit.uid)
+    processed.add(unitKey)
   })
   
   return pairs
@@ -213,6 +219,16 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
 }
 
 /**
+ * Converts legacy string format to new object format
+ * "apc_احكي_unit" -> { language: "apc", content: "احكي" }
+ */
+function parseLegacyUnitString(str: string): { language: string, content: string } {
+  const clean = str.replace(/_unit$/, '')
+  const [language, ...contentParts] = clean.split('_')
+  return { language, content: contentParts.join('_') }
+}
+
+/**
  * Generates exercises for a specific task with weighted selection
  * 70% from primary units of meaning, 30% from regular units
  */
@@ -220,12 +236,24 @@ export function generateExercisesForTask(
   task: Task,
   unitStore: ReturnType<typeof import('@/stores/unitOfMeaningStore').useUnitOfMeaningStore>
 ): ExerciseFlashcard[] {
-  // Get all units for this task
-  const allUnitUids = [...task.primaryUnitsOfMeaning, ...task.unitsOfMeaning]
-  console.debug('[generateExercisesForTask] Requested UIDs:', allUnitUids)
-  const allUnits = unitStore.getUnitsByUids(allUnitUids)
-  console.debug('[generateExercisesForTask] Units returned:', allUnits)
+  // Get all units for this task (primary and regular)
+  const allUnitPairs = [...task.primaryUnitsOfMeaning, ...task.unitsOfMeaning]
+  console.debug('[generateExercisesForTask] Requested unit pairs:', allUnitPairs)
   
+  // Convert legacy string format to new object format if needed
+  const convertedPairs = allUnitPairs.map(pair => {
+    if (typeof pair === 'string') {
+      return parseLegacyUnitString(pair)
+    }
+    return pair
+  })
+  console.debug('[generateExercisesForTask] Converted pairs:', convertedPairs)
+  
+  const allUnits = convertedPairs
+    .map(pair => unitStore.getUnitByLanguageAndContent(pair.language, pair.content))
+    .filter(Boolean) as UnitOfMeaning[]
+  console.debug('[generateExercisesForTask] Units returned:', allUnits)
+
   if (allUnits.length === 0) {
     console.debug('[generateExercisesForTask] No units found for task.')
     return []
@@ -233,27 +261,35 @@ export function generateExercisesForTask(
 
   // Generate exercises from all units that have translations
   const allExercises: ExerciseFlashcard[] = []
-  
+
   allUnits.forEach(unit => {
-    // Check if unit has translations in the same language as the task
+    // Debug: show unit info and translation UIDs
+    console.debug('[generateExercisesForTask] Unit:', {
+      language: unit.language,
+      content: unit.content,
+      translations: unit.translations
+    })
+    // Find translations in the task language
     const sameLanguageTranslations = unitStore.getTranslationsByLanguage(unit, task.language)
-    
-    // Check if unit has native (English) translations
+    // Debug: show found same-language translations
+    console.debug('[generateExercisesForTask]   sameLanguageTranslations:', sameLanguageTranslations.map(u => ({ language: u.language, content: u.content })))
+    // Find native (English) translations
     const nativeTranslations = unitStore.getNativeTranslations(unit)
-    
+    // Debug: show found native translations
+    console.debug('[generateExercisesForTask]   nativeTranslations:', nativeTranslations.map(u => ({ language: u.language, content: u.content })))
     // If unit has either same-language or native translations, generate clozes
     if (sameLanguageTranslations.length > 0 || nativeTranslations.length > 0) {
-      console.debug('[generateExercisesForTask] Unit eligible for cloze:', unit.uid, 'same-language:', sameLanguageTranslations.length, 'native:', nativeTranslations.length)
-      
-      // Generate clozes for each translation
+      console.debug('[generateExercisesForTask] Unit eligible for cloze:', `${unit.language}:${unit.content}`, 'same-language:', sameLanguageTranslations.length, 'native:', nativeTranslations.length)
       const allTranslations = [...sameLanguageTranslations, ...nativeTranslations]
       allTranslations.forEach(translation => {
         const pairExercises = generateClozesForPair(unit, translation)
         allExercises.push(...pairExercises)
       })
+    } else {
+      console.debug('[generateExercisesForTask] Unit NOT eligible for cloze:', `${unit.language}:${unit.content}`)
     }
   })
-  
+
   console.debug('[generateExercisesForTask] Total exercises generated:', allExercises.length)
 
   if (allExercises.length === 0) {
@@ -262,33 +298,30 @@ export function generateExercisesForTask(
   }
 
   // Apply weighted selection: 70% primary, 30% regular
+  const primaryKeys = convertedPairs.slice(0, task.primaryUnitsOfMeaning.length).map(pair => `${pair.language}:${pair.content}`)
   const primaryExercises = allExercises.filter(exercise => {
-    const unitUid = exercise.uid.split('_')[1] // Extract unit UID from exercise UID
-    return task.primaryUnitsOfMeaning.includes(unitUid)
+    const parts = exercise.uid.split('_')
+    const unitLanguage = parts[1]
+    const unitContent = parts.slice(2, -1).join('_')
+    return primaryKeys.includes(`${unitLanguage}:${unitContent}`)
   })
-  
   const regularExercises = allExercises.filter(exercise => {
-    const unitUid = exercise.uid.split('_')[1]
-    return !task.primaryUnitsOfMeaning.includes(unitUid)
+    const parts = exercise.uid.split('_')
+    const unitLanguage = parts[1]
+    const unitContent = parts.slice(2, -1).join('_')
+    return !primaryKeys.includes(`${unitLanguage}:${unitContent}`)
   })
   console.debug('[generateExercisesForTask] Primary exercises:', primaryExercises.length, 'Regular exercises:', regularExercises.length)
 
-  // Use weighted random selection to pick up to 20 exercises
+  // Weighted random selection
   const selectedExercises: ExerciseFlashcard[] = []
   const maxExercises = 20
-  
-  // Create weighted array: 70% chance for primary, 30% chance for regular
   const weightedChoices: ('primary' | 'regular')[] = []
   for (let i = 0; i < 70; i++) weightedChoices.push('primary')
   for (let i = 0; i < 30; i++) weightedChoices.push('regular')
-  
-  // Shuffle the weighted choices
   const shuffledChoices = shuffleArray(weightedChoices)
-  
-  // Pick exercises based on weighted random selection
   for (const choice of shuffledChoices) {
     if (selectedExercises.length >= maxExercises) break
-    
     if (choice === 'primary' && primaryExercises.length > 0) {
       const randomIndex = Math.floor(Math.random() * primaryExercises.length)
       const exercise = primaryExercises.splice(randomIndex, 1)[0]
@@ -299,8 +332,6 @@ export function generateExercisesForTask(
       selectedExercises.push(exercise)
     }
   }
-  
-  // If we still have room and exercises available, fill with whatever is left
   while (selectedExercises.length < maxExercises && (primaryExercises.length > 0 || regularExercises.length > 0)) {
     if (primaryExercises.length > 0) {
       const randomIndex = Math.floor(Math.random() * primaryExercises.length)
@@ -313,8 +344,8 @@ export function generateExercisesForTask(
     }
   }
   console.debug('[generateExercisesForTask] Final selected exercises:', selectedExercises.length, selectedExercises)
-  
-  // Use store to select session exercises (this handles due/new/not due logic)
+
+  // Use store to select session exercises (handles due/new/not due logic)
   const store = useExerciseStore()
   const sessionExercises = pickSessionExercises(selectedExercises, store.exercises)
   console.debug('[generateExercisesForTask] Session exercises after pickSessionExercises:', sessionExercises.length, sessionExercises)

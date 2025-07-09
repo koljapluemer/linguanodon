@@ -39,17 +39,29 @@ export const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
   }
 
   /**
-   * Gets a unit by UID
+   * Gets a unit by language and content
    */
-  function getUnitByUid(uid: string): UnitOfMeaning | undefined {
-    return unitsOfMeaning.value.find(unit => unit.uid === uid)
+  function getUnitByLanguageAndContent(language: string, content: string): UnitOfMeaning | undefined {
+    return unitsOfMeaning.value.find(unit => 
+      unit.language === language && unit.content === content
+    )
   }
 
   /**
-   * Gets multiple units by their UIDs
+   * Get unit by identification string, meaning something like "en:dog"
    */
-  function getUnitsByUids(uids: string[]): UnitOfMeaning[] {
-    return unitsOfMeaning.value.filter(unit => uids.includes(unit.uid))
+  function getUnitByIdentificationString(id: string): UnitOfMeaning | undefined {
+    const [language, content] = id.split(':', 2)
+    return getUnitByLanguageAndContent(language, content)
+  }
+
+  /**
+   * Gets multiple units by their language and content pairs
+   */
+  function getUnitsByLanguageAndContentPairs(pairs: Array<{language: string, content: string}>): UnitOfMeaning[] {
+    return unitsOfMeaning.value.filter(unit => 
+      pairs.some(pair => unit.language === pair.language && unit.content === pair.content)
+    )
   }
 
   /**
@@ -57,10 +69,19 @@ export const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
    */
   function getTranslationsByLanguage(unit: UnitOfMeaning, language: string): UnitOfMeaning[] {
     const translationUnits: UnitOfMeaning[] = []
-    unit.translations.forEach(translationUid => {
-      const translationUnit = getUnitByUid(translationUid)
+    unit.translations.forEach(translationRef => {
+      console.debug('[getTranslationsByLanguage] Processing translation ref:', translationRef)
+      const translationUnit = getUnitByIdentificationString(translationRef)
+      console.debug('[getTranslationsByLanguage] Found unit:', translationUnit)
       if (translationUnit && translationUnit.language === language) {
         translationUnits.push(translationUnit)
+      } else {
+        console.debug('[getTranslationsByLanguage] Translation not found or wrong language:', {
+          requestedRef: translationRef,
+          found: !!translationUnit,
+          foundLanguage: translationUnit?.language,
+          expectedLanguage: language
+        })
       }
     })
     return translationUnits
@@ -79,10 +100,11 @@ export const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
     isUnitExists,
     getAllUnits,
     getUnitsByLanguage,
-    getUnitByUid,
-    getUnitsByUids,
+    getUnitByLanguageAndContent,
+    getUnitsByLanguageAndContentPairs,
     getTranslationsByLanguage,
-    getNativeTranslations
+    getNativeTranslations,
+    getUnitByIdentificationString
   }
 }, {
   persist: true

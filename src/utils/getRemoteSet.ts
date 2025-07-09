@@ -17,7 +17,8 @@ export interface RemoteUnitOfMeaning {
     language: string
     content: string,
     notes?: string,
-    translations?: string[] // array of other unit of meanings referenced by "$language_$content"
+    seeAlso?: string[] // array of other unit of meanings referenced by "$language:$content"
+    translations?: string[] // array of other unit of meanings referenced by "$language:$content"
     credits?: RemoteCredit[]
 }
 

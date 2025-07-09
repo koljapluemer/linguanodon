@@ -21,12 +21,11 @@ function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMe
   })) : []
 
   return {
-    uid: `${remoteUnit.language}_${remoteUnit.content}_${remoteUnit.notes || 'unit'}`,
     language: remoteUnit.language,
     content: remoteUnit.content,
     notes: remoteUnit.notes || '',
     translations: remoteUnit.translations || [],
-    seeAlso: [],
+    seeAlso: remoteUnit.seeAlso || [],
     credits,
     card: createEmptyCard()
   }
@@ -36,13 +35,15 @@ function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMe
  * Converts a remote task to local format
  */
 function convertRemoteTaskToLocalTask(remoteTask: RemoteTask): Task {
-  const primaryUnitUids = (remoteTask.primaryUnitsOfMeaning || []).map(unit => 
-    `${unit.language}_${unit.content}_${unit.notes || 'unit'}`
-  )
+  const primaryUnitUids = (remoteTask.primaryUnitsOfMeaning || []).map(unit => ({
+    language: unit.language,
+    content: unit.content
+  }))
   const allUnitUids = remoteTask.unitsOfMeaning 
-    ? [...primaryUnitUids, ...remoteTask.unitsOfMeaning.map(unit => 
-        `${unit.language}_${unit.content}_${unit.notes || 'unit'}`
-      )]
+    ? [...primaryUnitUids, ...remoteTask.unitsOfMeaning.map(unit => ({
+        language: unit.language,
+        content: unit.content
+      }))]
     : primaryUnitUids
 
   return {
@@ -94,17 +95,15 @@ export async function downloadAndPersistSet(filename: string, language: string) 
     }
 
     // Convert and add units of meaning
-    const allUnits = new Map<string, UnitOfMeaning>()
     let newUnitsCount = 0
     let skippedUnitsCount = 0
 
     for (const task of remoteSet.tasks) {
       // Add primary units
       for (const unit of (task.primaryUnitsOfMeaning || [])) {
-        const unitId = `${unit.language}_${unit.content}_${unit.notes || 'unit'}`
         if (!unitStore.isUnitExists(unit.language, unit.content)) {
           const localUnit = convertRemoteUnitToLocalUnit(unit)
-          allUnits.set(unitId, localUnit)
+          unitStore.addUnit(localUnit)
           newUnitsCount++
         } else {
           skippedUnitsCount++
@@ -114,21 +113,15 @@ export async function downloadAndPersistSet(filename: string, language: string) 
       // Add secondary units
       if (task.unitsOfMeaning) {
         for (const unit of task.unitsOfMeaning) {
-          const unitId = `${unit.language}_${unit.content}_${unit.notes || 'unit'}`
           if (!unitStore.isUnitExists(unit.language, unit.content)) {
             const localUnit = convertRemoteUnitToLocalUnit(unit)
-            allUnits.set(unitId, localUnit)
+            unitStore.addUnit(localUnit)
             newUnitsCount++
           } else {
             skippedUnitsCount++
           }
         }
       }
-    }
-
-    // Add units to store
-    for (const unit of allUnits.values()) {
-      unitStore.addUnit(unit)
     }
 
     // Convert and add tasks

@@ -1,6 +1,6 @@
 // shape of remote data
 // url: https://scintillating-empanada-730581.netlify.app/sets.json
-export type RemoteSets = Record<string, string> // $route : $name
+export type RemoteSets = Record<string, string>
 
 /**
  * Fetches all available languages from the remote API
