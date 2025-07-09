@@ -52,6 +52,27 @@ export const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
     return unitsOfMeaning.value.filter(unit => uids.includes(unit.uid))
   }
 
+  /**
+   * Gets translations of a unit by language
+   */
+  function getTranslationsByLanguage(unit: UnitOfMeaning, language: string): UnitOfMeaning[] {
+    const translationUnits: UnitOfMeaning[] = []
+    unit.translations.forEach(translationUid => {
+      const translationUnit = getUnitByUid(translationUid)
+      if (translationUnit && translationUnit.language === language) {
+        translationUnits.push(translationUnit)
+      }
+    })
+    return translationUnits
+  }
+
+  /**
+   * Gets native translations of a unit (English translations)
+   */
+  function getNativeTranslations(unit: UnitOfMeaning): UnitOfMeaning[] {
+    return getTranslationsByLanguage(unit, 'en')
+  }
+
   return {
     unitsOfMeaning,
     addUnit,
@@ -59,7 +80,9 @@ export const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
     getAllUnits,
     getUnitsByLanguage,
     getUnitByUid,
-    getUnitsByUids
+    getUnitsByUids,
+    getTranslationsByLanguage,
+    getNativeTranslations
   }
 }, {
   persist: true

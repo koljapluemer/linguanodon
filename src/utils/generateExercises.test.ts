@@ -18,7 +18,9 @@ vi.mock('@/stores/exerciseStore', () => ({
 
 vi.mock('@/stores/unitOfMeaningStore', () => ({
   useUnitOfMeaningStore: () => ({
-    getUnitsByUids: vi.fn()
+    getUnitsByUids: vi.fn(),
+    getTranslationsByLanguage: vi.fn(),
+    getNativeTranslations: vi.fn()
   })
 }))
 
@@ -228,11 +230,25 @@ describe('generateExercisesForTask', () => {
 
   let mockUnitStore: {
     getUnitsByUids: ReturnType<typeof vi.fn>
+    getTranslationsByLanguage: ReturnType<typeof vi.fn>
+    getNativeTranslations: ReturnType<typeof vi.fn>
   }
 
   beforeEach(() => {
     mockUnitStore = {
-      getUnitsByUids: vi.fn().mockReturnValue(mockUnits)
+      getUnitsByUids: vi.fn().mockReturnValue(mockUnits),
+      getTranslationsByLanguage: vi.fn().mockImplementation((unit, language) => {
+        // Mock implementation: return units that have the specified language and are in the unit's translations
+        return mockUnits.filter(u => 
+          u.language === language && unit.translations.includes(u.uid)
+        )
+      }),
+      getNativeTranslations: vi.fn().mockImplementation((unit) => {
+        // Mock implementation: return English translations
+        return mockUnits.filter(u => 
+          u.language === 'en' && unit.translations.includes(u.uid)
+        )
+      })
     }
   })
 
