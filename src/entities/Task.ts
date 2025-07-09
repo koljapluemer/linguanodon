@@ -1,10 +1,12 @@
 export interface Task {
+    language: string;
     content: string;
     unitsOfMeaning: string[] // list of uids
-    lastDownloadedAt?: Date
-    lastPracticedAt?: Date
+    primaryUnitsOfMeaning: string[] // list of uids
+    lastDownloadedAt: Date | null
+    lastPracticedAt: Date | null
     isCompleted: boolean
-    nextShownEarliestAt?: Date
+    nextShownEarliestAt: Date
     interval: number
     attempts: TaskAttempt[]
 }
