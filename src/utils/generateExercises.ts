@@ -2,7 +2,7 @@ import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import type { Task } from '@/entities/Task'
 import { createEmptyCard } from 'ts-fsrs'
-import { useExerciseStore } from '@/stores/exerciseStore'
+import { useExerciseStore } from '@/repositories/pinia/exerciseStore'
 
 /**
  * Splits a sentence into tokens: words and punctuation, preserving order
@@ -224,7 +224,7 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
  */
 export function generateExercisesForTask(
   task: Task,
-  unitStore: ReturnType<typeof import('@/stores/unitOfMeaningStore').useUnitOfMeaningStore>
+  unitStore: ReturnType<typeof import('@/repositories/pinia/useUnitOfMeaningPiniaRepo').useUnitOfMeaningStore>
 ): ExerciseFlashcard[] {
   // Get all units for this task (primary and regular)
   const allUnitPairs = [...task.primaryUnitsOfMeaning, ...task.unitsOfMeaning]

@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { Download } from 'lucide-vue-next'
-import { useSetStore } from '@/stores/setStore'
+import { useSetStore } from '@/repositories/pinia/setStore'
 import { downloadAndPersistSet } from '@/utils/downloadRemoteSet'
 
 interface Props {

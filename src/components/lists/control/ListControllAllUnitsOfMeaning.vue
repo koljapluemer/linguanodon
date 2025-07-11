@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useUnitOfMeaningStore } from '@/stores/unitOfMeaningStore'
+import { useUnitOfMeaningStore } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
 import ListRenderUnitsOfMeaning from '@/components/lists/render/ListRenderUnitsOfMeaning.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 

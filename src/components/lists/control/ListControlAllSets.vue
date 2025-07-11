@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useSetStore } from '@/stores/setStore'
+import { useSetStore } from '@/repositories/pinia/setStore'
 import { storeToRefs } from 'pinia'
 import ListRenderSets from '@/components/lists/render/ListRenderSets.vue'
 

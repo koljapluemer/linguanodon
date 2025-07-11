@@ -41,8 +41,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useTaskStore } from '@/stores/taskStore'
-import { useUnitOfMeaningStore } from '@/stores/unitOfMeaningStore'
+import { useTaskStore } from '@/repositories/pinia/taskStore'
+import { useUnitOfMeaningStore } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { generateExercisesForTask } from '@/utils/generateExercises'
 import PracticeTaskView from './PracticeTaskView.vue'

@@ -1,11 +1,9 @@
 import type { Card } from "ts-fsrs";
 
-export interface UnitOfMeaning {
-    language: string;
-    content: string;
+export interface UnitOfMeaning extends UnitOfMeaningIdentification {
     notes: string;
-    translations: string[]; // format: "language:content"
-    seeAlso: string[]; // language:content format of other units, used to e.g. link the plural with the singular
+    translations: UnitOfMeaningIdentification[]; 
+    seeAlso: UnitOfMeaningIdentification[];
     
     credits: Credit[]
     
@@ -18,4 +16,9 @@ export interface Credit {
     ownerLink?: string;
     source?: string;
     sourceLink?: string;
+}
+
+export interface UnitOfMeaningIdentification {
+    language: string
+    content: string
 }
