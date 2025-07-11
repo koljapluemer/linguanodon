@@ -2,4 +2,6 @@
 
 The ultimate language learning app. *Maybe*.
 
-Next up: Transfer the urls for the db calls, then old folder can be deleted and we can start file by file spec & gen
+## Credit
+
+-  ISO 639-3 code set by [this web page](https://iso639-3.sil.org/code_tables/download_tables) (needs inline credit)

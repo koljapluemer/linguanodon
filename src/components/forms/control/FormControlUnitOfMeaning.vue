@@ -1,6 +1,7 @@
 <template>
   <FormRenderUnitOfMeaning
     :unit="unit"
+    :repository="languageRepository"
     @update="handleUpdate"
   />
 </template>
@@ -11,10 +12,12 @@ import { createEmptyCard } from 'ts-fsrs'
 import FormRenderUnitOfMeaning from '@/components/forms/render/FormRenderUnitOfMeaning.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
 
 interface Props {
   initialUnit?: Partial<UnitOfMeaning>
   repository: UnitOfMeaningRepository
+  languageRepository: LanguageRepository
 }
 
 interface Emits {

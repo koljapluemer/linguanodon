@@ -1,18 +1,13 @@
 <template>
   <div class="space-y-6">
     <!-- Language -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-medium">Language</span>
-      </label>
-      <input
-        type="text"
-        :value="unit.language"
-        @input="updateField('language', ($event.target as HTMLInputElement).value)"
-        class="input input-bordered w-full"
-        placeholder="e.g., en, ar, es"
-      />
-    </div>
+    <FormWidgetLanguageSelect
+      :model-value="unit.language"
+      :repository="repository"
+      label="Language"
+      placeholder="Search languages..."
+      @update:model-value="updateField('language', $event)"
+    />
 
     <!-- Content -->
     <div class="form-control">
@@ -166,10 +161,13 @@
 </template>
 
 <script setup lang="ts">
+import FormWidgetLanguageSelect from '@/components/forms/widgets/FormWidgetLanguageSelect.vue'
 import type { UnitOfMeaning, Credit } from '@/entities/UnitOfMeaning'
+import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
 
 interface Props {
   unit: UnitOfMeaning
+  repository: LanguageRepository
 }
 
 interface Emits {

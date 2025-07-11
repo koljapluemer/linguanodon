@@ -10,6 +10,7 @@
           <FormControlUnitOfMeaning
             :initial-unit="defaultUnit"
             :repository="mockUnitOfMeaningRepo()"
+            :language-repository="mockLanguageRepository()"
             @update="handleUnitUpdate"
           />
         </div>
@@ -78,6 +79,7 @@ import { createEmptyCard } from 'ts-fsrs'
 import FormControlUnitOfMeaning from '@/components/forms/control/FormControlUnitOfMeaning.vue'
 import { generateExercises } from '@/utils/generateExercises'
 import { mockUnitOfMeaningRepo } from '@/repositories/mocks/mockUnitOfMeaningRepo'
+import { mockLanguageRepository } from '@/repositories/mocks/mockLanguageRepository'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 
