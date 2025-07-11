@@ -34,7 +34,20 @@
   </div>
 </template>
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useExerciseStore } from '@/repositories/pinia/useRepoPiniaExercises'
-const { exercises } = storeToRefs(useExerciseStore())
+import { ref, onMounted } from 'vue'
+import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import { piniaExerciseRepository } from '@/repositories/pinia/useRepoPiniaExercises'
+
+const exercises = ref<ExerciseFlashcard[]>([])
+
+/**
+ * Loads all exercises from the repository for debug display
+ */
+async function loadExercises() {
+  exercises.value = await piniaExerciseRepository.getAllExercises()
+}
+
+onMounted(() => {
+  loadExercises()
+})
 </script>

@@ -82,6 +82,7 @@ import { mockUnitOfMeaningRepo } from '@/repositories/mocks/mockUnitOfMeaningRep
 import { mockLanguageRepository } from '@/repositories/mocks/mockLanguageRepository'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import { mockExerciseRepository } from '@/repositories/mocks/mockExerciseRepository'
 
 /**
  * Default unit for testing
@@ -102,6 +103,9 @@ const defaultUnit: UnitOfMeaning = {
 const currentUnit = ref<UnitOfMeaning>(defaultUnit)
 const exercises = ref<ExerciseFlashcard[]>([])
 
+// Use the proper mock repository
+const exerciseRepository = mockExerciseRepository()
+
 /**
  * Check if we can generate exercises (unit has content and translations)
  */
@@ -120,7 +124,7 @@ function handleUnitUpdate(unit: UnitOfMeaning) {
 /**
  * Generate exercises from the current unit
  */
-function generateExercisesFromUnit() {
+async function generateExercisesFromUnit() {
   if (!canGenerateExercises.value) return
   
   try {
@@ -141,7 +145,7 @@ function generateExercisesFromUnit() {
       units.push(translationUnit)
     })
     
-    exercises.value = generateExercises(units)
+    exercises.value = await generateExercises(units, exerciseRepository)
   } catch (error) {
     console.error('Error generating exercises:', error)
     exercises.value = []
