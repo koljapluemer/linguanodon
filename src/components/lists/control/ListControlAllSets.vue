@@ -6,21 +6,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import { piniaSetRepository } from '@/repositories/pinia/useRepoPiniaSets'
 import ListRenderSets from '@/components/lists/render/ListRenderSets.vue'
 import type { Set } from '@/entities/Set'
+import type { SetRepository } from '@/repositories/interfaces/SetRepository'
 
 const router = useRouter()
+const setRepository = inject<SetRepository>('setRepository')
 const sets = ref<Set[]>([])
 
 /**
  * Load all sets from the repository
  */
 async function loadSets() {
+  if (!setRepository) {
+    console.error('Set repository not provided')
+    return
+  }
+  
   try {
-    sets.value = await piniaSetRepository.getAllSets()
+    sets.value = await setRepository.getAllSets()
   } catch (error) {
     console.error('Error loading sets:', error)
     sets.value = []

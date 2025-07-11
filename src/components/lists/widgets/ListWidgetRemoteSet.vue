@@ -26,13 +26,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { Download } from 'lucide-vue-next'
 import { downloadAndPersistSet } from '@/utils/remoteSet'
-import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
-import { piniaSetRepository } from '@/repositories/pinia/useRepoPiniaSets'
-import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
 import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
+import type { SetRepository } from '@/repositories/interfaces/SetRepository'
+import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
+import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 
 interface Props {
   setName: string
@@ -42,6 +42,11 @@ interface Props {
 
 const props = defineProps<Props>()
 
+// Inject repositories
+const setRepository = inject<SetRepository>('setRepository')
+const taskRepository = inject<TaskRepository>('taskRepository')
+const unitRepository = inject<UnitOfMeaningRepository>('unitOfMeaningRepository')
+
 const isDownloading = ref(false)
 const isDownloaded = ref(false)
 const downloadDate = ref<Date | undefined>(undefined)
@@ -50,11 +55,16 @@ const downloadDate = ref<Date | undefined>(undefined)
  * Initialize component data
  */
 async function initializeData() {
-  isDownloaded.value = await isSetDownloaded(piniaSetRepository, props.language, props.setName)
+  if (!setRepository) {
+    console.error('Set repository not provided')
+    return
+  }
+  
+  isDownloaded.value = await isSetDownloaded(setRepository, props.language, props.setName)
   
   if (isDownloaded.value) {
     const uid = `${props.language}_${props.setName}`
-    const set = await piniaSetRepository.findSet(uid)
+    const set = await setRepository.findSet(uid)
     downloadDate.value = set?.lastDownloadedAt
   }
 }
@@ -75,16 +85,16 @@ function formatDownloadDate(date: Date | undefined): string {
  * Handles the download process
  */
 async function handleDownload() {
-  if (isDownloading.value) return
+  if (isDownloading.value || !setRepository || !taskRepository || !unitRepository) return
   
   isDownloading.value = true
   try {
     await downloadAndPersistSet(
       props.filename, 
       props.language, 
-      piniaUnitOfMeaningRepository,
-      piniaSetRepository,
-      piniaTaskRepository
+      unitRepository,
+      setRepository,
+      taskRepository
     )
     // Refresh data after download
     await initializeData()

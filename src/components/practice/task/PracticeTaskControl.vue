@@ -39,17 +39,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
-import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
-import { piniaExerciseRepository } from '@/repositories/pinia/useRepoPiniaExercises'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { generateExercisesForTask } from '@/utils/generateExercises'
 import PracticeTaskView from './PracticeTaskView.vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import type { TaskAttempt } from '@/entities/Task'
 import type { Task } from '@/entities/Task'
+import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
+import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import type { ExerciseRepository } from '@/repositories/interfaces/ExerciseRepository'
 
 interface Props {
   taskId: string
@@ -58,9 +58,12 @@ interface Props {
 const props = defineProps<Props>()
 
 const router = useRouter()
-const unitStore = piniaUnitOfMeaningRepository
-const exerciseStore = piniaExerciseRepository
 const toastsStore = useToastsStore()
+
+// Inject repositories
+const taskRepository = inject<TaskRepository>('taskRepository')
+const unitRepository = inject<UnitOfMeaningRepository>('unitOfMeaningRepository')
+const exerciseRepository = inject<ExerciseRepository>('exerciseRepository')
 
 const exercises = ref<ExerciseFlashcard[]>([])
 const currentExerciseIndex = ref(0)
@@ -80,8 +83,13 @@ const taskInfo = computed(() => {
  * Load the task from repository
  */
 async function loadTask() {
+  if (!taskRepository) {
+    error.value = 'Task repository not provided'
+    return
+  }
+  
   try {
-    const foundTask = await piniaTaskRepository.findTask(taskInfo.value.language, taskInfo.value.content)
+    const foundTask = await taskRepository.findTask(taskInfo.value.language, taskInfo.value.content)
     if (!foundTask) {
       error.value = 'Task not found'
       return
@@ -97,13 +105,13 @@ async function loadTask() {
  * Initialize exercises for the task
  */
 async function initializeExercises() {
-  if (!task.value) {
-    error.value = 'Task not found'
+  if (!task.value || !unitRepository || !exerciseRepository) {
+    error.value = 'Required repositories not provided'
     return
   }
 
   try {
-    const generatedExercises = await generateExercisesForTask(task.value, unitStore, exerciseStore)
+    const generatedExercises = await generateExercisesForTask(task.value, unitRepository, exerciseRepository)
     exercises.value = generatedExercises
   } catch (err) {
     error.value = 'Failed to generate exercises'
@@ -131,14 +139,14 @@ function handleExerciseScore() {
  * Handle task attempt submission
  */
 async function handleTaskAttempt(attempt: TaskAttempt) {
-  if (!task.value) return
+  if (!task.value || !taskRepository) return
 
   try {
     // Add attempt to task
-    await piniaTaskRepository.addTaskAttempt(task.value.language, task.value.content, attempt)
+    await taskRepository.addTaskAttempt(task.value.language, task.value.content, attempt)
     
     // Update last practiced timestamp
-    await piniaTaskRepository.updateTaskLastPracticedAt(task.value.language, task.value.content)
+    await taskRepository.updateTaskLastPracticedAt(task.value.language, task.value.content)
     
     // Show success toast
     toastsStore.addToast({
@@ -167,7 +175,7 @@ function goBack() {
 onMounted(async () => {
   await loadTask()
   if (task.value) {
-    initializeExercises()
+    await initializeExercises()
   }
 })
 </script>
