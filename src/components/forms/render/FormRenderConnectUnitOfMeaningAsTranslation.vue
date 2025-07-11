@@ -75,17 +75,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, inject, onMounted } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
 import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
+import { languageRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
   currentUnit: UnitOfMeaning
-  repository: UnitOfMeaningRepository
-  languageRepository: LanguageRepository
 }
 
 interface Emits {
@@ -95,6 +92,21 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+// Inject repositories using proper injection keys
+const repository = inject(unitOfMeaningRepositoryKey, null)
+const languageRepository = inject(languageRepositoryKey, null)
+
+if (!repository) {
+  throw new Error('UnitOfMeaningRepository not provided in parent context')
+}
+
+if (!languageRepository) {
+  throw new Error('LanguageRepository not provided in parent context')
+}
+
+// Type assertion after null check
+const typedRepository = repository as NonNullable<typeof repository>
 
 const loading = ref(false)
 const units = ref<UnitOfMeaning[]>([])
@@ -107,7 +119,7 @@ const selectedLanguage = ref('')
 async function loadUnits() {
   loading.value = true
   try {
-    units.value = await props.repository.getAllUnitsOfMeaning()
+    units.value = await typedRepository.getAllUnitsOfMeaning()
   } catch (error) {
     console.error('Error loading units:', error)
   } finally {

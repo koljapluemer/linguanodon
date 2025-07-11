@@ -46,14 +46,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, inject, onMounted, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import type { Language } from '@/entities/Language'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
+import { languageRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
-  modelValue?: string
-  repository: LanguageRepository
+  modelValue: string
+  languageType?: 'native' | 'target' | 'both'
+  label?: string
   placeholder?: string
 }
 
@@ -62,11 +63,22 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  languageType: 'both',
   label: 'Language',
-  placeholder: 'Search languages...'
+  placeholder: 'Select a language...'
 })
 
 const emit = defineEmits<Emits>()
+
+// Inject repository using proper injection key
+const repository = inject(languageRepositoryKey, null)
+
+if (!repository) {
+  throw new Error('LanguageRepository not provided in parent context')
+}
+
+// Type assertion after null check
+const typedRepository = repository as NonNullable<typeof repository>
 
 const inputRef = ref<HTMLInputElement>()
 const searchQuery = ref('')
@@ -101,7 +113,7 @@ const filteredLanguages = ref<Language[]>([])
 async function loadLanguages() {
   loading.value = true
   try {
-    languages.value = await props.repository.getAllLanguages()
+    languages.value = await typedRepository.getAllLanguages()
     filteredLanguages.value = languages.value
   } catch (error) {
     console.error('Error loading languages:', error)

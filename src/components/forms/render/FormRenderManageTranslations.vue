@@ -36,8 +36,6 @@
     <div v-if="showConnectForm">
       <FormControlConnectUnitOfMeaningAsTranslation
         :current-unit="currentUnit"
-        :repository="repository"
-        :language-repository="languageRepository"
         @select="handleConnectSelect"
         @cancel="showConnectForm = false"
       />
@@ -46,7 +44,7 @@
     <!-- Add New Translation Form -->
     <div v-if="showAddNewForm">
       <FormControlAddNewUnitAsTranslation
-        :language-repository="languageRepository"
+        :current-unit="currentUnit"
         @create="handleAddNewCreate"
         @cancel="showAddNewForm = false"
       />
@@ -61,14 +59,10 @@ import ListRenderTranslations from '@/components/lists/render/ListRenderTranslat
 import FormControlConnectUnitOfMeaningAsTranslation from '@/components/forms/control/FormControlConnectUnitOfMeaningAsTranslation.vue'
 import FormControlAddNewUnitAsTranslation from '@/components/forms/control/FormControlAddNewUnitAsTranslation.vue'
 import type { UnitOfMeaning, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
-import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
 
 interface Props {
   translations: UnitOfMeaningIdentification[]
   currentUnit: UnitOfMeaning
-  repository: UnitOfMeaningRepository
-  languageRepository: LanguageRepository
 }
 
 interface Emits {

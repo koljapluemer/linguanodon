@@ -111,22 +111,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, inject, onMounted } from 'vue'
 import { Languages, Target, X } from 'lucide-vue-next'
 import FormWidgetLanguageSelect from '@/components/forms/widgets/FormWidgetLanguageSelect.vue'
 import type { Language } from '@/entities/Language'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
-
-interface Props {
-  repository: LanguageRepository
-}
+import { languageRepositoryKey } from '@/types/injectionKeys'
 
 interface Emits {
   (e: 'update'): void
 }
 
-const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+// Inject repository using proper injection key
+const repository = inject(languageRepositoryKey, null)
+
+if (!repository) {
+  throw new Error('LanguageRepository not provided in parent context')
+}
+
+// Type assertion after null check
+const typedRepository = repository as NonNullable<typeof repository>
 
 const nativeLanguages = ref<Language[]>([])
 const targetLanguages = ref<Language[]>([])
@@ -138,8 +143,8 @@ const selectedTargetLanguage = ref('')
  */
 async function loadUserLanguages() {
   try {
-    nativeLanguages.value = await props.repository.getUserNativeLanguages()
-    targetLanguages.value = await props.repository.getUserTargetLanguages()
+    nativeLanguages.value = await typedRepository.getUserNativeLanguages()
+    targetLanguages.value = await typedRepository.getUserTargetLanguages()
   } catch (error) {
     console.error('Error loading user languages:', error)
   }
@@ -152,7 +157,7 @@ async function addNativeLanguage(languageCode: string) {
   if (!languageCode) return
   
   try {
-    await props.repository.addUserNativeLanguage(languageCode)
+    await typedRepository.addUserNativeLanguage(languageCode)
     await loadUserLanguages()
     selectedNativeLanguage.value = ''
     emit('update')
@@ -168,7 +173,7 @@ async function addTargetLanguage(languageCode: string) {
   if (!languageCode) return
   
   try {
-    await props.repository.addUserTargetLanguage(languageCode)
+    await typedRepository.addUserTargetLanguage(languageCode)
     await loadUserLanguages()
     selectedTargetLanguage.value = ''
     emit('update')
@@ -182,7 +187,7 @@ async function addTargetLanguage(languageCode: string) {
  */
 async function removeNativeLanguage(languageCode: string) {
   try {
-    await props.repository.removeUserNativeLanguage(languageCode)
+    await typedRepository.removeUserNativeLanguage(languageCode)
     await loadUserLanguages()
     emit('update')
   } catch (error) {
@@ -195,7 +200,7 @@ async function removeNativeLanguage(languageCode: string) {
  */
 async function removeTargetLanguage(languageCode: string) {
   try {
-    await props.repository.removeUserTargetLanguage(languageCode)
+    await typedRepository.removeUserTargetLanguage(languageCode)
     await loadUserLanguages()
     emit('update')
   } catch (error) {

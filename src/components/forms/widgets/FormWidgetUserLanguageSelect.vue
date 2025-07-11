@@ -48,16 +48,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, inject, onMounted } from 'vue'
 import type { Language } from '@/entities/Language'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
-
-type LanguageType = 'native' | 'target' | 'both'
+import { languageRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
-  modelValue?: string
-  repository: LanguageRepository
-  languageType: LanguageType
+  modelValue: string
+  languageType?: 'native' | 'target' | 'both'
   label?: string
   placeholder?: string
 }
@@ -67,11 +64,22 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  languageType: 'both',
   label: 'Language',
   placeholder: 'Select a language...'
 })
 
 const emit = defineEmits<Emits>()
+
+// Inject repository using proper injection key
+const repository = inject(languageRepositoryKey, null)
+
+if (!repository) {
+  throw new Error('LanguageRepository not provided in parent context')
+}
+
+// Type assertion after null check
+const typedRepository = repository as NonNullable<typeof repository>
 
 const loading = ref(false)
 const nativeLanguages = ref<Language[]>([])
@@ -95,10 +103,10 @@ async function loadUserLanguages() {
   loading.value = true
   try {
     if (showNative.value) {
-      nativeLanguages.value = await props.repository.getUserNativeLanguages()
+      nativeLanguages.value = await typedRepository.getUserNativeLanguages()
     }
     if (showTarget.value) {
-      targetLanguages.value = await props.repository.getUserTargetLanguages()
+      targetLanguages.value = await typedRepository.getUserTargetLanguages()
     }
   } catch (error) {
     console.error('Error loading user languages:', error)

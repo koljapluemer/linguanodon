@@ -50,6 +50,7 @@ import type { Task } from '@/entities/Task'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { ExerciseRepository } from '@/repositories/interfaces/ExerciseRepository'
+import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
   taskId: string
@@ -61,9 +62,9 @@ const router = useRouter()
 const toastsStore = useToastsStore()
 
 // Inject repositories
-const taskRepository = inject<TaskRepository>('taskRepository')
-const unitRepository = inject<UnitOfMeaningRepository>('unitOfMeaningRepository')
-const exerciseRepository = inject<ExerciseRepository>('exerciseRepository')
+const taskRepository = inject<TaskRepository>(taskRepositoryKey)
+const unitRepository = inject<UnitOfMeaningRepository>(unitOfMeaningRepositoryKey)
+const exerciseRepository = inject<ExerciseRepository>(exerciseRepositoryKey)
 
 const exercises = ref<ExerciseFlashcard[]>([])
 const currentExerciseIndex = ref(0)

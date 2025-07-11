@@ -10,26 +10,34 @@ import { ref, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import ListRenderSets from '@/components/lists/render/ListRenderSets.vue'
 import type { Set } from '@/entities/Set'
-import type { SetRepository } from '@/repositories/interfaces/SetRepository'
+import { setRepositoryKey } from '@/types/injectionKeys'
 
 const router = useRouter()
-const setRepository = inject<SetRepository>('setRepository')
+
+// Inject repository using proper injection key
+const setRepository = inject(setRepositoryKey, null)
+
+if (!setRepository) {
+  throw new Error('SetRepository not provided in parent context')
+}
+
+// Type assertion after null check
+const typedSetRepository = setRepository as NonNullable<typeof setRepository>
+
 const sets = ref<Set[]>([])
+const loading = ref(false)
 
 /**
- * Load all sets from the repository
+ * Load all sets from repository
  */
 async function loadSets() {
-  if (!setRepository) {
-    console.error('Set repository not provided')
-    return
-  }
-  
+  loading.value = true
   try {
-    sets.value = await setRepository.getAllSets()
+    sets.value = await typedSetRepository.getAllSets()
   } catch (error) {
     console.error('Error loading sets:', error)
-    sets.value = []
+  } finally {
+    loading.value = false
   }
 }
 

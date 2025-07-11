@@ -1,6 +1,5 @@
 <template>
   <FormRenderAddNewUnitAsTranslation
-    :language-repository="languageRepository"
     @create="handleCreate"
     @cancel="handleCancel"
   />
@@ -9,10 +8,9 @@
 <script setup lang="ts">
 import FormRenderAddNewUnitAsTranslation from '@/components/forms/render/FormRenderAddNewUnitAsTranslation.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
 
 interface Props {
-  languageRepository: LanguageRepository
+  currentUnit: UnitOfMeaning
 }
 
 interface Emits {

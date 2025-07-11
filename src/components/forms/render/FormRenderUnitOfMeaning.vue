@@ -161,16 +161,14 @@
 </template>
 
 <script setup lang="ts">
+import { inject } from 'vue'
 import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
 import FormRenderManageTranslations from '@/components/forms/render/FormRenderManageTranslations.vue'
 import type { UnitOfMeaning, Credit, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
-import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import { languageRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
   unit: UnitOfMeaning
-  languageRepository: LanguageRepository
-  repository: UnitOfMeaningRepository
   showTranslations?: boolean
 }
 
@@ -187,6 +185,18 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+
+// Inject repositories using proper injection keys
+const languageRepository = inject(languageRepositoryKey)
+const repository = inject(unitOfMeaningRepositoryKey)
+
+if (!languageRepository) {
+  throw new Error('LanguageRepository not provided in parent context')
+}
+
+if (!repository) {
+  throw new Error('UnitOfMeaningRepository not provided in parent context')
+}
 
 /**
  * Update a simple field in the unit

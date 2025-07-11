@@ -1,8 +1,6 @@
 <template>
   <FormRenderConnectUnitOfMeaningAsTranslation
     :current-unit="currentUnit"
-    :repository="repository"
-    :language-repository="languageRepository"
     @select="handleSelect"
     @cancel="handleCancel"
   />
@@ -11,13 +9,9 @@
 <script setup lang="ts">
 import FormRenderConnectUnitOfMeaningAsTranslation from '@/components/forms/render/FormRenderConnectUnitOfMeaningAsTranslation.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
 
 interface Props {
   currentUnit: UnitOfMeaning
-  repository: UnitOfMeaningRepository
-  languageRepository: LanguageRepository
 }
 
 interface Emits {

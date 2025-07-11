@@ -30,9 +30,7 @@ import { ref, onMounted, inject } from 'vue'
 import { Download } from 'lucide-vue-next'
 import { downloadAndPersistSet } from '@/utils/remoteSet'
 import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
-import type { SetRepository } from '@/repositories/interfaces/SetRepository'
-import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
-import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
   setName: string
@@ -42,10 +40,27 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Inject repositories
-const setRepository = inject<SetRepository>('setRepository')
-const taskRepository = inject<TaskRepository>('taskRepository')
-const unitRepository = inject<UnitOfMeaningRepository>('unitOfMeaningRepository')
+// Inject repositories using proper injection keys
+const setRepository = inject(setRepositoryKey, null)
+const taskRepository = inject(taskRepositoryKey, null)
+const unitRepository = inject(unitOfMeaningRepositoryKey, null)
+
+if (!setRepository) {
+  throw new Error('SetRepository not provided in parent context')
+}
+
+if (!taskRepository) {
+  throw new Error('TaskRepository not provided in parent context')
+}
+
+if (!unitRepository) {
+  throw new Error('UnitOfMeaningRepository not provided in parent context')
+}
+
+// Type assertion after null check
+const typedSetRepository = setRepository as NonNullable<typeof setRepository>
+const typedTaskRepository = taskRepository as NonNullable<typeof taskRepository>
+const typedUnitRepository = unitRepository as NonNullable<typeof unitRepository>
 
 const isDownloading = ref(false)
 const isDownloaded = ref(false)
@@ -55,16 +70,11 @@ const downloadDate = ref<Date | undefined>(undefined)
  * Initialize component data
  */
 async function initializeData() {
-  if (!setRepository) {
-    console.error('Set repository not provided')
-    return
-  }
-  
-  isDownloaded.value = await isSetDownloaded(setRepository, props.language, props.setName)
+  isDownloaded.value = await isSetDownloaded(typedSetRepository, props.language, props.setName)
   
   if (isDownloaded.value) {
     const uid = `${props.language}_${props.setName}`
-    const set = await setRepository.findSet(uid)
+    const set = await typedSetRepository.findSet(uid)
     downloadDate.value = set?.lastDownloadedAt
   }
 }
@@ -85,16 +95,16 @@ function formatDownloadDate(date: Date | undefined): string {
  * Handles the download process
  */
 async function handleDownload() {
-  if (isDownloading.value || !setRepository || !taskRepository || !unitRepository) return
+  if (isDownloading.value) return
   
   isDownloading.value = true
   try {
     await downloadAndPersistSet(
       props.filename, 
       props.language, 
-      unitRepository,
-      setRepository,
-      taskRepository
+      typedUnitRepository,
+      typedSetRepository,
+      typedTaskRepository
     )
     // Refresh data after download
     await initializeData()
