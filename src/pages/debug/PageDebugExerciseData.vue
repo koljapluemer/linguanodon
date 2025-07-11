@@ -35,8 +35,8 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, provide } from 'vue'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
-import { piniaExerciseRepository } from '@/repositories/pinia/useRepoPiniaExercises'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import { piniaExerciseRepository } from '@/repositories/pinia/useRepoPiniaExerciseData'
 import { exerciseRepositoryKey } from '@/types/injectionKeys'
 
 // Provide the exercise repository to child components

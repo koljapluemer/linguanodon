@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import ExerciseFlashcardRender from './ExerciseFlashcardRender.vue'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
 import { Rating } from 'ts-fsrs'
 
 interface Props {

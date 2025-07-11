@@ -1,13 +1,13 @@
 import { fsrs, Rating } from 'ts-fsrs'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
-import type { ExerciseRepository } from '@/repositories/interfaces/ExerciseRepository'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
 import type { Grade } from 'ts-fsrs'
 
 /**
  * Records exercise completion and updates card using ts-fsrs
  */
 export async function recordExerciseRating(
-  repository: ExerciseRepository,
+  repository: ExerciseDataRepository,
   exercise: ExerciseFlashcard, 
   rating: Rating
 ): Promise<void> {

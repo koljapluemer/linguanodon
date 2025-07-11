@@ -112,8 +112,8 @@ import { generateClozesForUnitAndLanguage as generateClozes } from '@/utils/exer
 import { mockUnitOfMeaningRepo } from '@/repositories/mocks/useRepoMockUnitsOfMeaning'
 import { mockLanguageRepository } from '@/repositories/mocks/useRepoMockLanguages'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
-import { mockExerciseRepository } from '@/repositories/mocks/useRepoMockExercises'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import { mockExerciseRepository } from '@/repositories/mocks/useRepoMockExerciseData'
 import { unitOfMeaningRepositoryKey, languageRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
 
 // Use the proper mock repositories

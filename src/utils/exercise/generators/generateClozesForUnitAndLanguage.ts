@@ -1,5 +1,5 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
 import { createEmptyCard } from 'ts-fsrs'
 
 /**

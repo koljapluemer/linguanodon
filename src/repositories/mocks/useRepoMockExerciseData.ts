@@ -1,15 +1,15 @@
 /**
  * Returns a mock in-memory repository for testing and development.
  */
-import type { Exercise } from "@/entities/Exercise";
-import type { ExerciseRepository } from "@/repositories/interfaces/ExerciseRepository";
+import type { ExerciseData } from "@/entities/ExerciseData";
+import type { ExerciseDataRepository } from "@/repositories/interfaces/ExerciseDataRepository";
 import { createEmptyCard } from 'ts-fsrs';
 
 /**
  * Use for dependency injection in tests or development to avoid real persistence.
  */
-export function mockExerciseRepository(): ExerciseRepository {
-    const dataSource: Exercise[] = [
+export function mockExerciseDataRepository(): ExerciseDataRepository {
+    const dataSource: ExerciseData[] = [
         // Demo exercise 1
         {
             uid: 'demo-exercise-1',
@@ -31,7 +31,7 @@ export function mockExerciseRepository(): ExerciseRepository {
         /**
          * Adds an exercise to the mock store.
          */
-        async addExercise(exercise: Exercise) {
+        async addExercise(exercise: ExerciseData) {
             if (!dataSource.some(ex => ex.uid === exercise.uid)) {
                 dataSource.push(exercise);
             }
@@ -62,7 +62,7 @@ export function mockExerciseRepository(): ExerciseRepository {
         /**
          * Updates an existing exercise.
          */
-        async updateExercise(exercise: Exercise) {
+        async updateExercise(exercise: ExerciseData) {
             const idx = dataSource.findIndex(ex => ex.uid === exercise.uid);
             if (idx !== -1) {
                 dataSource[idx] = exercise;

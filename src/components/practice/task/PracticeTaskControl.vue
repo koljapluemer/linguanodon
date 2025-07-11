@@ -44,12 +44,12 @@ import { useRouter } from 'vue-router'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { generateExercisesForTask } from '@/utils/generateExercises'
 import PracticeTaskView from './PracticeTaskView.vue'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
 import type { TaskAttempt } from '@/entities/Task'
 import type { Task } from '@/entities/Task'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { ExerciseRepository } from '@/repositories/interfaces/ExerciseRepository'
+import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
 import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
@@ -64,7 +64,7 @@ const toastsStore = useToastsStore()
 // Inject repositories
 const taskRepository = inject<TaskRepository>(taskRepositoryKey)
 const unitRepository = inject<UnitOfMeaningRepository>(unitOfMeaningRepositoryKey)
-const exerciseRepository = inject<ExerciseRepository>(exerciseRepositoryKey)
+const exerciseRepository = inject<ExerciseDataRepository>(exerciseRepositoryKey)
 
 const exercises = ref<ExerciseFlashcard[]>([])
 const currentExerciseIndex = ref(0)

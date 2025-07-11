@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Exercise } from '@/entities/Exercise'
-import type { ExerciseRepository } from '@/repositories/interfaces/ExerciseRepository'
+import type { ExerciseData } from '@/entities/ExerciseData'
+import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
 
-const useExerciseStore = defineStore('exercise', () => {
-  const exercises = ref<Record<string, Exercise>>({})
+const useExerciseDataStore = defineStore('exerciseData', () => {
+  const exercises = ref<Record<string, ExerciseData>>({})
 
   /**
    * Adds an exercise to the store
    */
-  function addExercise(exercise: Exercise) {
+  function addExercise(exercise: ExerciseData) {
     exercises.value[exercise.uid] = exercise
   }
 
@@ -23,21 +23,21 @@ const useExerciseStore = defineStore('exercise', () => {
   /**
    * Finds an exercise by UID
    */
-  function findExercise(uid: string): Exercise | null {
+  function findExercise(uid: string): ExerciseData | null {
     return exercises.value[uid] || null
   }
 
   /**
    * Gets all exercises
    */
-  function getAllExercises(): Exercise[] {
+  function getAllExercises(): ExerciseData[] {
     return Object.values(exercises.value)
   }
 
   /**
    * Updates an existing exercise
    */
-  function updateExercise(exercise: Exercise) {
+  function updateExercise(exercise: ExerciseData) {
     exercises.value[exercise.uid] = exercise
   }
 
@@ -55,11 +55,11 @@ const useExerciseStore = defineStore('exercise', () => {
 /**
  * Pinia-backed implementation of ExerciseRepository
  */
-export const piniaExerciseRepository: ExerciseRepository = {
+export const piniaExerciseRepository: ExerciseDataRepository = {
   /**
    * Adds an exercise to the store
    */
-  async addExercise(exercise: Exercise) {
+  async addExercise(exercise: ExerciseData) {
     useExerciseStore().addExercise(exercise)
     return Promise.resolve()
   },
@@ -85,7 +85,7 @@ export const piniaExerciseRepository: ExerciseRepository = {
   /**
    * Updates an existing exercise
    */
-  async updateExercise(exercise: Exercise) {
+  async updateExercise(exercise: ExerciseData) {
     useExerciseStore().updateExercise(exercise)
     return Promise.resolve()
   }

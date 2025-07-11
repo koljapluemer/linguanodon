@@ -38,7 +38,7 @@ import { computed } from 'vue'
 import ExerciseFlashcardControl from '@/components/practice/exercise/ExerciseFlashcardControl.vue'
 import TaskExecuteControl from './TaskExecuteControl.vue'
 import type { Task } from '@/entities/Task'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
 import type { TaskAttempt } from '@/entities/Task'
 import { Rating } from 'ts-fsrs'
 

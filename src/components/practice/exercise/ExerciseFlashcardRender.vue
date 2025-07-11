@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
 import { Rating } from 'ts-fsrs'
 
 interface Props {
