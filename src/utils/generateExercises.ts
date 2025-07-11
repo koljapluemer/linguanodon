@@ -1,8 +1,8 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import type { Task } from '@/entities/Task'
+import type { ExerciseRepository } from '@/repositories/interfaces/ExerciseRepository'
 import { createEmptyCard } from 'ts-fsrs'
-import { useExerciseStore } from '@/repositories/pinia/exerciseStore'
 
 /**
  * Splits a sentence into tokens: words and punctuation, preserving order
@@ -143,15 +143,21 @@ function shuffleArray<T>(array: T[]): T[] {
  */
 function categorizeExercises(
   exercises: ExerciseFlashcard[],
-  storeExercises: Record<string, ExerciseFlashcard>
+  storeExercises: ExerciseFlashcard[]
 ) {
   const now = new Date()
   const due: ExerciseFlashcard[] = []
   const newExercises: ExerciseFlashcard[] = []
   const notDue: ExerciseFlashcard[] = []
 
+  // Convert array to record for easier lookup
+  const storeExercisesRecord: Record<string, ExerciseFlashcard> = {}
+  storeExercises.forEach(ex => {
+    storeExercisesRecord[ex.uid] = ex
+  })
+
   for (const ex of exercises) {
-    const stored = storeExercises[ex.uid]
+    const stored = storeExercisesRecord[ex.uid]
     if (!stored) {
       newExercises.push(ex)
     } else if (stored.card && stored.card.due && new Date(stored.card.due) <= now) {
@@ -170,7 +176,7 @@ function categorizeExercises(
  */
 function pickSessionExercises(
   allExercises: ExerciseFlashcard[],
-  storeExercises: Record<string, ExerciseFlashcard>
+  storeExercises: ExerciseFlashcard[]
 ): ExerciseFlashcard[] {
   const { due, newExercises, notDue } = categorizeExercises(allExercises, storeExercises)
   console.info(
@@ -201,19 +207,23 @@ function pickSessionExercises(
  * Generates cloze-based flashcard exercises from units of meaning
  * Returns 20 randomly selected and shuffled exercises
  */
-export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
-  const pairs = groupIntoPairs(units)
+export async function generateExercises(units: UnitOfMeaning[], exerciseRepo: ExerciseRepository): Promise<ExerciseFlashcard[]> {
   const allExercises: ExerciseFlashcard[] = []
   
-  // Generate clozes for each pair
-  pairs.forEach(([unit1, unit2]) => {
-    const pairExercises = generateClozesForPair(unit1, unit2)
-    allExercises.push(...pairExercises)
+  // Generate clozes for all translation pairs
+  const pairs = groupIntoPairs(units)
+  pairs.forEach(pair => {
+    if (pair.length === 2) {
+      const clozes = generateClozesForPair(pair[0], pair[1])
+      allExercises.push(...clozes)
+    }
   })
   
-  // Use store to select session exercises
-  const store = useExerciseStore()
-  return pickSessionExercises(allExercises, store.exercises)
+  // Get existing exercises from store
+  const storeExercises = await exerciseRepo.getAllExercises()
+  
+  // Pick session exercises
+  return pickSessionExercises(allExercises, storeExercises)
 }
 
 /**
@@ -222,7 +232,8 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
  */
 export async function generateExercisesForTask(
   task: Task,
-  unitRepo: import('@/repositories/interfaces/UnitOfMeaningRepository').UnitOfMeaningRepository
+  unitRepo: import('@/repositories/interfaces/UnitOfMeaningRepository').UnitOfMeaningRepository,
+  exerciseRepo: ExerciseRepository
 ): Promise<ExerciseFlashcard[]> {
   // Get all units for this task (primary and regular)
   const allUnitPairs = [...task.primaryUnitsOfMeaning, ...task.unitsOfMeaning]
@@ -344,9 +355,9 @@ export async function generateExercisesForTask(
   }
   console.debug('[generateExercisesForTask] Final selected exercises:', selectedExercises.length, selectedExercises)
 
-  // Use store to select session exercises (handles due/new/not due logic)
-  const store = useExerciseStore()
-  const sessionExercises = pickSessionExercises(selectedExercises, store.exercises)
+  // Get existing exercises from repository and select session exercises (handles due/new/not due logic)
+  const storeExercises = await exerciseRepo.getAllExercises()
+  const sessionExercises = pickSessionExercises(selectedExercises, storeExercises)
   console.debug('[generateExercisesForTask] Session exercises after pickSessionExercises:', sessionExercises.length, sessionExercises)
   return sessionExercises
 }

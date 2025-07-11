@@ -35,6 +35,6 @@
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useExerciseStore } from '@/repositories/pinia/exerciseStore'
+import { useExerciseStore } from '@/repositories/pinia/useRepoPiniaExercises'
 const { exercises } = storeToRefs(useExerciseStore())
 </script>

@@ -1,13 +1,62 @@
 import { createEmptyCard } from 'ts-fsrs'
-import { downloadSet, type RemoteSet, type RemoteTask, type RemoteUnitOfMeaning } from '@/utils/getRemoteSet'
-import { useSetStore } from '@/repositories/pinia/setStore'
-import { useTaskStore } from '@/repositories/pinia/taskStore'
-import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { doesUnitOfMeaningExist } from '@/utils/unitOfMeaning/doesUnitOfMeaningExist'
+import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
+import { isTaskExists } from '@/utils/task/isTaskExists'
 import type { Set } from '@/entities/Set'
 import type { Task } from '@/entities/Task'
 import type { UnitOfMeaning, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
+import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import type { SetRepository } from '@/repositories/interfaces/SetRepository'
+import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
+
+// Remote data interfaces
+export interface RemoteSet {
+    name: string
+    language: string
+    tasks: RemoteTask[]
+}
+
+export interface RemoteTask {
+    content: string
+    language: string
+    primaryUnitsOfMeaning: RemoteUnitOfMeaning[]
+    unitsOfMeaning?: RemoteUnitOfMeaning[]
+}
+
+export interface RemoteUnitOfMeaning {
+    language: string
+    content: string,
+    notes?: string,
+    seeAlso?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
+    translations?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
+    credits?: RemoteCredit[]
+}
+
+export interface RemoteCredit {
+    license: string
+    owner?: string
+    ownerLink?: string
+    source?: string
+    sourceLink?: string
+}
+
+/**
+ * Downloads a specific set from the remote API
+ */
+export async function downloadSet(filename: string, language: string): Promise<RemoteSet> {
+  try {
+    const response = await fetch(`https://scintillating-empanada-730581.netlify.app/${language}/${filename}`)
+    if (!response.ok) {
+      throw new Error(`Failed to download set: ${response.status} ${response.statusText}`)
+    }
+    const setData = await response.json()
+    return setData as RemoteSet
+  } catch (error) {
+    console.error(`Error downloading set ${filename} for language ${language}:`, error)
+    throw error
+  }
+}
 
 /**
  * Converts a remote unit of meaning to local format with ts-fsrs card
@@ -21,28 +70,12 @@ function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMe
     sourceLink: credit.sourceLink || ''
   })) : []
 
-  // Ensure translations and seeAlso are UnitOfMeaningIdentification[]
-  const translations: UnitOfMeaningIdentification[] = (remoteUnit.translations || []).map(t => {
-    if (typeof t === 'string') {
-      const [language, content] = t.split(':', 2)
-      return { language: language?.trim() || '', content: content?.trim() || '' }
-    }
-    return t
-  })
-  const seeAlso: UnitOfMeaningIdentification[] = (remoteUnit.seeAlso || []).map(t => {
-    if (typeof t === 'string') {
-      const [language, content] = t.split(':', 2)
-      return { language: language?.trim() || '', content: content?.trim() || '' }
-    }
-    return t
-  })
-
   return {
     language: remoteUnit.language,
     content: remoteUnit.content,
     notes: remoteUnit.notes || '',
-    translations,
-    seeAlso,
+    translations: remoteUnit.translations || [],
+    seeAlso: remoteUnit.seeAlso || [],
     credits,
     card: createEmptyCard()
   }
@@ -91,10 +124,13 @@ function convertRemoteSetToLocalSet(remoteSet: RemoteSet): Set {
 /**
  * Downloads and persists a set with all its data
  */
-export async function downloadAndPersistSet(filename: string, language: string) {
-  const setStore = useSetStore()
-  const taskStore = useTaskStore()
-  const unitStore = piniaUnitOfMeaningRepository
+export async function downloadAndPersistSet(
+  filename: string, 
+  language: string, 
+  unitRepository: UnitOfMeaningRepository,
+  setRepository: SetRepository,
+  taskRepository: TaskRepository
+) {
   const toastsStore = useToastsStore()
 
   try {
@@ -102,7 +138,7 @@ export async function downloadAndPersistSet(filename: string, language: string) 
     const remoteSet = await downloadSet(filename, language)
     
     // Check if set already exists
-    const setExists = setStore.isSetDownloaded(remoteSet.language, remoteSet.name)
+    const setExists = await isSetDownloaded(setRepository, remoteSet.language, remoteSet.name)
     if (setExists) {
       toastsStore.addToast({
         type: 'warning',
@@ -118,10 +154,10 @@ export async function downloadAndPersistSet(filename: string, language: string) 
     for (const task of remoteSet.tasks) {
       // Add primary units
       for (const unit of (task.primaryUnitsOfMeaning || [])) {
-        const exists = await doesUnitOfMeaningExist(unitStore, unit.language, unit.content)
+        const exists = await doesUnitOfMeaningExist(unitRepository, unit.language, unit.content)
         if (!exists) {
           const localUnit = convertRemoteUnitToLocalUnit(unit)
-          await unitStore.addUnitOfMeaning(localUnit)
+          await unitRepository.addUnitOfMeaning(localUnit)
           newUnitsCount++
         } else {
           skippedUnitsCount++
@@ -131,10 +167,10 @@ export async function downloadAndPersistSet(filename: string, language: string) 
       // Add secondary units
       if (task.unitsOfMeaning) {
         for (const unit of task.unitsOfMeaning) {
-          const exists = await doesUnitOfMeaningExist(unitStore, unit.language, unit.content)
+          const exists = await doesUnitOfMeaningExist(unitRepository, unit.language, unit.content)
           if (!exists) {
             const localUnit = convertRemoteUnitToLocalUnit(unit)
-            await unitStore.addUnitOfMeaning(localUnit)
+            await unitRepository.addUnitOfMeaning(localUnit)
             newUnitsCount++
           } else {
             skippedUnitsCount++
@@ -148,9 +184,10 @@ export async function downloadAndPersistSet(filename: string, language: string) 
     let skippedTasksCount = 0
 
     for (const remoteTask of remoteSet.tasks) {
-      if (!taskStore.isTaskExists(remoteTask.language, remoteTask.content)) {
+      const taskExists = await isTaskExists(taskRepository, remoteTask.language, remoteTask.content)
+      if (!taskExists) {
         const localTask = convertRemoteTaskToLocalTask(remoteTask)
-        taskStore.addTask(localTask)
+        await taskRepository.addTask(localTask)
         newTasksCount++
       } else {
         skippedTasksCount++
@@ -159,7 +196,7 @@ export async function downloadAndPersistSet(filename: string, language: string) 
 
     // Convert and add set
     const localSet = convertRemoteSetToLocalSet(remoteSet)
-    setStore.addDownloadedSet(localSet)
+    await setRepository.addSet(localSet)
 
     // Show success toast
     const message = `Set "${remoteSet.name}" downloaded. Added ${newTasksCount} tasks and ${newUnitsCount} words/sentences.`

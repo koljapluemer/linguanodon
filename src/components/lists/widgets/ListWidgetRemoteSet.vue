@@ -26,10 +26,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Download } from 'lucide-vue-next'
-import { useSetStore } from '@/repositories/pinia/setStore'
-import { downloadAndPersistSet } from '@/utils/downloadRemoteSet'
+import { downloadAndPersistSet } from '@/utils/remoteSet'
+import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
+import { piniaSetRepository } from '@/repositories/pinia/useRepoPiniaSets'
+import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
+import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
 
 interface Props {
   setName: string
@@ -38,24 +41,23 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const setStore = useSetStore()
 
 const isDownloading = ref(false)
+const isDownloaded = ref(false)
+const downloadDate = ref<Date | undefined>(undefined)
 
 /**
- * Checks if this set is already downloaded
+ * Initialize component data
  */
-const isDownloaded = computed(() => {
-  return setStore.isSetDownloaded(props.language, props.setName)
-})
-
-/**
- * Gets the download date for this set
- */
-const downloadDate = computed(() => {
-  const set = setStore.getSetByUid(`${props.language}_${props.setName}`)
-  return set?.lastDownloadedAt
-})
+async function initializeData() {
+  isDownloaded.value = await isSetDownloaded(piniaSetRepository, props.language, props.setName)
+  
+  if (isDownloaded.value) {
+    const uid = `${props.language}_${props.setName}`
+    const set = await piniaSetRepository.findSet(uid)
+    downloadDate.value = set?.lastDownloadedAt
+  }
+}
 
 /**
  * Formats the download date for display
@@ -77,11 +79,23 @@ async function handleDownload() {
   
   isDownloading.value = true
   try {
-    await downloadAndPersistSet(props.filename, props.language)
+    await downloadAndPersistSet(
+      props.filename, 
+      props.language, 
+      piniaUnitOfMeaningRepository,
+      piniaSetRepository,
+      piniaTaskRepository
+    )
+    // Refresh data after download
+    await initializeData()
   } catch (error) {
     console.error('Download failed:', error)
   } finally {
     isDownloading.value = false
   }
 }
+
+onMounted(() => {
+  initializeData()
+})
 </script>

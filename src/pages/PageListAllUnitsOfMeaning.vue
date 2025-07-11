@@ -11,5 +11,5 @@
 
 <script setup lang="ts">
 import ListControllAllUnitsOfMeaning from '@/components/lists/control/ListControllAllUnitsOfMeaning.vue'
-import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
+import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
 </script> 

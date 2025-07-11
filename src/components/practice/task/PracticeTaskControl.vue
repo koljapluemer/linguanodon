@@ -41,13 +41,15 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useTaskStore } from '@/repositories/pinia/taskStore'
-import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
+import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
+import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
+import { piniaExerciseRepository } from '@/repositories/pinia/useRepoPiniaExercises'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { generateExercisesForTask } from '@/utils/generateExercises'
 import PracticeTaskView from './PracticeTaskView.vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import type { TaskAttempt } from '@/entities/Task'
+import type { Task } from '@/entities/Task'
 
 interface Props {
   taskId: string
@@ -56,14 +58,15 @@ interface Props {
 const props = defineProps<Props>()
 
 const router = useRouter()
-const taskStore = useTaskStore()
 const unitStore = piniaUnitOfMeaningRepository
+const exerciseStore = piniaExerciseRepository
 const toastsStore = useToastsStore()
 
 const exercises = ref<ExerciseFlashcard[]>([])
 const currentExerciseIndex = ref(0)
 const isTaskExecutionPhase = ref(false)
 const error = ref<string>('')
+const task = ref<Task | null>(null)
 
 /**
  * Parse task ID to get language and content
@@ -74,23 +77,33 @@ const taskInfo = computed(() => {
 })
 
 /**
- * Get the task from store
+ * Load the task from repository
  */
-const task = computed(() => 
-  taskStore.getTaskById(taskInfo.value.language, taskInfo.value.content)
-)
+async function loadTask() {
+  try {
+    const foundTask = await piniaTaskRepository.findTask(taskInfo.value.language, taskInfo.value.content)
+    if (!foundTask) {
+      error.value = 'Task not found'
+      return
+    }
+    task.value = foundTask
+  } catch (err) {
+    error.value = 'Failed to load task'
+    console.error('Error loading task:', err)
+  }
+}
 
 /**
  * Initialize exercises for the task
  */
-function initializeExercises() {
+async function initializeExercises() {
   if (!task.value) {
     error.value = 'Task not found'
     return
   }
 
   try {
-    const generatedExercises = generateExercisesForTask(task.value, unitStore)
+    const generatedExercises = await generateExercisesForTask(task.value, unitStore, exerciseStore)
     exercises.value = generatedExercises
   } catch (err) {
     error.value = 'Failed to generate exercises'
@@ -117,23 +130,31 @@ function handleExerciseScore() {
 /**
  * Handle task attempt submission
  */
-function handleTaskAttempt(attempt: TaskAttempt) {
+async function handleTaskAttempt(attempt: TaskAttempt) {
   if (!task.value) return
 
-  // Add attempt to task
-  taskStore.addTaskAttempt(task.value.language, task.value.content, attempt)
-  
-  // Update last practiced timestamp
-  taskStore.updateTaskLastPracticedAt(task.value.language, task.value.content)
-  
-  // Show success toast
-  toastsStore.addToast({
-    type: 'success',
-    message: 'Practice session completed! Great job!'
-  })
-  
-  // Navigate back to tasks
-  goBack()
+  try {
+    // Add attempt to task
+    await piniaTaskRepository.addTaskAttempt(task.value.language, task.value.content, attempt)
+    
+    // Update last practiced timestamp
+    await piniaTaskRepository.updateTaskLastPracticedAt(task.value.language, task.value.content)
+    
+    // Show success toast
+    toastsStore.addToast({
+      type: 'success',
+      message: 'Practice session completed! Great job!'
+    })
+    
+    // Navigate back to tasks
+    goBack()
+  } catch (error) {
+    console.error('Error saving task attempt:', error)
+    toastsStore.addToast({
+      type: 'error',
+      message: 'Failed to save practice session'
+    })
+  }
 }
 
 /**
@@ -143,7 +164,10 @@ function goBack() {
   router.push('/tasks')
 }
 
-onMounted(() => {
-  initializeExercises()
+onMounted(async () => {
+  await loadTask()
+  if (task.value) {
+    initializeExercises()
+  }
 })
 </script>

@@ -6,17 +6,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useSetStore } from '@/repositories/pinia/setStore'
-import { storeToRefs } from 'pinia'
+import { piniaSetRepository } from '@/repositories/pinia/useRepoPiniaSets'
 import ListRenderSets from '@/components/lists/render/ListRenderSets.vue'
+import type { Set } from '@/entities/Set'
 
 const router = useRouter()
-const setStore = useSetStore()
-const { getAllSets } = storeToRefs(setStore)
+const sets = ref<Set[]>([])
 
-const sets = getAllSets
+/**
+ * Load all sets from the repository
+ */
+async function loadSets() {
+  try {
+    sets.value = await piniaSetRepository.getAllSets()
+  } catch (error) {
+    console.error('Error loading sets:', error)
+    sets.value = []
+  }
+}
 
 /**
  * Handles navigation to practice a specific set
@@ -26,9 +35,6 @@ function handlePracticeSet(setUid: string) {
 }
 
 onMounted(() => {
-  // Seed initial data if not already done
-  if (sets.value.length === 0) {
-    setStore.seedInitialData()
-  }
+  loadSets()
 })
 </script>

@@ -7,12 +7,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useTaskStore } from '@/repositories/pinia/taskStore'
+import { ref, onMounted } from 'vue'
+import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
 import ListRenderTasks from '@/components/lists/render/ListRenderTasks.vue'
 import type { Task } from '@/entities/Task'
 
-const taskStore = useTaskStore()
+const tasks = ref<Task[]>([])
 
-const tasks = computed<Task[]>(() => taskStore.getAllTasks())
+/**
+ * Load all tasks from the repository
+ */
+async function loadTasks() {
+  try {
+    tasks.value = await piniaTaskRepository.getAllTasks()
+  } catch (error) {
+    console.error('Error loading tasks:', error)
+    tasks.value = []
+  }
+}
+
+onMounted(() => {
+  loadTasks()
+})
 </script> 
