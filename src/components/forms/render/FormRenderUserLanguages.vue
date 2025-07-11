@@ -8,7 +8,7 @@
           Native Languages
         </h3>
         <p class="text-base-content/70 text-sm mb-4">
-          Languages you already speak.
+          Languages you speak fluently. These will be used as the source language for translations.
         </p>
         
         <!-- Current Native Languages -->
@@ -62,7 +62,7 @@
           Target Languages
         </h3>
         <p class="text-base-content/70 text-sm mb-4">
-          Languages you want to learn. 
+          Languages you want to learn. These will be used as the target language for translations.
         </p>
         
         <!-- Current Target Languages -->

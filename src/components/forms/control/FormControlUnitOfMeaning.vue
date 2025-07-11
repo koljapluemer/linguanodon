@@ -1,7 +1,7 @@
 <template>
   <FormRenderUnitOfMeaning
     :unit="unit"
-    :repository="languageRepository"
+    :language-repository="languageRepository"
     @update="handleUpdate"
   />
 </template>

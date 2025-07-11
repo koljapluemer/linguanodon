@@ -1,11 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Language -->
-    <FormWidgetLanguageSelect
+    <FormWidgetUserLanguageSelect
       :model-value="unit.language"
-      :repository="repository"
+      :repository="languageRepository"
+      language-type="both"
       label="Language"
-      placeholder="Search languages..."
+      placeholder="Select a language..."
       @update:model-value="updateField('language', $event)"
     />
 
@@ -161,13 +162,13 @@
 </template>
 
 <script setup lang="ts">
-import FormWidgetLanguageSelect from '@/components/forms/widgets/FormWidgetLanguageSelect.vue'
+import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
 import type { UnitOfMeaning, Credit } from '@/entities/UnitOfMeaning'
 import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
 
 interface Props {
   unit: UnitOfMeaning
-  repository: LanguageRepository
+  languageRepository: LanguageRepository
 }
 
 interface Emits {
