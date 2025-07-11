@@ -8,9 +8,9 @@
 import { provide } from 'vue'
 import { useRoute } from 'vue-router'
 import PracticeTaskControl from '@/components/practice/task/PracticeTaskControl.vue'
-import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
-import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
-import { piniaExerciseRepository } from '@/repositories/pinia/useRepoPiniaExerciseData'
+import { piniaTaskRepository } from '@/repositories/implementations/pinia/useRepoPiniaTasks'
+import { piniaUnitOfMeaningRepository } from '@/repositories/implementations/pinia/useRepoPiniaUnitsOfMeaning'
+import { piniaExerciseRepository } from '@/repositories/implementations/pinia/useRepoPiniaExerciseData'
 import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
 
 const route = useRoute()

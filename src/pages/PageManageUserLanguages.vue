@@ -30,7 +30,7 @@
 import { ref, onMounted, provide } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import FormControlUserLanguages from '@/components/forms/control/FormControlUserLanguages.vue'
-import { piniaLanguageRepository } from '@/repositories/pinia/useRepoPiniaLanguages'
+import { piniaLanguageRepository } from '@/repositories/implementations/pinia/useRepoPiniaLanguages'
 import { languageRepositoryKey } from '@/types/injectionKeys'
 import type { Language } from '@/entities/Language'
 

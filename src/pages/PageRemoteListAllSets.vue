@@ -8,9 +8,9 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import ListControllRemoteSets from '@/components/lists/control/ListControllRemoteSets.vue'
-import { piniaSetRepository } from '@/repositories/pinia/useRepoPiniaSets'
-import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
-import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
+import { piniaSetRepository } from '@/repositories/implementations/pinia/useRepoPiniaSets'
+import { piniaTaskRepository } from '@/repositories/implementations/pinia/useRepoPiniaTasks'
+import { piniaUnitOfMeaningRepository } from '@/repositories/implementations/pinia/useRepoPiniaUnitsOfMeaning'
 import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
 // Provide repositories to child components
