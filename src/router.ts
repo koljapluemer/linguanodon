@@ -6,6 +6,7 @@ import PageRemoteListAllSets from '@/pages/PageRemoteListAllSets.vue'
 import PageListAllUnitsOfMeaning from '@/pages/PageListAllUnitsOfMeaning.vue'
 import PageListAllTasks from '@/pages/PageListAllTasks.vue'
 import PagePracticeTask from '@/pages/PagePracticeTask.vue'
+import PageManageUserLanguages from '@/pages/PageManageUserLanguages.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -39,6 +40,13 @@ const routes: RouteRecordRaw[] = [
     path: '/practice-task/:taskId',
     name: 'practice-task',
     component: PagePracticeTask
+  },
+
+  {
+    /** Route for managing user languages */
+    path: '/manage-languages',
+    name: 'manage-languages',
+    component: PageManageUserLanguages
   },
 
   // DEBUG ROUTES

@@ -1,9 +1,5 @@
 <template>
   <div class="form-control relative">
-    <label class="label">
-      <span class="label-text font-medium">{{ label }}</span>
-    </label>
-    
     <!-- Input field -->
     <input
       ref="inputRef"
@@ -34,7 +30,6 @@
         class="px-4 py-2 hover:bg-base-200 cursor-pointer"
       >
         <div class="font-medium">{{ language.name }}</div>
-        <div class="text-sm text-base-content/60">{{ language.code.toUpperCase() }}</div>
       </div>
     </div>
     
@@ -59,7 +54,6 @@ import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepos
 interface Props {
   modelValue?: string
   repository: LanguageRepository
-  label?: string
   placeholder?: string
 }
 

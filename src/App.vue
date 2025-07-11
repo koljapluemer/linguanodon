@@ -5,6 +5,7 @@
       <router-link :to="{ name: 'tasks' }">Tasks</router-link>
       <router-link :to="{ name: 'units' }">Words & Sentences</router-link>
       <router-link :to="{ name: 'remote-sets' }">Remote Sets</router-link>
+      <router-link :to="{ name: 'manage-languages' }">Languages</router-link>
     </nav>
   </header>
   <main class="container mx-auto">

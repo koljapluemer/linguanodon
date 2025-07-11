@@ -18,6 +18,15 @@ export function mockLanguageRepository(): LanguageRepository {
     { code: 'pt', name: 'Portuguese', custom: false }
   ]
 
+  // Mock user language lists
+  let userNativeLanguages: Language[] = [
+    { code: 'en', name: 'English', custom: false }
+  ]
+  let userTargetLanguages: Language[] = [
+    { code: 'es', name: 'Spanish', custom: false },
+    { code: 'fr', name: 'French', custom: false }
+  ]
+
   return {
     /**
      * Returns all mock languages.
@@ -36,6 +45,52 @@ export function mockLanguageRepository(): LanguageRepository {
      */
     async getTargetLanguages() {
       return Promise.resolve(mockLanguages.filter(lang => lang.code !== 'en'))
+    },
+    /**
+     * Returns user's native languages.
+     */
+    async getUserNativeLanguages() {
+      return Promise.resolve([...userNativeLanguages])
+    },
+    /**
+     * Returns user's target languages.
+     */
+    async getUserTargetLanguages() {
+      return Promise.resolve([...userTargetLanguages])
+    },
+    /**
+     * Adds a language to user's native languages.
+     */
+    async addUserNativeLanguage(languageCode: string) {
+      const language = mockLanguages.find(lang => lang.code === languageCode)
+      if (language && !userNativeLanguages.find(lang => lang.code === languageCode)) {
+        userNativeLanguages.push(language)
+      }
+      return Promise.resolve()
+    },
+    /**
+     * Adds a language to user's target languages.
+     */
+    async addUserTargetLanguage(languageCode: string) {
+      const language = mockLanguages.find(lang => lang.code === languageCode)
+      if (language && !userTargetLanguages.find(lang => lang.code === languageCode)) {
+        userTargetLanguages.push(language)
+      }
+      return Promise.resolve()
+    },
+    /**
+     * Removes a language from user's native languages.
+     */
+    async removeUserNativeLanguage(languageCode: string) {
+      userNativeLanguages = userNativeLanguages.filter(lang => lang.code !== languageCode)
+      return Promise.resolve()
+    },
+    /**
+     * Removes a language from user's target languages.
+     */
+    async removeUserTargetLanguage(languageCode: string) {
+      userTargetLanguages = userTargetLanguages.filter(lang => lang.code !== languageCode)
+      return Promise.resolve()
     }
   }
 }
