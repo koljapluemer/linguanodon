@@ -53,6 +53,16 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
          */
         async getAllUnitsOfMeaningByIdentificationList(identificationList: UnitOfMeaningIdentification[]) {
             return Promise.resolve(dataSource.filter(u => identificationList.some(id => id.language === u.language && id.content === u.content)));
+        },
+        /**
+         * Adds a translation to a unit if not already present.
+         */
+        async addTranslationToUnit(unit, translation) {
+            const found = dataSource.find(u => u.language === unit.language && u.content === unit.content);
+            if (found && !found.translations.some(t => t.language === translation.language && t.content === translation.content)) {
+                found.translations.push(translation);
+            }
+            return Promise.resolve();
         }
     };
 }

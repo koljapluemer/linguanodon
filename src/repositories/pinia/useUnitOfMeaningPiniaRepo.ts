@@ -111,5 +111,16 @@ export const piniaUnitOfMeaningRepository: UnitOfMeaningRepository = {
    */
   async getAllUnitsOfMeaningByIdentificationList(identificationList) {
     return Promise.resolve(useUnitOfMeaningStore().getAllUnitsOfMeaningByIdentificationList(identificationList))
+  },
+  /**
+   * Adds a translation to a unit if not already present.
+   */
+  async addTranslationToUnit(unit, translation) {
+    const store = useUnitOfMeaningStore()
+    const found = store.findUnitOfMeaning(unit.language, unit.content)
+    if (found && !found.translations.some(t => t.language === translation.language && t.content === translation.content)) {
+      found.translations.push(translation)
+    }
+    return Promise.resolve()
   }
 }

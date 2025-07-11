@@ -76,6 +76,8 @@ export default defineConfig([
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: "module",
+        project: './tsconfig.app.json',
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
@@ -85,6 +87,8 @@ export default defineConfig([
     },
     rules: {
       ...tseslint.configs.recommended.rules,
+      ...tseslint.configs.recommendedTypeChecked.rules,
+      ...tseslint.configs.strictTypeChecked.rules,
       'import/no-unresolved': 'error',
       'jsdoc/require-jsdoc': ["error", {
         require: {

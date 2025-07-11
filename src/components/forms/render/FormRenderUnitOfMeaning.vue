@@ -38,19 +38,18 @@
       ></textarea>
     </div>
 
-    <!-- Translations -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-medium">Translations</span>
-        <span class="label-text-alt">Format: language:content (one per line)</span>
-      </label>
-      <textarea
-        :value="unit.translations.map(t => `${t.language}:${t.content}`).join('\n')"
-        @input="updateTranslations(($event.target as HTMLTextAreaElement).value)"
-        class="textarea textarea-bordered w-full"
-        rows="3"
-        placeholder="en:hello&#10;es:hola"
-      ></textarea>
+    <!-- Translations (only show if showTranslations is true) -->
+    <div v-if="showTranslations" class="form-control">
+      <FormRenderManageTranslations
+        :translations="unit.translations"
+        :current-unit="unit"
+        :repository="repository"
+        :language-repository="languageRepository"
+        @disconnect="handleDisconnectTranslation"
+        @delete="handleDeleteTranslation"
+        @connect-translation="handleConnectTranslation"
+        @add-new-translation="handleAddNewTranslation"
+      />
     </div>
 
     <!-- See Also -->
@@ -163,19 +162,30 @@
 
 <script setup lang="ts">
 import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
-import type { UnitOfMeaning, Credit } from '@/entities/UnitOfMeaning'
+import FormRenderManageTranslations from '@/components/forms/render/FormRenderManageTranslations.vue'
+import type { UnitOfMeaning, Credit, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
+import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 
 interface Props {
   unit: UnitOfMeaning
   languageRepository: LanguageRepository
+  repository: UnitOfMeaningRepository
+  showTranslations?: boolean
 }
 
 interface Emits {
   (e: 'update', unit: UnitOfMeaning): void
+  (e: 'disconnect-translation', translation: UnitOfMeaningIdentification): void
+  (e: 'delete-translation', translation: UnitOfMeaningIdentification): void
+  (e: 'connect-translation', unit: UnitOfMeaning): void
+  (e: 'add-new-translation', unit: UnitOfMeaning): void
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  showTranslations: true
+})
+
 const emit = defineEmits<Emits>()
 
 /**
@@ -183,19 +193,6 @@ const emit = defineEmits<Emits>()
  */
 function updateField(field: keyof UnitOfMeaning, value: string) {
   const updatedUnit = { ...props.unit, [field]: value }
-  emit('update', updatedUnit)
-}
-
-/**
- * Update translations from textarea (one per line)
- */
-function updateTranslations(value: string) {
-  const translationStrings = value.split('\n').filter(line => line.trim() !== '')
-  const translations = translationStrings.map(line => {
-    const [language, content] = line.split(':', 2)
-    return { language: language?.trim() || '', content: content?.trim() || '' }
-  }).filter(t => t.language && t.content)
-  const updatedUnit = { ...props.unit, translations }
   emit('update', updatedUnit)
 }
 
@@ -245,5 +242,33 @@ function removeCredit(creditIndex: number) {
   const updatedCredits = props.unit.credits.filter((_: Credit, index: number) => index !== creditIndex)
   const updatedUnit = { ...props.unit, credits: updatedCredits }
   emit('update', updatedUnit)
+}
+
+/**
+ * Handle disconnect translation from manage translations component
+ */
+function handleDisconnectTranslation(translation: UnitOfMeaningIdentification) {
+  emit('disconnect-translation', translation)
+}
+
+/**
+ * Handle delete translation from manage translations component
+ */
+function handleDeleteTranslation(translation: UnitOfMeaningIdentification) {
+  emit('delete-translation', translation)
+}
+
+/**
+ * Handle connect translation from manage translations component
+ */
+function handleConnectTranslation(unit: UnitOfMeaning) {
+  emit('connect-translation', unit)
+}
+
+/**
+ * Handle add new translation from manage translations component
+ */
+function handleAddNewTranslation(unit: UnitOfMeaning) {
+  emit('add-new-translation', unit)
 }
 </script>

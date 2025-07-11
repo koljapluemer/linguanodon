@@ -7,4 +7,5 @@ export interface UnitOfMeaningRepository {
     getAllUnitsOfMeaning(): Promise<UnitOfMeaning[]>
     getAllUnitsOfMeaningByLanguage(language:string): Promise<UnitOfMeaning[]>
     getAllUnitsOfMeaningByIdentificationList(identificationList:UnitOfMeaningIdentification[]): Promise<UnitOfMeaning[]>
+    addTranslationToUnit(unit: UnitOfMeaning, translation: UnitOfMeaningIdentification): Promise<void>
 }
