@@ -19,16 +19,48 @@
         <div class="card-body">
           <div class="flex justify-between items-center mb-4">
             <h2 class="card-title">Generated Exercises</h2>
-            <button 
-              @click="generateExercisesFromUnit"
-              class="btn btn-primary btn-sm"
-              :disabled="!canGenerateExercises"
-            >
-              Generate
-            </button>
+            <div class="flex gap-2">
+              <!-- Language Selector -->
+              <FormWidgetUserLanguageSelect
+                v-model="selectedLanguage"
+                language-type="target"
+                label=""
+                placeholder="Select language..."
+                class="w-48"
+              />
+              
+              <!-- Generate Clozes Button -->
+              <button 
+                @click="generateClozesForUnitAndLanguage"
+                class="btn btn-primary btn-sm"
+                :disabled="!canGenerateClozes"
+                title="Generate cloze exercises for current unit and selected language"
+              >
+                Generate Clozes
+              </button>
+              
+              <!-- Original Generate Button -->
+              <button 
+                @click="generateExercisesFromUnit"
+                class="btn btn-secondary btn-sm"
+                :disabled="!canGenerateExercises"
+              >
+                Generate All
+              </button>
+            </div>
           </div>
           
-          <div v-if="exercises.length === 0" class="text-center py-8">
+          <!-- Cloze Generation Result -->
+          <div v-if="clozeResult" class="mb-4">
+            <div v-if="clozeResult === 'no-translations'" class="alert alert-warning">
+              <span>This unit has no translations in the selected language</span>
+            </div>
+            <div v-else class="alert alert-info">
+              <span>Generated {{ clozeResult.length }} cloze exercises</span>
+            </div>
+          </div>
+          
+          <div v-if="exercises.length === 0 && !clozeResult" class="text-center py-8">
             <div class="">
               <p>No exercises generated yet.</p>
               <p class="text-sm mt-2">Fill in the unit of meaning and click "Generate" to see exercises.</p>
@@ -74,7 +106,9 @@
 <script setup lang="ts">
 import { ref, computed, provide } from 'vue'
 import FormControlUnitOfMeaning from '@/components/forms/control/FormControlUnitOfMeaning.vue'
+import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
 import { generateExercises } from '@/utils/generateExercises'
+import { generateClozesForUnitAndLanguage as generateClozes } from '@/utils/exercise/generate/generateClozesForUnitAndLanguage'
 import { mockUnitOfMeaningRepo } from '@/repositories/mocks/useRepoMockUnitsOfMeaning'
 import { mockLanguageRepository } from '@/repositories/mocks/useRepoMockLanguages'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
@@ -95,6 +129,8 @@ provide(exerciseRepositoryKey, exerciseRepository)
 // Get the demo unit from the repository
 const currentUnit = ref<UnitOfMeaning | null>(null)
 const exercises = ref<ExerciseFlashcard[]>([])
+const selectedLanguage = ref<string>('')
+const clozeResult = ref<ExerciseFlashcard[] | 'no-translations' | null>(null)
 
 /**
  * Initialize with demo data from repository
@@ -118,10 +154,37 @@ const canGenerateExercises = computed(() =>
 )
 
 /**
+ * Check if we can generate clozes (unit has content and language is selected)
+ */
+const canGenerateClozes = computed(() => 
+  currentUnit.value?.content?.trim() !== '' && 
+  selectedLanguage.value !== ''
+)
+
+/**
  * Handle unit updates from the form
  */
 function handleUnitUpdate(unit: UnitOfMeaning) {
   currentUnit.value = unit
+  // Clear previous cloze results when unit changes
+  clozeResult.value = null
+}
+
+/**
+ * Generate clozes for the current unit and selected language
+ */
+function generateClozesForUnitAndLanguage() {
+  if (!canGenerateClozes.value || !currentUnit.value) return
+  
+  const clozes = generateClozes(currentUnit.value, selectedLanguage.value)
+  
+  if (clozes.length === 0) {
+    clozeResult.value = 'no-translations'
+  } else {
+    clozeResult.value = clozes
+    // Replace the exercises display with the cloze results
+    exercises.value = clozes
+  }
 }
 
 /**
@@ -135,6 +198,8 @@ async function generateExercisesFromUnit() {
     const units = await unitRepository.getAllUnitsOfMeaning()
     
     exercises.value = await generateExercises(units, exerciseRepository)
+    // Clear cloze result when generating all exercises
+    clozeResult.value = null
   } catch (error) {
     console.error('Error generating exercises:', error)
     exercises.value = []

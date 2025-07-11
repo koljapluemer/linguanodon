@@ -219,11 +219,16 @@ export async function generateExercises(units: UnitOfMeaning[], exerciseRepo: Ex
     }
   })
   
-  // Get existing exercises from store
+  // Get existing exercises from store and convert to ExerciseFlashcard[]
   const storeExercises = await exerciseRepo.getAllExercises()
+  const storeExerciseFlashcards: ExerciseFlashcard[] = storeExercises.map(exercise => ({
+    ...exercise,
+    front: '', // Empty for stored exercises
+    back: ''   // Empty for stored exercises
+  }))
   
   // Pick session exercises
-  return pickSessionExercises(allExercises, storeExercises)
+  return pickSessionExercises(allExercises, storeExerciseFlashcards)
 }
 
 /**
@@ -357,7 +362,12 @@ export async function generateExercisesForTask(
 
   // Get existing exercises from repository and select session exercises (handles due/new/not due logic)
   const storeExercises = await exerciseRepo.getAllExercises()
-  const sessionExercises = pickSessionExercises(selectedExercises, storeExercises)
+  const storeExerciseFlashcards: ExerciseFlashcard[] = storeExercises.map(exercise => ({
+    ...exercise,
+    front: '', // Empty for stored exercises
+    back: ''   // Empty for stored exercises
+  }))
+  const sessionExercises = pickSessionExercises(selectedExercises, storeExerciseFlashcards)
   console.debug('[generateExercisesForTask] Session exercises after pickSessionExercises:', sessionExercises.length, sessionExercises)
   return sessionExercises
 }
