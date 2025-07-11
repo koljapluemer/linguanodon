@@ -21,7 +21,7 @@
             <span class="label-text font-medium">How difficult was this task?</span>
           </label>
           <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-600">Very Difficult</span>
+            <span class="text-sm ">Very Difficult</span>
             <div class="flex gap-4">
               <label class="flex items-center gap-2">
                 <input 
@@ -74,7 +74,7 @@
                 <span class="text-sm">5</span>
               </label>
             </div>
-            <span class="text-sm text-gray-600">Very Easy</span>
+            <span class="text-sm ">Very Easy</span>
           </div>
         </div>
 
@@ -84,7 +84,7 @@
             <span class="label-text font-medium">How correct was your answer?</span>
           </label>
           <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-600">Not Correct at All</span>
+            <span class="text-sm ">Not Correct at All</span>
             <div class="flex gap-4">
               <label class="flex items-center gap-2">
                 <input 
@@ -137,7 +137,7 @@
                 <span class="text-sm">5</span>
               </label>
             </div>
-            <span class="text-sm text-gray-600">Entirely Correct</span>
+            <span class="text-sm ">Entirely Correct</span>
           </div>
         </div>
 

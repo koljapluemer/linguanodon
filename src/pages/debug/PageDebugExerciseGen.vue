@@ -29,14 +29,14 @@
           </div>
           
           <div v-if="exercises.length === 0" class="text-center py-8">
-            <div class="text-gray-500">
+            <div class="">
               <p>No exercises generated yet.</p>
               <p class="text-sm mt-2">Fill in the unit of meaning and click "Generate" to see exercises.</p>
             </div>
           </div>
           
           <div v-else class="space-y-4">
-            <div class="text-sm text-gray-600 mb-4">
+            <div class="text-sm  mb-4">
               Generated {{ exercises.length }} exercises
             </div>
             
@@ -48,18 +48,18 @@
               <div class="card-body p-4">
                 <div class="flex justify-between items-start mb-2">
                   <span class="badge badge-primary">Exercise {{ index + 1 }}</span>
-                  <span class="text-xs text-gray-500">{{ exercise.uid }}</span>
+                  <span class="text-xs ">{{ exercise.uid }}</span>
                 </div>
                 
                 <!-- Front side -->
                 <div class="mb-3">
-                  <div class="text-sm font-medium text-gray-600 mb-1">Front:</div>
+                  <div class="text-sm font-medium  mb-1">Front:</div>
                   <div class="p-3 bg-base-100 rounded border" v-html="exercise.front"></div>
                 </div>
                 
                 <!-- Back side -->
                 <div>
-                  <div class="text-sm font-medium text-gray-600 mb-1">Back:</div>
+                  <div class="text-sm font-medium  mb-1">Back:</div>
                   <div class="p-3 bg-base-100 rounded border" v-html="exercise.back"></div>
                 </div>
               </div>

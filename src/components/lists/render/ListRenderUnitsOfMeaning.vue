@@ -5,7 +5,6 @@
         <tr>
           <th>Content</th>
           <th>Language</th>
-          <th>Notes</th>
           <th>Translations</th>
         </tr>
       </thead>

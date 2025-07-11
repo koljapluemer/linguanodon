@@ -1,10 +1,18 @@
 <template>
   <tr>
     <td class="font-medium">{{ unit.content }}</td>
-    <td>{{ unit.language.toUpperCase() }}</td>
-    <td class="text-sm ">{{ unit.notes || '-' }}</td>
+    <td>{{ unit.language }}</td>
     <td class="text-sm ">
-      {{ unit.translations.length > 0 ? unit.translations.map(t => `${t.language}:${t.content}`).join(', ') : '-' }}
+      <div v-if="unit.translations.length > 0" class="flex flex-wrap gap-1">
+        <span
+          v-for="t in unit.translations"
+          :key="t.language + '-' + t.content"
+          class="bg-base-300 text-xs rounded px-2 py-1 min-w-0 break-words whitespace-pre-line text-left items-start"
+        >
+          {{ t.content }}
+        </span>
+      </div>
+      <span v-else>-</span>
     </td>
   </tr>
 </template>
