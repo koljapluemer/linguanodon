@@ -42,7 +42,6 @@
 import { ref, computed, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
-import { generateExercisesForTask } from '@/utils/generateExercises'
 import PracticeTaskView from './PracticeTaskView.vue'
 import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
 import type { TaskAttempt } from '@/entities/Task'
@@ -112,7 +111,7 @@ async function initializeExercises() {
   }
 
   try {
-    const generatedExercises = await generateExercisesForTask(task.value, unitRepository, exerciseRepository)
+    const generatedExercises: ExerciseFlashcard[] = []
     exercises.value = generatedExercises
   } catch (err) {
     error.value = 'Failed to generate exercises'

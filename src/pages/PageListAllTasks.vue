@@ -8,9 +8,9 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import ListControllAllTasks from '@/components/lists/control/ListControllAllTasks.vue'
-import { piniaTaskRepository } from '@/repositories/implementations/pinia/useRepoPiniaTasks'
+import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoDexieTasks'
 import { taskRepositoryKey } from '@/types/injectionKeys'
 
 // Provide the task repository to child components
-provide(taskRepositoryKey, piniaTaskRepository)
+provide(taskRepositoryKey, useRepoDexieTasks())
 </script> 

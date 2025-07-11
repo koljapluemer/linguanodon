@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import PageDebugExerciseData from '@/pages/debug/PageDebugExerciseData.vue'
-import PageDebugExerciseGen from '@/pages/debug/PageDebugExerciseGen.vue'
 import PageRemoteListAllSets from '@/pages/PageRemoteListAllSets.vue'
 import PageListAllUnitsOfMeaning from '@/pages/PageListAllUnitsOfMeaning.vue'
 import PageListAllTasks from '@/pages/PageListAllTasks.vue'
@@ -49,17 +47,6 @@ const routes: RouteRecordRaw[] = [
     component: PageManageUserLanguages
   },
 
-  // DEBUG ROUTES
-  {
-    path: '/debug/exercise-data',
-    name: 'debug-exercise-data',
-    component: PageDebugExerciseData
-  },
-  {
-    path: '/debug/exercise-gen',
-    name: 'debug-exercise-gen',
-    component: PageDebugExerciseGen
-  }
 ]
 
 const router = createRouter({

@@ -12,9 +12,9 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import ListControllAllUnitsOfMeaning from '@/components/lists/control/ListControllAllUnitsOfMeaning.vue'
-import { piniaUnitOfMeaningRepository } from '@/repositories/implementations/pinia/useRepoPiniaUnitsOfMeaning'
+import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
 import { unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
 // Provide the unit of meaning repository to child components
-provide(unitOfMeaningRepositoryKey, piniaUnitOfMeaningRepository)
+provide(unitOfMeaningRepositoryKey, useRepoDexieUnitsOfMeaning())
 </script> 

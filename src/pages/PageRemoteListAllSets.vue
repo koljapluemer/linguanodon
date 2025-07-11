@@ -8,13 +8,13 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import ListControllRemoteSets from '@/components/lists/control/ListControllRemoteSets.vue'
-import { piniaSetRepository } from '@/repositories/implementations/pinia/useRepoPiniaSets'
-import { piniaTaskRepository } from '@/repositories/implementations/pinia/useRepoPiniaTasks'
-import { piniaUnitOfMeaningRepository } from '@/repositories/implementations/pinia/useRepoPiniaUnitsOfMeaning'
+import { useRepoDexieSets } from '@/repositories/implementations/dexie/useRepoDexieSets'
+import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoDexieTasks'
+import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
 import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
 // Provide repositories to child components
-provide(setRepositoryKey, piniaSetRepository)
-provide(taskRepositoryKey, piniaTaskRepository)
-provide(unitOfMeaningRepositoryKey, piniaUnitOfMeaningRepository)
+provide(setRepositoryKey, useRepoDexieSets())
+provide(taskRepositoryKey, useRepoDexieTasks())
+provide(unitOfMeaningRepositoryKey, useRepoDexieUnitsOfMeaning())
 </script>

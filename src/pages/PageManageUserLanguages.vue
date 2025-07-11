@@ -30,12 +30,12 @@
 import { ref, onMounted, provide } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import FormControlUserLanguages from '@/components/forms/control/FormControlUserLanguages.vue'
-import { piniaLanguageRepository } from '@/repositories/implementations/pinia/useRepoPiniaLanguages'
+import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'
 import { languageRepositoryKey } from '@/types/injectionKeys'
 import type { Language } from '@/entities/Language'
 
 // Provide the language repository to child components
-provide(languageRepositoryKey, piniaLanguageRepository)
+provide(languageRepositoryKey, useRepoDexieLanguages())
 
 const nativeLanguages = ref<Language[]>([])
 const targetLanguages = ref<Language[]>([])
@@ -45,8 +45,9 @@ const targetLanguages = ref<Language[]>([])
  */
 async function loadUserLanguages() {
   try {
-    nativeLanguages.value = await piniaLanguageRepository.getUserNativeLanguages()
-    targetLanguages.value = await piniaLanguageRepository.getUserTargetLanguages()
+    const languageRepo = useRepoDexieLanguages()
+    nativeLanguages.value = await languageRepo.getUserNativeLanguages()
+    targetLanguages.value = await languageRepo.getUserTargetLanguages()
   } catch (error) {
     console.error('Error loading user languages:', error)
   }
