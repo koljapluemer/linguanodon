@@ -3,12 +3,75 @@
  */
 import type { UnitOfMeaning, UnitOfMeaningIdentification } from "@/entities/UnitOfMeaning";
 import type { UnitOfMeaningRepository } from "@/repositories/interfaces/UnitOfMeaningRepository";
+import { createEmptyCard } from 'ts-fsrs';
 
 /**
  * Use for dependency injection in tests or development to avoid real persistence.
  */
 export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
-    const dataSource: UnitOfMeaning[] = [];
+    const dataSource: UnitOfMeaning[] = [
+        // Demo English unit with translations
+        {
+            language: 'en',
+            content: 'Hello world',
+            notes: 'A simple greeting',
+            translations: [
+                { language: 'es', content: 'hola mundo' },
+                { language: 'ar', content: 'مرحبا بالعالم' }
+            ],
+            seeAlso: [],
+            credits: [],
+            card: createEmptyCard()
+        },
+        // Demo Spanish translation unit
+        {
+            language: 'es',
+            content: 'hola mundo',
+            notes: 'Un saludo simple',
+            translations: [
+                { language: 'en', content: 'Hello world' }
+            ],
+            seeAlso: [],
+            credits: [],
+            card: createEmptyCard()
+        },
+        // Demo Arabic translation unit
+        {
+            language: 'ar',
+            content: 'مرحبا بالعالم',
+            notes: 'تحية بسيطة',
+            translations: [
+                { language: 'en', content: 'Hello world' }
+            ],
+            seeAlso: [],
+            credits: [],
+            card: createEmptyCard()
+        },
+        // Demo French unit
+        {
+            language: 'fr',
+            content: 'Bonjour le monde',
+            notes: 'Une salutation simple',
+            translations: [
+                { language: 'en', content: 'Hello world' }
+            ],
+            seeAlso: [],
+            credits: [],
+            card: createEmptyCard()
+        },
+        // Demo German unit
+        {
+            language: 'de',
+            content: 'Hallo Welt',
+            notes: 'Eine einfache Begrüßung',
+            translations: [
+                { language: 'en', content: 'Hello world' }
+            ],
+            seeAlso: [],
+            credits: [],
+            card: createEmptyCard()
+        }
+    ];
 
     return {
         /**

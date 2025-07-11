@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { createEmptyCard } from 'ts-fsrs'
 import FormRenderUnitOfMeaning from '@/components/forms/render/FormRenderUnitOfMeaning.vue'
 import { makeTwoUnitsOfMeaningsTranslationsOfEachOther } from '@/utils/unitOfMeaning/makeTwoUnitsOfMeaningsTranslationsOfEachOther'
@@ -36,6 +36,23 @@ const unit = ref<UnitOfMeaning>({
   credits: props.initialUnit?.credits || [],
   card: props.initialUnit?.card || createEmptyCard()
 })
+
+/**
+ * Watch for changes in initialUnit prop and update the form
+ */
+watch(() => props.initialUnit, (newInitialUnit) => {
+  if (newInitialUnit) {
+    unit.value = {
+      language: newInitialUnit.language || 'en',
+      content: newInitialUnit.content || '',
+      notes: newInitialUnit.notes || '',
+      translations: newInitialUnit.translations || [],
+      seeAlso: newInitialUnit.seeAlso || [],
+      credits: newInitialUnit.credits || [],
+      card: newInitialUnit.card || createEmptyCard()
+    }
+  }
+}, { immediate: true })
 
 /**
  * Handle updates from the render component
@@ -103,6 +120,7 @@ async function handleDisconnectTranslation(translation: { language: string; cont
  */
 async function handleDeleteTranslation(translation: { language: string; content: string }) {
   const translationUnit = await props.repository.findUnitOfMeaning(translation.language, translation.content)
+  
   if (translationUnit) {
     // Remove current unit from the translation unit's translations before deleting
     const updatedTranslationUnit = {
@@ -116,12 +134,16 @@ async function handleDeleteTranslation(translation: { language: string; content:
     // Now delete the translation unit
     await props.repository.deleteUnitOfMeaning(translationUnit)
     
-    // Remove from current unit's translations
-    unit.value = {
+    // Remove from current unit's translations and save to repository
+    const updatedCurrentUnit = {
       ...unit.value,
       translations: unit.value.translations.filter(t => !(t.language === translation.language && t.content === translation.content))
     }
-    emit('update', unit.value)
+    await props.repository.addUnitOfMeaning(updatedCurrentUnit)
+    
+    // Update local state
+    unit.value = updatedCurrentUnit
+    emit('update', updatedCurrentUnit)
   }
 }
 </script>

@@ -1,9 +1,9 @@
-import type { ExerciseFlashcard } from "@/entities/ExerciseFlashcard"
+import type { Exercise } from "@/entities/Exercise"
 
 export interface ExerciseRepository {
-    addExercise(exercise: ExerciseFlashcard): Promise<void>
+    addExercise(exercise: Exercise): Promise<void>
     deleteExercise(uid: string): Promise<void>
-    findExercise(uid: string): Promise<ExerciseFlashcard | null>
-    getAllExercises(): Promise<ExerciseFlashcard[]>
-    updateExercise(exercise: ExerciseFlashcard): Promise<void>
+    findExercise(uid: string): Promise<Exercise | null>
+    getAllExercises(): Promise<Exercise[]>
+    updateExercise(exercise: Exercise): Promise<void>
 }

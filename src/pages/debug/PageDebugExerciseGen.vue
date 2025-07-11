@@ -8,8 +8,8 @@
         <div class="card-body">
           <h2 class="card-title">Edit Unit of Meaning</h2>
           <FormControlUnitOfMeaning
-            :initial-unit="defaultUnit"
-            :repository="mockUnitOfMeaningRepo()"
+            :initial-unit="currentUnit || undefined"
+            :repository="unitRepository"
             :language-repository="mockLanguageRepository()"
             @update="handleUnitUpdate"
           />
@@ -75,43 +75,41 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { createEmptyCard } from 'ts-fsrs'
 import FormControlUnitOfMeaning from '@/components/forms/control/FormControlUnitOfMeaning.vue'
 import { generateExercises } from '@/utils/generateExercises'
-import { mockUnitOfMeaningRepo } from '@/repositories/mocks/mockUnitOfMeaningRepo'
-import { mockLanguageRepository } from '@/repositories/mocks/mockLanguageRepository'
+import { mockUnitOfMeaningRepo } from '@/repositories/mocks/useRepoMockUnitsOfMeaning'
+import { mockLanguageRepository } from '@/repositories/mocks/useRepoMockLanguages'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
-import { mockExerciseRepository } from '@/repositories/mocks/mockExerciseRepository'
+import { mockExerciseRepository } from '@/repositories/mocks/useRepoMockExercises'
 
-/**
- * Default unit for testing
- */
-const defaultUnit: UnitOfMeaning = {
-  language: 'en',
-  content: 'Hello world',
-  notes: 'A simple greeting',
-  translations: [
-    { language: 'es', content: 'hola mundo' },
-    { language: 'ar', content: 'مرحبا بالعالم' }
-  ],
-  seeAlso: [],
-  credits: [],
-  card: createEmptyCard()
-}
+// Use the proper mock repositories
+const exerciseRepository = mockExerciseRepository()
+const unitRepository = mockUnitOfMeaningRepo()
 
-const currentUnit = ref<UnitOfMeaning>(defaultUnit)
+// Get the demo unit from the repository
+const currentUnit = ref<UnitOfMeaning | null>(null)
 const exercises = ref<ExerciseFlashcard[]>([])
 
-// Use the proper mock repository
-const exerciseRepository = mockExerciseRepository()
+/**
+ * Initialize with demo data from repository
+ */
+async function initializeDemoData() {
+  const demoUnit = await unitRepository.findUnitOfMeaning('en', 'Hello world')
+  if (demoUnit) {
+    currentUnit.value = demoUnit
+  }
+}
+
+// Initialize on component mount
+initializeDemoData()
 
 /**
  * Check if we can generate exercises (unit has content and translations)
  */
 const canGenerateExercises = computed(() => 
-  currentUnit.value.content.trim() !== '' && 
-  currentUnit.value.translations.length > 0
+  currentUnit.value?.content?.trim() !== '' && 
+  (currentUnit.value?.translations?.length ?? 0) > 0
 )
 
 /**
@@ -128,22 +126,8 @@ async function generateExercisesFromUnit() {
   if (!canGenerateExercises.value) return
   
   try {
-    // Create a mock array with just this unit and its translations
-    const units: UnitOfMeaning[] = [currentUnit.value]
-    
-    // Add translation units based on the translations array
-    currentUnit.value.translations.forEach(translationRef => {
-      const translationUnit: UnitOfMeaning = {
-        language: translationRef.language,
-        content: translationRef.content,
-        notes: '',
-        translations: [{ language: currentUnit.value.language, content: currentUnit.value.content }],
-        seeAlso: [],
-        credits: [],
-        card: createEmptyCard()
-      }
-      units.push(translationUnit)
-    })
+    // Get all units from the repository
+    const units = await unitRepository.getAllUnitsOfMeaning()
     
     exercises.value = await generateExercises(units, exerciseRepository)
   } catch (error) {

@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
+import type { Exercise } from '@/entities/Exercise'
 import type { ExerciseRepository } from '@/repositories/interfaces/ExerciseRepository'
 
 const useExerciseStore = defineStore('exercise', () => {
-  const exercises = ref<Record<string, ExerciseFlashcard>>({})
+  const exercises = ref<Record<string, Exercise>>({})
 
   /**
    * Adds an exercise to the store
    */
-  function addExercise(exercise: ExerciseFlashcard) {
+  function addExercise(exercise: Exercise) {
     exercises.value[exercise.uid] = exercise
   }
 
@@ -23,21 +23,21 @@ const useExerciseStore = defineStore('exercise', () => {
   /**
    * Finds an exercise by UID
    */
-  function findExercise(uid: string): ExerciseFlashcard | null {
+  function findExercise(uid: string): Exercise | null {
     return exercises.value[uid] || null
   }
 
   /**
    * Gets all exercises
    */
-  function getAllExercises(): ExerciseFlashcard[] {
+  function getAllExercises(): Exercise[] {
     return Object.values(exercises.value)
   }
 
   /**
    * Updates an existing exercise
    */
-  function updateExercise(exercise: ExerciseFlashcard) {
+  function updateExercise(exercise: Exercise) {
     exercises.value[exercise.uid] = exercise
   }
 
@@ -59,7 +59,7 @@ export const piniaExerciseRepository: ExerciseRepository = {
   /**
    * Adds an exercise to the store
    */
-  async addExercise(exercise: ExerciseFlashcard) {
+  async addExercise(exercise: Exercise) {
     useExerciseStore().addExercise(exercise)
     return Promise.resolve()
   },
@@ -85,7 +85,7 @@ export const piniaExerciseRepository: ExerciseRepository = {
   /**
    * Updates an existing exercise
    */
-  async updateExercise(exercise: ExerciseFlashcard) {
+  async updateExercise(exercise: Exercise) {
     useExerciseStore().updateExercise(exercise)
     return Promise.resolve()
   }
