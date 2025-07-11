@@ -20,25 +20,23 @@
     <!-- Language Management Form -->
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
-        <FormControlUserLanguages
-          :repository="languageRepository"
-          @update="handleLanguagesUpdate"
-        />
+        <FormControlUserLanguages @update="handleLanguagesUpdate" />
       </div>
     </div>
-
-
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import FormControlUserLanguages from '@/components/forms/control/FormControlUserLanguages.vue'
 import { piniaLanguageRepository } from '@/repositories/pinia/useRepoPiniaLanguages'
+import { languageRepositoryKey } from '@/types/injectionKeys'
 import type { Language } from '@/entities/Language'
 
-const languageRepository = piniaLanguageRepository
+// Provide the language repository to child components
+provide(languageRepositoryKey, piniaLanguageRepository)
+
 const nativeLanguages = ref<Language[]>([])
 const targetLanguages = ref<Language[]>([])
 
@@ -47,8 +45,8 @@ const targetLanguages = ref<Language[]>([])
  */
 async function loadUserLanguages() {
   try {
-    nativeLanguages.value = await languageRepository.getUserNativeLanguages()
-    targetLanguages.value = await languageRepository.getUserTargetLanguages()
+    nativeLanguages.value = await piniaLanguageRepository.getUserNativeLanguages()
+    targetLanguages.value = await piniaLanguageRepository.getUserTargetLanguages()
   } catch (error) {
     console.error('Error loading user languages:', error)
   }

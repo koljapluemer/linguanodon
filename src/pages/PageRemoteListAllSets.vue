@@ -11,12 +11,10 @@ import ListControllRemoteSets from '@/components/lists/control/ListControllRemot
 import { piniaSetRepository } from '@/repositories/pinia/useRepoPiniaSets'
 import { piniaTaskRepository } from '@/repositories/pinia/useRepoPiniaTasks'
 import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
-import type { SetRepository } from '@/repositories/interfaces/SetRepository'
-import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
-import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
 // Provide repositories to child components
-provide<SetRepository>('setRepository', piniaSetRepository)
-provide<TaskRepository>('taskRepository', piniaTaskRepository)
-provide<UnitOfMeaningRepository>('unitOfMeaningRepository', piniaUnitOfMeaningRepository)
+provide(setRepositoryKey, piniaSetRepository)
+provide(taskRepositoryKey, piniaTaskRepository)
+provide(unitOfMeaningRepositoryKey, piniaUnitOfMeaningRepository)
 </script>

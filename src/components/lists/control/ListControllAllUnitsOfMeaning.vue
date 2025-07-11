@@ -13,16 +13,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import ListRenderUnitsOfMeaning from '@/components/lists/render/ListRenderUnitsOfMeaning.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import { unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
-interface Props {
-  repository: UnitOfMeaningRepository
+// Inject repository using proper injection key
+const repository = inject(unitOfMeaningRepositoryKey, null)
+
+if (!repository) {
+  throw new Error('UnitOfMeaningRepository not provided in parent context')
 }
 
-const props = defineProps<Props>()
+// Type assertion after null check
+const typedRepository = repository as NonNullable<typeof repository>
 
 const units = ref<UnitOfMeaning[]>([])
 const loading = ref(true)
@@ -32,7 +36,7 @@ const loading = ref(true)
  */
 async function loadUnits() {
   try {
-    units.value = await props.repository.getAllUnitsOfMeaning()
+    units.value = await typedRepository.getAllUnitsOfMeaning()
   } catch (error) {
     console.error('Error loading units:', error)
     units.value = []

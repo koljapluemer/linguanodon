@@ -9,8 +9,6 @@
           <h2 class="card-title">Edit Unit of Meaning</h2>
           <FormControlUnitOfMeaning
             :initial-unit="currentUnit || undefined"
-            :repository="unitRepository"
-            :language-repository="mockLanguageRepository()"
             @update="handleUnitUpdate"
           />
         </div>
@@ -74,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, provide } from 'vue'
 import FormControlUnitOfMeaning from '@/components/forms/control/FormControlUnitOfMeaning.vue'
 import { generateExercises } from '@/utils/generateExercises'
 import { mockUnitOfMeaningRepo } from '@/repositories/mocks/useRepoMockUnitsOfMeaning'
@@ -82,10 +80,17 @@ import { mockLanguageRepository } from '@/repositories/mocks/useRepoMockLanguage
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import { mockExerciseRepository } from '@/repositories/mocks/useRepoMockExercises'
+import { unitOfMeaningRepositoryKey, languageRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
 
 // Use the proper mock repositories
 const exerciseRepository = mockExerciseRepository()
 const unitRepository = mockUnitOfMeaningRepo()
+const languageRepository = mockLanguageRepository()
+
+// Provide repositories to child components
+provide(unitOfMeaningRepositoryKey, unitRepository)
+provide(languageRepositoryKey, languageRepository)
+provide(exerciseRepositoryKey, exerciseRepository)
 
 // Get the demo unit from the repository
 const currentUnit = ref<UnitOfMeaning | null>(null)

@@ -5,11 +5,16 @@
       <p class="">View all downloaded words and sentences.</p>
     </div>
     
-    <ListControllAllUnitsOfMeaning :repository="piniaUnitOfMeaningRepository" />
+    <ListControllAllUnitsOfMeaning />
   </div>
 </template>
 
 <script setup lang="ts">
+import { provide } from 'vue'
 import ListControllAllUnitsOfMeaning from '@/components/lists/control/ListControllAllUnitsOfMeaning.vue'
 import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useRepoPiniaUnitsOfMeaning'
+import { unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
+
+// Provide the unit of meaning repository to child components
+provide(unitOfMeaningRepositoryKey, piniaUnitOfMeaningRepository)
 </script> 

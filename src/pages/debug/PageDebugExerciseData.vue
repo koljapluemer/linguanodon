@@ -34,9 +34,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 import { piniaExerciseRepository } from '@/repositories/pinia/useRepoPiniaExercises'
+import { exerciseRepositoryKey } from '@/types/injectionKeys'
+
+// Provide the exercise repository to child components
+provide(exerciseRepositoryKey, piniaExerciseRepository)
 
 const exercises = ref<ExerciseFlashcard[]>([])
 
@@ -44,7 +48,13 @@ const exercises = ref<ExerciseFlashcard[]>([])
  * Loads all exercises from the repository for debug display
  */
 async function loadExercises() {
-  exercises.value = await piniaExerciseRepository.getAllExercises()
+  // Convert Exercise[] to ExerciseFlashcard[] by adding front/back properties
+  const exerciseData = await piniaExerciseRepository.getAllExercises()
+  exercises.value = exerciseData.map(exercise => ({
+    ...exercise,
+    front: `Exercise ${exercise.uid}`,
+    back: `Answer for ${exercise.uid}`
+  }))
 }
 
 onMounted(() => {
