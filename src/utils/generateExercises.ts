@@ -98,33 +98,31 @@ function generateClozesForPair(unit1: UnitOfMeaning, unit2: UnitOfMeaning): Exer
 function groupIntoPairs(units: UnitOfMeaning[]): UnitOfMeaning[][] {
   const pairs: UnitOfMeaning[][] = []
   const processed = new Set<string>()
-  
+
   units.forEach(unit => {
     const unitKey = `${unit.language}:${unit.content}`
     if (processed.has(unitKey)) return
-    
+
     // Find translation pair
     const pair = [unit]
     unit.translations.forEach(translationRef => {
-      const [translationLanguage, translationContent] = translationRef.split(':', 2)
-      if (translationLanguage && translationContent) {
-        const translation = units.find(u => 
-          u.language === translationLanguage && u.content === translationContent
-        )
-        if (translation && !processed.has(`${translation.language}:${translation.content}`)) {
-          pair.push(translation)
-          processed.add(`${translation.language}:${translation.content}`)
-        }
+      // translationRef is UnitOfMeaningIdentification
+      const translation = units.find(u => 
+        u.language === translationRef.language && u.content === translationRef.content
+      )
+      if (translation && !processed.has(`${translation.language}:${translation.content}`)) {
+        pair.push(translation)
+        processed.add(`${translation.language}:${translation.content}`)
       }
     })
-    
+
     if (pair.length === 2) {
       pairs.push(pair)
     }
-    
+
     processed.add(unitKey)
   })
-  
+
   return pairs
 }
 
@@ -222,17 +220,18 @@ export function generateExercises(units: UnitOfMeaning[]): ExerciseFlashcard[] {
  * Generates exercises for a specific task with weighted selection
  * 70% from primary units of meaning, 30% from regular units
  */
-export function generateExercisesForTask(
+export async function generateExercisesForTask(
   task: Task,
-  unitStore: ReturnType<typeof import('@/repositories/pinia/useUnitOfMeaningPiniaRepo').useUnitOfMeaningStore>
-): ExerciseFlashcard[] {
+  unitRepo: import('@/repositories/interfaces/UnitOfMeaningRepository').UnitOfMeaningRepository
+): Promise<ExerciseFlashcard[]> {
   // Get all units for this task (primary and regular)
   const allUnitPairs = [...task.primaryUnitsOfMeaning, ...task.unitsOfMeaning]
   console.debug('[generateExercisesForTask] Requested unit pairs:', allUnitPairs)
-  
-  const allUnits = allUnitPairs
-    .map(pair => unitStore.getUnitByLanguageAndContent(pair.language, pair.content))
-    .filter(Boolean) as UnitOfMeaning[]
+
+  // Fetch all units from the repository
+  const allUnits = (await Promise.all(
+    allUnitPairs.map(pair => unitRepo.findUnitOfMeaning(pair.language, pair.content))
+  )).filter(Boolean) as UnitOfMeaning[]
   console.debug('[generateExercisesForTask] Units returned:', allUnits)
 
   if (allUnits.length === 0) {
@@ -250,12 +249,31 @@ export function generateExercisesForTask(
       content: unit.content,
       translations: unit.translations
     })
+    // Helper: get translations of a unit by language from a list of units
+    /**
+     * Gets translations of a unit by language from a list of all units.
+     */
+    function getTranslationsByLanguage(unit: UnitOfMeaning, language: string, allUnits: UnitOfMeaning[]): UnitOfMeaning[] {
+      return unit.translations
+        .filter(ref => ref.language === language)
+        .map(ref => allUnits.find(u => u.language === ref.language && u.content === ref.content))
+        .filter((u): u is UnitOfMeaning => !!u)
+    }
+
+    // Helper: get native (English) translations
+    /**
+     * Gets native (English) translations of a unit from a list of all units.
+     */
+    function getNativeTranslations(unit: UnitOfMeaning, allUnits: UnitOfMeaning[]): UnitOfMeaning[] {
+      return getTranslationsByLanguage(unit, 'en', allUnits)
+    }
+
     // Find translations in the task language
-    const sameLanguageTranslations = unitStore.getTranslationsByLanguage(unit, task.language)
+    const sameLanguageTranslations = getTranslationsByLanguage(unit, task.language, allUnits)
     // Debug: show found same-language translations
     console.debug('[generateExercisesForTask]   sameLanguageTranslations:', sameLanguageTranslations.map(u => ({ language: u.language, content: u.content })))
     // Find native (English) translations
-    const nativeTranslations = unitStore.getNativeTranslations(unit)
+    const nativeTranslations = getNativeTranslations(unit, allUnits)
     // Debug: show found native translations
     console.debug('[generateExercisesForTask]   nativeTranslations:', nativeTranslations.map(u => ({ language: u.language, content: u.content })))
     // If unit has either same-language or native translations, generate clozes

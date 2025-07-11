@@ -44,6 +44,13 @@ const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
   }
 
   /**
+   * Returns all units.
+   */
+  function getAllUnitsOfMeaning(): UnitOfMeaning[] {
+    return unitsOfMeaning.value
+  }
+
+  /**
    * Returns all units matching any of the given identifications.
    */
   function getAllUnitsOfMeaningByIdentificationList(identificationList: UnitOfMeaningIdentification[]): UnitOfMeaning[] {
@@ -54,6 +61,7 @@ const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
     addUnitOfMeaning,
     deleteUnitOfMeaning,
     findUnitOfMeaning,
+    getAllUnitsOfMeaning,
     getAllUnitsOfMeaningByLanguage,
     getAllUnitsOfMeaningByIdentificationList
   }
@@ -85,6 +93,12 @@ export const piniaUnitOfMeaningRepository: UnitOfMeaningRepository = {
    */
   async findUnitOfMeaning(language, content) {
     return Promise.resolve(useUnitOfMeaningStore().findUnitOfMeaning(language, content))
+  },
+  /**
+   * Returns all units.
+   */
+  async getAllUnitsOfMeaning() {
+    return Promise.resolve(useUnitOfMeaningStore().getAllUnitsOfMeaning())
   },
   /**
    * Returns all units for a given language.

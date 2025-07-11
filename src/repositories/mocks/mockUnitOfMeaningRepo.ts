@@ -37,6 +37,12 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             return Promise.resolve(dataSource.find(u => u.language === language && u.content === content) || null);
         },
         /**
+         * Returns all units.
+         */
+        async getAllUnitsOfMeaning() {
+            return Promise.resolve([...dataSource]);
+        },
+        /**
          * Returns all units for a given language.
          */
         async getAllUnitsOfMeaningByLanguage(language: string) {

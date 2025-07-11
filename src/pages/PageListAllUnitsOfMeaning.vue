@@ -5,10 +5,11 @@
       <p class="">View all downloaded words and sentences.</p>
     </div>
     
-    <ListControllAllUnitsOfMeaning />
+    <ListControllAllUnitsOfMeaning :repository="piniaUnitOfMeaningRepository" />
   </div>
 </template>
 
 <script setup lang="ts">
 import ListControllAllUnitsOfMeaning from '@/components/lists/control/ListControllAllUnitsOfMeaning.vue'
+import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
 </script> 

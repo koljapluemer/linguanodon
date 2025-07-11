@@ -10,9 +10,11 @@ import { ref } from 'vue'
 import { createEmptyCard } from 'ts-fsrs'
 import FormRenderUnitOfMeaning from '@/components/forms/render/FormRenderUnitOfMeaning.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
+import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 
 interface Props {
   initialUnit?: Partial<UnitOfMeaning>
+  repository: UnitOfMeaningRepository
 }
 
 interface Emits {

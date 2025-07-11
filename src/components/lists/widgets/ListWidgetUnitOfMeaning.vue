@@ -4,7 +4,7 @@
     <td>{{ unit.language.toUpperCase() }}</td>
     <td class="text-sm ">{{ unit.notes || '-' }}</td>
     <td class="text-sm ">
-      {{ unit.translations.length > 0 ? unit.translations.join(', ') : '-' }}
+      {{ unit.translations.length > 0 ? unit.translations.map(t => `${t.language}:${t.content}`).join(', ') : '-' }}
     </td>
   </tr>
 </template>

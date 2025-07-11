@@ -2,11 +2,12 @@ import { createEmptyCard } from 'ts-fsrs'
 import { downloadSet, type RemoteSet, type RemoteTask, type RemoteUnitOfMeaning } from '@/utils/getRemoteSet'
 import { useSetStore } from '@/repositories/pinia/setStore'
 import { useTaskStore } from '@/repositories/pinia/taskStore'
-import { useUnitOfMeaningStore } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
+import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
+import { doesUnitOfMeaningExist } from '@/utils/unitOfMeaning/doesUnitOfMeaningExist'
 import type { Set } from '@/entities/Set'
 import type { Task } from '@/entities/Task'
-import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
+import type { UnitOfMeaning, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 
 /**
  * Converts a remote unit of meaning to local format with ts-fsrs card
@@ -20,12 +21,28 @@ function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMe
     sourceLink: credit.sourceLink || ''
   })) : []
 
+  // Ensure translations and seeAlso are UnitOfMeaningIdentification[]
+  const translations: UnitOfMeaningIdentification[] = (remoteUnit.translations || []).map(t => {
+    if (typeof t === 'string') {
+      const [language, content] = t.split(':', 2)
+      return { language: language?.trim() || '', content: content?.trim() || '' }
+    }
+    return t
+  })
+  const seeAlso: UnitOfMeaningIdentification[] = (remoteUnit.seeAlso || []).map(t => {
+    if (typeof t === 'string') {
+      const [language, content] = t.split(':', 2)
+      return { language: language?.trim() || '', content: content?.trim() || '' }
+    }
+    return t
+  })
+
   return {
     language: remoteUnit.language,
     content: remoteUnit.content,
     notes: remoteUnit.notes || '',
-    translations: remoteUnit.translations || [],
-    seeAlso: remoteUnit.seeAlso || [],
+    translations,
+    seeAlso,
     credits,
     card: createEmptyCard()
   }
@@ -77,7 +94,7 @@ function convertRemoteSetToLocalSet(remoteSet: RemoteSet): Set {
 export async function downloadAndPersistSet(filename: string, language: string) {
   const setStore = useSetStore()
   const taskStore = useTaskStore()
-  const unitStore = useUnitOfMeaningStore()
+  const unitStore = piniaUnitOfMeaningRepository
   const toastsStore = useToastsStore()
 
   try {
@@ -101,9 +118,10 @@ export async function downloadAndPersistSet(filename: string, language: string) 
     for (const task of remoteSet.tasks) {
       // Add primary units
       for (const unit of (task.primaryUnitsOfMeaning || [])) {
-        if (!unitStore.isUnitExists(unit.language, unit.content)) {
+        const exists = await doesUnitOfMeaningExist(unitStore, unit.language, unit.content)
+        if (!exists) {
           const localUnit = convertRemoteUnitToLocalUnit(unit)
-          unitStore.addUnit(localUnit)
+          await unitStore.addUnitOfMeaning(localUnit)
           newUnitsCount++
         } else {
           skippedUnitsCount++
@@ -113,9 +131,10 @@ export async function downloadAndPersistSet(filename: string, language: string) 
       // Add secondary units
       if (task.unitsOfMeaning) {
         for (const unit of task.unitsOfMeaning) {
-          if (!unitStore.isUnitExists(unit.language, unit.content)) {
+          const exists = await doesUnitOfMeaningExist(unitStore, unit.language, unit.content)
+          if (!exists) {
             const localUnit = convertRemoteUnitToLocalUnit(unit)
-            unitStore.addUnit(localUnit)
+            await unitStore.addUnitOfMeaning(localUnit)
             newUnitsCount++
           } else {
             skippedUnitsCount++

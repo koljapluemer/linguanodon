@@ -49,7 +49,7 @@
         <span class="label-text-alt">Format: language:content (one per line)</span>
       </label>
       <textarea
-        :value="unit.translations.join('\n')"
+        :value="unit.translations.map(t => `${t.language}:${t.content}`).join('\n')"
         @input="updateTranslations(($event.target as HTMLTextAreaElement).value)"
         class="textarea textarea-bordered w-full"
         rows="3"
@@ -64,7 +64,7 @@
         <span class="label-text-alt">Related units (language:content format)</span>
       </label>
       <textarea
-        :value="unit.seeAlso.join('\n')"
+        :value="unit.seeAlso.map(t => `${t.language}:${t.content}`).join('\n')"
         @input="updateSeeAlso(($event.target as HTMLTextAreaElement).value)"
         class="textarea textarea-bordered w-full"
         rows="2"
@@ -191,7 +191,11 @@ function updateField(field: keyof UnitOfMeaning, value: string) {
  * Update translations from textarea (one per line)
  */
 function updateTranslations(value: string) {
-  const translations = value.split('\n').filter(line => line.trim() !== '')
+  const translationStrings = value.split('\n').filter(line => line.trim() !== '')
+  const translations = translationStrings.map(line => {
+    const [language, content] = line.split(':', 2)
+    return { language: language?.trim() || '', content: content?.trim() || '' }
+  }).filter(t => t.language && t.content)
   const updatedUnit = { ...props.unit, translations }
   emit('update', updatedUnit)
 }
@@ -200,7 +204,11 @@ function updateTranslations(value: string) {
  * Update see also from textarea (one per line)
  */
 function updateSeeAlso(value: string) {
-  const seeAlso = value.split('\n').filter(line => line.trim() !== '')
+  const seeAlsoStrings = value.split('\n').filter(line => line.trim() !== '')
+  const seeAlso = seeAlsoStrings.map(line => {
+    const [language, content] = line.split(':', 2)
+    return { language: language?.trim() || '', content: content?.trim() || '' }
+  }).filter(t => t.language && t.content)
   const updatedUnit = { ...props.unit, seeAlso }
   emit('update', updatedUnit)
 }

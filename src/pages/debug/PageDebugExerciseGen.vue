@@ -9,6 +9,7 @@
           <h2 class="card-title">Edit Unit of Meaning</h2>
           <FormControlUnitOfMeaning
             :initial-unit="defaultUnit"
+            :repository="mockUnitOfMeaningRepo()"
             @update="handleUnitUpdate"
           />
         </div>
@@ -76,6 +77,7 @@ import { ref, computed } from 'vue'
 import { createEmptyCard } from 'ts-fsrs'
 import FormControlUnitOfMeaning from '@/components/forms/control/FormControlUnitOfMeaning.vue'
 import { generateExercises } from '@/utils/generateExercises'
+import { mockUnitOfMeaningRepo } from '@/repositories/mocks/mockUnitOfMeaningRepo'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/entities/ExerciseFlashcard'
 
@@ -86,7 +88,10 @@ const defaultUnit: UnitOfMeaning = {
   language: 'en',
   content: 'Hello world',
   notes: 'A simple greeting',
-  translations: ['es:hola mundo', 'ar:مرحبا بالعالم'],
+  translations: [
+    { language: 'es', content: 'hola mundo' },
+    { language: 'ar', content: 'مرحبا بالعالم' }
+  ],
   seeAlso: [],
   credits: [],
   card: createEmptyCard()
@@ -122,19 +127,16 @@ function generateExercisesFromUnit() {
     
     // Add translation units based on the translations array
     currentUnit.value.translations.forEach(translationRef => {
-      const [language, content] = translationRef.split(':', 2)
-      if (language && content) {
-        const translationUnit: UnitOfMeaning = {
-          language,
-          content,
-          notes: '',
-          translations: [`${currentUnit.value.language}:${currentUnit.value.content}`],
-          seeAlso: [],
-          credits: [],
-          card: createEmptyCard()
-        }
-        units.push(translationUnit)
+      const translationUnit: UnitOfMeaning = {
+        language: translationRef.language,
+        content: translationRef.content,
+        notes: '',
+        translations: [{ language: currentUnit.value.language, content: currentUnit.value.content }],
+        seeAlso: [],
+        credits: [],
+        card: createEmptyCard()
       }
+      units.push(translationUnit)
     })
     
     exercises.value = generateExercises(units)

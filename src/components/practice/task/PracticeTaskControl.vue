@@ -42,7 +42,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTaskStore } from '@/repositories/pinia/taskStore'
-import { useUnitOfMeaningStore } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
+import { piniaUnitOfMeaningRepository } from '@/repositories/pinia/useUnitOfMeaningPiniaRepo'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import { generateExercisesForTask } from '@/utils/generateExercises'
 import PracticeTaskView from './PracticeTaskView.vue'
@@ -57,7 +57,7 @@ const props = defineProps<Props>()
 
 const router = useRouter()
 const taskStore = useTaskStore()
-const unitStore = useUnitOfMeaningStore()
+const unitStore = piniaUnitOfMeaningRepository
 const toastsStore = useToastsStore()
 
 const exercises = ref<ExerciseFlashcard[]>([])
