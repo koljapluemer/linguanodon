@@ -12,7 +12,7 @@
       <tbody>
         <ListWidgetUnitOfMeaning
           v-for="unit in units"
-          :key="unit.uid"
+          :key="unit.content + unit.language"
           :unit="unit"
         />
       </tbody>

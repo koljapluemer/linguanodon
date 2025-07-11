@@ -54,17 +54,12 @@
 
     <!-- See Also -->
     <div class="form-control">
-      <label class="label">
-        <span class="label-text font-medium">See Also</span>
-        <span class="label-text-alt">Related units (language:content format)</span>
-      </label>
-      <textarea
-        :value="unit.seeAlso.map(t => `${t.language}:${t.content}`).join('\n')"
-        @input="updateSeeAlso(($event.target as HTMLTextAreaElement).value)"
-        class="textarea textarea-bordered w-full"
-        rows="2"
-        placeholder="en:related word&#10;ar:كلمة ذات صلة"
-      ></textarea>
+      <FormRenderManageSeeAlso
+        :see-also="unit.seeAlso"
+        :current-unit="unit"
+        @disconnect="handleDisconnectSeeAlso"
+        @connect-see-also="handleConnectSeeAlso"
+      />
     </div>
 
     <!-- Credits -->
@@ -164,6 +159,7 @@
 import { inject } from 'vue'
 import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
 import FormRenderManageTranslations from '@/components/forms/render/FormRenderManageTranslations.vue'
+import FormRenderManageSeeAlso from '@/components/forms/render/FormRenderManageSeeAlso.vue'
 import type { UnitOfMeaning, Credit, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import { languageRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
@@ -178,6 +174,8 @@ interface Emits {
   (e: 'delete-translation', translation: UnitOfMeaningIdentification): void
   (e: 'connect-translation', unit: UnitOfMeaning): void
   (e: 'add-new-translation', unit: UnitOfMeaning): void
+  (e: 'disconnect-see-also', item: UnitOfMeaningIdentification): void
+  (e: 'connect-see-also', unit: UnitOfMeaning): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -203,19 +201,6 @@ if (!repository) {
  */
 function updateField(field: keyof UnitOfMeaning, value: string) {
   const updatedUnit = { ...props.unit, [field]: value }
-  emit('update', updatedUnit)
-}
-
-/**
- * Update see also from textarea (one per line)
- */
-function updateSeeAlso(value: string) {
-  const seeAlsoStrings = value.split('\n').filter(line => line.trim() !== '')
-  const seeAlso = seeAlsoStrings.map(line => {
-    const [language, content] = line.split(':', 2)
-    return { language: language?.trim() || '', content: content?.trim() || '' }
-  }).filter(t => t.language && t.content)
-  const updatedUnit = { ...props.unit, seeAlso }
   emit('update', updatedUnit)
 }
 
@@ -280,5 +265,19 @@ function handleConnectTranslation(unit: UnitOfMeaning) {
  */
 function handleAddNewTranslation(unit: UnitOfMeaning) {
   emit('add-new-translation', unit)
+}
+
+/**
+ * Handle disconnect see also from manage see also component
+ */
+function handleDisconnectSeeAlso(item: UnitOfMeaningIdentification) {
+  emit('disconnect-see-also', item)
+}
+
+/**
+ * Handle connect see also from manage see also component
+ */
+function handleConnectSeeAlso(unit: UnitOfMeaning) {
+  emit('connect-see-also', unit)
 }
 </script>

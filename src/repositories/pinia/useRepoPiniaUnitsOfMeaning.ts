@@ -57,13 +57,46 @@ const useUnitOfMeaningStore = defineStore('unitOfMeaning', () => {
     return unitsOfMeaning.value.filter(u => identificationList.some(id => id.language === u.language && id.content === u.content))
   }
 
+  /**
+   * Adds a translation to a unit if not already present.
+   */
+  function addTranslationToUnit(unit: UnitOfMeaning, translation: UnitOfMeaningIdentification) {
+    const found = unitsOfMeaning.value.find(u => u.language === unit.language && u.content === unit.content)
+    if (found && !found.translations.some(t => t.language === translation.language && t.content === translation.content)) {
+      found.translations.push(translation)
+    }
+  }
+
+  /**
+   * Adds a seeAlso reference to a unit if not already present.
+   */
+  function addSeeAlsoToUnit(unit: UnitOfMeaning, seeAlso: UnitOfMeaningIdentification) {
+    const found = unitsOfMeaning.value.find(u => u.language === unit.language && u.content === unit.content)
+    if (found && !found.seeAlso.some(s => s.language === seeAlso.language && s.content === seeAlso.content)) {
+      found.seeAlso.push(seeAlso)
+    }
+  }
+
+  /**
+   * Removes a seeAlso reference from a unit.
+   */
+  function removeSeeAlsoFromUnit(unit: UnitOfMeaning, seeAlso: UnitOfMeaningIdentification) {
+    const found = unitsOfMeaning.value.find(u => u.language === unit.language && u.content === unit.content)
+    if (found) {
+      found.seeAlso = found.seeAlso.filter(s => !(s.language === seeAlso.language && s.content === seeAlso.content))
+    }
+  }
+
   return {
     addUnitOfMeaning,
     deleteUnitOfMeaning,
     findUnitOfMeaning,
     getAllUnitsOfMeaning,
     getAllUnitsOfMeaningByLanguage,
-    getAllUnitsOfMeaningByIdentificationList
+    getAllUnitsOfMeaningByIdentificationList,
+    addTranslationToUnit,
+    addSeeAlsoToUnit,
+    removeSeeAlsoFromUnit
   }
 }, {
   persist: true
@@ -120,6 +153,28 @@ export const piniaUnitOfMeaningRepository: UnitOfMeaningRepository = {
     const found = store.findUnitOfMeaning(unit.language, unit.content)
     if (found && !found.translations.some(t => t.language === translation.language && t.content === translation.content)) {
       found.translations.push(translation)
+    }
+    return Promise.resolve()
+  },
+  /**
+   * Adds a seeAlso reference to a unit if not already present.
+   */
+  async addSeeAlsoToUnit(unit, seeAlso) {
+    const store = useUnitOfMeaningStore()
+    const found = store.findUnitOfMeaning(unit.language, unit.content)
+    if (found && !found.seeAlso.some(s => s.language === seeAlso.language && s.content === seeAlso.content)) {
+      found.seeAlso.push(seeAlso)
+    }
+    return Promise.resolve()
+  },
+  /**
+   * Removes a seeAlso reference from a unit.
+   */
+  async removeSeeAlsoFromUnit(unit, seeAlso) {
+    const store = useUnitOfMeaningStore()
+    const found = store.findUnitOfMeaning(unit.language, unit.content)
+    if (found) {
+      found.seeAlso = found.seeAlso.filter(s => !(s.language === seeAlso.language && s.content === seeAlso.content))
     }
     return Promise.resolve()
   }

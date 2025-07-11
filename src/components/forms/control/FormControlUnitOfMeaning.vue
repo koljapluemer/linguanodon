@@ -3,6 +3,7 @@ import { ref, watch, inject } from 'vue'
 import { createEmptyCard } from 'ts-fsrs'
 import FormRenderUnitOfMeaning from '@/components/forms/render/FormRenderUnitOfMeaning.vue'
 import { makeTwoUnitsOfMeaningsTranslationsOfEachOther } from '@/utils/unitOfMeaning/makeTwoUnitsOfMeaningsTranslationsOfEachOther'
+import { makeTwoUnitsOfMeaningShowUpInEachOthersSeeAlso } from '@/utils/unitOfMeaning/makeTwoUnitsOfMeaningShowUpInEachOthersSeeAlso'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import { languageRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 
@@ -158,6 +159,43 @@ async function handleDeleteTranslation(translation: { language: string; content:
     emit('update', updatedCurrentUnit)
   }
 }
+
+/**
+ * Handle connecting an existing unit as seeAlso (bidirectional)
+ */
+async function handleConnectSeeAlso(selectedUnit: UnitOfMeaning) {
+  await makeTwoUnitsOfMeaningShowUpInEachOthersSeeAlso(unit.value, selectedUnit, typedRepository)
+  
+  // Refresh current unit (assume repo is source of truth)
+  const refreshed = await typedRepository.findUnitOfMeaning(unit.value.language, unit.value.content)
+  
+  if (refreshed) {
+    // Update just the seeAlso array to ensure reactivity
+    unit.value.seeAlso = [...refreshed.seeAlso]
+    emit('update', unit.value)
+  }
+}
+
+/**
+ * Handle disconnecting a seeAlso relationship (removes bidirectional relationship)
+ */
+async function handleDisconnectSeeAlso(seeAlsoItem: { language: string; content: string }) {
+  // Remove from current unit's seeAlso
+  await typedRepository.removeSeeAlsoFromUnit(unit.value, seeAlsoItem)
+  
+  // Also remove current unit from the seeAlso unit's seeAlso
+  const seeAlsoUnit = await typedRepository.findUnitOfMeaning(seeAlsoItem.language, seeAlsoItem.content)
+  if (seeAlsoUnit) {
+    await typedRepository.removeSeeAlsoFromUnit(seeAlsoUnit, { language: unit.value.language, content: unit.value.content })
+  }
+  
+  // Refresh current unit from repository
+  const refreshed = await typedRepository.findUnitOfMeaning(unit.value.language, unit.value.content)
+  if (refreshed) {
+    unit.value = refreshed
+    emit('update', refreshed)
+  }
+}
 </script>
 
 <template>
@@ -169,5 +207,7 @@ async function handleDeleteTranslation(translation: { language: string; content:
     @add-new-translation="handleAddNewTranslation"
     @disconnect-translation="handleDisconnectTranslation"
     @delete-translation="handleDeleteTranslation"
+    @connect-see-also="handleConnectSeeAlso"
+    @disconnect-see-also="handleDisconnectSeeAlso"
   />
 </template>

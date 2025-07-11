@@ -19,7 +19,10 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
                 { language: 'es', content: 'hola mundo' },
                 { language: 'ar', content: 'مرحبا بالعالم' }
             ],
-            seeAlso: [],
+            seeAlso: [
+                { language: 'en', content: 'Greeting' },
+                { language: 'en', content: 'Welcome' }
+            ],
             credits: [],
             card: createEmptyCard()
         },
@@ -68,6 +71,37 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
                 { language: 'en', content: 'Hello world' }
             ],
             seeAlso: [],
+            credits: [],
+            card: createEmptyCard()
+        },
+        // Demo related units for seeAlso testing
+        {
+            language: 'en',
+            content: 'Greeting',
+            notes: 'A word used to say hello',
+            translations: [
+                { language: 'es', content: 'saludo' },
+                { language: 'fr', content: 'salutation' }
+            ],
+            seeAlso: [
+                { language: 'en', content: 'Hello world' },
+                { language: 'en', content: 'Welcome' }
+            ],
+            credits: [],
+            card: createEmptyCard()
+        },
+        {
+            language: 'en',
+            content: 'Welcome',
+            notes: 'A friendly greeting',
+            translations: [
+                { language: 'es', content: 'bienvenido' },
+                { language: 'fr', content: 'bienvenue' }
+            ],
+            seeAlso: [
+                { language: 'en', content: 'Hello world' },
+                { language: 'en', content: 'Greeting' }
+            ],
             credits: [],
             card: createEmptyCard()
         }
@@ -124,6 +158,27 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             const found = dataSource.find(u => u.language === unit.language && u.content === unit.content);
             if (found && !found.translations.some(t => t.language === translation.language && t.content === translation.content)) {
                 found.translations.push(translation);
+            }
+            return Promise.resolve();
+        },
+        /**
+         * Adds a seeAlso reference to a unit if not already present.
+         */
+        async addSeeAlsoToUnit(unit, seeAlso) {
+            const found = dataSource.find(u => u.language === unit.language && u.content === unit.content);
+            
+            if (found && !found.seeAlso.some(s => s.language === seeAlso.language && s.content === seeAlso.content)) {
+                found.seeAlso.push(seeAlso);
+            }
+            return Promise.resolve();
+        },
+        /**
+         * Removes a seeAlso reference from a unit.
+         */
+        async removeSeeAlsoFromUnit(unit, seeAlso) {
+            const found = dataSource.find(u => u.language === unit.language && u.content === unit.content);
+            if (found) {
+                found.seeAlso = found.seeAlso.filter(s => !(s.language === seeAlso.language && s.content === seeAlso.content));
             }
             return Promise.resolve();
         }

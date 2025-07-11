@@ -8,4 +8,6 @@ export interface UnitOfMeaningRepository {
     getAllUnitsOfMeaningByLanguage(language:string): Promise<UnitOfMeaning[]>
     getAllUnitsOfMeaningByIdentificationList(identificationList:UnitOfMeaningIdentification[]): Promise<UnitOfMeaning[]>
     addTranslationToUnit(unit: UnitOfMeaning, translation: UnitOfMeaningIdentification): Promise<void>
+    addSeeAlsoToUnit(unit: UnitOfMeaning, seeAlso: UnitOfMeaningIdentification): Promise<void>
+    removeSeeAlsoFromUnit(unit: UnitOfMeaning, seeAlso: UnitOfMeaningIdentification): Promise<void>
 }
