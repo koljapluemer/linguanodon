@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { ref, onMounted, inject } from 'vue'
 import { Download } from 'lucide-vue-next'
-import { downloadAndPersistSet } from '@/utils/remoteSet'
+import { downloadAndPersistSet } from '@/utils/backend/remoteSet'
 import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
 import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 

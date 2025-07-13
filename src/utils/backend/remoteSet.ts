@@ -42,11 +42,11 @@ export interface RemoteCredit {
 }
 
 /**
- * Downloads a specific set from the remote API
+ * Downloads a specific set from the local public directory
  */
 export async function downloadSet(filename: string, language: string): Promise<RemoteSet> {
   try {
-    const response = await fetch(`https://scintillating-empanada-730581.netlify.app/${language}/${filename}`)
+    const response = await fetch(`/data/${language}/${filename}`)
     if (!response.ok) {
       throw new Error(`Failed to download set: ${response.status} ${response.statusText}`)
     }

@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import ListWidgetRemoteSet from '@/components/lists/widgets/ListWidgetRemoteSet.vue'
-import type { RemoteSets } from '@/utils/getRemoteSets'
+import type { RemoteSets } from '@/utils/backend/getRemoteSets'
 
 interface Props {
   sets: RemoteSets

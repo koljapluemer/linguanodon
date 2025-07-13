@@ -1,13 +1,13 @@
 // shape of remote data
-// url: https://scintillating-empanada-730581.netlify.app/sets.json
+// url: /data/languages.json
 export type RemoteSets = Record<string, string>
 
 /**
- * Fetches all available languages from the remote API
+ * Fetches all available languages from the local public directory
  */
 export async function getAvailableLanguages(): Promise<string[]> {
   try {
-    const response = await fetch('https://scintillating-empanada-730581.netlify.app/languages.json')
+    const response = await fetch('/data/languages.json')
     if (!response.ok) {
       console.error('Failed to fetch languages:', response.status, response.statusText)
       return []
@@ -21,11 +21,11 @@ export async function getAvailableLanguages(): Promise<string[]> {
 }
 
 /**
- * Fetches available sets for a specific language from the remote API
+ * Fetches available sets for a specific language from the local public directory
  */
 export async function getSetsForLanguage(languageCode: string): Promise<RemoteSets> {
   try {
-    const response = await fetch(`https://scintillating-empanada-730581.netlify.app/${languageCode}/index.json`)
+    const response = await fetch(`/data/${languageCode}/index.json`)
     if (!response.ok) {
       console.error(`Failed to fetch sets for language ${languageCode}:`, response.status, response.statusText)
       return {}

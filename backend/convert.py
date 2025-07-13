@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 
 # Configuration: Set the absolute path where data should be outputted
-OUTPUT_DIR = "/home/brokkoli/GITHUB/linguanodon/src/public/data"  # Change this to your desired output path
+OUTPUT_DIR = "/home/brokkoli/GITHUB/linguanodon/public/data"  # Change this to your desired output path
 
 def clear_public_folder():
     """Clear all folders and files in output directory"""
@@ -14,15 +14,6 @@ def clear_public_folder():
     output_path.mkdir(exist_ok=True, parents=True)
     print(f"Cleared {OUTPUT_DIR}/ folder")
 
-def copy_headers_file():
-    """Copy _headers file to output directory"""
-    headers_src = Path("_headers")
-    headers_dst = Path(OUTPUT_DIR) / "_headers"
-    if headers_src.exists():
-        shutil.copy2(headers_src, headers_dst)
-        print("Copied _headers file")
-    else:
-        print("Warning: _headers file not found")
 
 def copy_data_files():
     """Copy JSON files from data/ to output directory organized by language code"""
@@ -126,9 +117,6 @@ def main():
     
     # Step 1: Clear public/ folder
     clear_public_folder()
-    
-    # Step 2: Copy _headers file
-    copy_headers_file()
     
     # Step 3: Copy data/ files organized by language
     try:
