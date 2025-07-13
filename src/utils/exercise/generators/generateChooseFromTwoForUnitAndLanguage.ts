@@ -84,7 +84,9 @@ function generateIncorrectAnswer(correctAnswer: string): string {
 
 /**
  * Generates choose-from-two exercises for a unit of meaning in a specific language
- * The unit's content is clozed, and translations in the target language are shown as context
+ * Creates exercises in both directions:
+ * 1. Original content clozed, translation as hint
+ * 2. Translation clozed, original content as hint
  */
 export function generateChooseFromTwoForUnitAndLanguage(
   unit: UnitOfMeaning,
@@ -131,6 +133,38 @@ export function generateChooseFromTwoForUnitAndLanguage(
       card: createEmptyCard()
     })
   })
+  
+  // Generate reverse exercises: clozing the translations
+  for (const translation of targetTranslations) {
+    const translationTokens = splitIntoTokens(translation.content)
+    const translationWordIndexes = translationTokens.map((t, i) => isWordToken(t) ? i : -1).filter(i => i !== -1)
+    
+    if (translationWordIndexes.length <= 1) continue
+    
+    translationWordIndexes.forEach((wordIdx) => {
+      const word = translationTokens[wordIdx]
+      if (word.length < 3) return
+      
+      // Create cloze version of the translation
+      const clozeContent = makeClozeTokens(translationTokens, wordIdx)
+      
+      // Show original content as context
+      const contextText = unit.content
+      
+      // Generate incorrect answer
+      const incorrectAnswer = generateIncorrectAnswer(word)
+      
+      exercises.push({
+        uid: `choose_${translation.language}_${translation.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${unit.language}`,
+        type: 'choose-from-two',
+        front: wrapWithDirection(clozeContent),
+        correctAnswer: word,
+        incorrectAnswer: incorrectAnswer,
+        context: contextText,
+        card: createEmptyCard()
+      })
+    })
+  }
   
   return exercises
 } 

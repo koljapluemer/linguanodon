@@ -59,7 +59,9 @@ function detectTextDirection(text: string): 'rtl' | 'ltr' {
 
 /**
  * Generates all possible cloze exercises for a unit of meaning in a specific language
- * The unit's content is clozed, and translations in the target language are shown as context
+ * Creates exercises in both directions:
+ * 1. Original content clozed, translation as hint
+ * 2. Translation clozed, original content as hint
  */
 export function generateClozesForUnitAndLanguage(
   unit: UnitOfMeaning,
@@ -104,6 +106,36 @@ export function generateClozesForUnitAndLanguage(
       card: createEmptyCard()
     })
   })
+  
+  // Generate reverse exercises: clozing the translations
+  for (const translation of targetTranslations) {
+    const translationTokens = splitIntoTokens(translation.content)
+    const translationWordIndexes = translationTokens.map((t, i) => isWordToken(t) ? i : -1).filter(i => i !== -1)
+    
+    if (translationWordIndexes.length <= 1) continue
+    
+    translationWordIndexes.forEach((wordIdx) => {
+      const word = translationTokens[wordIdx]
+      if (word.length < 3) return
+      
+      // Create cloze version of the translation
+      const clozeContent = makeClozeTokens(translationTokens, wordIdx)
+      
+      // Show original content as context
+      const contextText = unit.content
+      
+      const front = `${wrapWithDirection(clozeContent)}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
+      const back = `${wrapWithDirection(translation.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
+      
+      exercises.push({
+        uid: `cloze_${translation.language}_${translation.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${unit.language}`,
+        type: 'flashcard',
+        front,
+        back,
+        card: createEmptyCard()
+      })
+    })
+  }
   
   return exercises
 }

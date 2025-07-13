@@ -55,6 +55,13 @@
               Exercise {{ index + 1 }} ({{ exercise.uid }}) - {{ exercise.type }}
             </h3>
             
+            <!-- Exercise direction info -->
+            <div class="text-sm opacity-70 mb-3">
+              <span v-if="exercise.uid.includes('cloze_') || exercise.uid.includes('choose_')">
+                {{ getExerciseDirection(exercise.uid) }}
+              </span>
+            </div>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h4 class="font-medium text-sm opacity-70">Front</h4>
@@ -178,6 +185,21 @@ async function generateExercises() {
   } finally {
     loading.value = false
   }
+}
+
+/**
+ * Helper to get exercise direction from UID
+ */
+function getExerciseDirection(uid: string): string {
+  // Parse the UID to determine direction
+  // Format: type_language_content_wordIdx_targetLanguage
+  const parts = uid.split('_')
+  if (parts.length >= 5) {
+    const sourceLanguage = parts[1]
+    const targetLanguage = parts[parts.length - 1]
+    return `Clozing ${sourceLanguage} → Hint: ${targetLanguage}`
+  }
+  return 'Unknown direction'
 }
 
 onMounted(() => {
