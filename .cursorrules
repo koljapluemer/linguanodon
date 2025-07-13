@@ -1,7 +1,7 @@
 - Use Tailwind + Daisy UI for styling
   - Ensure that the layout works on mobile and desktop. Keep in mind both light and dark mode, avoid hardcoding white, greys and blacks.
 - follow Vue3/ts best practices
-- Our pinia stores are the source of truth
+- Our interfaces (and their implementation, currently dexie)
 - Components are either controller (logic, maybe dependency and store, do nothing in template except loading a representational component) or representational only (just props and emits, no external dependencies)
 - keep code unit-testable as much a possible
 - fix linter errors always

@@ -10,6 +10,7 @@ import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
  */
 export interface DexieLanguage extends Language {
   isTarget: boolean
+  isNative: boolean
   isCustom: boolean
 }
 
