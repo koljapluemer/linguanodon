@@ -3,18 +3,21 @@ import json
 import shutil
 from pathlib import Path
 
+# Configuration: Set the absolute path where data should be outputted
+OUTPUT_DIR = "/home/brokkoli/GITHUB/linguanodon/src/public/data"  # Change this to your desired output path
+
 def clear_public_folder():
-    """Clear all folders and files in public/"""
-    public_dir = Path("public")
-    if public_dir.exists():
-        shutil.rmtree(public_dir)
-    public_dir.mkdir(exist_ok=True)
-    print("Cleared public/ folder")
+    """Clear all folders and files in output directory"""
+    output_path = Path(OUTPUT_DIR)
+    if output_path.exists():
+        shutil.rmtree(output_path)
+    output_path.mkdir(exist_ok=True, parents=True)
+    print(f"Cleared {OUTPUT_DIR}/ folder")
 
 def copy_headers_file():
-    """Copy _headers file to public/"""
+    """Copy _headers file to output directory"""
     headers_src = Path("_headers")
-    headers_dst = Path("public/_headers")
+    headers_dst = Path(OUTPUT_DIR) / "_headers"
     if headers_src.exists():
         shutil.copy2(headers_src, headers_dst)
         print("Copied _headers file")
@@ -22,9 +25,9 @@ def copy_headers_file():
         print("Warning: _headers file not found")
 
 def copy_data_files():
-    """Copy JSON files from data/ to public/ organized by language code"""
+    """Copy JSON files from data/ to output directory organized by language code"""
     data_dir = Path("data")
-    public_dir = Path("public")
+    output_path = Path(OUTPUT_DIR)
     
     if not data_dir.exists():
         raise FileNotFoundError("data/ folder not found")
@@ -55,7 +58,7 @@ def copy_data_files():
             language_codes.add(language_code)
             
             # Create language subfolder
-            lang_dir = public_dir / language_code
+            lang_dir = output_path / language_code
             lang_dir.mkdir(exist_ok=True)
             
             # Copy JSON file to language subfolder (compressed)
@@ -73,10 +76,10 @@ def copy_data_files():
 
 def generate_language_indexes(language_codes):
     """Generate index files for each language subfolder"""
-    public_dir = Path("public")
+    output_path = Path(OUTPUT_DIR)
     
     for lang_code in language_codes:
-        lang_dir = public_dir / lang_code
+        lang_dir = output_path / lang_code
         if not lang_dir.exists():
             continue
         
@@ -106,8 +109,8 @@ def generate_language_indexes(language_codes):
 
 def generate_languages_json(language_codes):
     """Generate root-level languages.json with available language codes"""
-    public_dir = Path("public")
-    languages_path = public_dir / "languages.json"
+    output_path = Path(OUTPUT_DIR)
+    languages_path = output_path / "languages.json"
     
     # Convert set to sorted list for consistent output
     languages_list = sorted(list(language_codes))
