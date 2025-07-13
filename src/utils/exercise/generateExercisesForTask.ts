@@ -32,7 +32,7 @@ export async function generateExercisesForTask(
     for (const language of allLanguages) {
       // Generate both types of exercises
       const flashcardExercises = generateClozesForUnitAndLanguage(unit, language.code)
-      const chooseFromTwoExercises = generateChooseFromTwoForUnitAndLanguage(unit, language.code)
+      const chooseFromTwoExercises = await generateChooseFromTwoForUnitAndLanguage(unit, language.code, unitRepository)
       
       allExercises.push(...flashcardExercises, ...chooseFromTwoExercises)
     }
