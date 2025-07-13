@@ -43,13 +43,14 @@ import { ref, computed, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import PracticeTaskView from './PracticeTaskView.vue'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import type { Exercise } from '@/utils/exercise/types/Exercise'
 import type { TaskAttempt } from '@/entities/Task'
 import type { Task } from '@/entities/Task'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
 import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
+import { Rating } from 'ts-fsrs'
 
 interface Props {
   taskId: string
@@ -65,7 +66,7 @@ const taskRepository = inject<TaskRepository>(taskRepositoryKey)
 const unitRepository = inject<UnitOfMeaningRepository>(unitOfMeaningRepositoryKey)
 const exerciseRepository = inject<ExerciseDataRepository>(exerciseRepositoryKey)
 
-const exercises = ref<ExerciseFlashcard[]>([])
+const exercises = ref<Exercise[]>([])
 const currentExerciseIndex = ref(0)
 const isTaskExecutionPhase = ref(false)
 const error = ref<string>('')
@@ -111,7 +112,7 @@ async function initializeExercises() {
   }
 
   try {
-    const generatedExercises: ExerciseFlashcard[] = []
+    const generatedExercises: Exercise[] = []
     exercises.value = generatedExercises
   } catch (err) {
     error.value = 'Failed to generate exercises'
@@ -122,9 +123,10 @@ async function initializeExercises() {
 /**
  * Handle exercise scoring and progression
  */
-function handleExerciseScore() {
+function handleExerciseScore(exercise: Exercise, score: Rating) {
   // Store exercise rating (this will be handled by the exercise store)
-  // The exercise store is already set up to handle this via the ExerciseFlashcardControl
+  // The exercise store is already set up to handle this via the ExerciseRenderer
+  console.log(`Exercise ${exercise.uid} scored as ${score}`)
     
   // Move to next exercise or complete exercise phase
   if (currentExerciseIndex.value < exercises.value.length - 1) {

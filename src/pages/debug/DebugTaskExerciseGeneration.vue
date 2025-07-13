@@ -51,7 +51,9 @@
             :key="exercise.uid"
             class="border rounded-lg p-4"
           >
-            <h3 class="font-semibold mb-2">Exercise {{ index + 1 }} ({{ exercise.uid }})</h3>
+            <h3 class="font-semibold mb-2">
+              Exercise {{ index + 1 }} ({{ exercise.uid }}) - {{ exercise.type }}
+            </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -59,9 +61,31 @@
                 <div class="bg-base-200 p-3 rounded" v-html="exercise.front"></div>
               </div>
               
-              <div>
+              <!-- Flashcard exercise -->
+              <div v-if="exercise.type === 'flashcard'">
                 <h4 class="font-medium text-sm opacity-70">Back</h4>
                 <div class="bg-base-200 p-3 rounded" v-html="exercise.back"></div>
+              </div>
+              
+              <!-- Choose from two exercise -->
+              <div v-else-if="exercise.type === 'choose-from-two'">
+                <h4 class="font-medium text-sm opacity-70">Options</h4>
+                <div class="bg-base-200 p-3 rounded space-y-2">
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono">A.</span>
+                    <span class="text-success font-medium">{{ exercise.correctAnswer }}</span>
+                    <span class="text-xs opacity-70">(correct)</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono">B.</span>
+                    <span class="text-error">{{ exercise.incorrectAnswer }}</span>
+                    <span class="text-xs opacity-70">(incorrect)</span>
+                  </div>
+                  <div v-if="exercise.context" class="mt-3 pt-3 border-t">
+                    <span class="text-sm opacity-70">Context:</span>
+                    <div class="mt-1">{{ exercise.context }}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -79,7 +103,7 @@
 <script setup lang="ts">
 import { ref, onMounted, provide } from 'vue'
 import type { Task } from '@/entities/Task'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import type { Exercise } from '@/utils/exercise/types/Exercise'
 import { generateExercisesForTask } from '@/utils/exercise/generateExercisesForTask'
 import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoDexieTasks'
 import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
@@ -99,7 +123,7 @@ const languageRepository = useRepoDexieLanguages()
 // Reactive state
 const tasks = ref<Task[]>([])
 const selectedTaskId = ref('')
-const exercises = ref<ExerciseFlashcard[]>([])
+const exercises = ref<Exercise[]>([])
 const loading = ref(false)
 const error = ref('')
 

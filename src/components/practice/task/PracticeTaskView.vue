@@ -17,7 +17,7 @@
     
     <!-- Exercise phase -->
     <div v-if="!isTaskExecutionPhase && currentExercise">
-      <ExerciseFlashcardControl
+      <ExerciseRenderer
         :exercise="currentExercise"
         @score="handleExerciseScore"
       />
@@ -35,22 +35,22 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import ExerciseFlashcardControl from '@/components/practice/exercise/ExerciseFlashcardControl.vue'
+import ExerciseRenderer from '@/components/practice/exercise/ExerciseRenderer.vue'
 import TaskExecuteControl from './TaskExecuteControl.vue'
 import type { Task } from '@/entities/Task'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import type { Exercise } from '@/utils/exercise/types/Exercise'
 import type { TaskAttempt } from '@/entities/Task'
 import { Rating } from 'ts-fsrs'
 
 interface Props {
   task: Task
-  exercises: ExerciseFlashcard[]
+  exercises: Exercise[]
   currentExerciseIndex: number
   isTaskExecutionPhase: boolean
 }
 
 interface Emits {
-  (e: 'exercise-score', exercise: ExerciseFlashcard, score: Rating): void
+  (e: 'exercise-score', exercise: Exercise, score: Rating): void
   (e: 'task-attempt', attempt: TaskAttempt): void
 }
 
@@ -67,7 +67,7 @@ const currentExercise = computed(() =>
 /**
  * Handle exercise scoring
  */
-function handleExerciseScore(exercise: ExerciseFlashcard, score: Rating) {
+function handleExerciseScore(exercise: Exercise, score: Rating) {
   emit('exercise-score', exercise, score)
 }
 

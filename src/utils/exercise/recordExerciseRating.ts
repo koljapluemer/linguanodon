@@ -1,5 +1,5 @@
 import { fsrs, Rating } from 'ts-fsrs'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import type { Exercise } from '@/utils/exercise/types/Exercise'
 import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
 import type { Grade } from 'ts-fsrs'
 
@@ -8,14 +8,14 @@ import type { Grade } from 'ts-fsrs'
  */
 export async function recordExerciseRating(
   repository: ExerciseDataRepository,
-  exercise: ExerciseFlashcard, 
+  exercise: Exercise, 
   rating: Rating
 ): Promise<void> {
   const scheduler = fsrs() // default params
   const now = new Date()
   const { card: updatedCard } = scheduler.next(exercise.card, now, rating as Grade)
   
-  const updatedExercise: ExerciseFlashcard = { 
+  const updatedExercise: Exercise = { 
     ...exercise, 
     card: updatedCard 
   }

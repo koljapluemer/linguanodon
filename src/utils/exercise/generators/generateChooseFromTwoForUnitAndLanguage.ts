@@ -1,5 +1,5 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/Exercise'
+import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/Exercise'
 import { createEmptyCard } from 'ts-fsrs'
 
 /**
@@ -8,7 +8,7 @@ import { createEmptyCard } from 'ts-fsrs'
 function splitIntoTokens(sentence: string): string[] {
   // Match words (\p{L} = any letter, \p{N} = any number), or punctuation, or whitespace
   // This will keep punctuation as separate tokens
-  return sentence.match(/\p{L}+[\p{N}\p{L}'’-]*|[.,!?;:،؟…-]+|\s+/gu) || []
+  return sentence.match(/\p{L}+[\p{N}\p{L}''-]*|[.,!?;:،؟…-]+|\s+/gu) || []
 }
 
 /**
@@ -58,14 +58,39 @@ function detectTextDirection(text: string): 'rtl' | 'ltr' {
 }
 
 /**
- * Generates all possible cloze exercises for a unit of meaning in a specific language
+ * Generates a random incorrect answer based on the correct answer
+ * This is a simple implementation - in a real app you might want more sophisticated logic
+ */
+function generateIncorrectAnswer(correctAnswer: string): string {
+  // Simple strategy: add or remove a character, or use a similar word
+  const variations = [
+    correctAnswer + 's',
+    correctAnswer.slice(0, -1),
+    correctAnswer + 'ing',
+    correctAnswer.replace(/[aeiou]/g, 'a'),
+    correctAnswer.toUpperCase(),
+    correctAnswer.toLowerCase()
+  ]
+  
+  // Filter out variations that are too similar or empty
+  const validVariations = variations.filter(v => 
+    v.length > 2 && v !== correctAnswer && v.toLowerCase() !== correctAnswer.toLowerCase()
+  )
+  
+  return validVariations.length > 0 
+    ? validVariations[Math.floor(Math.random() * validVariations.length)]
+    : correctAnswer + 'x' // Fallback
+}
+
+/**
+ * Generates choose-from-two exercises for a unit of meaning in a specific language
  * The unit's content is clozed, and translations in the target language are shown as context
  */
-export function generateClozesForUnitAndLanguage(
+export function generateChooseFromTwoForUnitAndLanguage(
   unit: UnitOfMeaning,
   targetLanguage: string
-): ExerciseFlashcard[] {
-  const exercises: ExerciseFlashcard[] = []
+): ExerciseChooseFromTwo[] {
+  const exercises: ExerciseChooseFromTwo[] = []
   
   // Find translations in the target language
   const targetTranslations = unit.translations.filter(ref => ref.language === targetLanguage)
@@ -93,17 +118,19 @@ export function generateClozesForUnitAndLanguage(
     // Show all translations in the target language as context
     const contextText = targetTranslations.map(ref => ref.content).join(' / ')
     
-    const front = `${wrapWithDirection(clozeContent)}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
-    const back = `${wrapWithDirection(unit.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
+    // Generate incorrect answer
+    const incorrectAnswer = generateIncorrectAnswer(word)
     
     exercises.push({
-      uid: `cloze_${unit.language}_${unit.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${targetLanguage}`,
-      type: 'flashcard',
-      front,
-      back,
+      uid: `choose_${unit.language}_${unit.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${targetLanguage}`,
+      type: 'choose-from-two',
+      front: wrapWithDirection(clozeContent),
+      correctAnswer: word,
+      incorrectAnswer: incorrectAnswer,
+      context: contextText,
       card: createEmptyCard()
     })
   })
   
   return exercises
-}
+} 

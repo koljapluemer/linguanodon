@@ -1,20 +1,21 @@
 import type { Task } from '@/entities/Task'
 import type { Language } from '@/entities/Language'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/ExerciseFlashcard'
+import type { Exercise } from '@/utils/exercise/types/Exercise'
 import { generateClozesForUnitAndLanguage } from './generators/generateClozesForUnitAndLanguage'
+import { generateChooseFromTwoForUnitAndLanguage } from './generators/generateChooseFromTwoForUnitAndLanguage'
 
 /**
- * Generates all possible cloze exercises for a task
- * Loops through each unit associated with the task and generates clozes for each user language
+ * Generates all possible exercises for a task
+ * Loops through each unit associated with the task and generates exercises for each user language
  */
 export async function generateExercisesForTask(
   task: Task,
   targetLanguages: Language[],
   nativeLanguages: Language[],
   unitRepository: UnitOfMeaningRepository
-): Promise<ExerciseFlashcard[]> {
-  const allExercises: ExerciseFlashcard[] = []
+): Promise<Exercise[]> {
+  const allExercises: Exercise[] = []
   const allLanguages = [...targetLanguages, ...nativeLanguages]
   
   // Loop through each unit associated with the task
@@ -29,8 +30,11 @@ export async function generateExercisesForTask(
     
     // Loop through all user languages (both target and native)
     for (const language of allLanguages) {
-      const exercises = generateClozesForUnitAndLanguage(unit, language.code)
-      allExercises.push(...exercises)
+      // Generate both types of exercises
+      const flashcardExercises = generateClozesForUnitAndLanguage(unit, language.code)
+      const chooseFromTwoExercises = generateChooseFromTwoForUnitAndLanguage(unit, language.code)
+      
+      allExercises.push(...flashcardExercises, ...chooseFromTwoExercises)
     }
   }
   
