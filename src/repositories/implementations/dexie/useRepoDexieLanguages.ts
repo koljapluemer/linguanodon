@@ -111,12 +111,12 @@ async function initializeWithIsoLanguages(): Promise<void> {
       const dexieLanguages: DexieLanguage[] = isoLanguages.map(lang => ({
         ...lang,
         isTarget: false, // Not automatically set as target
-        isNative: false, // Not automatically set as native
+        isNative: lang.code === 'eng', // Set English as native language
         isCustom: false
       }))
       
       await db.languages.bulkAdd(dexieLanguages)
-      console.log(`Initialized database with ${dexieLanguages.length} ISO languages`)
+      console.log(`Initialized database with ${dexieLanguages.length} ISO languages (English set as native)`)
     }
   } catch (error) {
     console.error('Failed to initialize database with ISO languages:', error)

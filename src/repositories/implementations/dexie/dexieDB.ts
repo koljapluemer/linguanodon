@@ -17,7 +17,7 @@ export interface DexieLanguage extends Language {
 /**
  * Main database class for LinguaNodon using Dexie.js
  */
-export class LinguaNodonDB extends Dexie {
+export class LinguanodonDB extends Dexie {
   // Tables
   exercises!: Table<ExerciseData>
   languages!: Table<DexieLanguage>
@@ -29,7 +29,7 @@ export class LinguaNodonDB extends Dexie {
    * Initializes the database with schema version 1
    */
   constructor() {
-    super('LinguaNodonDB')
+    super('LinguanodonDB')
     
     this.version(1).stores({
       exercises: 'uid',
@@ -42,4 +42,4 @@ export class LinguaNodonDB extends Dexie {
 }
 
 // Export a singleton instance
-export const db = new LinguaNodonDB()
+export const db = new LinguanodonDB()
