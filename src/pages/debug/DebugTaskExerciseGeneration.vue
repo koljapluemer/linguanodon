@@ -39,6 +39,24 @@
         </div>
       </div>
     </div>
+
+    <!-- Task Details: Primary and Units of Meaning -->
+    <div v-if="selectedTask" class="space-y-2">
+      <div>
+        <span class="font-semibold">Primary Units of Meaning:</span>
+        <span v-if="selectedTask.primaryUnitsOfMeaning.length === 0" class="opacity-60 ml-2">None</span>
+        <span v-for="(unit, idx) in selectedTask.primaryUnitsOfMeaning" :key="'primary-' + idx" class="badge badge-primary mx-1">
+          {{ unit.content }}
+        </span>
+      </div>
+      <div>
+        <span class="font-semibold">Units of Meaning:</span>
+        <span v-if="selectedTask.unitsOfMeaning.length === 0" class="opacity-60 ml-2">None</span>
+        <span v-for="(unit, idx) in selectedTask.unitsOfMeaning" :key="'unit-' + idx" class="badge badge-secondary mx-1">
+          {{ unit.content }}
+        </span>
+      </div>
+    </div>
     
     <!-- Results -->
     <div v-if="exercises.length > 0" class="card bg-base-100 shadow-xl">
@@ -114,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, provide } from 'vue'
+import { ref, onMounted, provide, computed } from 'vue'
 import type { Task } from '@/entities/Task'
 import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
 import { generateExercisesForTask } from '@/utils/exercise/generateExercisesForTask'
@@ -208,6 +226,13 @@ function getExerciseDirection(uid: string): string {
   }
   return 'Unknown direction'
 }
+
+// Computed: currently selected task
+const selectedTask = computed(() => {
+  if (!selectedTaskId.value) return null
+  const [language, content] = selectedTaskId.value.split(':')
+  return tasks.value.find(t => t.language === language && t.content === content) || null
+})
 
 onMounted(() => {
   loadTasks()
