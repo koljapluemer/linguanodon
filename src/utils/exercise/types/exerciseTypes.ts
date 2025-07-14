@@ -1,7 +1,6 @@
-import type { ExerciseData } from "@/entities/ExerciseData"
 
 // Base interface for all exercises
-export interface BaseExercise extends ExerciseData {
+export interface BaseExercise {
   type: string
 }
 
@@ -21,8 +20,15 @@ export interface ExerciseChooseFromTwo extends BaseExercise {
   context: string
 }
 
+// Free-translation exercise type
+export interface ExerciseFreeTranslation extends BaseExercise {
+  type: 'free-translation'
+  front: string // target language sentence
+  back: string  // native language sentence
+}
+
 // Union type for all exercise types
-export type Exercise = ExerciseFlashcard | ExerciseChooseFromTwo
+export type Exercise = ExerciseFlashcard | ExerciseChooseFromTwo | ExerciseFreeTranslation
 
 // Type guard functions
 /**
@@ -37,4 +43,11 @@ export function isFlashcardExercise(exercise: Exercise): exercise is ExerciseFla
  */
 export function isChooseFromTwoExercise(exercise: Exercise): exercise is ExerciseChooseFromTwo {
   return exercise.type === 'choose-from-two'
+}
+
+/**
+ * Type guard to check if an exercise is a free-translation exercise
+ */
+export function isFreeTranslationExercise(exercise: Exercise): exercise is ExerciseFreeTranslation {
+  return exercise.type === 'free-translation'
 }

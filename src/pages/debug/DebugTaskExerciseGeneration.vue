@@ -48,17 +48,17 @@
         <div class="space-y-4">
           <div 
             v-for="(exercise, index) in exercises" 
-            :key="exercise.uid"
+            :key="generateExerciseDataUidFromExercise(exercise)"
             class="border rounded-lg p-4"
           >
             <h3 class="font-semibold mb-2">
-              Exercise {{ index + 1 }} ({{ exercise.uid }}) - {{ exercise.type }}
+              Exercise {{ index + 1 }} ({{ generateExerciseDataUidFromExercise(exercise) }}) - {{ exercise.type }}
             </h3>
             
             <!-- Exercise direction info -->
             <div class="text-sm opacity-70 mb-3">
-              <span v-if="exercise.uid.includes('cloze_') || exercise.uid.includes('choose_')">
-                {{ getExerciseDirection(exercise.uid) }}
+              <span v-if="generateExerciseDataUidFromExercise(exercise).includes('cloze_') || generateExerciseDataUidFromExercise(exercise).includes('choose_')">
+                {{ getExerciseDirection(generateExerciseDataUidFromExercise(exercise)) }}
               </span>
             </div>
             
@@ -94,6 +94,12 @@
                   </div>
                 </div>
               </div>
+              
+              <!-- Free-translation exercise -->
+              <div v-else-if="exercise.type === 'free-translation'">
+                <h4 class="font-medium text-sm opacity-70">Reference Translation</h4>
+                <div class="bg-base-200 p-3 rounded" v-html="exercise.back"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -110,8 +116,9 @@
 <script setup lang="ts">
 import { ref, onMounted, provide } from 'vue'
 import type { Task } from '@/entities/Task'
-import type { Exercise } from '@/utils/exercise/types/Exercise'
+import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
 import { generateExercisesForTask } from '@/utils/exercise/generateExercisesForTask'
+import { generateExerciseDataUidFromExercise } from '@/utils/exercise/generateExerciseDataUidFromExercise'
 import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoDexieTasks'
 import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
 import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'

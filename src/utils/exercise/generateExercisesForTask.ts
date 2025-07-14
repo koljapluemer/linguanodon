@@ -1,9 +1,10 @@
 import type { Task } from '@/entities/Task'
 import type { Language } from '@/entities/Language'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { Exercise } from '@/utils/exercise/types/Exercise'
+import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
 import { generateClozesForUnitAndLanguage } from './generators/generateClozesForUnitAndLanguage'
 import { generateChooseFromTwoForUnitAndLanguage } from './generators/generateChooseFromTwoForUnitAndLanguage'
+import { generateFreeTranslationForUnitAndLanguage } from './generators/generateFreeTranslationForUnitAndLanguage'
 
 /**
  * Generates all possible exercises for a task
@@ -17,6 +18,7 @@ export async function generateExercisesForTask(
 ): Promise<Exercise[]> {
   const allExercises: Exercise[] = []
   const allLanguages = [...targetLanguages, ...nativeLanguages]
+  const nativeLanguageCodes = nativeLanguages.map(l => l.code)
   
   // Loop through each unit associated with the task
   for (const unitRef of task.unitsOfMeaning) {
@@ -35,6 +37,16 @@ export async function generateExercisesForTask(
       const chooseFromTwoExercises = await generateChooseFromTwoForUnitAndLanguage(unit, language.code, unitRepository)
       
       allExercises.push(...flashcardExercises, ...chooseFromTwoExercises)
+    }
+    // Generate free-translation exercises (only for target -> native)
+    for (const targetLang of targetLanguages) {
+      const freeTranslationExercises = await generateFreeTranslationForUnitAndLanguage(
+        unit,
+        targetLang.code,
+        nativeLanguageCodes,
+        unitRepository
+      )
+      allExercises.push(...freeTranslationExercises)
     }
   }
   

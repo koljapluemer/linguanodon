@@ -1,5 +1,5 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/Exercise'
+import type { ExerciseFlashcard } from '@/utils/exercise/types/exerciseTypes'
 import { createEmptyCard } from 'ts-fsrs'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'

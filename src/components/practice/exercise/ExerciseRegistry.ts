@@ -1,14 +1,16 @@
 import type { Component } from 'vue'
 import ExerciseFlashcardControl from './ExerciseFlashcardControl.vue'
 import ExerciseChooseFromTwoControl from './ExerciseChooseFromTwoControl.vue'
-import type { Exercise } from '@/utils/exercise/types/Exercise'
+import ExerciseFreeTranslationControl from './ExerciseFreeTranslationControl.vue'
+import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
 
 /**
  * Registry mapping exercise types to their renderer components
  */
 export const exerciseRenderers = {
   flashcard: ExerciseFlashcardControl,
-  'choose-from-two': ExerciseChooseFromTwoControl
+  'choose-from-two': ExerciseChooseFromTwoControl,
+  'free-translation': ExerciseFreeTranslationControl
 } as const
 
 /**

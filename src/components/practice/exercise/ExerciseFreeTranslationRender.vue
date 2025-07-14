@@ -2,10 +2,18 @@
   <div class="max-w-2xl mx-auto">
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
-        <!-- Front side (cloze) -->
+        <!-- Front side (input) -->
         <div v-if="!isRevealed" class="text-center">
-          <h2 class="card-title justify-center mb-4">Fill in the blank</h2>
+          <h2 class="card-title justify-center mb-4">Translate the sentence</h2>
           <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="exercise.front"></div>
+          <input
+            v-model="userInput"
+            type="text"
+            class="input input-bordered w-full mb-4"
+            placeholder="Type your translation here..."
+            :disabled="isRevealed"
+            @keyup.enter="reveal"
+          />
           <button 
             @click="reveal" 
             class="btn btn-primary"
@@ -16,9 +24,19 @@
         
         <!-- Back side (answer + scoring) -->
         <div v-else class="text-center">
-          <h2 class="card-title justify-center mb-4">Answer</h2>
-          <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="exercise.back"></div>
-          
+          <h2 class="card-title justify-center mb-4">Compare your translation</h2>
+          <div class="mb-4">
+            <span class="font-medium opacity-70">Target sentence:</span>
+            <div class="mt-2 p-3 bg-base-200 rounded-lg min-h-[2rem]" v-html="exercise.front"></div>
+          </div>
+          <div class="mb-4">
+            <span class="font-medium opacity-70">Your translation:</span>
+            <div class="mt-2 p-3 bg-base-300 rounded-lg min-h-[2rem]">{{ userInput }}</div>
+          </div>
+          <div class="mb-6">
+            <span class="font-medium opacity-70">Reference translation:</span>
+            <div class="mt-2 p-3 bg-base-200 rounded-lg min-h-[2rem]" v-html="exercise.back"></div>
+          </div>
           <div class="flex flex-wrap gap-2 justify-center">
             <button 
               @click="score(Rating.Again)" 
@@ -51,13 +69,16 @@
   </div>
 </template>
 
+/**
+ * Render component for free-translation exercises. Handles user input, reveal, and scoring.
+ */
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/exerciseTypes'
+import type { ExerciseFreeTranslation } from '@/utils/exercise/types/exerciseTypes'
 import { Rating } from 'ts-fsrs'
 
 interface Props {
-  exercise: ExerciseFlashcard
+  exercise: ExerciseFreeTranslation
 }
 
 interface Emits {
@@ -68,20 +89,22 @@ defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const isRevealed = ref(false)
+const userInput = ref('')
 
 /**
- * Reveals the answer side of the flashcard
+ * Reveals the reference translation and user input for comparison.
  */
 function reveal() {
   isRevealed.value = true
 }
 
 /**
- * Emits score event and resets for next exercise
+ * Emits score event and resets for next exercise.
  */
 function score(scoreValue: Rating) {
   emit('score', scoreValue)
   isRevealed.value = false
+  userInput.value = ''
 }
 </script>
 
@@ -93,15 +116,4 @@ function score(scoreValue: Rating) {
   border-radius: 3px;
   font-weight: bold;
 }
-
-/* Ensure proper text sizing for the main cloze sentence */
-:deep(div[dir]) {
-  font-size: 1.875rem; /* text-3xl */
-  margin-bottom: 1.25rem; /* mb-5 */
-}
-
-/* Ensure proper text sizing for the context sentence */
-:deep(div[dir] + div[dir]) {
-  font-size: 1.5rem; /* text-2xl */
-}
-</style>
+</style> 

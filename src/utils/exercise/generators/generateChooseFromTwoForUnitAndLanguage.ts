@@ -1,6 +1,6 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/Exercise'
+import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/exerciseTypes'
 import { createEmptyCard } from 'ts-fsrs'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'

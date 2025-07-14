@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { getExerciseRenderer } from './ExerciseRegistry'
-import type { Exercise } from '@/utils/exercise/types/Exercise'
+import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
 import { Rating } from 'ts-fsrs'
 
 interface Props {
