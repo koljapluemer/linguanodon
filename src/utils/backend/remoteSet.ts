@@ -21,7 +21,7 @@ export interface RemoteTask {
     content: string
     language: string
     primaryUnitsOfMeaning: RemoteUnitOfMeaning[]
-    unitsOfMeaning?: RemoteUnitOfMeaning[]
+    secondaryUnitsOfMeaning?: RemoteUnitOfMeaning[]
 }
 
 export interface RemoteUnitOfMeaning {
@@ -89,17 +89,15 @@ function convertRemoteTaskToLocalTask(remoteTask: RemoteTask): Task {
     language: unit.language,
     content: unit.content
   }))
-  const allUnitUids = remoteTask.unitsOfMeaning 
-    ? [...primaryUnitUids, ...remoteTask.unitsOfMeaning.map(unit => ({
-        language: unit.language,
-        content: unit.content
-      }))]
-    : primaryUnitUids
+  const secondaryUnitUids = (remoteTask.secondaryUnitsOfMeaning || []).map(unit => ({
+    language: unit.language,
+    content: unit.content
+  }))
 
   return {
     language: remoteTask.language,
     content: remoteTask.content,
-    unitsOfMeaning: allUnitUids,
+    secondaryUnitsOfMeaning: secondaryUnitUids,
     primaryUnitsOfMeaning: primaryUnitUids,
     lastDownloadedAt: new Date(),
     lastPracticedAt: null,
@@ -165,8 +163,8 @@ export async function downloadAndPersistSet(
       }
       
       // Add secondary units
-      if (task.unitsOfMeaning) {
-        for (const unit of task.unitsOfMeaning) {
+      if (task.secondaryUnitsOfMeaning) {
+        for (const unit of task.secondaryUnitsOfMeaning) {
           const exists = await doesUnitOfMeaningExist(unitRepository, unit.language, unit.content)
           if (!exists) {
             const localUnit = convertRemoteUnitToLocalUnit(unit)

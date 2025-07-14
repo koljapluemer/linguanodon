@@ -103,11 +103,11 @@ for word in target_words:
     task = {
         "content": f"Use '{word}' in a sentence",
         "language": "apc",
-        "unitsOfMeaning": [],
+        "secondaryUnitsOfMeaning": [],
         "primaryUnitsOfMeaning": []
     }
     
-    # Add all sentence pairs to unitsOfMeaning or primaryUnitsOfMeaning based on word count
+    # Add all sentence pairs to secondaryUnitsOfMeaning or primaryUnitsOfMeaning based on word count
     arabic_words = []
     english_words = []
     
@@ -117,8 +117,8 @@ for word in target_words:
             task["primaryUnitsOfMeaning"].append(pair["arabic"])
             task["primaryUnitsOfMeaning"].append(pair["english"])
         else:
-            task["unitsOfMeaning"].append(pair["arabic"])
-            task["unitsOfMeaning"].append(pair["english"])
+            task["secondaryUnitsOfMeaning"].append(pair["arabic"])
+            task["secondaryUnitsOfMeaning"].append(pair["english"])
         
         # Extract words for frequency analysis
         arabic_text = pair["arabic"]["content"]
@@ -182,7 +182,7 @@ for word in target_words:
         en_words = sentence_to_words.get((english_text, "en"), set())
         pair["english"]["seeAlso"] = [{"language": "en", "content": word} for word in sorted(en_words)]
     
-    # Add all unique words as unitsOfMeaning (no linguType, credits, or translations), deduplicated by language+content
+    # Add all unique words as secondaryUnitsOfMeaning (no linguType, credits, or translations), deduplicated by language+content
     for unique_ar_word in sorted(set(arabic_words)):
         word_unit = {
             "language": "apc",
@@ -192,7 +192,7 @@ for word in target_words:
         # Add seeAlso to word unit
         word_sentences = word_to_sentences.get(("apc", unique_ar_word), set())
         word_unit["seeAlso"] = [{"language": lang, "content": content} for content, lang in sorted(word_sentences)]
-        task["unitsOfMeaning"].append(word_unit)
+        task["secondaryUnitsOfMeaning"].append(word_unit)
         
     for unique_en_word in sorted(set(english_words)):
         word_unit = {
@@ -203,7 +203,7 @@ for word in target_words:
         # Add seeAlso to word unit
         word_sentences = word_to_sentences.get(("en", unique_en_word), set())
         word_unit["seeAlso"] = [{"language": lang, "content": content} for content, lang in sorted(word_sentences)]
-        task["unitsOfMeaning"].append(word_unit)
+        task["secondaryUnitsOfMeaning"].append(word_unit)
     
     # Add the main word for the task (the same one used in the task content) to the very top of primaryUnitsOfMeaning
     # Create the main word unit with seeAlso
@@ -229,7 +229,7 @@ for word in target_words:
                 unique_units.append(unit)
         return unique_units
     
-    task["unitsOfMeaning"] = deduplicate_units(task["unitsOfMeaning"])
+    task["secondaryUnitsOfMeaning"] = deduplicate_units(task["secondaryUnitsOfMeaning"])
     task["primaryUnitsOfMeaning"] = deduplicate_units(task["primaryUnitsOfMeaning"])
     
     current_file_tasks.append(task)

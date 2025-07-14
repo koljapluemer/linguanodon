@@ -9,36 +9,39 @@ import { generateFreeTranslationForUnitAndLanguage } from './generators/generate
 /**
  * Generates all possible exercises for a task
  * Loops through each unit associated with the task and generates exercises for each user language
+ * unitMode: 'primary' | 'secondary' | 'all' determines which units to use
  */
 export async function generateExercisesForTask(
   task: Task,
   targetLanguages: Language[],
   nativeLanguages: Language[],
-  unitRepository: UnitOfMeaningRepository
+  unitRepository: UnitOfMeaningRepository,
+  unitMode: 'primary' | 'secondary' | 'all' = 'all'
 ): Promise<Exercise[]> {
   const allExercises: Exercise[] = []
   const allLanguages = [...targetLanguages, ...nativeLanguages]
   const nativeLanguageCodes = nativeLanguages.map(l => l.code)
-  
-  // Loop through each unit associated with the task
-  for (const unitRef of task.unitsOfMeaning) {
-    // Look up the actual unit from the repository
+
+  let unitRefs: { language: string; content: string }[] = []
+  if (unitMode === 'primary') {
+    unitRefs = task.primaryUnitsOfMeaning
+  } else if (unitMode === 'secondary') {
+    unitRefs = task.secondaryUnitsOfMeaning
+  } else {
+    unitRefs = [...task.primaryUnitsOfMeaning, ...task.secondaryUnitsOfMeaning]
+  }
+
+  for (const unitRef of unitRefs) {
     const unit = await unitRepository.findUnitOfMeaning(unitRef.language, unitRef.content)
-    
     if (!unit) {
       console.warn(`Unit not found: ${unitRef.language}:${unitRef.content}`)
       continue
     }
-    
-    // Loop through all user languages (both target and native)
     for (const language of allLanguages) {
-      // Generate both types of exercises
       const flashcardExercises = generateClozesForUnitAndLanguage(unit, language.code)
       const chooseFromTwoExercises = await generateChooseFromTwoForUnitAndLanguage(unit, language.code, unitRepository)
-      
       allExercises.push(...flashcardExercises, ...chooseFromTwoExercises)
     }
-    // Generate free-translation exercises (only for target -> native)
     for (const targetLang of targetLanguages) {
       const freeTranslationExercises = await generateFreeTranslationForUnitAndLanguage(
         unit,
@@ -49,6 +52,5 @@ export async function generateExercisesForTask(
       allExercises.push(...freeTranslationExercises)
     }
   }
-  
   return allExercises
 }

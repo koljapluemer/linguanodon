@@ -27,14 +27,30 @@
           </select>
         </div>
         
-        <div class="card-actions justify-end">
+        <div class="card-actions justify-end flex flex-col md:flex-row gap-2 md:gap-4">
           <button 
-            @click="generateExercises"
+            @click="() => generateExercises('primary')"
             class="btn btn-primary"
             :disabled="!selectedTaskId || loading"
           >
             <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-            Generate Exercises
+            Generate Exercises from Primary Units of Meaning
+          </button>
+          <button 
+            @click="() => generateExercises('secondary')"
+            class="btn btn-secondary"
+            :disabled="!selectedTaskId || loading"
+          >
+            <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+            Generate Exercises from Secondary Units of Meaning
+          </button>
+          <button 
+            @click="() => generateExercises('all')"
+            class="btn btn-accent"
+            :disabled="!selectedTaskId || loading"
+          >
+            <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+            Generate Exercises from All Units of Meaning
           </button>
         </div>
       </div>
@@ -50,9 +66,9 @@
         </span>
       </div>
       <div>
-        <span class="font-semibold">Units of Meaning:</span>
-        <span v-if="selectedTask.unitsOfMeaning.length === 0" class="opacity-60 ml-2">None</span>
-        <span v-for="(unit, idx) in selectedTask.unitsOfMeaning" :key="'unit-' + idx" class="badge badge-secondary mx-1">
+        <span class="font-semibold">Secondary Units of Meaning:</span>
+        <span v-if="selectedTask.secondaryUnitsOfMeaning.length === 0" class="opacity-60 ml-2">None</span>
+        <span v-for="(unit, idx) in selectedTask.secondaryUnitsOfMeaning" :key="'unit-' + idx" class="badge badge-secondary mx-1">
           {{ unit.content }}
         </span>
       </div>
@@ -174,35 +190,30 @@ async function loadTasks() {
 /**
  * Generate exercises for the selected task
  */
-async function generateExercises() {
+async function generateExercises(mode: 'primary' | 'secondary' | 'all') {
   if (!selectedTaskId.value) return
-  
   loading.value = true
   error.value = ''
   exercises.value = []
-  
   try {
     // Parse task ID
     const [language, content] = selectedTaskId.value.split(':')
     const task = await taskRepository.findTask(language, content)
-    
     if (!task) {
       error.value = 'Selected task not found'
       return
     }
-    
     // Get user languages
     const targetLanguages = await languageRepository.getUserTargetLanguages()
     const nativeLanguages = await languageRepository.getUserNativeLanguages()
-    
-    // Generate exercises
+    // Generate exercises using the utility, passing the mode
     const generatedExercises = await generateExercisesForTask(
       task,
       targetLanguages,
       nativeLanguages,
-      unitRepository
+      unitRepository,
+      mode
     )
-    
     exercises.value = generatedExercises
   } catch (err) {
     error.value = 'Failed to generate exercises'

@@ -1,8 +1,8 @@
 export interface Task {
     language: string;
     content: string;
-    unitsOfMeaning: Array<{language: string, content: string}> // list of language+content pairs
-    primaryUnitsOfMeaning: Array<{language: string, content: string}> // list of language+content pairs
+    primaryUnitsOfMeaning: Array<{language: string, content: string}> 
+    secondaryUnitsOfMeaning: Array<{language: string, content: string}> 
     lastDownloadedAt: Date | null
     lastPracticedAt: Date | null
     isCompleted: boolean
