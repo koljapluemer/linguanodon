@@ -1,16 +1,9 @@
 <template>
   <tr>
     <td class="font-medium">{{ task.content }}</td>
-    <td>{{ task.language.toUpperCase() }}</td>
-    <td class="text-sm ">{{ task.unitsOfMeaning.length }}</td>
+    <td>{{ task.language }}</td>
     <td class="text-sm ">{{ task.primaryUnitsOfMeaning.length }}</td>
-    <td>
-      <span 
-        :class="task.isCompleted ? 'badge badge-success' : 'badge badge-warning'"
-      >
-        {{ task.isCompleted ? 'Completed' : 'In Progress' }}
-      </span>
-    </td>
+    <td class="text-sm ">{{ task.primaryUnitsOfMeaning.length + (task.secondaryUnitsOfMeaning?.length || 0) }}</td>
     <td>
       <button 
         @click="startPractice"
@@ -39,7 +32,7 @@ const router = useRouter()
  * Check if task can be practiced (has units of meaning)
  */
 const canPractice = computed(() => 
-  props.task.unitsOfMeaning.length > 0 || props.task.primaryUnitsOfMeaning.length > 0
+  props.task.primaryUnitsOfMeaning.length > 0 || (props.task.secondaryUnitsOfMeaning?.length || 0) > 0
 )
 
 /**

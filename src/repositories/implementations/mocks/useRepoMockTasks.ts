@@ -13,12 +13,11 @@ export function mockTaskRepository(): TaskRepository {
         {
             language: 'en',
             content: 'Learn Basic Greetings',
-            unitsOfMeaning: [
-                { language: 'en', content: 'Hello world' },
-                { language: 'es', content: 'hola mundo' }
-            ],
             primaryUnitsOfMeaning: [
                 { language: 'en', content: 'Hello world' }
+            ],
+            secondaryUnitsOfMeaning: [
+                { language: 'es', content: 'hola mundo' }
             ],
             lastDownloadedAt: new Date('2024-01-01'),
             lastPracticedAt: null,
@@ -31,12 +30,11 @@ export function mockTaskRepository(): TaskRepository {
         {
             language: 'es',
             content: 'Essential Vocabulary',
-            unitsOfMeaning: [
-                { language: 'es', content: 'hola mundo' },
-                { language: 'en', content: 'Hello world' }
-            ],
             primaryUnitsOfMeaning: [
                 { language: 'es', content: 'hola mundo' }
+            ],
+            secondaryUnitsOfMeaning: [
+                { language: 'en', content: 'Hello world' }
             ],
             lastDownloadedAt: new Date('2024-01-01'),
             lastPracticedAt: new Date('2024-01-15'),

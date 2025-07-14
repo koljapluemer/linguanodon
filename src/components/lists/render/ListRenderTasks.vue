@@ -5,10 +5,9 @@
         <tr>
           <th>Content</th>
           <th>Language</th>
-          <th>Units of Meaning</th>
-          <th>Primary Units</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th>Core Words & Sentences</th>
+          <th>All Words & Sentences</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
