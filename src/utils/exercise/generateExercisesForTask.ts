@@ -39,8 +39,11 @@ export async function generateExercisesForTask(
     }
     for (const language of allLanguages) {
       const flashcardExercises = generateClozesForUnitAndLanguage(unit, language.code)
-      const chooseFromTwoExercises = await generateChooseFromTwoForUnitAndLanguage(unit, language.code, unitRepository)
-      allExercises.push(...flashcardExercises, ...chooseFromTwoExercises)
+      allExercises.push(...flashcardExercises)
+    }
+    for (const targetLang of targetLanguages) {
+      const chooseFromTwoExercises = await generateChooseFromTwoForUnitAndLanguage(unit, targetLang.code, unitRepository)
+      allExercises.push(...chooseFromTwoExercises)
     }
     for (const targetLang of targetLanguages) {
       const freeTranslationExercises = await generateFreeTranslationForUnitAndLanguage(

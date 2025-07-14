@@ -11,7 +11,8 @@ import PracticeTaskControl from '@/components/practice/task/PracticeTaskControl.
 import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoDexieTasks'
 import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
 import { useRepoDexieExerciseData } from '@/repositories/implementations/dexie/useRepoDexieExerciseData'
-import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
+import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'
+import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
 
 const route = useRoute()
 const taskId = route.params.taskId as string
@@ -20,4 +21,5 @@ const taskId = route.params.taskId as string
 provide(taskRepositoryKey, useRepoDexieTasks())
 provide(unitOfMeaningRepositoryKey, useRepoDexieUnitsOfMeaning())
 provide(exerciseRepositoryKey, useRepoDexieExerciseData())
+provide(languageRepositoryKey, useRepoDexieLanguages())
 </script>

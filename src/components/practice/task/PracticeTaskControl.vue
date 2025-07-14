@@ -49,9 +49,10 @@ import type { Task } from '@/entities/Task'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
-import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey } from '@/types/injectionKeys'
+import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
 import { Rating } from 'ts-fsrs'
 import { generateExerciseDataUidFromExercise } from '@/utils/exercise/generateExerciseDataUidFromExercise'
+import { generateExercisesForTask } from '@/utils/exercise/generateExercisesForTask'
 
 interface Props {
   taskId: string
@@ -66,6 +67,8 @@ const toastsStore = useToastsStore()
 const taskRepository = inject<TaskRepository>(taskRepositoryKey)
 const unitRepository = inject<UnitOfMeaningRepository>(unitOfMeaningRepositoryKey)
 const exerciseRepository = inject<ExerciseDataRepository>(exerciseRepositoryKey)
+const languageRepository = inject(languageRepositoryKey, null)
+
 
 const exercises = ref<Exercise[]>([])
 const currentExerciseIndex = ref(0)
@@ -107,13 +110,23 @@ async function loadTask() {
  * Initialize exercises for the task
  */
 async function initializeExercises() {
-  if (!task.value || !unitRepository || !exerciseRepository) {
+  if (!task.value || !unitRepository || !exerciseRepository || !languageRepository) {
     error.value = 'Required repositories not provided'
     return
   }
 
   try {
-    const generatedExercises: Exercise[] = []
+    // Fetch user languages
+    const targetLanguages = await languageRepository.getUserTargetLanguages()
+    const nativeLanguages = await languageRepository.getUserNativeLanguages()
+    // Generate exercises using the utility
+    const generatedExercises = await generateExercisesForTask(
+      task.value,
+      targetLanguages,
+      nativeLanguages,
+      unitRepository,
+      'all'
+    )
     exercises.value = generatedExercises
   } catch (err) {
     error.value = 'Failed to generate exercises'
