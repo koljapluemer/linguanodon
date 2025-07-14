@@ -79,11 +79,11 @@ for word in target_words:
                     "source": "Levanti Dataset",
                     "sourceLink": "https://huggingface.co/datasets/guymorlan/levanti"
                 }],
-                "translations": [{"language": "en", "content": english_text}],
+                "translations": [{"language": "eng", "content": english_text}],
                 "card": {"type": "sentence"}
             },
             "english": {
-                "language": "en",
+                "language": "eng",
                 "content": english_text,
                 "notes": "",
                 "credits": [{
@@ -163,11 +163,11 @@ for word in target_words:
             cleaned_word = re.sub(r'[^\w]', '', en_word.strip().lower())
             if cleaned_word and len(cleaned_word) > 1:
                 sentence_en_words.add(cleaned_word)
-                word_to_sentences[("en", cleaned_word)].add((english_text, "en"))
+                word_to_sentences[("eng", cleaned_word)].add((english_text, "eng"))
         
         # Add word references to sentence
         sentence_to_words[(arabic_text, "apc")] = sentence_ar_words
-        sentence_to_words[(english_text, "en")] = sentence_en_words
+        sentence_to_words[(english_text, "eng")] = sentence_en_words
     
     # Add seeAlso to sentences
     for pair in matching_sentences:
@@ -179,8 +179,8 @@ for word in target_words:
         pair["arabic"]["seeAlso"] = [{"language": "apc", "content": word} for word in sorted(ar_words)]
         
         # Add seeAlso to English sentence
-        en_words = sentence_to_words.get((english_text, "en"), set())
-        pair["english"]["seeAlso"] = [{"language": "en", "content": word} for word in sorted(en_words)]
+        en_words = sentence_to_words.get((english_text, "eng"), set())
+        pair["english"]["seeAlso"] = [{"language": "eng", "content": word} for word in sorted(en_words)]
     
     # Add all unique words as secondaryUnitsOfMeaning (no linguType, credits, or translations), deduplicated by language+content
     for unique_ar_word in sorted(set(arabic_words)):
@@ -196,12 +196,12 @@ for word in target_words:
         
     for unique_en_word in sorted(set(english_words)):
         word_unit = {
-            "language": "en",
+            "language": "eng",
             "content": unique_en_word,
             "card": {"type": "word"}
         }
         # Add seeAlso to word unit
-        word_sentences = word_to_sentences.get(("en", unique_en_word), set())
+        word_sentences = word_to_sentences.get(("eng", unique_en_word), set())
         word_unit["seeAlso"] = [{"language": lang, "content": content} for content, lang in sorted(word_sentences)]
         task["secondaryUnitsOfMeaning"].append(word_unit)
     

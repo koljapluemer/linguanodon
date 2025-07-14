@@ -14,26 +14,41 @@ export async function generateFreeTranslationForUnitAndLanguage(
   unitRepository: UnitOfMeaningRepository
 ): Promise<ExerciseFreeTranslation[]> {
   // Only generate if the unit is in the target language
-  if (unit.language !== targetLanguageCode) return []
+  if (unit.language !== targetLanguageCode) {
+    console.debug('[FreeTranslation] Skipping unit because language does not match target:', {unitLanguage: unit.language, targetLanguageCode})
+    return []
+  }
 
   // Count words in the target sentence
   const tokens = splitIntoTokens(unit.content)
   const wordCount = tokens.filter(isWordToken).length
-  if (wordCount < 3) return []
+  if (wordCount < 3) {
+    console.debug('[FreeTranslation] Skipping unit because word count < 3:', {unitContent: unit.content, wordCount})
+    return []
+  }
 
   // For each native language, find the translation and create the exercise
   const exercises: ExerciseFreeTranslation[] = []
   for (const nativeLang of nativeLanguageCodes) {
     const translationRef = unit.translations.find(t => t.language === nativeLang)
-    if (!translationRef) continue
+    if (!translationRef) {
+      console.debug('[FreeTranslation] No translationRef found for native language:', {nativeLang, availableTranslations: unit.translations})
+      continue
+    }
     // Look up the translation unit
     const translationUnit = await unitRepository.findUnitOfMeaning(nativeLang, translationRef.content)
-    if (!translationUnit) continue
+    if (!translationUnit) {
+      console.debug('[FreeTranslation] No translationUnit found in DB for:', {nativeLang, content: translationRef.content})
+      continue
+    }
     exercises.push({
       type: 'free-translation',
       front: unit.content,
       back: translationUnit.content
     })
+  }
+  if (exercises.length === 0) {
+    console.debug('[FreeTranslation] No exercises generated for unit:', {unit})
   }
   return exercises
 } 

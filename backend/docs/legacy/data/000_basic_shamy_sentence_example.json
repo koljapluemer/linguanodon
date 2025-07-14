@@ -1,7 +1,7 @@
 {
     "unitsOfMeaning": {
         "a":{
-            "language": "en",
+            "language": "eng",
             "content": "I couldn't say",
             "linguType": "sentence",
             "translations": ["b"]
@@ -12,7 +12,7 @@
             "linguType": "sentence"
         },
         "c": {
-            "language": "en",
+            "language": "eng",
             "content": "I have a cat.",
             "linguType": "sentence",
             "translations": ["d"]
@@ -29,7 +29,7 @@
             "translations": ["f"]   
         },
         "f": {
-            "language": "en",
+            "language": "eng",
             "content": "cat",
             "linguType": "noun",
             "related": ["c"]

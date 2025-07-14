@@ -9,7 +9,7 @@
             ]
         },
         "b": {
-            "language": "en",
+            "language": "eng",
             "content": "music",
             "linguType": "word",
             "related": [
@@ -25,7 +25,7 @@
             ]
         },
         "d": {
-            "language": "en",
+            "language": "eng",
             "content": "in front of me",
             "linguType": "word",
             "related": [
@@ -41,7 +41,7 @@
             ]
         },
         "f": {
-            "language": "en",
+            "language": "eng",
             "content": "two lines",
             "linguType": "word",
             "related": [
@@ -57,7 +57,7 @@
             ]
         },
         "h": {
-            "language": "en",
+            "language": "eng",
             "content": "perfect",
             "linguType": "word",
             "related": [
@@ -73,7 +73,7 @@
             ]
         },
         "j": {
-            "language": "en",
+            "language": "eng",
             "content": "I solved it",
             "linguType": "word",
             "related": [
@@ -89,7 +89,7 @@
             ]
         },
         "l": {
-            "language": "en",
+            "language": "eng",
             "content": "correct",
             "linguType": "word",
             "related": [
@@ -105,7 +105,7 @@
             ]
         },
         "n": {
-            "language": "en",
+            "language": "eng",
             "content": "game",
             "linguType": "word",
             "related": [
@@ -121,7 +121,7 @@
             ]
         },
         "p": {
-            "language": "en",
+            "language": "eng",
             "content": "ladder",
             "linguType": "word",
             "related": [
@@ -137,7 +137,7 @@
             ]
         },
         "r": {
-            "language": "en",
+            "language": "eng",
             "content": "snake",
             "linguType": "word",
             "related": [
@@ -153,7 +153,7 @@
             ]
         },
         "t": {
-            "language": "en",
+            "language": "eng",
             "content": "wrong",
             "linguType": "word",
             "related": [
@@ -169,7 +169,7 @@
             ]
         },
         "v": {
-            "language": "en",
+            "language": "eng",
             "content": "your hand",
             "linguType": "word",
             "related": [
@@ -185,7 +185,7 @@
             ]
         },
         "x": {
-            "language": "en",
+            "language": "eng",
             "content": "normal",
             "linguType": "word",
             "related": [
@@ -201,7 +201,7 @@
             ]
         },
         "z": {
-            "language": "en",
+            "language": "eng",
             "content": "difference",
             "linguType": "word",
             "related": [
@@ -217,7 +217,7 @@
             ]
         },
         "|": {
-            "language": "en",
+            "language": "eng",
             "content": "five",
             "linguType": "word",
             "related": [
@@ -233,7 +233,7 @@
             ]
         },
         "~": {
-            "language": "en",
+            "language": "eng",
             "content": "six",
             "linguType": "word",
             "related": [
@@ -249,7 +249,7 @@
             ]
         },
         "": {
-            "language": "en",
+            "language": "eng",
             "content": "conversation",
             "linguType": "word",
             "related": [
@@ -265,7 +265,7 @@
             ]
         },
         "": {
-            "language": "en",
+            "language": "eng",
             "content": "take",
             "linguType": "word",
             "related": [
@@ -281,7 +281,7 @@
             ]
         },
         "": {
-            "language": "en",
+            "language": "eng",
             "content": "pound",
             "linguType": "word",
             "related": [
@@ -297,7 +297,7 @@
             ]
         },
         "": {
-            "language": "en",
+            "language": "eng",
             "content": "one",
             "linguType": "word",
             "related": [
@@ -313,7 +313,7 @@
             ]
         },
         "": {
-            "language": "en",
+            "language": "eng",
             "content": "two",
             "linguType": "word",
             "related": [

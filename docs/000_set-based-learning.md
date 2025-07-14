@@ -28,7 +28,7 @@ It is initially fed from files in `src/stores/initialSetData/*json`, which follo
     },
     {
       "uid": "en_I have to go._sentence",
-      "language": "en",
+      "language": "eng",
       "content": "I have to go.",
       "linguType": "sentence",
       "license": "CC-BY-NC-4.0",

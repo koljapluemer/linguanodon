@@ -125,7 +125,7 @@ def create_units_of_meaning(vocabulary: List[WordEntry], source_language_code: s
         # Create unit for the English translation
         translation_id = chr(ord('a') + counter + 1)
         units[translation_id] = {
-            "language": "en",
+            "language": 'en',
             "content": entry.translation,
             "linguType": "word",
             "related": [source_id]

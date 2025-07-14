@@ -1,7 +1,7 @@
 {
     "unitsOfMeaning": {
         "eng_1": {
-            "language": "en",
+            "language": "eng",
             "content": "Honestly?",
             "linguType": "sentence",
             "translations": [
@@ -28,7 +28,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301102"
         },
         "eng_2": {
-            "language": "en",
+            "language": "eng",
             "content": "Hallo!",
             "linguType": "sentence",
             "translations": [
@@ -55,7 +55,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301103"
         },
         "eng_3": {
-            "language": "en",
+            "language": "eng",
             "content": "Ta!",
             "linguType": "sentence",
             "translations": [
@@ -82,7 +82,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301117"
         },
         "eng_4": {
-            "language": "en",
+            "language": "eng",
             "content": "Congratulations.",
             "linguType": "sentence",
             "translations": [
@@ -107,7 +107,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/10218761"
         },
         "eng_5": {
-            "language": "en",
+            "language": "eng",
             "content": "Fag.",
             "linguType": "sentence",
             "translations": [
@@ -134,7 +134,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301112"
         },
         "eng_6": {
-            "language": "en",
+            "language": "eng",
             "content": "Die.",
             "linguType": "sentence",
             "translations": [
@@ -161,7 +161,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301101"
         },
         "eng_7": {
-            "language": "en",
+            "language": "eng",
             "content": "Stop.",
             "linguType": "sentence",
             "translations": [
@@ -188,7 +188,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301111"
         },
         "eng_8": {
-            "language": "en",
+            "language": "eng",
             "content": "Pardon?",
             "linguType": "sentence",
             "translations": [
@@ -215,7 +215,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301088"
         },
         "eng_9": {
-            "language": "en",
+            "language": "eng",
             "content": "Welcome!",
             "linguType": "sentence",
             "translations": [
@@ -242,7 +242,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301092"
         },
         "eng_10": {
-            "language": "en",
+            "language": "eng",
             "content": "Exactly!",
             "linguType": "sentence",
             "translations": [
@@ -269,7 +269,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301127"
         },
         "eng_11": {
-            "language": "en",
+            "language": "eng",
             "content": "No!",
             "linguType": "sentence",
             "translations": [
@@ -296,7 +296,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301123"
         },
         "eng_12": {
-            "language": "en",
+            "language": "eng",
             "content": "Dunno.",
             "linguType": "sentence",
             "translations": [
@@ -321,7 +321,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_13": {
-            "language": "en",
+            "language": "eng",
             "content": "Morning!",
             "linguType": "sentence",
             "translations": [
@@ -348,7 +348,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301130"
         },
         "eng_14": {
-            "language": "en",
+            "language": "eng",
             "content": "Hi!",
             "linguType": "sentence",
             "translations": [
@@ -375,7 +375,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301106"
         },
         "eng_15": {
-            "language": "en",
+            "language": "eng",
             "content": "Goodbye.",
             "linguType": "sentence",
             "translations": [
@@ -402,7 +402,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299785"
         },
         "eng_16": {
-            "language": "en",
+            "language": "eng",
             "content": "Thanks.",
             "linguType": "sentence",
             "translations": [
@@ -429,7 +429,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301117"
         },
         "eng_17": {
-            "language": "en",
+            "language": "eng",
             "content": "Hello.",
             "linguType": "sentence",
             "translations": [
@@ -456,7 +456,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301105"
         },
         "eng_18": {
-            "language": "en",
+            "language": "eng",
             "content": "Yes!",
             "linguType": "sentence",
             "translations": [
@@ -483,7 +483,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301124"
         },
         "eng_19": {
-            "language": "en",
+            "language": "eng",
             "content": "Nope.",
             "linguType": "sentence",
             "translations": [
@@ -510,7 +510,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301123"
         },
         "eng_20": {
-            "language": "en",
+            "language": "eng",
             "content": "Shit!",
             "linguType": "sentence",
             "translations": [
@@ -537,7 +537,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301122"
         },
         "eng_21": {
-            "language": "en",
+            "language": "eng",
             "content": "Incredible!",
             "linguType": "sentence",
             "translations": [
@@ -564,7 +564,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301095"
         },
         "eng_22": {
-            "language": "en",
+            "language": "eng",
             "content": "Hi.",
             "linguType": "sentence",
             "translations": [
@@ -591,7 +591,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301106"
         },
         "eng_23": {
-            "language": "en",
+            "language": "eng",
             "content": "Goodbye!",
             "linguType": "sentence",
             "translations": [
@@ -618,7 +618,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299785"
         },
         "eng_24": {
-            "language": "en",
+            "language": "eng",
             "content": "Precisely!",
             "linguType": "sentence",
             "translations": [
@@ -645,7 +645,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301127"
         },
         "eng_25": {
-            "language": "en",
+            "language": "eng",
             "content": "Yes.",
             "linguType": "sentence",
             "translations": [
@@ -672,7 +672,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301124"
         },
         "eng_26": {
-            "language": "en",
+            "language": "eng",
             "content": "No.",
             "linguType": "sentence",
             "translations": [
@@ -699,7 +699,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301123"
         },
         "eng_27": {
-            "language": "en",
+            "language": "eng",
             "content": "Shit.",
             "linguType": "sentence",
             "translations": [
@@ -726,7 +726,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301122"
         },
         "eng_28": {
-            "language": "en",
+            "language": "eng",
             "content": "Crazy!",
             "linguType": "sentence",
             "translations": [
@@ -753,7 +753,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301120"
         },
         "eng_29": {
-            "language": "en",
+            "language": "eng",
             "content": "Hungry?",
             "linguType": "sentence",
             "translations": [
@@ -780,7 +780,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301118"
         },
         "eng_30": {
-            "language": "en",
+            "language": "eng",
             "content": "Thanks!",
             "linguType": "sentence",
             "translations": [
@@ -807,7 +807,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301117"
         },
         "eng_31": {
-            "language": "en",
+            "language": "eng",
             "content": "Stop!",
             "linguType": "sentence",
             "translations": [
@@ -834,7 +834,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301111"
         },
         "eng_32": {
-            "language": "en",
+            "language": "eng",
             "content": "Help!",
             "linguType": "sentence",
             "translations": [
@@ -861,7 +861,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301115"
         },
         "eng_33": {
-            "language": "en",
+            "language": "eng",
             "content": "Fuck!",
             "linguType": "sentence",
             "translations": [
@@ -888,7 +888,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301114"
         },
         "eng_34": {
-            "language": "en",
+            "language": "eng",
             "content": "Faggot.",
             "linguType": "sentence",
             "translations": [
@@ -915,7 +915,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301112"
         },
         "eng_35": {
-            "language": "en",
+            "language": "eng",
             "content": "Enough!",
             "linguType": "sentence",
             "translations": [
@@ -942,7 +942,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301111"
         },
         "eng_36": {
-            "language": "en",
+            "language": "eng",
             "content": "Please.",
             "linguType": "sentence",
             "translations": [
@@ -969,7 +969,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301109"
         },
         "eng_37": {
-            "language": "en",
+            "language": "eng",
             "content": "Finally!",
             "linguType": "sentence",
             "translations": [
@@ -996,7 +996,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301108"
         },
         "eng_38": {
-            "language": "en",
+            "language": "eng",
             "content": "Hello!",
             "linguType": "sentence",
             "translations": [
@@ -1023,7 +1023,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301103"
         },
         "eng_39": {
-            "language": "en",
+            "language": "eng",
             "content": "Really?",
             "linguType": "sentence",
             "translations": [
@@ -1050,7 +1050,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301102"
         },
         "eng_40": {
-            "language": "en",
+            "language": "eng",
             "content": "Die!",
             "linguType": "sentence",
             "translations": [
@@ -1077,7 +1077,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301101"
         },
         "eng_41": {
-            "language": "en",
+            "language": "eng",
             "content": "Study!",
             "linguType": "sentence",
             "translations": [
@@ -1104,7 +1104,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301099"
         },
         "eng_42": {
-            "language": "en",
+            "language": "eng",
             "content": "Naturally.",
             "linguType": "sentence",
             "translations": [
@@ -1131,7 +1131,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301098"
         },
         "eng_43": {
-            "language": "en",
+            "language": "eng",
             "content": "Obviously.",
             "linguType": "sentence",
             "translations": [
@@ -1158,7 +1158,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301097"
         },
         "eng_44": {
-            "language": "en",
+            "language": "eng",
             "content": "Certainly.",
             "linguType": "sentence",
             "translations": [
@@ -1185,7 +1185,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301096"
         },
         "eng_45": {
-            "language": "en",
+            "language": "eng",
             "content": "Unbelievable!",
             "linguType": "sentence",
             "translations": [
@@ -1212,7 +1212,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301095"
         },
         "eng_46": {
-            "language": "en",
+            "language": "eng",
             "content": "Speaking.",
             "linguType": "sentence",
             "translations": [
@@ -1239,7 +1239,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301094"
         },
         "eng_47": {
-            "language": "en",
+            "language": "eng",
             "content": "Dead?",
             "linguType": "sentence",
             "translations": [
@@ -1266,7 +1266,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301093"
         },
         "eng_48": {
-            "language": "en",
+            "language": "eng",
             "content": "Welcome.",
             "linguType": "sentence",
             "translations": [
@@ -1293,7 +1293,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301092"
         },
         "eng_49": {
-            "language": "en",
+            "language": "eng",
             "content": "Brilliant!",
             "linguType": "sentence",
             "translations": [
@@ -1320,7 +1320,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301091"
         },
         "eng_50": {
-            "language": "en",
+            "language": "eng",
             "content": "Terrific!",
             "linguType": "sentence",
             "translations": [
@@ -1347,7 +1347,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301091"
         },
         "eng_51": {
-            "language": "en",
+            "language": "eng",
             "content": "Sorry...",
             "linguType": "sentence",
             "translations": [
@@ -1374,7 +1374,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041986"
         },
         "eng_52": {
-            "language": "en",
+            "language": "eng",
             "content": "Why?",
             "linguType": "sentence",
             "translations": [
@@ -1401,7 +1401,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301090"
         },
         "eng_53": {
-            "language": "en",
+            "language": "eng",
             "content": "What?",
             "linguType": "sentence",
             "translations": [
@@ -1428,7 +1428,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301088"
         },
         "eng_54": {
-            "language": "en",
+            "language": "eng",
             "content": "Definitely!",
             "linguType": "sentence",
             "translations": [
@@ -1455,7 +1455,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301087"
         },
         "eng_55": {
-            "language": "en",
+            "language": "eng",
             "content": "Louder.",
             "linguType": "sentence",
             "translations": [
@@ -1482,7 +1482,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301086"
         },
         "eng_56": {
-            "language": "en",
+            "language": "eng",
             "content": "Wrong.",
             "linguType": "sentence",
             "translations": [
@@ -1509,7 +1509,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041985"
         },
         "eng_57": {
-            "language": "en",
+            "language": "eng",
             "content": "Congratulations!",
             "linguType": "sentence",
             "translations": [
@@ -1534,7 +1534,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/10218761"
         },
         "eng_58": {
-            "language": "en",
+            "language": "eng",
             "content": "Your name?",
             "linguType": "sentence",
             "translations": [
@@ -1559,7 +1559,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_59": {
-            "language": "en",
+            "language": "eng",
             "content": "(You) Study!",
             "linguType": "sentence",
             "translations": [
@@ -1586,7 +1586,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301099"
         },
         "eng_60": {
-            "language": "en",
+            "language": "eng",
             "content": "Thank God!",
             "linguType": "sentence",
             "translations": [
@@ -1611,7 +1611,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905725"
         },
         "eng_61": {
-            "language": "en",
+            "language": "eng",
             "content": "Fucking hell!",
             "linguType": "sentence",
             "translations": [
@@ -1638,7 +1638,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301114"
         },
         "eng_62": {
-            "language": "en",
+            "language": "eng",
             "content": "Fuck you.",
             "linguType": "sentence",
             "translations": [
@@ -1665,7 +1665,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301114"
         },
         "eng_63": {
-            "language": "en",
+            "language": "eng",
             "content": "Good evening!",
             "linguType": "sentence",
             "translations": [
@@ -1692,7 +1692,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301131"
         },
         "eng_64": {
-            "language": "en",
+            "language": "eng",
             "content": "Good morning.",
             "linguType": "sentence",
             "translations": [
@@ -1719,7 +1719,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301130"
         },
         "eng_65": {
-            "language": "en",
+            "language": "eng",
             "content": "Thank you.",
             "linguType": "sentence",
             "translations": [
@@ -1746,7 +1746,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301117"
         },
         "eng_66": {
-            "language": "en",
+            "language": "eng",
             "content": "Come in!",
             "linguType": "sentence",
             "translations": [
@@ -1773,7 +1773,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301133"
         },
         "eng_67": {
-            "language": "en",
+            "language": "eng",
             "content": "Of course!",
             "linguType": "sentence",
             "translations": [
@@ -1800,7 +1800,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301097"
         },
         "eng_68": {
-            "language": "en",
+            "language": "eng",
             "content": "Of course.",
             "linguType": "sentence",
             "translations": [
@@ -1827,7 +1827,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301097"
         },
         "eng_69": {
-            "language": "en",
+            "language": "eng",
             "content": "Thank you!",
             "linguType": "sentence",
             "translations": [
@@ -1854,7 +1854,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301117"
         },
         "eng_70": {
-            "language": "en",
+            "language": "eng",
             "content": "Thank God.",
             "linguType": "sentence",
             "translations": [
@@ -1879,7 +1879,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905725"
         },
         "eng_71": {
-            "language": "en",
+            "language": "eng",
             "content": "No swimming.",
             "linguType": "sentence",
             "translations": [
@@ -1906,7 +1906,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301135"
         },
         "eng_72": {
-            "language": "en",
+            "language": "eng",
             "content": "Come in.",
             "linguType": "sentence",
             "translations": [
@@ -1933,7 +1933,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301133"
         },
         "eng_73": {
-            "language": "en",
+            "language": "eng",
             "content": "Hello, Chicago!",
             "linguType": "sentence",
             "translations": [
@@ -1960,7 +1960,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301132"
         },
         "eng_74": {
-            "language": "en",
+            "language": "eng",
             "content": "Good evening.",
             "linguType": "sentence",
             "translations": [
@@ -1987,7 +1987,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301131"
         },
         "eng_75": {
-            "language": "en",
+            "language": "eng",
             "content": "Good morning!",
             "linguType": "sentence",
             "translations": [
@@ -2014,7 +2014,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301130"
         },
         "eng_76": {
-            "language": "en",
+            "language": "eng",
             "content": "Search me.",
             "linguType": "sentence",
             "translations": [
@@ -2039,7 +2039,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_77": {
-            "language": "en",
+            "language": "eng",
             "content": "Start, dammit!",
             "linguType": "sentence",
             "translations": [
@@ -2066,7 +2066,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301129"
         },
         "eng_78": {
-            "language": "en",
+            "language": "eng",
             "content": "Fuck you!",
             "linguType": "sentence",
             "translations": [
@@ -2093,7 +2093,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301114"
         },
         "eng_79": {
-            "language": "en",
+            "language": "eng",
             "content": "Beats me.",
             "linguType": "sentence",
             "translations": [
@@ -2118,7 +2118,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_80": {
-            "language": "en",
+            "language": "eng",
             "content": "Fuck your mother!",
             "linguType": "sentence",
             "translations": [
@@ -2145,7 +2145,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301114"
         },
         "eng_81": {
-            "language": "en",
+            "language": "eng",
             "content": "Don't know.",
             "linguType": "sentence",
             "translations": [
@@ -2170,7 +2170,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_82": {
-            "language": "en",
+            "language": "eng",
             "content": "Praise the Lord!",
             "linguType": "sentence",
             "translations": [
@@ -2195,7 +2195,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905725"
         },
         "eng_83": {
-            "language": "en",
+            "language": "eng",
             "content": "How are you?",
             "linguType": "sentence",
             "translations": [
@@ -2220,7 +2220,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905720"
         },
         "eng_84": {
-            "language": "en",
+            "language": "eng",
             "content": "I'm confused.",
             "linguType": "sentence",
             "translations": [
@@ -2245,7 +2245,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_85": {
-            "language": "en",
+            "language": "eng",
             "content": "Where am I?",
             "linguType": "sentence",
             "translations": [
@@ -2272,7 +2272,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041993"
         },
         "eng_86": {
-            "language": "en",
+            "language": "eng",
             "content": "I'm sorry.",
             "linguType": "sentence",
             "translations": [
@@ -2299,7 +2299,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041986"
         },
         "eng_87": {
-            "language": "en",
+            "language": "eng",
             "content": "He will accompany you.",
             "linguType": "sentence",
             "translations": [
@@ -2326,7 +2326,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299731"
         },
         "eng_88": {
-            "language": "en",
+            "language": "eng",
             "content": "I don't know!",
             "linguType": "sentence",
             "translations": [
@@ -2351,7 +2351,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_89": {
-            "language": "en",
+            "language": "eng",
             "content": "This is his car.",
             "linguType": "sentence",
             "translations": [
@@ -2378,7 +2378,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299712"
         },
         "eng_90": {
-            "language": "en",
+            "language": "eng",
             "content": "I do not know.",
             "linguType": "sentence",
             "translations": [
@@ -2403,7 +2403,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_91": {
-            "language": "en",
+            "language": "eng",
             "content": "I couldn't say.",
             "linguType": "sentence",
             "translations": [
@@ -2428,7 +2428,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_92": {
-            "language": "en",
+            "language": "eng",
             "content": "I have a cat.",
             "linguType": "sentence",
             "translations": [
@@ -2453,7 +2453,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11168546"
         },
         "eng_93": {
-            "language": "en",
+            "language": "eng",
             "content": "What's his name?",
             "linguType": "sentence",
             "translations": [
@@ -2478,7 +2478,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_94": {
-            "language": "en",
+            "language": "eng",
             "content": "Praise be to Allah!",
             "linguType": "sentence",
             "translations": [
@@ -2503,7 +2503,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905725"
         },
         "eng_95": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom was my hero.",
             "linguType": "sentence",
             "translations": [
@@ -2530,7 +2530,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299601"
         },
         "eng_96": {
-            "language": "en",
+            "language": "eng",
             "content": "How're you doing?",
             "linguType": "sentence",
             "translations": [
@@ -2555,7 +2555,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905720"
         },
         "eng_97": {
-            "language": "en",
+            "language": "eng",
             "content": "What are you called?",
             "linguType": "sentence",
             "translations": [
@@ -2580,7 +2580,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_98": {
-            "language": "en",
+            "language": "eng",
             "content": "Did you say something?",
             "linguType": "sentence",
             "translations": [
@@ -2607,7 +2607,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301088"
         },
         "eng_99": {
-            "language": "en",
+            "language": "eng",
             "content": "What's her name?",
             "linguType": "sentence",
             "translations": [
@@ -2632,7 +2632,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_100": {
-            "language": "en",
+            "language": "eng",
             "content": "What's your name?",
             "linguType": "sentence",
             "translations": [
@@ -2657,7 +2657,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_101": {
-            "language": "en",
+            "language": "eng",
             "content": "I don't understand.",
             "linguType": "sentence",
             "translations": [
@@ -2682,7 +2682,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/10218688"
         },
         "eng_102": {
-            "language": "en",
+            "language": "eng",
             "content": "I do not understand.",
             "linguType": "sentence",
             "translations": [
@@ -2707,7 +2707,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/10218688"
         },
         "eng_103": {
-            "language": "en",
+            "language": "eng",
             "content": "I don't know.",
             "linguType": "sentence",
             "translations": [
@@ -2732,7 +2732,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_104": {
-            "language": "en",
+            "language": "eng",
             "content": "What's its name?",
             "linguType": "sentence",
             "translations": [
@@ -2757,7 +2757,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_105": {
-            "language": "en",
+            "language": "eng",
             "content": "What is his name?",
             "linguType": "sentence",
             "translations": [
@@ -2782,7 +2782,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_106": {
-            "language": "en",
+            "language": "eng",
             "content": "I have no idea.",
             "linguType": "sentence",
             "translations": [
@@ -2807,7 +2807,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_107": {
-            "language": "en",
+            "language": "eng",
             "content": "My hobby is music.",
             "linguType": "sentence",
             "translations": [
@@ -2834,7 +2834,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11316505"
         },
         "eng_108": {
-            "language": "en",
+            "language": "eng",
             "content": "What is your name?",
             "linguType": "sentence",
             "translations": [
@@ -2859,7 +2859,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_109": {
-            "language": "en",
+            "language": "eng",
             "content": "What was your name?",
             "linguType": "sentence",
             "translations": [
@@ -2884,7 +2884,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_110": {
-            "language": "en",
+            "language": "eng",
             "content": "How are you doing?",
             "linguType": "sentence",
             "translations": [
@@ -2909,7 +2909,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905720"
         },
         "eng_111": {
-            "language": "en",
+            "language": "eng",
             "content": "May your mother get cholera!",
             "linguType": "sentence",
             "translations": [
@@ -2936,7 +2936,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12301114"
         },
         "eng_112": {
-            "language": "en",
+            "language": "eng",
             "content": "She sits on a chair.",
             "linguType": "sentence",
             "translations": [
@@ -2963,7 +2963,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299718"
         },
         "eng_113": {
-            "language": "en",
+            "language": "eng",
             "content": "We went to see Tom.",
             "linguType": "sentence",
             "translations": [
@@ -2990,7 +2990,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299727"
         },
         "eng_114": {
-            "language": "en",
+            "language": "eng",
             "content": "We want a peaceful solution.",
             "linguType": "sentence",
             "translations": [
@@ -3017,7 +3017,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/10020557"
         },
         "eng_115": {
-            "language": "en",
+            "language": "eng",
             "content": "The real question is why.",
             "linguType": "sentence",
             "translations": [
@@ -3044,7 +3044,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299599"
         },
         "eng_116": {
-            "language": "en",
+            "language": "eng",
             "content": "I have a female cat.",
             "linguType": "sentence",
             "translations": [
@@ -3069,7 +3069,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11168546"
         },
         "eng_117": {
-            "language": "en",
+            "language": "eng",
             "content": "Paris is a romantic city.",
             "linguType": "sentence",
             "translations": [
@@ -3096,7 +3096,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299675"
         },
         "eng_118": {
-            "language": "en",
+            "language": "eng",
             "content": "Sami started getting really worried.",
             "linguType": "sentence",
             "translations": [
@@ -3123,7 +3123,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041975"
         },
         "eng_119": {
-            "language": "en",
+            "language": "eng",
             "content": "Layla dated a drug addict.",
             "linguType": "sentence",
             "translations": [
@@ -3150,7 +3150,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299723"
         },
         "eng_120": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom cries all the time.",
             "linguType": "sentence",
             "translations": [
@@ -3177,7 +3177,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11316524"
         },
         "eng_121": {
-            "language": "en",
+            "language": "eng",
             "content": "Do you have a name?",
             "linguType": "sentence",
             "translations": [
@@ -3202,7 +3202,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_122": {
-            "language": "en",
+            "language": "eng",
             "content": "I'm not a singer.",
             "linguType": "sentence",
             "translations": [
@@ -3229,7 +3229,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299764"
         },
         "eng_123": {
-            "language": "en",
+            "language": "eng",
             "content": "Turtles don't have teeth.",
             "linguType": "sentence",
             "translations": [
@@ -3256,7 +3256,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299780"
         },
         "eng_124": {
-            "language": "en",
+            "language": "eng",
             "content": "My sister likes to dance.",
             "linguType": "sentence",
             "translations": [
@@ -3283,7 +3283,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299772"
         },
         "eng_125": {
-            "language": "en",
+            "language": "eng",
             "content": "Can you swim like them?",
             "linguType": "sentence",
             "translations": [
@@ -3310,7 +3310,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11316532"
         },
         "eng_126": {
-            "language": "en",
+            "language": "eng",
             "content": "How do we explain this?",
             "linguType": "sentence",
             "translations": [
@@ -3337,7 +3337,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299734"
         },
         "eng_127": {
-            "language": "en",
+            "language": "eng",
             "content": "Where's the new girl?",
             "linguType": "sentence",
             "translations": [
@@ -3364,7 +3364,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041967"
         },
         "eng_128": {
-            "language": "en",
+            "language": "eng",
             "content": "I don't want war.",
             "linguType": "sentence",
             "translations": [
@@ -3391,7 +3391,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/10020557"
         },
         "eng_129": {
-            "language": "en",
+            "language": "eng",
             "content": "What's your name, please?",
             "linguType": "sentence",
             "translations": [
@@ -3416,7 +3416,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_130": {
-            "language": "en",
+            "language": "eng",
             "content": "What do we call you?",
             "linguType": "sentence",
             "translations": [
@@ -3441,7 +3441,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_131": {
-            "language": "en",
+            "language": "eng",
             "content": "What's your first name?",
             "linguType": "sentence",
             "translations": [
@@ -3466,7 +3466,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_132": {
-            "language": "en",
+            "language": "eng",
             "content": "I keep a female cat.",
             "linguType": "sentence",
             "translations": [
@@ -3491,7 +3491,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11168546"
         },
         "eng_133": {
-            "language": "en",
+            "language": "eng",
             "content": "May I have your name?",
             "linguType": "sentence",
             "translations": [
@@ -3516,7 +3516,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/8905722"
         },
         "eng_134": {
-            "language": "en",
+            "language": "eng",
             "content": "I don't get it.",
             "linguType": "sentence",
             "translations": [
@@ -3541,7 +3541,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/10218688"
         },
         "eng_135": {
-            "language": "en",
+            "language": "eng",
             "content": "Erdoğan is the president of Turkey.",
             "linguType": "sentence",
             "translations": [
@@ -3568,7 +3568,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041980"
         },
         "eng_136": {
-            "language": "en",
+            "language": "eng",
             "content": "She decided to move to Belgium.",
             "linguType": "sentence",
             "translations": [
@@ -3595,7 +3595,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299758"
         },
         "eng_137": {
-            "language": "en",
+            "language": "eng",
             "content": "Does it really make a difference?",
             "linguType": "sentence",
             "translations": [
@@ -3622,7 +3622,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299741"
         },
         "eng_138": {
-            "language": "en",
+            "language": "eng",
             "content": "My sisters and I are Muslims.",
             "linguType": "sentence",
             "translations": [
@@ -3649,7 +3649,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041970"
         },
         "eng_139": {
-            "language": "en",
+            "language": "eng",
             "content": "Mennad was in a horrible situation.",
             "linguType": "sentence",
             "translations": [
@@ -3676,7 +3676,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299659"
         },
         "eng_140": {
-            "language": "en",
+            "language": "eng",
             "content": "Was it you who did it?",
             "linguType": "sentence",
             "translations": [
@@ -3703,7 +3703,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299706"
         },
         "eng_141": {
-            "language": "en",
+            "language": "eng",
             "content": "I'm sure Tom understands that.",
             "linguType": "sentence",
             "translations": [
@@ -3730,7 +3730,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299746"
         },
         "eng_142": {
-            "language": "en",
+            "language": "eng",
             "content": "I haven't got a clue.",
             "linguType": "sentence",
             "translations": [
@@ -3755,7 +3755,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/9317155"
         },
         "eng_143": {
-            "language": "en",
+            "language": "eng",
             "content": "We don't want a peaceful solution.",
             "linguType": "sentence",
             "translations": [
@@ -3782,7 +3782,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11936711"
         },
         "eng_144": {
-            "language": "en",
+            "language": "eng",
             "content": "Yanni was too shy to go there.",
             "linguType": "sentence",
             "translations": [
@@ -3809,7 +3809,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299733"
         },
         "eng_145": {
-            "language": "en",
+            "language": "eng",
             "content": "Soon you'll stop thinking of him.",
             "linguType": "sentence",
             "translations": [
@@ -3836,7 +3836,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299745"
         },
         "eng_146": {
-            "language": "en",
+            "language": "eng",
             "content": "How many kinds of insect are there?",
             "linguType": "sentence",
             "translations": [
@@ -3863,7 +3863,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299732"
         },
         "eng_147": {
-            "language": "en",
+            "language": "eng",
             "content": "He said that he was very cold.",
             "linguType": "sentence",
             "translations": [
@@ -3890,7 +3890,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041956"
         },
         "eng_148": {
-            "language": "en",
+            "language": "eng",
             "content": "I'm not wearing that stupid costume.",
             "linguType": "sentence",
             "translations": [
@@ -3917,7 +3917,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299708"
         },
         "eng_149": {
-            "language": "en",
+            "language": "eng",
             "content": "Sami poured himself a glass of juice.",
             "linguType": "sentence",
             "translations": [
@@ -3944,7 +3944,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041972"
         },
         "eng_150": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom didn't even open the envelope.",
             "linguType": "sentence",
             "translations": [
@@ -3971,7 +3971,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299715"
         },
         "eng_151": {
-            "language": "en",
+            "language": "eng",
             "content": "Cold is blowing in from the windows.",
             "linguType": "sentence",
             "translations": [
@@ -3998,7 +3998,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299681"
         },
         "eng_152": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom spent the whole afternoon playing tennis.",
             "linguType": "sentence",
             "translations": [
@@ -4025,7 +4025,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299635"
         },
         "eng_153": {
-            "language": "en",
+            "language": "eng",
             "content": "They told me they couldn't speak French.",
             "linguType": "sentence",
             "translations": [
@@ -4052,7 +4052,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299617"
         },
         "eng_154": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom was able to repair the broken radio.",
             "linguType": "sentence",
             "translations": [
@@ -4079,7 +4079,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299729"
         },
         "eng_155": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom and Mary hid themselves under the bed.",
             "linguType": "sentence",
             "translations": [
@@ -4106,7 +4106,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299711"
         },
         "eng_156": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom said he might walk to work tomorrow.",
             "linguType": "sentence",
             "translations": [
@@ -4133,7 +4133,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299644"
         },
         "eng_157": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom said he may walk to work tomorrow.",
             "linguType": "sentence",
             "translations": [
@@ -4160,7 +4160,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299644"
         },
         "eng_158": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom likes to do that at 2:30.",
             "linguType": "sentence",
             "translations": [
@@ -4187,7 +4187,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299724"
         },
         "eng_159": {
-            "language": "en",
+            "language": "eng",
             "content": "Her favourite food as a child was pizza.",
             "linguType": "sentence",
             "translations": [
@@ -4214,7 +4214,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299735"
         },
         "eng_160": {
-            "language": "en",
+            "language": "eng",
             "content": "I live in a pretty rural area in Algeria.",
             "linguType": "sentence",
             "translations": [
@@ -4241,7 +4241,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299705"
         },
         "eng_161": {
-            "language": "en",
+            "language": "eng",
             "content": "They're able to do that on their own.",
             "linguType": "sentence",
             "translations": [
@@ -4268,7 +4268,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299702"
         },
         "eng_162": {
-            "language": "en",
+            "language": "eng",
             "content": "I don't feel like going out this evening.",
             "linguType": "sentence",
             "translations": [
@@ -4295,7 +4295,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/11316555"
         },
         "eng_163": {
-            "language": "en",
+            "language": "eng",
             "content": "Tom said that he may walk to work tomorrow.",
             "linguType": "sentence",
             "translations": [
@@ -4322,7 +4322,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299644"
         },
         "eng_164": {
-            "language": "en",
+            "language": "eng",
             "content": "They buried him in the graveyard by the church.",
             "linguType": "sentence",
             "translations": [
@@ -4349,7 +4349,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299594"
         },
         "eng_165": {
-            "language": "en",
+            "language": "eng",
             "content": "The old man lived in the three-room apartment.",
             "linguType": "sentence",
             "translations": [
@@ -4376,7 +4376,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299608"
         },
         "eng_166": {
-            "language": "en",
+            "language": "eng",
             "content": "Layla put the GPS in the back of her vehicle.",
             "linguType": "sentence",
             "translations": [
@@ -4403,7 +4403,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299689"
         },
         "eng_167": {
-            "language": "en",
+            "language": "eng",
             "content": "The news soon spread that he was on his way.",
             "linguType": "sentence",
             "translations": [
@@ -4430,7 +4430,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299725"
         },
         "eng_168": {
-            "language": "en",
+            "language": "eng",
             "content": "Burj Khalifa is currently the tallest skyscraper in the world.",
             "linguType": "sentence",
             "translations": [
@@ -4457,7 +4457,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299770"
         },
         "eng_169": {
-            "language": "en",
+            "language": "eng",
             "content": "It's not as if I have anything better to do.",
             "linguType": "sentence",
             "translations": [
@@ -4484,7 +4484,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299722"
         },
         "eng_170": {
-            "language": "en",
+            "language": "eng",
             "content": "You're planning on doing that again tomorrow, aren't you?",
             "linguType": "sentence",
             "translations": [
@@ -4511,7 +4511,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299658"
         },
         "eng_171": {
-            "language": "en",
+            "language": "eng",
             "content": "You're planning to do that again tomorrow, aren't you?",
             "linguType": "sentence",
             "translations": [
@@ -4538,7 +4538,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299658"
         },
         "eng_172": {
-            "language": "en",
+            "language": "eng",
             "content": "I didn't think Tom had the strength to do that anymore.",
             "linguType": "sentence",
             "translations": [
@@ -4565,7 +4565,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299651"
         },
         "eng_173": {
-            "language": "en",
+            "language": "eng",
             "content": "I didn't think that Tom had the strength to do that anymore.",
             "linguType": "sentence",
             "translations": [
@@ -4592,7 +4592,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299651"
         },
         "eng_174": {
-            "language": "en",
+            "language": "eng",
             "content": "I don't think Tom and Mary have very many friends in Boston.",
             "linguType": "sentence",
             "translations": [
@@ -4619,7 +4619,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12299664"
         },
         "eng_175": {
-            "language": "en",
+            "language": "eng",
             "content": "I asked Mary if she wanted to go to a movie with me.",
             "linguType": "sentence",
             "translations": [
@@ -4646,7 +4646,7 @@
             "sentenceLink": "https://tatoeba.org/en/sentences/show/12041962"
         },
         "eng_176": {
-            "language": "en",
+            "language": "eng",
             "content": "I remember it as if it were yesterday, but in reality it was fifteen years ago.",
             "linguType": "sentence",
             "translations": [

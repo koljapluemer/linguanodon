@@ -115,7 +115,7 @@ def create_units_of_meaning(sentences: List[Dict[str, Any]]) -> Dict[str, Dict[s
         eng_sentence_link = f"https://tatoeba.org/en/sentences/show/{eng_sentence_id}" if eng_sentence_id else None
         
         eng_unit = {
-            "language": SOURCE_LANGUAGE.replace("eng", "en"),
+            "language": SOURCE_LANGUAGE.replace("eng", 'en'),
             "content": sentence_pair.get('text', ''),
             "linguType": "sentence",
             "translations": [ajp_id],

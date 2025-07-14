@@ -22,7 +22,7 @@ An example:
 {
     "unitsOfMeaning": {
         "a":{
-            "language": "en",
+            "language": "eng",
             "content": "I couldn't say",
             "linguType": "sentence",
             "translations": ["b"]
@@ -33,7 +33,7 @@ An example:
             "linguType": "sentence"
         },
         "c": {
-            "language": "en",
+            "language": "eng",
             "content": "I have a cat.",
             "linguType": "sentence",
             "translations": ["d"]
@@ -50,7 +50,7 @@ An example:
             "translations": ["f"]   
         },
         "f": {
-            "language": "en",
+            "language": "eng",
             "content": "cat",
             "linguType": "noun",
             "related": ["c"]
