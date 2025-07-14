@@ -1,38 +1,38 @@
 {
     "name": "Fun Idioms",
-    "language": "it",
+    "language": "ita",
     "tasks": [
       {
         "content": "Write a short dialog using 'In bocca al lupo'",
-        "language": "it",
+        "language": "ita",
         "primaryUnitsOfMeaning": [
           {
-            "language": "it",
+            "language": "ita",
             "content": "In bocca al lupo",
             "translations": [{"language": "en", "content": "Good luck"}]
           },
           {
             "language": "en",
             "content": "Good luck",
-            "translations": [{"language": "it", "content": "In bocca al lupo"}]
+            "translations": [{"language": "ita", "content": "In bocca al lupo"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "In",
             "translations": [{"language": "en", "content": "in"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "bocca",
             "translations": [{"language": "en", "content": "mouth"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "al",
             "translations": [{"language": "en", "content": "to the"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "lupo",
             "translations": [{"language": "en", "content": "wolf"}]
           }
@@ -40,30 +40,30 @@
       },
       {
         "content": "Write a short dialog using 'Siamo a cavallo'",
-        "language": "it",
+        "language": "ita",
         "primaryUnitsOfMeaning": [
           {
-            "language": "it",
+            "language": "ita",
             "content": "Siamo a cavallo",
             "translations": [{"language": "en", "content": "We're on horseback"}]
           },
           {
             "language": "en",
             "content": "We're on horseback",
-            "translations": [{"language": "it", "content": "Siamo a cavallo"}]
+            "translations": [{"language": "ita", "content": "Siamo a cavallo"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "Siamo",
             "translations": [{"language": "en", "content": "We are"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "a",
             "translations": [{"language": "en", "content": "on"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "cavallo",
             "translations": [{"language": "en", "content": "horseback"}]
           }
@@ -71,25 +71,25 @@
       },
       {
         "content": "Write a short dialog using 'Meno male'",
-        "language": "it",
+        "language": "ita",
         "primaryUnitsOfMeaning": [
           {
-            "language": "it",
+            "language": "ita",
             "content": "Meno male",
             "translations": [{"language": "en", "content": "Thank goodness"}]
           },
           {
             "language": "en",
             "content": "Thank goodness",
-            "translations": [{"language": "it", "content": "Meno male"}]
+            "translations": [{"language": "ita", "content": "Meno male"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "Meno",
             "translations": [{"language": "en", "content": "less"}]
           },
           {
-            "language": "it",
+            "language": "ita",
             "content": "male",
             "translations": [{"language": "en", "content": "bad"}]
           }

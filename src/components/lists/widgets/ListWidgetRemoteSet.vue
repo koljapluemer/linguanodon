@@ -30,7 +30,7 @@ import { ref, onMounted, inject } from 'vue'
 import { Download } from 'lucide-vue-next'
 import { downloadAndPersistSet } from '@/utils/backend/remoteSet'
 import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
-import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
+import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
 
 interface Props {
   setName: string
@@ -44,6 +44,7 @@ const props = defineProps<Props>()
 const setRepository = inject(setRepositoryKey, null)
 const taskRepository = inject(taskRepositoryKey, null)
 const unitRepository = inject(unitOfMeaningRepositoryKey, null)
+const languageRepository = inject(languageRepositoryKey, null)
 
 if (!setRepository) {
   throw new Error('SetRepository not provided in parent context')
@@ -57,10 +58,15 @@ if (!unitRepository) {
   throw new Error('UnitOfMeaningRepository not provided in parent context')
 }
 
+if (!languageRepository) {
+  throw new Error('LanguageRepository not provided in parent context')
+}
+
 // Type assertion after null check
 const typedSetRepository = setRepository as NonNullable<typeof setRepository>
 const typedTaskRepository = taskRepository as NonNullable<typeof taskRepository>
 const typedUnitRepository = unitRepository as NonNullable<typeof unitRepository>
+const typedLanguageRepository = languageRepository as NonNullable<typeof languageRepository>
 
 const isDownloading = ref(false)
 const isDownloaded = ref(false)
@@ -104,7 +110,8 @@ async function handleDownload() {
       props.language, 
       typedUnitRepository,
       typedSetRepository,
-      typedTaskRepository
+      typedTaskRepository,
+      typedLanguageRepository
     )
     // Refresh data after download
     await initializeData()

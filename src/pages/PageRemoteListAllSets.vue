@@ -11,10 +11,12 @@ import ListControllRemoteSets from '@/components/lists/control/ListControllRemot
 import { useRepoDexieSets } from '@/repositories/implementations/dexie/useRepoDexieSets'
 import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoDexieTasks'
 import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
-import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
+import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'
+import { setRepositoryKey, taskRepositoryKey, unitOfMeaningRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
 
 // Provide repositories to child components
 provide(setRepositoryKey, useRepoDexieSets())
 provide(taskRepositoryKey, useRepoDexieTasks())
 provide(unitOfMeaningRepositoryKey, useRepoDexieUnitsOfMeaning())
+provide(languageRepositoryKey, useRepoDexieLanguages())
 </script>

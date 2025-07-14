@@ -9,6 +9,8 @@ import type { UnitOfMeaning, UnitOfMeaningIdentification } from '@/entities/Unit
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { SetRepository } from '@/repositories/interfaces/SetRepository'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
+import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
+import { getIsoLanguages } from '@/utils/language/getIsoLanguages'
 
 // Remote data interfaces
 export interface RemoteSet {
@@ -127,13 +129,35 @@ export async function downloadAndPersistSet(
   language: string, 
   unitRepository: UnitOfMeaningRepository,
   setRepository: SetRepository,
-  taskRepository: TaskRepository
+  taskRepository: TaskRepository,
+  languageRepository: LanguageRepository
 ) {
   const toastsStore = useToastsStore()
 
   try {
     // Download remote set data
     const remoteSet = await downloadSet(filename, language)
+
+    // --- Language check and add logic ---
+    const userTargetLanguages = await languageRepository.getUserTargetLanguages()
+    const isAlreadyTarget = userTargetLanguages.some((l: { code: string }) => l.code === remoteSet.language)
+    if (!isAlreadyTarget) {
+      const isoLanguages = getIsoLanguages()
+      const isoMatch = isoLanguages.find(l => l.code === remoteSet.language)
+      if (isoMatch) {
+        await languageRepository.addUserTargetLanguage(remoteSet.language)
+        toastsStore.addToast({
+          type: 'info',
+          message: `Added '${isoMatch.name}' to your target languages.`
+        })
+      } else {
+        toastsStore.addToast({
+          type: 'warning',
+          message: `Language code '${remoteSet.language}' is not a recognized ISO language. Skipping adding to your target languages.`
+        })
+      }
+    }
+    // --- End language check ---
     
     // Check if set already exists
     const setExists = await isSetDownloaded(setRepository, remoteSet.language, remoteSet.name)
