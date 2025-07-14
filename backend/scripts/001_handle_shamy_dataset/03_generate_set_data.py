@@ -4,8 +4,10 @@ import re
 import os
 from collections import Counter, defaultdict
 
-# Create data directory if it doesn't exist
-os.makedirs('data', exist_ok=True)
+# Get the directory of the current script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, 'data')
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Adjustable constants
 MAX_WORDS_PER_SENTENCE = 7  # Maximum allowed words in Arabic sentence
@@ -236,7 +238,7 @@ for word in target_words:
     
     # If we've reached TASKS_PER_FILE or this is the last word, save the file
     if len(current_file_tasks) >= TASKS_PER_FILE or word == target_words[-1]:
-        filename = f"data/natural_sentences_{current_file_index}.json"
+        filename = os.path.join(OUTPUT_DIR, f"natural_sentences_{current_file_index}.json")
         
         if not OVERWRITE_EXISTING_FILES and os.path.exists(filename):
             print(f"  Skipping {filename} (already exists)")
