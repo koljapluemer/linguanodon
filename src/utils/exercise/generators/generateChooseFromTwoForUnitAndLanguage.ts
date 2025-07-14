@@ -1,7 +1,6 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/exerciseTypes'
-import { createEmptyCard } from 'ts-fsrs'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'
 import { makeClozeTokens } from '@/utils/exercise/utils/makeClozeTokens'
@@ -95,40 +94,7 @@ export async function generateChooseFromTwoForUnitAndLanguage(
     return []
   }
   
-  // Generate clozes for the unit's content (the main content gets clozed)
-  const tokens = splitIntoTokens(unit.content)
-  const wordIndexes = tokens.map((t, i) => isWordToken(t) ? i : -1).filter(i => i !== -1)
-  
-  if (wordIndexes.length <= 1) {
-    return []
-  }
-  
-  // Create one exercise per word (excluding very short words)
-  for (const wordIdx of wordIndexes) {
-    const word = tokens[wordIdx]
-    if (word.length < 3) continue
-    
-    // Create cloze version of the content
-    const clozeContent = makeClozeTokens(tokens, wordIdx)
-    
-    // Show all translations in the target language as context
-    const contextText = targetTranslations.map(ref => ref.content).join(' / ')
-    
-    // Find incorrect answer from repository
-    const incorrectAnswer = await findIncorrectAnswer(word, unit.language, unitRepository)
-    
-    exercises.push({
-      uid: `choose_${unit.language}_${unit.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${targetLanguage}`,
-      type: 'choose-from-two',
-      front: wrapWithDirection(clozeContent),
-      correctAnswer: word,
-      incorrectAnswer: incorrectAnswer,
-      context: contextText,
-      card: createEmptyCard()
-    })
-  }
-  
-  // Generate reverse exercises: clozing the translations
+  // Only generate exercises for clozing the target language translations
   for (const translation of targetTranslations) {
     const translationTokens = splitIntoTokens(translation.content)
     const translationWordIndexes = translationTokens.map((t, i) => isWordToken(t) ? i : -1).filter(i => i !== -1)
@@ -149,13 +115,11 @@ export async function generateChooseFromTwoForUnitAndLanguage(
       const incorrectAnswer = await findIncorrectAnswer(word, translation.language, unitRepository)
       
       exercises.push({
-        uid: `choose_${translation.language}_${translation.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${unit.language}`,
         type: 'choose-from-two',
         front: wrapWithDirection(clozeContent),
         correctAnswer: word,
         incorrectAnswer: incorrectAnswer,
-        context: contextText,
-        card: createEmptyCard()
+        context: contextText
       })
     }
   }
