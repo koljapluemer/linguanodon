@@ -1,96 +1,62 @@
 #!/usr/bin/env python3
 """
 Script to download YouTube subtitles and extract vocabulary using OpenAI.
-Creates Set structure for language learning data.
+Creates RemoteSet structure for language learning data.
 """
 
 import os
 import json
 import sys
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from youtube_transcript_api import YouTubeTranscriptApi
 from openai import OpenAI
 from dotenv import load_dotenv
-from collections import Counter
+from collections import Counter, defaultdict
 import re
+
+# =====================
+# CONFIGURATION
+# =====================
+VIDEO_ID = "r4psGFKZQqQ"  # YouTube video ID
+VIDEO_SUBTITLE_LANGUAGE = "ar"  # Language code for subtitles (YouTube's code)
+TARGET_LANG_CODE = "apc"  # Output language code for units
+OUTPUT_FILE = f"/home/brokkoli/GITHUB/linguanodon/backend/data/youtube_{VIDEO_ID}.json"  # Set this to any absolute or relative path you want
+# =====================
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Configuration
-YOUTUBE_VIDEO_ID = "r4psGFKZQqQ"  # Replace with your video ID
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_FILE = os.path.join(SCRIPT_DIR, "data", "002_youtube_vocabulary.json")
-LETTER_CODE = "apc"
+# Types
+class VocabObject:
+    def __init__(self, original: str, translation: str):
+        self.original = original.strip()
+        self.translation = translation.strip()
+    def __hash__(self):
+        return hash((self.original, self.translation))
+    def __eq__(self, other):
+        return (self.original, self.translation) == (other.original, other.translation)
+
+# Download subtitles (returns list of lines)
+def download_subtitles(video_id: str, lang_code: str) -> Tuple[List[str], str]:
+    try:
+        transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+        transcript = transcript_list.find_transcript([lang_code])
+        fetched_transcript = transcript.fetch()
+        lines = [entry.text.strip() for entry in fetched_transcript if entry.text.strip()]
+        print(f"Downloaded {len(lines)} subtitle lines (language: {transcript.language_code})")
+        return lines, transcript.language_code
+    except Exception as e:
+        print(f"Error downloading subtitles: {e}")
+        sys.exit(1)
 
 def get_openai_client() -> OpenAI:
-    """Initialize OpenAI client with API key from environment"""
     api_key = os.getenv('OPENAI_API_KEY')
     if not api_key:
         raise ValueError("OPENAI_API_KEY environment variable is required")
     return OpenAI(api_key=api_key)
 
-def download_subtitles(video_id: str) -> str:
-    """Download subtitles from YouTube video"""
-    try:
-        # Get transcript list to find available languages
-        transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-        
-        # Try to get transcript in the video's original language first
-        # If that fails, fall back to any available transcript
-        try:
-            # Get the first available transcript (usually in the video's original language)
-            transcript = next(iter(transcript_list))
-            print(f"Found transcript in language: {transcript.language} ({transcript.language_code})")
-        except StopIteration:
-            # If no transcripts available, try to find any transcript
-            available_transcripts = list(transcript_list)
-            if not available_transcripts:
-                raise Exception("No transcripts available for this video")
-            transcript = available_transcripts[0]
-            print(f"Using available transcript in: {transcript.language} ({transcript.language_code})")
-        
-        # Fetch the transcript
-        fetched_transcript = transcript.fetch()
-        
-        print(f"Downloaded transcript with {len(fetched_transcript)} snippets")
-        print(f"Language: {transcript.language} ({transcript.language_code})")
-        
-        return fetched_transcript, transcript.language_code
-        
-    except Exception as e:
-        print(f"Error downloading subtitles: {e}")
-        sys.exit(1)
-
-def extract_vocabulary(subtitle_snippets, source_language_code: str, client: OpenAI) -> List[Dict[str, str]]:
-    """Extract vocabulary from subtitle snippets using OpenAI"""
-    
-    # Convert subtitle snippets to a format suitable for analysis
-    subtitle_texts = [snippet.text for snippet in subtitle_snippets]
-    
-    # Generic prompt that works for any language
-    prompt = f"""You are an expert in language learning and vocabulary extraction.
-
-Extract language learning vocabulary from the following subtitle snippets in {source_language_code} language. 
-
-Guidelines:
-- Extract meaningful words and phrases that would be useful for language learners
-- Ignore music indicators like [موسيقى] or [music]
-- Extract even single words if they are meaningful vocabulary
-- Ignore proper nouns (names, places, brands), exclamations (oh, wow), and non-translatable words
-- For each extracted word/phrase, provide an English translation suitable for learning
-- Retain correct capitalization and spelling
-- If a word appears in declined, conjugated, or plural form, include both the occurring form and base form as separate entries
-- Focus on common, everyday vocabulary that learners would encounter
-- Even if snippets are short, extract any meaningful vocabulary
-
-Return your answer as a JSON array with objects containing "word" and "translation" fields.
-
-Subtitle snippets to analyze:
-{subtitle_texts}
-
-Output JSON:"""
-
+def extract_vocab_from_line(line: str, source_language_code: str, client: OpenAI) -> List[VocabObject]:
+    prompt = f"""You are an expert in language teaching.\n\nExtract language learning vocabulary from the following subtitle snippet in {source_language_code} language.\n\nGuidelines:\n- Extract meaningful words and phrases that would be useful for language learners\n- Ignore music indicators like [موسيقى] or [music]\n- Extract even single words if they are meaningful vocabulary\n- Ignore proper nouns (names, places, brands), exclamations (oh, wow), and non-translatable words\n- For each extracted word/phrase, provide an English translation suitable for learning\n- Retain correct capitalization and spelling\n- Focus on common, everyday vocabulary that learners would encounter\n- Even if snippets are short, extract any meaningful vocabulary\n- Avoid!! comma-separated synonyms. Simply give the most fitting translation!\n- Only add the pure words/expressions themselves. Do not add notes or extra infos.\n\nReturn your answer as a JSON array with objects containing 'original' and 'translation' fields.\n\nSubtitle snippet to analyze:\n{line}\n"""
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -100,56 +66,96 @@ Output JSON:"""
             ],
             response_format={"type": "json_object"}
         )
-        
-        # Parse the JSON response
         content = response.choices[0].message.content
-        print(f"OpenAI Response: {content}")
-        parsed_response = json.loads(content)
-        
-        # Handle different possible response structures
-        if "vocabulary" in parsed_response:
-            return parsed_response["vocabulary"]
-        elif "words" in parsed_response:
-            return parsed_response["words"]
-        elif isinstance(parsed_response, list):
-            return parsed_response
+        print(f"OpenAI Response for line: {line}\n{content}\n")
+        parsed = json.loads(content)
+        # Accept both array and object with 'vocabulary' or 'words' keys
+        if isinstance(parsed, list):
+            return [VocabObject(obj.get('original') or obj.get('word'), obj.get('translation')) for obj in parsed if obj.get('original') or obj.get('word')]
+        elif 'vocabulary' in parsed:
+            return [VocabObject(obj.get('original') or obj.get('word'), obj.get('translation')) for obj in parsed['vocabulary'] if obj.get('original') or obj.get('word')]
+        elif 'words' in parsed:
+            return [VocabObject(obj.get('original') or obj.get('word'), obj.get('translation')) for obj in parsed['words'] if obj.get('original') or obj.get('word')]
         else:
-            # If it's a flat object, try to extract word-translation pairs
-            vocabulary = []
-            for key, value in parsed_response.items():
-                if isinstance(value, str):
-                    vocabulary.append({"word": key, "translation": value})
-            return vocabulary
-            
+            return []
     except Exception as e:
         print(f"Error extracting vocabulary: {e}")
         print(f"Response content: {content if 'content' in locals() else 'No content'}")
-        sys.exit(1)
+        return []
 
-def create_set_structure(vocabulary: List[Dict[str, str]], subtitle_snippets, source_language_code: str, video_id: str) -> Dict[str, Any]:
-    """Create Set structure with one task per video"""
-    
-    # Create primary units (all vocabulary words)
-    primary_units = []
-    for entry in vocabulary:
-        primary_units.append({
-            "language": LETTER_CODE,
-            "content": entry["word"]
-        })
-        primary_units.append({
-            "language": "eng",
-            "content": entry["translation"]
-        })
-    
-    # Create secondary units (empty for now, could be populated with additional context)
-    secondary_units = []
-    
-    # Create the task
+def aggregate_vocab_objects(vocab_objects: List[VocabObject]):
+    # Count frequency by original
+    freq_counter = Counter([v.original for v in vocab_objects])
+    # Get top 50 most common originals
+    top_50_originals = set([item[0] for item in freq_counter.most_common(50)])
+    # Group all translations for each original
+    original_to_translations = defaultdict(set)
+    translation_to_originals = defaultdict(set)
+    for v in vocab_objects:
+        original_to_translations[v.original].add(v.translation)
+        translation_to_originals[v.translation].add(v.original)
+    return top_50_originals, original_to_translations, translation_to_originals
+
+def build_units_of_meaning(original_to_translations, translation_to_originals, lang_code: str, top_50_originals: set):
+    # Each (language, content) must be unique, but translations can be multiple
+    units_by_key = dict()  # (lang, content) -> unit
+    # Originals (target language)
+    for original, translations in original_to_translations.items():
+        key = (lang_code, original)
+        if key not in units_by_key:
+            units_by_key[key] = {
+                "language": lang_code,
+                "content": original,
+                "translations": []
+            }
+        for t in translations:
+            units_by_key[key]["translations"].append({"language": "eng", "content": t})
+    # Translations (English)
+    for translation, originals in translation_to_originals.items():
+        key = ("eng", translation)
+        if key not in units_by_key:
+            units_by_key[key] = {
+                "language": "eng",
+                "content": translation,
+                "translations": []
+            }
+        for o in originals:
+            units_by_key[key]["translations"].append({"language": lang_code, "content": o})
+    # Split into primary and secondary
+    primary, secondary = [], []
+    for (lang, content), unit in units_by_key.items():
+        if lang == lang_code and content in top_50_originals:
+            primary.append(unit)
+        elif lang == lang_code:
+            secondary.append(unit)
+    return primary, secondary, units_by_key
+
+def main():
+    print(f"Processing YouTube video: {VIDEO_ID}")
+    client = get_openai_client()
+    # Download subtitles
+    print("Downloading subtitles...")
+    lines, subtitle_lang_code = download_subtitles(VIDEO_ID, VIDEO_SUBTITLE_LANGUAGE)
+    print("\n--- SUBTITLE DEBUG (first 3 lines) ---")
+    for i, line in enumerate(lines[:3]):
+        print(f"Line {i+1}: {line}")
+    print("--- END SUBTITLE DEBUG ---\n")
+    # Extract vocab for each line
+    all_vocab = []
+    for idx, line in enumerate(lines):
+        print(f"\nProcessing line {idx+1}/{len(lines)}: {line}")
+        vocab_objs = extract_vocab_from_line(line, subtitle_lang_code, client)
+        all_vocab.extend(vocab_objs)
+    print(f"\nExtracted {len(all_vocab)} vocab objects from all lines.")
+    # Aggregate and build units
+    top_50_originals, original_to_translations, translation_to_originals = aggregate_vocab_objects(all_vocab)
+    primary, secondary, _ = build_units_of_meaning(original_to_translations, translation_to_originals, TARGET_LANG_CODE, top_50_originals)
+    # Build RemoteSet
     task = {
-        "language": LETTER_CODE,
-        "content": f"Watch the video: https://www.youtube.com/watch?v={video_id}",
-        "primaryUnitsOfMeaning": primary_units,
-        "secondaryUnitsOfMeaning": secondary_units,
+        "language": TARGET_LANG_CODE,
+        "content": f"Watch & try to understand the video <https://www.youtube.com/watch?v={VIDEO_ID}>",
+        "primaryUnitsOfMeaning": primary,
+        "secondaryUnitsOfMeaning": secondary,
         "lastDownloadedAt": None,
         "lastPracticedAt": None,
         "isCompleted": False,
@@ -157,59 +163,16 @@ def create_set_structure(vocabulary: List[Dict[str, str]], subtitle_snippets, so
         "interval": 0,
         "attempts": []
     }
-    
-    # Create the Set structure
-    set_data = {
-        "name": f"YouTube Vocabulary - {video_id}",
-        "language": LETTER_CODE,
+    remote_set = {
+        "name": f"YouTube Vocabulary - {VIDEO_ID}",
+        "language": TARGET_LANG_CODE,
         "tasks": [task]
     }
-    
-    return set_data
-
-def save_to_file(data: Dict[str, Any], filename: str):
-    """Save data to JSON file"""
-    try:
-        # Create data directory if it doesn't exist
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
-        print(f"Set data saved to {filename}")
-    except Exception as e:
-        print(f"Error saving file: {e}")
-        sys.exit(1)
-
-def main():
-    """Main function"""
-    print(f"Processing YouTube video: {YOUTUBE_VIDEO_ID}")
-    
-    # Initialize OpenAI client
-    client = get_openai_client()
-    
-    # Download subtitles
-    print("Downloading subtitles...")
-    subtitle_snippets, language_code = download_subtitles(YOUTUBE_VIDEO_ID)
-    
-    # Debug: print the first few subtitle snippets
-    print("\n--- SUBTITLE DEBUG (first 3 snippets) ---")
-    for i, snippet in enumerate(subtitle_snippets[:3]):
-        print(f"Snippet {i+1}: {snippet.text}")
-    print("--- END SUBTITLE DEBUG ---\n")
-    
-    # Extract vocabulary using OpenAI
-    print("Extracting vocabulary using OpenAI...")
-    vocabulary = extract_vocabulary(subtitle_snippets, language_code, client)
-    print(f"Extracted {len(vocabulary)} vocabulary entries")
-    
-    # Create Set structure
-    print("Creating Set structure...")
-    data = create_set_structure(vocabulary, subtitle_snippets, language_code, YOUTUBE_VIDEO_ID)
-    
-    # Save to file
-    save_to_file(data, OUTPUT_FILE)
-    
-    print("Script completed successfully!")
+    # Save
+    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        json.dump(remote_set, f, ensure_ascii=False, indent=2)
+    print(f"\nRemoteSet saved to {OUTPUT_FILE}\nScript completed successfully!")
 
 if __name__ == "__main__":
     main()

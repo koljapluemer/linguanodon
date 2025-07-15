@@ -28,8 +28,9 @@ export interface RemoteTask {
 
 export interface RemoteUnitOfMeaning {
     language: string
-    content: string,
-    notes?: string,
+    content: string
+    preNotes?: string
+    postNotes?: string
     seeAlso?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
     translations?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
     credits?: RemoteCredit[]

@@ -1,0 +1,399 @@
+{
+  "name": "YouTube Vocabulary - r4psGFKZQqQ",
+  "language": "apc",
+  "tasks": [
+    {
+      "language": "apc",
+      "content": "Watch & try to understand the video <https://www.youtube.com/watch?v=r4psGFKZQqQ>",
+      "primaryUnitsOfMeaning": [
+        {
+          "language": "apc",
+          "content": "ادي",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "give"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "واح",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "beware"
+            },
+            {
+              "language": "eng",
+              "content": "wow"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "كده",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "like this"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "ا كده",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "like this"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اين",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "where"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "انا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "I"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "قدامي",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "in front of me"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "خطين",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "Two lines"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اه",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "oh"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "تمام",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "Perfect"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "حليتها",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "solved it"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "صح",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "correct"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "دي",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "this"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "لعبه",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "game"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "السلم",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "ladder"
+            },
+            {
+              "language": "eng",
+              "content": "the ladder"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "التعبان",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "the tired"
+            },
+            {
+              "language": "eng",
+              "content": "tired"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "غلط",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "wrong"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "ايدك",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "your hand"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "لا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "no"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "يا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "O"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "مش",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "not"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "عادي",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "normal"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "خمسه",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "five"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "من",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "from"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "ستة",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "six"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "يعني",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "means"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "حوار",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "dialogue"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "بس",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "only"
+            },
+            {
+              "language": "eng",
+              "content": "but"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "خد",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "take"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "جنيه",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "pound"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "هحول",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "I will convert"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "تاني",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "Again"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "واحد",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "One"
+            },
+            {
+              "language": "eng",
+              "content": "one"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "انين",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "moaning"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "لاه",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "No"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "ا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "A"
+            }
+          ]
+        }
+      ],
+      "secondaryUnitsOfMeaning": [],
+      "lastDownloadedAt": null,
+      "lastPracticedAt": null,
+      "isCompleted": false,
+      "nextShownEarliestAt": "2024-01-01T00:00:00.000Z",
+      "interval": 0,
+      "attempts": []
+    }
+  ]
+}

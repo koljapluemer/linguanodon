@@ -1,9 +1,11 @@
 import type { Card } from "ts-fsrs";
 
 export interface UnitOfMeaning extends UnitOfMeaningIdentification {
-    notes: string;
+    preNotes: string;
+    postNotes: string;
     translations: UnitOfMeaningIdentification[]; 
     seeAlso: UnitOfMeaningIdentification[];
+    explicitlyNotRelated: UnitOfMeaningIdentification[];
     
     credits: Credit[]
     
