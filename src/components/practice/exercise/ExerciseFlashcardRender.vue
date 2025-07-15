@@ -52,8 +52,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/exerciseTypes'
 import { Rating } from 'ts-fsrs'
+import type { ExerciseFlashcard } from '@/entities/Exercises';
 
 interface Props {
   exercise: ExerciseFlashcard

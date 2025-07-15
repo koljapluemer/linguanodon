@@ -55,8 +55,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/exerciseTypes'
 import { Rating } from 'ts-fsrs'
+import type { ExerciseChooseFromTwo } from '@/entities/Exercises';
 
 interface Props {
   exercise: ExerciseChooseFromTwo

@@ -4,7 +4,7 @@
     <component 
       :is="renderer" 
       :exercise="exercise"
-      @score="$emit('score', $event)"
+      @learning-event="$emit('learning-event', $event)"
     />
   </div>
 </template>

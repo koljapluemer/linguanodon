@@ -9,13 +9,14 @@
 import ExerciseChooseFromTwoRender from './ExerciseChooseFromTwoRender.vue'
 import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/exerciseTypes'
 import { Rating } from 'ts-fsrs'
+import type { LearningEvent } from '@/entities/LearningEvent'
 
 interface Props {
   exercise: ExerciseChooseFromTwo
 }
 
 interface Emits {
-  (e: 'score', exercise: ExerciseChooseFromTwo, score: Rating): void
+  (e: 'learning-event', event: LearningEvent): void
 }
 
 const props = defineProps<Props>()
@@ -25,6 +26,10 @@ const emit = defineEmits<Emits>()
  * Forwards score event up to parent
  */
 function onScore(score: Rating) {
-  emit('score', props.exercise, score)
+  emit('learning-event', {
+    timestamp: new Date(),
+    exercise: props.exercise,
+    fsrsRating: score
+  })
 }
 </script> 
