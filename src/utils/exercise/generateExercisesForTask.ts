@@ -2,9 +2,7 @@ import type { Task } from '@/entities/Task'
 import type { Language } from '@/entities/Language'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
-import { generateClozesForUnitAndLanguage } from './generators/generateClozesForUnitAndLanguage'
-import { generateChooseFromTwoForUnitAndLanguage } from './generators/generateChooseFromTwoForUnitAndLanguage'
-import { generateFreeTranslationForUnitAndLanguage } from './generators/generateFreeTranslationForUnitAndLanguage'
+import { generateExercisesForUnitOfMeaning } from './generateExercisesForUnitOfMeaning'
 
 /**
  * Generates all possible exercises for a task
@@ -19,8 +17,6 @@ export async function generateExercisesForTask(
   unitMode: 'primary' | 'secondary' | 'all' = 'all'
 ): Promise<Exercise[]> {
   const allExercises: Exercise[] = []
-  const allLanguages = [...targetLanguages, ...nativeLanguages]
-  const nativeLanguageCodes = nativeLanguages.map(l => l.code)
 
   let unitRefs: { language: string; content: string }[] = []
   if (unitMode === 'primary') {
@@ -37,23 +33,13 @@ export async function generateExercisesForTask(
       console.warn(`Unit not found: ${unitRef.language}:${unitRef.content}`)
       continue
     }
-    for (const language of allLanguages) {
-      const flashcardExercises = generateClozesForUnitAndLanguage(unit, language.code)
-      allExercises.push(...flashcardExercises)
-    }
-    for (const targetLang of targetLanguages) {
-      const chooseFromTwoExercises = await generateChooseFromTwoForUnitAndLanguage(unit, targetLang.code, unitRepository)
-      allExercises.push(...chooseFromTwoExercises)
-    }
-    for (const targetLang of targetLanguages) {
-      const freeTranslationExercises = await generateFreeTranslationForUnitAndLanguage(
-        unit,
-        targetLang.code,
-        nativeLanguageCodes,
-        unitRepository
-      )
-      allExercises.push(...freeTranslationExercises)
-    }
+    const exercises = await generateExercisesForUnitOfMeaning(
+      unit,
+      targetLanguages,
+      nativeLanguages,
+      unitRepository
+    )
+    allExercises.push(...exercises)
   }
   return allExercises
 }
