@@ -1,18 +1,21 @@
 <template>
-  <ExerciseChooseFromTwoRender
+  <ExerciseFreeTranslationRender
     :exercise="exercise"
     @score="onScore"
   />
 </template>
 
+/**
+ * Controller component for free-translation exercises. Forwards score events up to parent.
+ */
 <script setup lang="ts">
-import ExerciseChooseFromTwoRender from './ExerciseChooseFromTwoRender.vue'
-import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/exerciseTypes'
 import { Rating } from 'ts-fsrs'
 import type { LearningEvent } from '@/entities/LearningEvent'
+import type { ExerciseFreeTranslation } from '@/entities/Exercises'
+import ExerciseFreeTranslationRender from '@/components/practice/exercise/specific/free-translation/ExerciseFreeTranslationRender.vue'
 
 interface Props {
-  exercise: ExerciseChooseFromTwo
+  exercise: ExerciseFreeTranslation
 }
 
 interface Emits {
@@ -23,7 +26,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 /**
- * Forwards score event up to parent
+ * Emits score event with the exercise and selected rating.
  */
 function onScore(score: Rating) {
   emit('learning-event', {

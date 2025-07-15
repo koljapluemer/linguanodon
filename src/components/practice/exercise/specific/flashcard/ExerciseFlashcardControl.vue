@@ -1,21 +1,18 @@
 <template>
-  <ExerciseFreeTranslationRender
+  <ExerciseFlashcardRender
     :exercise="exercise"
     @score="onScore"
   />
 </template>
 
-/**
- * Controller component for free-translation exercises. Forwards score events up to parent.
- */
 <script setup lang="ts">
-import ExerciseFreeTranslationRender from './ExerciseFreeTranslationRender.vue'
-import type { ExerciseFreeTranslation } from '@/utils/exercise/types/exerciseTypes'
+import type { ExerciseFlashcard } from '@/entities/Exercises';
 import { Rating } from 'ts-fsrs'
 import type { LearningEvent } from '@/entities/LearningEvent'
+import ExerciseFlashcardRender from '@/components/practice/exercise/specific/flashcard/ExerciseFlashcardRender.vue';
 
 interface Props {
-  exercise: ExerciseFreeTranslation
+  exercise: ExerciseFlashcard
 }
 
 interface Emits {
@@ -26,7 +23,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 /**
- * Emits score event with the exercise and selected rating.
+ * Forwards score event up to parent
  */
 function onScore(score: Rating) {
   emit('learning-event', {
@@ -35,4 +32,4 @@ function onScore(score: Rating) {
     fsrsRating: score
   })
 }
-</script> 
+</script>

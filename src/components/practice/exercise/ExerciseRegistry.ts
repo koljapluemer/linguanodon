@@ -1,8 +1,8 @@
 import type { Component } from 'vue'
-import ExerciseFlashcardControl from './ExerciseFlashcardControl.vue'
-import ExerciseChooseFromTwoControl from './ExerciseChooseFromTwoControl.vue'
-import ExerciseFreeTranslationControl from './ExerciseFreeTranslationControl.vue'
-import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
+import type { Exercise } from '@/entities/Exercises'
+import ExerciseChooseFromTwoControl from '@/components/practice/exercise/specific/choose-from-two/ExerciseChooseFromTwoControl.vue'
+import ExerciseFlashcardControl from '@/components/practice/exercise/specific/flashcard/ExerciseFlashcardControl.vue'
+import ExerciseFreeTranslationControl from '@/components/practice/exercise/specific/free-translation/ExerciseFreeTranslationControl.vue'
 
 /**
  * Registry mapping exercise types to their renderer components

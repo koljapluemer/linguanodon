@@ -1,18 +1,18 @@
 <template>
-  <ExerciseFlashcardRender
+  <ExerciseChooseFromTwoRender
     :exercise="exercise"
     @score="onScore"
   />
 </template>
 
 <script setup lang="ts">
-import type { ExerciseFlashcard } from '@/entities/Exercises';
-import ExerciseFlashcardRender from './ExerciseFlashcardRender.vue'
 import { Rating } from 'ts-fsrs'
 import type { LearningEvent } from '@/entities/LearningEvent'
+import type { ExerciseChooseFromTwo } from '@/entities/Exercises'
+import ExerciseChooseFromTwoRender from '@/components/practice/exercise/specific/choose-from-two/ExerciseChooseFromTwoRender.vue'
 
 interface Props {
-  exercise: ExerciseFlashcard
+  exercise: ExerciseChooseFromTwo
 }
 
 interface Emits {
@@ -32,4 +32,4 @@ function onScore(score: Rating) {
     fsrsRating: score
   })
 }
-</script>
+</script> 
