@@ -17,9 +17,9 @@
     
     <!-- Exercise phase -->
     <div v-if="!isTaskExecutionPhase && currentExercise">
-      <ExerciseRenderer
+      <DoExerciseControl
         :exercise="currentExercise"
-        @score="handleExerciseScore"
+        @exercise-finished="$emit('exercise-finished')"
       />
     </div>
     
@@ -35,12 +35,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import ExerciseRenderer from '@/components/practice/exercise/ExerciseRenderer.vue'
 import TaskExecuteControl from './TaskExecuteControl.vue'
 import type { Task } from '@/entities/Task'
 import type { Exercise } from '@/entities/Exercises'
 import type { TaskAttempt } from '@/entities/Task'
 import { Rating } from 'ts-fsrs'
+import DoExerciseControl from '@/components/practice/exercise/DoExerciseControl.vue'
 
 interface Props {
   task: Task
@@ -52,6 +52,7 @@ interface Props {
 interface Emits {
   (e: 'exercise-score', exercise: Exercise, score: Rating): void
   (e: 'task-attempt', attempt: TaskAttempt): void
+  (e: 'exercise-finished'): void
 }
 
 const props = defineProps<Props>()
@@ -63,13 +64,6 @@ const emit = defineEmits<Emits>()
 const currentExercise = computed(() => 
   props.exercises[props.currentExerciseIndex]
 )
-
-/**
- * Handle exercise scoring
- */
-function handleExerciseScore(exercise: Exercise, score: Rating) {
-  emit('exercise-score', exercise, score)
-}
 
 /**
  * Handle task attempt submission

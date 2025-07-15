@@ -32,7 +32,7 @@
       :exercises="exercises"
       :current-exercise-index="currentExerciseIndex"
       :is-task-execution-phase="isTaskExecutionPhase"
-      @exercise-score="handleExerciseScore"
+      @exercise-finished="handleExerciseFinished"
       @task-attempt="handleTaskAttempt"
     />
   </div>
@@ -50,7 +50,6 @@ import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
 import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
-import { Rating } from 'ts-fsrs'
 import { generateExercisesForTask } from '@/utils/exercise/generateExercisesForTask'
 
 interface Props {
@@ -127,18 +126,12 @@ async function initializeExercises() {
 }
 
 /**
- * Handle exercise scoring and progression
+ * Handle exercise finished event: advance to next exercise or phase
  */
-function handleExerciseScore(exercise: Exercise, score: Rating) {
-  // Store exercise rating (this will be handled by the exercise store)
-  // The exercise store is already set up to handle this via the ExerciseRenderer
-  console.log(`Exercise ${exercise.uid} scored as ${score}`)
-    
-  // Move to next exercise or complete exercise phase
+function handleExerciseFinished() {
   if (currentExerciseIndex.value < exercises.value.length - 1) {
     currentExerciseIndex.value++
   } else {
-    // Exercise phase completed, move to task execution phase
     isTaskExecutionPhase.value = true
   }
 }
