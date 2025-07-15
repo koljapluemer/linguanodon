@@ -43,7 +43,7 @@ import { ref, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import PracticeTaskView from './PracticeTaskView.vue'
-import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
+import type { Exercise } from '@/entities/Exercises'
 import type { TaskAttempt } from '@/entities/Task'
 import type { Task } from '@/entities/Task'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
@@ -51,7 +51,6 @@ import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMe
 import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseDataRepository'
 import { taskRepositoryKey, unitOfMeaningRepositoryKey, exerciseRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
 import { Rating } from 'ts-fsrs'
-import { generateExerciseDataUidFromExercise } from '@/utils/exercise/generateExerciseDataUidFromExercise'
 import { generateExercisesForTask } from '@/utils/exercise/generateExercisesForTask'
 
 interface Props {
@@ -133,7 +132,7 @@ async function initializeExercises() {
 function handleExerciseScore(exercise: Exercise, score: Rating) {
   // Store exercise rating (this will be handled by the exercise store)
   // The exercise store is already set up to handle this via the ExerciseRenderer
-  console.log(`Exercise ${generateExerciseDataUidFromExercise(exercise)} scored as ${score}`)
+  console.log(`Exercise ${exercise.uid} scored as ${score}`)
     
   // Move to next exercise or complete exercise phase
   if (currentExerciseIndex.value < exercises.value.length - 1) {

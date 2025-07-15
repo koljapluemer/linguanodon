@@ -1,6 +1,6 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/exerciseTypes'
+import type { ExerciseChooseFromTwo } from '@/entities/Exercises'
 import type { UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import type { ExerciseGeneratorInterface } from './ExerciseGeneratorInterface'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
@@ -104,7 +104,7 @@ export const chooseFromTwoGenerator: ExerciseGeneratorInterface<[
         if (incorrectRef) {
           secondaryUnits.push({ language: incorrectRef.language, content: incorrectRef.content })
         }
-        exercises.push({
+        const exercise: ExerciseChooseFromTwo = {
           type: 'choose-from-two',
           front: wrapWithDirection(clozeContent),
           correctAnswer: word,
@@ -112,8 +112,14 @@ export const chooseFromTwoGenerator: ExerciseGeneratorInterface<[
           context: contextText,
           instruction: 'Fill in the blank with the correct word',
           primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-          secondaryUnitsOfMeaning: secondaryUnits
-        })
+          secondaryUnitsOfMeaning: secondaryUnits,
+          uid: '',
+          humanReadableName: ''
+        }
+        const { uid, humanReadable } = chooseFromTwoGenerator.getUid(exercise)
+        exercise.uid = uid
+        exercise.humanReadableName = humanReadable
+        exercises.push(exercise)
       }
     }
     return exercises

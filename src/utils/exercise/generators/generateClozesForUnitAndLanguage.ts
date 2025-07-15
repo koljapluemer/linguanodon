@@ -1,5 +1,5 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/exerciseTypes'
+import type { ExerciseFlashcard } from '@/entities/Exercises'
 import type { ExerciseGeneratorInterface } from './ExerciseGeneratorInterface'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'
@@ -46,14 +46,20 @@ export const clozeGenerator: ExerciseGeneratorInterface<[
       const contextText = targetTranslations.map(ref => ref.content).join(' / ')
       const front = `${wrapWithDirection(clozeContent)}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
       const back = `${wrapWithDirection(unit.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
-      exercises.push({
+      const exercise: ExerciseFlashcard = {
         type: 'flashcard',
         front,
         back,
         instruction: 'Fill in the blank',
         primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-        secondaryUnitsOfMeaning: targetTranslations.map(t => ({ language: t.language, content: t.content }))
-      })
+        secondaryUnitsOfMeaning: targetTranslations.map(t => ({ language: t.language, content: t.content })),
+        uid: '',
+        humanReadableName: ''
+      }
+      const { uid, humanReadable } = clozeGenerator.getUid(exercise)
+      exercise.uid = uid
+      exercise.humanReadableName = humanReadable
+      exercises.push(exercise)
     })
     for (const translation of targetTranslations) {
       const translationTokens = splitIntoTokens(translation.content)
@@ -66,14 +72,20 @@ export const clozeGenerator: ExerciseGeneratorInterface<[
         const contextText = unit.content
         const front = `${wrapWithDirection(clozeContent)}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
         const back = `${wrapWithDirection(translation.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
-        exercises.push({
+        const exercise: ExerciseFlashcard = {
           type: 'flashcard',
           front,
           back,
           instruction: 'Fill in the blank',
           primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-          secondaryUnitsOfMeaning: [{ language: translation.language, content: translation.content }]
-        })
+          secondaryUnitsOfMeaning: [{ language: translation.language, content: translation.content }],
+          uid: '',
+          humanReadableName: ''
+        }
+        const { uid, humanReadable } = clozeGenerator.getUid(exercise)
+        exercise.uid = uid
+        exercise.humanReadableName = humanReadable
+        exercises.push(exercise)
       })
     }
     return Promise.resolve(exercises)

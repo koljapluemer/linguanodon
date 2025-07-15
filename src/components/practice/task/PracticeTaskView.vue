@@ -38,7 +38,7 @@ import { computed } from 'vue'
 import ExerciseRenderer from '@/components/practice/exercise/ExerciseRenderer.vue'
 import TaskExecuteControl from './TaskExecuteControl.vue'
 import type { Task } from '@/entities/Task'
-import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
+import type { Exercise } from '@/entities/Exercises'
 import type { TaskAttempt } from '@/entities/Task'
 import { Rating } from 'ts-fsrs'
 

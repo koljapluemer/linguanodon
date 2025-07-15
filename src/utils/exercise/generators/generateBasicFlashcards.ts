@@ -1,6 +1,6 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { Language } from '@/entities/Language'
-import type { ExerciseFlashcard } from '@/utils/exercise/types/exerciseTypes'
+import type { ExerciseFlashcard } from '@/entities/Exercises'
 import type { UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import type { ExerciseGeneratorInterface } from './ExerciseGeneratorInterface'
 
@@ -46,24 +46,36 @@ export const basicFlashcardGenerator: ExerciseGeneratorInterface<[
     if (targetLangCodes.includes(unit.language)) {
       const nativeTranslations = unit.translations.filter(t => nativeLangCodes.includes(t.language))
       if (nativeTranslations.length > 0) {
-        flashcards.push({
+        const exercise: ExerciseFlashcard = {
           type: 'flashcard',
           front: unit.content,
           back: nativeTranslations.map(t => t.content).join(', '),
           instruction: `Translate to ${nativeTranslations.length === 1 ? langName(nativeTranslations[0].language) : 'your native language'}`,
           primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-          secondaryUnitsOfMeaning: nativeTranslations.map(t => ({ language: t.language, content: t.content }))
-        })
+          secondaryUnitsOfMeaning: nativeTranslations.map(t => ({ language: t.language, content: t.content })),
+          uid: '',
+          humanReadableName: ''
+        }
+        const { uid, humanReadable } = basicFlashcardGenerator.getUid(exercise)
+        exercise.uid = uid
+        exercise.humanReadableName = humanReadable
+        flashcards.push(exercise)
       }
       for (const t of nativeTranslations) {
-        flashcards.push({
+        const exercise: ExerciseFlashcard = {
           type: 'flashcard',
           front: t.content,
           back: unit.content,
           instruction: `Translate to ${langName(unit.language)}`,
           primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-          secondaryUnitsOfMeaning: [{ language: t.language, content: t.content }]
-        })
+          secondaryUnitsOfMeaning: [{ language: t.language, content: t.content }],
+          uid: '',
+          humanReadableName: ''
+        }
+        const { uid, humanReadable } = basicFlashcardGenerator.getUid(exercise)
+        exercise.uid = uid
+        exercise.humanReadableName = humanReadable
+        flashcards.push(exercise)
       }
     }
 
@@ -77,25 +89,37 @@ export const basicFlashcardGenerator: ExerciseGeneratorInterface<[
       }
       for (const targetLang of Object.keys(translationsByTargetLang)) {
         const translations = translationsByTargetLang[targetLang]
-        flashcards.push({
+        const exercise: ExerciseFlashcard = {
           type: 'flashcard',
           front: unit.content,
           back: translations.map(t => t.content).join(', '),
           instruction: `Translate to ${langName(targetLang)}`,
           primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-          secondaryUnitsOfMeaning: translations
-        })
+          secondaryUnitsOfMeaning: translations,
+          uid: '',
+          humanReadableName: ''
+        }
+        const { uid, humanReadable } = basicFlashcardGenerator.getUid(exercise)
+        exercise.uid = uid
+        exercise.humanReadableName = humanReadable
+        flashcards.push(exercise)
       }
       for (const t of unit.translations) {
         if (targetLangCodes.includes(t.language)) {
-          flashcards.push({
+          const exercise: ExerciseFlashcard = {
             type: 'flashcard',
             front: t.content,
             back: unit.content,
             instruction: `Translate to ${langName(unit.language)}`,
             primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-            secondaryUnitsOfMeaning: [{ language: t.language, content: t.content }]
-          })
+            secondaryUnitsOfMeaning: [{ language: t.language, content: t.content }],
+            uid: '',
+            humanReadableName: ''
+          }
+          const { uid, humanReadable } = basicFlashcardGenerator.getUid(exercise)
+          exercise.uid = uid
+          exercise.humanReadableName = humanReadable
+          flashcards.push(exercise)
         }
       }
     }
@@ -109,7 +133,7 @@ export const basicFlashcardGenerator: ExerciseGeneratorInterface<[
   getUid: (exercise) => {
     if (exercise.type !== 'flashcard') throw new Error('Not a flashcard exercise')
     const uid = `flashcard_${hashString(exercise.front)}_${hashString(exercise.back)}`
-    const humanReadable = `Flashcard: ${exercise.primaryUnitOfMeaning.language} → ${exercise.secondaryUnitsOfMeaning.map(u => u.language).join(', ')} | ${exercise.front}`
+    const humanReadable = `Flashcard: ${exercise.primaryUnitOfMeaning.language} → ${exercise.secondaryUnitsOfMeaning.map((u: UnitOfMeaningIdentification) => u.language).join(', ')} | ${exercise.front}`
     return { uid, humanReadable }
   }
 }

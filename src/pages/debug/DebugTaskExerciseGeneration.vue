@@ -82,17 +82,17 @@
         <div class="space-y-4">
           <div 
             v-for="(exercise, index) in exercises" 
-            :key="generateExerciseDataUidFromExercise(exercise)"
+            :key="exercise.uid"
             class="border rounded-lg p-4"
           >
             <h3 class="font-semibold mb-2">
-              Exercise {{ index + 1 }} ({{ generateExerciseDataUidFromExercise(exercise) }}) - {{ exercise.type }}
+              Exercise {{ index + 1 }} ({{ exercise.humanReadableName }})
             </h3>
             
             <!-- Exercise direction info -->
             <div class="text-sm opacity-70 mb-3">
-              <span v-if="generateExerciseDataUidFromExercise(exercise).includes('cloze_') || generateExerciseDataUidFromExercise(exercise).includes('choose_')">
-                {{ getExerciseDirection(generateExerciseDataUidFromExercise(exercise)) }}
+              <span v-if="exercise.uid.includes('cloze_') || exercise.uid.includes('choose_')">
+                {{ getExerciseDirection(exercise.uid) }}
               </span>
             </div>
             
@@ -150,9 +150,8 @@
 <script setup lang="ts">
 import { ref, onMounted, provide, computed } from 'vue'
 import type { Task } from '@/entities/Task'
-import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
+import type { Exercise } from '@/entities/Exercises'
 import { generateExercisesForTask } from '@/utils/exercise/generateExercisesForTask'
-import { generateExerciseDataUidFromExercise } from '@/utils/exercise/generateExerciseDataUidFromExercise'
 import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoDexieTasks'
 import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
 import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'
@@ -178,7 +177,7 @@ const error = ref('')
 /**
  * Load all tasks from the repository
  */
-async function loadTasks() {
+async function loadTasks(): Promise<void> {
   try {
     tasks.value = await taskRepository.getAllTasks()
   } catch (err) {
@@ -190,7 +189,7 @@ async function loadTasks() {
 /**
  * Generate exercises for the selected task
  */
-async function generateExercises(mode: 'primary' | 'secondary' | 'all') {
+async function generateExercises(mode: 'primary' | 'secondary' | 'all'): Promise<void> {
   if (!selectedTaskId.value) return
   loading.value = true
   error.value = ''

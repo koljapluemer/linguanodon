@@ -1,11 +1,11 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { Language } from '@/entities/Language'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
 import { clozeGenerator } from './generators/generateClozesForUnitAndLanguage'
 import { chooseFromTwoGenerator } from './generators/generateChooseFromTwoForUnitAndLanguage'
 import { freeTranslationGenerator } from './generators/generateFreeTranslationForUnitAndLanguage'
 import { basicFlashcardGenerator } from './generators/generateBasicFlashcards'
+import type { Exercise } from '@/entities/Exercises'
 
 /**
  * Generates all possible exercises for a given unit of meaning and user languages.

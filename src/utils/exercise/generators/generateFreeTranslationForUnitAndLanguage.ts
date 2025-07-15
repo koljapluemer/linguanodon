@@ -1,6 +1,6 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
-import type { ExerciseFreeTranslation } from '@/utils/exercise/types/exerciseTypes'
+import type { ExerciseFreeTranslation } from '@/entities/Exercises'
 import type { ExerciseGeneratorInterface } from './ExerciseGeneratorInterface'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'
@@ -48,14 +48,20 @@ export const freeTranslationGenerator: ExerciseGeneratorInterface<[
       if (!translationUnit) {
         continue
       }
-      exercises.push({
+      const exercise: ExerciseFreeTranslation = {
         type: 'free-translation',
         front: unit.content,
         back: translationUnit.content,
         instruction: 'Translate the sentence',
         primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-        secondaryUnitsOfMeaning: [{ language: translationUnit.language, content: translationUnit.content }]
-      })
+        secondaryUnitsOfMeaning: [{ language: translationUnit.language, content: translationUnit.content }],
+        uid: '',
+        humanReadableName: ''
+      }
+      const { uid, humanReadable } = freeTranslationGenerator.getUid(exercise)
+      exercise.uid = uid
+      exercise.humanReadableName = humanReadable
+      exercises.push(exercise)
     }
     return exercises
   },

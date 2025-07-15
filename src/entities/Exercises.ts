@@ -2,6 +2,8 @@ import type { UnitOfMeaningIdentification } from "@/entities/UnitOfMeaning"
 
 // Base interface for all exercises
 export interface BaseExercise {
+  uid: string
+  humanReadableName: string
   type: string
   instruction: string
   primaryUnitOfMeaning: UnitOfMeaningIdentification
