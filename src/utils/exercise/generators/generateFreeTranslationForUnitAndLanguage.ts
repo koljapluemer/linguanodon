@@ -45,7 +45,9 @@ export async function generateFreeTranslationForUnitAndLanguage(
       type: 'free-translation',
       front: unit.content,
       back: translationUnit.content,
-      instruction: 'Translate the sentence'
+      instruction: 'Translate the sentence',
+      primaryUnitOfMeaning: { language: unit.language, content: unit.content },
+      secondaryUnitsOfMeaning: [{ language: translationUnit.language, content: translationUnit.content }]
     })
   }
   if (exercises.length === 0) {

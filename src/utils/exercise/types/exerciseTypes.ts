@@ -1,8 +1,11 @@
+import type { UnitOfMeaning } from "@/entities/UnitOfMeaning"
 
 // Base interface for all exercises
 export interface BaseExercise {
   type: string
   instruction: string
+  primaryUnitOfMeaning: UnitOfMeaning
+  secondaryUnitsOfMeaning: UnitOfMeaning[]
 }
 
 // Flashcard exercise type

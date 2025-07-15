@@ -1,6 +1,7 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { ExerciseChooseFromTwo } from '@/utils/exercise/types/exerciseTypes'
+import type { UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'
 import { makeClozeTokens } from '@/utils/exercise/utils/makeClozeTokens'
@@ -113,14 +114,23 @@ export async function generateChooseFromTwoForUnitAndLanguage(
       
       // Find incorrect answer from repository
       const incorrectAnswer = await findIncorrectAnswer(word, translation.language, unitRepository)
-      
+      // Try to find a translation ref for the incorrect answer (if it exists in this unit's translations)
+      const incorrectRef = unit.translations.find(t => t.language === translation.language && t.content === incorrectAnswer)
+      const secondaryUnits: UnitOfMeaningIdentification[] = [
+        { language: translation.language, content: translation.content }
+      ]
+      if (incorrectRef) {
+        secondaryUnits.push({ language: incorrectRef.language, content: incorrectRef.content })
+      }
       exercises.push({
         type: 'choose-from-two',
         front: wrapWithDirection(clozeContent),
         correctAnswer: word,
         incorrectAnswer: incorrectAnswer,
         context: contextText,
-        instruction: 'Fill in the blank with the correct word'
+        instruction: 'Fill in the blank with the correct word',
+        primaryUnitOfMeaning: { language: unit.language, content: unit.content },
+        secondaryUnitsOfMeaning: secondaryUnits
       })
     }
   }

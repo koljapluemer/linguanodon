@@ -1,6 +1,7 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { Language } from '@/entities/Language'
 import type { ExerciseFlashcard } from '@/utils/exercise/types/exerciseTypes'
+import type { UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 
 /**
  * Generates basic flashcards for a unit of meaning in both directions between user target and native languages.
@@ -38,7 +39,9 @@ export function generateBasicFlashcardsForUnitAndLanguages(
         type: 'flashcard',
         front: unit.content,
         back: nativeTranslations.map(t => t.content).join(', '),
-        instruction: `Translate to ${nativeTranslations.length === 1 ? langName(nativeTranslations[0].language) : 'your native language'}`
+        instruction: `Translate to ${nativeTranslations.length === 1 ? langName(nativeTranslations[0].language) : 'your native language'}`,
+        primaryUnitOfMeaning: { language: unit.language, content: unit.content },
+        secondaryUnitsOfMeaning: nativeTranslations.map(t => ({ language: t.language, content: t.content }))
       })
     }
     // 2. Flashcard: each native translation -> target content
@@ -47,7 +50,9 @@ export function generateBasicFlashcardsForUnitAndLanguages(
         type: 'flashcard',
         front: t.content,
         back: unit.content,
-        instruction: `Translate to ${langName(unit.language)}`
+        instruction: `Translate to ${langName(unit.language)}`,
+        primaryUnitOfMeaning: { language: unit.language, content: unit.content },
+        secondaryUnitsOfMeaning: [{ language: t.language, content: t.content }]
       })
     }
   }
@@ -55,19 +60,22 @@ export function generateBasicFlashcardsForUnitAndLanguages(
   // If the unit is in a native language
   if (nativeLangCodes.includes(unit.language)) {
     // 3. For each unique target lang in translations, native content -> all translations in that target lang
-    const translationsByTargetLang: Record<string, string[]> = {}
+    const translationsByTargetLang: Record<string, UnitOfMeaningIdentification[]> = {}
     for (const t of unit.translations) {
       if (targetLangCodes.includes(t.language)) {
         if (!translationsByTargetLang[t.language]) translationsByTargetLang[t.language] = []
-        translationsByTargetLang[t.language].push(t.content)
+        translationsByTargetLang[t.language].push({ language: t.language, content: t.content })
       }
     }
     for (const targetLang of Object.keys(translationsByTargetLang)) {
+      const translations = translationsByTargetLang[targetLang]
       flashcards.push({
         type: 'flashcard',
         front: unit.content,
-        back: translationsByTargetLang[targetLang].join(', '),
-        instruction: `Translate to ${langName(targetLang)}`
+        back: translations.map(t => t.content).join(', '),
+        instruction: `Translate to ${langName(targetLang)}`,
+        primaryUnitOfMeaning: { language: unit.language, content: unit.content },
+        secondaryUnitsOfMeaning: translations
       })
     }
     // 4. For each translation in a user's target lang, translation content -> native content
@@ -77,7 +85,9 @@ export function generateBasicFlashcardsForUnitAndLanguages(
           type: 'flashcard',
           front: t.content,
           back: unit.content,
-          instruction: `Translate to ${langName(unit.language)}`
+          instruction: `Translate to ${langName(unit.language)}`,
+          primaryUnitOfMeaning: { language: unit.language, content: unit.content },
+          secondaryUnitsOfMeaning: [{ language: t.language, content: t.content }]
         })
       }
     }
