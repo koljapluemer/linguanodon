@@ -1,27 +1,11 @@
-import type { Exercise } from './types/exerciseTypes'
-
 /**
- * Generates a predictable UID for an Exercise, based on its type and content.
- * This UID can be used to match ExerciseData to a generated Exercise.
+ * Utility for generating predictable UIDs and human-readable labels for exercises, for matching ExerciseData to generated exercises.
  */
-export function generateExerciseDataUidFromExercise(exercise: Exercise): string {
-  switch (exercise.type) {
-    case 'flashcard':
-      // Use type, front, back
-      return `flashcard_${hashString(exercise.front)}_${hashString(exercise.back)}`
-    case 'choose-from-two':
-      // Use type, front, correct/incorrect answers
-      return `choose-from-two_${hashString(exercise.front)}_${hashString(exercise.correctAnswer)}_${hashString(exercise.incorrectAnswer)}`
-    case 'free-translation':
-      // Use type, front, back
-      return `free-translation_${hashString(exercise.front)}_${hashString(exercise.back)}`
-    default:
-      throw new Error(`Unknown exercise type: ${(exercise as unknown as { type: string }).type}`)
-  }
-}
+import type { Exercise } from './types/exerciseTypes'
+import type { ExerciseGeneratorInterface } from './generators/ExerciseGeneratorInterface'
 
 /**
- * Simple hash function for strings to keep UIDs readable but unique enough for practical use.
+ * Simple hash function for generating readable, unique-enough strings for UIDs.
  */
 function hashString(str: string): string {
   let hash = 0
@@ -30,4 +14,38 @@ function hashString(str: string): string {
     hash |= 0 // Convert to 32bit integer
   }
   return Math.abs(hash).toString(36)
+}
+
+/**
+ * Generator-like utility for UID and label generation for exercises. Only getUid is implemented.
+ */
+export const exerciseDataUidGenerator: ExerciseGeneratorInterface<[Exercise]> = {
+  /**
+   * Not implemented: Only getUid is supported for this utility.
+   */
+  generateExercises: () => { throw new Error('Not implemented: Only getUid is supported for this utility.') },
+  /**
+   * Returns a predictable UID and human-readable label for a given exercise.
+   */
+  getUid: (exercise: Exercise) => {
+    switch (exercise.type) {
+      case 'flashcard':
+        return {
+          uid: `flashcard_${hashString(exercise.front)}_${hashString(exercise.back)}`,
+          humanReadable: `Flashcard: ${exercise.primaryUnitOfMeaning?.language ?? ''} | ${exercise.front}`
+        }
+      case 'choose-from-two':
+        return {
+          uid: `choose-from-two_${hashString(exercise.front)}_${hashString(exercise.correctAnswer)}_${hashString(exercise.incorrectAnswer)}`,
+          humanReadable: `ChooseFromTwo: ${exercise.primaryUnitOfMeaning?.language ?? ''} | ${exercise.front}`
+        }
+      case 'free-translation':
+        return {
+          uid: `free-translation_${hashString(exercise.front)}_${hashString(exercise.back)}`,
+          humanReadable: `FreeTranslation: ${exercise.primaryUnitOfMeaning?.language ?? ''} | ${exercise.front}`
+        }
+      default:
+        throw new Error(`Unknown exercise type: ${(exercise as unknown as { type: string }).type}`)
+    }
+  }
 }

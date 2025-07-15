@@ -8,13 +8,13 @@ import { createEmptyCard } from 'ts-fsrs'
 
 // Mocks for exercise generators
 vi.mock('./generators/generateClozesForUnitAndLanguage', () => ({
-  generateClozesForUnitAndLanguage: vi.fn(() => [{ type: 'cloze' }])
+  clozeGenerator: { generateExercises: vi.fn(() => Promise.resolve([{ type: 'cloze' }])) }
 }))
 vi.mock('./generators/generateChooseFromTwoForUnitAndLanguage', () => ({
-  generateChooseFromTwoForUnitAndLanguage: vi.fn(() => Promise.resolve([{ type: 'chooseFromTwo' }]))
+  chooseFromTwoGenerator: { generateExercises: vi.fn(() => Promise.resolve([{ type: 'chooseFromTwo' }])) }
 }))
 vi.mock('./generators/generateFreeTranslationForUnitAndLanguage', () => ({
-  generateFreeTranslationForUnitAndLanguage: vi.fn(() => Promise.resolve([{ type: 'freeTranslation' }]))
+  freeTranslationGenerator: { generateExercises: vi.fn(() => Promise.resolve([{ type: 'freeTranslation' }])) }
 }))
 
 describe('generateExercisesForTask', () => {

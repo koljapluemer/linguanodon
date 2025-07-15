@@ -1,57 +1,71 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { ExerciseFreeTranslation } from '@/utils/exercise/types/exerciseTypes'
+import type { ExerciseGeneratorInterface } from './ExerciseGeneratorInterface'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'
 
 /**
- * Generates free-translation exercises for a unit, for all native languages
+ * Simple hash function for generating readable, unique-enough strings for UIDs.
  */
-export async function generateFreeTranslationForUnitAndLanguage(
-  unit: UnitOfMeaning,
-  targetLanguageCode: string,
-  nativeLanguageCodes: string[],
-  unitRepository: UnitOfMeaningRepository
-): Promise<ExerciseFreeTranslation[]> {
-  // Only generate if the unit is in the target language
-  if (unit.language !== targetLanguageCode) {
-    console.debug('[FreeTranslation] Skipping unit because language does not match target:', {unitLanguage: unit.language, targetLanguageCode})
-    return []
+function hashString(str: string): string {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i)
+    hash |= 0
   }
+  return Math.abs(hash).toString(36)
+}
 
-  // Count words in the target sentence
-  const tokens = splitIntoTokens(unit.content)
-  const wordCount = tokens.filter(isWordToken).length
-  if (wordCount < 3) {
-    console.debug('[FreeTranslation] Skipping unit because word count < 3:', {unitContent: unit.content, wordCount})
-    return []
-  }
-
-  // For each native language, find the translation and create the exercise
-  const exercises: ExerciseFreeTranslation[] = []
-  for (const nativeLang of nativeLanguageCodes) {
-    const translationRef = unit.translations.find(t => t.language === nativeLang)
-    if (!translationRef) {
-      console.debug('[FreeTranslation] No translationRef found for native language:', {nativeLang, availableTranslations: unit.translations})
-      continue
+/**
+ * Generator for free-translation exercises for a unit of meaning.
+ */
+export const freeTranslationGenerator: ExerciseGeneratorInterface<[
+  UnitOfMeaning,
+  string,
+  string[],
+  UnitOfMeaningRepository
+]> = {
+  /**
+   * Produces all free-translation exercises for a unit, target language, and native languages.
+   */
+  generateExercises: async (unit, targetLanguageCode, nativeLanguageCodes, unitRepository) => {
+    if (unit.language !== targetLanguageCode) {
+      return []
     }
-    // Look up the translation unit
-    const translationUnit = await unitRepository.findUnitOfMeaning(nativeLang, translationRef.content)
-    if (!translationUnit) {
-      console.debug('[FreeTranslation] No translationUnit found in DB for:', {nativeLang, content: translationRef.content})
-      continue
+    const tokens = splitIntoTokens(unit.content)
+    const wordCount = tokens.filter(isWordToken).length
+    if (wordCount < 3) {
+      return []
     }
-    exercises.push({
-      type: 'free-translation',
-      front: unit.content,
-      back: translationUnit.content,
-      instruction: 'Translate the sentence',
-      primaryUnitOfMeaning: { language: unit.language, content: unit.content },
-      secondaryUnitsOfMeaning: [{ language: translationUnit.language, content: translationUnit.content }]
-    })
+    const exercises: ExerciseFreeTranslation[] = []
+    for (const nativeLang of nativeLanguageCodes) {
+      const translationRef = unit.translations.find(t => t.language === nativeLang)
+      if (!translationRef) {
+        continue
+      }
+      const translationUnit = await unitRepository.findUnitOfMeaning(nativeLang, translationRef.content)
+      if (!translationUnit) {
+        continue
+      }
+      exercises.push({
+        type: 'free-translation',
+        front: unit.content,
+        back: translationUnit.content,
+        instruction: 'Translate the sentence',
+        primaryUnitOfMeaning: { language: unit.language, content: unit.content },
+        secondaryUnitsOfMeaning: [{ language: translationUnit.language, content: translationUnit.content }]
+      })
+    }
+    return exercises
+  },
+  /**
+   * Returns the UID and a human-readable string for a given free-translation exercise.
+   */
+  getUid: (exercise) => {
+    if (exercise.type !== 'free-translation') throw new Error('Not a free-translation exercise')
+    const uid = `freetrans_${hashString(exercise.front)}_${hashString(exercise.back)}`
+    const humanReadable = `FreeTranslation: ${exercise.primaryUnitOfMeaning.language} | ${exercise.front}`
+    return { uid, humanReadable }
   }
-  if (exercises.length === 0) {
-    console.debug('[FreeTranslation] No exercises generated for unit:', {unit})
-  }
-  return exercises
 } 
