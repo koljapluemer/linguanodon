@@ -89,52 +89,7 @@
               Exercise {{ index + 1 }} ({{ exercise.humanReadableName }})
             </h3>
             
-            <!-- Exercise direction info -->
-            <div class="text-sm opacity-70 mb-3">
-              <span v-if="exercise.uid.includes('cloze_') || exercise.uid.includes('choose_')">
-                {{ getExerciseDirection(exercise.uid) }}
-              </span>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h4 class="font-medium text-sm opacity-70">Front</h4>
-                <div class="bg-base-200 p-3 rounded" v-html="exercise.front"></div>
-              </div>
-              
-              <!-- Flashcard exercise -->
-              <div v-if="exercise.type === 'flashcard'">
-                <h4 class="font-medium text-sm opacity-70">Back</h4>
-                <div class="bg-base-200 p-3 rounded" v-html="exercise.back"></div>
-              </div>
-              
-              <!-- Choose from two exercise -->
-              <div v-else-if="exercise.type === 'choose-from-two'">
-                <h4 class="font-medium text-sm opacity-70">Options</h4>
-                <div class="bg-base-200 p-3 rounded space-y-2">
-                  <div class="flex items-center gap-2">
-                    <span class="font-mono">A.</span>
-                    <span class="text-success font-medium">{{ exercise.correctAnswer }}</span>
-                    <span class="text-xs opacity-70">(correct)</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="font-mono">B.</span>
-                    <span class="text-error">{{ exercise.incorrectAnswer }}</span>
-                    <span class="text-xs opacity-70">(incorrect)</span>
-                  </div>
-                  <div v-if="exercise.context" class="mt-3 pt-3 border-t">
-                    <span class="text-sm opacity-70">Context:</span>
-                    <div class="mt-1">{{ exercise.context }}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Free-translation exercise -->
-              <div v-else-if="exercise.type === 'free-translation'">
-                <h4 class="font-medium text-sm opacity-70">Reference Translation</h4>
-                <div class="bg-base-200 p-3 rounded" v-html="exercise.back"></div>
-              </div>
-            </div>
+            <AbstractExerciseWidgetControl :exercise="exercise" />
           </div>
         </div>
       </div>
@@ -156,6 +111,7 @@ import { useRepoDexieTasks } from '@/repositories/implementations/dexie/useRepoD
 import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
 import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'
 import { taskRepositoryKey, unitOfMeaningRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
+import AbstractExerciseWidgetControl from '@/components/practice/exercise/AbstractExerciseWidgetControl.vue'
 
 // Provide repositories to child components
 provide(taskRepositoryKey, useRepoDexieTasks())
@@ -221,20 +177,6 @@ async function generateExercises(mode: 'primary' | 'secondary' | 'all'): Promise
   }
 }
 
-/**
- * Helper to get exercise direction from UID
- */
-function getExerciseDirection(uid: string): string {
-  // Parse the UID to determine direction
-  // Format: type_language_content_wordIdx_targetLanguage
-  const parts = uid.split('_')
-  if (parts.length >= 5) {
-    const sourceLanguage = parts[1]
-    const targetLanguage = parts[parts.length - 1]
-    return `Clozing ${sourceLanguage} → Hint: ${targetLanguage}`
-  }
-  return 'Unknown direction'
-}
 
 // Computed: currently selected task
 const selectedTask = computed(() => {
