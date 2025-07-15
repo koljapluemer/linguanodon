@@ -73,6 +73,16 @@ export function useRepoDexieTasks(): TaskRepository {
       
       task.lastPracticedAt = new Date()
       await db.tasks.put(task)
+    },
+
+    /**
+     * Finds a task by its uid.
+     */
+    async getTaskByUid(uid: string): Promise<Task | null> {
+      const allTasks = await db.tasks.toArray();
+      console.log('DexieRepo: getTaskByUid called with:', uid);
+      console.log('DexieRepo: All available uids:', allTasks.map(t => t.uid));
+      return await db.tasks.where('uid').equals(uid).first() || null;
     }
   }
 }

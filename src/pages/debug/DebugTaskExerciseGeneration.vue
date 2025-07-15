@@ -19,8 +19,8 @@
             <option value="">Select a task...</option>
             <option 
               v-for="task in tasks" 
-              :key="`${task.language}:${task.content}`"
-              :value="`${task.language}:${task.content}`"
+              :key="task.uid"
+              :value="task.uid"
             >
               {{ task.language }}: {{ task.content }}
             </option>
@@ -196,9 +196,7 @@ async function generateExercises(mode: 'primary' | 'secondary' | 'all') {
   error.value = ''
   exercises.value = []
   try {
-    // Parse task ID
-    const [language, content] = selectedTaskId.value.split(':')
-    const task = await taskRepository.findTask(language, content)
+    const task = await taskRepository.getTaskByUid(selectedTaskId.value)
     if (!task) {
       error.value = 'Selected task not found'
       return
@@ -241,8 +239,7 @@ function getExerciseDirection(uid: string): string {
 // Computed: currently selected task
 const selectedTask = computed(() => {
   if (!selectedTaskId.value) return null
-  const [language, content] = selectedTaskId.value.split(':')
-  return tasks.value.find(t => t.language === language && t.content === content) || null
+  return tasks.value.find(t => t.uid === selectedTaskId.value) || null
 })
 
 onMounted(() => {

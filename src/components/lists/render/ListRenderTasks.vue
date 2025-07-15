@@ -13,7 +13,7 @@
       <tbody>
         <ListWidgetTask
           v-for="task in tasks"
-          :key="`${task.language}_${task.content}`"
+          :key="task.uid"
           :task="task"
         />
       </tbody>

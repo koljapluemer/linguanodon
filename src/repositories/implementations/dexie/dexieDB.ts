@@ -31,11 +31,12 @@ export class LinguanodonDB extends Dexie {
   constructor() {
     super('LinguanodonDB')
     
-    this.version(1).stores({
+    this.version(2).stores({
       exercises: 'uid',
       languages: 'code',
       sets: 'uid',
-      tasks: '[language+content]',
+      // Index both uid and [language+content] for Task
+      tasks: 'uid, [language+content]',
       unitsOfMeaning: '[language+content]'
     })
   }

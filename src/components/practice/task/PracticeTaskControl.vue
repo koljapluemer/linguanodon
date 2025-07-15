@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, inject } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
 import PracticeTaskView from './PracticeTaskView.vue'
@@ -69,7 +69,6 @@ const unitRepository = inject<UnitOfMeaningRepository>(unitOfMeaningRepositoryKe
 const exerciseRepository = inject<ExerciseDataRepository>(exerciseRepositoryKey)
 const languageRepository = inject(languageRepositoryKey, null)
 
-
 const exercises = ref<Exercise[]>([])
 const currentExerciseIndex = ref(0)
 const isTaskExecutionPhase = ref(false)
@@ -77,24 +76,17 @@ const error = ref<string>('')
 const task = ref<Task | null>(null)
 
 /**
- * Parse task ID to get language and content
- */
-const taskInfo = computed(() => {
-  const [language, content] = props.taskId.split(':')
-  return { language, content }
-})
-
-/**
- * Load the task from repository
+ * Load the task from repository by uid
  */
 async function loadTask() {
   if (!taskRepository) {
     error.value = 'Task repository not provided'
     return
   }
-  
   try {
-    const foundTask = await taskRepository.findTask(taskInfo.value.language, taskInfo.value.content)
+    console.log('PracticeTaskControl: Looking up task by uid:', props.taskId)
+    const foundTask = await taskRepository.getTaskByUid(props.taskId)
+    console.log('PracticeTaskControl: Result of getTaskByUid:', foundTask)
     if (!foundTask) {
       error.value = 'Task not found'
       return

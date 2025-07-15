@@ -24,7 +24,8 @@ export function mockTaskRepository(): TaskRepository {
             isCompleted: false,
             nextShownEarliestAt: new Date('2024-01-01'),
             interval: 1,
-            attempts: []
+            attempts: [],
+            uid: 'en_' + encodeURIComponent('Learn Basic Greetings')
         },
         // Demo task for vocabulary
         {
@@ -47,7 +48,8 @@ export function mockTaskRepository(): TaskRepository {
                     correctness: 1,
                     timestamp: new Date('2024-01-15')
                 }
-            ]
+            ],
+            uid: 'es_' + encodeURIComponent('Essential Vocabulary')
         }
     ];
 
@@ -108,6 +110,12 @@ export function mockTaskRepository(): TaskRepository {
                 task.lastPracticedAt = new Date();
             }
             return Promise.resolve();
+        },
+        /**
+         * Finds a task by its uid.
+         */
+        async getTaskByUid(uid: string) {
+            return Promise.resolve(dataSource.find(t => t.uid === uid) || null);
         }
     };
 }

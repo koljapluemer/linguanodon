@@ -1,6 +1,7 @@
 export interface Task {
     language: string;
     content: string;
+    uid: string;
     primaryUnitsOfMeaning: Array<{language: string, content: string}> 
     secondaryUnitsOfMeaning: Array<{language: string, content: string}> 
     lastDownloadedAt: Date | null

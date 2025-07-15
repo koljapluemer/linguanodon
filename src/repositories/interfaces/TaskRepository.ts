@@ -8,4 +8,5 @@ export interface TaskRepository {
     getTasksByLanguage(language: string): Promise<Task[]>
     addTaskAttempt(language: string, content: string, attempt: TaskAttempt): Promise<void>
     updateTaskLastPracticedAt(language: string, content: string): Promise<void>
+    getTaskByUid(uid: string): Promise<Task | null>
 }

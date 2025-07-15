@@ -5,20 +5,21 @@
     <td class="text-sm ">{{ task.primaryUnitsOfMeaning.length }}</td>
     <td class="text-sm ">{{ task.primaryUnitsOfMeaning.length + (task.secondaryUnitsOfMeaning?.length || 0) }}</td>
     <td>
-      <button 
-        @click="startPractice"
+      <router-link
+        :to="{ name: 'practice-task', params: { taskId: task.uid } }"
         class="btn btn-primary btn-sm"
-        :disabled="!canPractice"
+        :class="{ 'btn-disabled': !canPractice }"
+        :tabindex="canPractice ? 0 : -1"
+        :aria-disabled="!canPractice"
       >
         Practice
-      </button>
+      </router-link>
     </td>
   </tr>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import type { Task } from '@/entities/Task'
 
 interface Props {
@@ -26,7 +27,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const router = useRouter()
 
 /**
  * Check if task can be practiced (has units of meaning)
@@ -34,12 +34,4 @@ const router = useRouter()
 const canPractice = computed(() => 
   props.task.primaryUnitsOfMeaning.length > 0 || (props.task.secondaryUnitsOfMeaning?.length || 0) > 0
 )
-
-/**
- * Navigate to practice page for this task
- */
-function startPractice() {
-  const taskId = encodeURIComponent(`${props.task.language}:${props.task.content}`)
-  router.push(`/practice-task/${taskId}`)
-}
 </script> 

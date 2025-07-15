@@ -11,6 +11,7 @@ import type { SetRepository } from '@/repositories/interfaces/SetRepository'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
 import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepository'
 import { getIsoLanguages } from '@/utils/language/getIsoLanguages'
+import { generateTaskUidBasedOnLanguageAndContent } from '@/utils/task/generateTaskUidBasedOnLanguageAndContent'
 
 // Remote data interfaces
 export interface RemoteSet {
@@ -105,6 +106,7 @@ function convertRemoteTaskToLocalTask(remoteTask: RemoteTask): Task {
   }))
 
   return {
+    uid: generateTaskUidBasedOnLanguageAndContent(remoteTask.language, remoteTask.content),
     language: remoteTask.language,
     content: remoteTask.content,
     secondaryUnitsOfMeaning: secondaryUnitUids,
