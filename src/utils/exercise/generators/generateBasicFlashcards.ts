@@ -3,21 +3,12 @@ import type { Language } from '@/entities/Language'
 import type { ExerciseFlashcard } from '@/entities/Exercises'
 import type { UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import type { ExerciseGeneratorInterface } from './ExerciseGeneratorInterface'
+import { makeHashString } from '@/utils/exercise/utils/makeHashString'
 
 /**
  * Generator for basic bidirectional flashcard exercises for a unit of meaning.
  */
-/**
- * Simple hash function for generating readable, unique-enough strings for UIDs.
- */
-function hashString(str: string): string {
-  let hash = 0
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i)
-    hash |= 0 // Convert to 32bit integer
-  }
-  return Math.abs(hash).toString(36)
-}
+
 
 /**
  * Generates basic flashcard exercises for a unit of meaning, covering both directions (target→native and native→target).
@@ -132,7 +123,7 @@ export const basicFlashcardGenerator: ExerciseGeneratorInterface<[
    */
   getUid: (exercise) => {
     if (exercise.type !== 'flashcard') throw new Error('Not a flashcard exercise')
-    const uid = `flashcard_${hashString(exercise.front)}_${hashString(exercise.back)}`
+    const uid = `flashcard_${makeHashString(exercise.front)}_${makeHashString(exercise.back)}`
     const humanReadable = `Flashcard: ${exercise.primaryUnitOfMeaning.language} → ${exercise.secondaryUnitsOfMeaning.map((u: UnitOfMeaningIdentification) => u.language).join(', ')} | ${exercise.front}`
     return { uid, humanReadable }
   }
