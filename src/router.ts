@@ -6,6 +6,7 @@ import PageListAllTasks from '@/pages/PageListAllTasks.vue'
 import PagePracticeTask from '@/pages/PagePracticeTask.vue'
 import PageManageUserLanguages from '@/pages/PageManageUserLanguages.vue'
 import DebugTaskExerciseGeneration from '@/pages/debug/DebugTaskExerciseGeneration.vue'
+import DebugExerciseDataTracking from '@/pages/debug/DebugExerciseDataTracking.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -53,6 +54,13 @@ const routes: RouteRecordRaw[] = [
     path: '/debug/exercise-generation',
     name: 'debug-exercise-generation',
     component: DebugTaskExerciseGeneration
+  },
+
+  {
+    /** Route for debugging exercise data tracking */
+    path: '/debug/exercise-data-tracking',
+    name: 'debug-exercise-data-tracking',
+    component: DebugExerciseDataTracking
   },
 
 ]
