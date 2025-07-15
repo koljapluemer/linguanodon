@@ -5,7 +5,7 @@ import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
 import { isTaskExists } from '@/utils/task/isTaskExists'
 import type { Set } from '@/entities/Set'
 import type { Task } from '@/entities/Task'
-import type { UnitOfMeaning, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
+import type { UnitOfMeaning, UnitOfMeaningIdentification, UnitOfMeaningLink } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { SetRepository } from '@/repositories/interfaces/SetRepository'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
@@ -31,9 +31,12 @@ export interface RemoteUnitOfMeaning {
     content: string
     preNotes?: string
     postNotes?: string
+    pronunciation?: string;
     seeAlso?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
     translations?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
     credits?: RemoteCredit[]
+    links?: UnitOfMeaningLink[];
+    explicitlyNotRelated?: UnitOfMeaningIdentification[]; // New field for explicitly not related units
 }
 
 export interface RemoteCredit {
@@ -67,19 +70,23 @@ export async function downloadSet(filename: string, language: string): Promise<R
 function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMeaning {
   const credits = remoteUnit.credits ? remoteUnit.credits.map(credit => ({
     license: credit.license,
-    owner: credit.owner || '',
-    ownerLink: credit.ownerLink || '',
-    source: credit.source || '',
-    sourceLink: credit.sourceLink || ''
+    owner: credit.owner,
+    ownerLink: credit.ownerLink,
+    source: credit.source,
+    sourceLink: credit.sourceLink
   })) : []
 
   return {
     language: remoteUnit.language,
     content: remoteUnit.content,
-    notes: remoteUnit.notes || '',
+    preNotes: remoteUnit.preNotes,
+    postNotes: remoteUnit.postNotes,
+    pronunciation: remoteUnit.pronunciation,
     translations: remoteUnit.translations || [],
     seeAlso: remoteUnit.seeAlso || [],
+    explicitlyNotRelated: remoteUnit.explicitlyNotRelated || [],
     credits,
+    links: remoteUnit.links || [],
     card: createEmptyCard()
   }
 }

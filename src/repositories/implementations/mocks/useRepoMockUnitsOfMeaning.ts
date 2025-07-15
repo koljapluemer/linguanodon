@@ -14,7 +14,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'en',
             content: 'Hello world',
-            notes: 'A simple greeting',
+            preNotes: 'A simple greeting',
+            postNotes: '',
+            pronunciation: undefined,
             translations: [
                 { language: 'es', content: 'hola mundo' },
                 { language: 'ar', content: 'مرحبا بالعالم' }
@@ -24,61 +26,81 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
                 { language: 'en', content: 'Welcome' }
             ],
             credits: [],
+            links: [],
+            explicitlyNotRelated: [],
             card: createEmptyCard()
         },
         // Demo Spanish translation unit
         {
             language: 'es',
             content: 'hola mundo',
-            notes: 'Un saludo simple',
+            preNotes: '',
+            postNotes: 'Un saludo simple',
+            pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
             ],
             seeAlso: [],
             credits: [],
+            links: [],
+            explicitlyNotRelated: [],
             card: createEmptyCard()
         },
         // Demo Arabic translation unit
         {
             language: 'ar',
             content: 'مرحبا بالعالم',
-            notes: 'تحية بسيطة',
+            preNotes: '',
+            postNotes: 'تحية بسيطة',
+            pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
             ],
             seeAlso: [],
             credits: [],
+            links: [],
+            explicitlyNotRelated: [],
             card: createEmptyCard()
         },
         // Demo French unit
         {
             language: 'fr',
             content: 'Bonjour le monde',
-            notes: 'Une salutation simple',
+            preNotes: 'Une salutation simple',
+            postNotes: '',
+            pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
             ],
             seeAlso: [],
             credits: [],
+            links: [],
+            explicitlyNotRelated: [],
             card: createEmptyCard()
         },
         // Demo German unit
         {
             language: 'de',
             content: 'Hallo Welt',
-            notes: 'Eine einfache Begrüßung',
+            preNotes: '',
+            postNotes: 'Eine einfache Begrüßung',
+            pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
             ],
             seeAlso: [],
             credits: [],
+            links: [],
+            explicitlyNotRelated: [],
             card: createEmptyCard()
         },
         // Demo related units for seeAlso testing
         {
             language: 'en',
             content: 'Greeting',
-            notes: 'A word used to say hello',
+            preNotes: 'A word used to say hello',
+            postNotes: '',
+            pronunciation: undefined,
             translations: [
                 { language: 'es', content: 'saludo' },
                 { language: 'fr', content: 'salutation' }
@@ -88,12 +110,16 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
                 { language: 'en', content: 'Welcome' }
             ],
             credits: [],
+            links: [],
+            explicitlyNotRelated: [],
             card: createEmptyCard()
         },
         {
             language: 'en',
             content: 'Welcome',
-            notes: 'A friendly greeting',
+            preNotes: '',
+            postNotes: 'A friendly greeting',
+            pronunciation: undefined,
             translations: [
                 { language: 'es', content: 'bienvenido' },
                 { language: 'fr', content: 'bienvenue' }
@@ -103,6 +129,8 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
                 { language: 'en', content: 'Greeting' }
             ],
             credits: [],
+            links: [],
+            explicitlyNotRelated: [],
             card: createEmptyCard()
         }
     ];
