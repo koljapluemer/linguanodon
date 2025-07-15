@@ -129,10 +129,14 @@ async function initializeExercises() {
  * Handle exercise finished event: advance to next exercise or phase
  */
 function handleExerciseFinished() {
+  console.debug('[PracticeTaskControl] handleExerciseFinished called');
+  console.debug('[PracticeTaskControl] currentExerciseIndex before:', currentExerciseIndex.value, 'exercises.length:', exercises.value.length);
   if (currentExerciseIndex.value < exercises.value.length - 1) {
-    currentExerciseIndex.value++
+    currentExerciseIndex.value++;
+    console.debug('[PracticeTaskControl] currentExerciseIndex incremented to:', currentExerciseIndex.value);
   } else {
-    isTaskExecutionPhase.value = true
+    isTaskExecutionPhase.value = true;
+    console.debug('[PracticeTaskControl] All exercises done, switching to task execution phase');
   }
 }
 

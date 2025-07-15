@@ -18,8 +18,9 @@
     <!-- Exercise phase -->
     <div v-if="!isTaskExecutionPhase && currentExercise">
       <DoExerciseControl
+        :key="currentExercise.uid"
         :exercise="currentExercise"
-        @exercise-finished="$emit('exercise-finished')"
+        @exercise-finished="() => { console.debug('[PracticeTaskView] exercise-finished event received'); $emit('exercise-finished') }"
       />
     </div>
     
@@ -61,9 +62,11 @@ const emit = defineEmits<Emits>()
 /**
  * Get current exercise
  */
-const currentExercise = computed(() => 
-  props.exercises[props.currentExerciseIndex]
-)
+const currentExercise = computed(() => {
+  const ex = props.exercises[props.currentExerciseIndex]
+  console.debug('[PracticeTaskView] currentExerciseIndex:', props.currentExerciseIndex, 'currentExercise.uid:', ex?.uid)
+  return ex
+})
 
 /**
  * Handle task attempt submission
