@@ -119,7 +119,8 @@ export async function generateChooseFromTwoForUnitAndLanguage(
         front: wrapWithDirection(clozeContent),
         correctAnswer: word,
         incorrectAnswer: incorrectAnswer,
-        context: contextText
+        context: contextText,
+        instruction: 'Fill in the blank with the correct word'
       })
     }
   }

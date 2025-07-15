@@ -1,9 +1,12 @@
 <template>
-  <component 
-    :is="renderer" 
-    :exercise="exercise"
-    @score="handleScore"
-  />
+  <div>
+    <h2 class="card-title justify-center mb-4 text-center">{{ exercise.instruction }}</h2>
+    <component 
+      :is="renderer" 
+      :exercise="exercise"
+      @score="handleScore"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -210,7 +210,8 @@ async function generateExercises(mode: 'primary' | 'secondary' | 'all') {
       targetLanguages,
       nativeLanguages,
       unitRepository,
-      mode
+      mode,
+      false // Do not limit number of exercises in debug
     )
     exercises.value = generatedExercises
   } catch (err) {

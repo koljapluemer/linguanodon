@@ -4,7 +4,6 @@
       <div class="card-body">
         <!-- Front side (cloze) -->
         <div v-if="!isRevealed" class="text-center">
-          <h2 class="card-title justify-center mb-4">Fill in the blank</h2>
           <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="exercise.front"></div>
           <button 
             @click="reveal" 

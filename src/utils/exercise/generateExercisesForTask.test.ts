@@ -4,6 +4,7 @@ import type { Task } from '@/entities/Task'
 import type { Language } from '@/entities/Language'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
+import { createEmptyCard } from 'ts-fsrs'
 
 // Mocks for exercise generators
 vi.mock('./generators/generateClozesForUnitAndLanguage', () => ({
@@ -27,7 +28,12 @@ describe('generateExercisesForTask', () => {
     mockUnit = {
       language: 'en',
       content: 'hello',
-      // ...other properties as needed
+      translations: [],
+      seeAlso: [],
+      explicitlyNotRelated: [],
+      credits: [{ license: 'MIT' }],
+      links: [],
+      card: createEmptyCard()
     } as UnitOfMeaning
 
     mockUnitRepository = {
@@ -65,7 +71,8 @@ describe('generateExercisesForTask', () => {
       targetLanguages,
       nativeLanguages,
       mockUnitRepository,
-      'primary'
+      'primary',
+      false // do not limit for test
     )
     expect(Array.isArray(exercises)).toBe(true)
     expect(exercises.length).toBeGreaterThan(0)

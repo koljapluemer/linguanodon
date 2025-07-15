@@ -5,6 +5,7 @@ import type { Exercise } from '@/utils/exercise/types/exerciseTypes'
 import { generateClozesForUnitAndLanguage } from './generators/generateClozesForUnitAndLanguage'
 import { generateChooseFromTwoForUnitAndLanguage } from './generators/generateChooseFromTwoForUnitAndLanguage'
 import { generateFreeTranslationForUnitAndLanguage } from './generators/generateFreeTranslationForUnitAndLanguage'
+import { generateBasicFlashcardsForUnitAndLanguages } from './generators/generateBasicFlashcards'
 
 /**
  * Generates all possible exercises for a given unit of meaning and user languages.
@@ -17,6 +18,8 @@ export async function generateExercisesForUnitOfMeaning(
   unitRepository: UnitOfMeaningRepository
 ): Promise<Exercise[]> {
   const allExercises: Exercise[] = []
+  // Add basic flashcards
+  allExercises.push(...generateBasicFlashcardsForUnitAndLanguages(unit, targetLanguages, nativeLanguages))
   const allLanguages = [...targetLanguages, ...nativeLanguages]
   const nativeLanguageCodes = nativeLanguages.map(l => l.code)
 

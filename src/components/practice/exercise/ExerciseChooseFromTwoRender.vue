@@ -4,7 +4,6 @@
       <div class="card-body">
         <!-- Question -->
         <div class="text-center">
-          <h2 class="card-title justify-center mb-4">Choose the correct answer</h2>
           <div class="text-2xl mb-6 p-4 bg-base-200 rounded-lg" v-html="exercise.front"></div>
           
           <!-- Answer options -->

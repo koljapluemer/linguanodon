@@ -1,6 +1,5 @@
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import type { ExerciseFlashcard } from '@/utils/exercise/types/exerciseTypes'
-import { createEmptyCard } from 'ts-fsrs'
 import { splitIntoTokens } from '@/utils/exercise/utils/splitIntoTokens'
 import { isWordToken } from '@/utils/exercise/utils/isWordToken'
 import { makeClozeTokens } from '@/utils/exercise/utils/makeClozeTokens'
@@ -48,11 +47,10 @@ export function generateClozesForUnitAndLanguage(
     const back = `${wrapWithDirection(unit.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
     
     exercises.push({
-      uid: `cloze_${unit.language}_${unit.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${targetLanguage}`,
       type: 'flashcard',
       front,
       back,
-      card: createEmptyCard()
+      instruction: 'Fill in the blank'
     })
   })
   
@@ -77,11 +75,10 @@ export function generateClozesForUnitAndLanguage(
       const back = `${wrapWithDirection(translation.content.replace(word, `<mark>${word}</mark>`))}<div class="text-2xl">${wrapWithDirection(contextText)}</div>`
       
       exercises.push({
-        uid: `cloze_${translation.language}_${translation.content.replace(/[^a-zA-Z0-9]/g, '_')}_${wordIdx}_${unit.language}`,
         type: 'flashcard',
         front,
         back,
-        card: createEmptyCard()
+        instruction: 'Fill in the blank'
       })
     })
   }

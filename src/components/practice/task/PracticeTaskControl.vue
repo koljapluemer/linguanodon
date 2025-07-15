@@ -117,7 +117,8 @@ async function initializeExercises() {
       targetLanguages,
       nativeLanguages,
       unitRepository,
-      'all'
+      'all',
+      true // limitNumberOfExercises: set to false for testing
     )
     exercises.value = generatedExercises
   } catch (err) {

@@ -2,6 +2,7 @@
 // Base interface for all exercises
 export interface BaseExercise {
   type: string
+  instruction: string
 }
 
 // Flashcard exercise type
