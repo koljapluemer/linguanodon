@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-2">
     <div v-if="seeAlso.length === 0" class="text-center py-4 text-base-content/60">
-      <p>No related units added yet.</p>
+      <p>No related words or sentences added yet.</p>
       <p class="text-sm">Connect related words or sentences to build associations.</p>
     </div>
     

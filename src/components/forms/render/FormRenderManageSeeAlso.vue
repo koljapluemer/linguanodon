@@ -3,7 +3,7 @@
     <!-- See Also List -->
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Related Units (See Also)</span>
+        <span class="label-text font-medium">Related Words or Sentences</span>
       </label>
       <ListRenderSeeAlso
         :see-also="seeAlso"

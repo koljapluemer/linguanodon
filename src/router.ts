@@ -7,6 +7,7 @@ import PagePracticeTask from '@/pages/PagePracticeTask.vue'
 import PageManageUserLanguages from '@/pages/PageManageUserLanguages.vue'
 import DebugTaskExerciseGeneration from '@/pages/debug/DebugTaskExerciseGeneration.vue'
 import DebugExerciseDataTracking from '@/pages/debug/DebugExerciseDataTracking.vue'
+import PageManageUnitOfMeaning from '@/pages/PageManageUnitOfMeaning.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -63,7 +64,15 @@ const routes: RouteRecordRaw[] = [
     component: DebugExerciseDataTracking
   },
 
+  // Route for editing a specific unit of meaning
+  {
+    path: '/units/:language/:content/edit',
+    name: 'unit-edit',
+    component: PageManageUnitOfMeaning
+  },
+
 ]
+
 
 const router = createRouter({
   history: createWebHistory(),

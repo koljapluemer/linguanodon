@@ -9,7 +9,7 @@
       <button 
         @click="handleDisconnect"
         class="btn btn-outline btn-sm"
-        title="Disconnect related unit"
+        title="Disconnect related"
       >
         <Unlink class="w-4 h-4" />
       </button>

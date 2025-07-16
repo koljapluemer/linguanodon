@@ -7,6 +7,7 @@
     <div v-else>
       <ListRenderUnitsOfMeaningLazy
         :units="units"
+        @select="handleSelectUnit"
       />
     </div>
   </div>
@@ -14,6 +15,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, inject } from 'vue'
+import { useRouter } from 'vue-router'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import { unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
 import ListRenderUnitsOfMeaningLazy from '../render/ListRenderUnitsOfMeaningLazy.vue'
@@ -43,6 +45,15 @@ async function loadUnits() {
   } finally {
     loading.value = false
   }
+}
+
+const router = useRouter()
+
+/**
+ *
+ */
+function handleSelectUnit(unit: UnitOfMeaning) {
+  router.push({ name: 'unit-edit', params: { language: unit.language, content: unit.content } })
 }
 
 onMounted(() => {
