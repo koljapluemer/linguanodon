@@ -19,3 +19,19 @@ export function getRetrievabilityAtKeyPoints(card: Card, now: Date = new Date())
     in1Year: Math.round(in1Year * 100)
   }
 }
+
+/**
+ * Returns the retrievability (probability of recall) for a card after a given number of minutes from now.
+ * Value is in the range 0-100 (percent).
+ */
+export function getRetrievabilityInMinutes(card: Card, minutes: number, now: Date = new Date()): number | null {
+  if (!card) return null
+  try {
+    const fsrs = new FSRS({})
+    const future = new Date(now.getTime() + minutes * 60 * 1000)
+    const value = fsrs.get_retrievability(card, future, false)
+    return Math.round(value * 100)
+  } catch {
+    return null
+  }
+}

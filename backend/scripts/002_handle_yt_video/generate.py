@@ -47,7 +47,7 @@ def download_subtitles(video_id: str, lang_code: str) -> Tuple[List[str], str]:
         return lines, transcript.language_code
     except Exception as e:
         print(f"Error downloading subtitles: {e}")
-        sys.exit(1)
+        raise
 
 def get_openai_client() -> OpenAI:
     api_key = os.getenv('OPENAI_API_KEY')
@@ -130,12 +130,12 @@ def build_units_of_meaning(original_to_translations, translation_to_originals, l
             secondary.append(unit)
     return primary, secondary, units_by_key
 
-def main():
-    print(f"Processing YouTube video: {VIDEO_ID}")
+def process_video(video_id: str, target_lang_code: str, subtitle_lang_code: str, output_file: str):
+    print(f"Processing YouTube video: {video_id}")
     client = get_openai_client()
     # Download subtitles
     print("Downloading subtitles...")
-    lines, subtitle_lang_code = download_subtitles(VIDEO_ID, VIDEO_SUBTITLE_LANGUAGE)
+    lines, subtitle_lang_code_actual = download_subtitles(video_id, subtitle_lang_code)
     print("\n--- SUBTITLE DEBUG (first 3 lines) ---")
     for i, line in enumerate(lines[:3]):
         print(f"Line {i+1}: {line}")
@@ -144,16 +144,16 @@ def main():
     all_vocab = []
     for idx, line in enumerate(lines):
         print(f"\nProcessing line {idx+1}/{len(lines)}: {line}")
-        vocab_objs = extract_vocab_from_line(line, subtitle_lang_code, client)
+        vocab_objs = extract_vocab_from_line(line, subtitle_lang_code_actual, client)
         all_vocab.extend(vocab_objs)
     print(f"\nExtracted {len(all_vocab)} vocab objects from all lines.")
     # Aggregate and build units
     top_50_originals, original_to_translations, translation_to_originals = aggregate_vocab_objects(all_vocab)
-    primary, secondary, _ = build_units_of_meaning(original_to_translations, translation_to_originals, TARGET_LANG_CODE, top_50_originals)
+    primary, secondary, _ = build_units_of_meaning(original_to_translations, translation_to_originals, target_lang_code, top_50_originals)
     # Build RemoteSet
     task = {
-        "language": TARGET_LANG_CODE,
-        "content": f"Watch & try to understand the video <https://www.youtube.com/watch?v={VIDEO_ID}>",
+        "language": target_lang_code,
+        "content": f"Watch & try to understand the video <https://www.youtube.com/watch?v={video_id}>",
         "primaryUnitsOfMeaning": primary,
         "secondaryUnitsOfMeaning": secondary,
         "lastDownloadedAt": None,
@@ -164,15 +164,15 @@ def main():
         "attempts": []
     }
     remote_set = {
-        "name": f"YouTube Vocabulary - {VIDEO_ID}",
-        "language": TARGET_LANG_CODE,
+        "name": f"YouTube Vocabulary - {video_id}",
+        "language": target_lang_code,
         "tasks": [task]
     }
     # Save
-    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(remote_set, f, ensure_ascii=False, indent=2)
-    print(f"\nRemoteSet saved to {OUTPUT_FILE}\nScript completed successfully!")
+    print(f"\nRemoteSet saved to {output_file}\nScript completed successfully!")
 
 if __name__ == "__main__":
-    main()
+    process_video(VIDEO_ID, TARGET_LANG_CODE, VIDEO_SUBTITLE_LANGUAGE, OUTPUT_FILE)

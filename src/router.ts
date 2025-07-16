@@ -9,6 +9,7 @@ import DebugTaskExerciseGeneration from '@/pages/debug/DebugTaskExerciseGenerati
 import DebugExerciseDataTracking from '@/pages/debug/DebugExerciseDataTracking.vue'
 import PageManageUnitOfMeaning from '@/pages/PageManageUnitOfMeaning.vue'
 import PageQueue from '@/pages/PageQueue.vue'
+import PageCheckTask from '@/pages/PageCheckTask.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -76,6 +77,12 @@ const routes: RouteRecordRaw[] = [
     path: '/queue',
     name: 'queue',
     component: PageQueue
+  },
+
+  {
+    path: '/tasks/:taskId',
+    name: 'task-view',
+    component: PageCheckTask
   },
 
 ]

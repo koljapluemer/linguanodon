@@ -1,0 +1,409 @@
+{
+  "name": "YouTube Vocabulary - wKkXkvISGGU",
+  "language": "apc",
+  "tasks": [
+    {
+      "language": "apc",
+      "content": "Watch & try to understand the video <https://www.youtube.com/watch?v=wKkXkvISGGU>",
+      "primaryUnitsOfMeaning": [
+        {
+          "language": "apc",
+          "content": "عنده",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "has"
+            },
+            {
+              "language": "eng",
+              "content": "he has"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "مشركين",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "partners"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اكثر",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "more"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "مستر",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "mister"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "ابو",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "father"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "بنت",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "girl"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "كثير",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "many"
+            },
+            {
+              "language": "eng",
+              "content": "A lot"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "منيح",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "good"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اكيد",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "sure"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "صح",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "right"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "وهلا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "And now"
+            },
+            {
+              "language": "eng",
+              "content": "And hello"
+            },
+            {
+              "language": "eng",
+              "content": "now"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "عن",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "about"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "بعض",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "some"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "رح",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "will"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "وص",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "and"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "مرو",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "pass"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "مني",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "me"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "عم",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "am"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "بغلط",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "wrong"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "الاجانب",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "foreigners"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "زمان",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "time"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "مش",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "not"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "عاملين",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "making"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "محتوى",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "content"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "نقي",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "choose"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "لك",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "for you"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "وقت",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "Time"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "حاسمه",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "Crucial"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "عملوا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "they made"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "لايك",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "like"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اذا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "if"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "بتقولوا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "you say"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "انا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "I"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "عندي",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "I have"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اشتراك",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "subscription"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اشتركوا",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "subscribe"
+            },
+            {
+              "language": "eng",
+              "content": "Subscribe"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "نمبر",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "number"
+            }
+          ]
+        }
+      ],
+      "secondaryUnitsOfMeaning": [],
+      "lastDownloadedAt": null,
+      "lastPracticedAt": null,
+      "isCompleted": false,
+      "nextShownEarliestAt": "2024-01-01T00:00:00.000Z",
+      "interval": 0,
+      "attempts": []
+    }
+  ]
+}

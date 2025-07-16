@@ -4,7 +4,7 @@
     <td>{{ task.language }}</td>
     <td class="text-sm ">{{ task.primaryUnitsOfMeaning.length }}</td>
     <td class="text-sm ">{{ task.primaryUnitsOfMeaning.length + (task.secondaryUnitsOfMeaning?.length || 0) }}</td>
-    <td>
+    <td class="flex flex-row gap-2">
       <router-link
         :to="{ name: 'practice-task', params: { taskId: task.uid } }"
         class="btn btn-primary btn-sm"
@@ -13,6 +13,13 @@
         :aria-disabled="!canPractice"
       >
         Practice
+      </router-link>
+      <router-link
+        :to="{ name: 'task-view', params: { taskId: task.uid } }"
+        class="btn btn-secondary btn-sm ml-2"
+        @click="() => console.debug('ListWidgetTask: View clicked, task.uid:', task.uid)"
+      >
+        View
       </router-link>
     </td>
   </tr>
