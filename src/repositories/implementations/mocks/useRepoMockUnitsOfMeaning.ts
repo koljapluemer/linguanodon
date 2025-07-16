@@ -14,8 +14,10 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'en',
             content: 'Hello world',
-            preNotes: 'A simple greeting',
-            postNotes: '',
+            notes: [
+                { content: 'A simple greeting', showBeforeExercise: true },
+                { content: '', showBeforeExercise: false }
+            ],
             pronunciation: undefined,
             translations: [
                 { language: 'es', content: 'hola mundo' },
@@ -34,8 +36,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'es',
             content: 'hola mundo',
-            preNotes: '',
-            postNotes: 'Un saludo simple',
+            notes: [
+                { content: '', showBeforeExercise: false }
+            ],
             pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
@@ -50,8 +53,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'ar',
             content: 'مرحبا بالعالم',
-            preNotes: '',
-            postNotes: 'تحية بسيطة',
+            notes: [
+                { content: '', showBeforeExercise: false }
+            ],
             pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
@@ -66,8 +70,10 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'fr',
             content: 'Bonjour le monde',
-            preNotes: 'Une salutation simple',
-            postNotes: '',
+            notes: [
+                { content: 'Une salutation simple', showBeforeExercise: true },
+                { content: '', showBeforeExercise: false }
+            ],
             pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
@@ -82,8 +88,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'de',
             content: 'Hallo Welt',
-            preNotes: '',
-            postNotes: 'Eine einfache Begrüßung',
+            notes: [
+                { content: '', showBeforeExercise: false }
+            ],
             pronunciation: undefined,
             translations: [
                 { language: 'en', content: 'Hello world' }
@@ -98,8 +105,10 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'en',
             content: 'Greeting',
-            preNotes: 'A word used to say hello',
-            postNotes: '',
+            notes: [
+                { content: 'A word used to say hello', showBeforeExercise: true },
+                { content: '', showBeforeExercise: false }
+            ],
             pronunciation: undefined,
             translations: [
                 { language: 'es', content: 'saludo' },
@@ -117,8 +126,10 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
         {
             language: 'en',
             content: 'Welcome',
-            preNotes: '',
-            postNotes: 'A friendly greeting',
+            notes: [
+                { content: 'A friendly greeting', showBeforeExercise: true },
+                { content: '', showBeforeExercise: false }
+            ],
             pronunciation: undefined,
             translations: [
                 { language: 'es', content: 'bienvenido' },
@@ -141,6 +152,20 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
          */
         async addUnitOfMeaning(unitOfMeaning: UnitOfMeaning) {
             if (!dataSource.some(u => u.language === unitOfMeaning.language && u.content === unitOfMeaning.content)) {
+                dataSource.push(unitOfMeaning);
+            } else {
+                throw new Error(`Unit of meaning with language ${unitOfMeaning.language} and content ${unitOfMeaning.content} already exists`)
+            }
+            return Promise.resolve();
+        },
+        /**
+         * Inserts or updates a unit of meaning in the mock repository
+         */
+        async upsertUnitOfMeaning(unitOfMeaning: UnitOfMeaning) {
+            const idx = dataSource.findIndex(u => u.language === unitOfMeaning.language && u.content === unitOfMeaning.content);
+            if (idx !== -1) {
+                dataSource[idx] = unitOfMeaning;
+            } else {
                 dataSource.push(unitOfMeaning);
             }
             return Promise.resolve();

@@ -41,7 +41,7 @@ const emit = defineEmits<Emits>()
 const newUnit = ref<UnitOfMeaning>({
   language: 'en',
   content: '',
-  notes: '',
+  notes: [],
   translations: [],
   seeAlso: [],
   credits: [],

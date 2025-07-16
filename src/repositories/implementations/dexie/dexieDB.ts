@@ -35,8 +35,7 @@ export class LinguanodonDB extends Dexie {
       exercises: 'uid',
       languages: 'code',
       sets: 'uid',
-      // Index both uid and [language+content] for Task
-      tasks: 'uid, [language+content]',
+      tasks: 'uid',
       unitsOfMeaning: '[language+content]'
     })
   }

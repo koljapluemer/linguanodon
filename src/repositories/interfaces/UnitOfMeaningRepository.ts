@@ -2,6 +2,7 @@ import type { UnitOfMeaning, UnitOfMeaningIdentification } from "@/entities/Unit
 
 export interface UnitOfMeaningRepository {
     addUnitOfMeaning(unitOfMeaning: UnitOfMeaning): Promise<void>
+    upsertUnitOfMeaning(unitOfMeaning: UnitOfMeaning): Promise<void>
     deleteUnitOfMeaning(unitOfMeaning: UnitOfMeaning): Promise<void>
     findUnitOfMeaning(language: string, content: string): Promise<UnitOfMeaning | null>
     getAllUnitsOfMeaning(): Promise<UnitOfMeaning[]>

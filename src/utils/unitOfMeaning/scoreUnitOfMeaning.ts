@@ -20,10 +20,12 @@ export async function scoreUnitOfMeaning(
     }
     const scheduler = fsrs() // default params
     const now = new Date()
+    console.log('[scoreUnitOfMeaning] BEFORE', { card: unit.card, identification, rating })
     const { card: updatedCard } = scheduler.next(unit.card, now, rating)
+    console.log('[scoreUnitOfMeaning] AFTER', { updatedCard })
     unit.card = updatedCard
-    // Persist by re-adding (since no update method exists)
-    await repository.addUnitOfMeaning(unit)
+    // Persist by upserting (safe for both new and existing)
+    await repository.upsertUnitOfMeaning(unit)
   } catch (err) {
     console.error('Failed to score UnitOfMeaning:', identification, err)
   }

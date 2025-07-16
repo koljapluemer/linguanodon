@@ -11,14 +11,18 @@ export function useRepoDexieUnitsOfMeaning(): UnitOfMeaningRepository {
      * Adds a new unit of meaning to the database
      */
     async addUnitOfMeaning(unitOfMeaning: UnitOfMeaning): Promise<void> {
-      try {
-        await db.unitsOfMeaning.add(unitOfMeaning)
-      } catch (error) {
-        if (error instanceof Error && error.name === 'ConstraintError') {
-          throw new Error(`Unit of meaning with language ${unitOfMeaning.language} and content ${unitOfMeaning.content} already exists`)
-        }
-        throw error
+      const existing = await db.unitsOfMeaning.get([unitOfMeaning.language, unitOfMeaning.content])
+      if (existing) {
+        throw new Error(`Unit of meaning with language ${unitOfMeaning.language} and content ${unitOfMeaning.content} already exists`)
       }
+      await db.unitsOfMeaning.add(unitOfMeaning)
+    },
+
+    /**
+     * Inserts or updates a unit of meaning in the database
+     */
+    async upsertUnitOfMeaning(unitOfMeaning: UnitOfMeaning): Promise<void> {
+      await db.unitsOfMeaning.put(unitOfMeaning)
     },
 
     /**

@@ -23,7 +23,9 @@ export async function recordExerciseLearningEvent(
   }
   const scheduler = fsrs() // default params
   const now = new Date()
+  console.log('[recordExerciseLearningEvent] BEFORE', { card: exerciseData.card, event, rating: event.fsrsRating })
   const { card: updatedCard } = scheduler.next(exerciseData.card, now, event.fsrsRating as Grade)
+  console.log('[recordExerciseLearningEvent] AFTER', { updatedCard })
   const updatedExercise: ExerciseData = { 
     ...exerciseData, 
     card: updatedCard 

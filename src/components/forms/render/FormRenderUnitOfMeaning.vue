@@ -24,20 +24,6 @@
       ></textarea>
     </div>
 
-    <!-- Notes -->
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-medium">Notes</span>
-      </label>
-      <textarea
-        :value="unit.notes"
-        @input="updateField('notes', ($event.target as HTMLTextAreaElement).value)"
-        class="textarea textarea-bordered w-full"
-        rows="2"
-        placeholder="Optional notes about this unit"
-      ></textarea>
-    </div>
-
     <!-- Translations (only show if showTranslations is true) -->
     <div v-if="showTranslations" class="form-control">
       <FormRenderManageTranslations
@@ -153,15 +139,38 @@
       </div>
     </div>
   </div>
+
+  <!-- Retrievability and Due Date -->
+  <div class="card bg-base-200 mt-8 p-4">
+    <h2 class="text-lg font-semibold mb-2">Memory Stats</h2>
+    <div v-if="retrievability">
+      <div class="flex flex-col md:flex-row gap-4">
+        <div>
+          <span class="font-medium">Due Date:</span>
+          <span>{{ dueDateString }}</span>
+        </div>
+        <div>
+          <span class="font-medium">Retrievability:</span>
+          <ul class="ml-2">
+            <li>In 1 day: <span class="badge badge-outline">{{ retrievability.in1Day }}%</span></li>
+            <li>In 1 week: <span class="badge badge-outline">{{ retrievability.in1Week }}%</span></li>
+            <li>In 1 year: <span class="badge badge-outline">{{ retrievability.in1Year }}%</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div v-else class="text-base-content/60">No card data available.</div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, computed } from 'vue'
 import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
 import FormRenderManageTranslations from '@/components/forms/render/FormRenderManageTranslations.vue'
 import FormRenderManageSeeAlso from '@/components/forms/render/FormRenderManageSeeAlso.vue'
 import type { UnitOfMeaning, Credit, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import { languageRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
+import { getRetrievabilityAtKeyPoints } from '@/utils/fsrs/getRetrievabilityAtKeyPoints'
 
 interface Props {
   unit: UnitOfMeaning
@@ -280,4 +289,24 @@ function handleDisconnectSeeAlso(item: UnitOfMeaningIdentification) {
 function handleConnectSeeAlso(unit: UnitOfMeaning) {
   emit('connect-see-also', unit)
 }
+
+const retrievability = computed(() => {
+  if (!props.unit.card) return null
+  try {
+    return getRetrievabilityAtKeyPoints(props.unit.card)
+  } catch {
+    return null
+  }
+})
+
+const dueDateString = computed(() => {
+  const due = props.unit.card?.due
+  if (!due) return 'N/A'
+  try {
+    const date = due instanceof Date ? due : new Date(due)
+    return date.toLocaleString()
+  } catch {
+    return String(due)
+  }
+})
 </script>

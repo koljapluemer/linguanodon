@@ -43,11 +43,13 @@ const typedRepository = repository as NonNullable<typeof repository>
 const unit = ref<UnitOfMeaning>({
   language: props.initialUnit?.language || 'en',
   content: props.initialUnit?.content || '',
-  notes: props.initialUnit?.notes || '',
+  notes: props.initialUnit?.notes || [],
   translations: props.initialUnit?.translations || [],
   seeAlso: props.initialUnit?.seeAlso || [],
   credits: props.initialUnit?.credits || [],
-  card: props.initialUnit?.card || createEmptyCard()
+  card: props.initialUnit?.card || createEmptyCard(),
+  explicitlyNotRelated: props.initialUnit?.explicitlyNotRelated || [],
+  links: props.initialUnit?.links || []
 })
 
 /**
@@ -58,11 +60,13 @@ watch(() => props.initialUnit, (newInitialUnit) => {
     unit.value = {
       language: newInitialUnit.language || 'en',
       content: newInitialUnit.content || '',
-      notes: newInitialUnit.notes || '',
+      notes: newInitialUnit.notes || [],
       translations: newInitialUnit.translations || [],
       seeAlso: newInitialUnit.seeAlso || [],
       credits: newInitialUnit.credits || [],
-      card: newInitialUnit.card || createEmptyCard()
+      card: newInitialUnit.card || createEmptyCard(),
+      explicitlyNotRelated: newInitialUnit.explicitlyNotRelated || [],
+      links: newInitialUnit.links || []
     }
   }
 }, { immediate: true })
@@ -92,7 +96,7 @@ async function handleConnectTranslation(selectedUnit: UnitOfMeaning) {
  * Handle creating a new unit and connecting as translation (mutual)
  */
 async function handleAddNewTranslation(newUnit: UnitOfMeaning) {
-  await typedRepository.addUnitOfMeaning(newUnit)
+  await typedRepository.upsertUnitOfMeaning(newUnit)
   await makeTwoUnitsOfMeaningsTranslationsOfEachOther(unit.value, newUnit, typedRepository)
   // Refresh current unit
   const refreshed = await typedRepository.findUnitOfMeaning(unit.value.language, unit.value.content)
@@ -122,7 +126,7 @@ async function handleDisconnectTranslation(translation: { language: string; cont
       )
     }
     // Update the translation unit in the repository
-    await typedRepository.addUnitOfMeaning(updatedTranslationUnit)
+    await typedRepository.upsertUnitOfMeaning(updatedTranslationUnit)
   }
   
   emit('update', unit.value)
@@ -142,7 +146,7 @@ async function handleDeleteTranslation(translation: { language: string; content:
         !(t.language === unit.value.language && t.content === unit.value.content)
       )
     }
-    await typedRepository.addUnitOfMeaning(updatedTranslationUnit)
+    await typedRepository.upsertUnitOfMeaning(updatedTranslationUnit)
     
     // Now delete the translation unit
     await typedRepository.deleteUnitOfMeaning(translationUnit)
@@ -152,7 +156,7 @@ async function handleDeleteTranslation(translation: { language: string; content:
       ...unit.value,
       translations: unit.value.translations.filter(t => !(t.language === translation.language && t.content === translation.content))
     }
-    await typedRepository.addUnitOfMeaning(updatedCurrentUnit)
+    await typedRepository.upsertUnitOfMeaning(updatedCurrentUnit)
     
     // Update local state
     unit.value = updatedCurrentUnit

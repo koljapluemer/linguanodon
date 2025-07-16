@@ -50,7 +50,7 @@ async function loadUnits() {
 const router = useRouter()
 
 /**
- *
+ * Go to the unit of meaning edit page
  */
 function handleSelectUnit(unit: UnitOfMeaning) {
   router.push({ name: 'unit-edit', params: { language: unit.language, content: unit.content } })

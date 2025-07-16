@@ -5,7 +5,7 @@ import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
 import { isTaskExists } from '@/utils/task/isTaskExists'
 import type { Set } from '@/entities/Set'
 import type { Task } from '@/entities/Task'
-import type { UnitOfMeaning, UnitOfMeaningIdentification, UnitOfMeaningLink } from '@/entities/UnitOfMeaning'
+import type { UnitOfMeaning, UnitOfMeaningIdentification, UnitOfMeaningLink, UnitOfMeaningNote } from '@/entities/UnitOfMeaning'
 import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
 import type { SetRepository } from '@/repositories/interfaces/SetRepository'
 import type { TaskRepository } from '@/repositories/interfaces/TaskRepository'
@@ -30,8 +30,7 @@ export interface RemoteTask {
 export interface RemoteUnitOfMeaning {
     language: string
     content: string
-    preNotes?: string
-    postNotes?: string
+    notes?: UnitOfMeaningNote[];
     pronunciation?: string;
     seeAlso?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
     translations?: UnitOfMeaningIdentification[] // array of other unit of meanings referenced by "$language:$content"
@@ -80,8 +79,7 @@ function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMe
   return {
     language: remoteUnit.language,
     content: remoteUnit.content,
-    preNotes: remoteUnit.preNotes,
-    postNotes: remoteUnit.postNotes,
+    notes: remoteUnit.notes || [],
     pronunciation: remoteUnit.pronunciation,
     translations: remoteUnit.translations || [],
     seeAlso: remoteUnit.seeAlso || [],

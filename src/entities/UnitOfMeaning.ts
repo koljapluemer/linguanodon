@@ -1,8 +1,7 @@
 import type { Card } from "ts-fsrs";
 
 export interface UnitOfMeaning extends UnitOfMeaningIdentification {
-    preNotes?: string;
-    postNotes?: string;
+    notes: UnitOfMeaningNote[];
     pronunciation?: string;
     translations: UnitOfMeaningIdentification[]; 
     seeAlso: UnitOfMeaningIdentification[];
@@ -11,6 +10,11 @@ export interface UnitOfMeaning extends UnitOfMeaningIdentification {
     credits: Credit[]
     links: UnitOfMeaningLink[];
     card: Card;
+}
+
+export interface UnitOfMeaningNote {
+    content: string;
+    showBeforeExercise: boolean;
 }
 
 export interface Credit {
