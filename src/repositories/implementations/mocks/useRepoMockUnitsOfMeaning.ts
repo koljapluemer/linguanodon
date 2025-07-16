@@ -31,6 +31,7 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             links: [],
             explicitlyNotRelated: [],
             card: createEmptyCard(),
+            secondaryCard: createEmptyCard(),
             isBlacklisted: false,
             priority: 1
         },
@@ -50,6 +51,7 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             links: [],
             explicitlyNotRelated: [],
             card: createEmptyCard(),
+            secondaryCard: createEmptyCard(),
             isBlacklisted: false,
             priority: 1
         },
@@ -69,6 +71,7 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             links: [],
             explicitlyNotRelated: [],
             card: createEmptyCard(),
+            secondaryCard: createEmptyCard(),
             isBlacklisted: false,
             priority: 1
         },
@@ -89,6 +92,7 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             links: [],
             explicitlyNotRelated: [],
             card: createEmptyCard(),
+            secondaryCard: createEmptyCard(),
             isBlacklisted: false,
             priority: 1
         },
@@ -108,6 +112,7 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             links: [],
             explicitlyNotRelated: [],
             card: createEmptyCard(),
+            secondaryCard: createEmptyCard(),
             isBlacklisted: false,
             priority: 1
         },
@@ -132,6 +137,7 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             links: [],
             explicitlyNotRelated: [],
             card: createEmptyCard(),
+            secondaryCard: createEmptyCard(),
             isBlacklisted: false,
             priority: 1
         },
@@ -155,6 +161,7 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             links: [],
             explicitlyNotRelated: [],
             card: createEmptyCard(),
+            secondaryCard: createEmptyCard(),
             isBlacklisted: false,
             priority: 1
         }

@@ -10,7 +10,8 @@ import type { UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 export async function scoreUnitOfMeaning(
   repository: UnitOfMeaningRepository,
   identification: UnitOfMeaningIdentification,
-  rating: Grade
+  rating: Grade,
+  mode: 'both' | 'onlyPrimary'
 ): Promise<void> {
   try {
     const unit = await repository.findUnitOfMeaning(identification.language, identification.content)
@@ -20,10 +21,19 @@ export async function scoreUnitOfMeaning(
     }
     const scheduler = fsrs() // default params
     const now = new Date()
-    console.log('[scoreUnitOfMeaning] BEFORE', { card: unit.card, identification, rating })
-    const { card: updatedCard } = scheduler.next(unit.card, now, rating)
-    console.log('[scoreUnitOfMeaning] AFTER', { updatedCard })
-    unit.card = updatedCard
+    if (mode === 'both') {
+      console.log('[scoreUnitOfMeaning] BEFORE (both)', { card: unit.card, secondaryCard: unit.secondaryCard, identification, rating })
+      const { card: updatedCard } = scheduler.next(unit.card, now, rating)
+      const { card: updatedSecondaryCard } = scheduler.next(unit.secondaryCard, now, rating)
+      unit.card = updatedCard
+      unit.secondaryCard = updatedSecondaryCard
+      console.log('[scoreUnitOfMeaning] AFTER (both)', { updatedCard, updatedSecondaryCard })
+    } else if (mode === 'onlyPrimary') {
+      console.log('[scoreUnitOfMeaning] BEFORE (onlySecondary)', { secondaryCard: unit.secondaryCard, identification, rating })
+      const { card: updatedSecondaryCard } = scheduler.next(unit.secondaryCard, now, rating)
+      unit.secondaryCard = updatedSecondaryCard
+      console.log('[scoreUnitOfMeaning] AFTER (onlySecondary)', { updatedSecondaryCard })
+    }
     // Persist by upserting (safe for both new and existing)
     await repository.upsertUnitOfMeaning(unit)
   } catch (err) {

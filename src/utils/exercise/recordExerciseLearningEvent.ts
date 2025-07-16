@@ -37,9 +37,26 @@ export async function recordExerciseLearningEvent(
     await scoreUnitOfMeaning(
       unitRepository,
       event.exercise.primaryUnitOfMeaning,
-      event.fsrsRating as Grade
+      event.fsrsRating as Grade,
+      'both'
     )
   } catch (err) {
     console.error('Failed to score primary unit of meaning:', err)
+  }
+
+  // Score each secondary unit (only secondaryCard)
+  if (event.exercise.secondaryUnitsOfMeaning && event.exercise.secondaryUnitsOfMeaning.length > 0) {
+    for (const secondary of event.exercise.secondaryUnitsOfMeaning) {
+      try {
+        await scoreUnitOfMeaning(
+          unitRepository,
+          secondary,
+          event.fsrsRating as Grade,
+          'onlyPrimary'
+        )
+      } catch (err) {
+        console.error('Failed to score secondary unit of meaning:', secondary, err)
+      }
+    }
   }
 } 

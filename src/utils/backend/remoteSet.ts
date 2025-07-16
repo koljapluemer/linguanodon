@@ -86,7 +86,8 @@ function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMe
     credits,
     links: remoteUnit.links || [],
     card: createEmptyCard(),
-    isBlacklisted: false, // default value
+    secondaryCard: createEmptyCard(),
+    isBlacklisted: false, 
     priority: 1 // default value
   }
 }
