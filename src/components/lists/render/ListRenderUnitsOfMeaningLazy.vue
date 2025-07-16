@@ -51,9 +51,6 @@
               <div class="flex-1">
                 <div class="font-medium">{{ unit.content }}</div>
                 <div class="text-sm text-base-content/60">{{ unit.language }}</div>
-                <div v-if="unit.notes" class="text-sm text-base-content/70 mt-1">
-                  {{ unit.notes }}
-                </div>
               </div>
               <div class="flex items-center gap-2">
                 <span class="badge badge-outline">{{ unit.translations.length }} translations</span>
@@ -164,8 +161,7 @@ async function loadUnits() {
       // Filter by search query
       if (searchQuery.value.trim()) {
         const query = searchQuery.value.toLowerCase()
-        return unit.content.toLowerCase().includes(query) ||
-               unit.notes.toLowerCase().includes(query)
+        return unit.content.toLowerCase().includes(query)
       }
       
       return true

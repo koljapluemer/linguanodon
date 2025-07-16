@@ -13,8 +13,11 @@
 import { provide } from 'vue'
 import ListControllAllUnitsOfMeaning from '@/components/lists/control/ListControllAllUnitsOfMeaning.vue'
 import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie/useRepoDexieUnitsOfMeaning'
+import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'
 import { unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
+import { languageRepositoryKey } from '@/types/injectionKeys'
 
 // Provide the unit of meaning repository to child components
 provide(unitOfMeaningRepositoryKey, useRepoDexieUnitsOfMeaning())
+provide(languageRepositoryKey, useRepoDexieLanguages())
 </script> 

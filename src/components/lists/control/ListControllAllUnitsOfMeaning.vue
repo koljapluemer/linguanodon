@@ -5,7 +5,7 @@
       <p class="mt-2">Loading units...</p>
     </div>
     <div v-else>
-      <ListRenderUnitsOfMeaning
+      <ListRenderUnitsOfMeaningLazy
         :units="units"
       />
     </div>
@@ -14,9 +14,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, inject } from 'vue'
-import ListRenderUnitsOfMeaning from '@/components/lists/render/ListRenderUnitsOfMeaning.vue'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
 import { unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
+import ListRenderUnitsOfMeaningLazy from '../render/ListRenderUnitsOfMeaningLazy.vue'
 
 // Inject repository using proper injection key
 const repository = inject(unitOfMeaningRepositoryKey, null)
