@@ -20,4 +20,22 @@ export async function getExercisesBasedOnDueUnitsOfMeaning(
     allExercises.push(...unitExercises)
   }
   return allExercises
+}
+
+/**
+ * Generates exercises for a batch of due units of meaning.
+ * Returns a flat array of exercises for the given units and user languages.
+ */
+export async function getExercisesForDueUnitsBatch(
+  units: Parameters<typeof generateExercisesForUnitOfMeaning>[0][],
+  targetLanguages: Parameters<typeof generateExercisesForUnitOfMeaning>[1],
+  nativeLanguages: Parameters<typeof generateExercisesForUnitOfMeaning>[2],
+  unitRepo: Parameters<typeof generateExercisesForUnitOfMeaning>[3]
+): Promise<Exercise[]> {
+  const allExercises: Exercise[] = []
+  for (const unit of units) {
+    const unitExercises = await generateExercisesForUnitOfMeaning(unit, targetLanguages, nativeLanguages, unitRepo)
+    allExercises.push(...unitExercises)
+  }
+  return allExercises
 } 
