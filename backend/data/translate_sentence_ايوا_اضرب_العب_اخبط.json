@@ -1,0 +1,73 @@
+{
+  "name": "Translate: ايوا اضرب العب اخبط",
+  "language": "apc",
+  "tasks": [
+    {
+      "content": "Translate the sentence 'ايوا اضرب العب اخبط'",
+      "language": "apc",
+      "primaryUnitsOfMeaning": [
+        {
+          "language": "apc",
+          "content": "اضرب",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "hit"
+            }
+          ]
+        },
+        {
+          "language": "eng",
+          "content": "hit",
+          "translations": [
+            {
+              "language": "apc",
+              "content": "اضرب"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "العب",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "play"
+            }
+          ]
+        },
+        {
+          "language": "eng",
+          "content": "play",
+          "translations": [
+            {
+              "language": "apc",
+              "content": "العب"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "اخبط",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "keep playing"
+            }
+          ]
+        },
+        {
+          "language": "eng",
+          "content": "keep playing",
+          "translations": [
+            {
+              "language": "apc",
+              "content": "اخبط"
+            }
+          ]
+        }
+      ],
+      "secondaryUnitsOfMeaning": []
+    }
+  ]
+}

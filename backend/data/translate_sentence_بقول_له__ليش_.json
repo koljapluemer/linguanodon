@@ -1,0 +1,73 @@
+{
+  "name": "Translate: بقول له: ليش؟",
+  "language": "apc",
+  "tasks": [
+    {
+      "content": "Translate the sentence 'بقول له: ليش؟'",
+      "language": "apc",
+      "primaryUnitsOfMeaning": [
+        {
+          "language": "apc",
+          "content": "بقول",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "I say"
+            }
+          ]
+        },
+        {
+          "language": "eng",
+          "content": "I say",
+          "translations": [
+            {
+              "language": "apc",
+              "content": "بقول"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "له",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "to him"
+            }
+          ]
+        },
+        {
+          "language": "eng",
+          "content": "to him",
+          "translations": [
+            {
+              "language": "apc",
+              "content": "له"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "content": "ليش",
+          "translations": [
+            {
+              "language": "eng",
+              "content": "why"
+            }
+          ]
+        },
+        {
+          "language": "eng",
+          "content": "why",
+          "translations": [
+            {
+              "language": "apc",
+              "content": "ليش"
+            }
+          ]
+        }
+      ],
+      "secondaryUnitsOfMeaning": []
+    }
+  ]
+}
