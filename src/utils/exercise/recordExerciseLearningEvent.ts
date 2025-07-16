@@ -3,14 +3,18 @@ import type { ExerciseDataRepository } from '@/repositories/interfaces/ExerciseD
 import type { Grade } from 'ts-fsrs'
 import type { ExerciseData } from '@/entities/ExerciseData'
 import type { LearningEvent } from '@/entities/LearningEvent'
+import type { UnitOfMeaningRepository } from '@/repositories/interfaces/UnitOfMeaningRepository'
+import { scoreUnitOfMeaning } from '@/utils/unitOfMeaning/scoreUnitOfMeaning'
 
 /**
  * Records exercise completion and updates card using ts-fsrs.
  * Finds or creates ExerciseData by UID, then updates the score and persists.
+ * Also scores the primary unit of meaning attached to the exercise.
  */
 export async function recordExerciseLearningEvent(
   repository: ExerciseDataRepository,
-  event: LearningEvent
+  event: LearningEvent,
+  unitRepository: UnitOfMeaningRepository
 ): Promise<void> {
   let exerciseData = await repository.findExercise(event.exercise.uid)
   if (!exerciseData) {
@@ -25,4 +29,15 @@ export async function recordExerciseLearningEvent(
     card: updatedCard 
   }
   await repository.updateExercise(updatedExercise)
+
+  // Score the primary unit of meaning
+  try {
+    await scoreUnitOfMeaning(
+      unitRepository,
+      event.exercise.primaryUnitOfMeaning,
+      event.fsrsRating as Grade
+    )
+  } catch (err) {
+    console.error('Failed to score primary unit of meaning:', err)
+  }
 } 
