@@ -8,6 +8,7 @@ import PageManageUserLanguages from '@/pages/PageManageUserLanguages.vue'
 import DebugTaskExerciseGeneration from '@/pages/debug/DebugTaskExerciseGeneration.vue'
 import DebugExerciseDataTracking from '@/pages/debug/DebugExerciseDataTracking.vue'
 import PageManageUnitOfMeaning from '@/pages/PageManageUnitOfMeaning.vue'
+import PageQueue from '@/pages/PageQueue.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -69,6 +70,12 @@ const routes: RouteRecordRaw[] = [
     path: '/units/:language/:content/edit',
     name: 'unit-edit',
     component: PageManageUnitOfMeaning
+  },
+
+  {
+    path: '/queue',
+    name: 'queue',
+    component: PageQueue
   },
 
 ]
