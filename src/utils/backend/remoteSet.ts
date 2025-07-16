@@ -1,6 +1,5 @@
 import { createEmptyCard } from 'ts-fsrs'
 import { useToastsStore } from '@/components/ui/toasts/useToasts'
-import { doesUnitOfMeaningExist } from '@/utils/unitOfMeaning/doesUnitOfMeaningExist'
 import { isSetDownloaded } from '@/utils/set/isSetDownloaded'
 import { isTaskExists } from '@/utils/task/isTaskExists'
 import type { Set } from '@/entities/Set'
@@ -86,7 +85,9 @@ function convertRemoteUnitToLocalUnit(remoteUnit: RemoteUnitOfMeaning): UnitOfMe
     explicitlyNotRelated: remoteUnit.explicitlyNotRelated || [],
     credits,
     links: remoteUnit.links || [],
-    card: createEmptyCard()
+    card: createEmptyCard(),
+    isBlacklisted: false, // default value
+    priority: 1 // default value
   }
 }
 
@@ -184,12 +185,54 @@ export async function downloadAndPersistSet(
     for (const task of remoteSet.tasks) {
       // Add primary units
       for (const unit of (task.primaryUnitsOfMeaning || [])) {
-        const exists = await doesUnitOfMeaningExist(unitRepository, unit.language, unit.content)
-        if (!exists) {
+        const existingUnit = await unitRepository.findUnitOfMeaning(unit.language, unit.content)
+        if (!existingUnit) {
           const localUnit = convertRemoteUnitToLocalUnit(unit)
           await unitRepository.addUnitOfMeaning(localUnit)
           newUnitsCount++
         } else {
+          // Merge arrays and increment priority
+          /**
+           * Helper to merge arrays by unique key
+           */
+          function mergeByKey<T>(arr1: T[], arr2: T[], keyFn: (item: T) => string): T[] {
+            const map = new Map(arr1.map(item => [keyFn(item), item]))
+            for (const item of arr2) {
+              const key = keyFn(item)
+              if (!map.has(key)) map.set(key, item)
+            }
+            return Array.from(map.values())
+          }
+          const updated = { ...existingUnit }
+
+          updated.translations = mergeByKey(
+            existingUnit.translations,
+            unit.translations || [],
+            (t) => `${t.language}:${t.content}`
+          )
+          updated.seeAlso = mergeByKey(
+            existingUnit.seeAlso,
+            unit.seeAlso || [],
+            (s) => `${s.language}:${s.content}`
+          )
+          updated.explicitlyNotRelated = mergeByKey(
+            existingUnit.explicitlyNotRelated,
+            unit.explicitlyNotRelated || [],
+            (e) => `${e.language}:${e.content}`
+          )
+          updated.credits = mergeByKey(
+            existingUnit.credits,
+            unit.credits || [],
+            (c) => `${c.license}:${c.owner || ''}:${c.ownerLink || ''}:${c.source || ''}:${c.sourceLink || ''}`
+          )
+          updated.links = mergeByKey(
+            existingUnit.links,
+            unit.links || [],
+            (l) => `${l.label}:${l.url}`
+          )
+          updated.priority = (existingUnit.priority || 1) + 1
+          // keep isBlacklisted as is
+          await unitRepository.upsertUnitOfMeaning(updated)
           skippedUnitsCount++
         }
       }
@@ -197,12 +240,53 @@ export async function downloadAndPersistSet(
       // Add secondary units
       if (task.secondaryUnitsOfMeaning) {
         for (const unit of task.secondaryUnitsOfMeaning) {
-          const exists = await doesUnitOfMeaningExist(unitRepository, unit.language, unit.content)
-          if (!exists) {
+          const existingUnit = await unitRepository.findUnitOfMeaning(unit.language, unit.content)
+          if (!existingUnit) {
             const localUnit = convertRemoteUnitToLocalUnit(unit)
             await unitRepository.addUnitOfMeaning(localUnit)
             newUnitsCount++
           } else {
+            // Merge arrays and increment priority
+            /**
+             * Helper to merge arrays by unique key
+             */
+            function mergeByKey<T>(arr1: T[], arr2: T[], keyFn: (item: T) => string): T[] {
+              const map = new Map(arr1.map(item => [keyFn(item), item]))
+              for (const item of arr2) {
+                const key = keyFn(item)
+                if (!map.has(key)) map.set(key, item)
+              }
+              return Array.from(map.values())
+            }
+            const updated = { ...existingUnit }
+            updated.translations = mergeByKey(
+              existingUnit.translations,
+              unit.translations || [],
+              (t) => `${t.language}:${t.content}`
+            )
+            updated.seeAlso = mergeByKey(
+              existingUnit.seeAlso,
+              unit.seeAlso || [],
+              (s) => `${s.language}:${s.content}`
+            )
+            updated.explicitlyNotRelated = mergeByKey(
+              existingUnit.explicitlyNotRelated,
+              unit.explicitlyNotRelated || [],
+              (e) => `${e.language}:${e.content}`
+            )
+            updated.credits = mergeByKey(
+              existingUnit.credits,
+              unit.credits || [],
+              (c) => `${c.license}:${c.owner || ''}:${c.ownerLink || ''}:${c.source || ''}:${c.sourceLink || ''}`
+            )
+            updated.links = mergeByKey(
+              existingUnit.links,
+              unit.links || [],
+              (l) => `${l.label}:${l.url}`
+            )
+            updated.priority = (existingUnit.priority || 1) + 1
+            // keep isBlacklisted as is
+            await unitRepository.upsertUnitOfMeaning(updated)
             skippedUnitsCount++
           }
         }

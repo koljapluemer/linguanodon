@@ -49,7 +49,9 @@ const unit = ref<UnitOfMeaning>({
   credits: props.initialUnit?.credits || [],
   card: props.initialUnit?.card || createEmptyCard(),
   explicitlyNotRelated: props.initialUnit?.explicitlyNotRelated || [],
-  links: props.initialUnit?.links || []
+  links: props.initialUnit?.links || [],
+  isBlacklisted: props.initialUnit?.isBlacklisted ?? false,
+  priority: props.initialUnit?.priority ?? 1
 })
 
 /**
@@ -66,7 +68,9 @@ watch(() => props.initialUnit, (newInitialUnit) => {
       credits: newInitialUnit.credits || [],
       card: newInitialUnit.card || createEmptyCard(),
       explicitlyNotRelated: newInitialUnit.explicitlyNotRelated || [],
-      links: newInitialUnit.links || []
+      links: newInitialUnit.links || [],
+      isBlacklisted: newInitialUnit.isBlacklisted ?? false,
+      priority: newInitialUnit.priority ?? 1
     }
   }
 }, { immediate: true })

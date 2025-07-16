@@ -10,6 +10,9 @@ export interface UnitOfMeaning extends UnitOfMeaningIdentification {
     credits: Credit[]
     links: UnitOfMeaningLink[];
     card: Card;
+
+    isBlacklisted: boolean;
+    priority: number;
 }
 
 export interface UnitOfMeaningNote {

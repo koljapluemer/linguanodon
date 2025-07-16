@@ -30,7 +30,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             credits: [],
             links: [],
             explicitlyNotRelated: [],
-            card: createEmptyCard()
+            card: createEmptyCard(),
+            isBlacklisted: false,
+            priority: 1
         },
         // Demo Spanish translation unit
         {
@@ -47,7 +49,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             credits: [],
             links: [],
             explicitlyNotRelated: [],
-            card: createEmptyCard()
+            card: createEmptyCard(),
+            isBlacklisted: false,
+            priority: 1
         },
         // Demo Arabic translation unit
         {
@@ -64,7 +68,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             credits: [],
             links: [],
             explicitlyNotRelated: [],
-            card: createEmptyCard()
+            card: createEmptyCard(),
+            isBlacklisted: false,
+            priority: 1
         },
         // Demo French unit
         {
@@ -82,7 +88,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             credits: [],
             links: [],
             explicitlyNotRelated: [],
-            card: createEmptyCard()
+            card: createEmptyCard(),
+            isBlacklisted: false,
+            priority: 1
         },
         // Demo German unit
         {
@@ -99,7 +107,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             credits: [],
             links: [],
             explicitlyNotRelated: [],
-            card: createEmptyCard()
+            card: createEmptyCard(),
+            isBlacklisted: false,
+            priority: 1
         },
         // Demo related units for seeAlso testing
         {
@@ -121,7 +131,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             credits: [],
             links: [],
             explicitlyNotRelated: [],
-            card: createEmptyCard()
+            card: createEmptyCard(),
+            isBlacklisted: false,
+            priority: 1
         },
         {
             language: 'en',
@@ -142,7 +154,9 @@ export function mockUnitOfMeaningRepo(): UnitOfMeaningRepository {
             credits: [],
             links: [],
             explicitlyNotRelated: [],
-            card: createEmptyCard()
+            card: createEmptyCard(),
+            isBlacklisted: false,
+            priority: 1
         }
     ];
 

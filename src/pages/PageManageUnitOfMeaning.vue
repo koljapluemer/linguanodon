@@ -10,6 +10,7 @@
     <div v-else>
       <h1 class="text-2xl font-bold mb-4">{{ unit.content }}</h1>
       <FormControlUnitOfMeaning :initial-unit="unit" @update="handleUpdate" />
+      <WidgetUnitLearningData :unit="unit" />
     </div>
   </div>
 </template>
@@ -22,6 +23,7 @@ import { useRepoDexieUnitsOfMeaning } from '@/repositories/implementations/dexie
 import { useRepoDexieLanguages } from '@/repositories/implementations/dexie/useRepoDexieLanguages'
 import { unitOfMeaningRepositoryKey, languageRepositoryKey } from '@/types/injectionKeys'
 import type { UnitOfMeaning } from '@/entities/UnitOfMeaning'
+import WidgetUnitLearningData from '@/components/widgets/WidgetUnitLearningData.vue'
 
 const route = useRoute()
 const language = route.params.language as string

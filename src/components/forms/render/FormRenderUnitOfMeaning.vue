@@ -140,37 +140,28 @@
     </div>
   </div>
 
-  <!-- Retrievability and Due Date -->
-  <div class="card bg-base-200 mt-8 p-4">
-    <h2 class="text-lg font-semibold mb-2">Memory Stats</h2>
-    <div v-if="retrievability">
-      <div class="flex flex-col md:flex-row gap-4">
-        <div>
-          <span class="font-medium">Due Date:</span>
-          <span>{{ dueDateString }}</span>
-        </div>
-        <div>
-          <span class="font-medium">Retrievability:</span>
-          <ul class="ml-2">
-            <li>In 1 day: <span class="badge badge-outline">{{ retrievability.in1Day }}%</span></li>
-            <li>In 1 week: <span class="badge badge-outline">{{ retrievability.in1Week }}%</span></li>
-            <li>In 1 year: <span class="badge badge-outline">{{ retrievability.in1Year }}%</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div v-else class="text-base-content/60">No card data available.</div>
+
+
+  <!-- Blacklist and Priority Controls -->
+  <div class="card bg-base-200 mt-4 p-4 flex flex-col md:flex-row gap-4 items-center">
+    <label class="flex items-center gap-2">
+      <input type="checkbox" v-model="props.unit.isBlacklisted" @change="emitUpdate" class="checkbox checkbox-sm" />
+      <span>Blacklisted</span>
+    </label>
+    <label class="flex items-center gap-2">
+      <span>Priority:</span>
+      <input type="number" v-model.number="props.unit.priority" @input="emitUpdate" min="1" class="input input-bordered input-sm w-20" />
+    </label>
   </div>
 </template>
 
 <script setup lang="ts">
-import { inject, computed } from 'vue'
+import { inject } from 'vue'
 import FormWidgetUserLanguageSelect from '@/components/forms/widgets/FormWidgetUserLanguageSelect.vue'
 import FormRenderManageTranslations from '@/components/forms/render/FormRenderManageTranslations.vue'
 import FormRenderManageSeeAlso from '@/components/forms/render/FormRenderManageSeeAlso.vue'
 import type { UnitOfMeaning, Credit, UnitOfMeaningIdentification } from '@/entities/UnitOfMeaning'
 import { languageRepositoryKey, unitOfMeaningRepositoryKey } from '@/types/injectionKeys'
-import { getRetrievabilityAtKeyPoints } from '@/utils/fsrs/getRetrievabilityAtKeyPoints'
 
 interface Props {
   unit: UnitOfMeaning
@@ -290,23 +281,12 @@ function handleConnectSeeAlso(unit: UnitOfMeaning) {
   emit('connect-see-also', unit)
 }
 
-const retrievability = computed(() => {
-  if (!props.unit.card) return null
-  try {
-    return getRetrievabilityAtKeyPoints(props.unit.card)
-  } catch {
-    return null
-  }
-})
+/**
+ * Emits an update event with the current unit state (for editable fields like blacklist and priority)
+ */
+function emitUpdate() {
+  emit('update', { ...props.unit })
+}
 
-const dueDateString = computed(() => {
-  const due = props.unit.card?.due
-  if (!due) return 'N/A'
-  try {
-    const date = due instanceof Date ? due : new Date(due)
-    return date.toLocaleString()
-  } catch {
-    return String(due)
-  }
-})
+
 </script>
