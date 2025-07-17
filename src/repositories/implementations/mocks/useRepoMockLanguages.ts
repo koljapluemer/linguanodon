@@ -6,25 +6,25 @@ import type { LanguageRepository } from '@/repositories/interfaces/LanguageRepos
  */
 export function mockLanguageRepository(): LanguageRepository {
   const mockLanguages: Language[] = [
-    { code: 'en', name: 'English', custom: false },
-    { code: 'es', name: 'Spanish', custom: false },
-    { code: 'fr', name: 'French', custom: false },
-    { code: 'de', name: 'German', custom: false },
-    { code: 'ar', name: 'Arabic', custom: false },
-    { code: 'zh', name: 'Chinese', custom: false },
-    { code: 'ja', name: 'Japanese', custom: false },
-    { code: 'ko', name: 'Korean', custom: false },
-    { code: 'ru', name: 'Russian', custom: false },
-    { code: 'pt', name: 'Portuguese', custom: false }
+    { code: 'en', name: 'English', isCustom: false },
+    { code: 'es', name: 'Spanish', isCustom: false },
+    { code: 'fr', name: 'French', isCustom: false },
+    { code: 'de', name: 'German', isCustom: false },
+    { code: 'ar', name: 'Arabic', isCustom: false },
+    { code: 'zh', name: 'Chinese', isCustom: false },
+    { code: 'ja', name: 'Japanese', isCustom: false },
+    { code: 'ko', name: 'Korean', isCustom: false },
+    { code: 'ru', name: 'Russian', isCustom: false },
+    { code: 'pt', name: 'Portuguese', isCustom: false }
   ]
 
   // Mock user language lists
   let userNativeLanguages: Language[] = [
-    { code: 'en', name: 'English', custom: false }
+    { code: 'en', name: 'English', isCustom: false }
   ]
   let userTargetLanguages: Language[] = [
-    { code: 'es', name: 'Spanish', custom: false },
-    { code: 'fr', name: 'French', custom: false }
+    { code: 'es', name: 'Spanish', isCustom: false },
+    { code: 'fr', name: 'French', isCustom: false }
   ]
 
   return {
