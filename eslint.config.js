@@ -136,4 +136,6 @@ export default defineConfig([
       'jsdoc/require-jsdoc': 'off',
     },
   },
-]);
+], {
+  ignores: ["legacy/**"]
+});
