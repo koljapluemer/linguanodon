@@ -8,6 +8,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/practice',
     name: 'practice',
+    /**
+     *
+     */
     component: () => import('@/pages/PracticePage.vue')
   }
 ]

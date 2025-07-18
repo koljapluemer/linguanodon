@@ -2,6 +2,7 @@ import Dexie from "dexie";
 import type { Table } from "dexie";
 import type { SentenceData } from "./SentenceData";
 import type { SentenceRepository } from "./SentenceRepository";
+import sentenceExampleData from "./sentenceExampleData.json";
 
 /**
  * Dexie database for storing SentenceData entities.
@@ -24,49 +25,11 @@ class SentenceDexieDB extends Dexie {
 
 const db = new SentenceDexieDB();
 
-// Hardcoded initial data for MVP
-const initialSentences: SentenceData[] = [
-  {
-    language: "eng",
-    content: "I want to talk to you.",
-    notes: [],
-    translations: [{ language: "apc", content: "انا حابب احكي معك." }],
-    links: [],
-    credits: [
-      {
-        license: "CC-BY-NC-4.0",
-        owner: "guymorlan",
-        ownerLink: "https://huggingface.co/guymorlan",
-        source: "Huggingface - Levanti Dataset",
-        sourceLink: "https://huggingface.co/datasets/guymorlan/levanti"
-      }
-    ],
-    containsWords: [{ language: "eng", content: "want" }]
-  },
-  {
-    language: "apc",
-    content: "انا حابب احكي معك.",
-    notes: [],
-    translations: [{ language: "eng", content: "I want to talk to you." }],
-    links: [],
-    credits: [
-      {
-        license: "CC-BY-NC-4.0",
-        owner: "guymorlan",
-        ownerLink: "https://huggingface.co/guymorlan",
-        source: "Huggingface - Levanti Dataset",
-        sourceLink: "https://huggingface.co/datasets/guymorlan/levanti"
-      }
-    ],
-    containsWords: [{ language: "apc", content: "حابب" }]
-  }
-];
-
 // Populate DB on first load
 (async () => {
   const count = await db.sentences.count();
   if (count === 0) {
-    await db.sentences.bulkAdd(initialSentences);
+    await db.sentences.bulkAdd(sentenceExampleData as SentenceData[]);
   }
 })();
 

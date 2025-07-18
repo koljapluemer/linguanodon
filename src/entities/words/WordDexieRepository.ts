@@ -2,6 +2,7 @@ import Dexie from "dexie";
 import type { Table } from "dexie";
 import type { WordData } from "./Word";
 import type { WordRepository } from "./WordRepository";
+import wordsExampleData from "./wordsExampleData.json";
 
 /**
  * Dexie database for storing WordData entities.
@@ -24,35 +25,11 @@ class WordDexieDB extends Dexie {
 
 const db = new WordDexieDB();
 
-// Hardcoded initial data for MVP
-const initialWords: WordData[] = [
-  {
-    language: "eng",
-    content: "want",
-    notes: [{ content: "verb", showBeforeExercise: true }],
-    translations: [{ language: "apc", content: "حابب" }],
-    links: [],
-    otherForms: [],
-    synonyms: [],
-    appearsIn: [{ language: "eng", content: "I want to talk to you." }]
-  },
-  {
-    language: "apc",
-    content: "حابب",
-    notes: [{ content: "verb", showBeforeExercise: true }],
-    translations: [{ language: "eng", content: "want" }],
-    links: [{ label: "Wiktionary", url: "https://en.wiktionary.org/wiki/%D8%AD%D8%A7%D8%A8%D8%A8" }],
-    otherForms: [],
-    synonyms: [],
-    appearsIn: [{ language: "apc", content: "انا حابب احكي معك." }]
-  }
-];
-
 // Populate DB on first load
 (async () => {
   const count = await db.words.count();
   if (count === 0) {
-    await db.words.bulkAdd(initialWords);
+    await db.words.bulkAdd(wordsExampleData as WordData[]);
   }
 })();
 
