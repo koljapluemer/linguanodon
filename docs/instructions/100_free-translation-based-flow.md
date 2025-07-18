@@ -438,3 +438,154 @@ Now we have the setup to fully discuss how exercises for a `Lesson` are actually
 5) Last, we call `fillUpLesson`. It simply checks for due `LinguisticUnit` (via their attached data), randomly picks one, randomly returns one exercise based on due levels same as above, until we have as many exercises in the lesson as we wanted.
 
 At the end of each lesson, we have a little component saying "Done with the lesson" and "Next" button which loads the next lesson.
+
+
+## Folder Structure Proposition
+
+Here is a draft for a folder+file structure, but it does not mean that this is strictly the best idea:
+
+```
+src/
+├── app/
+│   ├── router.ts
+│   ├── provideRepos.ts             # binds repo interfaces to impls (Dexie/Pinia/etc)
+│   └── fsrsConfig.ts               # global FSRS params
+│
+├── pages/
+│   ├── PracticePage.vue            # renders <PracticeSession />
+│   └── ManagePage.vue              # content management etc.
+│
+├── processes/
+│   └── practice-session/
+│       ├── model/
+│       │   ├── generateLesson.ts           # selects units, calls generators
+│       │   ├── runLesson.ts                # controls step flow: next, reveal, rate
+│       │   └── usePracticeSession.ts       # combined lesson state + progression logic
+│       └── ui/
+│           └── PracticeSession.vue         # combines runner + progress + result
+│
+├── widgets/
+│   ├── ExerciseRunner/
+│   │   ├── ExerciseRunner.vue              # receives one Exercise, renders task
+│   │   └── ControlPanel.vue                # shows reveal / rate buttons
+│   ├── LessonProgress/
+│   │   └── LessonProgressBar.vue           # visual session progress bar
+│   └── LessonResult/
+│       └── LessonDone.vue                  # shown when session completes
+│
+├── features/
+│   ├── lesson-control/
+│   │   ├── model/
+│   │   │   ├── useLessonState.ts           # current step, reveal status, etc
+│   │   │   └── useCurrentExercise.ts       # resolves current exercise
+│   │   └── index.ts
+│
+│   ├── word-progress/
+│   │   ├── model/
+│   │   │   ├── useDueWords.ts              # SRS-filtered word units
+│   │   │   └── useWordStats.ts             # accuracy/streaks
+│   │   └── index.ts
+│
+│   ├── sentence-progress/
+│   │   ├── model/
+│   │   │   └── useEligibleSentences.ts     # eligible sentence units
+│   │   └── index.ts
+│
+│   ├── exercise-feedback/
+│   │   ├── model/
+│   │   │   └── saveExerciseResult.ts       # stores result and rating
+│   │   └── index.ts
+│
+│   ├── exercise-task/
+│   │   ├── model/
+│   │   │   └── getTaskComponent.ts         # maps TaskType → component
+│   │   └── ui/
+│   │       ├── FlashcardTask.vue
+│   │       ├── FreeTranslateTask.vue
+│   │       └── RatingButtons.vue
+│   │
+│   └── index.ts
+│
+├── entities/
+│   ├── linguistic-units/
+│   │   ├── model/
+│   │   │   ├── LinguisticUnit.ts                # base for word/sentence
+│   │   │   ├── LinguisticUnitIdentifier.ts      # unit ID abstraction (e.g. "word:xxx")
+│   │   │   └── LinguisticUnitProgress.ts        # FSRS progress state
+│   │   └── repo/
+│   │       ├── LinguisticUnitProgressRepo.ts    # interface
+│   │       ├── LinguisticUnitProgressDexie.ts   # Dexie-based impl
+│   │       └── LinguisticUnitProgressPinia.ts   # Pinia-based fallback
+│
+│   ├── words/
+│   │   ├── model/
+│   │   │   ├── Word.ts
+│   │   │   └── repo/
+│   │   │       ├── WordRepo.ts
+│   │   │       ├── WordRepoDexie.ts
+│   │   │       └── WordRepoPinia.ts
+│
+│   ├── sentences/
+│   │   ├── model/
+│   │   │   ├── Sentence.ts
+│   │   │   └── repo/
+│   │   │       ├── SentenceRepo.ts
+│   │   │       ├── SentenceRepoDexie.ts
+│
+│   ├── tasks/
+│   │   ├── model/
+│   │   │   ├── Task.ts                      # { id, type, data }
+│   │   │   └── TaskType.ts                  # 'flashcard' | 'free-translate' etc
+│
+│   ├── exercises/
+│   │   ├── model/
+│   │   │   ├── Exercise.ts
+│   │   │   ├── ExerciseData.ts              # raw data from generator
+│   │   │   └── repo/
+│   │   │       ├── ExerciseRepo.ts
+│   │   │       ├── ExerciseRepoDexie.ts
+│   │   │       └── ExerciseProgressRepo.ts
+│   │   └── generators/
+│   │       ├── generateWordLevel0.ts
+│   │       ├── generateWordLevel1.ts
+│   │       ├── generateSentenceLevel0.ts
+│   │       ├── generateSentenceLevel1.ts
+│   │       ├── generateFromFallback.ts
+│   │       └── canGenerate.ts
+│
+│   ├── lessons/
+│   │   ├── model/
+│   │   │   ├── Lesson.ts
+│   │   │   └── LessonBuilder.ts             # calls unit selectors + generators
+│
+│   ├── learning-events/
+│   │   ├── model/
+│   │   │   └── LearningEvent.ts             # result snapshot (unit, task, rating, time)
+│   │   └── repo/
+│   │       └── LearningEventRepo.ts
+│
+│   └── languages/
+│       ├── model/
+│       │   ├── Language.ts
+│       │   └── repo/
+│       │       └── LanguageRepo.ts
+│
+├── shared/
+│   ├── lib/
+│   │   ├── fsrs/
+│   │   │   ├── createEmptyCard.ts          # builds empty FSRS card for new unit
+│   │   │   └── scheduleCard.ts             # applies FSRS algorithm to a card
+│   │   ├── uuid.ts
+│   │   └── time.ts
+│
+│   ├── types/
+│   │   ├── exercise.ts
+│   │   ├── rating.ts
+│   │   └── progress.ts
+│
+│   ├── ui/
+│   │   ├── Button.vue
+│   │   ├── Input.vue
+│   │   └── RevealCard.vue
+
+```
