@@ -283,9 +283,6 @@ For example:
 Thus, when we do an exercise, we can loop the affected units and upsert a `ts-fsrs` rating to the *correct level* of each linguistic unit.
 
 <!-- TODO: define what happens when levels of a unit are unfilled -->
-<!-- TODO: define how the rating for different one shot tasks looks (really, draw interfaces) -->
-<!-- find that goddamn learning app creator online with the exercise types so that you surely don't fucking under-abstract :) -->
-
 
 We will type exercise ratings in a data structure like this, with key from 0-9:
 
@@ -299,4 +296,54 @@ We will type exercise ratings in a data structure like this, with key from 0-9:
 ```
 
 `Card` is a type from `ts-fsrs` — check [here](../../legacy/utils/exercise/recordExerciseLearningEvent.ts) for example usage.
-So, we will simply either use `createEmptyCard()` to add tracking for the unit's correct level, or, if a `Card` already exists, we score it. 
+So, we will simply either use `createEmptyCard()` to add tracking for the unit's correct level, or, if a `Card` already exists, we score it.
+
+Specifically, the UI will look like this:
+
+- For the first, normal flashcard tasks: show the front, user clicks "Reveal", we show front and back, and we ask "How easy was this task?" and offer four buttons "Impossible", "Hard", "Doable", "Easy". We map this two the `ts-fsrs` `Rating`s (Wrong, Hard, Correct, Easy) or whatever they're calld.
+- For the last, sentence free translate task, we show the target lang sentence and a text input box, let the user try, reveal solution, and again ask the same question with the four buttons.
+
+A Learning event is thus typed like this
+
+```ts
+interface LearningEvent {
+  userEaseRating: Rating
+  timestamp: Date
+  exerciseType: string
+  taskType: string
+  level: number
+  linguisticUnit: LinguisticUnit
+  userInput?: string // only relevant for the free translate, we save what the user writes here.
+}
+```
+
+### Selecting Data
+
+Since we're persisting progress for `Word`s and `Sentence`s, we can smartly select them according to which are due. 
+
+To design our `Lesson`, we first pick a `Sentence` (or rather, `SentenceData`) that is elibible for a free translation exercise.
+For these exercise, we can *only* use `SetenceData` where we have *no attached `LinguisticUnitProgressData`* (=sentences not used for exercises before).
+
+We need to also check that at least 60% of its attached are *mastered*
+
+<!-- todo: define "mastered" (above) -->
+
+We generate that exercise (smartly factor these util functions, and put heavy work in either the `Sentence` class or the `LinguisticUnit` class) according to the functionality needed, described above.
+
+Then, we generate exercises for the `Word`s attached to the used `Sentence` (`containsWords` props).
+However, we want only choose `Words` that are due.
+To find out which words are du, we find the `LinguisticProgressData` for each word in `containsWords` and check for which levels we can generate exercises (more on that later). Check if *any* of the following conditions is true:
+
+- The `WordData` has *no* attached `LinguisticProgressData`, but we can generate exercises for at least 1 level for it.
+- The `WordData` is linked to a `LinguisticProgressData` object and the `Card` for any level of it is currently due, according to fsrs
+- The `WordData` is linked to a `LinguisticProgressData` object, none of the `Card`s attached to any of its levels are due, but we *can* generate exercises for a level that has no attached `Card` yet (=was not practiced before) 
+
+For exercise generation, let's start with following principles:
+
+- To save compute, each generator should offer
+  - a function that actually generates `Exercises`
+  - a function that returns a bool to see if it would be possible to generate at least 1 exercise (for quick checks, saving compute)
+
+For words and sentences, we will have high-level exercise gen functions like: `generateWordExercisesLevel0`, `generateWordExercisesLevel1`, ...up until level 9
+
+Specifically, (for now), we want to implement the following exercise generation:
