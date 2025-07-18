@@ -347,3 +347,94 @@ For exercise generation, let's start with following principles:
 For words and sentences, we will have high-level exercise gen functions like: `generateWordExercisesLevel0`, `generateWordExercisesLevel1`, ...up until level 9
 
 Specifically, (for now), we want to implement the following exercise generation:
+
+### `WordData` Exercise Gen Levels
+
+#### Level 0
+
+##### Look At Card
+
+This is a very simple exercise and task. 
+It gets a word in a target lang, shows the target content and all translations into native langs in a comma-separated list.
+Or it gets a word in a native lang, checks which languages are available in its translations, picks one that is also a user's target lang at random, and show one view with both the native lang content and all translations in the chosen target lang as a comma-seperated list.
+
+Then, simply have prompt "Try to remember this word." and ask "How difficult is the word" and show the classic "Impossible", "Hard", "Doable", "Easy" and rate accordingly.
+
+*This exercise can only be generated if the word has no associated `LinguisticProgressData` (=never seen before)
+
+#### Level 1
+
+##### Flashcard from target to native, select from two buttons
+
+Make an exercise with the target content and "What does this mean?" and two buttons: one is the correct `Word` in a native lang, the other is a randomly chosen, ideally also due `Word` in the same native lang.
+When the user clicks the wrong button, it gets disabled. When the user clicks the correct button, color it green, wait 100ms then score the exercise.
+
+#### Level 2
+
+##### Flashcard from target to native, select from four buttons
+
+Same as before, but, well, with four buttons (one of them correct)
+
+##### Flashcard from native to target, select from two buttons
+
+Same as `Flashcard from target to native, select from two buttons`, only with the native being shown and target lang options being on the buttons, one of them correct
+
+
+#### Level 3
+
+##### Flashcard from native to target, select from four buttons
+
+Same as before, only with four buttons
+
+#### Level 4
+
+##### Flashcard target to native
+
+Similar as before, only instead of buttons, there is a "Reveal" button which simply unveals the correct translation(s). Then the user rates.
+
+#### Level 5
+
+##### Flashcard native to target
+
+As above, only reverse
+
+#### Level 6, 7, 8, 9
+
+*More to come. Implement these functions as a stub returning no exercises*
+
+
+### `SentenceData` Exercise Gen Levels
+
+#### Level 0
+
+##### Free Translation
+
+As described before: The user is shown the target lang content and is prompted to write their best guess as to how to translate it. There is a reveal button, and a the attached native lang translation(s) are shown.
+
+*This exercise can only be generated if*:
+
+- *the `SentenceData` has no associated `LinguisticProgressData` (= it has not been seen before)*
+- *looping all the `containsWords` and within that all the levels, every single one of the levels 0 to 5 (inclusive) either cannot generate exercises, or, if thy can, this level is currently not due (ts-fsrs check) according to the associated `card`*
+
+In other words, this exercise is only generated for previously unseen sentences where the words in the sentence are already pretty well studied
+
+#### Level 1-9
+
+*to be implemented later*
+
+
+## Full Generation Logic
+
+Now we have the setup to fully discuss how exercises for a `Lesson` are actually generated for our basic flow.
+
+0) Randomly decide how many exercises the `Lesson` will have, see above
+
+1) Use a function called *searchForSpecialExercise*
+2) This function will, later, have multiple options to try and find that special per-exercise level, for now, it only calls *searchForFreeTranslateExercise*
+3) `searchForFreeTranslateExercise()` will find the `Sentence` that was not seen before and where the highest average progress was made in the first 6 levels (0-5) of its `containsWords` array (see criterion for Free Translation gen described above) — it may either find one where the exercise can be generated, or one where we are fairly close.
+  - if we can generate the Exercise, great. Do that and save it to a temp.
+  - if not, also fine. We will have no special exercise for this lesson. Move to next step.
+4) Next, we will have a function `addExercisesHelpingWithSpecialExercise()`. We take the `Sentence` that was picked before (no matter whether we got a special exercise out of it or not) and generate 1 due `Exercise` for every `Word` attached to it via `containsWords`. If a `Word` was not seen before, generate a level 0 exercise. If it was, pick one of the levels that are currently due (or, if none are due, the lowest level that was yet unplayed), generate the `Exercise`s according to the level (if a level allows multiple types of exercises, pick at random) and return randomly chosen `Exercise`.
+5) Last, we call `fillUpLesson`. It simply checks for due `LinguisticUnit` (via their attached data), randomly picks one, randomly returns one exercise based on due levels same as above, until we have as many exercises in the lesson as we wanted.
+
+At the end of each lesson, we have a little component saying "Done with the lesson" and "Next" button which loads the next lesson.
