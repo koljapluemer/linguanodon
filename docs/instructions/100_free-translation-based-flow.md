@@ -286,3 +286,17 @@ Thus, when we do an exercise, we can loop the affected units and upsert a `ts-fs
 <!-- TODO: define how the rating for different one shot tasks looks (really, draw interfaces) -->
 <!-- find that goddamn learning app creator online with the exercise types so that you surely don't fucking under-abstract :) -->
 
+
+We will type exercise ratings in a data structure like this, with key from 0-9:
+
+```ts
+{
+  0: Card
+  2: Card
+  3: Card
+  7: Card
+}
+```
+
+`Card` is a type from `ts-fsrs` — check [here](../../legacy/utils/exercise/recordExerciseLearningEvent.ts) for example usage.
+So, we will simply either use `createEmptyCard()` to add tracking for the unit's correct level, or, if a `Card` already exists, we score it. 
