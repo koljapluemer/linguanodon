@@ -77,7 +77,6 @@ function next() {
 }
 /**
  * Record the user's rating for the current exercise, persist a learning event, and move to the next.
- * @param rating - The user's self-assessed rating.
  */
 async function rate(rating: string) {
   if (currentExercise.value) {
@@ -98,7 +97,6 @@ async function rate(rating: string) {
 }
 /**
  * Save the user's input for a free-translate exercise.
- * @param e - The input event.
  */
 function saveInput(e: Event) {
   const val = (e.target as HTMLInputElement).value;
