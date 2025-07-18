@@ -4,6 +4,7 @@ export interface ExerciseData {
   type: 'reveal' | 'free-translate';
   prompt: string;
   solution: string;
+  level: number;
   linguisticUnit: {
     language: string;
     content: string;

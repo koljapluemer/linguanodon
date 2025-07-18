@@ -2,7 +2,8 @@ import { provide } from "vue";
 import { WordDexieRepository } from "@/entities/words/WordDexieRepository";
 import { SentenceDexieRepository } from "@/entities/sentences/SentenceDexieRepository";
 import { LanguageDexieRepository } from "@/entities/languages/LanguageDexieRepository";
-import { wordRepoKey, sentenceRepoKey, languageRepoKey } from "@/shared/injectionKeys";
+import { LearningEventDexieRepository } from "@/entities/learning-events/LearningEventDexieRepository";
+import { wordRepoKey, sentenceRepoKey, languageRepoKey, learningEventRepoKey } from "@/shared/injectionKeys";
 
 /**
  * Provides Dexie-based repositories for all core entities.
@@ -12,4 +13,5 @@ export function provideRepositories() {
   provide(wordRepoKey, new WordDexieRepository());
   provide(sentenceRepoKey, new SentenceDexieRepository());
   provide(languageRepoKey, new LanguageDexieRepository());
+  provide(learningEventRepoKey, new LearningEventDexieRepository());
 } 

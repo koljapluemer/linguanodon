@@ -8,10 +8,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/practice',
     name: 'practice',
-    /**
-     *
-     */
     component: () => import('@/pages/PracticePage.vue')
+  },
+  {
+    path: '/debug-learning-events',
+    name: 'debug-learning-events',
+    component: () => import('@/pages/DebugLearningEvents.vue')
   }
 ]
 

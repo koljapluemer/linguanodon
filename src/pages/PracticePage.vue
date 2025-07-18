@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { inject } from "vue";
-import { wordRepoKey, sentenceRepoKey } from "@/shared/injectionKeys";
+import { wordRepoKey, sentenceRepoKey, learningEventRepoKey } from "@/shared/injectionKeys";
 import type { ExerciseData } from "@/entities/exercises/ExerciseData";
+// Removed unused LearningEventRepository import
 
 // Inject repositories
 const wordRepo = inject(wordRepoKey);
 const sentenceRepo = inject(sentenceRepoKey);
-if (!wordRepo || !sentenceRepo) throw new Error("Repositories not provided!");
+const learningEventRepo = inject(learningEventRepoKey);
+if (!wordRepo || !sentenceRepo || !learningEventRepo) throw new Error("Repositories not provided!");
 
 // State
 const exercises = ref<ExerciseData[]>([]);
@@ -29,7 +31,8 @@ const userInputs = ref<Record<string, string>>({});
     type: "reveal",
     prompt: `${word.language.toUpperCase()}: ${word.content}`,
     solution: word.translations?.map(t => `${t.language.toUpperCase()}: ${t.content}`).join(", ") || "(no translation)",
-    linguisticUnit: { language: word.language, content: word.content }
+    linguisticUnit: { language: word.language, content: word.content },
+    level: 0
   }));
 
   // Pick 1 sentence for free-translate (if available)
@@ -41,7 +44,8 @@ const userInputs = ref<Record<string, string>>({});
       type: "free-translate",
       prompt: `${s.language.toUpperCase()}: ${s.content}`,
       solution: s.translations?.map(t => `${t.language.toUpperCase()}: ${t.content}`).join(", ") || "(no translation)",
-      linguisticUnit: { language: s.language, content: s.content }
+      linguisticUnit: { language: s.language, content: s.content },
+      level: 0
     };
   }
 
@@ -72,12 +76,23 @@ function next() {
   }
 }
 /**
- * Record the user's rating for the current exercise and move to the next.
+ * Record the user's rating for the current exercise, persist a learning event, and move to the next.
  * @param rating - The user's self-assessed rating.
  */
-function rate(rating: string) {
+async function rate(rating: string) {
   if (currentExercise.value) {
     userRatings.value[currentExercise.value.id] = rating;
+    // Persist learning event as a plain object
+    const event = {
+      userEaseRating: rating as "Impossible" | "Hard" | "Doable" | "Easy",
+      timestamp: new Date(),
+      exerciseType: currentExercise.value.type,
+      taskType: currentExercise.value.type, // For now, use type as taskType
+      level: currentExercise.value.level ?? 0,
+      linguisticUnit: { ...currentExercise.value.linguisticUnit },
+      userInput: currentExercise.value.type === "free-translate" ? userInputs.value[currentExercise.value.id] : undefined
+    };
+    await learningEventRepo!.add({ ...event });
   }
   next();
 }
