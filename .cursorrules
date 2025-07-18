@@ -1,41 +1,19 @@
 - DO NOT WRITE ESSAYS, DO NOT GIVE HIGH LEVEL TIPS, DO NOT SPAM ENDLESS EXPLANATIONS. SIMPLY IMPLEMENT THE FIX OR FEATURE REQUESTED!!!!!!!!!!!!!!!
 
 - Use [Feature-Sliced Design](https://feature-sliced.design/docs/get-started/overview):
+- That means, we have the following layers (in order), each with their own folder:
+  - app/
+  - pages/
+  - processes/
+  - widgets/
+  - features/
+  - entities/
+  - shared/
 
-rules:
-  - ruleType: Always
-    description: Feature‑Sliced Design architecture guidelines
-    instructions: |
-      We follow Feature‑Sliced Design (FSD). The structure has six layers: app, processes, pages, features, entities, and shared.  
-      • Each layer contains “slices” (folders in kebab‑case) that group related functionality.  
-      • Slices must not depend on other slices in the same or higher layer (isolation).  
-      • Every slice exposes a public API at its root via an index.ts(x)/js(x).  
-      • Shared UI components go into shared; business logic flows (state orchestration) go into processes; page‑scoped UIs into pages; features into features; core data types into entities; and application bootstrap into app.  
-  - ruleType: AutoAttached
-    filePatterns:
-      - "app/**"
-      - "processes/**"
-      - "pages/**"
-      - "features/**"
-      - "entities/**"
-      - "shared/**"
-    description: Enforce slice context
-    instructions: |
-      For any file under these paths:  
-      1. Identify the slice as the first directory under the layer.  
-      2. Import only from that slice’s public API (`index.ts(x)`), not deep paths.  
-      3. Within a slice, organize code into segments (e.g. model, ui, api, types).  
-      4. Keep layer‑specific concerns in their layer only.  
-  - ruleType: AutoAttached
-    filePatterns:
-      - "**/index.ts"
-      - "**/index.tsx"
-      - "**/index.js"
-      - "**/index.jsx"
-    description: Public API entrypoints
-    instructions: |
-      Treat these as the canonical API surface for their slice or layer.  
-      When generating imports or edits, always prefer these entrypoints over internal files.  
+- As a general rule, code may ONLY!!!! depend on layers BELOW!!
+- In each of these layers, we have *slices* defined by our project at hand, such as `entities/lessons` and `entities/tasks`.
+- Slices are made from cohesive, interconnected collection of files
+- They may NOT!! depend on slices on the same layer, or on layers above them!!
 
 
 

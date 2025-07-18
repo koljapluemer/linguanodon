@@ -589,3 +589,5 @@ src/
 │   │   └── RevealCard.vue
 
 ```
+
+One BIG problem with this: we do not have, and do not want, a `processes/` folder.
