@@ -14,6 +14,9 @@
 </template>
 
 <script setup lang="ts">
+// Provide all repositories for DI at the app root
+import { provideRepositories } from "@/app/provideRepos";
+provideRepositories();
 </script>
 
 <style>
