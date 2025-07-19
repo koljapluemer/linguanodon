@@ -34,6 +34,18 @@ const routes: RouteRecordRaw[] = [
     path: '/debug-linguistic-unit-progress-data',
     name: 'debug-linguistic-unit-progress-data',
     component: () => import('@/pages/DebugLinguisticUnitProgressData.vue')
+  },
+  {
+    /** Debug page for a specific word */
+    path: '/debug/word/:language/:content',
+    name: 'debug-word',
+    component: () => import('@/pages/DebugWord.vue')
+  },
+  {
+    /** Debug page for a specific sentence */
+    path: '/debug/sentence/:language/:content',
+    name: 'debug-sentence',
+    component: () => import('@/pages/DebugSentence.vue')
   }
 ]
 

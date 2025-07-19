@@ -200,7 +200,14 @@ onMounted(loadData);
           <div class="card-body">
             <div class="flex justify-between items-start">
               <div class="flex-1">
-                <h3 class="text-lg font-semibold">{{ sentence.content }}</h3>
+                <h3 class="text-lg font-semibold">
+                  <router-link 
+                    :to="{ name: 'debug-sentence', params: { language: sentence.language, content: sentence.content } }"
+                    class="link link-primary hover:link-primary-focus"
+                  >
+                    {{ sentence.content }}
+                  </router-link>
+                </h3>
                 <p class="text-sm text-gray-600">{{ sentence.language }}</p>
                 
                 <!-- Translations -->
