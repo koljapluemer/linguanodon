@@ -32,7 +32,7 @@ async function loadLesson() {
     ]);
 
     // Generate lesson
-    currentLesson.value = LessonGenerator.generateLesson(words, sentences, progressData);
+    currentLesson.value = await LessonGenerator.generateLesson(words, sentences, progressData);
     
     // Create first task
     if (currentLesson.value.exercises.length > 0) {
