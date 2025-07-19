@@ -7,6 +7,7 @@ import type { Task } from "../model/Task";
 import type { LearningEventData } from "@/entities/learning-events";
 import { wordService, sentenceService, progressService } from "@/entities/linguisticUnits";
 import { learningEventService } from "@/entities/learning-events";
+import { fsrs, createEmptyCard } from "ts-fsrs";
 import DoLessonRender from "./DoLessonRender.vue";
 
 // State
@@ -96,6 +97,9 @@ async function completeTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', u
 
   await learningEventService.add(learningEvent);
 
+  // Update progress data for the linguistic unit
+  await updateProgressData(currentExercise, rating);
+
   // Move to next exercise or complete lesson
   moveToNextExercise();
 }
@@ -128,6 +132,53 @@ function revealSolution() {
   if (currentTask.value) {
     currentTask.value.isRevealed = true;
   }
+}
+
+/**
+ * Updates progress data for a linguistic unit after exercise completion.
+ */
+async function updateProgressData(exercise: Exercise, rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
+  const { linguisticUnit, level } = exercise;
+  
+  // Get existing progress data or create new one
+  let progressData = await progressService.get(
+    linguisticUnit.language, 
+    linguisticUnit.content, 
+    linguisticUnit.type
+  );
+
+  if (!progressData) {
+    // Create new progress data
+    progressData = {
+      language: linguisticUnit.language,
+      content: linguisticUnit.content,
+      type: linguisticUnit.type,
+      cards: {}
+    };
+  }
+
+  // Get or create card for this level
+  let card = progressData.cards[level];
+  if (!card) {
+    card = createEmptyCard();
+  }
+
+  // Apply FSRS algorithm to update the card
+  const scheduler = fsrs();
+  const now = new Date();
+  
+  // Map UI ratings to FSRS ratings
+  const fsrsRating = rating === 'Impossible' ? 1 : 
+                    rating === 'Hard' ? 2 : 
+                    rating === 'Doable' ? 3 : 4; // Easy
+
+  const { card: updatedCard } = scheduler.next(card, now, fsrsRating);
+  
+  // Update the card in progress data
+  progressData.cards[level] = updatedCard;
+
+  // Save the updated progress data
+  await progressService.upsert(progressData);
 }
 
 /**
