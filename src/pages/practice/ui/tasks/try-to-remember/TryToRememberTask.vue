@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import type { Task } from "../../../model/Task";
 import WidgetBigText from "@/shared/WidgetBigText.vue";
 import WidgetInstruction from "@/shared/WidgetInstruction.vue";
 import WidgetRateConfidence from "@/shared/WidgetRateConfidence.vue";
-import WidgetRevealButton from "@/shared/WidgetRevealButton.vue";
 
 interface Props {
   task: Task;
@@ -16,9 +14,6 @@ interface Emits {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-
-// Internal state for reveal
-const isRevealed = ref(false);
 
 /**
  * Gets the prompt from task data.
@@ -59,7 +54,6 @@ function isWord(): boolean {
 </script>
 
 <template>
-
   <!-- Task Instruction -->
   <WidgetInstruction>
     {{ getPrompt() }}
@@ -75,36 +69,22 @@ function isWord(): boolean {
         </WidgetBigText>
       </div>
 
-      <!-- Solution (when revealed) -->
-      <div v-if="isRevealed">
-        <!-- Dashed Line -->
-        <div class="border-t-2 md:border-dotted border-base-300 my-4"></div>
+      <!-- Dashed Line -->
+      <div class="border-t-2 md:border-dotted border-base-300 my-4"></div>
 
-        <!-- Back (Solution) -->
-        <div class="mb-6 text-center">
-          <WidgetBigText :is-extra-big="false">
-            {{ getSolution() }}
-          </WidgetBigText>
-        </div>
+      <!-- Back (Solution) -->
+      <div class="mb-6 text-center">
+        <WidgetBigText :is-extra-big="true">
+          {{ getSolution() }}
+        </WidgetBigText>
       </div>
+
 
 
 
     </div>
   </div>
 
-
-  <!-- Action Buttons -->
-  <div class="flex justify-center gap-2 w-full">
-    <!-- Reveal Button -->
-    <WidgetRevealButton v-if="!isRevealed" @click="isRevealed = true" />
-
-    <!-- Skip Button -->
-    <button v-if="task.canSkip && !isRevealed" class="btn btn-outline" @click="emit('rate', 'Impossible')">
-      Skip
-    </button>
-
-    <!-- Rating (when revealed) -->
-    <WidgetRateConfidence v-if="isRevealed" prompt="How difficult was this?" @rate="emit('rate', $event)" />
-  </div>
+  <!-- Rating -->
+  <WidgetRateConfidence prompt="How difficult to remember is this word?" @rate="emit('rate', $event)" />
 </template>

@@ -63,26 +63,23 @@ function getProgressPercentage(): number {
 
     <!-- Lesson Completed State -->
     <div v-else-if="lesson?.isCompleted" class="text-center py-12">
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title text-2xl mb-4">🎉 Lesson Completed!</h2>
+        <div class="">
+          <h2 class="text-2xl mb-4">🎉 Lesson Completed!</h2>
           <p class="text-lg mb-6">
             You completed {{ lesson.exercises.length }} exercises.
           </p>
-          <div class="card-actions justify-center">
+          <div class="justify-center">
             <button class="btn btn-primary btn-lg" @click="handleStartNewLesson">
               Start New Lesson
             </button>
           </div>
         </div>
       </div>
-    </div>
 
     <!-- Active Lesson State -->
     <div v-else-if="lesson && task" class="space-y-6">
       <!-- Progress Bar -->
-      <div class="card bg-base-100 shadow">
-        <div class="card-body">
+      <div class="">
           <div class="flex justify-between items-center mb-2">
             <span class="text-sm font-medium">
               Exercise {{ lesson.currentExerciseIndex + 1 }} of {{ lesson.exercises.length }}
@@ -96,7 +93,6 @@ function getProgressPercentage(): number {
             :value="getProgressPercentage()" 
             max="100"
           ></progress>
-        </div>
       </div>
 
       <!-- Current Task -->

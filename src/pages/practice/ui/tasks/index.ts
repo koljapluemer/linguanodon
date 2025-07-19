@@ -1,12 +1,12 @@
 import { TaskRegistry } from './TaskRegistry';
 import RevealTask from './reveal/RevealTask.vue';
 import FreeTranslateTask from './free-translate/FreeTranslateTask.vue';
-import ChooseFromTwoTask from './choose-from-two/ChooseFromTwoTask.vue';
+import TryToRememberTask from './try-to-remember/TryToRememberTask.vue';
 
 // Register all task types
 TaskRegistry.register('reveal', { component: RevealTask });
 TaskRegistry.register('free-translate', { component: FreeTranslateTask });
-TaskRegistry.register('choose-from-two', { component: ChooseFromTwoTask });
+TaskRegistry.register('try-to-remember', { component: TryToRememberTask });
 
 // Export the registry for use in other components
 export { TaskRegistry };

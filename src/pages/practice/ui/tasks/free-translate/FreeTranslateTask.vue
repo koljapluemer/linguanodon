@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Task } from "../../../model/Task";
+import WidgetBigText from "@/shared/WidgetBigText.vue";
+import WidgetInstruction from "@/shared/WidgetInstruction.vue";
+import WidgetImportantTextArea from "@/shared/WidgetImportantTextArea.vue";
+import WidgetRateConfidence from "@/shared/WidgetRateConfidence.vue";
+import WidgetRevealButton from "@/shared/WidgetRevealButton.vue";
 
 interface Props {
   task: Task;
@@ -38,52 +43,58 @@ function getLinguisticUnit() {
 }
 
 /**
+ * Gets the linguistic unit content.
+ */
+function getLinguisticUnitContent(): string {
+  const unit = getLinguisticUnit() as { content: string };
+  return unit.content;
+}
+
+/**
  * Handles task completion with rating and user input.
  */
 function handleCompleteTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
   emit('rate', rating, userInput.value);
-}
-
-/**
- * Handles input change for the translation textarea.
- */
-function handleInputChange(event: Event) {
-  const target = event.target as HTMLTextAreaElement;
-  userInput.value = target.value;
 }
 </script>
 
 <template>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <!-- Task Prompt -->
-      <div class="mb-6">
-        <h3 class="text-xl font-semibold mb-4">{{ getPrompt() }}</h3>
-        
-        <!-- Translation Input -->
-        <div v-if="!isRevealed" class="mb-4">
-          <textarea
-            v-model="userInput"
-            @input="handleInputChange"
-            class="textarea textarea-bordered w-full h-24"
-            placeholder="Type your translation here..."
-          ></textarea>
-        </div>
+      <!-- Task Instruction -->
+      <WidgetInstruction>
+        {{ getPrompt() }}
+      </WidgetInstruction>
+
+      <!-- Front (Linguistic Unit Content) -->
+      <div class="mb-4 text-center">
+        <WidgetBigText :is-extra-big="false">
+          {{ getLinguisticUnitContent() }}
+        </WidgetBigText>
+      </div>
+      
+      <!-- Translation Input -->
+      <div v-if="!isRevealed" class="mb-4">
+        <WidgetImportantTextArea
+          v-model="userInput"
+          placeholder="Type your translation here..."
+        />
       </div>
 
       <!-- Solution (when revealed) -->
-      <div v-if="isRevealed" class="mb-6">
-        <div class="alert alert-info">
-          <div>
-            <h4 class="font-semibold">Solution:</h4>
-            <p class="whitespace-pre-line">{{ getSolution() }}</p>
-          </div>
-        </div>
-        
-        <!-- User's Answer (if provided) -->
-        <div v-if="userInput" class="alert alert-warning mt-2">
-          <div>
-            <h4 class="font-semibold">Your Answer:</h4>
+      <div v-if="isRevealed">
+        <!-- Dashed Line -->
+        <div class="border-t-2 md:border-dotted border-base-300 my-4"></div>
+
+        <!-- Back (Solution) -->
+        <div class="mb-6 text-center">
+          <WidgetBigText :is-extra-big="false">
+            {{ getSolution() }}
+          </WidgetBigText>
+          
+          <!-- User's Answer (if provided) -->
+          <div v-if="userInput" class="mt-4 p-3 bg-warning/10 rounded-lg border border-warning/20">
+            <p class="text-sm font-medium text-warning-content">Your Answer:</p>
             <p class="whitespace-pre-line">{{ userInput }}</p>
           </div>
         </div>
@@ -92,13 +103,10 @@ function handleInputChange(event: Event) {
       <!-- Action Buttons -->
       <div class="card-actions justify-between">
         <!-- Reveal Button -->
-        <button
+        <WidgetRevealButton
           v-if="!isRevealed"
-          class="btn btn-secondary"
           @click="isRevealed = true"
-        >
-          Reveal Solution
-        </button>
+        />
 
         <!-- Skip Button -->
         <button
@@ -109,43 +117,15 @@ function handleInputChange(event: Event) {
           Skip
         </button>
 
-        <!-- Rating Buttons (when revealed) -->
-        <div v-if="isRevealed" class="flex gap-2">
-          <button
-            class="btn btn-error"
-            @click="handleCompleteTask('Impossible')"
-          >
-            Impossible
-          </button>
-          <button
-            class="btn btn-warning"
-            @click="handleCompleteTask('Hard')"
-          >
-            Hard
-          </button>
-          <button
-            class="btn btn-info"
-            @click="handleCompleteTask('Doable')"
-          >
-            Doable
-          </button>
-          <button
-            class="btn btn-success"
-            @click="handleCompleteTask('Easy')"
-          >
-            Easy
-          </button>
-        </div>
+        <!-- Rating (when revealed) -->
+        <WidgetRateConfidence
+          v-if="isRevealed"
+          prompt="How difficult was this to translate?"
+          @rate="handleCompleteTask"
+        />
       </div>
 
-      <!-- Linguistic Unit Info -->
-      <div class="mt-4 text-sm text-base-content/70">
-        <p>
-          <strong>Type:</strong> {{ (getLinguisticUnit() as any).type }} | 
-          <strong>Language:</strong> {{ (getLinguisticUnit() as any).language }} | 
-          <strong>Content:</strong> {{ (getLinguisticUnit() as any).content }}
-        </p>
-      </div>
+
     </div>
   </div>
 </template> 

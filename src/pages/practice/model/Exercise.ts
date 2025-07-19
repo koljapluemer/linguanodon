@@ -3,7 +3,7 @@ import type { LinguisticUnitData } from "@/entities/linguisticUnits";
 // Represents a generated exercise for a lesson.
 export interface Exercise {
   id: string;
-  type: 'reveal' | 'free-translate' | 'choose-from-two';
+  type: 'reveal' | 'free-translate' | 'choose-from-two' | 'try-to-remember';
   prompt: string;
   solution: string;
   level: number;

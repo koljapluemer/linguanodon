@@ -50,9 +50,9 @@ export async function makeTryToRemember(
 
   const exercise: Exercise = {
     id: `word-level0-${word.language}-${word.content}`,
-    type: 'reveal',
-    prompt: `Try to remember this word: "${word.content}"`,
-    solution: `Translations: ${translationsText}`,
+    type: 'try-to-remember',
+    prompt: `Try to remember this word:`,
+    solution: `${translationsText}`,
     level: 0,
     linguisticUnit: {
       type: 'word',
