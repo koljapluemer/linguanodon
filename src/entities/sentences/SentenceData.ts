@@ -2,23 +2,9 @@ import type { LinguisticUnitData } from "@/shared/linguisticUnits/LinguisticUnit
 
 // Represents a sentence in a specific language, with translations, credits, and contained words for MVP.
 export interface SentenceData extends LinguisticUnitData {
-  notes?: string[];
-  translations?: Array<{
-    language: string;
-    content: string;
-  }>;
-  links?: Array<{
-    label: string;
-    url: string;
-  }>;
-  credits?: Array<{
-    license: string;
-    owner: string;
-    ownerLink?: string;
-    source?: string;
-    sourceLink?: string;
-  }>;
+  type: 'sentence';
   containsWords?: Array<{
+    type: 'word';
     language: string;
     content: string;
   }>;

@@ -18,7 +18,7 @@ class SentenceDexieDB extends Dexie {
   constructor() {
     super("SentenceDexieDB");
     this.version(1).stores({
-      sentences: "[language+content]"
+      sentences: "[language+content], type, notes, translations, links, credits, containsWords"
     });
   }
 }

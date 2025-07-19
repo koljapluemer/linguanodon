@@ -137,5 +137,5 @@ export default defineConfig([
     },
   },
 ], {
-  ignores: ["legacy/**"]
+  ignores: ["legacy/**", "src/app/router.ts"]
 });

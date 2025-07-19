@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import type { Table } from "dexie";
-import type { WordData } from "./Word";
+import type { WordData } from "./WordData";
 import type { WordRepository } from "./WordRepository";
 import wordsExampleData from "./wordsExampleData.json";
 
@@ -18,7 +18,7 @@ class WordDexieDB extends Dexie {
   constructor() {
     super("WordDexieDB");
     this.version(1).stores({
-      words: "[language+content]"
+      words: "[language+content], type, notes, translations, links, otherForms, synonyms, appearsIn"
     });
   }
 }

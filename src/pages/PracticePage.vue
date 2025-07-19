@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { inject } from "vue";
-import { wordRepoKey, sentenceRepoKey, learningEventRepoKey } from "@/shared/injectionKeys";
+import { wordRepoKey, sentenceRepoKey, learningEventRepoKey, linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
 import type { ExerciseData } from "@/entities/exercises/ExerciseData";
-// Removed unused LearningEventRepository import
+import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
+import type { Grade } from 'ts-fsrs';
 
 // Inject repositories
 const wordRepo = inject(wordRepoKey);
 const sentenceRepo = inject(sentenceRepoKey);
 const learningEventRepo = inject(learningEventRepoKey);
-if (!wordRepo || !sentenceRepo || !learningEventRepo) throw new Error("Repositories not provided!");
+const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
+if (!wordRepo || !sentenceRepo || !learningEventRepo || !linguisticUnitProgressRepo) throw new Error("Repositories not provided!");
 
 // State
 const exercises = ref<ExerciseData[]>([]);
@@ -18,6 +20,83 @@ const revealed = ref(false);
 const lessonDone = ref(false);
 const userRatings = ref<Record<string, string>>({});
 const userInputs = ref<Record<string, string>>({});
+
+/**
+ * Convert user rating to FSRS Grade enum.
+ */
+function userRatingToFsrsRating(userRating: string): Grade {
+  switch (userRating) {
+    case "Impossible": return Rating.Again as Grade;
+    case "Hard": return Rating.Hard as Grade;
+    case "Doable": return Rating.Good as Grade;
+    case "Easy": return Rating.Easy as Grade;
+    default: return Rating.Good as Grade;
+  }
+}
+
+/**
+ * Update FSRS progress for a linguistic unit.
+ */
+async function updateLinguisticUnitProgress(linguisticUnit: { language: string; content: string; type: 'word' | 'sentence' }, level: number, fsrsRating: Grade) {
+  try {
+    console.log('Updating progress for:', linguisticUnit, 'level:', level, 'rating:', fsrsRating);
+    
+    // Get existing progress or create new
+    let progress = await linguisticUnitProgressRepo!.get(linguisticUnit.language, linguisticUnit.content, linguisticUnit.type);
+    console.log('Existing progress:', progress);
+    
+    if (!progress) {
+      progress = {
+        language: linguisticUnit.language,
+        content: linguisticUnit.content,
+        type: linguisticUnit.type,
+        cards: {}
+      };
+      console.log('Created new progress:', progress);
+    }
+    
+    // Ensure cards object exists
+    if (!progress.cards) {
+      progress.cards = {};
+    }
+    
+    // Get or create card for this level
+    let card = progress.cards[level];
+    if (!card) {
+      card = createEmptyCard();
+      console.log('Created new card for level', level, ':', card);
+    }
+    
+    // Update card with FSRS algorithm
+    const scheduler = fsrs();
+    const now = new Date();
+    const { card: updatedCard } = scheduler.next(card, now, fsrsRating);
+    console.log('Updated card:', updatedCard);
+    
+    // Update progress
+    const updatedProgress = {
+      ...progress,
+      cards: {
+        ...progress.cards,
+        [level]: updatedCard
+      }
+    };
+    
+    console.log('Saving updated progress:', updatedProgress);
+    await linguisticUnitProgressRepo!.upsert(updatedProgress);
+    console.log('Progress saved successfully');
+  } catch (error) {
+    console.error('Error updating linguistic unit progress:', error);
+    console.error('Error details:', {
+      linguisticUnit,
+      level,
+      fsrsRating,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    // Continue without failing the exercise
+  }
+}
 
 // Generate lesson on mount
 (async () => {
@@ -31,7 +110,7 @@ const userInputs = ref<Record<string, string>>({});
     type: "reveal",
     prompt: `${word.language.toUpperCase()}: ${word.content}`,
     solution: word.translations?.map(t => `${t.language.toUpperCase()}: ${t.content}`).join(", ") || "(no translation)",
-    linguisticUnit: { language: word.language, content: word.content },
+    linguisticUnit: word,
     level: 0
   }));
 
@@ -44,7 +123,7 @@ const userInputs = ref<Record<string, string>>({});
       type: "free-translate",
       prompt: `${s.language.toUpperCase()}: ${s.content}`,
       solution: s.translations?.map(t => `${t.language.toUpperCase()}: ${t.content}`).join(", ") || "(no translation)",
-      linguisticUnit: { language: s.language, content: s.content },
+      linguisticUnit: s,
       level: 0
     };
   }
@@ -81,6 +160,24 @@ function next() {
 async function rate(rating: string) {
   if (currentExercise.value) {
     userRatings.value[currentExercise.value.id] = rating;
+    
+    // Convert user rating to FSRS rating
+    const fsrsRating = userRatingToFsrsRating(rating);
+    
+    // Update FSRS progress for the linguistic unit
+    console.log('Current exercise linguistic unit:', currentExercise.value.linguisticUnit);
+    console.log('Type from linguistic unit:', currentExercise.value.linguisticUnit.type);
+    
+    await updateLinguisticUnitProgress(
+      {
+        language: currentExercise.value.linguisticUnit.language,
+        content: currentExercise.value.linguisticUnit.content,
+        type: currentExercise.value.linguisticUnit.type
+      },
+      currentExercise.value.level ?? 0,
+      fsrsRating
+    );
+    
     // Persist learning event as a plain object
     const event = {
       userEaseRating: rating as "Impossible" | "Hard" | "Doable" | "Easy",
@@ -88,7 +185,11 @@ async function rate(rating: string) {
       exerciseType: currentExercise.value.type,
       taskType: currentExercise.value.type, // For now, use type as taskType
       level: currentExercise.value.level ?? 0,
-      linguisticUnit: { ...currentExercise.value.linguisticUnit },
+      linguisticUnit: {
+        language: currentExercise.value.linguisticUnit.language,
+        content: currentExercise.value.linguisticUnit.content,
+        type: currentExercise.value.linguisticUnit.type
+      },
       userInput: currentExercise.value.type === "free-translate" ? userInputs.value[currentExercise.value.id] : undefined
     };
     await learningEventRepo!.add({ ...event });

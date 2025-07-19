@@ -1,4 +1,4 @@
-import type { WordData } from "./Word";
+import type { WordData } from "./WordData";
 
 // Repository interface for accessing and managing WordData entities.
 export interface WordRepository {

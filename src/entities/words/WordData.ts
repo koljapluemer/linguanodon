@@ -2,21 +2,19 @@ import type { LinguisticUnitData } from "@/shared/linguisticUnits/LinguisticUnit
 
 // Represents a word in a specific language, with translations and notes for MVP.
 export interface WordData extends LinguisticUnitData {
-  notes?: Array<{
-    content: string;
-    showBeforeExercise?: boolean;
-  }>;
-  translations?: Array<{
+  type: 'word';
+  otherForms?: Array<{
+    type: 'word';
     language: string;
     content: string;
-  }>;
-  links?: Array<{
-    label: string;
-    url: string;
-  }>;
-  otherForms?: string[];
-  synonyms?: string[];
+  }>
+  synonyms?: Array<{
+    type: 'word';
+    language: string;
+    content: string;
+  }>
   appearsIn?: Array<{
+    type: 'sentence';
     language: string;
     content: string;
   }>;

@@ -8,6 +8,7 @@ export interface LearningEventData {
   linguisticUnit: {
     language: string;
     content: string;
+    type: 'word' | 'sentence';
   };
   userInput?: string;
 } 

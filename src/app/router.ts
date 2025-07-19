@@ -6,11 +6,13 @@ import type { RouteRecordRaw } from 'vue-router'
  */
 const routes: RouteRecordRaw[] = [
   {
+    /** Practice page for language learning exercises */
     path: '/practice',
     name: 'practice',
     component: () => import('@/pages/PracticePage.vue')
   },
   {
+    /** Debug page to view all learning events */
     path: '/debug-learning-events',
     name: 'debug-learning-events',
     component: () => import('@/pages/DebugLearningEvents.vue')
