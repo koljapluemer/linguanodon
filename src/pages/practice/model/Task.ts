@@ -15,9 +15,6 @@ export interface Task {
   /** Whether this task can be skipped */
   canSkip: boolean;
   
-  /** Whether the solution has been revealed */
-  isRevealed: boolean;
-  
   /** User's input (for input-based tasks) */
   userInput?: string;
   

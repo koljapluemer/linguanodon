@@ -58,8 +58,7 @@ function createTaskFromExercise(exercise: Exercise): Task {
       solution: exercise.solution,
       linguisticUnit: exercise.linguisticUnit
     },
-    canSkip: !exercise.isRepeatable,
-    isRevealed: false
+    canSkip: !exercise.isRepeatable
   };
 }
 
@@ -125,14 +124,7 @@ function moveToNextExercise() {
   }
 }
 
-/**
- * Reveals the solution for the current task.
- */
-function revealSolution() {
-  if (currentTask.value) {
-    currentTask.value.isRevealed = true;
-  }
-}
+
 
 /**
  * Updates progress data for a linguistic unit after exercise completion.
@@ -201,7 +193,6 @@ onMounted(loadLesson);
     :loading="loading"
     :error="error"
     @complete-task="completeTask"
-    @reveal-solution="revealSolution"
     @start-new-lesson="startNewLesson"
   />
 </template>

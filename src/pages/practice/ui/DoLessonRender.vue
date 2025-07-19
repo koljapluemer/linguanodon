@@ -12,7 +12,6 @@ interface Props {
 
 interface Emits {
   (e: 'complete-task', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string): void;
-  (e: 'reveal-solution'): void;
   (e: 'start-new-lesson'): void;
 }
 
@@ -26,12 +25,7 @@ function handleCompleteTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', u
   emit('complete-task', rating, userInput);
 }
 
-/**
- * Handles solution reveal.
- */
-function handleRevealSolution() {
-  emit('reveal-solution');
-}
+
 
 /**
  * Handles starting a new lesson.
@@ -109,7 +103,6 @@ function getProgressPercentage(): number {
       <DoTaskRender
         :task="task"
         @complete-task="handleCompleteTask"
-        @reveal-solution="handleRevealSolution"
       />
     </div>
 

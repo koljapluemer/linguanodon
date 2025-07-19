@@ -1,0 +1,118 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import type { Task } from "../../../model/Task";
+
+interface Props {
+  task: Task;
+}
+
+interface Emits {
+  (e: 'rate', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): void;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
+
+// Internal state for reveal
+const isRevealed = ref(false);
+
+/**
+ * Gets the prompt from task data.
+ */
+function getPrompt(): string {
+  return props.task.data.prompt as string;
+}
+
+/**
+ * Gets the solution from task data.
+ */
+function getSolution(): string {
+  return props.task.data.solution as string;
+}
+
+/**
+ * Gets the linguistic unit from task data.
+ */
+function getLinguisticUnit() {
+  return props.task.data.linguisticUnit;
+}
+</script>
+
+<template>
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <!-- Task Prompt -->
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-4">{{ getPrompt() }}</h3>
+      </div>
+
+      <!-- Solution (when revealed) -->
+      <div v-if="isRevealed" class="mb-6">
+        <div class="alert alert-info">
+          <div>
+            <h4 class="font-semibold">Solution:</h4>
+            <p class="whitespace-pre-line">{{ getSolution() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="card-actions justify-between">
+        <!-- Reveal Button -->
+        <button
+          v-if="!isRevealed"
+          class="btn btn-secondary"
+          @click="isRevealed = true"
+        >
+          Reveal Solution
+        </button>
+
+        <!-- Skip Button -->
+        <button
+          v-if="task.canSkip && !isRevealed"
+          class="btn btn-outline"
+          @click="emit('rate', 'Impossible')"
+        >
+          Skip
+        </button>
+
+        <!-- Rating Buttons (when revealed) -->
+        <div v-if="isRevealed" class="flex gap-2">
+          <button
+            class="btn btn-error"
+            @click="emit('rate', 'Impossible')"
+          >
+            Impossible
+          </button>
+          <button
+            class="btn btn-warning"
+            @click="emit('rate', 'Hard')"
+          >
+            Hard
+          </button>
+          <button
+            class="btn btn-info"
+            @click="emit('rate', 'Doable')"
+          >
+            Doable
+          </button>
+          <button
+            class="btn btn-success"
+            @click="emit('rate', 'Easy')"
+          >
+            Easy
+          </button>
+        </div>
+      </div>
+
+      <!-- Linguistic Unit Info -->
+      <div class="mt-4 text-sm text-base-content/70">
+        <p>
+          <strong>Type:</strong> {{ (getLinguisticUnit() as any).type }} | 
+          <strong>Language:</strong> {{ (getLinguisticUnit() as any).language }} | 
+          <strong>Content:</strong> {{ (getLinguisticUnit() as any).content }}
+        </p>
+      </div>
+    </div>
+  </div>
+</template> 
