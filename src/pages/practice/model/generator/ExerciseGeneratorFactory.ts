@@ -35,7 +35,7 @@ export class ExerciseGeneratorFactory {
     level: number, 
     context: ExerciseGenerationContext
   ): Promise<Exercise | null> {
-    let exercises: Exercise[] | null = null;
+    let exercises: Exercise[] = [];
     
     switch (level) {
       case 0:
@@ -72,7 +72,7 @@ export class ExerciseGeneratorFactory {
         return null;
     }
     
-    if (!exercises || exercises.length === 0) {
+    if (exercises.length === 0) {
       return null;
     }
     
@@ -89,7 +89,7 @@ export class ExerciseGeneratorFactory {
     level: number, 
     context: ExerciseGenerationContext
   ): Promise<Exercise | null> {
-    let exercises: Exercise[] | null = null;
+    let exercises: Exercise[] = [];
     
     switch (level) {
       case 0:
@@ -126,7 +126,7 @@ export class ExerciseGeneratorFactory {
         return null;
     }
     
-    if (!exercises || exercises.length === 0) {
+    if (exercises.length === 0) {
       return null;
     }
     

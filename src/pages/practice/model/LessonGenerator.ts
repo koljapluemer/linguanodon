@@ -146,7 +146,7 @@ export class LessonGenerator {
    */
   private static async generateExerciseForWord(
     word: WordData,
-    allWords: WordData[],
+    _allWords: WordData[],
     progressData: LinguisticUnitProgressData[],
     context: ExerciseGenerationContext
   ): Promise<Exercise | null> {
@@ -191,22 +191,7 @@ export class LessonGenerator {
     return null;
   }
 
-  /**
-   * Gets distractor words for multiple choice exercises.
-   */
-  private static getDistractorWords(
-    targetWord: WordData,
-    allWords: WordData[],
-    count: number
-  ): WordData[] {
-    const distractors = allWords.filter(word => 
-      word.content !== targetWord.content && 
-      word.language === targetWord.language
-    );
-    
-    // Shuffle and take the requested number
-    return this.shuffleArray(distractors).slice(0, count);
-  }
+
 
   /**
    * Generates additional exercises to fill up the lesson.

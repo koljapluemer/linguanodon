@@ -21,51 +21,51 @@ export interface ExerciseGeneratorInterface {
   /**
    * Generates a level 0 exercise.
    */
-  generateLevel0(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel0(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 1 exercise.
    */
-  generateLevel1(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel1(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 2 exercise.
    */
-  generateLevel2(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel2(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 3 exercise.
    */
-  generateLevel3(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel3(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 4 exercise.
    */
-  generateLevel4(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel4(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 5 exercise.
    */
-  generateLevel5(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel5(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 6 exercise.
    */
-  generateLevel6(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel6(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 7 exercise.
    */
-  generateLevel7(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel7(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 8 exercise.
    */
-  generateLevel8(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel8(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
   
   /**
    * Generates a level 9 exercise.
    */
-  generateLevel9(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[] | null>;
+  generateLevel9(unit: WordData | SentenceData, context: ExerciseGenerationContext): Promise<Exercise[]>;
 
 } 
