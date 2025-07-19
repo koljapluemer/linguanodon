@@ -1,5 +1,5 @@
 import type { WordData } from "@/entities/linguisticUnits";
-import type { Exercise } from "../../../Exercise";
+import type { ChooseFromTwoExercise, AnswerOption } from "../../../Exercise";
 import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface";
 
 /**
@@ -11,7 +11,7 @@ import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface
 export async function makeTwoButtonsFromTarget(
   word: WordData, 
   context: ExerciseGenerationContext
-): Promise<Exercise[]> {
+): Promise<ChooseFromTwoExercise[]> {
   // Check if this is a target language word
   const isTargetLanguage = context.targetLanguages.includes(word.language);
   if (!isTargetLanguage) {
@@ -53,11 +53,22 @@ export async function makeTwoButtonsFromTarget(
 
   const correctAnswer = nativeTranslations[0].content;
 
-  const exercise: Exercise = {
+  // Create answer options and shuffle them
+  const answerOptions: [AnswerOption, AnswerOption] = [
+    { content: correctAnswer, isCorrect: true },
+    { content: distractorTranslation, isCorrect: false }
+  ];
+  
+  // Shuffle the options
+  if (Math.random() < 0.5) {
+    [answerOptions[0], answerOptions[1]] = [answerOptions[1], answerOptions[0]];
+  }
+
+  const exercise: ChooseFromTwoExercise = {
     id: `word-level1-${word.language}-${word.content}`,
-    type: 'reveal', // Using reveal for now since choose-from-two isn't supported yet
+    type: 'choose-from-two',
     prompt: `What does "${word.content}" mean?`,
-    solution: `Correct: ${correctAnswer}\nIncorrect: ${distractorTranslation}`,
+    answerOptions,
     level: 1,
     linguisticUnit: {
       type: 'word',

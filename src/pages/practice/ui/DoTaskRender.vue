@@ -1,28 +1,28 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { Task } from "../model/Task";
+import type { Exercise } from "../model/Exercise";
 import { TaskRegistry } from "./tasks";
 
 interface Props {
-  task: Task;
+  exercise: Exercise;
 }
 
 interface Emits {
-  (e: 'complete-task', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string): void;
+  (e: 'complete-exercise', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string): void;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 /**
- * Get the appropriate task component based on task type.
+ * Get the appropriate task component based on exercise type.
  */
 const taskComponent = computed(() => {
-  const taskType = props.task.taskType;
-  const registeredTask = TaskRegistry.get(taskType);
+  const exerciseType = props.exercise.type;
+  const registeredTask = TaskRegistry.get(exerciseType);
   
   if (!registeredTask) {
-    console.warn(`No task component registered for type: ${taskType}`);
+    console.warn(`No task component registered for type: ${exerciseType}`);
     return null;
   }
   
@@ -30,27 +30,27 @@ const taskComponent = computed(() => {
 });
 
 /**
- * Handles task completion with rating.
+ * Handles exercise completion with rating.
  */
 function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string) {
-  emit('complete-task', rating, userInput);
+  emit('complete-exercise', rating, userInput);
 }
 </script>
 
 <template>
-  <!-- Render the appropriate task component based on task type -->
+  <!-- Render the appropriate task component based on exercise type -->
   <component 
     v-if="taskComponent"
     :is="taskComponent" 
-    :task="task"
+    :exercise="exercise"
     @rate="handleRate"
   />
   
-  <!-- Fallback for unknown task types -->
+  <!-- Fallback for unknown exercise types -->
   <div v-else class="card bg-base-100 shadow-xl">
     <div class="card-body">
       <div class="alert alert-error">
-        <span>Unknown task type: {{ task.taskType }}</span>
+        <span>Unknown exercise type: {{ exercise.type }}</span>
       </div>
     </div>
   </div>

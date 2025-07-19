@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Task } from "../../../model/Task";
+import type { TryToRememberExercise } from "../../../model/Exercise";
 import WidgetBigText from "@/shared/WidgetBigText.vue";
 import WidgetInstruction from "@/shared/WidgetInstruction.vue";
 import WidgetRateConfidence from "@/shared/WidgetRateConfidence.vue";
 
 interface Props {
-  task: Task;
+  exercise: TryToRememberExercise;
 }
 
 interface Emits {
@@ -16,24 +16,24 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 /**
- * Gets the prompt from task data.
+ * Gets the prompt from exercise data.
  */
 function getPrompt(): string {
-  return props.task.data.prompt as string;
+  return props.exercise.prompt;
 }
 
 /**
- * Gets the solution from task data.
+ * Gets the solution from exercise data.
  */
 function getSolution(): string {
-  return props.task.data.solution as string;
+  return props.exercise.solution;
 }
 
 /**
- * Gets the linguistic unit from task data.
+ * Gets the linguistic unit from exercise data.
  */
 function getLinguisticUnit() {
-  return props.task.data.linguisticUnit;
+  return props.exercise.linguisticUnit;
 }
 
 /**

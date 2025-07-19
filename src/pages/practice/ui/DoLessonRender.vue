@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type { Lesson } from "../model/Lesson";
-import type { Task } from "../model/Task";
+import type { Exercise } from "../model/Exercise";
 import DoTaskRender from "./DoTaskRender.vue";
 
 interface Props {
   lesson: Lesson | null;
-  task: Task | null;
+  exercise: Exercise | null;
   loading: boolean;
   error: string | null;
 }
 
 interface Emits {
-  (e: 'complete-task', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string): void;
+  (e: 'complete-exercise', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string): void;
   (e: 'start-new-lesson'): void;
 }
 
@@ -19,13 +19,11 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 /**
- * Handles task completion with rating.
+ * Handles exercise completion with rating.
  */
-function handleCompleteTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string) {
-  emit('complete-task', rating, userInput);
+function handleCompleteExercise(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string) {
+  emit('complete-exercise', rating, userInput);
 }
-
-
 
 /**
  * Handles starting a new lesson.
@@ -77,7 +75,7 @@ function getProgressPercentage(): number {
       </div>
 
     <!-- Active Lesson State -->
-    <div v-else-if="lesson && task" class="space-y-6">
+    <div v-else-if="lesson && exercise" class="space-y-6">
       <!-- Progress Bar -->
       <div class="">
           <div class="flex justify-between items-center mb-2">
@@ -95,10 +93,10 @@ function getProgressPercentage(): number {
           ></progress>
       </div>
 
-      <!-- Current Task -->
+      <!-- Current Exercise -->
       <DoTaskRender
-        :task="task"
-        @complete-task="handleCompleteTask"
+        :exercise="exercise"
+        @complete-exercise="handleCompleteExercise"
       />
     </div>
 

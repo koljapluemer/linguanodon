@@ -1,5 +1,5 @@
 import type { WordData } from "@/entities/linguisticUnits";
-import type { Exercise } from "../../../Exercise";
+import type { TryToRememberExercise } from "../../../Exercise";
 import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface";
 
 /**
@@ -12,7 +12,7 @@ import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface
 export async function makeTryToRemember(
   word: WordData, 
   context: ExerciseGenerationContext
-): Promise<Exercise[]> {
+): Promise<TryToRememberExercise[]> {
   // Check eligibility: word must not have been seen before
   const progress = await context.progressService.get(word.language, word.content, 'word');
   if (progress) {
@@ -48,7 +48,7 @@ export async function makeTryToRemember(
 
   const translationsText = displayTranslations.join(', ');
 
-  const exercise: Exercise = {
+  const exercise: TryToRememberExercise = {
     id: `word-level0-${word.language}-${word.content}`,
     type: 'try-to-remember',
     prompt: `Try to remember this word:`,

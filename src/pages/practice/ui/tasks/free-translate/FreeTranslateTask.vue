@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Task } from "../../../model/Task";
+import type { FreeTranslateExercise } from "../../../model/Exercise";
 import WidgetBigText from "@/shared/WidgetBigText.vue";
 import WidgetInstruction from "@/shared/WidgetInstruction.vue";
 import WidgetImportantTextArea from "@/shared/WidgetImportantTextArea.vue";
@@ -8,7 +8,7 @@ import WidgetRateConfidence from "@/shared/WidgetRateConfidence.vue";
 import WidgetRevealButton from "@/shared/WidgetRevealButton.vue";
 
 interface Props {
-  task: Task;
+  exercise: FreeTranslateExercise;
 }
 
 interface Emits {
@@ -22,24 +22,24 @@ const userInput = ref('');
 const isRevealed = ref(false);
 
 /**
- * Gets the prompt from task data.
+ * Gets the prompt from exercise data.
  */
 function getPrompt(): string {
-  return props.task.data.prompt as string;
+  return props.exercise.prompt;
 }
 
 /**
- * Gets the solution from task data.
+ * Gets the solution from exercise data.
  */
 function getSolution(): string {
-  return props.task.data.solution as string;
+  return props.exercise.solution;
 }
 
 /**
- * Gets the linguistic unit from task data.
+ * Gets the linguistic unit from exercise data.
  */
 function getLinguisticUnit() {
-  return props.task.data.linguisticUnit;
+  return props.exercise.linguisticUnit;
 }
 
 /**
@@ -51,9 +51,9 @@ function getLinguisticUnitContent(): string {
 }
 
 /**
- * Handles task completion with rating and user input.
+ * Handles exercise completion with rating and user input.
  */
-function handleCompleteTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
+function handleCompleteExercise(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
   emit('rate', rating, userInput.value);
 }
 </script>
@@ -110,9 +110,9 @@ function handleCompleteTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
 
         <!-- Skip Button -->
         <button
-          v-if="task.canSkip && !isRevealed"
+          v-if="!exercise.isRepeatable && !isRevealed"
           class="btn btn-outline"
-          @click="handleCompleteTask('Impossible')"
+          @click="handleCompleteExercise('Impossible')"
         >
           Skip
         </button>
@@ -121,7 +121,7 @@ function handleCompleteTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
         <WidgetRateConfidence
           v-if="isRevealed"
           prompt="How difficult was this to translate?"
-          @rate="handleCompleteTask"
+          @rate="handleCompleteExercise"
         />
       </div>
 

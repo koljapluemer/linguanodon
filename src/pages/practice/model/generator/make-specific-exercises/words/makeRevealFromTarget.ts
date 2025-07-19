@@ -1,5 +1,5 @@
 import type { WordData } from "@/entities/linguisticUnits";
-import type { Exercise } from "../../../Exercise";
+import type { RevealExercise } from "../../../Exercise";
 import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface";
 
 /**
@@ -11,7 +11,7 @@ import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface
 export async function makeRevealFromTarget(
   word: WordData, 
   context: ExerciseGenerationContext
-): Promise<Exercise[]> {
+): Promise<RevealExercise[]> {
   // Check if this is a target language word
   const isTargetLanguage = context.targetLanguages.includes(word.language);
   if (!isTargetLanguage) {
@@ -28,7 +28,7 @@ export async function makeRevealFromTarget(
 
   const translationsText = nativeTranslations.map(t => t.content).join(', ');
 
-  const exercise: Exercise = {
+  const exercise: RevealExercise = {
     id: `word-level4-${word.language}-${word.content}`,
     type: 'reveal',
     prompt: `What does "${word.content}" mean?`,

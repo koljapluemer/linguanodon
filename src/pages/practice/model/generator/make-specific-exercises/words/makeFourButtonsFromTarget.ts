@@ -1,5 +1,5 @@
 import type { WordData } from "@/entities/linguisticUnits";
-import type { Exercise } from "../../../Exercise";
+import type { ChooseFromFourExercise, AnswerOption } from "../../../Exercise";
 import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface";
 
 /**
@@ -11,7 +11,7 @@ import type { ExerciseGenerationContext } from "../../ExerciseGeneratorInterface
 export async function makeFourButtonsFromTarget(
   word: WordData, 
   context: ExerciseGenerationContext
-): Promise<Exercise[]> {
+): Promise<ChooseFromFourExercise[]> {
   // Check if this is a target language word
   const isTargetLanguage = context.targetLanguages.includes(word.language);
   if (!isTargetLanguage) {
@@ -54,11 +54,25 @@ export async function makeFourButtonsFromTarget(
 
   const correctAnswer = nativeTranslations[0].content;
 
-  const exercise: Exercise = {
+  // Create answer options
+  const answerOptions: [AnswerOption, AnswerOption, AnswerOption, AnswerOption] = [
+    { content: correctAnswer, isCorrect: true },
+    { content: distractorTranslations[0], isCorrect: false },
+    { content: distractorTranslations[1], isCorrect: false },
+    { content: distractorTranslations[2], isCorrect: false }
+  ];
+  
+  // Shuffle the options using Fisher-Yates algorithm
+  for (let i = answerOptions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [answerOptions[i], answerOptions[j]] = [answerOptions[j], answerOptions[i]];
+  }
+
+  const exercise: ChooseFromFourExercise = {
     id: `word-level2-${word.language}-${word.content}`,
-    type: 'reveal', // Using reveal for now since choose-from-two isn't supported yet
+    type: 'choose-from-four',
     prompt: `What does "${word.content}" mean?`,
-    solution: `Correct: ${correctAnswer}\nIncorrect: ${distractorTranslations.join(', ')}`,
+    answerOptions,
     level: 2,
     linguisticUnit: {
       type: 'word',

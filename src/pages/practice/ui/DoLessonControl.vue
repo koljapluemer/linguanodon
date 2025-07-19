@@ -3,7 +3,6 @@ import { ref, onMounted } from "vue";
 import { LessonGenerator } from "../model/LessonGenerator";
 import type { Lesson } from "../model/Lesson";
 import type { Exercise } from "../model/Exercise";
-import type { Task } from "../model/Task";
 import type { LearningEventData } from "@/entities/learning-events";
 import { wordService, sentenceService, progressService } from "@/entities/linguisticUnits";
 import { learningEventService } from "@/entities/learning-events";
@@ -12,7 +11,7 @@ import DoLessonRender from "./DoLessonRender.vue";
 
 // State
 const currentLesson = ref<Lesson | null>(null);
-const currentTask = ref<Task | null>(null);
+const currentExercise = ref<Exercise | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
@@ -34,9 +33,9 @@ async function loadLesson() {
     // Generate lesson
     currentLesson.value = await LessonGenerator.generateLesson(words, sentences, progressData);
     
-    // Create first task
+    // Set first exercise
     if (currentLesson.value.exercises.length > 0) {
-      currentTask.value = createTaskFromExercise(currentLesson.value.exercises[0]);
+      currentExercise.value = currentLesson.value.exercises[0];
     }
     
   } catch (err) {
@@ -47,49 +46,27 @@ async function loadLesson() {
 }
 
 /**
- * Creates a task from an exercise.
+ * Handles exercise completion with rating.
  */
-function createTaskFromExercise(exercise: Exercise): Task {
-  return {
-    id: exercise.id,
-    taskType: exercise.type,
-    data: {
-      prompt: exercise.prompt,
-      solution: exercise.solution,
-      linguisticUnit: exercise.linguisticUnit
-    },
-    canSkip: !exercise.isRepeatable
-  };
-}
-
-/**
- * Handles task completion with rating.
- */
-async function completeTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string) {
-  if (!currentTask.value || !currentLesson.value) return;
-
-  // Update task with rating
-  currentTask.value.userRating = rating;
-  if (userInput) {
-    currentTask.value.userInput = userInput;
-  }
+async function completeExercise(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string) {
+  if (!currentExercise.value || !currentLesson.value) return;
 
   // Save learning event
-  const currentExercise = currentLesson.value.exercises[currentLesson.value.currentExerciseIndex];
+  const exercise = currentExercise.value;
   
   // Extract plain object from Vue Proxy to avoid DataCloneError
   const plainLinguisticUnit = {
-    language: currentExercise.linguisticUnit.language,
-    content: currentExercise.linguisticUnit.content,
-    type: currentExercise.linguisticUnit.type
+    language: exercise.linguisticUnit.language,
+    content: exercise.linguisticUnit.content,
+    type: exercise.linguisticUnit.type
   };
   
   const learningEvent: LearningEventData = {
     userEaseRating: rating,
     timestamp: new Date(),
-    exerciseType: currentExercise.type,
-    taskType: currentTask.value.taskType,
-    level: currentExercise.level,
+    exerciseType: exercise.type,
+    taskType: exercise.type, // Use exercise type as task type since we eliminated Task
+    level: exercise.level,
     linguisticUnit: plainLinguisticUnit,
     userInput: userInput
   };
@@ -97,7 +74,7 @@ async function completeTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', u
   await learningEventService.add(learningEvent);
 
   // Update progress data for the linguistic unit
-  await updateProgressData(currentExercise, rating);
+  await updateProgressData(exercise, rating);
 
   // Move to next exercise or complete lesson
   moveToNextExercise();
@@ -115,16 +92,13 @@ function moveToNextExercise() {
     // Lesson completed
     currentLesson.value.isCompleted = true;
     currentLesson.value.completedAt = new Date();
-    currentTask.value = null;
+    currentExercise.value = null;
   } else {
     // Move to next exercise
     currentLesson.value.currentExerciseIndex = nextIndex;
-    const nextExercise = currentLesson.value.exercises[nextIndex];
-    currentTask.value = createTaskFromExercise(nextExercise);
+    currentExercise.value = currentLesson.value.exercises[nextIndex];
   }
 }
-
-
 
 /**
  * Updates progress data for a linguistic unit after exercise completion.
@@ -178,7 +152,7 @@ async function updateProgressData(exercise: Exercise, rating: 'Impossible' | 'Ha
  */
 function startNewLesson() {
   currentLesson.value = null;
-  currentTask.value = null;
+  currentExercise.value = null;
   loadLesson();
 }
 
@@ -189,10 +163,10 @@ onMounted(loadLesson);
 <template>
   <DoLessonRender
     :lesson="currentLesson"
-    :task="currentTask"
+    :exercise="currentExercise"
     :loading="loading"
     :error="error"
-    @complete-task="completeTask"
+    @complete-exercise="completeExercise"
     @start-new-lesson="startNewLesson"
   />
 </template>
