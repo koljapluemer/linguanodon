@@ -1,5 +1,5 @@
 import type { WordData, SentenceData } from "@/entities/linguisticUnits";
-import type { Exercise } from "./Exercise";
+import type { Exercise } from "../Exercise";
 import type { LinguisticUnitData } from "@/entities/linguisticUnits";
 
 /**

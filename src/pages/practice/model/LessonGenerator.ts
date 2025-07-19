@@ -1,7 +1,7 @@
 import type { Lesson } from "./Lesson";
 import type { Exercise } from "./Exercise";
 import type { WordData, SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
-import { ExerciseGenerator } from "./ExerciseGenerator";
+import { ExerciseGenerator } from "./generator/ExerciseGenerator";
 
 /**
  * Static class for generating complete lessons with exercises.
