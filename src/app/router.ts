@@ -16,6 +16,12 @@ const routes: RouteRecordRaw[] = [
     path: '/debug-learning-events',
     name: 'debug-learning-events',
     component: () => import('@/pages/DebugLearningEvents.vue')
+  },
+  {
+    /** Debug page to view all linguistic unit progress data */
+    path: '/debug-linguistic-unit-progress-data',
+    name: 'debug-linguistic-unit-progress-data',
+    component: () => import('@/pages/DebugLinguisticUnitProgressData.vue')
   }
 ]
 

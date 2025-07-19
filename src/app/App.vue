@@ -10,7 +10,8 @@
       <router-view />
     </main>
     <footer class="p-4 bg-base-200 text-center text-sm flex flex-col gap-2 items-center">
-      <router-link to="/debug-learning-events" class="link link-info">Debug: Learning Events</router-link>
+      <router-link :to="{ name: 'debug-learning-events' }" class="link link-info">Debug: Learning Events</router-link>
+      <router-link :to="{ name: 'debug-linguistic-unit-progress-data' }" class="link link-info">Debug: Linguistic Unit Progress Data</router-link>
     </footer>
   </div>
 </template>
