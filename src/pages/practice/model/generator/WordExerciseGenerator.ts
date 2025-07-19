@@ -9,10 +9,17 @@ import type { ExerciseGeneratorInterface, ExerciseGenerationContext } from "./Ex
  */
 export class WordExerciseGenerator implements ExerciseGeneratorInterface {
   
-  // Level 0: Look At Card
-  generateLevel0(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
-    if (!this.canGenerateLevel0(unit, context)) return null;
+  /**
+   * Generates a level 0 "Look At Card" exercise for words.
+   * Shows the word and its translations, asking the user to remember it.
+   */
+  async generateLevel0(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
+    // Check if this is a target or native language word
+    const isTargetLanguage = context.targetLanguages.includes(unit.language);
+    const isNativeLanguage = context.nativeLanguages.includes(unit.language);
     
+    if (!isTargetLanguage && !isNativeLanguage) return null;
+
     const linguisticUnit: LinguisticUnitData = {
       type: 'word',
       language: unit.language,
@@ -25,7 +32,7 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       ?.map(t => t.content)
       .join(', ') || '';
 
-    return {
+    return [{
       id: `word-level0-${unit.language}-${unit.content}`,
       type: 'reveal',
       prompt: `Try to remember this word: "${unit.content}"`,
@@ -33,20 +40,13 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       level: 0,
       linguisticUnit,
       isRepeatable: false
-    };
+    }];
   }
 
   /**
-   * Checks if a level 0 exercise can be generated for this word.
+   * Generates a level 1 flashcard exercise (target to native, 2 buttons).
    */
-  canGenerateLevel0(_unit: WordData, _context?: ExerciseGenerationContext): boolean {
-    return true; // Always possible, eligibility checked in lesson generation
-  }
-
-  // Level 1: Flashcard from target to native, select from two buttons
-  async generateLevel1(unit: WordData, context?: ExerciseGenerationContext): Promise<Exercise | null> {
-    if (!this.canGenerateLevel1(unit, context)) return null;
-    
+  async generateLevel1(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
     const linguisticUnit: LinguisticUnitData = {
       type: 'word',
       language: unit.language,
@@ -55,18 +55,24 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       notes: unit.notes
     };
 
+    // Check if this is a target language word
+    const isTargetLanguage = context.targetLanguages.includes(unit.language);
+    const isNativeLanguage = context.nativeLanguages.includes(unit.language);
+    
+    if (!isTargetLanguage && !isNativeLanguage) return null;
+
     const correctAnswer = unit.translations?.[0]?.content || '';
     
-    // Get distractors from service if context is provided
+    // Get distractors from service
     let wrongAnswer = '';
-    if (context?.wordService) {
+    if (context.wordService) {
       const distractors = await context.wordService.getRandomInLanguage(unit.language);
       if (distractors && distractors.translations && distractors.translations.length > 0) {
         wrongAnswer = distractors.translations[0].content;
       }
     }
 
-    return {
+    return [{
       id: `word-level1-${unit.language}-${unit.content}`,
       type: 'reveal', // Using reveal for now since choose-from-two isn't supported yet
       prompt: `What does "${unit.content}" mean?`,
@@ -74,17 +80,13 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       level: 1,
       linguisticUnit,
       isRepeatable: true
-    };
+    }];
   }
 
-  canGenerateLevel1(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return !!(unit.translations && unit.translations.length > 0);
-  }
-
-  // Level 2: Flashcard from target to native, select from four buttons
-  generateLevel2(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
-    if (!this.canGenerateLevel2(unit, context)) return null;
-    
+  /**
+   * Generates a level 2 flashcard exercise (target to native, 4 buttons).
+   */
+  async generateLevel2(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
     const linguisticUnit: LinguisticUnitData = {
       type: 'word',
       language: unit.language,
@@ -92,33 +94,38 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       translations: unit.translations,
       notes: unit.notes
     };
+
+    // Check if this is a target language word
+    const isTargetLanguage = context.targetLanguages.includes(unit.language);
+    const isNativeLanguage = context.nativeLanguages.includes(unit.language);
+    
+    if (!isTargetLanguage && !isNativeLanguage) return null;
 
     const correctAnswer = unit.translations?.[0]?.content || '';
-    const wrongAnswers = context?.distractors?.slice(0, 3).map(d => d.translations?.[0]?.content || '') || [];
+    
+    // Get distractors from service
+    let wrongAnswers: string[] = [];
+    if (context.wordService) {
+      const allWords = await context.wordService.getAllInLanguage(unit.language);
+      const otherWords = allWords.filter(w => w.content !== unit.content).slice(0, 3);
+      wrongAnswers = otherWords.map(w => w.translations?.[0]?.content || '').filter(Boolean);
+    }
 
-    return {
+    return [{
       id: `word-level2-${unit.language}-${unit.content}`,
-      type: 'choose-from-two',
+      type: 'reveal', // Using reveal for now since choose-from-two isn't supported yet
       prompt: `What does "${unit.content}" mean?`,
-      solution: `Correct: ${correctAnswer}`,
+      solution: `Correct: ${correctAnswer}\nIncorrect: ${wrongAnswers.join(', ')}`,
       level: 2,
       linguisticUnit,
-      isRepeatable: true,
-      data: {
-        options: [correctAnswer, ...wrongAnswers],
-        correctAnswer
-      }
-    };
+      isRepeatable: true
+    }];
   }
 
-  canGenerateLevel2(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return !!(unit.translations && unit.translations.length > 0);
-  }
-
-  // Level 3: Flashcard from native to target, select from four buttons
-  generateLevel3(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
-    if (!this.canGenerateLevel3(unit, context)) return null;
-    
+  /**
+   * Generates a level 3 flashcard exercise (native to target, 4 buttons).
+   */
+  async generateLevel3(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
     const linguisticUnit: LinguisticUnitData = {
       type: 'word',
       language: unit.language,
@@ -126,33 +133,36 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       translations: unit.translations,
       notes: unit.notes
     };
+
+    // Check if this is a native language word
+    const isNativeLanguage = context.nativeLanguages.includes(unit.language);
+    if (!isNativeLanguage) return null;
 
     const correctAnswer = unit.content;
-    const wrongAnswers = context?.distractors?.slice(0, 3).map(d => d.content) || [];
+    
+    // Get distractors from service
+    let wrongAnswers: string[] = [];
+    if (context.wordService) {
+      const allWords = await context.wordService.getAllInLanguage(unit.language);
+      const otherWords = allWords.filter(w => w.content !== unit.content).slice(0, 3);
+      wrongAnswers = otherWords.map(w => w.content).filter(Boolean);
+    }
 
-    return {
+    return [{
       id: `word-level3-${unit.language}-${unit.content}`,
-      type: 'choose-from-two',
+      type: 'reveal', // Using reveal for now since choose-from-two isn't supported yet
       prompt: `What is the word for "${unit.translations?.[0]?.content}"?`,
-      solution: `Correct: ${correctAnswer}`,
+      solution: `Correct: ${correctAnswer}\nIncorrect: ${wrongAnswers.join(', ')}`,
       level: 3,
       linguisticUnit,
-      isRepeatable: true,
-      data: {
-        options: [correctAnswer, ...wrongAnswers],
-        correctAnswer
-      }
-    };
+      isRepeatable: true
+    }];
   }
 
-  canGenerateLevel3(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return !!(unit.translations && unit.translations.length > 0);
-  }
-
-  // Level 4: Flashcard target to native
-  generateLevel4(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
-    if (!this.canGenerateLevel4(unit, context)) return null;
-    
+  /**
+   * Generates a level 4 flashcard exercise (target to native).
+   */
+  async generateLevel4(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
     const linguisticUnit: LinguisticUnitData = {
       type: 'word',
       language: unit.language,
@@ -160,12 +170,16 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       translations: unit.translations,
       notes: unit.notes
     };
+
+    // Check if this is a target language word
+    const isTargetLanguage = context.targetLanguages.includes(unit.language);
+    if (!isTargetLanguage) return null;
 
     const translations = unit.translations
       ?.map(t => t.content)
       .join(', ') || '';
 
-    return {
+    return [{
       id: `word-level4-${unit.language}-${unit.content}`,
       type: 'reveal',
       prompt: `What does "${unit.content}" mean?`,
@@ -173,17 +187,13 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       level: 4,
       linguisticUnit,
       isRepeatable: true
-    };
+    }];
   }
 
-  canGenerateLevel4(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return !!(unit.translations && unit.translations.length > 0);
-  }
-
-  // Level 5: Flashcard native to target
-  generateLevel5(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
-    if (!this.canGenerateLevel5(unit, context)) return null;
-    
+  /**
+   * Generates a level 5 flashcard exercise (native to target).
+   */
+  async generateLevel5(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
     const linguisticUnit: LinguisticUnitData = {
       type: 'word',
       language: unit.language,
@@ -192,7 +202,11 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       notes: unit.notes
     };
 
-    return {
+    // Check if this is a native language word
+    const isNativeLanguage = context.nativeLanguages.includes(unit.language);
+    if (!isNativeLanguage) return null;
+
+    return [{
       id: `word-level5-${unit.language}-${unit.content}`,
       type: 'reveal',
       prompt: `What is the word for "${unit.translations?.[0]?.content}"?`,
@@ -200,43 +214,39 @@ export class WordExerciseGenerator implements ExerciseGeneratorInterface {
       level: 5,
       linguisticUnit,
       isRepeatable: true
-    };
-  }
-
-  canGenerateLevel5(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return !!(unit.translations && unit.translations.length > 0);
+    }];
   }
 
   // Levels 6-9: Not implemented yet
-  generateLevel6(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
+  /**
+   * Generates a level 6 exercise (not implemented).
+   */
+  async generateLevel6(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
+    console.debug(`Generating exercises for word ${unit.content}, level 6, target languages: ${context.targetLanguages.join(', ')}`);
     return null;
   }
 
-  canGenerateLevel6(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return false;
-  }
-
-  generateLevel7(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
+  /**
+   * Generates a level 7 exercise (not implemented).
+   */
+  async generateLevel7(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
+    console.debug(`Generating exercises for word ${unit.content}, level 7, target languages: ${context.targetLanguages.join(', ')}`);
     return null;
   }
 
-  canGenerateLevel7(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return false;
-  }
-
-  generateLevel8(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
+  /**
+   * Generates a level 8 exercise (not implemented).
+   */
+  async generateLevel8(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
+    console.debug(`Generating exercises for word ${unit.content}, level 8, target languages: ${context.targetLanguages.join(', ')}`);
     return null;
   }
 
-  canGenerateLevel8(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return false;
-  }
-
-  generateLevel9(unit: WordData, context?: ExerciseGenerationContext): Exercise | null {
+  /**
+   * Generates a level 9 exercise (not implemented).
+   */
+  async generateLevel9(unit: WordData, context: ExerciseGenerationContext): Promise<Exercise[] | null> {
+    console.debug(`Generating exercises for word ${unit.content}, level 9, target languages: ${context.targetLanguages.join(', ')}`);
     return null;
-  }
-
-  canGenerateLevel9(unit: WordData, context?: ExerciseGenerationContext): boolean {
-    return false;
   }
 }

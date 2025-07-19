@@ -84,56 +84,148 @@ const progressRepo = new LinguisticUnitProgressDexieRepository();
 // Word service functions - implements WordServiceContract
 export const wordService: WordServiceContract = {
   // Basic CRUD operations
+  /**
+   * Retrieves all words from the repository.
+   */
   getAll: () => wordRepo.getAll(),
+  /**
+   * Retrieves a word by its language and content.
+   */
   getById: async (language: string, content: string) => {
     const result = await wordRepo.getById(language, content);
     return result || null;
   },
+  /**
+   * Adds a new word to the repository.
+   */
   add: (word: WordData) => wordRepo.add(word),
+  /**
+   * Updates an existing word in the repository.
+   */
   update: (word: WordData) => wordRepo.update(word),
+  /**
+   * Deletes a word from the repository.
+   */
   delete: (language: string, content: string) => wordRepo.delete(language, content),
   
-  // Pagination - TODO: implement in repository
+  // Pagination
+  /**
+   * Retrieves words with pagination support.
+   */
   getAllPaginated: async (page: number, pageSize: number) => {
     const all = await wordRepo.getAll();
     const start = page * pageSize;
     return all.slice(start, start + pageSize);
   },
   
-  // Due/eligibility operations - TODO: implement in repository
+  // Due/eligibility operations
+  /**
+   * Retrieves all words that are currently due for review.
+   */
   getAllDue: async () => {
-    // For now, return all words. This should be implemented with FSRS logic
-    return wordRepo.getAll();
+    const all = await wordRepo.getAll();
+    const dueWords: WordData[] = [];
+    
+    for (const word of all) {
+      const progress = await progressRepo.get(word.language, word.content, 'word');
+      if (!progress) {
+        // New word, always due
+        dueWords.push(word);
+        continue;
+      }
+      
+      // Check if any level is due
+      for (const [, card] of Object.entries(progress.cards)) {
+        if (card && card.due && new Date(card.due) <= new Date()) {
+          dueWords.push(word);
+          break;
+        }
+      }
+    }
+    
+    return dueWords;
   },
+  /**
+   * Checks if a word is due for review.
+   */
   isDue: async (language: string, content: string) => {
-    // TODO: implement FSRS due check
-    return true;
+    const progress = await progressRepo.get(language, content, 'word');
+    if (!progress) return true; // New word is always due
+    
+    // Check if any level is due
+    for (const card of Object.values(progress.cards)) {
+      if (card && card.due && new Date(card.due) <= new Date()) {
+        return true;
+      }
+    }
+    return false;
   },
+  /**
+   * Checks if a word is due for review at a specific level.
+   */
   isDueAtLevel: async (language: string, content: string, level: number) => {
-    // TODO: implement FSRS due check for specific level
-    return true;
+    const progress = await progressRepo.get(language, content, 'word');
+    if (!progress) return true; // New word is always due
+    
+    const card = progress.cards[level];
+    if (!card) return true; // Level not practiced yet
+    
+    return card.due && new Date(card.due) <= new Date();
   },
+  /**
+   * Calculates the average completion rate for specified levels.
+   */
   getAverageCompletionRate: async (language: string, content: string, levels: number[]) => {
-    // TODO: implement completion rate calculation
-    return 0.5;
+    const progress = await progressRepo.get(language, content, 'word');
+    if (!progress) return 0;
+    
+    let totalRate = 0;
+    let validLevels = 0;
+    
+    for (const level of levels) {
+      const card = progress.cards[level];
+      if (card) {
+        // Calculate completion rate based on card state
+        // For now, use a simple heuristic: newer cards have lower completion
+        const daysSinceCreation = (Date.now() - new Date(card.due || Date.now()).getTime()) / (1000 * 60 * 60 * 24);
+        const rate = Math.max(0, Math.min(1, 1 - (daysSinceCreation / 30))); // Decay over 30 days
+        totalRate += rate;
+        validLevels++;
+      }
+    }
+    
+    return validLevels > 0 ? totalRate / validLevels : 0;
   },
   
-  // Language-specific operations - TODO: implement in repository
+  // Language-specific operations
+  /**
+   * Retrieves all words in a specific language.
+   */
   getAllInLanguage: async (languageCode: string) => {
     const all = await wordRepo.getAll();
     return all.filter(word => word.language === languageCode);
   },
+  /**
+   * Retrieves a random word in a specific language.
+   */
   getRandomInLanguage: async (languageCode: string) => {
     const all = await wordRepo.getAll();
     const filtered = all.filter(word => word.language === languageCode);
     return filtered.length > 0 ? filtered[Math.floor(Math.random() * filtered.length)] : null;
   },
+  /**
+   * Retrieves a random due word in a specific language.
+   */
   getRandomDueInLanguage: async (languageCode: string) => {
-    // For now, same as getRandomInLanguage
-    return wordService.getRandomInLanguage(languageCode);
+    const dueWords = await wordService.getAllDue();
+    const filtered = dueWords.filter(word => word.language === languageCode);
+    return filtered.length > 0 ? filtered[Math.floor(Math.random() * filtered.length)] : null;
   },
   
-  // Translation operations - TODO: implement in repository
+  // Translation operations
+  /**
+   * Retrieves translations of a word in specified languages.
+   */
   getTranslationsInLanguages: async (language: string, content: string, languageCodes: string[]) => {
     const word = await wordRepo.getById(language, content);
     if (!word || !word.translations) return [];
@@ -157,53 +249,149 @@ export const wordService: WordServiceContract = {
 // Sentence service functions - implements SentenceServiceContract
 export const sentenceService: SentenceServiceContract = {
   // Basic CRUD operations
+  /**
+   * Retrieves all sentences from the repository.
+   */
   getAll: () => sentenceRepo.getAll(),
+  /**
+   * Retrieves a sentence by its language and content.
+   */
   getById: async (language: string, content: string) => {
     const result = await sentenceRepo.getById(language, content);
     return result || null;
   },
+  /**
+   * Adds a new sentence to the repository.
+   */
   add: (sentence: SentenceData) => sentenceRepo.add(sentence),
+  /**
+   * Updates an existing sentence in the repository.
+   */
   update: (sentence: SentenceData) => sentenceRepo.update(sentence),
+  /**
+   * Deletes a sentence from the repository.
+   */
   delete: (language: string, content: string) => sentenceRepo.delete(language, content),
   
-  // Pagination - TODO: implement in repository
+  // Pagination
+  /**
+   * Retrieves sentences with pagination support.
+   */
   getAllPaginated: async (page: number, pageSize: number) => {
     const all = await sentenceRepo.getAll();
     const start = page * pageSize;
     return all.slice(start, start + pageSize);
   },
   
-  // Due/eligibility operations - TODO: implement in repository
+  // Due/eligibility operations
+  /**
+   * Retrieves all sentences that are currently due for review.
+   */
   getAllDue: async () => {
-    // For now, return all sentences. This should be implemented with FSRS logic
-    return sentenceRepo.getAll();
-  },
-  getHighestCompletionRateUnseen: async () => {
-    // TODO: implement logic to find sentence with highest completion rate of associated words
     const all = await sentenceRepo.getAll();
-    return all.length > 0 ? all[0] : null;
+    const dueSentences: SentenceData[] = [];
+    
+    for (const sentence of all) {
+      const progress = await progressRepo.get(sentence.language, sentence.content, 'sentence');
+      if (!progress) {
+        // New sentence, always due
+        dueSentences.push(sentence);
+        continue;
+      }
+      
+      // Check if any level is due
+      for (const [, card] of Object.entries(progress.cards)) {
+        if (card && card.due && new Date(card.due) <= new Date()) {
+          dueSentences.push(sentence);
+          break;
+        }
+      }
+    }
+    
+    return dueSentences;
   },
+  /**
+   * Finds the sentence with highest completion rate of associated words that hasn't been seen.
+   */
+  getHighestCompletionRateUnseen: async () => {
+    const all = await sentenceRepo.getAll();
+    let bestSentence: SentenceData | null = null;
+    let bestRate = 0;
+    
+    for (const sentence of all) {
+      const progress = await progressRepo.get(sentence.language, sentence.content, 'sentence');
+      if (progress) continue; // Skip seen sentences
+      
+      // Calculate average completion rate of associated words
+      let totalRate = 0;
+      let wordCount = 0;
+      
+      for (const wordRef of sentence.containsWords || []) {
+        const wordProgress = await progressRepo.get(wordRef.language, wordRef.content, 'word');
+        if (wordProgress) {
+          const rate = await wordService.getAverageCompletionRate(wordRef.language, wordRef.content, [0, 1, 2, 3, 4, 5]);
+          totalRate += rate;
+          wordCount++;
+        }
+      }
+      
+      const avgRate = wordCount > 0 ? totalRate / wordCount : 0;
+      if (avgRate > bestRate) {
+        bestRate = avgRate;
+        bestSentence = sentence;
+      }
+    }
+    
+    return bestSentence;
+  },
+  /**
+   * Calculates the average completion rate for associated words.
+   */
   getAverageCompletionRate: async (language: string, content: string) => {
-    // TODO: implement completion rate calculation for associated words
-    return 0.5;
+    const sentence = await sentenceRepo.getById(language, content);
+    if (!sentence) return 0;
+    
+    let totalRate = 0;
+    let wordCount = 0;
+    
+    for (const wordRef of sentence.containsWords || []) {
+      const rate = await wordService.getAverageCompletionRate(wordRef.language, wordRef.content, [0, 1, 2, 3, 4, 5]);
+      totalRate += rate;
+      wordCount++;
+    }
+    
+    return wordCount > 0 ? totalRate / wordCount : 0;
   },
   
-  // Language-specific operations - TODO: implement in repository
+  // Language-specific operations
+  /**
+   * Retrieves all sentences in a specific language.
+   */
   getAllInLanguage: async (languageCode: string) => {
     const all = await sentenceRepo.getAll();
     return all.filter(sentence => sentence.language === languageCode);
   },
+  /**
+   * Retrieves a random sentence in a specific language.
+   */
   getRandomInLanguage: async (languageCode: string) => {
     const all = await sentenceRepo.getAll();
     const filtered = all.filter(sentence => sentence.language === languageCode);
     return filtered.length > 0 ? filtered[Math.floor(Math.random() * filtered.length)] : null;
   },
+  /**
+   * Retrieves a random due sentence in a specific language.
+   */
   getRandomDueInLanguage: async (languageCode: string) => {
-    // For now, same as getRandomInLanguage
-    return sentenceService.getRandomInLanguage(languageCode);
+    const dueSentences = await sentenceService.getAllDue();
+    const filtered = dueSentences.filter(sentence => sentence.language === languageCode);
+    return filtered.length > 0 ? filtered[Math.floor(Math.random() * filtered.length)] : null;
   },
   
-  // Translation operations - TODO: implement in repository
+  // Translation operations
+  /**
+   * Retrieves translations of a sentence in specified languages.
+   */
   getTranslationsInLanguages: async (language: string, content: string, languageCodes: string[]) => {
     const sentence = await sentenceRepo.getById(language, content);
     if (!sentence || !sentence.translations) return [];
@@ -226,15 +414,30 @@ export const sentenceService: SentenceServiceContract = {
 // Progress service functions - implements ProgressServiceContract
 export const progressService: ProgressServiceContract = {
   // Basic operations
+  /**
+   * Retrieves progress data for a linguistic unit.
+   */
   get: async (language: string, content: string, type: 'word' | 'sentence') => {
     const result = await progressRepo.get(language, content, type);
     return result || null;
   },
+  /**
+   * Updates or inserts progress data for a linguistic unit.
+   */
   upsert: (progress: LinguisticUnitProgressData) => progressRepo.upsert(progress),
+  /**
+   * Retrieves all progress data.
+   */
   getAll: () => progressRepo.getAll(),
+  /**
+   * Clears all progress data.
+   */
   clear: () => progressRepo.clear(),
   
-  // Recent operations - TODO: implement in repository
+  // Recent operations
+  /**
+   * Retrieves the most recent progress data entries.
+   */
   getRecent: async (limit = 100) => {
     const all = await progressRepo.getAll();
     return all.slice(-limit);

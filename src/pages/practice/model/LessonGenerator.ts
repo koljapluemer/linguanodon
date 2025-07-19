@@ -1,7 +1,8 @@
 import type { Lesson } from "./Lesson";
 import type { Exercise } from "./Exercise";
 import type { WordData, SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
-import { ExerciseGenerator } from "./generator/ExerciseGenerator";
+import type { ExerciseGenerationContext } from "./generator/ExerciseGeneratorInterface";
+import { ExerciseGeneratorFactory } from "./generator/ExerciseGeneratorFactory";
 
 /**
  * Static class for generating complete lessons with exercises.
@@ -15,26 +16,28 @@ export class LessonGenerator {
    * 3. Fill up with additional word exercises
    * 4. Add sentence exercise at the end (if eligible)
    */
-  static generateLesson(
+  static async generateLesson(
     words: WordData[],
     sentences: SentenceData[],
     progressData: LinguisticUnitProgressData[]
-  ): Lesson {
+  ): Promise<Lesson> {
     const lessonSize = this.getRandomLessonSize();
     let exercises: Exercise[] = [];
 
     // Step 1: Try to find a special sentence exercise (but don't add it yet)
     const specialSentence = this.findSpecialSentence(sentences, progressData);
-    const sentenceExercise = specialSentence && ExerciseGenerator.canGenerateSentenceLevel0(specialSentence) 
-      ? ExerciseGenerator.generateSentenceLevel0(specialSentence)
+    const context = ExerciseGeneratorFactory.createContext();
+    const sentenceExercise = specialSentence 
+      ? await ExerciseGeneratorFactory.generateSentenceExercise(specialSentence, 0, context)
       : null;
 
     // Step 2: Generate word exercises for sentence words
     if (specialSentence) {
-      const sentenceWordExercises = this.generateWordExercisesForSentence(
+      const sentenceWordExercises = await this.generateWordExercisesForSentence(
         specialSentence, 
         words, 
-        progressData
+        progressData,
+        context
       );
       exercises.push(...sentenceWordExercises);
     }
@@ -45,10 +48,11 @@ export class LessonGenerator {
     const remainingSlots = targetWordExercises - exercises.length;
     
     if (remainingSlots > 0) {
-      const additionalExercises = this.generateAdditionalExercises(
+      const additionalExercises = await this.generateAdditionalExercises(
         words, 
         progressData, 
-        remainingSlots
+        remainingSlots,
+        context
       );
       exercises.push(...additionalExercises);
     }
@@ -113,11 +117,12 @@ export class LessonGenerator {
   /**
    * Generates word exercises for words contained in a sentence.
    */
-  private static generateWordExercisesForSentence(
+  private static async generateWordExercisesForSentence(
     sentence: SentenceData,
     words: WordData[],
-    progressData: LinguisticUnitProgressData[]
-  ): Exercise[] {
+    progressData: LinguisticUnitProgressData[],
+    context: ExerciseGenerationContext
+  ): Promise<Exercise[]> {
     const exercises: Exercise[] = [];
     
     // Find words that appear in this sentence
@@ -127,7 +132,7 @@ export class LessonGenerator {
 
     // Generate one exercise per sentence word
     for (const word of sentenceWords) {
-      const exercise = this.generateExerciseForWord(word, words, progressData);
+      const exercise = await this.generateExerciseForWord(word, words, progressData, context);
       if (exercise) {
         exercises.push(exercise);
       }
@@ -139,11 +144,12 @@ export class LessonGenerator {
   /**
    * Generates an appropriate exercise for a word based on its progress.
    */
-  private static generateExerciseForWord(
+  private static async generateExerciseForWord(
     word: WordData,
     allWords: WordData[],
-    progressData: LinguisticUnitProgressData[]
-  ): Exercise | null {
+    progressData: LinguisticUnitProgressData[],
+    context: ExerciseGenerationContext
+  ): Promise<Exercise | null> {
     // Find word progress
     const wordProgress = progressData.find(p => 
       p.language === word.language && 
@@ -163,24 +169,24 @@ export class LessonGenerator {
     }
     
     // Generate exercise based on target level
-    if (targetLevel === 0 && ExerciseGenerator.canGenerateWordLevel0()) {
-      return ExerciseGenerator.generateWordLevel0(word);
+    if (targetLevel === 0) {
+      const exercise = await ExerciseGeneratorFactory.generateWordExercise(word, 0, context);
+      if (exercise) return exercise;
     }
     
-    if (targetLevel === 1 && ExerciseGenerator.canGenerateWordLevel1(word)) {
-      const distractors = this.getDistractorWords(word, allWords, 1);
-      return ExerciseGenerator.generateWordLevel1(word, distractors);
+    if (targetLevel === 1) {
+      const exercise = await ExerciseGeneratorFactory.generateWordExercise(word, 1, context);
+      if (exercise) return exercise;
     }
     
-    if (targetLevel === 2 && ExerciseGenerator.canGenerateWordLevel2(word)) {
-      const distractors = this.getDistractorWords(word, allWords, 3);
-      return ExerciseGenerator.generateWordLevel2(word, distractors);
+    if (targetLevel === 2) {
+      const exercise = await ExerciseGeneratorFactory.generateWordExercise(word, 2, context);
+      if (exercise) return exercise;
     }
 
     // Fallback to level 0 if higher levels can't be generated
-    if (ExerciseGenerator.canGenerateWordLevel0()) {
-      return ExerciseGenerator.generateWordLevel0(word);
-    }
+    const fallbackExercise = await ExerciseGeneratorFactory.generateWordExercise(word, 0, context);
+    if (fallbackExercise) return fallbackExercise;
 
     return null;
   }
@@ -205,11 +211,12 @@ export class LessonGenerator {
   /**
    * Generates additional exercises to fill up the lesson.
    */
-  private static generateAdditionalExercises(
+  private static async generateAdditionalExercises(
     words: WordData[],
     progressData: LinguisticUnitProgressData[],
-    count: number
-  ): Exercise[] {
+    count: number,
+    context: ExerciseGenerationContext
+  ): Promise<Exercise[]> {
     const exercises: Exercise[] = [];
     const availableWords = [...words];
 
@@ -217,7 +224,7 @@ export class LessonGenerator {
       const randomIndex = Math.floor(Math.random() * availableWords.length);
       const word = availableWords[randomIndex];
       
-      const exercise = this.generateExerciseForWord(word, words, progressData);
+      const exercise = await this.generateExerciseForWord(word, words, progressData, context);
       if (exercise) {
         exercises.push(exercise);
       }
