@@ -9,7 +9,19 @@ const routes: RouteRecordRaw[] = [
     /** Practice page for language learning exercises */
     path: '/practice',
     name: 'practice',
-    component: () => import('@/pages/PracticePage.vue')
+    component: () => import('@/pages/PagePractice.vue')
+  },
+  {
+    /** List all words with progress data */
+    path: '/words',
+    name: 'words',
+    component: () => import('@/pages/PageListWords.vue')
+  },
+  {
+    /** List all sentences with progress data */
+    path: '/sentences',
+    name: 'sentences',
+    component: () => import('@/pages/PageListSentences.vue')
   },
   {
     /** Debug page to view all learning events */
