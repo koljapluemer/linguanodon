@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { DoLessonControl } from "@/widgets/do-lesson";
+import DoLessonControl from './ui/DoLessonControl.vue';
+
 </script>
 
 <template>
