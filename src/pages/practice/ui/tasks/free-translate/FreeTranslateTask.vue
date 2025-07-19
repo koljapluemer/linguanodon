@@ -59,12 +59,13 @@ function handleCompleteExercise(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy
 </script>
 
 <template>
+  <!-- Task Instruction -->
+  <WidgetInstruction>
+    {{ getPrompt() }}
+  </WidgetInstruction>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <!-- Task Instruction -->
-      <WidgetInstruction>
-        {{ getPrompt() }}
-      </WidgetInstruction>
+
 
       <!-- Front (Linguistic Unit Content) -->
       <div class="mb-4 text-center">
@@ -72,13 +73,10 @@ function handleCompleteExercise(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy
           {{ getLinguisticUnitContent() }}
         </WidgetBigText>
       </div>
-      
+
       <!-- Translation Input -->
       <div v-if="!isRevealed" class="mb-4">
-        <WidgetImportantTextArea
-          v-model="userInput"
-          placeholder="Type your translation here..."
-        />
+        <WidgetImportantTextArea v-model="userInput" placeholder="Type your translation here..." />
       </div>
 
       <!-- Solution (when revealed) -->
@@ -91,7 +89,7 @@ function handleCompleteExercise(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy
           <WidgetBigText :is-extra-big="false">
             {{ getSolution() }}
           </WidgetBigText>
-          
+
           <!-- User's Answer (if provided) -->
           <div v-if="userInput" class="mt-4 p-3 bg-warning/10 rounded-lg border border-warning/20">
             <p class="text-sm font-medium text-warning-content">Your Answer:</p>
@@ -99,33 +97,14 @@ function handleCompleteExercise(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy
           </div>
         </div>
       </div>
-
-      <!-- Action Buttons -->
-      <div class="card-actions justify-between">
-        <!-- Reveal Button -->
-        <WidgetRevealButton
-          v-if="!isRevealed"
-          @click="isRevealed = true"
-        />
-
-        <!-- Skip Button -->
-        <button
-          v-if="!exercise.isRepeatable && !isRevealed"
-          class="btn btn-outline"
-          @click="handleCompleteExercise('Impossible')"
-        >
-          Skip
-        </button>
-
-        <!-- Rating (when revealed) -->
-        <WidgetRateConfidence
-          v-if="isRevealed"
-          prompt="How difficult was this to translate?"
-          @rate="handleCompleteExercise"
-        />
-      </div>
-
-
     </div>
   </div>
-</template> 
+
+  <!-- Reveal Button -->
+  <WidgetRevealButton v-if="!isRevealed" @click="isRevealed = true" />
+
+  <!-- Rating (when revealed) -->
+  <WidgetRateConfidence v-if="isRevealed" prompt="How difficult was this to translate?"
+    @rate="handleCompleteExercise" />
+
+</template>
