@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { inject } from "vue";
-import { linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
 import type { LinguisticUnitProgressData } from "@/entities/linguisticUnits";
-
-const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
-if (!linguisticUnitProgressRepo) throw new Error("LinguisticUnitProgressRepository not provided!");
+import { progressService } from "@/entities/linguisticUnits";
 
 const progressData = ref<LinguisticUnitProgressData[]>([]);
 const loading = ref(true);
@@ -15,7 +11,7 @@ const loading = ref(true);
  */
 async function loadProgressData() {
   loading.value = true;
-  progressData.value = await linguisticUnitProgressRepo!.getAll();
+  progressData.value = await progressService.getAll();
   loading.value = false;
 }
 
@@ -23,7 +19,7 @@ async function loadProgressData() {
  * Clear all linguistic unit progress data from the repository and reload.
  */
 async function clearProgressData() {
-  await linguisticUnitProgressRepo!.clear();
+  await progressService.clear();
   await loadProgressData();
 }
 

@@ -1,22 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, inject, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import type { WordData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
-import type { LearningEventData } from "@/entities/learning-events/LearningEventData";
-import { 
-  wordRepoKey, 
-  linguisticUnitProgressRepoKey,
-  learningEventRepoKey 
-} from "@/shared/injectionKeys";
-
-// Inject repositories
-const wordRepo = inject(wordRepoKey);
-const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
-const learningEventRepo = inject(learningEventRepoKey);
-
-if (!wordRepo || !linguisticUnitProgressRepo || !learningEventRepo) {
-  throw new Error("Required repositories not provided!");
-}
+import type { LearningEventData } from "@/entities/learning-events";
+import { wordService, progressService } from "@/entities/linguisticUnits";
+import { learningEventService } from "@/entities/learning-events";
 
 const route = useRoute();
 
@@ -40,7 +28,7 @@ async function loadData() {
   
   try {
     // Get the specific word
-    const wordData = await wordRepo!.getById(wordLanguage.value, wordContent.value);
+    const wordData = await wordService.getById(wordLanguage.value, wordContent.value);
     if (!wordData) {
       error.value = "Word not found";
       return;
@@ -48,7 +36,7 @@ async function loadData() {
     word.value = wordData;
 
     // Get progress data for this word
-    const progress = await linguisticUnitProgressRepo!.get(
+    const progress = await progressService.get(
       wordLanguage.value, 
       wordContent.value, 
       'word'
@@ -56,8 +44,8 @@ async function loadData() {
     progressData.value = progress || null;
 
     // Get learning events for this word
-    const allEvents = await learningEventRepo!.getAll();
-    const events = allEvents.filter(event => 
+    const allEvents = await learningEventService.getAll();
+    const events = allEvents.filter((event: LearningEventData) => 
       event.linguisticUnit.language === wordLanguage.value && 
       event.linguisticUnit.content === wordContent.value &&
       event.linguisticUnit.type === 'word'

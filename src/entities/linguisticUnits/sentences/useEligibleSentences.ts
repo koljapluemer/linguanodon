@@ -1,18 +1,10 @@
-import { inject } from "vue";
-import { sentenceRepoKey, linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
-import type { SentenceData } from "@/entities/linguisticUnits/sentences/SentenceData";
-import type { LinguisticUnitProgressData } from "@/entities/linguisticUnits/progress/LinguisticUnitProgressData";
+import type { SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
+import { sentenceService, progressService } from "@/entities/linguisticUnits";
 
 /**
  * Composable for finding eligible sentences for free translation exercises.
  */
 export function useEligibleSentences() {
-  const sentenceRepo = inject(sentenceRepoKey);
-  const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
-
-  if (!sentenceRepo || !linguisticUnitProgressRepo) {
-    throw new Error("Required repositories not provided!");
-  }
 
   /**
    * Finds sentences that are eligible for free translation exercises.
@@ -21,14 +13,14 @@ export function useEligibleSentences() {
    * - At least 60% of its contained words are mastered (levels 0-5 not due)
    */
   async function findEligibleSentences(): Promise<SentenceData[]> {
-    const sentences = await sentenceRepo!.getAll();
-    const progressData = await linguisticUnitProgressRepo!.getAll();
+    const sentences = await sentenceService.getAll();
+    const progressData = await progressService.getAll();
     
     const eligibleSentences: SentenceData[] = [];
 
     for (const sentence of sentences) {
       // Check if sentence has been seen before
-      const sentenceProgress = progressData.find(p => 
+      const sentenceProgress = progressData.find((p: LinguisticUnitProgressData) => 
         p.language === sentence.language && 
         p.content === sentence.content && 
         p.type === 'sentence'
@@ -60,14 +52,14 @@ export function useEligibleSentences() {
    * Finds sentences that are close to being eligible (for future lessons).
    */
   async function findNearEligibleSentences(): Promise<SentenceData[]> {
-    const sentences = await sentenceRepo!.getAll();
-    const progressData = await linguisticUnitProgressRepo!.getAll();
+    const sentences = await sentenceService.getAll();
+    const progressData = await progressService.getAll();
     
     const nearEligible: SentenceData[] = [];
 
     for (const sentence of sentences) {
       // Check if sentence has been seen before
-      const sentenceProgress = progressData.find(p => 
+      const sentenceProgress = progressData.find((p: LinguisticUnitProgressData) => 
         p.language === sentence.language && 
         p.content === sentence.content && 
         p.type === 'sentence'

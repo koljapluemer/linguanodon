@@ -1,27 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted } from "vue";
 import { LessonGenerator } from "../model/LessonGenerator";
 import type { Lesson } from "../model/Lesson";
 import type { Exercise } from "../model/Exercise";
 import type { Task } from "../model/Task";
-import type { LearningEventData } from "@/entities/learning-events/LearningEventData";
-import { 
-  wordRepoKey, 
-  sentenceRepoKey, 
-  linguisticUnitProgressRepoKey,
-  learningEventRepoKey 
-} from "@/shared/injectionKeys";
+import type { LearningEventData } from "@/entities/learning-events";
+import { wordService, sentenceService, progressService } from "@/entities/linguisticUnits";
+import { learningEventService } from "@/entities/learning-events";
 import DoLessonRender from "./DoLessonRender.vue";
-
-// Inject repositories
-const wordRepo = inject(wordRepoKey);
-const sentenceRepo = inject(sentenceRepoKey);
-const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
-const learningEventRepo = inject(learningEventRepoKey);
-
-if (!wordRepo || !sentenceRepo || !linguisticUnitProgressRepo || !learningEventRepo) {
-  throw new Error("Required repositories not provided!");
-}
 
 // State
 const currentLesson = ref<Lesson | null>(null);
@@ -39,9 +25,9 @@ async function loadLesson() {
   try {
     // Load all data
     const [words, sentences, progressData] = await Promise.all([
-      wordRepo!.getAll(),
-      sentenceRepo!.getAll(),
-      linguisticUnitProgressRepo!.getAll()
+      wordService.getAll(),
+      sentenceService.getAll(),
+      progressService.getAll()
     ]);
 
     // Generate lesson
@@ -108,7 +94,7 @@ async function completeTask(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', u
     userInput: userInput
   };
 
-  await learningEventRepo!.add(learningEvent);
+  await learningEventService.add(learningEvent);
 
   // Move to next exercise or complete lesson
   moveToNextExercise();

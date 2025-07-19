@@ -1,32 +1,25 @@
-import { inject } from "vue";
-import { wordRepoKey, linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
-import type { WordData } from "@/entities/linguisticUnits/words/WordData";
+import type { WordData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
 import { fsrs } from "ts-fsrs";
+import { wordService, progressService } from "@/entities/linguisticUnits";
 
 /**
  * Composable for finding due words based on FSRS progress.
  */
 export function useDueWords() {
-  const wordRepo = inject(wordRepoKey);
-  const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
-
-  if (!wordRepo || !linguisticUnitProgressRepo) {
-    throw new Error("Required repositories not provided!");
-  }
 
   /**
    * Finds words that are due for practice at a specific level.
    */
   async function findDueWords(level: number): Promise<WordData[]> {
-    const words = await wordRepo!.getAll();
-    const progressData = await linguisticUnitProgressRepo!.getAll();
+    const words = await wordService.getAll();
+    const progressData = await progressService.getAll();
     
     const dueWords: WordData[] = [];
     const now = new Date();
     const scheduler = fsrs();
 
     for (const word of words) {
-      const progress = progressData.find(p => 
+      const progress = progressData.find((p: LinguisticUnitProgressData) => 
         p.language === word.language && 
         p.content === word.content && 
         p.type === 'word'
@@ -61,9 +54,9 @@ export function useDueWords() {
    * Finds words that can generate exercises for a specific level.
    */
   async function findEligibleWords(level: number): Promise<WordData[]> {
-    const words = await wordRepo!.getAll();
+    const words = await wordService.getAll();
     
-    return words.filter(word => {
+    return words.filter((word: WordData) => {
       // Check if word has translations for the level
       if (!word.translations || word.translations.length === 0) {
         return false;

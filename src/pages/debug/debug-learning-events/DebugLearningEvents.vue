@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { inject } from "vue";
-import { learningEventRepoKey } from "@/shared/injectionKeys";
-import type { LearningEventData } from "@/entities/learning-events/LearningEventData";
-
-const learningEventRepo = inject(learningEventRepoKey);
-if (!learningEventRepo) throw new Error("LearningEventRepository not provided!");
+import type { LearningEventData } from "@/entities/learning-events";
+import { learningEventService } from "@/entities/learning-events";
 
 const events = ref<LearningEventData[]>([]);
 const loading = ref(true);
@@ -15,7 +11,7 @@ const loading = ref(true);
  */
 async function loadEvents() {
   loading.value = true;
-  events.value = await learningEventRepo!.getAll();
+  events.value = await learningEventService.getAll();
   loading.value = false;
 }
 
@@ -23,7 +19,7 @@ async function loadEvents() {
  * Clear all learning events from the repository and reload.
  */
 async function clearEvents() {
-  await learningEventRepo!.clear();
+  await learningEventService.clear();
   await loadEvents();
 }
 

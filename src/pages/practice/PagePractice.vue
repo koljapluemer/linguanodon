@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DoLessonControl from './ui/DoLessonControl.vue';
-
+// No longer need to inject repositories - components will use entity services directly
 </script>
 
 <template>

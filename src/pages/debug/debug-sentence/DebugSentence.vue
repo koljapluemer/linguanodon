@@ -1,22 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, inject, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import type { SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
-import type { LearningEventData } from "@/entities/learning-events/LearningEventData";
-import { 
-  sentenceRepoKey, 
-  linguisticUnitProgressRepoKey,
-  learningEventRepoKey 
-} from "@/shared/injectionKeys";
-
-// Inject repositories
-const sentenceRepo = inject(sentenceRepoKey);
-const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
-const learningEventRepo = inject(learningEventRepoKey);
-
-if (!sentenceRepo || !linguisticUnitProgressRepo || !learningEventRepo) {
-  throw new Error("Required repositories not provided!");
-}
+import type { LearningEventData } from "@/entities/learning-events";
+import { sentenceService, progressService } from "@/entities/linguisticUnits";
+import { learningEventService } from "@/entities/learning-events";
 
 const route = useRoute();
 
@@ -40,7 +28,7 @@ async function loadData() {
   
   try {
     // Get the specific sentence
-    const sentenceData = await sentenceRepo!.getById(sentenceLanguage.value, sentenceContent.value);
+    const sentenceData = await sentenceService.getById(sentenceLanguage.value, sentenceContent.value);
     if (!sentenceData) {
       error.value = "Sentence not found";
       return;
@@ -48,7 +36,7 @@ async function loadData() {
     sentence.value = sentenceData;
 
     // Get progress data for this sentence
-    const progress = await linguisticUnitProgressRepo!.get(
+    const progress = await progressService.get(
       sentenceLanguage.value, 
       sentenceContent.value, 
       'sentence'
@@ -56,8 +44,8 @@ async function loadData() {
     progressData.value = progress || null;
 
     // Get learning events for this sentence
-    const allEvents = await learningEventRepo!.getAll();
-    const events = allEvents.filter(event => 
+    const allEvents = await learningEventService.getAll();
+    const events = allEvents.filter((event: LearningEventData) => 
       event.linguisticUnit.language === sentenceLanguage.value && 
       event.linguisticUnit.content === sentenceContent.value &&
       event.linguisticUnit.type === 'sentence'

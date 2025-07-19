@@ -19,9 +19,7 @@
 </template>
 
 <script setup lang="ts">
-// Provide all repositories for DI at the app root
-import { provideRepositories } from "@/app/provideRepos";
-provideRepositories();
+// No longer need to provide repositories - entities handle their own access
 </script>
 
 <style>

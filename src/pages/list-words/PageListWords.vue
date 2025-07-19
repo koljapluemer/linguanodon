@@ -1,22 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, inject, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { Search } from "lucide-vue-next";
 import type { WordData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
-import type { LearningEventData } from "@/entities/learning-events/LearningEventData";
-import { 
-  wordRepoKey, 
-  linguisticUnitProgressRepoKey,
-  learningEventRepoKey 
-} from "@/shared/injectionKeys";
-
-// Inject repositories
-const wordRepo = inject(wordRepoKey);
-const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
-const learningEventRepo = inject(learningEventRepoKey);
-
-if (!wordRepo || !linguisticUnitProgressRepo || !learningEventRepo) {
-  throw new Error("Required repositories not provided!");
-}
+import type { LearningEventData } from "@/entities/learning-events";
+import { wordService, progressService } from "@/entities/linguisticUnits";
+import { learningEventService } from "@/entities/learning-events";
 
 // State
 const words = ref<WordData[]>([]);
@@ -39,9 +27,9 @@ async function loadData() {
   
   try {
     const [wordsData, progressDataData, learningEventsData] = await Promise.all([
-      wordRepo!.getAll(),
-      linguisticUnitProgressRepo!.getAll(),
-      learningEventRepo!.getAll()
+      wordService.getAll(),
+      progressService.getAll(),
+      learningEventService.getAll()
     ]);
 
     words.value = wordsData;
