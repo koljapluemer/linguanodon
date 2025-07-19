@@ -1,9 +1,7 @@
 import { provide } from "vue";
-import { WordDexieRepository } from "@/entities/words/WordDexieRepository";
-import { SentenceDexieRepository } from "@/entities/sentences/SentenceDexieRepository";
+import { WordDexieRepository, SentenceDexieRepository, LinguisticUnitProgressDexieRepository } from "@/entities/linguisticUnits";
 import { LanguageDexieRepository } from "@/entities/languages/LanguageDexieRepository";
 import { LearningEventDexieRepository } from "@/entities/learning-events/LearningEventDexieRepository";
-import { LinguisticUnitProgressDexieRepository } from "@/shared/linguisticUnits/progress/LinguisticUnitProgressDexieRepository";
 import { wordRepoKey, sentenceRepoKey, languageRepoKey, learningEventRepoKey, linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
 
 /**

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, inject, computed } from "vue";
 import { useRoute } from "vue-router";
-import type { SentenceData } from "@/entities/sentences/SentenceData";
-import type { LinguisticUnitProgressData } from "@/shared/linguisticUnits/progress/LinguisticUnitProgressData";
+import type { SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
 import type { LearningEventData } from "@/entities/learning-events/LearningEventData";
 import { 
   sentenceRepoKey, 

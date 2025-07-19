@@ -1,4 +1,4 @@
-import type { LinguisticUnitData } from "@/shared/linguisticUnits/LinguisticUnitData";
+import type { LinguisticUnitData } from "@/entities/linguisticUnits/LinguisticUnitData";
 
 // Represents a sentence in a specific language, with translations, credits, and contained words for MVP.
 export interface SentenceData extends LinguisticUnitData {

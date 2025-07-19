@@ -1,8 +1,6 @@
 import type { Lesson } from "./Lesson";
 import type { Exercise } from "./Exercise";
-import type { WordData } from "@/entities/words/WordData";
-import type { SentenceData } from "@/entities/sentences/SentenceData";
-import type { LinguisticUnitProgressData } from "@/shared/linguisticUnits/progress/LinguisticUnitProgressData";
+import type { WordData, SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
 import { ExerciseGenerator } from "./ExerciseGenerator";
 
 /**

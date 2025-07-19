@@ -1,7 +1,7 @@
 import { inject } from "vue";
 import { sentenceRepoKey, linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
-import type { SentenceData } from "@/entities/sentences/SentenceData";
-import type { LinguisticUnitProgressData } from "@/shared/linguisticUnits/progress/LinguisticUnitProgressData";
+import type { SentenceData } from "@/entities/linguisticUnits/sentences/SentenceData";
+import type { LinguisticUnitProgressData } from "@/entities/linguisticUnits/progress/LinguisticUnitProgressData";
 
 /**
  * Composable for finding eligible sentences for free translation exercises.

@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { inject } from "vue";
 import { linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
-import type { LinguisticUnitProgressData } from "@/shared/linguisticUnits/progress/LinguisticUnitProgressData";
+import type { LinguisticUnitProgressData } from "@/entities/linguisticUnits";
 
 const linguisticUnitProgressRepo = inject(linguisticUnitProgressRepoKey);
 if (!linguisticUnitProgressRepo) throw new Error("LinguisticUnitProgressRepository not provided!");

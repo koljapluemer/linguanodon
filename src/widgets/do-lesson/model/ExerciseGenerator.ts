@@ -1,7 +1,6 @@
-import type { WordData } from "@/entities/words/WordData";
-import type { SentenceData } from "@/entities/sentences/SentenceData";
+import type { WordData, SentenceData } from "@/entities/linguisticUnits";
 import type { Exercise } from "./Exercise";
-import type { LinguisticUnitData } from "@/shared/linguisticUnits/LinguisticUnitData";
+import type { LinguisticUnitData } from "@/entities/linguisticUnits";
 
 /**
  * Static class for generating exercises of different types and levels.

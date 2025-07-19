@@ -1,6 +1,6 @@
 import { inject } from "vue";
 import { wordRepoKey, linguisticUnitProgressRepoKey } from "@/shared/injectionKeys";
-import type { WordData } from "@/entities/words/WordData";
+import type { WordData } from "@/entities/linguisticUnits/words/WordData";
 import { fsrs } from "ts-fsrs";
 
 /**
