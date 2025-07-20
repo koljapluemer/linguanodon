@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { RevealExercise } from "../../../model/Exercise";
-import WidgetBigText from "@/shared/WidgetBigText.vue";
-import WidgetInstruction from "@/shared/WidgetInstruction.vue";
-import WidgetRateConfidence from "@/shared/WidgetRateConfidence.vue";
-import WidgetRevealButton from "@/shared/WidgetRevealButton.vue";
+import WidgetBigText from "@/shared/ElementBigText.vue";
+import WidgetInstruction from "@/shared/ElementInstruction.vue";
+import WidgetRateConfidence from "@/shared/ElementRateConfidence.vue";
+import WidgetRevealButton from "@/shared/ElementRevealButton.vue";
 
 interface Props {
   exercise: RevealExercise;

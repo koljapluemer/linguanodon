@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { ChooseFromFourExercise } from "../../../model/Exercise";
-import WidgetBigText from "@/shared/WidgetBigText.vue";
-import WidgetInstruction from "@/shared/WidgetInstruction.vue";
+import WidgetBigText from "@/shared/ElementBigText.vue";
+import WidgetInstruction from "@/shared/ElementInstruction.vue";
 
 interface Props {
     exercise: ChooseFromFourExercise;
