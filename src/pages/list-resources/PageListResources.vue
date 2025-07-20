@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { Search, ExternalLink, User, Download } from "lucide-vue-next";
+import { useRouter } from "vue-router";
+import { Search, ExternalLink, User, Download, Plus, Edit } from "lucide-vue-next";
 import type { ResourceData } from "@/entities/resources";
 import { resourceService } from "@/entities/resources";
+
+// Router
+const router = useRouter();
 
 // State
 const resources = ref<ResourceData[]>([]);
@@ -38,6 +42,20 @@ async function loadData() {
 function formatDate(date: Date | null): string {
   if (!date) return 'Never';
   return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+/**
+ * Navigate to create new resource page.
+ */
+function createNewResource() {
+  router.push({ name: 'manage-resource' });
+}
+
+/**
+ * Navigate to edit resource page.
+ */
+function editResource(uid: string) {
+  router.push({ name: 'edit-resource', params: { uid } });
 }
 
 /**
@@ -110,7 +128,13 @@ onMounted(loadData);
 
 <template>
   <div class="max-w-6xl mx-auto mt-8 p-4">
-    <h1 class="text-3xl font-bold mb-6">Resources</h1>
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Resources</h1>
+      <button @click="createNewResource" class="btn btn-primary btn-sm">
+        <Plus class="w-4 h-4" />
+        Add Resource
+      </button>
+    </div>
     
     <!-- Search -->
     <div class="mb-6">
@@ -160,6 +184,13 @@ onMounted(loadData);
                   <div class="badge badge-sm badge-outline">
                     Priority: {{ resource.priority }}
                   </div>
+                  <button 
+                    @click="editResource(resource.uid)"
+                    class="btn btn-ghost btn-xs"
+                    title="Edit resource"
+                  >
+                    <Edit class="w-3 h-3" />
+                  </button>
                 </div>
                 
                 <p class="text-sm text-gray-600 mb-2">{{ resource.language }}</p>

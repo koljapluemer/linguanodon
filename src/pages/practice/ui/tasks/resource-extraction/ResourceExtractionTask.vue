@@ -4,6 +4,9 @@ import type { ResourceExercise } from '../../../model/Exercise';
 import type { WordRepository } from '@/entities/linguisticUnits/words/WordRepository';
 import type { SentenceRepository } from '@/entities/linguisticUnits/sentences/SentenceRepository';
 import type { LanguageIdentifier } from '@/shared/LanguageIdentifier';
+import type { LinguisticUnitIdentification } from '@/shared/LinguisticUnitIdentification';
+import type { ResourceRepository } from '@/entities/resources/ResourceRepository';
+import type { ResourceData } from '@/entities/resources/ResourceData';
 import WidgetInstruction from '@/shared/ElementInstruction.vue';
 import WidgetBigText from '@/shared/ElementBigText.vue';
 import ResourceExtractionFormControl from '@/entities/linguisticUnits/ui/ResourceExtractionForm/ResourceExtractionFormControl.vue';
@@ -13,6 +16,7 @@ interface Props {
   wordRepository: WordRepository;
   sentenceRepository: SentenceRepository;
   languages: LanguageIdentifier[];
+  resourceRepository: ResourceRepository;
 }
 
 interface Emits {
@@ -20,10 +24,60 @@ interface Emits {
   (e: 'done-for-now'): void;
 }
 
-defineProps<Props>();
 const emit = defineEmits<Emits>();
 
+const props = defineProps<Props>();
+
 const showFutureWorkScreen = ref(false);
+
+/**
+ * Convert a reactive resource object to a plain object for IndexedDB storage.
+ */
+function convertResourceToPlainObject(resource: ResourceData): ResourceData {
+  return {
+    uid: resource.uid,
+    title: resource.title,
+    link: resource.link,
+    prompt: resource.prompt,
+    extraInfo: resource.extraInfo,
+    language: resource.language,
+    priority: resource.priority,
+    isUserCreated: resource.isUserCreated,
+    isExploited: resource.isExploited,
+    lastDownloadedAt: resource.lastDownloadedAt,
+    lastIteratedAt: resource.lastIteratedAt,
+    nextShownEarliestAt: resource.nextShownEarliestAt,
+    extractedUnits: resource.extractedUnits.map((unit: LinguisticUnitIdentification) => ({
+      type: unit.type,
+      language: unit.language,
+      content: unit.content
+    }))
+  };
+}
+
+/**
+ * Handle when a linguistic unit is saved.
+ */
+const handleUnitSaved = async (unit: LinguisticUnitIdentification) => {
+  try {
+    // Add the unit to the resource's extractedUnits if it's not already there
+    const existingUnit = props.exercise.resource.extractedUnits.find(
+      u => u.type === unit.type && u.language === unit.language && u.content === unit.content
+    );
+    
+    if (!existingUnit) {
+      props.exercise.resource.extractedUnits.push(unit);
+      
+      // Convert reactive object to plain object before saving
+      const resourceToSave = convertResourceToPlainObject(props.exercise.resource);
+      
+      // Save the updated resource
+      await props.resourceRepository.update(resourceToSave);
+    }
+  } catch (error) {
+    console.error('Failed to update resource with new unit:', error);
+  }
+};
 
 /**
  * Handle skip action.
@@ -99,6 +153,7 @@ const handleFutureWorkResponse = () => {
           :word-repository="wordRepository"
           :sentence-repository="sentenceRepository"
           :languages="languages"
+          :on-unit-saved="handleUnitSaved"
         />
       </div>
     </div>

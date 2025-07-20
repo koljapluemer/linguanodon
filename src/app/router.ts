@@ -4,6 +4,7 @@ import PagePractice from '@/pages/practice/PagePractice.vue'
 import PageListSentences from '@/pages/list-sentences/PageListSentences.vue'
 import PageManageSentences from '@/pages/manage-sentences/PageManageSentences.vue'
 import PageListResources from '@/pages/list-resources/PageListResources.vue'
+import PageManageResource from '@/pages/manage-resource/PageManageResource.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import PageDebugLearningEvents from '@/pages/debug/debug-learning-events/DebugLearningEvents.vue'
@@ -62,6 +63,18 @@ const routes: RouteRecordRaw[] = [
     path: '/resources',
     name: 'resources',
     component: PageListResources
+  },
+  {
+    /** Manage resources - add/edit */
+    path: '/resources/manage',
+    name: 'manage-resource',
+    component: PageManageResource
+  },
+  {
+    /** Edit specific resource */
+    path: '/resources/manage/:uid',
+    name: 'edit-resource',
+    component: PageManageResource
   },
   {
     /** Debug page to view all learning events */

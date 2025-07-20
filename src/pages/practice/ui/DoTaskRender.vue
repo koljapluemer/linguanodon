@@ -5,6 +5,7 @@ import type { LanguageIdentifier } from "@/shared/LanguageIdentifier";
 import { TaskRegistry } from "./tasks";
 import { wordService, sentenceService } from "@/entities/linguisticUnits";
 import { languageService } from "@/entities/languages";
+import { resourceService } from "@/entities/resources";
 
 interface Props {
   exercise: Exercise;
@@ -54,7 +55,8 @@ const additionalProps = computed(() => {
     return {
       wordRepository: wordService,
       sentenceRepository: sentenceService,
-      languages: languages.value
+      languages: languages.value,
+      resourceRepository: resourceService
     };
   }
   return {};

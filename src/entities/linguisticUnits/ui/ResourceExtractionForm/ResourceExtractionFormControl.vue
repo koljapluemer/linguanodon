@@ -12,6 +12,7 @@ interface Props {
   wordRepository: WordRepository;
   sentenceRepository: SentenceRepository;
   languages: LanguageIdentifier[];
+  onUnitSaved?: (unit: LinguisticUnitIdentification) => void;
 }
 
 const props = defineProps<Props>();
@@ -28,7 +29,8 @@ const {
 } = useResourceExtractionForm(
   props.wordRepository,
   props.sentenceRepository,
-  props.languages
+  props.languages,
+  props.onUnitSaved
 );
 
 onMounted(() => {

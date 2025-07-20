@@ -11,7 +11,8 @@ import type { LanguageIdentifier } from '@/shared/LanguageIdentifier';
 export function useResourceExtractionForm(
   wordRepository: WordRepository,
   sentenceRepository: SentenceRepository,
-  languages: LanguageIdentifier[]
+  languages: LanguageIdentifier[],
+  onUnitSaved?: (unit: LinguisticUnitIdentification) => void
 ) {
   const rows = ref<ResourceExtractionFormRow[]>([]);
   const isLoading = ref(false);
@@ -108,6 +109,15 @@ export function useResourceExtractionForm(
           type: 'word' as const
         };
         await wordRepository.update(wordData);
+        
+        // Notify parent about the saved unit
+        if (onUnitSaved) {
+          onUnitSaved({
+            type: 'word',
+            language: row.originalLanguage,
+            content: row.originalContent.trim()
+          });
+        }
       } else {
         const sentenceData = {
           language: row.originalLanguage,
@@ -115,6 +125,15 @@ export function useResourceExtractionForm(
           type: 'sentence' as const
         };
         await sentenceRepository.update(sentenceData);
+        
+        // Notify parent about the saved unit
+        if (onUnitSaved) {
+          onUnitSaved({
+            type: 'sentence',
+            language: row.originalLanguage,
+            content: row.originalContent.trim()
+          });
+        }
       }
 
       // Handle translation if provided
