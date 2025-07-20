@@ -1,6 +1,7 @@
 import PageListWords from '@/pages/list-words/PageListWords.vue'
 import PagePractice from '@/pages/practice/PagePractice.vue'
 import PageListSentences from '@/pages/list-sentences/PageListSentences.vue'
+import PageManageSentences from '@/pages/manage-sentences/PageManageSentences.vue'
 import PageListResources from '@/pages/list-resources/PageListResources.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
@@ -30,6 +31,18 @@ const routes: RouteRecordRaw[] = [
     path: '/sentences',
     name: 'sentences',
     component: PageListSentences
+  },
+  {
+    /** Manage sentences - add/edit */
+    path: '/sentences/manage',
+    name: 'manage-sentences',
+    component: PageManageSentences
+  },
+  {
+    /** Edit specific sentence */
+    path: '/sentences/manage/:language/:content',
+    name: 'edit-sentence',
+    component: PageManageSentences
   },
   {
     /** List all resources */

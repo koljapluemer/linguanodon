@@ -128,7 +128,7 @@ export const wordService: WordServiceContract = {
     const dueWords: WordData[] = [];
     
     for (const word of all) {
-      const progress = await progressRepo.get(word.language, word.content, 'word');
+      const progress = await progressRepo.get({ language: word.language, content: word.content, type: 'word' });
       if (!progress) {
         // New word, always due
         dueWords.push(word);
@@ -150,7 +150,7 @@ export const wordService: WordServiceContract = {
    * Checks if a word is due for review.
    */
   isDue: async (language: string, content: string) => {
-    const progress = await progressRepo.get(language, content, 'word');
+    const progress = await progressRepo.get({ language, content, type: 'word' });
     if (!progress) return true; // New word is always due
     
     // Check if any level is due
@@ -165,7 +165,7 @@ export const wordService: WordServiceContract = {
    * Checks if a word is due for review at a specific level.
    */
   isDueAtLevel: async (language: string, content: string, level: number) => {
-    const progress = await progressRepo.get(language, content, 'word');
+    const progress = await progressRepo.get({ language, content, type: 'word' });
     if (!progress) return true; // New word is always due
     
     const card = progress.cards[level];
@@ -177,7 +177,7 @@ export const wordService: WordServiceContract = {
    * Calculates the average completion rate for specified levels.
    */
   getAverageCompletionRate: async (language: string, content: string, levels: number[]) => {
-    const progress = await progressRepo.get(language, content, 'word');
+    const progress = await progressRepo.get({ language, content, type: 'word' });
     if (!progress) return 0;
     
     let totalRate = 0;
@@ -293,7 +293,7 @@ export const sentenceService: SentenceServiceContract = {
     const dueSentences: SentenceData[] = [];
     
     for (const sentence of all) {
-      const progress = await progressRepo.get(sentence.language, sentence.content, 'sentence');
+      const progress = await progressRepo.get({ language: sentence.language, content: sentence.content, type: 'sentence' });
       if (!progress) {
         // New sentence, always due
         dueSentences.push(sentence);
@@ -320,7 +320,7 @@ export const sentenceService: SentenceServiceContract = {
     let bestRate = 0;
     
     for (const sentence of all) {
-      const progress = await progressRepo.get(sentence.language, sentence.content, 'sentence');
+      const progress = await progressRepo.get({ language: sentence.language, content: sentence.content, type: 'sentence' });
       if (progress) continue; // Skip seen sentences
       
       // Calculate average completion rate of associated words
@@ -328,7 +328,7 @@ export const sentenceService: SentenceServiceContract = {
       let wordCount = 0;
       
       for (const wordRef of sentence.containsWords || []) {
-        const wordProgress = await progressRepo.get(wordRef.language, wordRef.content, 'word');
+        const wordProgress = await progressRepo.get({ language: wordRef.language, content: wordRef.content, type: 'word' });
         if (wordProgress) {
           const rate = await wordService.getAverageCompletionRate(wordRef.language, wordRef.content, [0, 1, 2, 3, 4, 5]);
           totalRate += rate;
@@ -419,7 +419,7 @@ export const progressService: ProgressServiceContract = {
    * Retrieves progress data for a linguistic unit.
    */
   get: async (language: string, content: string, type: 'word' | 'sentence') => {
-    const result = await progressRepo.get(language, content, type);
+    const result = await progressRepo.get({ language, content, type });
     return result || null;
   },
   /**

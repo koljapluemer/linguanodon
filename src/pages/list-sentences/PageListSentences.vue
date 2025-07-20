@@ -145,7 +145,12 @@ onMounted(loadData);
 
 <template>
   <div class="max-w-6xl mx-auto mt-8 p-4">
-    <h1 class="text-3xl font-bold mb-6">Sentences</h1>
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Sentences</h1>
+      <router-link to="/sentences/manage" class="btn btn-primary">
+        Add New Sentence
+      </router-link>
+    </div>
     
     <!-- Search -->
     <div class="mb-6">
@@ -195,6 +200,14 @@ onMounted(loadData);
                     {{ sentence.content }}
                   </router-link>
                 </h3>
+                <div class="flex gap-2 mt-2">
+                  <router-link 
+                    :to="{ name: 'edit-sentence', params: { language: sentence.language, content: sentence.content } }"
+                    class="btn btn-sm btn-outline"
+                  >
+                    Edit
+                  </router-link>
+                </div>
                 <p class="text-sm text-gray-600">{{ sentence.language }}</p>
                 
                 <!-- Translations -->
