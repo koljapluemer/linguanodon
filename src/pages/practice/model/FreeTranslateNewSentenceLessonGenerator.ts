@@ -7,7 +7,7 @@ import { ExerciseGeneratorFactory } from "./generator/ExerciseGeneratorFactory";
 /**
  * Static class for generating complete lessons with exercises.
  */
-export class LessonGenerator {
+export class FreeTranslateNewSentenceLessonGenerator {
   /**
    * Generates a complete lesson with 5-20 exercises.
    * Follows the algorithm from the spec:
@@ -50,6 +50,7 @@ export class LessonGenerator {
     if (remainingSlots > 0) {
       const additionalExercises = await this.generateAdditionalExercises(
         words, 
+        sentences,
         progressData, 
         remainingSlots,
         context
@@ -195,29 +196,74 @@ export class LessonGenerator {
 
   /**
    * Generates additional exercises to fill up the lesson.
+   * Uses weighted selection between words and sentences (70% words, 30% sentences).
    */
   private static async generateAdditionalExercises(
     words: WordData[],
+    sentences: SentenceData[],
     progressData: LinguisticUnitProgressData[],
     count: number,
     context: ExerciseGenerationContext
   ): Promise<Exercise[]> {
     const exercises: Exercise[] = [];
-    const availableWords = [...words];
-
-    for (let i = 0; i < count && availableWords.length > 0; i++) {
-      const randomIndex = Math.floor(Math.random() * availableWords.length);
-      const word = availableWords[randomIndex];
-      
+    
+    // Get reasonable due words and sentences
+    const reasonableWords = await import("@/entities/linguisticUnits").then(m => m.wordService.getReasonableDueWords(count));
+    const reasonableSentences = await import("@/entities/linguisticUnits").then(m => m.sentenceService.getReasonableDueSentences(count));
+    
+    // Calculate weights based on available data
+    const totalWords = reasonableWords.length;
+    const totalSentences = reasonableSentences.length;
+    
+    if (totalWords === 0 && totalSentences === 0) {
+      return [];
+    }
+    
+    if (totalWords === 0) {
+      // Only sentences available
+      for (const sentence of reasonableSentences.slice(0, count)) {
+        const exercise = await ExerciseGeneratorFactory.generateSentenceExercise(sentence, 0, context);
+        if (exercise) {
+          exercises.push(exercise);
+        }
+      }
+      return exercises;
+    }
+    
+    if (totalSentences === 0) {
+      // Only words available
+      for (const word of reasonableWords.slice(0, count)) {
+        const exercise = await this.generateExerciseForWord(word, words, progressData, context);
+        if (exercise) {
+          exercises.push(exercise);
+        }
+      }
+      return exercises;
+    }
+    
+    // Both types available - use weighted selection (70% words, 30% sentences)
+    const targetWords = Math.floor(count * 0.7);
+    const targetSentences = count - targetWords;
+    
+    const selectedWords = reasonableWords.slice(0, Math.min(targetWords, totalWords));
+    const selectedSentences = reasonableSentences.slice(0, Math.min(targetSentences, totalSentences));
+    
+    // Generate exercises for selected words
+    for (const word of selectedWords) {
       const exercise = await this.generateExerciseForWord(word, words, progressData, context);
       if (exercise) {
         exercises.push(exercise);
       }
-      
-      // Remove this word to avoid duplicates
-      availableWords.splice(randomIndex, 1);
     }
-
+    
+    // Generate exercises for selected sentences
+    for (const sentence of selectedSentences) {
+      const exercise = await ExerciseGeneratorFactory.generateSentenceExercise(sentence, 0, context);
+      if (exercise) {
+        exercises.push(exercise);
+      }
+    }
+    
     return exercises;
   }
 

@@ -1,9 +1,9 @@
 import type { Lesson } from "./Lesson";
 import type { WordData, SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
 import type { ResourceRepository } from "@/entities/resources";
-import { LessonGenerator } from "./LessonGenerator";
 import { ResourceBasedLessonGenerator } from "./ResourceBasedLessonGenerator";
 import { MissingTranslationLessonGenerator } from "./MissingTranslationLessonGenerator";
+import { FreeTranslateNewSentenceLessonGenerator } from "@/pages/practice/model/FreeTranslateNewSentenceLessonGenerator";
 
 /**
  * Factory for generating lessons using different templates.
@@ -23,11 +23,8 @@ export class LessonTemplateFactory {
     // Randomly choose between three templates
     const random = Math.random();
     
-    return MissingTranslationLessonGenerator.generateLesson(words, sentences, progressData);
-
-
     if (random < 0.33) {
-      return LessonGenerator.generateLesson(words, sentences, progressData);
+      return FreeTranslateNewSentenceLessonGenerator.generateLesson(words, sentences, progressData);
     } else if (random < 0.66) {
       return ResourceBasedLessonGenerator.generateLesson(words, sentences, progressData, resourceRepository);
     } else {

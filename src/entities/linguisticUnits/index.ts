@@ -82,6 +82,18 @@ const wordRepo = new WordDexieRepository();
 const sentenceRepo = new SentenceDexieRepository();
 const progressRepo = new LinguisticUnitProgressDexieRepository();
 
+/**
+ * Shuffles an array using Fisher-Yates algorithm.
+ */
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 // Word service functions - implements WordServiceContract
 export const wordService: WordServiceContract = {
   // Basic CRUD operations
@@ -244,6 +256,69 @@ export const wordService: WordServiceContract = {
         synonyms: [],
         appearsIn: []
       }));
+  },
+
+  /**
+   * Gets a reasonable selection of due words with weighted choice between seen and unseen.
+   * 80% due words that were seen before, 20% never-seen-before words.
+   */
+  getReasonableDueWords: async (amount: number): Promise<WordData[]> => {
+    const allWords = await wordRepo.getAll();
+    const allProgress = await progressRepo.getAll();
+    
+    // Separate words into seen (with progress) and unseen (no progress)
+    const seenWords: WordData[] = [];
+    const unseenWords: WordData[] = [];
+    
+    for (const word of allWords) {
+      const progress = allProgress.find(p => 
+        p.language === word.language && 
+        p.content === word.content && 
+        p.type === 'word'
+      );
+      
+      if (progress) {
+        // Check if this seen word is due
+        for (const [, card] of Object.entries(progress.cards)) {
+          if (card && card.due && new Date(card.due) <= new Date()) {
+            seenWords.push(word);
+            break;
+          }
+        }
+      } else {
+        // Unseen word
+        unseenWords.push(word);
+      }
+    }
+    
+    // Calculate weights based on available data
+    const totalSeen = seenWords.length;
+    const totalUnseen = unseenWords.length;
+    
+    if (totalSeen === 0 && totalUnseen === 0) {
+      return [];
+    }
+    
+    if (totalSeen === 0) {
+      // Only unseen words available
+      return shuffleArray(unseenWords).slice(0, amount);
+    }
+    
+    if (totalUnseen === 0) {
+      // Only seen words available
+      return shuffleArray(seenWords).slice(0, amount);
+    }
+    
+    // Both types available - use weighted selection
+    const targetSeen = Math.floor(amount * 0.8);
+    const targetUnseen = amount - targetSeen;
+    
+    const selectedSeen = shuffleArray(seenWords).slice(0, Math.min(targetSeen, totalSeen));
+    const selectedUnseen = shuffleArray(unseenWords).slice(0, Math.min(targetUnseen, totalUnseen));
+    
+    // Combine and shuffle
+    const combined = [...selectedSeen, ...selectedUnseen];
+    return shuffleArray(combined);
   }
 };
 
@@ -409,6 +484,69 @@ export const sentenceService: SentenceServiceContract = {
         credits: [],
         containsWords: []
       }));
+  },
+
+  /**
+   * Gets a reasonable selection of due sentences with weighted choice between seen and unseen.
+   * 80% due sentences that were seen before, 20% never-seen-before sentences.
+   */
+  getReasonableDueSentences: async (amount: number): Promise<SentenceData[]> => {
+    const allSentences = await sentenceRepo.getAll();
+    const allProgress = await progressRepo.getAll();
+    
+    // Separate sentences into seen (with progress) and unseen (no progress)
+    const seenSentences: SentenceData[] = [];
+    const unseenSentences: SentenceData[] = [];
+    
+    for (const sentence of allSentences) {
+      const progress = allProgress.find(p => 
+        p.language === sentence.language && 
+        p.content === sentence.content && 
+        p.type === 'sentence'
+      );
+      
+      if (progress) {
+        // Check if this seen sentence is due
+        for (const [, card] of Object.entries(progress.cards)) {
+          if (card && card.due && new Date(card.due) <= new Date()) {
+            seenSentences.push(sentence);
+            break;
+          }
+        }
+      } else {
+        // Unseen sentence
+        unseenSentences.push(sentence);
+      }
+    }
+    
+    // Calculate weights based on available data
+    const totalSeen = seenSentences.length;
+    const totalUnseen = unseenSentences.length;
+    
+    if (totalSeen === 0 && totalUnseen === 0) {
+      return [];
+    }
+    
+    if (totalSeen === 0) {
+      // Only unseen sentences available
+      return shuffleArray(unseenSentences).slice(0, amount);
+    }
+    
+    if (totalUnseen === 0) {
+      // Only seen sentences available
+      return shuffleArray(seenSentences).slice(0, amount);
+    }
+    
+    // Both types available - use weighted selection
+    const targetSeen = Math.floor(amount * 0.8);
+    const targetUnseen = amount - targetSeen;
+    
+    const selectedSeen = shuffleArray(seenSentences).slice(0, Math.min(targetSeen, totalSeen));
+    const selectedUnseen = shuffleArray(unseenSentences).slice(0, Math.min(targetUnseen, totalUnseen));
+    
+    // Combine and shuffle
+    const combined = [...selectedSeen, ...selectedUnseen];
+    return shuffleArray(combined);
   }
 };
 

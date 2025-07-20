@@ -28,6 +28,8 @@ export interface WordServiceContract {
   
   // Translation operations
   getTranslationsInLanguages(language: string, content: string, languageCodes: string[]): Promise<WordData[]>;
+
+  getReasonableDueWords(amount: number): Promise<WordData[]>;
 }
 
 /**
@@ -57,6 +59,7 @@ export interface SentenceServiceContract {
   
   // Translation operations
   getTranslationsInLanguages(language: string, content: string, languageCodes: string[]): Promise<SentenceData[]>;
+  getReasonableDueSentences(amount: number): Promise<SentenceData[]>;
 }
 
 /**
