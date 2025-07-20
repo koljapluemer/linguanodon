@@ -1,48 +1,57 @@
 import type { Lesson } from "./Lesson";
 import type { Exercise } from "./Exercise";
 import type { WordData, SentenceData, LinguisticUnitProgressData } from "@/entities/linguisticUnits";
-import type { ResourceRepository } from "@/entities/resources";
 import type { ExerciseGenerationContext } from "./generator/ExerciseGeneratorInterface";
 import { ExerciseGeneratorFactory } from "./generator/ExerciseGeneratorFactory";
+import { MissingTranslationExerciseGenerator } from "./generator/MissingTranslationExerciseGenerator";
 
 /**
- * Static class for generating resource-based lessons with exercises.
- * Similar to standard lessons but includes a resource extraction exercise.
+ * Static class for generating missing translation lessons with exercises.
+ * Includes 1-3 missing translation exercises plus standard exercises.
  */
-export class ResourceBasedLessonGenerator {
-
+export class MissingTranslationLessonGenerator {
+  
   /**
-   * Generates a complete lesson with 5-20 exercises plus a resource exercise.
-   * The resource exercise can appear anywhere in the lesson (not just at the end).
+   * Generates a lesson with 1-3 missing translation exercises plus standard exercises.
    */
   static async generateLesson(
     words: WordData[],
     sentences: SentenceData[],
-    progressData: LinguisticUnitProgressData[],
-    resourceRepository: ResourceRepository
+    progressData: LinguisticUnitProgressData[]
   ): Promise<Lesson> {
-    const lessonSize = ResourceBasedLessonGenerator.getRandomLessonSize();
+    const lessonSize = this.getRandomLessonSize();
     let exercises: Exercise[] = [];
 
-    // Step 1: Generate standard exercises (similar to LessonGenerator)
-    const standardExercises = await ResourceBasedLessonGenerator.generateStandardExercises(
-      words, 
-      sentences, 
-      progressData, 
-      lessonSize
+    // Step 1: Generate missing translation exercises
+    const context = await ExerciseGeneratorFactory.createContext();
+    const missingTranslationExercises = await MissingTranslationExerciseGenerator.findMissingTranslationExercises(context);
+    
+    // Take 1-3 missing translation exercises
+    const numMissingExercises = Math.min(
+      Math.floor(Math.random() * 3) + 1, // 1-3
+      missingTranslationExercises.length
     );
-    exercises.push(...standardExercises);
+    
+    const selectedMissingExercises = this.shuffleArray(missingTranslationExercises)
+      .slice(0, numMissingExercises);
+    
+    exercises.push(...selectedMissingExercises);
 
-    // Step 2: Generate resource exercise
-    const resourceExercise = await ResourceBasedLessonGenerator.generateResourceExercise(resourceRepository);
-    if (resourceExercise) {
-      // Insert resource exercise at random position
-      const randomPosition = Math.floor(Math.random() * (exercises.length + 1));
-      exercises.splice(randomPosition, 0, resourceExercise);
+    // Step 2: Fill up with standard exercises
+    const remainingSlots = lessonSize - exercises.length;
+    
+    if (remainingSlots > 0) {
+      const standardExercises = await this.generateStandardExercises(
+        words, 
+        progressData, 
+        remainingSlots,
+        context
+      );
+      exercises.push(...standardExercises);
     }
 
     // Step 3: Shuffle all exercises
-    exercises = ResourceBasedLessonGenerator.shuffleArray(exercises);
+    exercises = this.shuffleArray(exercises);
 
     return {
       id: `lesson-${Date.now()}`,
@@ -54,23 +63,22 @@ export class ResourceBasedLessonGenerator {
   }
 
   /**
-   * Generate standard exercises similar to LessonGenerator.
+   * Generate standard exercises to fill up the lesson.
    */
   private static async generateStandardExercises(
     words: WordData[],
-    sentences: SentenceData[],
     progressData: LinguisticUnitProgressData[],
-    count: number
+    count: number,
+    context: ExerciseGenerationContext
   ): Promise<Exercise[]> {
     const exercises: Exercise[] = [];
-    const context = await ExerciseGeneratorFactory.createContext();
     const availableWords = [...words];
 
     for (let i = 0; i < count && availableWords.length > 0; i++) {
       const randomIndex = Math.floor(Math.random() * availableWords.length);
       const word = availableWords[randomIndex];
       
-      const exercise = await ResourceBasedLessonGenerator.generateExerciseForWord(word, words, progressData, context);
+      const exercise = await this.generateExerciseForWord(word, words, progressData, context);
       if (exercise) {
         exercises.push(exercise);
       }
@@ -80,28 +88,6 @@ export class ResourceBasedLessonGenerator {
     }
 
     return exercises;
-  }
-
-  /**
-   * Generate a resource extraction exercise.
-   */
-  private static async generateResourceExercise(resourceRepository: ResourceRepository): Promise<Exercise | null> {
-    const resource = await resourceRepository.getRandom();
-    if (!resource) return null;
-
-    return {
-      id: `resource-exercise-${Date.now()}`,
-      type: 'resource-extraction',
-      level: 0,
-      linguisticUnit: {
-        language: resource.language,
-        content: resource.title,
-        type: 'sentence'
-      },
-      isRepeatable: false,
-      resource,
-      prompt: `Extract words and sentences from this resource: ${resource.title}`
-    };
   }
 
   /**
@@ -158,11 +144,11 @@ export class ResourceBasedLessonGenerator {
    * Gets a random lesson size between 5 and 20.
    */
   private static getRandomLessonSize(): number {
-    return Math.floor(Math.random() * 16) + 5; // 5 to 20
+    return Math.floor(Math.random() * 16) + 5; // 5-20
   }
 
   /**
-   * Shuffles an array in place.
+   * Shuffles an array using Fisher-Yates algorithm.
    */
   private static shuffleArray<T>(array: T[]): T[] {
     const shuffled = [...array];

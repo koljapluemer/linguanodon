@@ -7,4 +7,8 @@ export interface LanguageRepository {
   add(language: Language): Promise<void>;
   update(language: Language): Promise<void>;
   delete(code: string): Promise<void>;
+  
+  // User language management
+  getUserTargetLanguages(): Promise<Language[]>;
+  getUserNativeLanguages(): Promise<Language[]>;
 } 

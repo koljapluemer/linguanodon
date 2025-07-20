@@ -26,7 +26,7 @@ export class LessonGenerator {
 
     // Step 1: Try to find a special sentence exercise (but don't add it yet)
     const specialSentence = this.findSpecialSentence(sentences, progressData);
-    const context = ExerciseGeneratorFactory.createContext();
+    const context = await ExerciseGeneratorFactory.createContext();
     const sentenceExercise = specialSentence 
       ? await ExerciseGeneratorFactory.generateSentenceExercise(specialSentence, 0, context)
       : null;

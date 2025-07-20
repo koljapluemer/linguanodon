@@ -52,5 +52,11 @@ export interface ResourceExercise extends BaseExercise {
   prompt: string;
 }
 
+export interface MissingTranslationExercise extends BaseExercise {
+  type: 'missing-translation';
+  missingLanguages: string[];
+  prompt: string;
+}
+
 // Union type for all exercises
-export type Exercise = RevealExercise | ChooseFromTwoExercise | ChooseFromFourExercise | FreeTranslateExercise | TryToRememberExercise | ResourceExercise; 
+export type Exercise = RevealExercise | ChooseFromTwoExercise | ChooseFromFourExercise | FreeTranslateExercise | TryToRememberExercise | ResourceExercise | MissingTranslationExercise; 

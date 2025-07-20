@@ -84,4 +84,18 @@ export class LanguageDexieRepository implements LanguageRepository {
   async delete(code: string) {
     await db.languages.delete(code);
   }
+
+  /**
+   * Get user's target languages.
+   */
+  async getUserTargetLanguages() {
+    return db.languages.filter(lang => lang.isTarget).toArray();
+  }
+
+  /**
+   * Get user's native languages.
+   */
+  async getUserNativeLanguages() {
+    return db.languages.filter(lang => lang.isNative).toArray();
+  }
 } 

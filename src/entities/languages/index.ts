@@ -19,5 +19,9 @@ export const languageService = {
   /** Update an existing language in the database */
   update: (language: Language) => languageRepo.update(language),
   /** Delete a language from the database by code */
-  delete: (code: string) => languageRepo.delete(code)
+  delete: (code: string) => languageRepo.delete(code),
+  /** Get user's target languages */
+  getUserTargetLanguages: () => languageRepo.getUserTargetLanguages(),
+  /** Get user's native languages */
+  getUserNativeLanguages: () => languageRepo.getUserNativeLanguages()
 }; 

@@ -1,5 +1,6 @@
 import type { WordData, SentenceData } from "@/entities/linguisticUnits";
 import { wordService, sentenceService, progressService } from "@/entities/linguisticUnits";
+import { languageService } from "@/entities/languages";
 import type { Exercise } from "../Exercise";
 import type { ExerciseGenerationContext } from "./ExerciseGeneratorInterface";
 import { WordExerciseGenerator } from "./WordExerciseGenerator";
@@ -16,13 +17,18 @@ export class ExerciseGeneratorFactory {
   /**
    * Creates the exercise generation context with service contracts and language preferences.
    */
-  static createContext(targetLanguages: string[] = ['apc'], nativeLanguages: string[] = ['eng']): ExerciseGenerationContext {
+  static async createContext(): Promise<ExerciseGenerationContext> {
+    const [targetLanguages, nativeLanguages] = await Promise.all([
+      languageService.getUserTargetLanguages(),
+      languageService.getUserNativeLanguages()
+    ]);
+    
     return {
       wordService,
       sentenceService,
       progressService,
-      targetLanguages,
-      nativeLanguages
+      targetLanguages: targetLanguages.map(l => l.code),
+      nativeLanguages: nativeLanguages.map(l => l.code)
     };
   }
 
