@@ -2,6 +2,7 @@ import Dexie from "dexie";
 import type { Table } from "dexie";
 import type { LinguisticUnitProgressData } from "./LinguisticUnitProgressData";
 import type { LinguisticUnitProgressRepository } from "./LinguisticUnitProgressRepository";
+import type { LinguisticUnitIdentification } from "@/shared/LinguisticUnitIdentification";
 
 /**
  * Dexie database for storing LinguisticUnitProgressData entities.
@@ -31,8 +32,8 @@ export class LinguisticUnitProgressDexieRepository implements LinguisticUnitProg
   /**
    * Get a progress record by language, content, and type.
    */
-  async get(language: string, content: string, type: 'word' | 'sentence') {
-    return db.progress.get([language, content, type]);
+  async get(unitId: LinguisticUnitIdentification) {
+    return db.progress.get(unitId);
   }
   /**
    * Upsert a progress record.

@@ -3,6 +3,7 @@ import type { Table } from "dexie";
 import type { SentenceData } from "./SentenceData";
 import type { SentenceRepository } from "./SentenceRepository";
 import sentenceExampleData from "./sentenceExampleData.json";
+import type { LinguisticUnitIdentification } from "@/shared/LinguisticUnitIdentification";
 
 /**
  * Dexie database for storing SentenceData entities.
@@ -46,8 +47,8 @@ export class SentenceDexieRepository implements SentenceRepository {
   /**
    * Get a sentence by language and content.
    */
-  async getById(language: string, content: string) {
-    return db.sentences.get([language, content]);
+  async getById(unitId: LinguisticUnitIdentification) {
+    return db.sentences.get([unitId.language, unitId.content]);
   }
   /**
    * Add a new sentence to the database.
@@ -64,7 +65,7 @@ export class SentenceDexieRepository implements SentenceRepository {
   /**
    * Delete a sentence from the database by language and content.
    */
-  async delete(language: string, content: string) {
-    await db.sentences.delete([language, content]);
+  async delete(unitId: LinguisticUnitIdentification) {
+    await db.sentences.delete([unitId.language, unitId.content]);
   }
 } 

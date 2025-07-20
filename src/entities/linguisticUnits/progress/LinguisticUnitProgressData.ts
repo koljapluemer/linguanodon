@@ -1,3 +1,4 @@
+import type { LinguisticUnitIdentification } from '@/shared/LinguisticUnitIdentification';
 import type { Card } from 'ts-fsrs';
 
 /**
@@ -5,9 +6,6 @@ import type { Card } from 'ts-fsrs';
  * Keyed by language, content, and type ('word' | 'sentence').
  * Cards are stored per level (0-9).
  */
-export interface LinguisticUnitProgressData {
-  language: string;
-  content: string;
-  type: 'word' | 'sentence';
+export interface LinguisticUnitProgressData extends LinguisticUnitIdentification {
   cards: Record<number, Card>;
 } 

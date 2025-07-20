@@ -1,3 +1,5 @@
+import type { LinguisticUnitData } from "@/entities/linguisticUnits";
+
 // Represents a learning event (user rating an exercise), persisted for progress tracking.
 export interface LearningEventData {
   userEaseRating: "Impossible" | "Hard" | "Doable" | "Easy";
@@ -5,10 +7,6 @@ export interface LearningEventData {
   exerciseType: string;
   taskType: string;
   level: number;
-  linguisticUnit: {
-    language: string;
-    content: string;
-    type: 'word' | 'sentence';
-  };
+  linguisticUnit: LinguisticUnitData;
   userInput?: string;
 } 
