@@ -1,4 +1,5 @@
 import type { LinguisticUnitData } from "@/entities/linguisticUnits";
+import type { ResourceData } from "@/entities/resources";
 
 // Base interface for all exercises
 export interface BaseExercise {
@@ -45,5 +46,11 @@ export interface TryToRememberExercise extends BaseExercise {
   solution: string;
 }
 
+export interface ResourceExercise extends BaseExercise {
+  type: 'resource-extraction';
+  resource: ResourceData;
+  prompt: string;
+}
+
 // Union type for all exercises
-export type Exercise = RevealExercise | ChooseFromTwoExercise | ChooseFromFourExercise | FreeTranslateExercise | TryToRememberExercise; 
+export type Exercise = RevealExercise | ChooseFromTwoExercise | ChooseFromFourExercise | FreeTranslateExercise | TryToRememberExercise | ResourceExercise; 

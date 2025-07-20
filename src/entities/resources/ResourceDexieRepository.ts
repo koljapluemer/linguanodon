@@ -80,4 +80,15 @@ export class ResourceDexieRepository implements ResourceRepository {
   async delete(uid: string) {
     await db.resources.delete(uid);
   }
+
+  /**
+   * Get a random resource from the database.
+   */
+  async getRandom() {
+    const count = await db.resources.count();
+    if (count === 0) return undefined;
+    
+    const randomIndex = Math.floor(Math.random() * count);
+    return db.resources.offset(randomIndex).first();
+  }
 } 

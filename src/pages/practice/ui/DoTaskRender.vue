@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import type { Exercise } from "../model/Exercise";
+import type { LanguageIdentifier } from "@/shared/LanguageIdentifier";
 import { TaskRegistry } from "./tasks";
+import { wordService, sentenceService } from "@/entities/linguisticUnits";
+import { languageService } from "@/entities/languages";
 
 interface Props {
   exercise: Exercise;
@@ -13,6 +16,20 @@ interface Emits {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+
+const languages = ref<LanguageIdentifier[]>([]);
+
+/**
+ * Load languages on component mount.
+ */
+onMounted(async () => {
+  try {
+    languages.value = await languageService.getAll();
+  } catch (error) {
+    console.error('Failed to load languages:', error);
+    languages.value = [];
+  }
+});
 
 /**
  * Get the appropriate task component based on exercise type.
@@ -30,10 +47,32 @@ const taskComponent = computed(() => {
 });
 
 /**
+ * Get additional props for resource extraction tasks.
+ */
+const additionalProps = computed(() => {
+  if (props.exercise.type === 'resource-extraction') {
+    return {
+      wordRepository: wordService,
+      sentenceRepository: sentenceService,
+      languages: languages.value
+    };
+  }
+  return {};
+});
+
+/**
  * Handles exercise completion with rating.
  */
 function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput?: string) {
   emit('complete-exercise', rating, userInput);
+}
+
+/**
+ * Handles resource extraction task completion (skip or done-for-now).
+ */
+function handleResourceTaskComplete() {
+  // For resource tasks, we treat them as "Easy" completion since they don't have ratings
+  emit('complete-exercise', 'Easy');
 }
 </script>
 
@@ -43,7 +82,12 @@ function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', userInput
     v-if="taskComponent"
     :is="taskComponent" 
     :exercise="exercise"
+    v-bind="additionalProps"
     @rate="handleRate"
+    v-on="exercise.type === 'resource-extraction' ? {
+      'skip': handleResourceTaskComplete,
+      'done-for-now': handleResourceTaskComplete
+    } : {}"
   />
   
   <!-- Fallback for unknown exercise types -->

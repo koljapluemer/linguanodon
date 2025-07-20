@@ -7,4 +7,5 @@ export interface ResourceRepository {
   add(resource: ResourceData): Promise<void>;
   update(resource: ResourceData): Promise<void>;
   delete(uid: string): Promise<void>;
+  getRandom(): Promise<ResourceData | undefined>;
 } 

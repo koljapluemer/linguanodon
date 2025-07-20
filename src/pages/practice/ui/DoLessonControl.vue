@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { LessonGenerator } from "../model/LessonGenerator";
+import { LessonTemplateFactory } from "../model/LessonTemplateFactory";
 import type { Lesson } from "../model/Lesson";
 import type { Exercise } from "../model/Exercise";
 import type { LearningEventData } from "@/entities/learning-events";
 import { wordService, sentenceService, progressService } from "@/entities/linguisticUnits";
 import { learningEventService } from "@/entities/learning-events";
+import { resourceService } from "@/entities/resources";
 import { fsrs, createEmptyCard } from "ts-fsrs";
 import DoLessonRender from "./DoLessonRender.vue";
 
@@ -30,8 +31,13 @@ async function loadLesson() {
       progressService.getAll()
     ]);
 
-    // Generate lesson
-    currentLesson.value = await LessonGenerator.generateLesson(words, sentences, progressData);
+    // Generate lesson using factory (which randomly chooses between standard and resource-based)
+    currentLesson.value = await LessonTemplateFactory.generateLesson(
+      words, 
+      sentences, 
+      progressData,
+      resourceService
+    );
     
     // Set first exercise
     if (currentLesson.value.exercises.length > 0) {

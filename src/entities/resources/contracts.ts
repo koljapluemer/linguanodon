@@ -12,6 +12,9 @@ export interface ResourceServiceContract {
   update(resource: ResourceData): Promise<void>;
   delete(uid: string): Promise<void>;
   
+  // Random selection
+  getRandom(): Promise<ResourceData | null>;
+  
   // Pagination
   getAllPaginated(page: number, pageSize: number): Promise<ResourceData[]>;
   
