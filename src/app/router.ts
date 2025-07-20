@@ -1,6 +1,7 @@
 import PageListWords from '@/pages/list-words/PageListWords.vue'
 import PagePractice from '@/pages/practice/PagePractice.vue'
 import PageListSentences from '@/pages/list-sentences/PageListSentences.vue'
+import PageListResources from '@/pages/list-resources/PageListResources.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import PageDebugLearningEvents from '@/pages/debug/debug-learning-events/DebugLearningEvents.vue'
@@ -29,6 +30,12 @@ const routes: RouteRecordRaw[] = [
     path: '/sentences',
     name: 'sentences',
     component: PageListSentences
+  },
+  {
+    /** List all resources */
+    path: '/resources',
+    name: 'resources',
+    component: PageListResources
   },
   {
     /** Debug page to view all learning events */

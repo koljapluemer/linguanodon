@@ -7,14 +7,9 @@ export interface ResourceData {
     link: string
     prompt: string
     extraInfo: string
-    isEducational: boolean // e.g. grammar explain article vs. immersion video
-    inherentCoolness: number
 
     isUserCreated: boolean // did the user make this, or did they download it
     lastDownloadedAt: Date | null
-
-    unitsRequiredForUnderstanding: LinguisticUnitIdentification[]
-    unitsHelpfulForUnderstanding: LinguisticUnitIdentification[]
 
     isExploited: boolean // user does not want to look at it anymore
     lastIteratedAt: Date | null

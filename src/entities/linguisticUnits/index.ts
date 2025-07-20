@@ -65,7 +65,8 @@ export { useDueWords } from "./words/useDueWords";
 
 // Sentence-related exports
 export type { SentenceData } from "./sentences/SentenceData";
-export { useEligibleSentences } from "./sentences/useEligibleSentences";
+
+
 
 // Progress-related exports
 export type { LinguisticUnitProgressData } from "./progress/LinguisticUnitProgressData";

@@ -72,4 +72,6 @@ export interface ProgressServiceContract {
   
   // Recent operations
   getRecent(limit?: number): Promise<LinguisticUnitProgressData[]>;
-} 
+}
+
+ 
