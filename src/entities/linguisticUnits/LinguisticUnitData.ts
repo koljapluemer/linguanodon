@@ -9,10 +9,7 @@ export interface LinguisticUnitData extends LinguisticUnitIdentification {
     content: string;
     showBeforeExercise?: boolean;
   }>;
-  translations?: Array<{
-    language: string;
-    content: string;
-  }>;
+  translations?: LinguisticUnitIdentification[];
   links?: Array<{
     label: string;
     url: string;

@@ -8,8 +8,8 @@
   <!-- Form -->
   <div v-else class="card bg-base-100 shadow-lg">
     <div class="card-body">
-      <SentenceFormRender
-        :sentence="form"
+      <WordFormRender
+        :word="form"
         :languages="languages"
         :errors="errors"
         @submit="save"
@@ -38,7 +38,7 @@
           :disabled="loading"
         >
           <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-          {{ (language && content) ? 'Update Sentence' : 'Create Sentence' }}
+          {{ (language && content) ? 'Update Word' : 'Create Word' }}
         </button>
         <button
           @click="reset"
@@ -49,7 +49,7 @@
         </button>
         <button
           v-if="language && content"
-          @click="deleteSentence"
+          @click="deleteWord"
           class="btn btn-error"
           :disabled="loading"
         >
@@ -62,9 +62,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import SentenceFormRender from './SentenceFormRender.vue'
-import { sentenceService } from '@/entities/linguisticUnits'
-import type { SentenceData } from '@/entities/linguisticUnits'
+import WordFormRender from './WordFormRender.vue'
+import { wordService } from '@/entities/linguisticUnits'
+import type { WordData } from '@/entities/linguisticUnits'
 
 interface Props {
   language?: string
@@ -73,7 +73,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'saved', sentence: SentenceData): void
+  (e: 'saved', word: WordData): void
   (e: 'deleted'): void
   (e: 'error', message: string): void
 }
@@ -82,15 +82,17 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // Internal form state
-const form = ref<SentenceData>({
-  type: 'sentence',
+const form = ref<WordData>({
+  type: 'word',
   language: '',
   content: '',
   notes: [],
   translations: [],
   links: [],
   credits: [],
-  containsWords: []
+  otherForms: [],
+  synonyms: [],
+  appearsIn: []
 })
 
 const errors = ref<Record<string, string>>({})
@@ -100,7 +102,7 @@ const loading = ref(false)
 onMounted(() => {
   if (props.language && props.content) {
     loading.value = true
-    loadSentenceData()
+    loadWordData()
   }
 })
 
@@ -123,19 +125,19 @@ function validate() {
 }
 
 /**
- * Loads sentence data from the repository
+ * Loads word data from the repository
  */
-async function loadSentenceData() {
+async function loadWordData() {
   if (!props.language || !props.content) return
   
   loading.value = true
   try {
-    const sentence = await sentenceService.getById(props.language, props.content)
-    if (sentence) {
-      form.value = { ...sentence }
+    const word = await wordService.getById(props.language, props.content)
+    if (word) {
+      form.value = { ...word }
     }
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Failed to load sentence'
+    const message = err instanceof Error ? err.message : 'Failed to load word'
     emit('error', message)
   } finally {
     loading.value = false
@@ -147,24 +149,26 @@ async function loadSentenceData() {
  */
 function reset() {
   if (props.language && props.content) {
-    loadSentenceData()
+    loadWordData()
   } else {
     form.value = {
-      type: 'sentence',
+      type: 'word',
       language: '',
       content: '',
       notes: [],
       translations: [],
       links: [],
       credits: [],
-      containsWords: []
+      otherForms: [],
+      synonyms: [],
+      appearsIn: []
     }
   }
   errors.value = {}
 }
 
 /**
- * Saves the sentence to the repository
+ * Saves the word to the repository
  */
 async function save() {
   if (!validate()) return false
@@ -172,14 +176,14 @@ async function save() {
   loading.value = true
   try {
     if (props.language && props.content) {
-      await sentenceService.update(form.value)
+      await wordService.update(form.value)
     } else {
-      await sentenceService.add(form.value)
+      await wordService.add(form.value)
     }
     emit('saved', form.value)
     return true
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Failed to save sentence'
+    const message = err instanceof Error ? err.message : 'Failed to save word'
     emit('error', message)
     return false
   } finally {
@@ -188,18 +192,18 @@ async function save() {
 }
 
 /**
- * Deletes the sentence from the repository
+ * Deletes the word from the repository
  */
-async function deleteSentence() {
+async function deleteWord() {
   if (!props.language || !props.content) return false
   
   loading.value = true
   try {
-    await sentenceService.delete(form.value.language, form.value.content)
+    await wordService.delete(form.value.language, form.value.content)
     emit('deleted')
     return true
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Failed to delete sentence'
+    const message = err instanceof Error ? err.message : 'Failed to delete word'
     emit('error', message)
     return false
   } finally {
@@ -208,14 +212,14 @@ async function deleteSentence() {
 }
 
 /**
- * Updates the sentence language
+ * Updates the word language
  */
 function updateLanguage(value: string) {
   form.value.language = value
 }
 
 /**
- * Updates the sentence content
+ * Updates the word content
  */
 function updateContent(value: string) {
   form.value.content = value
@@ -282,7 +286,7 @@ function updateTranslationContent(index: number, content: string) {
  */
 function addTranslation() {
   if (!form.value.translations) form.value.translations = []
-  form.value.translations.push({ type: 'sentence', language: '', content: '' })
+  form.value.translations.push({ type: 'word', language: '', content: '' })
 }
 
 /**
@@ -328,7 +332,7 @@ function removeLink(index: number) {
 // Expose methods for parent components
 defineExpose({
   save,
-  delete: deleteSentence,
+  delete: deleteWord,
   reset,
   validate
 })

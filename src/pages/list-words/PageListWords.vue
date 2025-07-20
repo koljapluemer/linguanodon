@@ -145,7 +145,12 @@ onMounted(loadData);
 
 <template>
   <div class="max-w-6xl mx-auto mt-8 p-4">
-    <h1 class="text-3xl font-bold mb-6">Words</h1>
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Words</h1>
+      <router-link to="/words/manage" class="btn btn-primary">
+        Add New Word
+      </router-link>
+    </div>
     
     <!-- Search -->
     <div class="mb-6">
@@ -203,6 +208,16 @@ onMounted(loadData);
                     <span class="font-medium">Translations:</span> 
                     {{ word.translations.map(t => t.content).join(', ') }}
                   </p>
+                </div>
+
+                <!-- Edit button -->
+                <div class="flex gap-2 mt-2">
+                  <router-link 
+                    :to="{ name: 'edit-word', params: { language: word.language, content: word.content } }"
+                    class="btn btn-sm btn-outline"
+                  >
+                    Edit
+                  </router-link>
                 </div>
 
                 <!-- Last practiced -->

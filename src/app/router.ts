@@ -1,4 +1,5 @@
 import PageListWords from '@/pages/list-words/PageListWords.vue'
+import PageManageWords from '@/pages/manage-words/PageManageWords.vue'
 import PagePractice from '@/pages/practice/PagePractice.vue'
 import PageListSentences from '@/pages/list-sentences/PageListSentences.vue'
 import PageManageSentences from '@/pages/manage-sentences/PageManageSentences.vue'
@@ -25,6 +26,18 @@ const routes: RouteRecordRaw[] = [
     path: '/words',
     name: 'words',
     component: PageListWords
+  },
+  {
+    /** Manage words - add/edit */
+    path: '/words/manage',
+    name: 'manage-words',
+    component: PageManageWords
+  },
+  {
+    /** Edit specific word */
+    path: '/words/manage/:language/:content',
+    name: 'edit-word',
+    component: PageManageWords
   },
   {
     /** List all sentences with progress data */

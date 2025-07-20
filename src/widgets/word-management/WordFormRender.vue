@@ -2,7 +2,7 @@
   <form @submit.prevent="$emit('submit')">
     <!-- Language -->
     <WidgetLanguageSelect
-      :model-value="sentence.language"
+      :model-value="word.language"
       @update:model-value="$emit('update:language', $event)"
       :languages="languages"
       label="Language"
@@ -20,11 +20,11 @@
         </span>
       </label>
       <textarea
-        :value="sentence.content"
+        :value="word.content"
         @input="$emit('update:content', ($event.target as HTMLTextAreaElement).value)"
         class="textarea textarea-bordered w-full"
         rows="4"
-        placeholder="Enter the sentence content..."
+        placeholder="Enter the word content..."
         :class="{ 'textarea-error': errors.content }"
       ></textarea>
       <label v-if="errors.content" class="label">
@@ -39,7 +39,7 @@
       </label>
       <div class="space-y-2">
         <div 
-          v-for="(note, index) in sentence.notes || []" 
+          v-for="(note, index) in word.notes || []" 
           :key="index"
           class="flex gap-2"
         >
@@ -84,7 +84,7 @@
       </label>
       <div class="space-y-2">
         <div 
-          v-for="(translation, index) in sentence.translations || []" 
+          v-for="(translation, index) in word.translations || []" 
           :key="index"
           class="flex gap-2"
         >
@@ -131,7 +131,7 @@
       </label>
       <div class="space-y-2">
         <div 
-          v-for="(link, index) in sentence.links || []" 
+          v-for="(link, index) in word.links || []" 
           :key="index"
           class="flex gap-2"
         >
@@ -167,10 +167,10 @@
 
 <script setup lang="ts">
 import WidgetLanguageSelect from '@/shared/ElementLanguageSelect.vue'
-import type { SentenceData } from '@/entities/linguisticUnits'
+import type { WordData } from '@/entities/linguisticUnits'
 
 interface Props {
-  sentence: SentenceData
+  word: WordData
   languages: Array<{ code: string; name: string }>
   errors: Record<string, string>
 }
@@ -196,4 +196,4 @@ interface Emits {
 
 defineProps<Props>()
 defineEmits<Emits>()
-</script>
+</script> 
