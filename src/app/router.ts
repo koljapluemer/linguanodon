@@ -11,6 +11,7 @@ import PageDebugLearningEvents from '@/pages/debug/debug-learning-events/DebugLe
 import PageDebugLinguisticUnitProgressData from '@/pages/debug/debug-linguistic-unit-progress-data/DebugLinguisticUnitProgressData.vue'
 import PageDebugWord from '@/pages/debug/debug-word/DebugWord.vue'
 import PageDebugSentence from '@/pages/debug/debug-sentence/DebugSentence.vue'
+import PageManageLanguages from '@/pages/manage-languages/PageManageLanguages.vue'
 
 /**
  * Application routes. Add new pages here.
@@ -99,6 +100,12 @@ const routes: RouteRecordRaw[] = [
     path: '/debug/sentence/:language/:content',
     name: 'debug-sentence',
     component: PageDebugSentence
+  },
+  {
+    /** Manage languages - add/edit */
+    path: '/languages/manage',
+    name: 'manage-languages',
+    component: PageManageLanguages
   }
 ]
 
