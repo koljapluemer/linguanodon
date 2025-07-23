@@ -1,6 +1,0 @@
-requests
-youtube-transcript-api
-openai
-pydantic
-python-dotenv
-pandas
