@@ -12,6 +12,8 @@ import PageDebugLinguisticUnitProgressData from '@/pages/debug/debug-linguistic-
 import PageDebugWord from '@/pages/debug/debug-word/DebugWord.vue'
 import PageDebugSentence from '@/pages/debug/debug-sentence/DebugSentence.vue'
 import PageManageLanguages from '@/pages/manage-languages/PageManageLanguages.vue'
+import PageManageLearningGoal from '@/pages/manage-learning-goal/PageManageLearningGoal.vue'
+import PageListLearningGoals from '@/pages/list-learning-goals/PageListLearningGoals.vue'
 
 /**
  * Application routes. Add new pages here.
@@ -106,6 +108,24 @@ const routes: RouteRecordRaw[] = [
     path: '/languages/manage',
     name: 'manage-languages',
     component: PageManageLanguages
+  },
+  {
+    /** Manage learning goals - add/edit */
+    path: '/learning-goals/manage',
+    name: 'manage-learning-goals',
+    component: PageManageLearningGoal
+  },
+  {
+    /** Edit specific learning goal */
+    path: '/learning-goals/manage/:uid',
+    name: 'edit-learning-goal',
+    component: PageManageLearningGoal
+  },
+  {
+    /** List all learning goals */
+    path: '/learning-goals',
+    name: 'learning-goals',
+    component: PageListLearningGoals
   }
 ]
 

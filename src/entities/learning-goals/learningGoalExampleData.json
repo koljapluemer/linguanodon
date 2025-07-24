@@ -1,0 +1,32 @@
+[
+  {
+    "uid": "learning-goal-numbers-1-20-apc",
+    "title": "Learn the numbers from 1-20",
+    "language": "apc",
+    "associatedUnits": [
+      { "type": "word", "language": "eng", "content": "one" },
+      { "type": "word", "language": "eng", "content": "two" },
+      { "type": "word", "language": "eng", "content": "three" },
+      { "type": "word", "language": "eng", "content": "four" },
+      { "type": "word", "language": "eng", "content": "five" },
+      { "type": "word", "language": "eng", "content": "six" },
+      { "type": "word", "language": "eng", "content": "seven" },
+      { "type": "word", "language": "eng", "content": "eight" },
+      { "type": "word", "language": "eng", "content": "nine" },
+      { "type": "word", "language": "eng", "content": "ten" },
+      { "type": "word", "language": "eng", "content": "eleven" },
+      { "type": "word", "language": "eng", "content": "twelve" },
+      { "type": "word", "language": "eng", "content": "thirteen" },
+      { "type": "word", "language": "eng", "content": "fourteen" },
+      { "type": "word", "language": "eng", "content": "fifteen" },
+      { "type": "word", "language": "eng", "content": "sixteen" },
+      { "type": "word", "language": "eng", "content": "seventeen" },
+      { "type": "word", "language": "eng", "content": "eighteen" },
+      { "type": "word", "language": "eng", "content": "nineteen" },
+      { "type": "word", "language": "eng", "content": "twenty" }
+    ],
+    "milestones": [
+      { "content": "Count to twenty as fast as you can" }
+    ]
+  }
+] 

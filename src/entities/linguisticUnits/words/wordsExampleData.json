@@ -2,6 +2,346 @@
   {
     "type": "word",
     "language": "apc",
+    "content": "واحد",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "one"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تنين",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "two"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تلاتة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "three"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "أربعة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "four"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "خمسة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "five"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "ستة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "six"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "سبعة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "seven"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تمانِة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "eight"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تسعة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "nine"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "عشرة",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "ten"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "حداشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "eleven"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تناشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "twelve"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تلاتاشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "thirteen"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "اربعاشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "fourteen"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "خمستاشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "fifteen"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "ستاشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "sixteen"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "سبعتاشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "seventeen"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تمناشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "eighteen"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "تسعتاشر",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "nineteen"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
+    "content": "عشرين",
+    "notes": [],
+    "translations": [
+      {
+        "type": "word",
+        "language": "eng",
+        "content": "twenty"
+      }
+    ],
+    "links": [],
+    "otherForms": [],
+    "synonyms": [],
+    "appearsIn": []
+  },
+  {
+    "type": "word",
+    "language": "apc",
     "content": "حابب",
     "notes": [
       {
