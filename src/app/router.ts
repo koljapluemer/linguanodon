@@ -14,6 +14,8 @@ import PageDebugSentence from '@/pages/debug/debug-sentence/DebugSentence.vue'
 import PageManageLanguages from '@/pages/manage-languages/PageManageLanguages.vue'
 import PageManageLearningGoal from '@/pages/manage-learning-goal/PageManageLearningGoal.vue'
 import PageListLearningGoals from '@/pages/list-learning-goals/PageListLearningGoals.vue'
+import PageListImmersionContent from '@/pages/list-immersion-content/PageListImmersionContent.vue';
+import PageManageImmersionContent from '@/pages/manage-immersion-content/PageManageImmersionContent.vue';
 
 /**
  * Application routes. Add new pages here.
@@ -126,7 +128,26 @@ const routes: RouteRecordRaw[] = [
     path: '/learning-goals',
     name: 'learning-goals',
     component: PageListLearningGoals
-  }
+  },
+  {
+    /** List all immersion content */
+    path: '/immersion-content',
+    name: 'immersion-content',
+    component: PageListImmersionContent
+  },
+  {
+    /** Manage immersion content - add/edit */
+    path: '/immersion-content/manage',
+    name: 'manage-immersion-content',
+    component: PageManageImmersionContent
+  },
+  {
+    /** Edit specific immersion content */
+    path: '/immersion-content/manage/:uid',
+    name: 'edit-immersion-content',
+    component: PageManageImmersionContent
+  },
+
 ]
 
 /**

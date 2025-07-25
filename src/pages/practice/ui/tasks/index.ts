@@ -7,6 +7,7 @@ import ChooseFromFourTask from './choose-from-four/ChooseFromFourTask.vue';
 import ResourceExtractionTask from './resource-extraction/ResourceExtractionTask.vue';
 import MissingTranslationTask from './missing-translation/MissingTranslationTask.vue';
 import MilestoneTask from './milestone/MilestoneTask.vue';
+import ImmersionContentTask from './immersion-content/ImmersionContentTask.vue';
 
 // Register all task types
 TaskRegistry.register('reveal', { component: RevealTask });
@@ -17,6 +18,7 @@ TaskRegistry.register('choose-from-four', { component: ChooseFromFourTask });
 TaskRegistry.register('resource-extraction', { component: ResourceExtractionTask });
 TaskRegistry.register('missing-translation', { component: MissingTranslationTask });
 TaskRegistry.register('milestone', { component: MilestoneTask });
+TaskRegistry.register('immersion-content', { component: ImmersionContentTask });
 
 // Export the registry for use in other components
 export { TaskRegistry };

@@ -7,6 +7,7 @@
         <router-link :to="{ name: 'words' }" class="btn btn-ghost btn-sm">Words</router-link>
         <router-link :to="{ name: 'sentences' }" class="btn btn-ghost btn-sm">Sentences</router-link>
         <router-link :to="{ name: 'resources' }" class="btn btn-ghost btn-sm">Resources</router-link>
+        <router-link :to="{ name: 'immersion-content' }" class="btn btn-ghost btn-sm">Immersion</router-link>
         <router-link :to="{ name: 'learning-goals' }" class="btn btn-ghost btn-sm">Goals</router-link>
       </nav>
     </header>

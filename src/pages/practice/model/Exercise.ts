@@ -64,5 +64,11 @@ export interface MilestoneExercise extends BaseExercise {
   milestoneContent: string;
 }
 
+export interface ImmersionContentExercise extends BaseExercise {
+  type: 'immersion-content';
+  prompt: string;
+  immersionContent: import('@/entities/immersion-content').ImmersionContentData;
+}
+
 // Union type for all exercises
-export type Exercise = RevealExercise | ChooseFromTwoExercise | ChooseFromFourExercise | FreeTranslateExercise | TryToRememberExercise | ResourceExercise | MissingTranslationExercise | MilestoneExercise; 
+export type Exercise = RevealExercise | ChooseFromTwoExercise | ChooseFromFourExercise | FreeTranslateExercise | TryToRememberExercise | ResourceExercise | MissingTranslationExercise | MilestoneExercise | ImmersionContentExercise; 
