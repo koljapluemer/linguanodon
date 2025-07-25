@@ -21,10 +21,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// No longer need to provide repositories - entities handle their own access
-</script>
-
 <style>
 @import "tailwindcss";
 @plugin "daisyui";

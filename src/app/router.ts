@@ -1,6 +1,5 @@
 import PageListWords from '@/pages/list-words/PageListWords.vue'
 import PageManageWords from '@/pages/manage-words/PageManageWords.vue'
-import PagePractice from '@/pages/practice/PagePractice.vue'
 import PageListSentences from '@/pages/list-sentences/PageListSentences.vue'
 import PageManageSentences from '@/pages/manage-sentences/PageManageSentences.vue'
 import PageListResources from '@/pages/list-resources/PageListResources.vue'
@@ -21,12 +20,6 @@ import PageManageImmersionContent from '@/pages/manage-immersion-content/PageMan
  * Application routes. Add new pages here.
  */
 const routes: RouteRecordRaw[] = [
-  {
-    /** Practice page for language learning exercises */
-    path: '/practice',
-    name: 'practice',
-    component: PagePractice
-  },
   {
     /** List all words with progress data */
     path: '/words',
