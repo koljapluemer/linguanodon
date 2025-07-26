@@ -1,18 +1,10 @@
-import type { LinguisticUnitIdentification } from '@/shared/LinguisticUnitIdentification';
+import type { LocalObject } from "@/shared/LocalObject";
+import type { TaskData } from "@/shared/TaskData";
 
-export interface ImmersionContentData {
+export interface ImmersionContentData extends TaskData, LocalObject{
   uid: string;
-  title: string;
-  link: string;
-  prompt: string;
-  extraInfo: string;
   language: string;
-  isUserCreated: boolean;
-  lastDownloadedAt: Date | null;
-  isExploited: boolean;
-  lastIteratedAt: Date | null;
-  nextShownEarliestAt: Date | null;
+
   priority: number;
-  associatedUnits: LinguisticUnitIdentification[];
-  extractedUnits: LinguisticUnitIdentification[];
+  associatedUnits: string[]; // ids of vocabd
 } 
