@@ -188,3 +188,64 @@ Make sure that if the db is empty to add some demo content which meshes with the
 - See [README](src/shared/README.md) to understand what belongs here.
 
 - we have [array utils](src/shared/arrayUtils.ts) here. If you need shuffled arrays, weighted random picking, pick random from array, all that kinda stuff, put it here!
+
+
+# Development Guidelines
+
+- Use [Feature-Sliced Design](https://feature-sliced.design/docs/get-started/overview):
+- That means, we have the following layers (in order), each with their own folder:
+  - app/
+  - pages/
+  - widgets/
+  - features/
+  - entities/
+  - shared/
+
+- As a general rule, code may ONLY!!!! depend on layers BELOW!!
+- In each of these layers, we have *slices* defined by our project at hand, such as `entities/lessons` and `entities/tasks`.
+- Slices are made from cohesive, interconnected collection of files
+- They may NOT!! depend on slices on the same layer, or on layers above them!!
+
+
+
+- Use Tailwind + Daisy UI for styling
+  - Ensure that the layout works on mobile and desktop. Keep in mind both light and dark mode, avoid hardcoding white, greys and blacks.
+- follow Vue3/ts best practices
+- Our interfaces (and their implementation, currently dexie)
+
+- Page components should include MINIMAL implementation logic. That should live in util functions, called from components, not pages.
+- Components are either controller (logic, maybe dependency and store, do nothing in template except loading a representational component) or representational only (just props and emits, no external dependencies)
+- keep code unit-testable as much a possible
+- fix linter errors always
+- do not replicate type files! types should always live in dedicated files (unless ONLY relevant hyper-locally), and existing types should be reused.
+- use lucide icons (lucide-vue-next). Ensure!! icon names are valid ([icon list](https://raw.githubusercontent.com/mazeincoding/lucide-icons-list/refs/heads/main/icons.txt))
+
+
+## How to Add a Feature
+
+### High-Level Organisation
+
+- Keep files reasonably small.
+- Write VERY CLEAN code. functions and lines of code should be self-explanatory. If a collection of code lines is confusing to read (or even just a single line), it should likely be its own function
+- Keep components and pages as purely representational as possible
+
+
+- Use `@/...` import syntax, except if the the imported thing is in the same directory or slice. That's way more robust, and way more readable.
+
+### Documentation
+
+- Write conceptual stuff in `docs/` as a markdown guide
+- Code should mostly document itself, see chapter above
+
+### Testing
+
+- Write unit tests, component test and integration test when it's useful to improve our confidence
+- Test files should live alongside the code they are testing
+
+### Tech Stack
+
+- Standard Vue + Vite app
+    - Meaning, per-default, we are doing things *server-side*
+- `eslint` is setup. Don't forget to run linter.
+- we have `Tailwind` + `Daisy UI` installed, utilize that for design
+    - Avoid manual CSS when possible
