@@ -1,115 +1,1482 @@
 {
   "vocab": [
     {
-      "id": "ciao-1",
-      "language": "it",
-      "content": "ciao",
-      "pronunciation": "cha-oh",
-      "notes": [
-        {
-          "content": "Informal greeting",
-          "showBeforeExercise": true
-        }
+      "id": "lOmP70oVtLo_حمودي_8d9134ac",
+      "language": "apc",
+      "content": "حمودي",
+      "translations": [
+        "lOmP70oVtLo_Hamoudi_b0eaa68b"
       ],
-      "translations": ["hello-1", "bye-1"],
       "links": [],
       "associatedTasks": []
     },
     {
-      "id": "casa-1", 
-      "language": "it",
-      "content": "casa",
-      "notes": [],
-      "translations": ["house-1"],
-      "links": [],
-      "associatedTasks": []
-    },
-    {
-      "id": "libro-1",
-      "language": "it", 
-      "content": "libro",
-      "notes": [],
-      "translations": ["book-1"],
-      "links": [],
-      "associatedTasks": []
-    },
-    {
-      "id": "mangiare-1",
-      "language": "it",
-      "content": "mangiare", 
-      "notes": [
-        {
-          "content": "Regular -are verb",
-          "showBeforeExercise": false
-        }
+      "id": "lOmP70oVtLo_وصلوا_9e2182a0",
+      "language": "apc",
+      "content": "وصلوا",
+      "translations": [
+        "lOmP70oVtLo_they arrived_b3035243",
+        "lOmP70oVtLo_arrived_5fdb498d"
       ],
-      "translations": ["eat-1"],
       "links": [],
       "associatedTasks": []
     },
     {
-      "id": "bene-1",
-      "language": "it",
-      "content": "bene",
-      "notes": [],
-      "translations": ["well-1", "good-1"],
+      "id": "lOmP70oVtLo_كيف_7c158fb9",
+      "language": "apc",
+      "content": "كيف",
+      "translations": [
+        "lOmP70oVtLo_how_1d74b045"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_قعت_32f8d541",
+      "language": "apc",
+      "content": "قعت",
+      "translations": [
+        "lOmP70oVtLo_I sat_01214fd7"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_على_6ff92798",
+      "language": "apc",
+      "content": "على",
+      "translations": [
+        "lOmP70oVtLo_on_67cc8872"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_الكرسي_8fa2383d",
+      "language": "apc",
+      "content": "الكرسي",
+      "translations": [
+        "lOmP70oVtLo_the chair_f4508d38"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_مثل_2d415d60",
+      "language": "apc",
+      "content": "مثل",
+      "translations": [
+        "lOmP70oVtLo_like_e56e64cd"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_حضرتك_0ef624c7",
+      "language": "apc",
+      "content": "حضرتك",
+      "translations": [
+        "lOmP70oVtLo_you_86f7e67c"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_كبن_e7bc24b5",
+      "language": "apc",
+      "content": "كبن",
+      "translations": [
+        "lOmP70oVtLo_I accepted_118fa432"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_كف_3e37f955",
+      "language": "apc",
+      "content": "كف",
+      "translations": [
+        "lOmP70oVtLo_stop_c3ea1f1f"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_الكرس_b33c4aa1",
+      "language": "apc",
+      "content": "الكرس",
+      "translations": [
+        "lOmP70oVtLo_chair_41a55842"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_شو_ec339e0b",
+      "language": "apc",
+      "content": "شو",
+      "translations": [
+        "lOmP70oVtLo_what_bb9203e7"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_بدك_d6cff8ad",
+      "language": "apc",
+      "content": "بدك",
+      "translations": [
+        "lOmP70oVtLo_do you want_0170d1ac"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_نطلب_aa57ffb9",
+      "language": "apc",
+      "content": "نطلب",
+      "translations": [
+        "lOmP70oVtLo_order_4f527eaf"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_يا_ee594d8e",
+      "language": "apc",
+      "content": "يا",
+      "translations": [
+        "lOmP70oVtLo_you_0fb433d5"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_عمري_e0703cdd",
+      "language": "apc",
+      "content": "عمري",
+      "translations": [
+        "lOmP70oVtLo_my life_cac0a494"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_شي_ff771855",
+      "language": "apc",
+      "content": "شي",
+      "translations": [
+        "lOmP70oVtLo_thing_81c41d2d"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_نو_fe6afe19",
+      "language": "apc",
+      "content": "نو",
+      "translations": [
+        "lOmP70oVtLo_no_b7f1160e"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_نازل_d73c6bf4",
+      "language": "apc",
+      "content": "نازل",
+      "translations": [
+        "lOmP70oVtLo_available_1abc86c3"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_اسمه_7ba61a16",
+      "language": "apc",
+      "content": "اسمه",
+      "translations": [
+        "lOmP70oVtLo_its name_22e65eec"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_بوكس_d55f12af",
+      "language": "apc",
+      "content": "بوكس",
+      "translations": [
+        "lOmP70oVtLo_box_daa2a482"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_نطلبه_c171a1d6",
+      "language": "apc",
+      "content": "نطلبه",
+      "translations": [
+        "lOmP70oVtLo_we ask for_c7256db1"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_اوكي_3d327b1e",
+      "language": "apc",
+      "content": "اوكي",
+      "translations": [
+        "lOmP70oVtLo_okay_5db0fef1"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_بليز_6c2fc986",
+      "language": "apc",
+      "content": "بليز",
+      "translations": [
+        "lOmP70oVtLo_please_d0af8790"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_ماتوش_31a07c2b",
+      "language": "apc",
+      "content": "ماتوش",
+      "translations": [
+        "lOmP70oVtLo_don't bring_609e2d9e"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_ورق_3de7583e",
+      "language": "apc",
+      "content": "ورق",
+      "translations": [
+        "lOmP70oVtLo_paper_3caee294"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_طالب_397f4041",
+      "language": "apc",
+      "content": "طالب",
+      "translations": [
+        "lOmP70oVtLo_student_61b9f6c6"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_زعل_9a5311b8",
+      "language": "apc",
+      "content": "زعل",
+      "translations": [
+        "lOmP70oVtLo_angry_b198a917"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_زعاله_37b55eb5",
+      "language": "apc",
+      "content": "زعاله",
+      "translations": [
+        "lOmP70oVtLo_disturbance_208b8985"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_ما_6d18bb5f",
+      "language": "apc",
+      "content": "ما",
+      "translations": [
+        "lOmP70oVtLo_not_7f0be9a5"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_عم_d3fd6ba8",
+      "language": "apc",
+      "content": "عم",
+      "translations": [
+        "lOmP70oVtLo_present continuous marker_f6bc44f6"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_تطعمين_414cc9f9",
+      "language": "apc",
+      "content": "تطعمين",
+      "translations": [
+        "lOmP70oVtLo_you feed_ba32d999"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_طعميه_7acf01e5",
+      "language": "apc",
+      "content": "طعميه",
+      "translations": [
+        "lOmP70oVtLo_feed him_7a8f5057"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_طعميني_645eadea",
+      "language": "apc",
+      "content": "طعميني",
+      "translations": [
+        "lOmP70oVtLo_feed me_7d4c7eeb"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_بدي_e1d8fec1",
+      "language": "apc",
+      "content": "بدي",
+      "translations": [
+        "lOmP70oVtLo_I want_3273664b"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_منكب_0be13a08",
+      "language": "apc",
+      "content": "منكب",
+      "translations": [
+        "lOmP70oVtLo_shoulder_7356f26c"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_يعني_1d540501",
+      "language": "apc",
+      "content": "يعني",
+      "translations": [
+        "lOmP70oVtLo_means_e573d248"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_خَل_9f0a7184",
+      "language": "apc",
+      "content": "خَل",
+      "translations": [
+        "lOmP70oVtLo_let_ef416199"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_بس_84d976c7",
+      "language": "apc",
+      "content": "بس",
+      "translations": [
+        "lOmP70oVtLo_but_39b7194a"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_اتبق_67fa98dd",
+      "language": "apc",
+      "content": "اتبق",
+      "translations": [
+        "lOmP70oVtLo_stay_1d9e87fc"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_اصبتم_cf46bb6a",
+      "language": "apc",
+      "content": "اصبتم",
+      "translations": [
+        "lOmP70oVtLo_you have been hit_3db2edf5"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_بالعين_5664fdde",
+      "language": "apc",
+      "content": "بالعين",
+      "translations": [
+        "lOmP70oVtLo_with the evil eye_725996ea"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_اي_5777eecb",
+      "language": "apc",
+      "content": "اي",
+      "translations": [
+        "lOmP70oVtLo_which_f97267bf"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_صبيهم_dab7d998",
+      "language": "apc",
+      "content": "صبيهم",
+      "translations": [
+        "lOmP70oVtLo_boy_975299cc"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_فكره_425cbfc6",
+      "language": "apc",
+      "content": "فكره",
+      "translations": [
+        "lOmP70oVtLo_idea_7c6b62b9"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_عين_39d2fc46",
+      "language": "apc",
+      "content": "عين",
+      "translations": [
+        "lOmP70oVtLo_eye_1478b995"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_فكري_639469e3",
+      "language": "apc",
+      "content": "فكري",
+      "translations": [
+        "lOmP70oVtLo_my thoughts_902270df"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_هلا_cac0d4b1",
+      "language": "apc",
+      "content": "هلا",
+      "translations": [
+        "lOmP70oVtLo_now_60038606"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_الفاتوره_dbed6528",
+      "language": "apc",
+      "content": "الفاتوره",
+      "translations": [
+        "lOmP70oVtLo_the invoice_6dc0ec58"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_تدفع_a1564be1",
+      "language": "apc",
+      "content": "تدفع",
+      "translations": [
+        "lOmP70oVtLo_to pay_a3bcdf22"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "lOmP70oVtLo_نصيب_0ff0e4b8",
+      "language": "apc",
+      "content": "نصيب",
+      "translations": [
+        "lOmP70oVtLo_share_0a99a9a2"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_ابو_5ef5c6ba",
+      "language": "apc",
+      "content": "ابو",
+      "translations": [
+        "saXs-rRFTpM_father_db74b6d1"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_علي_7826d12f",
+      "language": "apc",
+      "content": "علي",
+      "translations": [
+        "saXs-rRFTpM_Ali_18f1097b"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_بيزعل_8df49643",
+      "language": "apc",
+      "content": "بيزعل",
+      "translations": [
+        "saXs-rRFTpM_is upset_46ebd868"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_بلا_ae91bc85",
+      "language": "apc",
+      "content": "بلا",
+      "translations": [
+        "saXs-rRFTpM_without_a31768a5"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_ما_b3c39c8b",
+      "language": "apc",
+      "content": "ما",
+      "translations": [
+        "saXs-rRFTpM_not_aa90cbba"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_هون_e30fa7be",
+      "language": "apc",
+      "content": "هون",
+      "translations": [
+        "saXs-rRFTpM_here_552e8c20"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_بدي_1a0fa841",
+      "language": "apc",
+      "content": "بدي",
+      "translations": [
+        "saXs-rRFTpM_I want_355c2e79"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_اصل_4564a600",
+      "language": "apc",
+      "content": "اصل",
+      "translations": [
+        "saXs-rRFTpM_origin_70254bf1"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_خلص_be952e78",
+      "language": "apc",
+      "content": "خلص",
+      "translations": [
+        "saXs-rRFTpM_finish_4100efee"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_شو_365fc0ab",
+      "language": "apc",
+      "content": "شو",
+      "translations": [
+        "saXs-rRFTpM_what_0506fe5e"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_بدك_a8ea38a9",
+      "language": "apc",
+      "content": "بدك",
+      "translations": [
+        "saXs-rRFTpM_you want_f0a1fb76"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_فيه_aec92ce5",
+      "language": "apc",
+      "content": "فيه",
+      "translations": [
+        "saXs-rRFTpM_in it_46eb132e"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_رايح_cab39cdf",
+      "language": "apc",
+      "content": "رايح",
+      "translations": [
+        "saXs-rRFTpM_going_ccd03b38"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_جاي_5f3c5b51",
+      "language": "apc",
+      "content": "جاي",
+      "translations": [
+        "saXs-rRFTpM_coming_4892f188"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_اوكي_4956feab",
+      "language": "apc",
+      "content": "اوكي",
+      "translations": [
+        "saXs-rRFTpM_Okay_7d063bac"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_اهلا_4644be10",
+      "language": "apc",
+      "content": "اهلا",
+      "translations": [
+        "saXs-rRFTpM_Hello_ff635ca2"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_وسهلا_9b72e6c1",
+      "language": "apc",
+      "content": "وسهلا",
+      "translations": [
+        "saXs-rRFTpM_Welcome_a4e519f4"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_لك_f44cbacb",
+      "language": "apc",
+      "content": "لك",
+      "translations": [
+        "saXs-rRFTpM_for you_51813f28"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_نورت_4b363084",
+      "language": "apc",
+      "content": "نورت",
+      "translations": [
+        "saXs-rRFTpM_You lit up_01d7d2d8"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_وشرفت_065a2640",
+      "language": "apc",
+      "content": "وشرفت",
+      "translations": [
+        "saXs-rRFTpM_You honored_ef20f11b"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_انا_55fa2dfa",
+      "language": "apc",
+      "content": "انا",
+      "translations": [
+        "saXs-rRFTpM_I_1dffa65f"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_بس_27d4cd25",
+      "language": "apc",
+      "content": "بس",
+      "translations": [
+        "saXs-rRFTpM_just_0c67bc6f"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_قالوا_071e8b21",
+      "language": "apc",
+      "content": "قالوا",
+      "translations": [
+        "saXs-rRFTpM_they said_fba42b25"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_لي_3c309d9b",
+      "language": "apc",
+      "content": "لي",
+      "translations": [
+        "saXs-rRFTpM_to me_3dfea12c"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_انك_9e75f856",
+      "language": "apc",
+      "content": "انك",
+      "translations": [
+        "saXs-rRFTpM_that you_7d23f5dd"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_جيت_9354233a",
+      "language": "apc",
+      "content": "جيت",
+      "translations": [
+        "saXs-rRFTpM_you came_4cdfc1a0"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_نزلت_6f1b2ecb",
+      "language": "apc",
+      "content": "نزلت",
+      "translations": [
+        "saXs-rRFTpM_you went down_9a9e9f19"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_ركت_9adf3490",
+      "language": "apc",
+      "content": "ركت",
+      "translations": [
+        "saXs-rRFTpM_you rode_9dd047dd"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_يا كبير_a44ac4d0",
+      "language": "apc",
+      "content": "يا كبير",
+      "translations": [
+        "saXs-rRFTpM_oh big (man)_d9b47a95"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_احلى_6f16193a",
+      "language": "apc",
+      "content": "احلى",
+      "translations": [
+        "saXs-rRFTpM_more beautiful_8fed36ff",
+        "saXs-rRFTpM_most beautiful_de21c3c9"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_برجر_fc470d33",
+      "language": "apc",
+      "content": "برجر",
+      "translations": [
+        "saXs-rRFTpM_burger_4fab574b"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_وصلك_f6f66acc",
+      "language": "apc",
+      "content": "وصلك",
+      "translations": [
+        "saXs-rRFTpM_delivered to you_a8e8a006"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_اياها_8168d0b8",
+      "language": "apc",
+      "content": "اياها",
+      "translations": [
+        "saXs-rRFTpM_it_69a536e5"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_من_df30bb27",
+      "language": "apc",
+      "content": "من",
+      "translations": [
+        "saXs-rRFTpM_from_ed9502d6"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_تحت_dcd9f50a",
+      "language": "apc",
+      "content": "تحت",
+      "translations": [
+        "saXs-rRFTpM_under_9696f15c"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_ايدي_b47e91df",
+      "language": "apc",
+      "content": "ايدي",
+      "translations": [
+        "saXs-rRFTpM_my hand_457b6fb5"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_ببيك_5511defd",
+      "language": "apc",
+      "content": "ببيك",
+      "translations": [
+        "saXs-rRFTpM_what do you want?_fee93451"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_ما شاء الله_037b86aa",
+      "language": "apc",
+      "content": "ما شاء الله",
+      "translations": [
+        "saXs-rRFTpM_what God has willed_4f7e7303"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_قاللك_785666c0",
+      "language": "apc",
+      "content": "قاللك",
+      "translations": [
+        "saXs-rRFTpM_he told you_5944c08b"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_قال_100dd38f",
+      "language": "apc",
+      "content": "قال",
+      "translations": [
+        "saXs-rRFTpM_said_5b7bde00"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_هلا_7de56d1d",
+      "language": "apc",
+      "content": "هلا",
+      "translations": [
+        "saXs-rRFTpM_hello_069fc98e"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_قسما بالله_63e90095",
+      "language": "apc",
+      "content": "قسما بالله",
+      "translations": [
+        "saXs-rRFTpM_I swear by God_8988a90c"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_خص_b2599299",
+      "language": "apc",
+      "content": "خص",
+      "translations": [
+        "saXs-rRFTpM_for_b181b5f0"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_قاللي_fc89da42",
+      "language": "apc",
+      "content": "قاللي",
+      "translations": [
+        "saXs-rRFTpM_told me_9de2bc8e"
+      ],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "saXs-rRFTpM_اص_13068462",
+      "language": "apc",
+      "content": "اص",
+      "translations": [
+        "saXs-rRFTpM_of_0afc9111"
+      ],
       "links": [],
       "associatedTasks": []
     }
   ],
   "translations": [
     {
-      "id": "hello-1",
-      "content": "hello",
-      "note": "informal greeting"
+      "id": "lOmP70oVtLo_Hamoudi_b0eaa68b",
+      "content": "Hamoudi"
     },
     {
-      "id": "bye-1", 
-      "content": "bye"
+      "id": "lOmP70oVtLo_they arrived_b3035243",
+      "content": "they arrived"
     },
     {
-      "id": "house-1",
-      "content": "house"
+      "id": "lOmP70oVtLo_arrived_5fdb498d",
+      "content": "arrived"
     },
     {
-      "id": "book-1",
-      "content": "book"
+      "id": "lOmP70oVtLo_how_1d74b045",
+      "content": "how"
     },
     {
-      "id": "eat-1",
-      "content": "to eat"
+      "id": "lOmP70oVtLo_I sat_01214fd7",
+      "content": "I sat"
     },
     {
-      "id": "well-1",
-      "content": "well"
+      "id": "lOmP70oVtLo_on_67cc8872",
+      "content": "on"
     },
     {
-      "id": "good-1",
-      "content": "good"
+      "id": "lOmP70oVtLo_the chair_f4508d38",
+      "content": "the chair"
+    },
+    {
+      "id": "lOmP70oVtLo_like_e56e64cd",
+      "content": "like"
+    },
+    {
+      "id": "lOmP70oVtLo_you_86f7e67c",
+      "content": "you"
+    },
+    {
+      "id": "lOmP70oVtLo_I accepted_118fa432",
+      "content": "I accepted"
+    },
+    {
+      "id": "lOmP70oVtLo_stop_c3ea1f1f",
+      "content": "stop"
+    },
+    {
+      "id": "lOmP70oVtLo_chair_41a55842",
+      "content": "chair"
+    },
+    {
+      "id": "lOmP70oVtLo_what_bb9203e7",
+      "content": "what"
+    },
+    {
+      "id": "lOmP70oVtLo_do you want_0170d1ac",
+      "content": "do you want"
+    },
+    {
+      "id": "lOmP70oVtLo_order_4f527eaf",
+      "content": "order"
+    },
+    {
+      "id": "lOmP70oVtLo_you_0fb433d5",
+      "content": "you"
+    },
+    {
+      "id": "lOmP70oVtLo_my life_cac0a494",
+      "content": "my life"
+    },
+    {
+      "id": "lOmP70oVtLo_thing_81c41d2d",
+      "content": "thing"
+    },
+    {
+      "id": "lOmP70oVtLo_no_b7f1160e",
+      "content": "no"
+    },
+    {
+      "id": "lOmP70oVtLo_available_1abc86c3",
+      "content": "available"
+    },
+    {
+      "id": "lOmP70oVtLo_its name_22e65eec",
+      "content": "its name"
+    },
+    {
+      "id": "lOmP70oVtLo_box_daa2a482",
+      "content": "box"
+    },
+    {
+      "id": "lOmP70oVtLo_we ask for_c7256db1",
+      "content": "we ask for"
+    },
+    {
+      "id": "lOmP70oVtLo_okay_5db0fef1",
+      "content": "okay"
+    },
+    {
+      "id": "lOmP70oVtLo_please_d0af8790",
+      "content": "please"
+    },
+    {
+      "id": "lOmP70oVtLo_don't bring_609e2d9e",
+      "content": "don't bring"
+    },
+    {
+      "id": "lOmP70oVtLo_paper_3caee294",
+      "content": "paper"
+    },
+    {
+      "id": "lOmP70oVtLo_student_61b9f6c6",
+      "content": "student"
+    },
+    {
+      "id": "lOmP70oVtLo_angry_b198a917",
+      "content": "angry"
+    },
+    {
+      "id": "lOmP70oVtLo_disturbance_208b8985",
+      "content": "disturbance"
+    },
+    {
+      "id": "lOmP70oVtLo_not_7f0be9a5",
+      "content": "not"
+    },
+    {
+      "id": "lOmP70oVtLo_present continuous marker_f6bc44f6",
+      "content": "present continuous marker"
+    },
+    {
+      "id": "lOmP70oVtLo_you feed_ba32d999",
+      "content": "you feed"
+    },
+    {
+      "id": "lOmP70oVtLo_feed him_7a8f5057",
+      "content": "feed him"
+    },
+    {
+      "id": "lOmP70oVtLo_feed me_7d4c7eeb",
+      "content": "feed me"
+    },
+    {
+      "id": "lOmP70oVtLo_I want_3273664b",
+      "content": "I want"
+    },
+    {
+      "id": "lOmP70oVtLo_shoulder_7356f26c",
+      "content": "shoulder"
+    },
+    {
+      "id": "lOmP70oVtLo_means_e573d248",
+      "content": "means"
+    },
+    {
+      "id": "lOmP70oVtLo_let_ef416199",
+      "content": "let"
+    },
+    {
+      "id": "lOmP70oVtLo_but_39b7194a",
+      "content": "but"
+    },
+    {
+      "id": "lOmP70oVtLo_stay_1d9e87fc",
+      "content": "stay"
+    },
+    {
+      "id": "lOmP70oVtLo_you have been hit_3db2edf5",
+      "content": "you have been hit"
+    },
+    {
+      "id": "lOmP70oVtLo_with the evil eye_725996ea",
+      "content": "with the evil eye"
+    },
+    {
+      "id": "lOmP70oVtLo_which_f97267bf",
+      "content": "which"
+    },
+    {
+      "id": "lOmP70oVtLo_boy_975299cc",
+      "content": "boy"
+    },
+    {
+      "id": "lOmP70oVtLo_idea_7c6b62b9",
+      "content": "idea"
+    },
+    {
+      "id": "lOmP70oVtLo_eye_1478b995",
+      "content": "eye"
+    },
+    {
+      "id": "lOmP70oVtLo_my thoughts_902270df",
+      "content": "my thoughts"
+    },
+    {
+      "id": "lOmP70oVtLo_now_60038606",
+      "content": "now"
+    },
+    {
+      "id": "lOmP70oVtLo_the invoice_6dc0ec58",
+      "content": "the invoice"
+    },
+    {
+      "id": "lOmP70oVtLo_to pay_a3bcdf22",
+      "content": "to pay"
+    },
+    {
+      "id": "lOmP70oVtLo_share_0a99a9a2",
+      "content": "share"
+    },
+    {
+      "id": "saXs-rRFTpM_father_db74b6d1",
+      "content": "father"
+    },
+    {
+      "id": "saXs-rRFTpM_Ali_18f1097b",
+      "content": "Ali"
+    },
+    {
+      "id": "saXs-rRFTpM_is upset_46ebd868",
+      "content": "is upset"
+    },
+    {
+      "id": "saXs-rRFTpM_without_a31768a5",
+      "content": "without"
+    },
+    {
+      "id": "saXs-rRFTpM_not_aa90cbba",
+      "content": "not"
+    },
+    {
+      "id": "saXs-rRFTpM_here_552e8c20",
+      "content": "here"
+    },
+    {
+      "id": "saXs-rRFTpM_I want_355c2e79",
+      "content": "I want"
+    },
+    {
+      "id": "saXs-rRFTpM_origin_70254bf1",
+      "content": "origin"
+    },
+    {
+      "id": "saXs-rRFTpM_finish_4100efee",
+      "content": "finish"
+    },
+    {
+      "id": "saXs-rRFTpM_what_0506fe5e",
+      "content": "what"
+    },
+    {
+      "id": "saXs-rRFTpM_you want_f0a1fb76",
+      "content": "you want"
+    },
+    {
+      "id": "saXs-rRFTpM_in it_46eb132e",
+      "content": "in it"
+    },
+    {
+      "id": "saXs-rRFTpM_going_ccd03b38",
+      "content": "going"
+    },
+    {
+      "id": "saXs-rRFTpM_coming_4892f188",
+      "content": "coming"
+    },
+    {
+      "id": "saXs-rRFTpM_Okay_7d063bac",
+      "content": "Okay"
+    },
+    {
+      "id": "saXs-rRFTpM_Hello_ff635ca2",
+      "content": "Hello"
+    },
+    {
+      "id": "saXs-rRFTpM_Welcome_a4e519f4",
+      "content": "Welcome"
+    },
+    {
+      "id": "saXs-rRFTpM_for you_51813f28",
+      "content": "for you"
+    },
+    {
+      "id": "saXs-rRFTpM_You lit up_01d7d2d8",
+      "content": "You lit up"
+    },
+    {
+      "id": "saXs-rRFTpM_You honored_ef20f11b",
+      "content": "You honored"
+    },
+    {
+      "id": "saXs-rRFTpM_I_1dffa65f",
+      "content": "I"
+    },
+    {
+      "id": "saXs-rRFTpM_just_0c67bc6f",
+      "content": "just"
+    },
+    {
+      "id": "saXs-rRFTpM_they said_fba42b25",
+      "content": "they said"
+    },
+    {
+      "id": "saXs-rRFTpM_to me_3dfea12c",
+      "content": "to me"
+    },
+    {
+      "id": "saXs-rRFTpM_that you_7d23f5dd",
+      "content": "that you"
+    },
+    {
+      "id": "saXs-rRFTpM_you came_4cdfc1a0",
+      "content": "you came"
+    },
+    {
+      "id": "saXs-rRFTpM_you went down_9a9e9f19",
+      "content": "you went down"
+    },
+    {
+      "id": "saXs-rRFTpM_you rode_9dd047dd",
+      "content": "you rode"
+    },
+    {
+      "id": "saXs-rRFTpM_oh big (man)_d9b47a95",
+      "content": "oh big (man)"
+    },
+    {
+      "id": "saXs-rRFTpM_more beautiful_8fed36ff",
+      "content": "more beautiful"
+    },
+    {
+      "id": "saXs-rRFTpM_most beautiful_de21c3c9",
+      "content": "most beautiful"
+    },
+    {
+      "id": "saXs-rRFTpM_burger_4fab574b",
+      "content": "burger"
+    },
+    {
+      "id": "saXs-rRFTpM_delivered to you_a8e8a006",
+      "content": "delivered to you"
+    },
+    {
+      "id": "saXs-rRFTpM_it_69a536e5",
+      "content": "it"
+    },
+    {
+      "id": "saXs-rRFTpM_from_ed9502d6",
+      "content": "from"
+    },
+    {
+      "id": "saXs-rRFTpM_under_9696f15c",
+      "content": "under"
+    },
+    {
+      "id": "saXs-rRFTpM_my hand_457b6fb5",
+      "content": "my hand"
+    },
+    {
+      "id": "saXs-rRFTpM_what do you want?_fee93451",
+      "content": "what do you want?"
+    },
+    {
+      "id": "saXs-rRFTpM_what God has willed_4f7e7303",
+      "content": "what God has willed"
+    },
+    {
+      "id": "saXs-rRFTpM_he told you_5944c08b",
+      "content": "he told you"
+    },
+    {
+      "id": "saXs-rRFTpM_said_5b7bde00",
+      "content": "said"
+    },
+    {
+      "id": "saXs-rRFTpM_hello_069fc98e",
+      "content": "hello"
+    },
+    {
+      "id": "saXs-rRFTpM_I swear by God_8988a90c",
+      "content": "I swear by God"
+    },
+    {
+      "id": "saXs-rRFTpM_for_b181b5f0",
+      "content": "for"
+    },
+    {
+      "id": "saXs-rRFTpM_told me_9de2bc8e",
+      "content": "told me"
+    },
+    {
+      "id": "saXs-rRFTpM_of_0afc9111",
+      "content": "of"
     }
   ],
   "immersionContent": [
     {
-      "uid": "dialogue-1",
-      "language": "it",
+      "uid": "lOmP70oVtLo_36d122b0",
+      "language": "apc",
       "priority": 1,
-      "associatedUnits": ["ciao-1"],
+      "associatedUnits": [
+        "lOmP70oVtLo_حمودي_8d9134ac",
+        "lOmP70oVtLo_وصلوا_9e2182a0",
+        "lOmP70oVtLo_كيف_7c158fb9",
+        "lOmP70oVtLo_قعت_32f8d541",
+        "lOmP70oVtLo_على_6ff92798",
+        "lOmP70oVtLo_الكرسي_8fa2383d",
+        "lOmP70oVtLo_مثل_2d415d60",
+        "lOmP70oVtLo_حضرتك_0ef624c7",
+        "lOmP70oVtLo_كبن_e7bc24b5",
+        "lOmP70oVtLo_كف_3e37f955",
+        "lOmP70oVtLo_الكرس_b33c4aa1",
+        "lOmP70oVtLo_شو_ec339e0b",
+        "lOmP70oVtLo_بدك_d6cff8ad",
+        "lOmP70oVtLo_نطلب_aa57ffb9",
+        "lOmP70oVtLo_يا_ee594d8e",
+        "lOmP70oVtLo_عمري_e0703cdd",
+        "lOmP70oVtLo_شي_ff771855",
+        "lOmP70oVtLo_نو_fe6afe19",
+        "lOmP70oVtLo_نازل_d73c6bf4",
+        "lOmP70oVtLo_اسمه_7ba61a16",
+        "lOmP70oVtLo_بوكس_d55f12af",
+        "lOmP70oVtLo_نطلبه_c171a1d6",
+        "lOmP70oVtLo_اوكي_3d327b1e",
+        "lOmP70oVtLo_بليز_6c2fc986",
+        "lOmP70oVtLo_ماتوش_31a07c2b",
+        "lOmP70oVtLo_ورق_3de7583e",
+        "lOmP70oVtLo_طالب_397f4041",
+        "lOmP70oVtLo_زعل_9a5311b8",
+        "lOmP70oVtLo_زعاله_37b55eb5",
+        "lOmP70oVtLo_ما_6d18bb5f",
+        "lOmP70oVtLo_عم_d3fd6ba8",
+        "lOmP70oVtLo_تطعمين_414cc9f9",
+        "lOmP70oVtLo_طعميه_7acf01e5",
+        "lOmP70oVtLo_طعميني_645eadea",
+        "lOmP70oVtLo_بدي_e1d8fec1",
+        "lOmP70oVtLo_منكب_0be13a08",
+        "lOmP70oVtLo_يعني_1d540501",
+        "lOmP70oVtLo_خَل_9f0a7184",
+        "lOmP70oVtLo_بس_84d976c7",
+        "lOmP70oVtLo_اتبق_67fa98dd",
+        "lOmP70oVtLo_اصبتم_cf46bb6a",
+        "lOmP70oVtLo_بالعين_5664fdde",
+        "lOmP70oVtLo_اي_5777eecb",
+        "lOmP70oVtLo_صبيهم_dab7d998",
+        "lOmP70oVtLo_فكره_425cbfc6",
+        "lOmP70oVtLo_عين_39d2fc46",
+        "lOmP70oVtLo_فكري_639469e3",
+        "lOmP70oVtLo_هلا_cac0d4b1",
+        "lOmP70oVtLo_الفاتوره_dbed6528",
+        "lOmP70oVtLo_تدفع_a1564be1",
+        "lOmP70oVtLo_نصيب_0ff0e4b8"
+      ],
       "taskType": "immersion-content",
-      "title": "Basic Greeting",
-      "prompt": "Listen to and practice this simple Italian greeting",
-      "extraInfo": "Ciao! Come stai? Bene, grazie!",
+      "title": "YouTube Video - lOmP70oVtLo",
+      "prompt": "Watch [this video](https://www.youtube.com/watch?v=lOmP70oVtLo)",
+      "extraInfo": "Video ID: lOmP70oVtLo",
       "isUserCreated": false,
       "lastDownloadedAt": null
     },
     {
-      "uid": "reading-1", 
-      "language": "it",
-      "priority": 2,
-      "associatedUnits": ["casa-1", "libro-1"],
-      "taskType": "immersion-content", 
-      "title": "At Home Reading",
-      "prompt": "Read about daily activities at home",
-      "extraInfo": "A casa leggo un libro interessante.",
+      "uid": "saXs-rRFTpM_c0935adc",
+      "language": "apc",
+      "priority": 1,
+      "associatedUnits": [
+        "saXs-rRFTpM_ابو_5ef5c6ba",
+        "saXs-rRFTpM_علي_7826d12f",
+        "saXs-rRFTpM_بيزعل_8df49643",
+        "saXs-rRFTpM_بلا_ae91bc85",
+        "saXs-rRFTpM_ما_b3c39c8b",
+        "saXs-rRFTpM_هون_e30fa7be",
+        "saXs-rRFTpM_بدي_1a0fa841",
+        "saXs-rRFTpM_اصل_4564a600",
+        "saXs-rRFTpM_خلص_be952e78",
+        "saXs-rRFTpM_شو_365fc0ab",
+        "saXs-rRFTpM_بدك_a8ea38a9",
+        "saXs-rRFTpM_فيه_aec92ce5",
+        "saXs-rRFTpM_رايح_cab39cdf",
+        "saXs-rRFTpM_جاي_5f3c5b51",
+        "saXs-rRFTpM_اوكي_4956feab",
+        "saXs-rRFTpM_اهلا_4644be10",
+        "saXs-rRFTpM_وسهلا_9b72e6c1",
+        "saXs-rRFTpM_لك_f44cbacb",
+        "saXs-rRFTpM_نورت_4b363084",
+        "saXs-rRFTpM_وشرفت_065a2640",
+        "saXs-rRFTpM_انا_55fa2dfa",
+        "saXs-rRFTpM_بس_27d4cd25",
+        "saXs-rRFTpM_قالوا_071e8b21",
+        "saXs-rRFTpM_لي_3c309d9b",
+        "saXs-rRFTpM_انك_9e75f856",
+        "saXs-rRFTpM_جيت_9354233a",
+        "saXs-rRFTpM_نزلت_6f1b2ecb",
+        "saXs-rRFTpM_ركت_9adf3490",
+        "saXs-rRFTpM_يا كبير_a44ac4d0",
+        "saXs-rRFTpM_احلى_6f16193a",
+        "saXs-rRFTpM_برجر_fc470d33",
+        "saXs-rRFTpM_وصلك_f6f66acc",
+        "saXs-rRFTpM_اياها_8168d0b8",
+        "saXs-rRFTpM_من_df30bb27",
+        "saXs-rRFTpM_تحت_dcd9f50a",
+        "saXs-rRFTpM_ايدي_b47e91df",
+        "saXs-rRFTpM_ببيك_5511defd",
+        "saXs-rRFTpM_ما شاء الله_037b86aa",
+        "saXs-rRFTpM_قاللك_785666c0",
+        "saXs-rRFTpM_قال_100dd38f",
+        "saXs-rRFTpM_هلا_7de56d1d",
+        "saXs-rRFTpM_قسما بالله_63e90095",
+        "saXs-rRFTpM_خص_b2599299",
+        "saXs-rRFTpM_قاللي_fc89da42",
+        "saXs-rRFTpM_اص_13068462"
+      ],
+      "taskType": "immersion-content",
+      "title": "YouTube Video - saXs-rRFTpM",
+      "prompt": "Watch [this video](https://www.youtube.com/watch?v=saXs-rRFTpM)",
+      "extraInfo": "Video ID: saXs-rRFTpM",
       "isUserCreated": false,
       "lastDownloadedAt": null
     }
