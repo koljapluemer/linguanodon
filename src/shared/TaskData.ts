@@ -1,4 +1,5 @@
 export interface TaskData {
+  taskType: string;
   title: string;
   prompt: string;
   extraInfo?: string;
