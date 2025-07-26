@@ -1,0 +1,117 @@
+{
+  "vocab": [
+    {
+      "id": "ciao-1",
+      "language": "it",
+      "content": "ciao",
+      "pronunciation": "cha-oh",
+      "notes": [
+        {
+          "content": "Informal greeting",
+          "showBeforeExercise": true
+        }
+      ],
+      "translations": ["hello-1", "bye-1"],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "casa-1", 
+      "language": "it",
+      "content": "casa",
+      "notes": [],
+      "translations": ["house-1"],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "libro-1",
+      "language": "it", 
+      "content": "libro",
+      "notes": [],
+      "translations": ["book-1"],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "mangiare-1",
+      "language": "it",
+      "content": "mangiare", 
+      "notes": [
+        {
+          "content": "Regular -are verb",
+          "showBeforeExercise": false
+        }
+      ],
+      "translations": ["eat-1"],
+      "links": [],
+      "associatedTasks": []
+    },
+    {
+      "id": "bene-1",
+      "language": "it",
+      "content": "bene",
+      "notes": [],
+      "translations": ["well-1", "good-1"],
+      "links": [],
+      "associatedTasks": []
+    }
+  ],
+  "translations": [
+    {
+      "id": "hello-1",
+      "content": "hello",
+      "note": "informal greeting"
+    },
+    {
+      "id": "bye-1", 
+      "content": "bye"
+    },
+    {
+      "id": "house-1",
+      "content": "house"
+    },
+    {
+      "id": "book-1",
+      "content": "book"
+    },
+    {
+      "id": "eat-1",
+      "content": "to eat"
+    },
+    {
+      "id": "well-1",
+      "content": "well"
+    },
+    {
+      "id": "good-1",
+      "content": "good"
+    }
+  ],
+  "immersionContent": [
+    {
+      "uid": "dialogue-1",
+      "language": "it",
+      "priority": 1,
+      "associatedUnits": ["ciao-1"],
+      "taskType": "immersion-content",
+      "title": "Basic Greeting",
+      "prompt": "Listen to and practice this simple Italian greeting",
+      "extraInfo": "Ciao! Come stai? Bene, grazie!",
+      "isUserCreated": false,
+      "lastDownloadedAt": null
+    },
+    {
+      "uid": "reading-1", 
+      "language": "it",
+      "priority": 2,
+      "associatedUnits": ["casa-1", "libro-1"],
+      "taskType": "immersion-content", 
+      "title": "At Home Reading",
+      "prompt": "Read about daily activities at home",
+      "extraInfo": "A casa leggo un libro interessante.",
+      "isUserCreated": false,
+      "lastDownloadedAt": null
+    }
+  ]
+}

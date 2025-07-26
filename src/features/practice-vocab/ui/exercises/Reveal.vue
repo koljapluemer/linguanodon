@@ -1,105 +1,69 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Exercise, ExerciseEmits } from '@/shared/ExerciseTypes';
+import ElementBigText from '@/shared/ui/ElementBigText.vue';
+import ElementInstruction from '@/shared/ui/ElementInstruction.vue';
+import ElementRevealButton from '@/shared/ui/ElementRevealButton.vue';
+import RatingButtons from '@/shared/ui/RatingButtons.vue';
 
 interface Props {
-  exercise: RevealExercise;
-}
-
-interface Emits {
-  (e: 'rate', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): void;
+  exercise: Exercise;
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits<Emits>();
+const emit = defineEmits<ExerciseEmits>();
 
-// Internal state for reveal
 const isRevealed = ref(false);
 
-/**
- * Gets the prompt from exercise data.
- */
-function getPrompt(): string {
-  return props.exercise.prompt;
-}
-
-/**
- * Gets the solution from exercise data.
- */
-function getSolution(): string {
-  return props.exercise.solution;
-}
-
-/**
- * Gets the linguistic unit from exercise data.
- */
-function getLinguisticUnit() {
-  return props.exercise.linguisticUnit;
-}
-
-/**
- * Gets the linguistic unit content.
- */
-function getLinguisticUnitContent(): string {
-  const unit = getLinguisticUnit() as { content: string };
-  return unit.content;
-}
-
-/**
- * Checks if the linguistic unit is a word.
- */
-function isWord(): boolean {
-  const unit = getLinguisticUnit() as { type: string };
-  return unit.type === 'word';
-}
+const handleRate = (rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') => {
+  emit('rate', rating);
+};
 </script>
 
 <template>
 
-  <!-- Task Instruction -->
-  <WidgetInstruction>
-    {{ getPrompt() }}
-  </WidgetInstruction>
-  <div class="card bg-base-100 shadow-xl">
-    <div class="card-body">
+  <div class="space-y-6">
+    <!-- Instruction -->
+    <ElementInstruction>
+      {{ exercise.prompt }}
+    </ElementInstruction>
 
+    <!-- Exercise Card -->
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <!-- Vocab Content -->
+        <div class="mb-4 text-center">
+          <ElementBigText :is-extra-big="true">
+            {{ exercise.vocab.content }}
+          </ElementBigText>
+        </div>
 
-      <!-- Front (Linguistic Unit Content) -->
-      <div class="mb-4 text-center">
-        <WidgetBigText :is-extra-big="isWord()">
-          {{ getLinguisticUnitContent() }}
-        </WidgetBigText>
-      </div>
+        <!-- Solution (when revealed) -->
+        <div v-if="isRevealed">
+          <!-- Divider -->
+          <div class="border-t-2 border-dotted border-base-300 my-4"></div>
 
-      <!-- Solution (when revealed) -->
-      <div v-if="isRevealed">
-        <!-- Dashed Line -->
-        <div class="border-t-2 md:border-dotted border-base-300 my-4"></div>
-
-        <!-- Back (Solution) -->
-        <div class="mb-6 text-center">
-          <WidgetBigText :is-extra-big="false">
-            {{ getSolution() }}
-          </WidgetBigText>
+          <!-- Solution -->
+          <div class="mb-6 text-center">
+            <ElementBigText :is-extra-big="false">
+              {{ exercise.solution }}
+            </ElementBigText>
+          </div>
         </div>
       </div>
-
-
-
     </div>
-  </div>
 
+    <!-- Action Buttons -->
+    <div class="flex justify-center gap-2 w-full">
+      <!-- Reveal Button -->
+      <ElementRevealButton v-if="!isRevealed" @click="isRevealed = true" />
 
-  <!-- Action Buttons -->
-  <div class="flex justify-center gap-2 w-full">
-    <!-- Reveal Button -->
-    <WidgetRevealButton v-if="!isRevealed" @click="isRevealed = true" />
-
-    <!-- Skip Button -->
-    <button v-if="!exercise.isRepeatable && !isRevealed" class="btn btn-outline" @click="emit('rate', 'Impossible')">
-      Skip
-    </button>
-
-    <!-- Rating (when revealed) -->
-    <WidgetRateConfidence v-if="isRevealed" prompt="How difficult was this?" @rate="emit('rate', $event)" />
+      <!-- Rating (when revealed) -->
+      <RatingButtons 
+        v-if="isRevealed" 
+        prompt="How difficult was this?" 
+        @rate="handleRate" 
+      />
+    </div>
   </div>
 </template>

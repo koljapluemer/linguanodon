@@ -1,86 +1,54 @@
 <script setup lang="ts">
+import type { Exercise, ExerciseEmits } from '@/shared/ExerciseTypes';
+import ElementBigText from '@/shared/ui/ElementBigText.vue';
+import ElementInstruction from '@/shared/ui/ElementInstruction.vue';
+import RatingButtons from '@/shared/ui/RatingButtons.vue';
 
 interface Props {
-  exercise: TryToRememberExercise;
-}
-
-interface Emits {
-  (e: 'rate', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): void;
+  exercise: Exercise;
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits<Emits>();
+const emit = defineEmits<ExerciseEmits>();
 
-/**
- * Gets the prompt from exercise data.
- */
-function getPrompt(): string {
-  return props.exercise.prompt;
-}
-
-/**
- * Gets the solution from exercise data.
- */
-function getSolution(): string {
-  return props.exercise.solution;
-}
-
-/**
- * Gets the linguistic unit from exercise data.
- */
-function getLinguisticUnit() {
-  return props.exercise.linguisticUnit;
-}
-
-/**
- * Gets the linguistic unit content.
- */
-function getLinguisticUnitContent(): string {
-  const unit = getLinguisticUnit() as { content: string };
-  return unit.content;
-}
-
-/**
- * Checks if the linguistic unit is a word.
- */
-function isWord(): boolean {
-  const unit = getLinguisticUnit() as { type: string };
-  return unit.type === 'word';
-}
+const handleRate = (rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') => {
+  emit('rate', rating);
+};
 </script>
 
 <template>
-  <!-- Task Instruction -->
-  <WidgetInstruction>
-    {{ getPrompt() }}
-  </WidgetInstruction>
-  <div class="card bg-base-100 shadow-xl">
-    <div class="card-body">
+  <div class="space-y-6">
+    <!-- Instruction -->
+    <ElementInstruction>
+      {{ exercise.prompt }}
+    </ElementInstruction>
 
+    <!-- Exercise Card -->
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <!-- Vocab Content -->
+        <div class="mb-4 text-center">
+          <ElementBigText :is-extra-big="true">
+            {{ exercise.vocab.content }}
+          </ElementBigText>
+        </div>
 
-      <!-- Front (Linguistic Unit Content) -->
-      <div class="mb-4 text-center">
-        <WidgetBigText :is-extra-big="isWord()">
-          {{ getLinguisticUnitContent() }}
-        </WidgetBigText>
+        <!-- Divider -->
+        <div class="border-t-2 border-dotted border-base-300 my-4"></div>
+
+        <!-- Solution -->
+        <div class="mb-6 text-center">
+          <ElementBigText :is-extra-big="true">
+            {{ exercise.solution }}
+          </ElementBigText>
+        </div>
       </div>
-
-      <!-- Dashed Line -->
-      <div class="border-t-2 md:border-dotted border-base-300 my-4"></div>
-
-      <!-- Back (Solution) -->
-      <div class="mb-6 text-center">
-        <WidgetBigText :is-extra-big="true">
-          {{ getSolution() }}
-        </WidgetBigText>
-      </div>
-
-
-
-
     </div>
-  </div>
 
-  <!-- Rating -->
-  <WidgetRateConfidence prompt="How difficult to remember is this word?" @rate="emit('rate', $event)" />
+    <!-- Rating -->
+    <RatingButtons 
+      prompt="How difficult to remember is this word?" 
+      @rate="handleRate" 
+    />
+  </div>
 </template>
