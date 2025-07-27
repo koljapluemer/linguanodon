@@ -77,8 +77,4 @@ export class ProposeImmersionContent implements TaskProposerContract {
     this.immersionRepo = immersionRepo;
     this.vocabRepo = vocabRepo;
   }
-  
-  setImmersionRepo(repo: ImmersionContentRepoContract) {
-    this.immersionRepo = repo;
-  }
 }

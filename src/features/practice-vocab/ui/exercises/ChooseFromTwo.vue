@@ -63,7 +63,7 @@ function selectOption(index: number) {
       // Map based on whether first attempt was wrong
       const rating = firstAttemptWrong.value ? 'Hard' : 'Doable';
       emit('rate', rating);
-    }, 1000);
+    }, 350);
   } else {
     // Wrong answer: mark first attempt as wrong, disable button
     firstAttemptWrong.value = true;
@@ -76,7 +76,7 @@ function getButtonClass(index: number): string {
 
   if (isCorrect && isSelected) {
     // Correct answer was selected
-    return 'btn-success';
+    return 'text-green-300';
   }
 
   if (!isCorrect && isSelected) {
@@ -86,7 +86,7 @@ function getButtonClass(index: number): string {
 
   if (isAnswered.value && isCorrect) {
     // Show correct answer when exercise is complete
-    return 'btn-success';
+    return 'text-green-300';
   }
 
   if (isAnswered.value && !isCorrect) {

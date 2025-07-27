@@ -94,6 +94,10 @@ export function useQueuePreloader(
     }
   }
 
+  // Track consecutive failed task loads to prevent infinite loops
+  let consecutiveFailedTaskLoads = 0;
+  const MAX_CONSECUTIVE_FAILED_LOADS = 3;
+
   // Background task loading
   async function loadTask() {
     if (status.isLoadingTask || taskLoadingPromise) return;
@@ -107,7 +111,11 @@ export function useQueuePreloader(
         if (task) {
           content.tasks.push(task);
           status.tasksReady = content.tasks.length;
+          consecutiveFailedTaskLoads = 0; // Reset counter on success
           console.log('Preloader: Loaded task, total tasks:', status.tasksReady);
+        } else {
+          consecutiveFailedTaskLoads++;
+          console.log(`Preloader: No task available (${consecutiveFailedTaskLoads}/${MAX_CONSECUTIVE_FAILED_LOADS})`);
         }
       })();
       
@@ -115,13 +123,16 @@ export function useQueuePreloader(
     } catch (error) {
       console.error('Preloader: Error loading task:', error);
       status.lastError = 'Failed to load task';
+      consecutiveFailedTaskLoads++;
     } finally {
       status.isLoadingTask = false;
       taskLoadingPromise = null;
       
-      // Check if we need more
-      if (content.tasks.length < finalConfig.minTaskBuffer) {
+      // Only continue loading if we haven't failed too many times
+      if (content.tasks.length < finalConfig.minTaskBuffer && consecutiveFailedTaskLoads < MAX_CONSECUTIVE_FAILED_LOADS) {
         setTimeout(() => loadTask(), 100); // Brief delay to prevent spam
+      } else if (consecutiveFailedTaskLoads >= MAX_CONSECUTIVE_FAILED_LOADS) {
+        console.log('Preloader: Pausing task loading due to consecutive failures');
       }
     }
   }
@@ -168,6 +179,9 @@ export function useQueuePreloader(
     if (task) {
       status.tasksReady = content.tasks.length;
       console.log('Preloader: Consumed task, remaining:', status.tasksReady);
+      
+      // Reset failed loads counter when successfully consuming tasks
+      consecutiveFailedTaskLoads = 0;
       
       // Trigger background reload if buffer is low
       if (content.tasks.length <= finalConfig.aggressiveThreshold) {

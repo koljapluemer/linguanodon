@@ -14,10 +14,8 @@ export class TaskPicker {
       addPronunciationProposer.setVocabRepo(vocabRepo);
     }
     
-    const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as { setImmersionRepo?: (repo: ImmersionContentRepoContract) => void };
-    if (immersionContentProposer.setImmersionRepo) {
-      immersionContentProposer.setImmersionRepo(immersionRepo);
-    }
+    const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as { setRepos: (immersionRepo: ImmersionContentRepoContract, vocabRepo: VocabAndTranslationRepoContract) => void };
+    immersionContentProposer.setRepos(immersionRepo, vocabRepo);
     
     this.initialized = true;
   }
