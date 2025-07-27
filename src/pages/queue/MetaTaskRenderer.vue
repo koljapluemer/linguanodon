@@ -2,6 +2,7 @@
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import RenderTaskForAddingPronunciation from '@/widgets/task-for-adding-pronunciation/RenderTaskForAddingPronunciation.vue';
 import RenderTaskForImmersionContent from '@/widgets/task-for-immersion-content/RenderTaskForImmersionContent.vue';
+import FreeTranslateTaskWidget from '@/widgets/free-translate-task/FreeTranslateTaskWidget.vue';
 
 interface Props {
   task: RuntimeTask;
@@ -31,6 +32,12 @@ const handleFinished = () => {
       v-else-if="task.taskType === 'immersion-content'"
       :content="task.data.content"
       @finished="handleFinished"
+    />
+    
+    <FreeTranslateTaskWidget
+      v-else-if="task.taskType === 'free-translate'"
+      :task-data="task.data"
+      @complete="handleFinished"
     />
     
     <!-- Fallback for unknown task types -->

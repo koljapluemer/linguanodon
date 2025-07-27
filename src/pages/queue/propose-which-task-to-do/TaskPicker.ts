@@ -1,13 +1,14 @@
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import { TASK_REGISTRY } from './TaskRegistry';
 import { pickRandom } from '@/shared/arrayUtils';
 
 export class TaskPicker {
   private initialized = false;
   
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract, exampleRepo: ExampleRepoContract) {
     // Configure proposers with repositories
     const addPronunciationProposer = TASK_REGISTRY['add-pronunciation'].proposer as { setVocabRepo?: (repo: VocabAndTranslationRepoContract) => void };
     if (addPronunciationProposer.setVocabRepo) {
@@ -17,6 +18,11 @@ export class TaskPicker {
     const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer;
     if ('setRepos' in immersionContentProposer && typeof immersionContentProposer.setRepos === 'function') {
       immersionContentProposer.setRepos(immersionRepo, vocabRepo);
+    }
+    
+    const freeTranslateProposer = TASK_REGISTRY['free-translate'].proposer;
+    if ('setRepos' in freeTranslateProposer && typeof freeTranslateProposer.setRepos === 'function') {
+      freeTranslateProposer.setRepos(exampleRepo, vocabRepo);
     }
     
     this.initialized = true;

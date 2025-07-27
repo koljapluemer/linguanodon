@@ -2,9 +2,11 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabProposerContract } from './VocabProposerContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import { ProposerByAlreadySeenDueVocab } from './proposers/ProposerByAlreadySeenDueVocab';
 import { ProposerOfNewVocab } from './proposers/ProposerOfNewVocab';
 import { ProposerByImmersionContentAlmostReady } from './proposers/ProposerByImmersionContentAlmostReady';
+import { ProposerByExamples } from './proposers/ProposerByExamples';
 import { randomBetween, shuffleArray, removeDuplicates } from '@/shared/arrayUtils';
 
 export class VocabPicker {
@@ -41,7 +43,7 @@ export class VocabPicker {
     this.proposers = proposers;
   }
 
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract, exampleRepo: ExampleRepoContract) {
     const alreadySeenDueProposer = new ProposerByAlreadySeenDueVocab();
     alreadySeenDueProposer.setVocabRepo(vocabRepo);
 
@@ -51,7 +53,10 @@ export class VocabPicker {
     const immersionProposer = new ProposerByImmersionContentAlmostReady();
     immersionProposer.setRepos(vocabRepo, immersionRepo);
 
-    this.proposers = [alreadySeenDueProposer, newVocabProposer, immersionProposer];
-    console.info('VocabPicker initialized with 3 proposers: AlreadySeenDue, NewVocab, ImmersionContent');
+    const examplesProposer = new ProposerByExamples();
+    examplesProposer.setRepos(exampleRepo, vocabRepo);
+
+    this.proposers = [alreadySeenDueProposer, newVocabProposer, immersionProposer, examplesProposer];
+    console.info('VocabPicker initialized with 4 proposers: AlreadySeenDue, NewVocab, ImmersionContent, Examples');
   }
 }

@@ -1,34 +1,26 @@
 import { VocabAndTranslationRepo } from '@/entities/vocab/VocabAndTranslationRepo';
 import { ImmersionContentRepo } from '@/entities/immersion-content/ImmersionContentRepo';
-import { TASK_REGISTRY } from '@/pages/queue/propose-which-task-to-do/TaskRegistry';
+import { ExampleRepo } from '@/entities/examples/ExampleRepo';
 
 export function setupRepositories() {
   // Create repository instances
   const vocabRepo = new VocabAndTranslationRepo();
   const immersionRepo = new ImmersionContentRepo();
-  
-  // Configure task proposers with repositories
-  const addPronunciationProposer = TASK_REGISTRY['add-pronunciation'].proposer as { setVocabRepo?: (repo: VocabAndTranslationRepo) => void };
-  if (addPronunciationProposer.setVocabRepo) {
-    addPronunciationProposer.setVocabRepo(vocabRepo);
-  }
-  
-  const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as { setImmersionRepo?: (repo: ImmersionContentRepo) => void };
-  if (immersionContentProposer.setImmersionRepo) {
-    immersionContentProposer.setImmersionRepo(immersionRepo);
-  }
+  const exampleRepo = new ExampleRepo();
   
   return {
     vocabRepo,
-    immersionRepo
+    immersionRepo,
+    exampleRepo
   };
 }
 
 export function provideRepositories(app: { provide: (key: string, value: unknown) => void }) {
-  const { vocabRepo, immersionRepo } = setupRepositories();
+  const { vocabRepo, immersionRepo, exampleRepo } = setupRepositories();
   
   app.provide('vocabRepo', vocabRepo);
   app.provide('immersionRepo', immersionRepo);
+  app.provide('exampleRepo', exampleRepo);
   
-  return { vocabRepo, immersionRepo };
+  return { vocabRepo, immersionRepo, exampleRepo };
 }

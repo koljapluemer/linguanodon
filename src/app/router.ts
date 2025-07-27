@@ -4,6 +4,8 @@ import PageVocabList from '@/pages/vocab/PageVocabList.vue';
 import PageVocabForm from '@/pages/vocab/PageVocabForm.vue';
 import PageListImmersionContent from '@/pages/immersion-content/PageListImmersionContent.vue';
 import PageManageImmersionContent from '@/pages/immersion-content/PageManageImmersionContent.vue';
+import PageListExamples from '@/pages/examples/PageListExamples.vue';
+import PageManageExample from '@/pages/examples/PageManageExample.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -46,6 +48,21 @@ const router = createRouter({
       path: '/immersion-content/:uid',
       name: 'immersion-content-edit',
       component: PageManageImmersionContent
+    },
+    {
+      path: '/examples',
+      name: 'examples-list',
+      component: PageListExamples
+    },
+    {
+      path: '/examples/new',
+      name: 'examples-new',
+      component: PageManageExample
+    },
+    {
+      path: '/examples/:id',
+      name: 'examples-edit',
+      component: PageManageExample
     }
   ]
 });

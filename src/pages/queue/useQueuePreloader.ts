@@ -3,6 +3,7 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import { VocabPicker } from './propose-which-vocab-to-practice/VocabPicker';
 import { TaskPicker } from './propose-which-task-to-do/TaskPicker';
 
@@ -34,16 +35,17 @@ const DEFAULT_CONFIG: PreloadConfig = {
 export function useQueuePreloader(
   vocabRepo: VocabAndTranslationRepoContract,
   immersionRepo: ImmersionContentRepoContract,
+  exampleRepo: ExampleRepoContract,
   config: Partial<PreloadConfig> = {}
 ) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
   
   // Initialize pickers
   const vocabPicker = new VocabPicker();
-  vocabPicker.initializeProposers(vocabRepo, immersionRepo);
+  vocabPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo);
   
   const taskPicker = new TaskPicker();
-  taskPicker.initializeProposers(vocabRepo, immersionRepo);
+  taskPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({

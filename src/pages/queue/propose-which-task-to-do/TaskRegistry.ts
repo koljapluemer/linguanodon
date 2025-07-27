@@ -1,6 +1,7 @@
 import type { TaskDefinition } from '@/shared/RuntimeTaskTypes';
 import { ProposeAddPronunciation } from './proposers/ProposeAddPronunciation';
 import { ProposeImmersionContent } from './proposers/ProposeImmersionContent';
+import { ProposeFreeTranslate } from './proposers/ProposeFreeTranslate';
 
 export const TASK_REGISTRY: Record<string, TaskDefinition> = {
   'add-pronunciation': {
@@ -10,6 +11,10 @@ export const TASK_REGISTRY: Record<string, TaskDefinition> = {
   'immersion-content': {
     taskType: 'immersion-content', 
     proposer: new ProposeImmersionContent()
+  },
+  'free-translate': {
+    taskType: 'free-translate',
+    proposer: new ProposeFreeTranslate()
   }
 };
 

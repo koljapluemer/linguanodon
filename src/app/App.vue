@@ -3,10 +3,11 @@ import { provide } from 'vue';
 import { setupRepositories } from './injectRepositories';
 
 // Setup and provide repositories
-const { vocabRepo, immersionRepo } = setupRepositories();
+const { vocabRepo, immersionRepo, exampleRepo } = setupRepositories();
 
 provide('vocabRepo', vocabRepo);
 provide('immersionRepo', immersionRepo);
+provide('exampleRepo', exampleRepo);
 </script>
 
 <template>
@@ -17,6 +18,7 @@ provide('immersionRepo', immersionRepo);
         <router-link :to="{ name: 'queue' }" class="btn btn-ghost btn-sm">Practice</router-link>
         <router-link :to="{ name: 'vocab-list' }" class="btn btn-ghost btn-sm">Manage Vocab</router-link>
         <router-link :to="{ name: 'immersion-content-list' }" class="btn btn-ghost btn-sm">Immersion Content</router-link>
+        <router-link :to="{ name: 'examples-list' }" class="btn btn-ghost btn-sm">Examples</router-link>
       </nav>
     </header>
     <main class="container mx-auto flex-1">

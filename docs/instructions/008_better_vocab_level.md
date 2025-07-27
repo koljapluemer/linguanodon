@@ -184,4 +184,4 @@ good point. limit to 8 translations max (in both directions, also when translati
 
 no special handling for "common" translations
 
-no handling of pronunciation or anything like that, but make a dumb widget for displaying the comma separated list (takes an array of vocab)
+no handling of pronunciation or anything like that, but make a dumb widget for displaying the comma separated list (takes an array of vocab and a prop whether to show their translations or their content, maybe?) so we can later adapt this.
