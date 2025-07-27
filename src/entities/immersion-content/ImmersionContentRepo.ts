@@ -21,7 +21,40 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
     return pickRandom(dueContent, 1)[0];
   }
 
+  async saveImmersionContent(content: Partial<ImmersionContentData>): Promise<ImmersionContentData> {
+    const newContent: ImmersionContentData = {
+      uid: content.uid || crypto.randomUUID(),
+      language: content.language || '',
+      priority: content.priority || 1,
+      associatedUnits: content.associatedUnits || [],
+      taskType: content.taskType || 'immersion-content',
+      title: content.title || '',
+      prompt: content.prompt || '',
+      evaluateAfterDoing: content.evaluateAfterDoing ?? true,
+      extraInfo: content.extraInfo,
+      lastShownAt: content.lastShownAt,
+      wantToDoAgain: content.wantToDoAgain,
+      nextShownEarliestAt: content.nextShownEarliestAt,
+      lastDifficultyRating: content.lastDifficultyRating,
+      lastCorrectnessRating: content.lastCorrectnessRating,
+      isUserCreated: true,
+      lastDownloadedAt: null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    await this.storage.add(newContent);
+    return newContent;
+  }
+
   async updateImmersionContent(content: ImmersionContentData): Promise<void> {
-    await this.storage.update(content);
+    await this.storage.update({
+      ...content,
+      updatedAt: new Date()
+    });
+  }
+
+  async deleteImmersionContent(uid: string): Promise<void> {
+    await this.storage.delete(uid);
   }
 }

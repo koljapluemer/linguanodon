@@ -16,6 +16,7 @@ provide('immersionRepo', immersionRepo);
       <nav class="flex gap-4 justify-center">
         <router-link :to="{ name: 'queue' }" class="btn btn-ghost btn-sm">Practice</router-link>
         <router-link :to="{ name: 'vocab-list' }" class="btn btn-ghost btn-sm">Manage Vocab</router-link>
+        <router-link :to="{ name: 'immersion-content-list' }" class="btn btn-ghost btn-sm">Immersion Content</router-link>
       </nav>
     </header>
     <main class="container mx-auto flex-1">

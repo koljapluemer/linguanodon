@@ -50,7 +50,7 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <!-- Main Content -->
-              <h3 class="text-lg font-semibold text-primary">
+              <h3 class="text-lg font-semibold">
                 {{ item.content || '[No content]' }}
               </h3>
               <p class="text-sm text-gray-600">{{ item.language }}</p>
