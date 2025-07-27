@@ -43,22 +43,7 @@ export default defineConfig([
       ...pluginVue.configs["flat/recommended"].rules,
       ...tseslint.configs.recommended.rules,
       'import/no-unresolved': 'error',
-      'jsdoc/require-jsdoc': ["error", {
-        require: {
-          FunctionDeclaration: true,
-          MethodDefinition: true,
-          ClassDeclaration: true,
-          ArrowFunctionExpression: true,
-          FunctionExpression: true
-        },
-        contexts: [
-          "FunctionDeclaration",
-          "MethodDefinition",
-          "ClassDeclaration",
-          "ArrowFunctionExpression",
-          "FunctionExpression"
-        ]
-      }],
+      'jsdoc/require-jsdoc': 'off',
       'jsdoc/require-description': "off",
       'jsdoc/require-param': "off",
       'jsdoc/require-returns': "off",

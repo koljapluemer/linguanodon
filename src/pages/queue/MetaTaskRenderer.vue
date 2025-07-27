@@ -11,7 +11,7 @@ interface Emits {
   (e: 'finished'): void;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const handleFinished = () => {

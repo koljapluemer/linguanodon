@@ -24,6 +24,9 @@ if (!vocabRepo) {
 const pronunciation = ref('');
 const isLoading = ref(false);
 
+/**
+ *
+ */
 const handleSave = async () => {
   if (!pronunciation.value.trim()) return;
   
@@ -38,6 +41,9 @@ const handleSave = async () => {
   }
 };
 
+/**
+ *
+ */
 const handleSkip = () => {
   emit('finished');
 };

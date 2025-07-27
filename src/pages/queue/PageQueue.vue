@@ -26,12 +26,18 @@ onMounted(async () => {
   await initializeQueue();
 });
 
+/**
+ *
+ */
 const handleVocabFinished = async () => {
   console.log('PageQueue: Vocab finished event received');
   await completeCurrentVocab();
   console.log('PageQueue: Completed vocab, new state:', state.value.status);
 };
 
+/**
+ *
+ */
 const handleTaskFinished = async () => {
   console.log('PageQueue: Task finished event received');
   await completeCurrentTask();

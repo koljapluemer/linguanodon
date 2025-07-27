@@ -1,12 +1,27 @@
 import type { VocabData } from './vocab/VocabData';
 import type { TranslationData } from './translations/TranslationData';
 
+export interface VocabPaginationResult {
+  vocab: VocabData[];
+  nextCursor?: string;
+  hasMore: boolean;
+}
+
 export interface VocabAndTranslationRepoContract {
   // Vocab operations
   getVocab(): Promise<VocabData[]>;
   getVocabByUID(uid: string): Promise<VocabData | undefined>;
   getVocabByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined>;
   getRandomDueVocab(count: number): Promise<VocabData[]>;
+  
+  // Pagination operations
+  getVocabPaginated(cursor?: string, limit?: number, searchQuery?: string): Promise<VocabPaginationResult>;
+  getTotalVocabCount(searchQuery?: string): Promise<number>;
+  
+  // CRUD operations
+  saveVocab(vocab: Partial<VocabData>): Promise<VocabData>;
+  updateVocab(vocab: VocabData): Promise<void>;
+  deleteVocab(id: string): Promise<void>;
   
   // Progress operations
   calculateMasteryLevelForVocab(id: string): Promise<number>;

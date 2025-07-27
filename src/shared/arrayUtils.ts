@@ -38,7 +38,7 @@ export function weightedRandom<T>(items: Array<{item: T, weight: number}>): T {
 /**
  * Removes duplicates from array using optional key function
  */
-export function removeDuplicates<T>(array: T[], keyFn?: (item: T) => any): T[] {
+export function removeDuplicates<T>(array: T[], keyFn?: (item: T) => string | number): T[] {
   if (!keyFn) {
     return [...new Set(array)];
   }

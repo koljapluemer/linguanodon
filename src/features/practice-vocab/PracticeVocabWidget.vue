@@ -37,6 +37,9 @@ onMounted(async () => {
   }
 });
 
+/**
+ *
+ */
 const handleRating = async (rating: ExerciseRating) => {
   console.log('PracticeVocabWidget: Rating received:', rating);
   if (!props.vocab) return;

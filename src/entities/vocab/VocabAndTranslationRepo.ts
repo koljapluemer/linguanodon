@@ -1,6 +1,6 @@
 import { VocabStorage } from './vocab/VocabStorage';
 import { TranslationStorage } from './translations/TranslationStorage';
-import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';
+import type { VocabAndTranslationRepoContract, VocabPaginationResult } from './VocabAndTranslationRepoContract';
 import type { VocabData } from './vocab/VocabData';
 import type { TranslationData } from './translations/TranslationData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
@@ -10,16 +10,31 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   private vocabStorage = new VocabStorage();
   private translationStorage = new TranslationStorage();
 
+  private ensureVocabFields(vocab: VocabData): VocabData {
+    return {
+      ...vocab,
+      content: vocab.content || '',
+      pronunciation: vocab.pronunciation || '',
+      notes: vocab.notes || [],
+      links: vocab.links || [],
+      translations: vocab.translations || [],
+      associatedTasks: vocab.associatedTasks || []
+    };
+  }
+
   async getVocab(): Promise<VocabData[]> {
-    return await this.vocabStorage.getAll();
+    const vocab = await this.vocabStorage.getAll();
+    return vocab.map(v => this.ensureVocabFields(v));
   }
 
   async getVocabByUID(uid: string): Promise<VocabData | undefined> {
-    return await this.vocabStorage.getById(uid);
+    const vocab = await this.vocabStorage.getById(uid);
+    return vocab ? this.ensureVocabFields(vocab) : undefined;
   }
 
   async getVocabByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined> {
-    return await this.vocabStorage.getByLanguageAndContent(language, content);
+    const vocab = await this.vocabStorage.getByLanguageAndContent(language, content);
+    return vocab ? this.ensureVocabFields(vocab) : undefined;
   }
 
   async getRandomDueVocab(count: number): Promise<VocabData[]> {
@@ -34,7 +49,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       return vocab.progress.due <= now;
     });
     
-    return pickRandom(dueVocab, count);
+    return pickRandom(dueVocab, count).map(v => this.ensureVocabFields(v));
   }
 
   async calculateMasteryLevelForVocab(id: string): Promise<number> {
@@ -118,5 +133,89 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
   async getTranslationsByIds(ids: string[]): Promise<TranslationData[]> {
     return await this.translationStorage.getByIds(ids);
+  }
+
+  async getVocabPaginated(cursor?: string, limit: number = 20, searchQuery?: string): Promise<VocabPaginationResult> {
+    const allVocab = await this.vocabStorage.getAll();
+    
+    // Apply search filter if provided
+    let filteredVocab = allVocab;
+    if (searchQuery && searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filteredVocab = allVocab.filter(vocab => 
+        vocab.content?.toLowerCase().includes(query) ||
+        vocab.language.toLowerCase().includes(query) ||
+        vocab.pronunciation?.toLowerCase().includes(query) ||
+        (vocab.notes && vocab.notes.some(note => note.content.toLowerCase().includes(query)))
+      );
+    }
+
+    // Sort by content for consistent cursor-based pagination
+    filteredVocab.sort((a, b) => (a.content || '').localeCompare(b.content || ''));
+
+    // Apply cursor-based pagination
+    let startIndex = 0;
+    if (cursor) {
+      startIndex = filteredVocab.findIndex(vocab => vocab.id === cursor);
+      if (startIndex === -1) startIndex = 0;
+      else startIndex += 1; // Start after the cursor
+    }
+
+    const endIndex = startIndex + limit;
+    const paginatedVocab = filteredVocab.slice(startIndex, endIndex);
+    const hasMore = endIndex < filteredVocab.length;
+    const nextCursor = hasMore && paginatedVocab.length > 0 ? paginatedVocab[paginatedVocab.length - 1].id : undefined;
+
+    return {
+      vocab: paginatedVocab.map(v => this.ensureVocabFields(v)),
+      nextCursor,
+      hasMore
+    };
+  }
+
+  async getTotalVocabCount(searchQuery?: string): Promise<number> {
+    if (!searchQuery || !searchQuery.trim()) {
+      return await this.vocabStorage.count();
+    }
+
+    const allVocab = await this.vocabStorage.getAll();
+    const query = searchQuery.toLowerCase().trim();
+    const filteredVocab = allVocab.filter(vocab => 
+      vocab.content?.toLowerCase().includes(query) ||
+      vocab.language.toLowerCase().includes(query) ||
+      vocab.pronunciation?.toLowerCase().includes(query) ||
+      (vocab.notes && vocab.notes.some(note => note.content.toLowerCase().includes(query)))
+    );
+    
+    return filteredVocab.length;
+  }
+
+  async saveVocab(vocab: Partial<VocabData>): Promise<VocabData> {
+    const newVocab: VocabData = {
+      id: vocab.id || crypto.randomUUID(),
+      language: vocab.language || '',
+      content: vocab.content || '',
+      pronunciation: vocab.pronunciation || '',
+      notes: vocab.notes || [],
+      translations: vocab.translations || [],
+      links: vocab.links || [],
+      associatedTasks: vocab.associatedTasks || [],
+      progress: vocab.progress || {
+        ...createEmptyCard(),
+        streak: 0,
+        level: -1
+      }
+    };
+
+    await this.vocabStorage.add(newVocab);
+    return newVocab;
+  }
+
+  async updateVocab(vocab: VocabData): Promise<void> {
+    await this.vocabStorage.update(vocab);
+  }
+
+  async deleteVocab(id: string): Promise<void> {
+    await this.vocabStorage.delete(id);
   }
 }

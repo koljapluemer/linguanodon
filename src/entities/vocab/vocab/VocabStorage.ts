@@ -55,6 +55,9 @@ export class VocabStorage {
     if (count === 0) {
       const vocabWithProgress = demoData.vocab.map(vocab => ({
         ...vocab,
+        content: vocab.content || '',
+        pronunciation: (vocab as { pronunciation?: string }).pronunciation || '',
+        notes: (vocab as { notes?: Array<{ content: string; showBeforeExercise: boolean }> }).notes || [],
         progress: {
           ...createEmptyCard(),
           streak: 0,

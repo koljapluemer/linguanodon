@@ -9,7 +9,7 @@ interface Emits {
   (e: 'rate', rating: ExerciseRating): void;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const { prompt = 'How difficult was this?' } = withDefaults(defineProps<Props>(), {
   prompt: 'How difficult was this?'
 });
 

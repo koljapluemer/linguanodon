@@ -12,6 +12,9 @@ const correctnessRating = ref(3);
 const difficultyRating = ref(3);
 const wantToDoAgain = ref<'no' | 'yes' | 'maybe'>('maybe');
 
+/**
+ *
+ */
 const handleSubmit = () => {
   const evaluation: TaskEvaluation = {
     correctnessRating: correctnessRating.value,

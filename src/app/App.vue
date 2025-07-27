@@ -15,7 +15,7 @@ provide('immersionRepo', immersionRepo);
       <h1 class="text-2xl font-bold">Linguanodon</h1>
       <nav class="flex gap-4 justify-center">
         <router-link :to="{ name: 'queue' }" class="btn btn-ghost btn-sm">Practice</router-link>
-    
+        <router-link :to="{ name: 'vocab-list' }" class="btn btn-ghost btn-sm">Manage Vocab</router-link>
       </nav>
     </header>
     <main class="container mx-auto flex-1">

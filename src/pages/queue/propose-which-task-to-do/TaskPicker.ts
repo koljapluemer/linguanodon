@@ -9,12 +9,12 @@ export class TaskPicker {
   
   initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract) {
     // Configure proposers with repositories
-    const addPronunciationProposer = TASK_REGISTRY['add-pronunciation'].proposer as any;
+    const addPronunciationProposer = TASK_REGISTRY['add-pronunciation'].proposer as { setVocabRepo?: (repo: VocabAndTranslationRepoContract) => void };
     if (addPronunciationProposer.setVocabRepo) {
       addPronunciationProposer.setVocabRepo(vocabRepo);
     }
     
-    const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as any;
+    const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as { setImmersionRepo?: (repo: ImmersionContentRepoContract) => void };
     if (immersionContentProposer.setImmersionRepo) {
       immersionContentProposer.setImmersionRepo(immersionRepo);
     }

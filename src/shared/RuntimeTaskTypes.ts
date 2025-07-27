@@ -11,11 +11,11 @@ export type RuntimeTask =
       data: { contentId: string; content: ImmersionContentData } 
     };
 
-export interface TaskProposer<T = any> {
+export interface TaskProposer<T = RuntimeTask> {
   proposeTask(): Promise<T | null>;
 }
 
-export interface TaskDefinition<T = any> {
+export interface TaskDefinition<T = RuntimeTask> {
   taskType: string;
   proposer: TaskProposer<T>;
 }
