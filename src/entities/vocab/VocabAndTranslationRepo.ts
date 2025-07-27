@@ -103,15 +103,25 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     const scheduling_cards = scheduler.repeat(vocab.progress, now);
     const updatedCard = scheduling_cards[fsrsRating].card;
 
-    // Update streak and level
-    if (fsrsRating === Rating.Again) {
-      vocab.progress.streak = 0;
-    } else {
-      vocab.progress.streak++;
-      // Level up at streak 1, reset streak
-      if (vocab.progress.streak === 1 && vocab.progress.level < 4) {
-        vocab.progress.level++;
+    // Update streak and level based on rating
+    if (fsrsRating === Rating.Again || fsrsRating === Rating.Hard) {
+      // Negative ratings: decrease streak (go negative) or reset positive streak to 0
+      if (vocab.progress.streak > 0) {
         vocab.progress.streak = 0;
+      } else {
+        vocab.progress.streak--;
+      }
+    } else {
+      // Positive ratings (Doable/Easy): reset negative streak to 0, then increment positive
+      if (vocab.progress.streak < 0) {
+        vocab.progress.streak = 0;
+      } else {
+        vocab.progress.streak++;
+        // Level up at streak 1, reset streak
+        if (vocab.progress.streak === 1 && vocab.progress.level < 4) {
+          vocab.progress.level++;
+          vocab.progress.streak = 0;
+        }
       }
     }
 
