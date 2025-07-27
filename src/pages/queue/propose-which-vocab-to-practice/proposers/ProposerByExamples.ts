@@ -73,9 +73,10 @@ export class ProposerByExamples implements VocabProposerContract {
       for (const vocabId of selectedExample.associatedVocab) {
         const vocab = await this.vocabRepo.getVocabByUID(vocabId);
         if (vocab && !vocab.doNotPractice) {
-          // Include vocab that is due for practice
+          // Include vocab that is due for practice OR is new (never practiced)
           const isDue = vocab.progress.due <= now;
-          if (isDue) {
+          const isNew = vocab.progress.reps === 0;
+          if (isDue || isNew) {
             vocabToTrain.push(vocab);
           }
         }

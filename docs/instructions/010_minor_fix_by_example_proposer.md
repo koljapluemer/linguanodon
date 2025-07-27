@@ -1,0 +1,3 @@
+- the [by example vocab proposer](src/pages/queue/propose-which-vocab-to-practice/proposers/ProposerByExamples.ts) currently often finds nothing, I think because it's strictly looking for due vocab. It's also ok if the vocab is new, tho.
+
+Also, please in the list view of examples, add a progress bar that shows how ready the example is (see [discussion](docs/instructions/009_examples.md)) (as in % of vocab isOnTopOfMind). hide bar if its 0.

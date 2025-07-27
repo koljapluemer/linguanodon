@@ -63,6 +63,21 @@
                     {{ vocabId }}
                   </span>
                 </div>
+                
+                <!-- Vocab Readiness Progress Bar -->
+                <div v-if="readinessPercentages[example.id] > 0" class="mt-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-base-content/70">Readiness:</span>
+                    <div class="flex-1">
+                      <progress 
+                        class="progress progress-primary w-full h-2" 
+                        :value="readinessPercentages[example.id]" 
+                        max="100"
+                      ></progress>
+                    </div>
+                    <span class="text-xs text-base-content/70">{{ readinessPercentages[example.id] }}%</span>
+                  </div>
+                </div>
               </div>
               
               <div v-if="example.associatedTasks.length > 0" class="mt-2">
@@ -108,16 +123,41 @@
 <script setup lang="ts">
 import { ref, onMounted, inject } from 'vue';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
+import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ExampleData } from '@/entities/examples/ExampleData';
+import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 
 const exampleRepo = inject<ExampleRepoContract>('exampleRepo');
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 if (!exampleRepo) {
   throw new Error('ExampleRepo not provided');
+}
+if (!vocabRepo) {
+  throw new Error('VocabRepo not provided');
 }
 
 const examples = ref<ExampleData[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
+const readinessPercentages = ref<Record<string, number>>({});
+
+async function calculateReadinessPercentage(example: ExampleData): Promise<number> {
+  if (!vocabRepo || example.associatedVocab.length === 0) {
+    return 0;
+  }
+  
+  let topOfMindCount = 0;
+  const totalCount = example.associatedVocab.length;
+  
+  for (const vocabId of example.associatedVocab) {
+    const vocab = await vocabRepo.getVocabByUID(vocabId);
+    if (vocab && isCurrentlyTopOfMind(vocab)) {
+      topOfMindCount++;
+    }
+  }
+  
+  return Math.round((topOfMindCount / totalCount) * 100);
+}
 
 async function loadExamples() {
   if (!exampleRepo) return;
@@ -127,6 +167,13 @@ async function loadExamples() {
   
   try {
     examples.value = await exampleRepo.getAllExamples();
+    
+    // Calculate readiness percentages for all examples
+    const percentages: Record<string, number> = {};
+    for (const example of examples.value) {
+      percentages[example.id] = await calculateReadinessPercentage(example);
+    }
+    readinessPercentages.value = percentages;
   } catch (err) {
     console.error('Error loading examples:', err);
     error.value = 'Failed to load examples';

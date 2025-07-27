@@ -57,12 +57,19 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
       
       console.info(`ProposerByImmersionContentAlmostReady: Chose "${bestContent.title}" with ${Math.round(bestPercentage * 100)}% vocab readiness`);
       
-      // Get vocab units associated with the best content that are NOT top-of-mind
+      // Get vocab units associated with the best content that are due or new
       const vocabToTrain: VocabData[] = [];
+      const now = new Date();
+      
       for (const vocabId of bestContent.associatedUnits) {
         const vocab = await this.vocabRepo.getVocabByUID(vocabId);
-        if (vocab && !vocab.doNotPractice && !isCurrentlyTopOfMind(vocab)) {
-          vocabToTrain.push(vocab);
+        if (vocab && !vocab.doNotPractice) {
+          // Include vocab that is due for practice OR is new (never practiced)
+          const isDue = vocab.progress.due <= now;
+          const isNew = vocab.progress.reps === 0;
+          if (isDue || isNew) {
+            vocabToTrain.push(vocab);
+          }
         }
       }
 
