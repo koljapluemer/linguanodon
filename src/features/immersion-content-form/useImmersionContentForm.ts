@@ -1,5 +1,6 @@
 import { ref, computed, inject, watch } from 'vue';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { ImmersionContentFormState, ImmersionContentFormData } from './types';
 import { immersionContentToFormData, formDataToImmersionContent } from './types';
 
@@ -22,6 +23,8 @@ export function useImmersionContentForm(contentUid?: string) {
     error: null,
     isEditing: !!contentUid
   });
+
+  const loadedContentData = ref<ImmersionContentData | null>(null);
 
   const isValid = computed(() => {
     const data = state.value.formData;
@@ -88,6 +91,7 @@ export function useImmersionContentForm(contentUid?: string) {
     try {
       const content = await immersionRepo.getImmersionContentById(contentUid);
       if (content) {
+        loadedContentData.value = content;
         state.value.formData = immersionContentToFormData(content);
       } else {
         state.value.error = 'Immersion content not found';
@@ -157,6 +161,7 @@ export function useImmersionContentForm(contentUid?: string) {
 
   return {
     state: computed(() => state.value),
+    loadedContentData: computed(() => loadedContentData.value),
     isValid,
     loadContent,
     save,

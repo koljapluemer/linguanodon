@@ -25,6 +25,8 @@ export function useVocabForm(vocabId?: string) {
     isEditing: !!vocabId
   });
 
+  const loadedVocabData = ref<VocabData | null>(null);
+
   const isValid = computed(() => {
     return state.value.formData.language.trim() !== '' && 
            state.value.formData.content.trim() !== '';
@@ -85,6 +87,7 @@ export function useVocabForm(vocabId?: string) {
     try {
       const vocab = await vocabRepo.getVocabByUID(vocabId);
       if (vocab) {
+        loadedVocabData.value = vocab;
         state.value.formData = vocabDataToFormData(vocab);
       } else {
         state.value.error = 'Vocab not found';
@@ -178,6 +181,7 @@ export function useVocabForm(vocabId?: string) {
 
   return {
     state: computed(() => state.value),
+    loadedVocabData: computed(() => loadedVocabData.value),
     isValid,
     loadVocab,
     save,

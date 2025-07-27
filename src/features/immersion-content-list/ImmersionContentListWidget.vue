@@ -58,6 +58,16 @@
                   {{ content.associatedUnits.length }} vocab units
                 </span>
               </div>
+              
+              <!-- Vocab Readiness Progress Bar -->
+              <div v-if="vocabReadiness.has(content.uid)" class="mt-3">
+                <div class="w-full bg-base-300 rounded-full h-2">
+                  <div 
+                    class="bg-success h-2 rounded-full transition-all duration-300"
+                    :style="{ width: (vocabReadiness.get(content.uid)!.ready / vocabReadiness.get(content.uid)!.total * 100) + '%' }"
+                  ></div>
+                </div>
+              </div>
               <div class="mt-2">
                 <MarkdownRenderer :content="content.prompt" />
               </div>
@@ -132,14 +142,22 @@ import { ref, computed, onMounted, inject } from 'vue';
 import { Plus, Search, Edit, Trash2 } from 'lucide-vue-next';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
 
 const immersionRepo = inject<ImmersionContentRepoContract>('immersionRepo');
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+
 if (!immersionRepo) {
   throw new Error('ImmersionRepo not provided');
 }
+if (!vocabRepo) {
+  throw new Error('VocabRepo not provided');
+}
 
 const content = ref<ImmersionContentData[]>([]);
+const vocabReadiness = ref<Map<string, { ready: number; total: number }>>(new Map());
 const loading = ref(true);
 const error = ref<string | null>(null);
 const searchQuery = ref('');
@@ -174,11 +192,37 @@ async function loadContent() {
   
   try {
     content.value = await immersionRepo!.getAllImmersionContent();
+    await loadVocabReadiness();
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load content';
   } finally {
     loading.value = false;
   }
+}
+
+async function loadVocabReadiness() {
+  const readinessMap = new Map<string, { ready: number; total: number }>();
+  
+  for (const item of content.value) {
+    if (item.associatedUnits.length === 0) {
+      // Don't add to map if no associated vocab - progress bar will be hidden
+      continue;
+    }
+    
+    let readyCount = 0;
+    const totalCount = item.associatedUnits.length;
+    
+    for (const vocabId of item.associatedUnits) {
+      const vocab = await vocabRepo!.getVocabByUID(vocabId);
+      if (vocab && isCurrentlyTopOfMind(vocab)) {
+        readyCount++;
+      }
+    }
+    
+    readinessMap.set(item.uid, { ready: readyCount, total: totalCount });
+  }
+  
+  vocabReadiness.value = readinessMap;
 }
 
 function confirmDelete(item: ImmersionContentData) {
