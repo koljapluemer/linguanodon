@@ -37,19 +37,39 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return vocab ? this.ensureVocabFields(vocab) : undefined;
   }
 
-  async getRandomDueVocab(count: number): Promise<VocabData[]> {
+  async getRandomAlreadySeenDueVocab(count: number): Promise<VocabData[]> {
     const allVocab = await this.vocabStorage.getAll();
     const now = new Date();
     
-    const dueVocab = allVocab.filter(vocab => {
-      // Level -1 vocab is always due (new)
-      if (vocab.progress.level === -1) return true;
+    const alreadySeenDueVocab = allVocab.filter(vocab => {
+      // Must have been practiced before (reps > 0)
+      const hasBeenPracticed = vocab.progress.reps > 0;
+      // Must be due now
+      const isDue = vocab.progress.due <= now;
       
-      // Check if FSRS card is due
-      return vocab.progress.due <= now;
+      return hasBeenPracticed && isDue;
     });
     
-    return pickRandom(dueVocab, count).map(v => this.ensureVocabFields(v));
+    console.info(`Found ${alreadySeenDueVocab.length} already-seen due vocab items`);
+    return pickRandom(alreadySeenDueVocab, count).map(v => this.ensureVocabFields(v));
+  }
+
+  async getRandomUnseenVocab(count: number): Promise<VocabData[]> {
+    const allVocab = await this.vocabStorage.getAll();
+    
+    const unseenVocab = allVocab.filter(vocab => {
+      // Check for null/undefined progress (shouldn't happen but handle gracefully)
+      if (!vocab.progress) {
+        console.warn('Found vocab with null/undefined progress:', vocab.id);
+        return true;
+      }
+      
+      // Never practiced before (reps === 0)
+      return vocab.progress.reps === 0;
+    });
+    
+    console.info(`Found ${unseenVocab.length} unseen vocab items`);
+    return pickRandom(unseenVocab, count).map(v => this.ensureVocabFields(v));
   }
 
 
