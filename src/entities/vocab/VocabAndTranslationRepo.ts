@@ -46,8 +46,10 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       const hasBeenPracticed = vocab.progress.reps > 0;
       // Must be due now
       const isDue = vocab.progress.due <= now;
+      // Must not be excluded from practice
+      const isNotExcluded = !vocab.doNotPractice;
       
-      return hasBeenPracticed && isDue;
+      return hasBeenPracticed && isDue && isNotExcluded;
     });
     
     console.info(`Found ${alreadySeenDueVocab.length} already-seen due vocab items`);
@@ -61,11 +63,14 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       // Check for null/undefined progress (shouldn't happen but handle gracefully)
       if (!vocab.progress) {
         console.warn('Found vocab with null/undefined progress:', vocab.id);
-        return true;
+        return !vocab.doNotPractice; // Still filter by doNotPractice
       }
       
-      // Never practiced before (reps === 0)
-      return vocab.progress.reps === 0;
+      // Never practiced before (reps === 0) and not excluded from practice
+      const isUnseen = vocab.progress.reps === 0;
+      const isNotExcluded = !vocab.doNotPractice;
+      
+      return isUnseen && isNotExcluded;
     });
     
     console.info(`Found ${unseenVocab.length} unseen vocab items`);
@@ -134,9 +139,21 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
   async getRandomVocabWithMissingPronunciation(): Promise<VocabData | null> {
     const allVocab = await this.vocabStorage.getAll();
-    const withoutPronunciation = allVocab.filter(vocab => 
-      !vocab.pronunciation || vocab.pronunciation.trim().length === 0
-    );
+    const now = new Date();
+    
+    const withoutPronunciation = allVocab.filter(vocab => {
+      const hasNoPronunciation = !vocab.pronunciation || vocab.pronunciation.trim().length === 0;
+      const hasPriority = (vocab.priority ?? 1) >= 2;
+      const isNotExcluded = !vocab.doNotPractice;
+      
+      // Check if there's a pronunciation task that's not yet due
+      const pronunciationTask = vocab.associatedTasks.find(task => task.taskType === 'add-pronunciation');
+      const isTaskDue = !pronunciationTask || 
+                       !pronunciationTask.nextShownEarliestAt || 
+                       pronunciationTask.nextShownEarliestAt <= now;
+      
+      return hasNoPronunciation && hasPriority && isNotExcluded && isTaskDue;
+    });
     
     if (withoutPronunciation.length === 0) return null;
     return pickRandom(withoutPronunciation, 1)[0];

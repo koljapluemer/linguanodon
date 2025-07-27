@@ -9,6 +9,7 @@ interface Props {
 
 interface Emits {
   (e: 'completed'): void;
+  (e: 'skipped'): void;
 }
 
 defineProps<Props>();
@@ -16,6 +17,10 @@ const emit = defineEmits<Emits>();
 
 const handleComplete = () => {
   emit('completed');
+};
+
+const handleSkip = () => {
+  emit('skipped');
 };
 </script>
 
@@ -32,7 +37,10 @@ const handleComplete = () => {
       </div>
     </div>
 
-    <div class="flex justify-center">
+    <div class="flex justify-center gap-4">
+      <button class="btn btn-sm btn-ghost" @click="handleSkip">
+        Skip
+      </button>
       <button class="btn btn-primary" @click="handleComplete">
         Mark as Completed
       </button>

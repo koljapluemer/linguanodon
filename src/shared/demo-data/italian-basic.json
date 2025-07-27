@@ -1418,6 +1418,7 @@
       "taskType": "immersion-content",
       "title": "YouTube Video - lOmP70oVtLo",
       "prompt": "Watch [this video](https://www.youtube.com/watch?v=lOmP70oVtLo)",
+      "evaluateAfterDoing": true,
       "extraInfo": "Video ID: lOmP70oVtLo",
       "isUserCreated": false,
       "lastDownloadedAt": null
@@ -1476,6 +1477,7 @@
       "taskType": "immersion-content",
       "title": "YouTube Video - saXs-rRFTpM",
       "prompt": "Watch [this video](https://www.youtube.com/watch?v=saXs-rRFTpM)",
+      "evaluateAfterDoing": true,
       "extraInfo": "Video ID: saXs-rRFTpM",
       "isUserCreated": false,
       "lastDownloadedAt": null

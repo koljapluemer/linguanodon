@@ -23,6 +23,17 @@ const handleTaskCompleted = () => {
   currentState.value = 'evaluation';
 };
 
+const handleTaskSkipped = async () => {
+  // Set nextShownEarliestAt to tomorrow for immersion content
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  // TODO: Update immersion content with nextShownEarliestAt
+  console.log('Immersion content task skipped, should be rescheduled to:', tomorrow);
+  
+  emit('finished');
+};
+
 const handleEvaluationFinished = (evaluation: TaskEvaluation) => {
   // TODO: Store evaluation in immersion content data
   console.log('Immersion content evaluation:', evaluation);
@@ -38,6 +49,7 @@ const handleEvaluationFinished = (evaluation: TaskEvaluation) => {
       :prompt="content.prompt"
       :extra-info="content.extraInfo"
       @completed="handleTaskCompleted"
+      @skipped="handleTaskSkipped"
     />
 
     <EvaluateTaskWidget 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import type { TaskEvaluation } from '@/shared/ExerciseTypes';
 
 interface Emits {
@@ -8,18 +8,26 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 
-const correctnessRating = ref(3);
-const difficultyRating = ref(3);
-const wantToDoAgain = ref<'no' | 'yes' | 'maybe'>('maybe');
+const correctnessRating = ref<number | null>(null);
+const difficultyRating = ref<number | null>(null);
+const wantToDoAgain = ref<'no' | 'yes' | 'maybe' | null>(null);
 
 /**
  *
  */
+const isFormValid = computed(() => {
+  return correctnessRating.value !== null && 
+         difficultyRating.value !== null && 
+         wantToDoAgain.value !== null;
+});
+
 const handleSubmit = () => {
+  if (!isFormValid.value) return;
+  
   const evaluation: TaskEvaluation = {
-    correctnessRating: correctnessRating.value,
-    difficultyRating: difficultyRating.value,
-    wantToDoAgain: wantToDoAgain.value
+    correctnessRating: correctnessRating.value!,
+    difficultyRating: difficultyRating.value!,
+    wantToDoAgain: wantToDoAgain.value!
   };
   
   emit('finished', evaluation);
@@ -39,10 +47,10 @@ const handleSubmit = () => {
         <div class="form-control">
           <label class="label">
             <span class="label-text">How well did you do?</span>
-            <span class="label-text-alt">{{ correctnessRating }}/5</span>
+            <span class="label-text-alt">{{ correctnessRating ?? '?' }}/5</span>
           </label>
           <input 
-            v-model="correctnessRating"
+            v-model.number="correctnessRating"
             type="range" 
             min="1" 
             max="5" 
@@ -58,10 +66,10 @@ const handleSubmit = () => {
         <div class="form-control">
           <label class="label">
             <span class="label-text">How difficult was it?</span>
-            <span class="label-text-alt">{{ difficultyRating }}/5</span>
+            <span class="label-text-alt">{{ difficultyRating ?? '?' }}/5</span>
           </label>
           <input 
-            v-model="difficultyRating"
+            v-model.number="difficultyRating"
             type="range" 
             min="1" 
             max="5" 
@@ -81,21 +89,21 @@ const handleSubmit = () => {
           <div class="flex gap-2 justify-center">
             <button 
               class="btn btn-sm"
-              :class="{ 'btn-error': wantToDoAgain === 'no' }"
+              :class="{ 'btn-error': wantToDoAgain === 'no', 'btn-outline': wantToDoAgain !== 'no' }"
               @click="wantToDoAgain = 'no'"
             >
               No
             </button>
             <button 
               class="btn btn-sm"
-              :class="{ 'btn-warning': wantToDoAgain === 'maybe' }"
+              :class="{ 'btn-warning': wantToDoAgain === 'maybe', 'btn-outline': wantToDoAgain !== 'maybe' }"
               @click="wantToDoAgain = 'maybe'"
             >
               Maybe
             </button>
             <button 
               class="btn btn-sm"
-              :class="{ 'btn-success': wantToDoAgain === 'yes' }"
+              :class="{ 'btn-success': wantToDoAgain === 'yes', 'btn-outline': wantToDoAgain !== 'yes' }"
               @click="wantToDoAgain = 'yes'"
             >
               Yes
@@ -106,7 +114,11 @@ const handleSubmit = () => {
     </div>
 
     <div class="flex justify-center">
-      <button class="btn btn-primary" @click="handleSubmit">
+      <button 
+        class="btn btn-primary" 
+        :disabled="!isFormValid"
+        @click="handleSubmit"
+      >
         Continue
       </button>
     </div>

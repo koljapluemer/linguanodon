@@ -58,6 +58,36 @@
               class="input input-bordered"
             />
           </div>
+
+          <!-- Priority -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Priority</span>
+            </label>
+            <input
+              v-model.number="formData.priority"
+              type="number"
+              min="1"
+              max="5"
+              placeholder="1"
+              class="input input-bordered w-24"
+            />
+            <div class="label">
+              <span class="label-text-alt">1 = lowest, 5 = highest priority</span>
+            </div>
+          </div>
+
+          <!-- Exclude from practice -->
+          <div class="form-control">
+            <label class="cursor-pointer label justify-start gap-2">
+              <input
+                v-model="formData.doNotPractice"
+                type="checkbox"
+                class="checkbox"
+              />
+              <span class="label-text">Exclude from practice</span>
+            </label>
+          </div>
         </div>
       </div>
 

@@ -6,6 +6,8 @@ export interface VocabData {
   id: string;
   language: string;
   content?: string;
+  priority?: number;
+  doNotPractice?: boolean;
   pronunciation?: string;
   notes: Array<{
     content: string;

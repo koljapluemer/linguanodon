@@ -27,7 +27,7 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
       const associatedVocab: VocabData[] = [];
       for (const vocabId of dueContent.associatedUnits) {
         const vocab = await this.vocabRepo.getVocabByUID(vocabId);
-        if (vocab) {
+        if (vocab && !vocab.doNotPractice) {
           associatedVocab.push(vocab);
         }
       }

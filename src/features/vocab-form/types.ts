@@ -5,6 +5,8 @@ export interface VocabFormData {
   language: string;
   content: string;
   pronunciation: string;
+  priority?: number;
+  doNotPractice?: boolean;
   notes: Array<{
     content: string;
     showBeforeExercise: boolean;
@@ -29,6 +31,8 @@ export function vocabDataToFormData(vocab: VocabData): VocabFormData {
     language: vocab.language,
     content: vocab.content || '',
     pronunciation: vocab.pronunciation || '',
+    priority: vocab.priority,
+    doNotPractice: vocab.doNotPractice,
     notes: vocab.notes ? [...vocab.notes] : [],
     links: vocab.links ? [...vocab.links] : []
   };
@@ -39,6 +43,8 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
     language: formData.language,
     content: formData.content,
     pronunciation: formData.pronunciation,
+    priority: formData.priority,
+    doNotPractice: formData.doNotPractice,
     notes: formData.notes,
     links: formData.links
   };
