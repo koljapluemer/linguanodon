@@ -47,7 +47,7 @@ const handleRate = (rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') => {
 
     <!-- Rating -->
     <RatingButtons 
-      prompt="How difficult to remember is this word?" 
+      prompt="How hard is this word to remember?" 
       @rate="handleRate" 
     />
   </div>

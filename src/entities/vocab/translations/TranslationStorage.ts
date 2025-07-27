@@ -33,8 +33,21 @@ export class TranslationStorage {
   }
 
   async add(translation: TranslationData): Promise<string> {
+    await this.ensureDemoData();
+    
+    // Check for duplicate content
+    const existing = await db.translations.where('content').equals(translation.content).first();
+    if (existing) {
+      throw new Error(`Translation with content "${translation.content}" already exists`);
+    }
+    
     await db.translations.add(translation);
     return translation.id;
+  }
+
+  async getByContent(content: string): Promise<TranslationData | undefined> {
+    await this.ensureDemoData();
+    return await db.translations.where('content').equals(content).first();
   }
 
   async update(translation: TranslationData): Promise<void> {

@@ -18,6 +18,13 @@ const isRevealed = ref(false);
 const handleRate = (rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') => {
   emit('rate', rating);
 };
+
+function getFrontContent(): string {
+  if (props.exercise.isReverse && props.exercise.targetTranslation) {
+    return props.exercise.targetTranslation;
+  }
+  return props.exercise.vocab.content;
+}
 </script>
 
 <template>
@@ -31,10 +38,10 @@ const handleRate = (rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') => {
     <!-- Exercise Card -->
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
-        <!-- Vocab Content -->
+        <!-- Front Content (vocab or translation) -->
         <div class="mb-4 text-center">
           <ElementBigText :is-extra-big="true">
-            {{ exercise.vocab.content }}
+            {{ getFrontContent() }}
           </ElementBigText>
         </div>
 

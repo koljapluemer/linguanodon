@@ -31,7 +31,7 @@ onMounted(async () => {
   console.log('PracticeVocabWidget mounted with vocab:', props.vocab.id);
   try {
     const translations = await vocabRepo.getTranslationsByIds(props.vocab.translations);
-    exercise.value = ExerciseGenerator.generateExercise(props.vocab, translations);
+    exercise.value = await ExerciseGenerator.generateExercise(props.vocab, translations, vocabRepo);
   } catch (error) {
     console.error('Error generating exercise:', error);
   } finally {

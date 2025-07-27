@@ -256,4 +256,44 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   async deleteVocab(id: string): Promise<void> {
     await this.vocabStorage.delete(id);
   }
+
+  // Distractor generation methods
+  async getDueVocabInLanguage(language: string): Promise<VocabData[]> {
+    const allVocab = await this.vocabStorage.getAll();
+    const now = new Date();
+    
+    return allVocab.filter(vocab => 
+      vocab.language === language &&
+      vocab.progress.reps > 0 &&
+      vocab.progress.due <= now &&
+      !vocab.doNotPractice
+    ).map(v => this.ensureVocabFields(v));
+  }
+
+  async getAllTranslationsInLanguage(language: string): Promise<TranslationData[]> {
+    // Get all vocab in the language, then collect their translations
+    const allVocab = await this.vocabStorage.getAll();
+    const vocabInLanguage = allVocab.filter(vocab => vocab.language === language);
+    
+    const allTranslationIds = vocabInLanguage.flatMap(vocab => vocab.translations);
+    const uniqueTranslationIds = [...new Set(allTranslationIds)];
+    
+    return await this.translationStorage.getByIds(uniqueTranslationIds);
+  }
+
+  async findVocabByTranslationContent(translationContent: string): Promise<VocabData[]> {
+    // Find all translations with this content
+    const allTranslations = await this.translationStorage.getAll();
+    const matchingTranslations = allTranslations.filter(t => t.content === translationContent);
+    
+    if (matchingTranslations.length === 0) return [];
+    
+    // Find all vocab that use these translations
+    const allVocab = await this.vocabStorage.getAll();
+    const matchingTranslationIds = new Set(matchingTranslations.map(t => t.id));
+    
+    return allVocab
+      .filter(vocab => vocab.translations.some(id => matchingTranslationIds.has(id)))
+      .map(v => this.ensureVocabFields(v));
+  }
 }

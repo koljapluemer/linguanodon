@@ -2,6 +2,8 @@
 import type { Exercise, ExerciseEmits } from '@/shared/ExerciseTypes';
 import TryToRemember from './exercises/TryToRemember.vue';
 import Reveal from './exercises/Reveal.vue';
+import ChooseFromTwo from './exercises/ChooseFromTwo.vue';
+import ChooseFromFour from './exercises/ChooseFromFour.vue';
 
 interface Props {
   exercise: Exercise;
@@ -25,6 +27,18 @@ const handleRate = (rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') => {
     
     <Reveal 
       v-else-if="exercise.type === 'reveal'"
+      :exercise="exercise"
+      @rate="handleRate"
+    />
+    
+    <ChooseFromTwo
+      v-else-if="exercise.type === 'choose-from-two-vocab-to-translation' || exercise.type === 'choose-from-two-translation-to-vocab'"
+      :exercise="exercise"
+      @rate="handleRate"
+    />
+    
+    <ChooseFromFour
+      v-else-if="exercise.type === 'choose-from-four-vocab-to-translation' || exercise.type === 'choose-from-four-translation-to-vocab'"
       :exercise="exercise"
       @rate="handleRate"
     />
