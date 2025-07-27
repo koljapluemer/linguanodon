@@ -24,7 +24,6 @@ export interface VocabAndTranslationRepoContract {
   deleteVocab(id: string): Promise<void>;
   
   // Progress operations
-  calculateMasteryLevelForVocab(id: string): Promise<number>;
   scoreVocab(vocabId: string, rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): Promise<void>;
   
   // Pronunciation operations

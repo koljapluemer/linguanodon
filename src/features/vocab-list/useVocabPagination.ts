@@ -1,6 +1,7 @@
 import { ref, computed, inject } from 'vue';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { VocabListState, VocabListItem } from './types';
+import { calculateVocabMastery } from '@/entities/vocab/vocabMastery';
 
 export function useVocabPagination() {
   const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
@@ -25,7 +26,7 @@ export function useVocabPagination() {
       pronunciation: vocab.pronunciation || '',
       notes: vocab.notes || [],
       translationCount: vocab.translations?.length || 0,
-      masteryPercentage: vocab.progress.level === -1 ? 0 : Math.round((vocab.progress.level / 4) * 100)
+      masteryPercentage: calculateVocabMastery(vocab)
     }));
   });
 

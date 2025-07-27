@@ -91,7 +91,7 @@
             </div>
 
             <!-- Progress Bar -->
-            <div class="ml-4 w-24">
+            <div v-if="item.masteryPercentage > 0" class="ml-4 w-24">
               <div class="text-xs text-gray-600 mb-1">Mastery</div>
               <div class="w-full bg-gray-200 rounded-full h-2">
                 <div 

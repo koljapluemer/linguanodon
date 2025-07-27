@@ -52,15 +52,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return pickRandom(dueVocab, count).map(v => this.ensureVocabFields(v));
   }
 
-  async calculateMasteryLevelForVocab(id: string): Promise<number> {
-    const vocab = await this.vocabStorage.getById(id);
-    if (!vocab) return 0;
-    
-    // Map level -1 to 4 -> 0 to 100%
-    const level = vocab.progress.level;
-    if (level === -1) return 0;
-    return Math.round((level / 4) * 100);
-  }
 
   async scoreVocab(vocabId: string, rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): Promise<void> {
     const vocab = await this.vocabStorage.getById(vocabId);
