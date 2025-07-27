@@ -38,9 +38,7 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       lastDifficultyRating: content.lastDifficultyRating,
       lastCorrectnessRating: content.lastCorrectnessRating,
       isUserCreated: true,
-      lastDownloadedAt: null,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      lastDownloadedAt: null
     };
 
     await this.storage.add(newContent);
@@ -48,10 +46,7 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
   }
 
   async updateImmersionContent(content: ImmersionContentData): Promise<void> {
-    await this.storage.update({
-      ...content,
-      updatedAt: new Date()
-    });
+    await this.storage.update(content);
   }
 
   async deleteImmersionContent(uid: string): Promise<void> {

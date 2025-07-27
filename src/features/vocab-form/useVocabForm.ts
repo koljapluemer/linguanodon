@@ -1,5 +1,6 @@
 import { ref, computed, inject, watch } from 'vue';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabFormState, VocabFormData } from './types';
 import { vocabDataToFormData, formDataToVocabData } from './types';
 

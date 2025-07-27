@@ -11,7 +11,6 @@
       <div><strong>State:</strong> {{ vocabData.progress.state }}</div>
       <div><strong>Stability:</strong> {{ formatNumber(vocabData.progress.stability) }}</div>
       <div><strong>Difficulty:</strong> {{ formatNumber(vocabData.progress.difficulty) }}</div>
-      <div><strong>Retrievability:</strong> {{ formatNumber(vocabData.progress.retrievability) }}</div>
       <div><strong>Last Review:</strong> {{ formatDate(vocabData.progress.last_review) }}</div>
       <div><strong>Elapsed Days:</strong> {{ vocabData.progress.elapsed_days }}</div>
       <div><strong>Scheduled Days:</strong> {{ vocabData.progress.scheduled_days }}</div>

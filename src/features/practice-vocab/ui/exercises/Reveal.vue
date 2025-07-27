@@ -10,7 +10,7 @@ interface Props {
   exercise: Exercise;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 const emit = defineEmits<ExerciseEmits>();
 
 const isRevealed = ref(false);

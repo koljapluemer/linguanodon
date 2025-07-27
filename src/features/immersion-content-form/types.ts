@@ -56,7 +56,6 @@ export function formDataToImmersionContent(
     baseData.lastCorrectnessRating = existingContent.lastCorrectnessRating;
     baseData.isUserCreated = existingContent.isUserCreated;
     baseData.lastDownloadedAt = existingContent.lastDownloadedAt;
-    baseData.createdAt = existingContent.createdAt;
   }
 
   return baseData;
