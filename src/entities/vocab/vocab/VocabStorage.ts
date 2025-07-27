@@ -1,7 +1,8 @@
 import Dexie, { type Table } from 'dexie';
 import type { VocabData } from './VocabData';
 import { createEmptyCard } from 'ts-fsrs';
-import demoData from '@/shared/demo-data/italian-basic.json';
+import demoData from '@/shared/demo-data/load_this.json';
+
 
 class VocabDatabase extends Dexie {
   vocab!: Table<VocabData>;
