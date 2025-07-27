@@ -6,7 +6,6 @@
     :error="state.error"
     :is-valid="isValid"
     :is-editing="state.isEditing"
-    @save="handleSave"
     @add-note="addNote"
     @remove-note="removeNote"
     @add-link="addLink"
@@ -16,7 +15,6 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { useVocabForm } from './useVocabForm';
 import VocabFormRenderer from './VocabFormRenderer.vue';
 
@@ -24,18 +22,7 @@ const props = defineProps<{
   vocabId?: string;
 }>();
 
-const router = useRouter();
-const { state, isValid, loadVocab, save, addNote, removeNote, addLink, removeLink } = useVocabForm(props.vocabId);
-
-/**
- *
- */
-async function handleSave() {
-  const success = await save();
-  if (success) {
-    router.push('/vocab');
-  }
-}
+const { state, isValid, loadVocab, addNote, removeNote, addLink, removeLink } = useVocabForm(props.vocabId);
 
 onMounted(() => {
   if (props.vocabId) {

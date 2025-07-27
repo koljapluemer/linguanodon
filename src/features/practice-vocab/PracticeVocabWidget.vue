@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue';
+import { Ban } from 'lucide-vue-next';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { Exercise, ExerciseRating } from '@/shared/ExerciseTypes';
@@ -12,6 +13,7 @@ interface Props {
 
 interface Emits {
   (e: 'finished'): void;
+  (e: 'doNotPractice'): void;
 }
 
 const props = defineProps<Props>();
@@ -37,13 +39,10 @@ onMounted(async () => {
   }
 });
 
-/**
- *
- */
 const handleRating = async (rating: ExerciseRating) => {
   console.log('PracticeVocabWidget: Rating received:', rating);
   if (!props.vocab) return;
-  
+
   try {
     console.log('PracticeVocabWidget: Scoring vocab...');
     await vocabRepo.scoreVocab(props.vocab.id, rating);
@@ -55,21 +54,54 @@ const handleRating = async (rating: ExerciseRating) => {
     emit('finished');
   }
 };
+
+const handleDoNotPractice = async () => {
+  console.log('PracticeVocabWidget: Do not practice requested for vocab:', props.vocab.id);
+  if (!props.vocab) return;
+
+  try {
+    // Get fresh vocab data to avoid conflicts
+    const freshVocab = await vocabRepo.getVocabByUID(props.vocab.id);
+    if (!freshVocab) {
+      console.warn('Vocab not found for doNotPractice update');
+      emit('finished');
+      return;
+    }
+
+    // Set doNotPractice to true
+    freshVocab.doNotPractice = true;
+    await vocabRepo.updateVocab(freshVocab);
+
+    console.log('PracticeVocabWidget: doNotPractice set, emitting finished');
+    emit('finished');
+  } catch (error) {
+    console.error('Error setting doNotPractice:', error);
+    console.log('PracticeVocabWidget: Error occurred, still emitting finished');
+    emit('finished');
+  }
+};
 </script>
 
 <template>
   <div>
+
     <div v-if="isLoading" class="flex justify-center p-8">
       <span class="loading loading-spinner loading-lg"></span>
     </div>
-    
-    <div v-else-if="exercise" class="w-full max-w-2xl mx-auto">
-      <MetaExerciseRenderer 
-        :exercise="exercise"
-        @rate="handleRating"
-      />
+
+    <div v-else-if="exercise" class="w-full max-w-2xl mx-auto gap-4 flex flex-col">
+      <div class="flex justify-center self-end">
+        <button class="btn btn-sm" @click="handleDoNotPractice">
+          <Ban class="w-4 h-4 mr-1" />
+          Do Not Practice This Word
+        </button>
+      </div>
+
+      <MetaExerciseRenderer :exercise="exercise" @rate="handleRating" />
+
+
     </div>
-    
+
     <div v-else class="alert alert-warning">
       <span>Unable to generate exercise for this vocab</span>
       <button class="btn btn-sm" @click="emit('finished')">

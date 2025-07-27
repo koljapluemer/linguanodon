@@ -1,6 +1,6 @@
-import { ref, computed, inject } from 'vue';
+import { ref, computed, inject, watch } from 'vue';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { VocabFormState } from './types';
+import type { VocabFormState, VocabFormData } from './types';
 import { vocabDataToFormData, formDataToVocabData } from './types';
 
 export function useVocabForm(vocabId?: string) {
@@ -14,6 +14,8 @@ export function useVocabForm(vocabId?: string) {
       language: '',
       content: '',
       pronunciation: '',
+      priority: undefined,
+      doNotPractice: undefined,
       notes: [],
       links: []
     },
@@ -27,6 +29,52 @@ export function useVocabForm(vocabId?: string) {
     return state.value.formData.language.trim() !== '' && 
            state.value.formData.content.trim() !== '';
   });
+
+  // Auto-save functionality
+  let autoSaveTimeout: number | null = null;
+
+  function scheduleAutoSave() {
+    if (autoSaveTimeout) {
+      clearTimeout(autoSaveTimeout);
+    }
+    
+    // Auto-save after 1 second of inactivity
+    autoSaveTimeout = window.setTimeout(() => {
+      if (state.value.isEditing && isValid.value && !state.value.saving) {
+        autoSave();
+      }
+    }, 1000);
+  }
+
+  async function autoSave() {
+    if (!state.value.isEditing || !vocabId || !isValid.value) return;
+
+    try {
+      state.value.saving = true;
+      await saveInternal();
+    } catch (error) {
+      console.warn('Auto-save failed:', error);
+      // Don't show error for auto-save failures
+    } finally {
+      state.value.saving = false;
+    }
+  }
+
+  // Watch for form changes to trigger auto-save
+  watch(
+    () => state.value.formData,
+    () => {
+      if (state.value.isEditing) {
+        scheduleAutoSave();
+      }
+    },
+    { deep: true }
+  );
+
+  // Helper function to serialize form data and avoid proxy issues
+  function serializeFormData(formData: VocabFormData): VocabFormData {
+    return JSON.parse(JSON.stringify(formData));
+  }
 
   async function loadVocab() {
     if (!vocabId || !vocabRepo) return;
@@ -48,6 +96,31 @@ export function useVocabForm(vocabId?: string) {
     }
   }
 
+  async function saveInternal(): Promise<void> {
+    if (!vocabRepo) throw new Error('VocabRepo not available');
+
+    // Serialize form data to avoid proxy issues
+    const serializedFormData = serializeFormData(state.value.formData);
+
+    if (state.value.isEditing && vocabId) {
+      // Get existing vocab for update
+      const existingVocab = await vocabRepo.getVocabByUID(vocabId);
+      if (!existingVocab) {
+        throw new Error('Vocab not found');
+      }
+
+      const updatedVocab = {
+        ...existingVocab,
+        ...formDataToVocabData(serializedFormData, existingVocab)
+      };
+      
+      await vocabRepo.updateVocab(updatedVocab);
+    } else {
+      // Create new vocab
+      await vocabRepo.saveVocab(formDataToVocabData(serializedFormData));
+    }
+  }
+
   async function save(): Promise<boolean> {
     if (!isValid.value || !vocabRepo) {
       state.value.error = 'Please fill in required fields';
@@ -58,25 +131,7 @@ export function useVocabForm(vocabId?: string) {
     state.value.error = null;
 
     try {
-      if (state.value.isEditing && vocabId) {
-        // Get existing vocab for update
-        const existingVocab = await vocabRepo.getVocabByUID(vocabId);
-        if (!existingVocab) {
-          state.value.error = 'Vocab not found';
-          return false;
-        }
-
-        const updatedVocab = {
-          ...existingVocab,
-          ...formDataToVocabData(state.value.formData, existingVocab)
-        };
-        
-        await vocabRepo.updateVocab(updatedVocab);
-      } else {
-        // Create new vocab
-        await vocabRepo.saveVocab(formDataToVocabData(state.value.formData));
-      }
-      
+      await saveInternal();
       return true;
     } catch (error) {
       state.value.error = error instanceof Error ? error.message : 'Failed to save vocab';
@@ -113,6 +168,8 @@ export function useVocabForm(vocabId?: string) {
       language: '',
       content: '',
       pronunciation: '',
+      priority: undefined,
+      doNotPractice: undefined,
       notes: [],
       links: []
     };

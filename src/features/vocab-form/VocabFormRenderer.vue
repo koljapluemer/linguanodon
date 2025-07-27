@@ -12,7 +12,7 @@
     </div>
 
     <!-- Form -->
-    <form v-else @submit.prevent="$emit('save')" class="space-y-6">
+    <div v-else class="space-y-6">
       <!-- Basic Information -->
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body">
@@ -72,9 +72,6 @@
               placeholder="1"
               class="input input-bordered w-24"
             />
-            <div class="label">
-              <span class="label-text-alt">1 = lowest, 5 = highest priority</span>
-            </div>
           </div>
 
           <!-- Exclude from practice -->
@@ -206,25 +203,23 @@
 
       <!-- Actions -->
       <div class="flex justify-between items-center">
-        <router-link to="/vocab" class="btn btn-outline">
-          Cancel
-        </router-link>
-        
-        <button
-          type="submit"
-          :disabled="!isValid || saving"
-          class="btn btn-primary"
-        >
-          <span v-if="saving" class="loading loading-spinner loading-sm"></span>
-          {{ saving ? 'Saving...' : (isEditing ? 'Update Vocab' : 'Create Vocab') }}
-        </button>
+        <div class="flex items-center gap-2">
+          <span v-if="saving" class="text-sm text-base-content/70 flex items-center gap-1">
+            <span class="loading loading-spinner loading-sm"></span>
+            Auto-saving...
+          </span>
+          <span v-else-if="isEditing" class="text-sm text-success flex items-center gap-1">
+            <Check class="w-4 h-4" />
+            Changes saved automatically
+          </span>
+        </div>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Plus, X } from 'lucide-vue-next';
+import { Plus, X, Check } from 'lucide-vue-next';
 import type { VocabFormData } from './types';
 
 defineProps<{
@@ -237,7 +232,6 @@ defineProps<{
 }>();
 
 defineEmits<{
-  save: [];
   addNote: [];
   removeNote: [index: number];
   addLink: [];
