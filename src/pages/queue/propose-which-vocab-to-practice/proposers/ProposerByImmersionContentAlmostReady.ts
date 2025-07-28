@@ -22,7 +22,7 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
       const allContent = await this.immersionRepo.getAllImmersionContent();
       
       let bestContent = null;
-      let bestPercentage = 0;
+      let bestPercentage = -1;
       
       // Find the immersion content with the highest top-of-mind percentage below 90%
       for (const content of allContent) {
