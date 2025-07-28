@@ -51,11 +51,8 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
       }
       
       if (!bestContent) {
-        console.info('ProposerByImmersionContentAlmostReady: No suitable immersion content found');
         return [];
       }
-      
-      console.info(`ProposerByImmersionContentAlmostReady: Chose "${bestContent.title}" with ${Math.round(bestPercentage * 100)}% vocab readiness`);
       
       // Get vocab units associated with the best content that are due or new
       const vocabToTrain: VocabData[] = [];

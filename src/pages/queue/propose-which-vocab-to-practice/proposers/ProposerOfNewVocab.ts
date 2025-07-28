@@ -13,7 +13,6 @@ export class ProposerOfNewVocab implements VocabProposerContract {
 
     try {
       const proposals = await this.vocabRepo.getRandomUnseenVocab(targetNumber);
-      console.info(`ProposerOfNewVocab proposed ${proposals.length} vocab items`);
       return proposals;
     } catch (error) {
       console.error('Error proposing new vocab:', error);

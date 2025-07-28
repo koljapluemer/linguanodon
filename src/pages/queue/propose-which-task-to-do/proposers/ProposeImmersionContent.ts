@@ -54,7 +54,6 @@ export class ProposeImmersionContent implements TaskProposerContract {
         
         // If at least 60% of vocab is top-of-mind, this content is ready
         if (readinessPercentage >= 0.6) {
-          console.info(`Proposing immersion content "${content.title}" with ${Math.round(readinessPercentage * 100)}% vocab readiness`);
           return {
             taskType: 'immersion-content',
             data: {

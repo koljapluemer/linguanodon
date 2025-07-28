@@ -52,7 +52,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       return hasBeenPracticed && isDue && isNotExcluded;
     });
     
-    console.info(`Found ${alreadySeenDueVocab.length} already-seen due vocab items`);
     return pickRandom(alreadySeenDueVocab, count).map(v => this.ensureVocabFields(v));
   }
 
@@ -73,7 +72,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       return isUnseen && isNotExcluded;
     });
     
-    console.info(`Found ${unseenVocab.length} unseen vocab items`);
     return pickRandom(unseenVocab, count).map(v => this.ensureVocabFields(v));
   }
 

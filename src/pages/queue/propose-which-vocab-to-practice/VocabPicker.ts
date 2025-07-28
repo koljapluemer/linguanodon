@@ -57,6 +57,5 @@ export class VocabPicker {
     examplesProposer.setRepos(exampleRepo, vocabRepo);
 
     this.proposers = [alreadySeenDueProposer, newVocabProposer, immersionProposer, examplesProposer];
-    console.info('VocabPicker initialized with 4 proposers: AlreadySeenDue, NewVocab, ImmersionContent, Examples');
   }
 }

@@ -64,7 +64,6 @@ export class ProposeFreeTranslate implements TaskProposerContract {
       // Randomly select one ready example
       const selectedExample = pickRandom(readyExamples, 1)[0];
       
-      console.info(`Proposing free-translate task for example "${selectedExample.content || selectedExample.id}"`);
       
       return {
         taskType: 'free-translate',

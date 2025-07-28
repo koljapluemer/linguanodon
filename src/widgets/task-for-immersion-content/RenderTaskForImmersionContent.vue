@@ -30,14 +30,12 @@ const handleTaskSkipped = async () => {
   tomorrow.setDate(tomorrow.getDate() + 1);
   
   // TODO: Update immersion content with nextShownEarliestAt
-  console.log('Immersion content task skipped, should be rescheduled to:', tomorrow);
   
   emit('finished');
 };
 
 const handleEvaluationFinished = (evaluation: TaskEvaluation) => {
   // TODO: Store evaluation in immersion content data
-  console.log('Immersion content evaluation:', evaluation);
   emit('finished');
 };
 </script>

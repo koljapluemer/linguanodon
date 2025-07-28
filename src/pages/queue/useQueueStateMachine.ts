@@ -31,7 +31,7 @@ export function useQueueStateMachine(preloader: PreloaderInstance) {
 
   // State transition logging
   function logTransition(from: string, to: string, reason: string) {
-    console.log(`StateMachine: ${from} → ${to} (${reason})`);
+    // No logging
   }
 
   // Initialize queue

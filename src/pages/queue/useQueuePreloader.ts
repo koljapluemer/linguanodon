@@ -78,7 +78,6 @@ export function useQueuePreloader(
         const batch = await vocabPicker.pickVocabBatch();
         content.vocabBatches.push(batch);
         status.vocabBatchesReady = content.vocabBatches.length;
-        console.log('Preloader: Loaded vocab batch, total batches:', status.vocabBatchesReady);
       })();
       
       await vocabLoadingPromise;
@@ -114,10 +113,8 @@ export function useQueuePreloader(
           content.tasks.push(task);
           status.tasksReady = content.tasks.length;
           consecutiveFailedTaskLoads = 0; // Reset counter on success
-          console.log('Preloader: Loaded task, total tasks:', status.tasksReady);
         } else {
           consecutiveFailedTaskLoads++;
-          console.log(`Preloader: No task available (${consecutiveFailedTaskLoads}/${MAX_CONSECUTIVE_FAILED_LOADS})`);
         }
       })();
       
@@ -134,14 +131,12 @@ export function useQueuePreloader(
       if (content.tasks.length < finalConfig.minTaskBuffer && consecutiveFailedTaskLoads < MAX_CONSECUTIVE_FAILED_LOADS) {
         setTimeout(() => loadTask(), 100); // Brief delay to prevent spam
       } else if (consecutiveFailedTaskLoads >= MAX_CONSECUTIVE_FAILED_LOADS) {
-        console.log('Preloader: Pausing task loading due to consecutive failures');
       }
     }
   }
 
   // Initialize preloading
   async function initialize() {
-    console.log('Preloader: Starting initial preload...');
     
     // Load initial content in parallel
     const promises = [];
@@ -157,7 +152,6 @@ export function useQueuePreloader(
     }
     
     await Promise.all(promises);
-    console.log('Preloader: Initial preload complete');
   }
 
   // Consume methods (instant)
@@ -165,11 +159,9 @@ export function useQueuePreloader(
     const batch = content.vocabBatches.shift() || null;
     if (batch) {
       status.vocabBatchesReady = content.vocabBatches.length;
-      console.log('Preloader: Consumed vocab batch, remaining:', status.vocabBatchesReady);
       
       // Trigger background reload if buffer is low
       if (content.vocabBatches.length <= finalConfig.aggressiveThreshold) {
-        console.log('Preloader: Vocab buffer low, triggering urgent reload');
         loadVocabBatch();
       }
     }
@@ -180,14 +172,12 @@ export function useQueuePreloader(
     const task = content.tasks.shift() || null;
     if (task) {
       status.tasksReady = content.tasks.length;
-      console.log('Preloader: Consumed task, remaining:', status.tasksReady);
       
       // Reset failed loads counter when successfully consuming tasks
       consecutiveFailedTaskLoads = 0;
       
       // Trigger background reload if buffer is low
       if (content.tasks.length <= finalConfig.aggressiveThreshold) {
-        console.log('Preloader: Task buffer low, triggering urgent reload');
         loadTask();
       }
     }
@@ -196,16 +186,12 @@ export function useQueuePreloader(
 
   // Force loading (for fallback scenarios)
   async function forceLoadNextVocabBatch(): Promise<VocabData[]> {
-    console.log('Preloader: Force loading vocab batch...');
     const batch = await vocabPicker.pickVocabBatch();
-    console.log('Preloader: Force loaded vocab batch');
     return batch;
   }
 
   async function forceLoadNextTask(): Promise<RuntimeTask | null> {
-    console.log('Preloader: Force loading task...');
     const task = await taskPicker.pickTask();
-    console.log('Preloader: Force loaded task');
     return task;
   }
 

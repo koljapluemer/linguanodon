@@ -14,7 +14,6 @@ const { prompt = 'How difficult was this?' } = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const handleRate = (rating: ExerciseRating) => {
-  console.log('RatingButtons: Rating clicked:', rating);
   emit('rate', rating);
 };
 </script>

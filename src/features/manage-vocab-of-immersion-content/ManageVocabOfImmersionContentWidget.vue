@@ -233,7 +233,6 @@ async function saveEntry(index: number) {
     // TODO: Create translation entities and link them to vocab
     // For now, we'll just store them as a simple array reference
     const translationTexts = entry.translations.split(',').map(t => t.trim()).filter(t => t);
-    console.log('Translation texts to be processed:', translationTexts);
 
     // Associate vocab with immersion content
     if (props.contentUid) {

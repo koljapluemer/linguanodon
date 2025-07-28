@@ -13,7 +13,6 @@ export class ProposerByAlreadySeenDueVocab implements VocabProposerContract {
 
     try {
       const proposals = await this.vocabRepo.getRandomAlreadySeenDueVocab(targetNumber);
-      console.info(`ProposerByAlreadySeenDueVocab proposed ${proposals.length} vocab items`);
       return proposals;
     } catch (error) {
       console.error('Error proposing already-seen due vocab:', error);

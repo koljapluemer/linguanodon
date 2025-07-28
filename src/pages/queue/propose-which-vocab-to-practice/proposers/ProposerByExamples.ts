@@ -25,7 +25,6 @@ export class ProposerByExamples implements VocabProposerContract {
       const eligibleExamples = await this.exampleRepo.getExamplesForVocabPractice();
       
       if (eligibleExamples.length === 0) {
-        console.info('ProposerByExamples: No eligible examples found');
         return [];
       }
 
@@ -39,16 +38,21 @@ export class ProposerByExamples implements VocabProposerContract {
         
         // Calculate top-of-mind percentage for this example
         let topOfMindCount = 0;
-        const totalCount = example.associatedVocab.length;
+        let foundVocabCount = 0;
         
         for (const vocabId of example.associatedVocab) {
           const vocab = await this.vocabRepo.getVocabByUID(vocabId);
-          if (vocab && isCurrentlyTopOfMind(vocab)) {
-            topOfMindCount++;
+          if (vocab) {
+            foundVocabCount++;
+            if (isCurrentlyTopOfMind(vocab)) {
+              topOfMindCount++;
+            }
+          } else {
+            console.warn(`ProposerByExamples: Vocab ${vocabId} not found in repo`);
           }
         }
         
-        const percentage = topOfMindCount / totalCount;
+        const percentage = foundVocabCount > 0 ? topOfMindCount / foundVocabCount : 0;
         
         // Only consider examples with less than 80% top-of-mind vocab
         if (percentage < TOP_OF_MIND_THRESHOLD) {
@@ -57,14 +61,11 @@ export class ProposerByExamples implements VocabProposerContract {
       }
       
       if (needyExamples.length === 0) {
-        console.info('ProposerByExamples: No examples need vocab practice');
         return [];
       }
       
       // Randomly select one needy example
       const selectedExample = pickRandom(needyExamples, 1)[0];
-      
-      console.info(`ProposerByExamples: Chose example "${selectedExample.content || selectedExample.id}" for vocab practice`);
       
       // Get all due vocab units from the selected example
       const vocabToTrain: VocabData[] = [];
@@ -79,12 +80,13 @@ export class ProposerByExamples implements VocabProposerContract {
           if (isDue || isNew) {
             vocabToTrain.push(vocab);
           }
+        } else if (!vocab) {
+          console.warn(`ProposerByExamples: Vocab ${vocabId} from selected example not found in repo`);
         }
       }
 
       // Return up to target number of vocab items
       const result = vocabToTrain.slice(0, Math.min(targetNumber, vocabToTrain.length));
-      console.info(`ProposerByExamples: Proposed ${result.length} vocab items from example`);
       
       return result;
     } catch (error) {

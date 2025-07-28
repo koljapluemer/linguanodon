@@ -28,7 +28,6 @@ const exercise = ref<Exercise | null>(null);
 const isLoading = ref(true);
 
 onMounted(async () => {
-  console.log('PracticeVocabWidget mounted with vocab:', props.vocab.id);
   try {
     const translations = await vocabRepo.getTranslationsByIds(props.vocab.translations);
     exercise.value = await ExerciseGenerator.generateExercise(props.vocab, translations, vocabRepo);
@@ -40,23 +39,18 @@ onMounted(async () => {
 });
 
 const handleRating = async (rating: ExerciseRating) => {
-  console.log('PracticeVocabWidget: Rating received:', rating);
   if (!props.vocab) return;
 
   try {
-    console.log('PracticeVocabWidget: Scoring vocab...');
     await vocabRepo.scoreVocab(props.vocab.id, rating);
-    console.log('PracticeVocabWidget: Scoring complete, emitting finished');
     emit('finished');
   } catch (error) {
     console.error('Error scoring vocab:', error);
-    console.log('PracticeVocabWidget: Error occurred, still emitting finished');
     emit('finished');
   }
 };
 
 const handleDoNotPractice = async () => {
-  console.log('PracticeVocabWidget: Do not practice requested for vocab:', props.vocab.id);
   if (!props.vocab) return;
 
   try {
@@ -72,11 +66,9 @@ const handleDoNotPractice = async () => {
     freshVocab.doNotPractice = true;
     await vocabRepo.updateVocab(freshVocab);
 
-    console.log('PracticeVocabWidget: doNotPractice set, emitting finished');
     emit('finished');
   } catch (error) {
     console.error('Error setting doNotPractice:', error);
-    console.log('PracticeVocabWidget: Error occurred, still emitting finished');
     emit('finished');
   }
 };
