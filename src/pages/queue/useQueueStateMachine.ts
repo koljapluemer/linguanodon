@@ -31,7 +31,10 @@ export function useQueueStateMachine(preloader: PreloaderInstance) {
 
   // State transition logging
   function logTransition(from: string, to: string, reason: string) {
-    // No logging
+    // No logging - parameters are kept to maintain call compatibility
+    void from;
+    void to; 
+    void reason;
   }
 
   // Initialize queue

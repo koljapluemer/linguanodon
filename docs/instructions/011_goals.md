@@ -98,3 +98,43 @@ Same idea, with `add-milestones`. Again, feature above.
 ## Vocab Proposer
 
 We also want to build and integrate a [vocab proposer](src/pages/queue/propose-which-vocab-to-practice). It should propose any due or new vocab from a randomly chosen goal that's not done.
+
+## Example
+
+At last, add 2 valid goal examples, fully typed and with the props set to useful stuff to [our example file](src/shared/demo-data/demo.json)
+
+## Clarification Questions
+
+Please clarify these aspects to ensure the best implementation:
+
+1. **Goal Hierarchy**: Should sub-goals have their own sub-goals (recursive nesting) or is it just one level deep?
+
+Recursive, but non-cyclic. Every goal can also have only one parent (but multiple children)
+
+2. **Core Tasks Auto-generation**: When exactly should the core tasks (add-sub-goals, add-vocab, add-examples, add-milestones) be created? Should they all be created immediately when a goal is created, or should they be created on-demand?
+
+when goal is created
+
+3. **Goal Completion Logic**: Should a goal be automatically marked as completed when all its sub-goals, milestones are done and vocab/examples are learned? Or is it always manual via the "mark-whether-goal-is-completed" feature?
+
+always manually.
+
+4. **Vocab Selection for Goals**: For the vocab proposer, should it prioritize vocab from goals that have fewer completed vocabulary items, or should it be purely random selection from incomplete goals?
+
+purely random
+
+5. **Task Priority**: Should goal-related tasks (add-sub-goals, etc.) have higher priority than other tasks in the queue system?
+
+no. random select.
+
+6. **Milestone Validation**: Should milestones be automatically marked as complete based on some criteria, or are they always manually marked by the user?
+
+manually. that's not really implemented yet as a task, that's fine.
+
+7. **Goal Progress Tracking**: Do you want any progress indicators showing completion percentage based on associated vocab mastery, completed sub-goals, etc.?
+
+sure, now that you ask, show `topOfMind` % for the associated vocab on the goal in the list 
+
+8. **UI Layout**: For the manage-goal page, should all features (edit-goal, manage-sub-goals, manage-vocab, etc.) be on a single page with tabs/sections, or should they be separate routes?
+
+just sections. it's essentially just one form, pieced together

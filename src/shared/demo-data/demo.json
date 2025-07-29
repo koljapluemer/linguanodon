@@ -135,5 +135,169 @@
         "isUserCreated": false,
         "lastDownloadedAt": null
       }
+    ],
+    "goals": [
+      {
+        "id": "goal-basic-conversation",
+        "title": "have basic conversations with Italian speakers",
+        "prompt": "I want to be able to have basic conversations with Italian speakers",
+        "taskType": "complete-goal",
+        "isUserCreated": true,
+        "lastDownloadedAt": null,
+        "subGoals": ["goal-greetings", "goal-introduce-myself"],
+        "milestones": [
+          {
+            "taskType": "milestone",
+            "title": "Introduce myself to an Italian speaker",
+            "prompt": "Complete this milestone: Introduce myself to an Italian speaker",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          },
+          {
+            "taskType": "milestone", 
+            "title": "Have a 5-minute conversation about daily life",
+            "prompt": "Complete this milestone: Have a 5-minute conversation about daily life",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          }
+        ],
+        "coreTasks": [
+          {
+            "taskType": "add-sub-goals",
+            "title": "Add Sub-Goals",
+            "prompt": "Add smaller goals that help you achieve this larger goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": false
+          },
+          {
+            "taskType": "add-vocab-to-goal",
+            "title": "Add Vocabulary", 
+            "prompt": "Add vocabulary that you need to learn for this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": false
+          },
+          {
+            "taskType": "add-examples-to-goal",
+            "title": "Add Examples",
+            "prompt": "Add example sentences or phrases related to this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          },
+          {
+            "taskType": "add-milestones",
+            "title": "Add Milestones",
+            "prompt": "Add specific milestones to track your progress toward this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": false
+          }
+        ],
+        "vocab": ["ciao-1", "bene-1"],
+        "examples": ["example-greeting-1"],
+        "wantToDoAgain": true
+      },
+      {
+        "id": "goal-greetings",
+        "title": "greet people confidently in Italian",
+        "prompt": "I want to be able to greet people confidently in Italian", 
+        "taskType": "complete-goal",
+        "isUserCreated": true,
+        "lastDownloadedAt": null,
+        "parentGoal": "goal-basic-conversation",
+        "subGoals": [],
+        "milestones": [
+          {
+            "taskType": "milestone",
+            "title": "Greet 5 different people using appropriate formality levels",
+            "prompt": "Complete this milestone: Greet 5 different people using appropriate formality levels",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          }
+        ],
+        "coreTasks": [
+          {
+            "taskType": "add-sub-goals",
+            "title": "Add Sub-Goals",
+            "prompt": "Add smaller goals that help you achieve this larger goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": false
+          },
+          {
+            "taskType": "add-vocab-to-goal",
+            "title": "Add Vocabulary",
+            "prompt": "Add vocabulary that you need to learn for this goal", 
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": false
+          },
+          {
+            "taskType": "add-examples-to-goal",
+            "title": "Add Examples",
+            "prompt": "Add example sentences or phrases related to this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": false
+          },
+          {
+            "taskType": "add-milestones",
+            "title": "Add Milestones",
+            "prompt": "Add specific milestones to track your progress toward this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": false
+          }
+        ],
+        "vocab": ["ciao-1"],
+        "examples": ["example-greeting-1"],
+        "wantToDoAgain": true
+      },
+      {
+        "id": "goal-introduce-myself",
+        "title": "introduce myself properly in Italian",
+        "prompt": "I want to be able to introduce myself properly in Italian",
+        "taskType": "complete-goal",
+        "isUserCreated": true,
+        "lastDownloadedAt": null,
+        "parentGoal": "goal-basic-conversation", 
+        "subGoals": [],
+        "milestones": [
+          {
+            "taskType": "milestone",
+            "title": "Introduce myself with name, age, and where I'm from",
+            "prompt": "Complete this milestone: Introduce myself with name, age, and where I'm from",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          }
+        ],
+        "coreTasks": [
+          {
+            "taskType": "add-sub-goals",
+            "title": "Add Sub-Goals",
+            "prompt": "Add smaller goals that help you achieve this larger goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          },
+          {
+            "taskType": "add-vocab-to-goal",
+            "title": "Add Vocabulary",
+            "prompt": "Add vocabulary that you need to learn for this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          },
+          {
+            "taskType": "add-examples-to-goal",
+            "title": "Add Examples",
+            "prompt": "Add example sentences or phrases related to this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          },
+          {
+            "taskType": "add-milestones",
+            "title": "Add Milestones",
+            "prompt": "Add specific milestones to track your progress toward this goal",
+            "evaluateAfterDoing": false,
+            "wantToDoAgain": true
+          }
+        ],
+        "vocab": [],
+        "examples": [],
+        "wantToDoAgain": true
+      }
     ]
   }

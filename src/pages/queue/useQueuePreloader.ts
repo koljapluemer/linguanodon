@@ -4,6 +4,7 @@ import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
+import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { VocabPicker } from './propose-which-vocab-to-practice/VocabPicker';
 import { TaskPicker } from './propose-which-task-to-do/TaskPicker';
 
@@ -36,16 +37,17 @@ export function useQueuePreloader(
   vocabRepo: VocabAndTranslationRepoContract,
   immersionRepo: ImmersionContentRepoContract,
   exampleRepo: ExampleRepoContract,
+  goalRepo: GoalRepoContract,
   config: Partial<PreloadConfig> = {}
 ) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
   
   // Initialize pickers
   const vocabPicker = new VocabPicker();
-  vocabPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo);
+  vocabPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo, goalRepo);
   
   const taskPicker = new TaskPicker();
-  taskPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo);
+  taskPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo, goalRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({
@@ -131,6 +133,7 @@ export function useQueuePreloader(
       if (content.tasks.length < finalConfig.minTaskBuffer && consecutiveFailedTaskLoads < MAX_CONSECUTIVE_FAILED_LOADS) {
         setTimeout(() => loadTask(), 100); // Brief delay to prevent spam
       } else if (consecutiveFailedTaskLoads >= MAX_CONSECUTIVE_FAILED_LOADS) {
+        console.warn('Too many consecutive failed task loads, stopping task preloading');
       }
     }
   }

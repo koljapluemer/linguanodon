@@ -6,6 +6,8 @@ import PageListImmersionContent from '@/pages/immersion-content/PageListImmersio
 import PageManageImmersionContent from '@/pages/immersion-content/PageManageImmersionContent.vue';
 import PageListExamples from '@/pages/examples/PageListExamples.vue';
 import PageManageExample from '@/pages/examples/PageManageExample.vue';
+import PageListGoals from '@/pages/goals/PageListGoals.vue';
+import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -63,6 +65,21 @@ const router = createRouter({
       path: '/examples/:id',
       name: 'examples-edit',
       component: PageManageExample
+    },
+    {
+      path: '/goals',
+      name: 'goals-list',
+      component: PageListGoals
+    },
+    {
+      path: '/goals/new',
+      name: 'goals-new',
+      component: PageManageGoal
+    },
+    {
+      path: '/goals/:id',
+      name: 'goals-edit',
+      component: PageManageGoal
     }
   ]
 });

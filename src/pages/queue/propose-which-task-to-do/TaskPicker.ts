@@ -2,13 +2,14 @@ import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
+import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { TASK_REGISTRY } from './TaskRegistry';
 import { pickRandom } from '@/shared/arrayUtils';
 
 export class TaskPicker {
   private initialized = false;
   
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract, exampleRepo: ExampleRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract, exampleRepo: ExampleRepoContract, goalRepo: GoalRepoContract) {
     // Configure proposers with repositories
     const addPronunciationProposer = TASK_REGISTRY['add-pronunciation'].proposer as { setVocabRepo?: (repo: VocabAndTranslationRepoContract) => void };
     if (addPronunciationProposer.setVocabRepo) {
@@ -23,6 +24,27 @@ export class TaskPicker {
     const freeTranslateProposer = TASK_REGISTRY['free-translate'].proposer;
     if ('setRepos' in freeTranslateProposer && typeof freeTranslateProposer.setRepos === 'function') {
       freeTranslateProposer.setRepos(exampleRepo, vocabRepo);
+    }
+
+    // Configure goal proposers
+    const addSubGoalsProposer = TASK_REGISTRY['add-sub-goals'].proposer as { setGoalRepo?: (repo: GoalRepoContract) => void };
+    if (addSubGoalsProposer.setGoalRepo) {
+      addSubGoalsProposer.setGoalRepo(goalRepo);
+    }
+    
+    const addVocabToGoalProposer = TASK_REGISTRY['add-vocab-to-goal'].proposer as { setGoalRepo?: (repo: GoalRepoContract) => void };
+    if (addVocabToGoalProposer.setGoalRepo) {
+      addVocabToGoalProposer.setGoalRepo(goalRepo);
+    }
+    
+    const addExamplesToGoalProposer = TASK_REGISTRY['add-examples-to-goal'].proposer as { setGoalRepo?: (repo: GoalRepoContract) => void };
+    if (addExamplesToGoalProposer.setGoalRepo) {
+      addExamplesToGoalProposer.setGoalRepo(goalRepo);
+    }
+    
+    const addMilestonesProposer = TASK_REGISTRY['add-milestones'].proposer as { setGoalRepo?: (repo: GoalRepoContract) => void };
+    if (addMilestonesProposer.setGoalRepo) {
+      addMilestonesProposer.setGoalRepo(goalRepo);
     }
     
     this.initialized = true;

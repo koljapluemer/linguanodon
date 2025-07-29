@@ -3,6 +3,10 @@ import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import RenderTaskForAddingPronunciation from '@/widgets/task-for-adding-pronunciation/RenderTaskForAddingPronunciation.vue';
 import RenderTaskForImmersionContent from '@/widgets/task-for-immersion-content/RenderTaskForImmersionContent.vue';
 import FreeTranslateTaskWidget from '@/widgets/free-translate-task/FreeTranslateTaskWidget.vue';
+import TaskAddSubGoals from '@/widgets/TaskAddSubGoals.vue';
+import TaskAddVocabToGoal from '@/widgets/TaskAddVocabToGoal.vue';
+import TaskAddExamplesToGoal from '@/widgets/TaskAddExamplesToGoal.vue';
+import TaskAddMilestones from '@/widgets/TaskAddMilestones.vue';
 
 interface Props {
   task: RuntimeTask;
@@ -40,9 +44,33 @@ const handleFinished = () => {
       @complete="handleFinished"
     />
     
+    <TaskAddSubGoals
+      v-else-if="task.taskType === 'add-sub-goals'"
+      :goal-id="task.data.goalId"
+      @task-completed="handleFinished"
+    />
+    
+    <TaskAddVocabToGoal
+      v-else-if="task.taskType === 'add-vocab-to-goal'"
+      :goal-id="task.data.goalId"
+      @task-completed="handleFinished"
+    />
+    
+    <TaskAddExamplesToGoal
+      v-else-if="task.taskType === 'add-examples-to-goal'"
+      :goal-id="task.data.goalId"
+      @task-completed="handleFinished"
+    />
+    
+    <TaskAddMilestones
+      v-else-if="task.taskType === 'add-milestones'"
+      :goal-id="task.data.goalId"
+      @task-completed="handleFinished"
+    />
+    
     <!-- Fallback for unknown task types -->
     <div v-else class="alert alert-error">
-      <span>Unknown task type</span>
+      <span>Unknown task type: {{ (task as any).taskType }}</span>
       <button class="btn btn-sm" @click="handleFinished">
         Skip
       </button>

@@ -3,6 +3,7 @@ import { inject, onMounted } from 'vue';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
+import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { useCachedQueue } from './useCachedQueue';
 import PracticeVocabWidget from '@/features/practice-vocab/PracticeVocabWidget.vue';
 import MetaTaskRenderer from './MetaTaskRenderer.vue';
@@ -11,8 +12,9 @@ import MetaTaskRenderer from './MetaTaskRenderer.vue';
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 const immersionRepo = inject<ImmersionContentRepoContract>('immersionRepo');
 const exampleRepo = inject<ExampleRepoContract>('exampleRepo');
+const goalRepo = inject<GoalRepoContract>('goalRepo');
 
-if (!vocabRepo || !immersionRepo || !exampleRepo) {
+if (!vocabRepo || !immersionRepo || !exampleRepo || !goalRepo) {
   throw new Error('Repositories not available');
 }
 
@@ -22,7 +24,7 @@ const {
   completeCurrentVocab,
   completeCurrentTask,
   stateMachineDebug
-} = useCachedQueue(vocabRepo, immersionRepo, exampleRepo);
+} = useCachedQueue(vocabRepo, immersionRepo, exampleRepo, goalRepo);
 
 onMounted(async () => {
   await initializeQueue();

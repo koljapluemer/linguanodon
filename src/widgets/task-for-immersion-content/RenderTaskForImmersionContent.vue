@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
-import type { TaskEvaluation } from '@/shared/ExerciseTypes';
+// import type { TaskEvaluation } from '@/shared/ExerciseTypes';
 import EvaluateTaskWidget from '@/features/evaluate-task-widget/EvaluateTaskWidget.vue';
 import ManageVocabOfImmersionContentWidget from '@/features/manage-vocab-of-immersion-content/ManageVocabOfImmersionContentWidget.vue';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
@@ -34,7 +34,7 @@ const handleTaskSkipped = async () => {
   emit('finished');
 };
 
-const handleEvaluationFinished = (evaluation: TaskEvaluation) => {
+const handleEvaluationFinished = (/* evaluation: TaskEvaluation */) => {
   // TODO: Store evaluation in immersion content data
   emit('finished');
 };

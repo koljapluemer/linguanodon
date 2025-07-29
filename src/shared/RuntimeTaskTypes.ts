@@ -1,6 +1,7 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { ExampleData } from '@/entities/examples/ExampleData';
+import type { GoalData } from '@/entities/goals/GoalData';
 
 export type RuntimeTask = 
   | { 
@@ -14,6 +15,22 @@ export type RuntimeTask =
   | { 
       taskType: 'free-translate'; 
       data: { exampleId: string; example: ExampleData } 
+    }
+  | { 
+      taskType: 'add-sub-goals'; 
+      data: { goalId: string; goal: GoalData } 
+    }
+  | { 
+      taskType: 'add-vocab-to-goal'; 
+      data: { goalId: string; goal: GoalData } 
+    }
+  | { 
+      taskType: 'add-examples-to-goal'; 
+      data: { goalId: string; goal: GoalData } 
+    }
+  | { 
+      taskType: 'add-milestones'; 
+      data: { goalId: string; goal: GoalData } 
     };
 
 export interface TaskProposer<T = RuntimeTask> {
