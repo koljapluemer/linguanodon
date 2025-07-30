@@ -82,8 +82,7 @@ const handlePronunciationFinished = () => {
     <DoTaskWidget 
       v-if="currentState === 'task'"
       title="Add Pronunciation"
-      prompt="Time to add pronunciation information for a vocabulary word"
-      extra-info="Click below when you're ready to add pronunciation"
+      prompt="Find out how this word is pronounced and add below."
       @completed="handleTaskCompleted"
       @skipped="handleTaskSkipped"
     />
