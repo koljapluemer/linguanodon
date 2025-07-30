@@ -1,14 +1,20 @@
 <template>
   <div class="space-y-6">
     <div v-if="goal">
-      <DoTaskWidget
-        :title="goal.coreTasks.find(t => t.taskType === 'add-sub-goals')?.title || 'Add Sub-Goals'"
-        :prompt="goal.coreTasks.find(t => t.taskType === 'add-sub-goals')?.prompt || 'Add smaller goals that help you achieve this larger goal'"
-        @completed="handleTaskCompleted"
-        @skipped="handleTaskCompleted"
-      />
+      <!-- Goal Display -->
+      <div class="card bg-primary/10 border border-primary/20">
+        <div class="card-body">
+          <h2 class="card-title text-primary">{{ goal.title }}</h2>
+          <p v-if="goal.description" class="text-base-content/70">{{ goal.description }}</p>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-primary btn-sm" @click="handleTaskCompleted">
+              Done Adding Sub-Goals
+            </button>
+          </div>
+        </div>
+      </div>
       
-      <div class="divider">Work on Sub-Goals</div>
+      <div class="divider">Sub-Goals</div>
       
       <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
@@ -61,13 +67,15 @@ function handleGoalUpdate(updatedGoal: GoalData) {
 async function handleTaskCompleted() {
   if (!goal.value) return;
   
-  // Mark the core task as completed
+  // Mark the core task as completed - convert to plain object
+  const updatedCoreTasks = goal.value.coreTasks.map(task => 
+    task.taskType === 'add-sub-goals' 
+      ? { ...task, wantToDoAgain: false } 
+      : task
+  );
+  
   const updatedGoal = await goalRepo.update(goal.value.id, {
-    coreTasks: goal.value.coreTasks.map(task => 
-      task.taskType === 'add-sub-goals' 
-        ? { ...task, wantToDoAgain: false } 
-        : task
-    )
+    coreTasks: JSON.parse(JSON.stringify(updatedCoreTasks))
   });
   
   goal.value = updatedGoal;
