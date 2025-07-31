@@ -44,12 +44,15 @@ export class ResourceRepo implements ResourceRepoContract {
       extractedVocab: resource.extractedVocab || [],
       extractedExamples: resource.extractedExamples || [],
       extractedFactCards: resource.extractedFactCards || [],
+      notes: resource.notes || [],
+      isImmersionContent: resource.isImmersionContent,
       
       // TaskData fields
       taskType: resource.taskType || 'resource',
       title: resource.title,
       prompt: resource.prompt || '',
       evaluateAfterDoing: resource.evaluateAfterDoing,
+      decideWhetherToDoAgainAfterDoing: resource.decideWhetherToDoAgainAfterDoing,
       extraInfo: resource.extraInfo,
       lastShownAt: resource.lastShownAt,
       wantToDoAgain: resource.wantToDoAgain,

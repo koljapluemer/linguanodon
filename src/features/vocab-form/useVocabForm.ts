@@ -20,7 +20,6 @@ export function useVocabForm(vocabId?: string) {
     formData: {
       language: '',
       content: '',
-      pronunciation: '',
       priority: undefined,
       doNotPractice: undefined,
       notes: [],
@@ -232,7 +231,6 @@ export function useVocabForm(vocabId?: string) {
     state.value.formData = {
       language: '',
       content: '',
-      pronunciation: '',
       priority: undefined,
       doNotPractice: undefined,
       notes: [],

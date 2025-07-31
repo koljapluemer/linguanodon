@@ -22,9 +22,6 @@
           >
             <div class="flex-1">
               <span class="font-medium">{{ vocab.content }}</span>
-              <span v-if="vocab.pronunciation" class="text-sm text-base-content/70 ml-2">
-                [{{ vocab.pronunciation }}]
-              </span>
               <div class="text-sm text-base-content/70">
                 {{ vocab.translations.join(', ') }}
               </div>
@@ -80,19 +77,6 @@
                     />
                   </div>
 
-                  <!-- Pronunciation -->
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text">Pronunciation</span>
-                    </label>
-                    <input
-                      v-model="entry.pronunciation"
-                      type="text"
-                      placeholder="Phonetic pronunciation"
-                      class="input input-bordered input-sm"
-                      @input="handleEntryChange(index)"
-                    />
-                  </div>
 
                   <!-- Translations -->
                   <div class="form-control">
@@ -151,7 +135,7 @@ import { ref, onMounted, inject } from 'vue';
 import { X, Check } from 'lucide-vue-next';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 
 interface Props {
   contentUid?: string;
@@ -162,7 +146,6 @@ interface VocabEntry {
   id: string;
   content: string;
   language: string;
-  pronunciation: string;
   translations: string;
   saving: boolean;
   error: string | null;
@@ -171,9 +154,9 @@ interface VocabEntry {
 const props = defineProps<Props>();
 
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
-const immersionRepo = inject<ImmersionContentRepoContract>('immersionRepo');
+const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 
-if (!vocabRepo || !immersionRepo) {
+if (!vocabRepo || !resourceRepo) {
   throw new Error('Required repositories not provided');
 }
 
@@ -187,7 +170,6 @@ function createEmptyEntry(): VocabEntry {
     id: crypto.randomUUID(),
     content: '',
     language: '',
-    pronunciation: '',
     translations: '',
     saving: false,
     error: null
@@ -206,7 +188,7 @@ function handleEntryChange(index: number) {
 
   // If this is the last entry and it has content, add a new empty entry
   if (index === vocabEntries.value.length - 1 && 
-      (entry.content || entry.language || entry.pronunciation || entry.translations)) {
+      (entry.content || entry.language || entry.translations)) {
     vocabEntries.value.push(createEmptyEntry());
   }
 }
@@ -223,7 +205,6 @@ async function saveEntry(index: number) {
     const newVocab = await vocabRepo!.saveVocab({
       content: entry.content.trim(),
       language: entry.language.trim(),
-      pronunciation: entry.pronunciation.trim() || undefined,
       translations: [], // Will be handled separately
       notes: [],
       links: [],
@@ -234,12 +215,12 @@ async function saveEntry(index: number) {
     // For now, we'll just store them as a simple array reference
     // const translationTexts = entry.translations.split(',').map(t => t.trim()).filter(t => t);
 
-    // Associate vocab with immersion content
+    // Associate vocab with resource content
     if (props.contentUid) {
-      const content = await immersionRepo!.getImmersionContentById(props.contentUid);
-      if (content) {
-        content.associatedUnits.push(newVocab.uid);
-        await immersionRepo!.updateImmersionContent(content);
+      const content = await resourceRepo!.getResourceById(props.contentUid);
+      if (content && content.isImmersionContent) {
+        content.extractedVocab.push(newVocab.uid);
+        await resourceRepo!.saveResource(content);
       }
     }
 
@@ -266,10 +247,10 @@ async function removeVocab(vocabId: string) {
   if (!props.contentUid) return;
 
   try {
-    const content = await immersionRepo!.getImmersionContentById(props.contentUid);
-    if (content) {
-      content.associatedUnits = content.associatedUnits.filter(id => id !== vocabId);
-      await immersionRepo!.updateImmersionContent(content);
+    const content = await resourceRepo!.getResourceById(props.contentUid);
+    if (content && content.isImmersionContent) {
+      content.extractedVocab = content.extractedVocab.filter(id => id !== vocabId);
+      await resourceRepo!.saveResource(content);
       associatedVocab.value = associatedVocab.value.filter(v => v.uid !== vocabId);
     }
   } catch (err) {
@@ -287,10 +268,10 @@ async function loadData() {
   error.value = null;
 
   try {
-    const content = await immersionRepo!.getImmersionContentById(props.contentUid);
-    if (content && content.associatedUnits.length > 0) {
+    const content = await resourceRepo!.getResourceById(props.contentUid);
+    if (content && content.isImmersionContent && content.extractedVocab.length > 0) {
       // Load associated vocab
-      const vocabPromises = content.associatedUnits.map(id => vocabRepo!.getVocabByUID(id));
+      const vocabPromises = content.extractedVocab.map(id => vocabRepo!.getVocabByUID(id));
       const vocabResults = await Promise.all(vocabPromises);
       associatedVocab.value = vocabResults.filter((v): v is VocabData => v !== undefined);
     }

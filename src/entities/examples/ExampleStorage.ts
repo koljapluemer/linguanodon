@@ -8,7 +8,7 @@ class ExampleDatabase extends Dexie {
   constructor() {
     super('ExampleDatabase');
     this.version(1).stores({
-      examples: 'id, language, isUserCreated'
+      examples: 'uid, language, isUserCreated'
     });
   }
 }
@@ -21,9 +21,9 @@ export class ExampleStorage {
     return await db.examples.toArray();
   }
 
-  async getById(id: string): Promise<ExampleData | undefined> {
+  async getById(uid: string): Promise<ExampleData | undefined> {
     await this.ensureDemoData();
-    return await db.examples.get(id);
+    return await db.examples.get(uid);
   }
 
   async add(example: ExampleData): Promise<void> {
@@ -34,8 +34,8 @@ export class ExampleStorage {
     await db.examples.put(example);
   }
 
-  async delete(id: string): Promise<void> {
-    await db.examples.delete(id);
+  async delete(uid: string): Promise<void> {
+    await db.examples.delete(uid);
   }
 
   async count(): Promise<number> {
@@ -45,7 +45,15 @@ export class ExampleStorage {
   private async ensureDemoData(): Promise<void> {
     const count = await db.examples.count();
     if (count === 0) {
-      await db.examples.bulkAdd(demoData.examples);
+      // Convert numeric dates to Date objects for ts-fsrs compatibility
+      const examplesWithDateObjects = demoData.examples.map(example => ({
+        ...example,
+        progress: {
+          ...example.progress,
+          due: new Date(example.progress.due)
+        }
+      })) as unknown as ExampleData[];
+      await db.examples.bulkAdd(examplesWithDateObjects);
     }
   }
 }

@@ -9,7 +9,7 @@ class TranslationDatabase extends Dexie {
   constructor() {
     super('TranslationDatabase');
     this.version(1).stores({
-      translations: 'id, content'
+      translations: 'uid, content'
     });
   }
 }
@@ -23,14 +23,14 @@ export class TranslationStorage {
     return await db.translations.toArray();
   }
 
-  async getById(id: string): Promise<TranslationData | undefined> {
+  async getById(uid: string): Promise<TranslationData | undefined> {
     await this.ensureDemoData();
-    return await db.translations.get(id);
+    return await db.translations.get(uid);
   }
 
-  async getByIds(ids: string[]): Promise<TranslationData[]> {
+  async getByIds(uids: string[]): Promise<TranslationData[]> {
     await this.ensureDemoData();
-    return await db.translations.where('id').anyOf(ids).toArray();
+    return await db.translations.where('uid').anyOf(uids).toArray();
   }
 
   async add(translation: TranslationData): Promise<string> {
@@ -55,8 +55,8 @@ export class TranslationStorage {
     await db.translations.put(translation);
   }
 
-  async delete(id: string): Promise<void> {
-    await db.translations.delete(id);
+  async delete(uid: string): Promise<void> {
+    await db.translations.delete(uid);
   }
 
   private async ensureDemoData(): Promise<void> {

@@ -118,7 +118,7 @@ async function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
       } else {
         // Create new task
         const newTask = {
-          taskType: 'free-translate',
+          taskType: 'free-translate' as const,
           title: 'Free Translation',
           prompt: 'Attempt to translate this sentence',
           evaluateAfterDoing: true,

@@ -15,7 +15,7 @@ export const TASK_REGISTRY: Record<TaskType, TaskDefinition> = {
     proposer: new ProposeAddPronunciation()
   },
   'immersion-content': {
-    taskType: 'immersion-content', 
+    taskType: 'immersion-content',
     proposer: new ProposeImmersionContent()
   },
   'free-translate': {
@@ -41,9 +41,17 @@ export const TASK_REGISTRY: Record<TaskType, TaskDefinition> = {
   'resource': {
     taskType: 'resource',
     proposer: new ProposeResource()
+  },
+  'complete-goal': {
+    taskType: 'complete-goal',
+    proposer: new ProposeResource() // Placeholder
+  },
+  'milestone': {
+    taskType: 'milestone',
+    proposer: new ProposeResource() // Placeholder
   }
 };
 
-export function getTaskDefinition(taskType: string): TaskDefinition | undefined {
+export function getTaskDefinition(taskType: TaskType): TaskDefinition | undefined {
   return TASK_REGISTRY[taskType];
 }

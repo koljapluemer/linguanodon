@@ -2,7 +2,6 @@ import { reactive } from 'vue';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
@@ -36,7 +35,6 @@ const DEFAULT_CONFIG: PreloadConfig = {
 
 export function useQueuePreloader(
   vocabRepo: VocabAndTranslationRepoContract,
-  immersionRepo: ImmersionContentRepoContract,
   exampleRepo: ExampleRepoContract,
   goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
@@ -46,10 +44,10 @@ export function useQueuePreloader(
   
   // Initialize pickers
   const vocabPicker = new VocabPicker();
-  vocabPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo, goalRepo);
+  vocabPicker.initializeProposers(vocabRepo, resourceRepo, exampleRepo, goalRepo);
   
   const taskPicker = new TaskPicker();
-  taskPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo, goalRepo, resourceRepo);
+  taskPicker.initializeProposers(vocabRepo, exampleRepo, goalRepo, resourceRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({

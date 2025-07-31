@@ -23,7 +23,6 @@ export function useVocabPagination() {
     return state.value.vocab.map(vocab => ({
       ...vocab,
       content: vocab.content || '',
-      pronunciation: vocab.pronunciation || '',
       notes: vocab.notes || [],
       translationCount: vocab.translations?.length || 0,
       masteryPercentage: calculateVocabMastery(vocab)

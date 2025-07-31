@@ -1,5 +1,4 @@
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
@@ -8,13 +7,12 @@ import { useQueueStateMachine } from './useQueueStateMachine';
 
 export function useCachedQueue(
   vocabRepo: VocabAndTranslationRepoContract,
-  immersionRepo: ImmersionContentRepoContract,
   exampleRepo: ExampleRepoContract,
   goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract
 ) {
   // Initialize preloader
-  const preloader = useQueuePreloader(vocabRepo, immersionRepo, exampleRepo, goalRepo, resourceRepo);
+  const preloader = useQueuePreloader(vocabRepo, exampleRepo, goalRepo, resourceRepo);
   
   // Initialize state machine with preloader
   const stateMachine = useQueueStateMachine(preloader);

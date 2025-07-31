@@ -54,8 +54,8 @@
               <div class="flex items-center gap-4 text-sm text-base-content/70 mt-1">
                 <span>{{ content.language }}</span>
                 <span>Priority: {{ content.priority }}</span>
-                <span v-if="content.associatedUnits.length > 0">
-                  {{ content.associatedUnits.length }} vocab units
+                <span v-if="content.extractedVocab.length > 0">
+                  {{ content.extractedVocab.length }} vocab units
                 </span>
               </div>
               
@@ -140,36 +140,36 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, inject } from 'vue';
 import { Plus, Search, Edit, Trash2 } from 'lucide-vue-next';
-import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ResourceData } from '@/entities/resources/ResourceData';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
 
-const immersionRepo = inject<ImmersionContentRepoContract>('immersionRepo');
+const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 
-if (!immersionRepo) {
-  throw new Error('ImmersionRepo not provided');
+if (!resourceRepo) {
+  throw new Error('ResourceRepo not provided');
 }
 if (!vocabRepo) {
   throw new Error('VocabRepo not provided');
 }
 
-const content = ref<ImmersionContentData[]>([]);
+const content = ref<ResourceData[]>([]);
 const vocabReadiness = ref<Map<string, { ready: number; total: number }>>(new Map());
 const loading = ref(true);
 const error = ref<string | null>(null);
 const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = 10;
-const contentToDelete = ref<ImmersionContentData | null>(null);
+const contentToDelete = ref<ResourceData | null>(null);
 
 const filteredContent = computed(() => {
   if (!searchQuery.value) return content.value;
   
   const query = searchQuery.value.toLowerCase();
-  return content.value.filter(item =>
+  return content.value.filter((item: ResourceData) =>
     item.title.toLowerCase().includes(query) ||
     item.prompt.toLowerCase().includes(query) ||
     item.language.toLowerCase().includes(query)
@@ -191,7 +191,8 @@ async function loadContent() {
   error.value = null;
   
   try {
-    content.value = await immersionRepo!.getAllImmersionContent();
+    const allResources = await resourceRepo!.getAllResources();
+    content.value = allResources.filter(resource => resource.isImmersionContent);
     await loadVocabReadiness();
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load content';
@@ -204,15 +205,15 @@ async function loadVocabReadiness() {
   const readinessMap = new Map<string, { ready: number; total: number }>();
   
   for (const item of content.value) {
-    if (item.associatedUnits.length === 0) {
+    if (item.extractedVocab.length === 0) {
       // Don't add to map if no associated vocab - progress bar will be hidden
       continue;
     }
     
     let readyCount = 0;
-    const totalCount = item.associatedUnits.length;
+    const totalCount = item.extractedVocab.length;
     
-    for (const vocabId of item.associatedUnits) {
+    for (const vocabId of item.extractedVocab) {
       const vocab = await vocabRepo!.getVocabByUID(vocabId);
       if (vocab && isCurrentlyTopOfMind(vocab)) {
         readyCount++;
@@ -225,16 +226,16 @@ async function loadVocabReadiness() {
   vocabReadiness.value = readinessMap;
 }
 
-function confirmDelete(item: ImmersionContentData) {
+function confirmDelete(item: ResourceData) {
   contentToDelete.value = item;
 }
 
 async function deleteContent() {
-  if (!contentToDelete.value || !immersionRepo) return;
+  if (!contentToDelete.value || !resourceRepo) return;
   
   try {
-    await immersionRepo.deleteImmersionContent(contentToDelete.value.uid);
-    content.value = content.value.filter(item => item.uid !== contentToDelete.value!.uid);
+    await resourceRepo!.deleteResource(contentToDelete.value.uid);
+    content.value = content.value.filter((item: ResourceData) => item.uid !== contentToDelete.value!.uid);
     contentToDelete.value = null;
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to delete content';

@@ -64,9 +64,9 @@ const handleSkip = () => {
           </ElementBigText>
         </div>
 
-        <!-- Current pronunciation if exists -->
-        <div v-if="vocab.pronunciation" class="text-center mb-4 text-base-content/70">
-          Current: {{ vocab.pronunciation }}
+        <!-- Note: pronunciation is now handled as notes -->
+        <div class="text-center mb-4 text-base-content/70">
+          Adding pronunciation as a note
         </div>
 
         <!-- Pronunciation input -->

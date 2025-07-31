@@ -54,13 +54,27 @@ const newExample = ref<Partial<ExampleData>>({
 watch(() => props.exampleIds, async () => {
   // For now, create mock data - in real implementation, load from example repo
   exampleItems.value = props.exampleIds.map((id, index) => ({
-    id,
     uid: id,
     language: 'Italian',
     content: `Example sentence ${index + 1}`,
     translation: `Translation ${index + 1}`,
     associatedVocab: [],
     associatedTasks: [],
+    notes: [],
+    links: [],
+    progress: {
+      due: new Date(),
+      stability: 2.5,
+      difficulty: 5.0,
+      elapsed_days: 0,
+      scheduled_days: 1,
+      learning_steps: 0,
+      reps: 0,
+      lapses: 0,
+      state: 0,
+      streak: 0,
+      level: -1
+    },
     isUserCreated: true,
     lastDownloadedAt: null
   }));

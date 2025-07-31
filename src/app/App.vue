@@ -3,10 +3,9 @@ import { provide } from 'vue';
 import { setupRepositories } from './injectRepositories';
 
 // Setup and provide repositories
-const { vocabRepo, immersionRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo } = setupRepositories();
+const { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo } = setupRepositories();
 
 provide('vocabRepo', vocabRepo);
-provide('immersionRepo', immersionRepo);
 provide('exampleRepo', exampleRepo);
 provide('goalRepo', goalRepo);
 provide('noteRepo', noteRepo);

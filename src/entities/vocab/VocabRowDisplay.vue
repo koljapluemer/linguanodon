@@ -4,9 +4,6 @@
       <div class="flex items-center gap-2 mb-1">
         <span class="badge badge-outline">{{ vocab.language }}</span>
         <span class="font-medium">{{ vocab.content }}</span>
-        <span v-if="vocab.pronunciation" class="text-sm text-base-content/70">
-          [{{ vocab.pronunciation }}]
-        </span>
       </div>
       <div class="text-sm text-base-content/70">
         {{ vocab.translations.join(', ') }}

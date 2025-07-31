@@ -97,6 +97,21 @@ function handleSave() {
     translation: localExample.value.translation?.trim(),
     associatedVocab: localExample.value.associatedVocab || [],
     associatedTasks: localExample.value.associatedTasks || [],
+    notes: localExample.value.notes || [],
+    links: localExample.value.links || [],
+    progress: localExample.value.progress || {
+      due: new Date(),
+      stability: 2.5,
+      difficulty: 5.0,
+      elapsed_days: 0,
+      scheduled_days: 1,
+      learning_steps: 0,
+      reps: 0,
+      lapses: 0,
+      state: 0,
+      streak: 0,
+      level: -1
+    },
     isUserCreated: localExample.value.isUserCreated ?? true,
     lastDownloadedAt: localExample.value.lastDownloadedAt || null
   };

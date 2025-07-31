@@ -8,7 +8,7 @@ export class GoalStorage extends Dexie {
     super('GoalStorage');
     
     this.version(1).stores({
-      goals: 'id, taskType, title, wantToDoAgain, parentGoal, *subGoals, *vocab, *examples'
+      goals: 'uid, taskType, title, wantToDoAgain, parentGoal, *subGoals, *vocab, *examples, *factCards, *notes'
     });
   }
 }

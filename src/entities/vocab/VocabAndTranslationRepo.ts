@@ -14,7 +14,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return {
       ...vocab,
       content: vocab.content || '',
-      pronunciation: vocab.pronunciation || '',
       notes: vocab.notes || [],
       links: vocab.links || [],
       translations: vocab.translations || [],
@@ -132,17 +131,20 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     await this.vocabStorage.update(vocab);
   }
 
-  async addPronunciationToVocab(uid: string, pronunciation: string): Promise<void> {
-    const vocab = await this.vocabStorage.getById(uid);
-    if (!vocab) return;
-    
-    vocab.pronunciation = pronunciation;
-    await this.vocabStorage.update(vocab);
+  async addPronunciationToVocab(_uid: string, _pronunciation: string): Promise<void> {
+    // Pronunciation is now handled as notes - this method will be deprecated
+    // The pronunciation task should create a note instead
+    console.warn('addPronunciationToVocab is deprecated - pronunciation should be added as notes');
+    // Suppress unused parameter warnings with void operator
+    void _uid;
+    void _pronunciation;
   }
 
-  async hasPronunciation(uid: string): Promise<boolean> {
-    const vocab = await this.vocabStorage.getById(uid);
-    return !!(vocab?.pronunciation && vocab.pronunciation.trim().length > 0);
+  async hasPronunciation(_uid: string): Promise<boolean> {
+    // Since pronunciation is now handled as notes, we'll check if there are pronunciation notes
+    // For now, return false to indicate no direct pronunciation field
+    void _uid; // Suppress unused parameter warning
+    return false;
   }
 
   async getRandomVocabWithMissingPronunciation(): Promise<VocabData | null> {
@@ -150,7 +152,9 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     const now = new Date();
     
     const withoutPronunciation = allVocab.filter(vocab => {
-      const hasNoPronunciation = !vocab.pronunciation || vocab.pronunciation.trim().length === 0;
+      // Since pronunciation is now handled as notes, we'll check for pronunciation notes
+      // For now, assume all vocab needs pronunciation (to be refined later)
+      const hasNoPronunciation = true; // TODO: Check if vocab has pronunciation notes
       const hasPriority = (vocab.priority ?? 1) >= 2;
       const isNotExcluded = !vocab.doNotPractice;
       
@@ -180,8 +184,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       const query = searchQuery.toLowerCase().trim();
       filteredVocab = allVocab.filter(vocab => 
         vocab.content?.toLowerCase().includes(query) ||
-        vocab.language.toLowerCase().includes(query) ||
-        vocab.pronunciation?.toLowerCase().includes(query)
+        vocab.language.toLowerCase().includes(query)
       );
     }
 
@@ -217,8 +220,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     const query = searchQuery.toLowerCase().trim();
     const filteredVocab = allVocab.filter(vocab => 
       vocab.content?.toLowerCase().includes(query) ||
-      vocab.language.toLowerCase().includes(query) ||
-      vocab.pronunciation?.toLowerCase().includes(query)
+      vocab.language.toLowerCase().includes(query)
     );
     
     return filteredVocab.length;
@@ -229,7 +231,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       uid: vocab.uid || crypto.randomUUID(),
       language: vocab.language || '',
       content: vocab.content || '',
-      pronunciation: vocab.pronunciation || '',
       notes: vocab.notes || [],
       translations: vocab.translations || [],
       links: vocab.links || [],

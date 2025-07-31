@@ -1,24 +1,25 @@
 import type { TaskProposerContract } from '../TaskProposerContract';
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 
 export class ProposeImmersionContent implements TaskProposerContract {
   constructor(
-    private immersionRepo?: ImmersionContentRepoContract,
+    private resourceRepo?: ResourceRepoContract,
     private vocabRepo?: VocabAndTranslationRepoContract
   ) {}
 
   async proposeTask(): Promise<RuntimeTask | null> {
-    if (!this.immersionRepo || !this.vocabRepo) {
+    if (!this.resourceRepo || !this.vocabRepo) {
       console.warn('Required repos not available for ProposeImmersionContent');
       return null;
     }
 
     try {
-      // Get all immersion content
-      const allContent = await this.immersionRepo.getAllImmersionContent();
+      // Get all resources that are immersion content
+      const allResources = await this.resourceRepo.getAllResources();
+      const allContent = allResources.filter(resource => resource.isImmersionContent);
       const now = new Date();
       
       // Filter to only due content (nextShownEarliestAt does not exist or is in the past)
@@ -28,7 +29,7 @@ export class ProposeImmersionContent implements TaskProposerContract {
       
       // Check each due content for vocab readiness threshold
       for (const content of dueContent) {
-        if (content.associatedUnits.length === 0) {
+        if (content.extractedVocab.length === 0) {
           // No associated vocab - consider it ready
           return {
             taskType: 'immersion-content',
@@ -41,9 +42,9 @@ export class ProposeImmersionContent implements TaskProposerContract {
         
         // Check what percentage of associated vocab is top-of-mind
         let topOfMindCount = 0;
-        const totalCount = content.associatedUnits.length;
+        const totalCount = content.extractedVocab.length;
         
-        for (const vocabId of content.associatedUnits) {
+        for (const vocabId of content.extractedVocab) {
           const vocab = await this.vocabRepo.getVocabByUID(vocabId);
           if (vocab && isCurrentlyTopOfMind(vocab)) {
             topOfMindCount++;
@@ -72,8 +73,8 @@ export class ProposeImmersionContent implements TaskProposerContract {
     }
   }
 
-  setRepos(immersionRepo: ImmersionContentRepoContract, vocabRepo: VocabAndTranslationRepoContract) {
-    this.immersionRepo = immersionRepo;
+  setRepos(resourceRepo: ResourceRepoContract, vocabRepo: VocabAndTranslationRepoContract) {
+    this.resourceRepo = resourceRepo;
     this.vocabRepo = vocabRepo;
   }
 }

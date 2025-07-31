@@ -1,6 +1,7 @@
 import { ExampleStorage } from './ExampleStorage';
 import type { ExampleRepoContract } from './ExampleRepoContract';
 import type { ExampleData } from './ExampleData';
+import { createEmptyCard } from 'ts-fsrs';
 
 export class ExampleRepo implements ExampleRepoContract {
   private storage = new ExampleStorage();
@@ -10,8 +11,16 @@ export class ExampleRepo implements ExampleRepoContract {
       ...example,
       content: example.content || '',
       translation: example.translation || '',
+      situation: example.situation,
       associatedVocab: example.associatedVocab || [],
-      associatedTasks: example.associatedTasks || []
+      associatedTasks: example.associatedTasks || [],
+      notes: example.notes || [],
+      links: example.links || [],
+      prio: example.prio,
+      doNotPractice: example.doNotPractice,
+      license: example.license,
+      owner: example.owner,
+      sources: example.sources || []
     };
   }
 
@@ -20,8 +29,8 @@ export class ExampleRepo implements ExampleRepoContract {
     return examples.map(e => this.ensureExampleFields(e));
   }
 
-  async getExampleById(id: string): Promise<ExampleData | undefined> {
-    const example = await this.storage.getById(id);
+  async getExampleById(uid: string): Promise<ExampleData | undefined> {
+    const example = await this.storage.getById(uid);
     return example ? this.ensureExampleFields(example) : undefined;
   }
 
@@ -31,8 +40,21 @@ export class ExampleRepo implements ExampleRepoContract {
       language: example.language || '',
       content: example.content,
       translation: example.translation,
+      situation: example.situation,
       associatedVocab: example.associatedVocab || [],
       associatedTasks: example.associatedTasks || [],
+      notes: example.notes || [],
+      links: example.links || [],
+      prio: example.prio,
+      progress: example.progress || {
+        ...createEmptyCard(),
+        streak: 0,
+        level: -1
+      },
+      doNotPractice: example.doNotPractice,
+      license: example.license,
+      owner: example.owner,
+      sources: example.sources || [],
       isUserCreated: example.isUserCreated ?? true,
       lastDownloadedAt: example.lastDownloadedAt || null
     };

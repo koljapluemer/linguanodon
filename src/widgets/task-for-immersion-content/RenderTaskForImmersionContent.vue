@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
+import type { ResourceData } from '@/entities/resources/ResourceData';
 // import type { TaskEvaluation } from '@/shared/ExerciseTypes';
 import EvaluateTaskWidget from '@/features/evaluate-task-widget/EvaluateTaskWidget.vue';
 import ManageVocabOfImmersionContentWidget from '@/features/manage-vocab-of-immersion-content/ManageVocabOfImmersionContentWidget.vue';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
 
 interface Props {
-  content: ImmersionContentData;
+  content: ResourceData;
 }
 
 interface Emits {

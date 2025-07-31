@@ -131,6 +131,8 @@ async function loadGoal() {
       coreTasks: [],
       vocab: [],
       examples: [],
+      notes: [],
+      factCards: [],
       wantToDoAgain: true
     };
   }

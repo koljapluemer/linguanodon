@@ -55,10 +55,7 @@
               </h3>
               <p class="text-sm text-gray-600">{{ item.language }}</p>
               
-              <!-- Pronunciation -->
-              <p v-if="item.pronunciation" class="text-sm text-gray-700 italic mt-1">
-                /{{ item.pronunciation }}/
-              </p>
+              <!-- Pronunciation removed - now handled as notes -->
 
               <!-- Translations Count -->
               <p class="text-sm text-gray-600 mt-2">

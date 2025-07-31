@@ -1,5 +1,4 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { ExampleData } from '@/entities/examples/ExampleData';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { ResourceData } from '@/entities/resources/ResourceData';
@@ -8,10 +7,6 @@ export type RuntimeTask =
   | { 
       taskType: 'add-pronunciation'; 
       data: { vocabId: string; vocab: VocabData } 
-    }
-  | { 
-      taskType: 'immersion-content'; 
-      data: { contentId: string; content: ImmersionContentData } 
     }
   | { 
       taskType: 'free-translate'; 
@@ -36,6 +31,10 @@ export type RuntimeTask =
   | { 
       taskType: 'resource'; 
       data: { resourceId: string; resource: ResourceData } 
+    }
+  | { 
+      taskType: 'immersion-content'; 
+      data: { contentId: string; content: ResourceData } 
     };
 
 export interface TaskProposer<T = RuntimeTask> {

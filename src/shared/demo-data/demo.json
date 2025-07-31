@@ -1,17 +1,16 @@
 {
     "vocab": [
       {
-        "id": "ciao-1",
+        "uid": "ciao-1",
         "language": "it",
         "content": "ciao",
-        "pronunciation": "cha-oh",
         "notes": ["note-ciao-1"],
         "translations": ["hello-1", "bye-1"],
         "links": [],
         "associatedTasks": []
       },
       {
-        "id": "casa-1", 
+        "uid": "casa-1", 
         "language": "it",
         "content": "casa",
         "notes": [],
@@ -20,7 +19,7 @@
         "associatedTasks": []
       },
       {
-        "id": "libro-1",
+        "uid": "libro-1",
         "language": "it", 
         "content": "libro",
         "notes": [],
@@ -29,7 +28,7 @@
         "associatedTasks": []
       },
       {
-        "id": "mangiare-1",
+        "uid": "mangiare-1",
         "language": "it",
         "content": "mangiare", 
         "notes": ["note-mangiare-1"],
@@ -38,7 +37,7 @@
         "associatedTasks": []
       },
       {
-        "id": "bene-1",
+        "uid": "bene-1",
         "language": "it",
         "content": "bene",
         "notes": [],
@@ -49,41 +48,51 @@
     ],
     "translations": [
       {
-        "id": "hello-1",
+        "uid": "hello-1",
         "content": "hello",
-        "note": "informal greeting"
+        "notes": ["note-hello-1"]
       },
       {
-        "id": "bye-1", 
-        "content": "bye"
+        "uid": "bye-1", 
+        "content": "bye",
+        "notes": []
       },
       {
-        "id": "house-1",
-        "content": "house"
+        "uid": "house-1",
+        "content": "house",
+        "notes": []
       },
       {
-        "id": "book-1",
-        "content": "book"
+        "uid": "book-1",
+        "content": "book",
+        "notes": []
       },
       {
-        "id": "eat-1",
-        "content": "to eat"
+        "uid": "eat-1",
+        "content": "to eat",
+        "notes": []
       },
       {
-        "id": "well-1",
-        "content": "well"
+        "uid": "well-1",
+        "content": "well",
+        "notes": []
       },
       {
-        "id": "good-1",
-        "content": "good"
+        "uid": "good-1",
+        "content": "good",
+        "notes": []
       }
     ],
-    "immersionContent": [
+    "resources": [
       {
         "uid": "dialogue-1",
         "language": "it",
         "priority": 1,
-        "associatedUnits": ["ciao-1"],
+        "extractedVocab": ["ciao-1"],
+        "extractedExamples": [],
+        "extractedFactCards": [],
+        "notes": [],
+        "isImmersionContent": true,
         "taskType": "immersion-content",
         "title": "Basic Greeting",
         "prompt": "Listen to and practice this simple Italian greeting",
@@ -95,7 +104,11 @@
         "uid": "reading-1", 
         "language": "it",
         "priority": 2,
-        "associatedUnits": ["casa-1", "libro-1"],
+        "extractedVocab": ["casa-1", "libro-1"],
+        "extractedExamples": [],
+        "extractedFactCards": [],
+        "notes": [],
+        "isImmersionContent": true,
         "taskType": "immersion-content", 
         "title": "At Home Reading",
         "prompt": "Read about daily activities at home",
@@ -106,29 +119,65 @@
     ],
     "examples": [
       {
-        "id": "example-greeting-1",
+        "uid": "example-greeting-1",
         "language": "it",
         "content": "Ciao, come stai oggi?",
         "translation": "Hello, how are you today?",
+        "situation": "Meeting a friend on the street",
         "associatedVocab": ["ciao-1", "bene-1"],
         "associatedTasks": [],
+        "notes": [],
+        "links": [],
+        "prio": 1,
+        "progress": {
+          "due": 1704067200000,
+          "stability": 2.5,
+          "difficulty": 5.0,
+          "elapsed_days": 0,
+          "scheduled_days": 1,
+          "learning_steps": 0,
+          "reps": 0,
+          "lapses": 0,
+          "state": 0,
+          "streak": 0,
+          "level": -1
+        },
+        "doNotPractice": false,
         "isUserCreated": false,
         "lastDownloadedAt": null
       },
       {
-        "id": "example-reading-1",
+        "uid": "example-reading-1",
         "language": "it",
         "content": "Leggo un libro interessante a casa.",
         "translation": "I read an interesting book at home.",
+        "situation": "Describing daily activities",
         "associatedVocab": ["casa-1", "libro-1"],
         "associatedTasks": [],
+        "notes": [],
+        "links": [],
+        "prio": 2,
+        "progress": {
+          "due": 1704067200000,
+          "stability": 2.5,
+          "difficulty": 5.0,
+          "elapsed_days": 0,
+          "scheduled_days": 1,
+          "learning_steps": 0,
+          "reps": 0,
+          "lapses": 0,
+          "state": 0,
+          "streak": 0,
+          "level": -1
+        },
+        "doNotPractice": false,
         "isUserCreated": false,
         "lastDownloadedAt": null
       }
     ],
     "goals": [
       {
-        "id": "goal-basic-conversation",
+        "uid": "goal-basic-conversation",
         "title": "have basic conversations with Italian speakers",
         "prompt": "I want to be able to have basic conversations with Italian speakers",
         "taskType": "complete-goal",
@@ -299,7 +348,7 @@
         "notes": ["note-subjunctive-1"],
         "priority": 2,
         "progress": {
-          "due": "2024-01-01T00:00:00.000Z",
+          "due": 1704067200000,
           "stability": 1,
           "difficulty": 5,
           "elapsed_days": 0,
@@ -323,7 +372,7 @@
         "notes": [],
         "priority": 1,
         "progress": {
-          "due": "2024-01-01T00:00:00.000Z",
+          "due": 1704067200000,
           "stability": 1,
           "difficulty": 5,
           "elapsed_days": 0,
@@ -347,7 +396,7 @@
         "notes": ["note-false-friends-1"],
         "priority": 3,
         "progress": {
-          "due": "2024-01-01T00:00:00.000Z",
+          "due": 1704067200000,
           "stability": 1,
           "difficulty": 5,
           "elapsed_days": 0,

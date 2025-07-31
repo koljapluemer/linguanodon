@@ -1,40 +1,41 @@
 import type { VocabProposerContract } from '../VocabProposerContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import { shuffleArray } from '@/shared/arrayUtils';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 
 export class ProposerByImmersionContentAlmostReady implements VocabProposerContract {
   constructor(
     private vocabRepo?: VocabAndTranslationRepoContract,
-    private immersionRepo?: ImmersionContentRepoContract
+    private resourceRepo?: ResourceRepoContract
   ) {}
 
   async proposeVocab(targetNumber: number): Promise<VocabData[]> {
-    if (!this.vocabRepo || !this.immersionRepo) {
+    if (!this.vocabRepo || !this.resourceRepo) {
       console.warn('Repos not available for ProposerByImmersionContentAlmostReady');
       return [];
     }
 
     try {
-      // Get all immersion content
-      const allContent = await this.immersionRepo.getAllImmersionContent();
+      // Get all resources that are immersion content
+      const allResources = await this.resourceRepo.getAllResources();
+      const allContent = allResources.filter(resource => resource.isImmersionContent);
       
       let bestContent = null;
       let bestPercentage = -1;
       
       // Find the immersion content with the highest top-of-mind percentage below 90%
       for (const content of allContent) {
-        if (content.associatedUnits.length === 0) {
+        if (content.extractedVocab.length === 0) {
           continue; // Skip content with no associated vocab
         }
         
         // Calculate top-of-mind percentage for this content
         let topOfMindCount = 0;
-        const totalCount = content.associatedUnits.length;
+        const totalCount = content.extractedVocab.length;
         
-        for (const vocabId of content.associatedUnits) {
+        for (const vocabId of content.extractedVocab) {
           const vocab = await this.vocabRepo.getVocabByUID(vocabId);
           if (vocab && isCurrentlyTopOfMind(vocab)) {
             topOfMindCount++;
@@ -58,7 +59,7 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
       const vocabToTrain: VocabData[] = [];
       const now = new Date();
       
-      for (const vocabId of bestContent.associatedUnits) {
+      for (const vocabId of bestContent.extractedVocab) {
         const vocab = await this.vocabRepo.getVocabByUID(vocabId);
         if (vocab && !vocab.doNotPractice) {
           // Include vocab that is due for practice OR is new (never practiced)
@@ -79,8 +80,8 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
     }
   }
 
-  setRepos(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract) {
+  setRepos(vocabRepo: VocabAndTranslationRepoContract, resourceRepo: ResourceRepoContract) {
     this.vocabRepo = vocabRepo;
-    this.immersionRepo = immersionRepo;
+    this.resourceRepo = resourceRepo;
   }
 }

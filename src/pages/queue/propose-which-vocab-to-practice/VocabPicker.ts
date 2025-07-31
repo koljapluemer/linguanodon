@@ -1,7 +1,7 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabProposerContract } from './VocabProposerContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { ProposerByAlreadySeenDueVocab } from './proposers/ProposerByAlreadySeenDueVocab';
@@ -45,7 +45,7 @@ export class VocabPicker {
     this.proposers = proposers;
   }
 
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract, exampleRepo: ExampleRepoContract, goalRepo?: GoalRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, resourceRepo: ResourceRepoContract, exampleRepo: ExampleRepoContract, goalRepo?: GoalRepoContract) {
     const alreadySeenDueProposer = new ProposerByAlreadySeenDueVocab();
     alreadySeenDueProposer.setVocabRepo(vocabRepo);
 
@@ -53,7 +53,7 @@ export class VocabPicker {
     newVocabProposer.setVocabRepo(vocabRepo);
 
     const immersionProposer = new ProposerByImmersionContentAlmostReady();
-    immersionProposer.setRepos(vocabRepo, immersionRepo);
+    immersionProposer.setRepos(vocabRepo, resourceRepo);
 
     const examplesProposer = new ProposerByExamples();
     examplesProposer.setRepos(exampleRepo, vocabRepo);

@@ -1,4 +1,4 @@
-import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
+import type { ResourceData } from '@/entities/resources/ResourceData';
 
 export interface ImmersionContentFormData {
   uid?: string;
@@ -17,7 +17,7 @@ export interface ImmersionContentFormState {
   isEditing: boolean;
 }
 
-export function immersionContentToFormData(content: ImmersionContentData): ImmersionContentFormData {
+export function immersionContentToFormData(content: ResourceData): ImmersionContentFormData {
   return {
     uid: content.uid,
     title: content.title,
@@ -30,14 +30,15 @@ export function immersionContentToFormData(content: ImmersionContentData): Immer
 
 export function formDataToImmersionContent(
   formData: ImmersionContentFormData, 
-  existingContent?: ImmersionContentData
-): Partial<ImmersionContentData> {
-  const baseData: Partial<ImmersionContentData> = {
+  existingContent?: ResourceData
+): Partial<ResourceData> {
+  const baseData: Partial<ResourceData> = {
     title: formData.title,
     prompt: formData.prompt,
     extraInfo: formData.extraInfo,
     language: formData.language,
-    priority: formData.priority
+    priority: formData.priority,
+    isImmersionContent: true
   };
 
   if (formData.uid) {
@@ -46,7 +47,10 @@ export function formDataToImmersionContent(
 
   // Preserve existing data that's not in the form
   if (existingContent) {
-    baseData.associatedUnits = existingContent.associatedUnits;
+    baseData.extractedVocab = existingContent.extractedVocab;
+    baseData.extractedExamples = existingContent.extractedExamples;
+    baseData.extractedFactCards = existingContent.extractedFactCards;
+    baseData.notes = existingContent.notes;
     baseData.taskType = existingContent.taskType;
     baseData.evaluateAfterDoing = existingContent.evaluateAfterDoing;
     baseData.lastShownAt = existingContent.lastShownAt;

@@ -77,6 +77,7 @@ async function saveGoal() {
     } else {
       // Create new goal
       updatedGoal = await goalRepo.create({
+        uid: crypto.randomUUID(),
         title: goalTitle.value.trim(),
         prompt: goalPrompt.value.trim() || goalTitle.value.trim(),
         taskType: 'complete-goal',
@@ -84,6 +85,8 @@ async function saveGoal() {
         milestones: [],
         vocab: [],
         examples: [],
+        notes: [],
+        factCards: [],
         wantToDoAgain: true
       });
     }

@@ -76,6 +76,7 @@ async function addSubGoal() {
   if (!newSubGoalTitle.value.trim()) return;
   
   const newSubGoal = await goalRepo.create({
+    uid: crypto.randomUUID(),
     title: newSubGoalTitle.value.trim(),
     prompt: newSubGoalTitle.value.trim(),
     taskType: 'complete-goal',
@@ -84,6 +85,8 @@ async function addSubGoal() {
     milestones: [],
     vocab: [],
     examples: [],
+    notes: [],
+    factCards: [],
     wantToDoAgain: true
   });
   

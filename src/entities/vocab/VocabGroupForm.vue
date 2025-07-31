@@ -48,7 +48,6 @@ const editingIndex = ref<number | null>(null);
 const newVocab = ref<Partial<VocabData>>({
   content: '',
   language: '',
-  pronunciation: '',
   translations: []
 });
 
@@ -60,7 +59,6 @@ watch(() => props.vocabIds, async () => {
     uid: id,
     content: `Vocab ${index + 1}`,
     language: 'Italian',
-    pronunciation: '',
     translations: [`Translation ${index + 1}`],
     notes: [],
     links: [],
@@ -107,7 +105,6 @@ function resetNewVocab() {
   newVocab.value = {
     content: '',
     language: '',
-    pronunciation: '',
     translations: []
   };
 }

@@ -28,18 +28,6 @@
           />
         </div>
 
-        <!-- Pronunciation -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Pronunciation</span>
-          </label>
-          <input
-            v-model="localVocab.pronunciation"
-            type="text"
-            placeholder="Phonetic pronunciation"
-            class="input input-bordered input-sm"
-          />
-        </div>
 
         <!-- Translations -->
         <div class="form-control">
@@ -116,7 +104,6 @@ function handleSave() {
     uid: localVocab.value.uid || crypto.randomUUID(),
     content: localVocab.value.content!.trim(),
     language: localVocab.value.language!.trim(),
-    pronunciation: localVocab.value.pronunciation?.trim() || '',
     translations,
     notes: localVocab.value.notes || [],
     links: localVocab.value.links || [],

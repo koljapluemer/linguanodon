@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import RenderTaskForAddingPronunciation from '@/widgets/task-for-adding-pronunciation/RenderTaskForAddingPronunciation.vue';
-import RenderTaskForImmersionContent from '@/widgets/task-for-immersion-content/RenderTaskForImmersionContent.vue';
 import RenderTaskForResource from '@/widgets/task-for-resource/RenderTaskForResource.vue';
 import FreeTranslateTaskWidget from '@/widgets/free-translate-task/FreeTranslateTaskWidget.vue';
 import TaskAddSubGoals from '@/widgets/TaskAddSubGoals.vue';
@@ -30,12 +29,6 @@ const handleFinished = () => {
     <RenderTaskForAddingPronunciation
       v-if="task.taskType === 'add-pronunciation'"
       :vocab="task.data.vocab"
-      @finished="handleFinished"
-    />
-    
-    <RenderTaskForImmersionContent
-      v-else-if="task.taskType === 'immersion-content'"
-      :content="task.data.content"
       @finished="handleFinished"
     />
     

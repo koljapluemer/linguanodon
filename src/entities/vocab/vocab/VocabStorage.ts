@@ -10,7 +10,7 @@ class VocabDatabase extends Dexie {
   constructor() {
     super('VocabDatabase');
     this.version(1).stores({
-      vocab: 'id, language, content, pronunciation'
+      vocab: 'uid, language, content'
     });
   }
 }
@@ -24,9 +24,9 @@ export class VocabStorage {
     return await db.vocab.toArray();
   }
 
-  async getById(id: string): Promise<VocabData | undefined> {
+  async getById(uid: string): Promise<VocabData | undefined> {
     await this.ensureDemoData();
-    return await db.vocab.get(id);
+    return await db.vocab.get(uid);
   }
 
   async getByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined> {
@@ -43,8 +43,8 @@ export class VocabStorage {
     await db.vocab.put(vocab);
   }
 
-  async delete(id: string): Promise<void> {
-    await db.vocab.delete(id);
+  async delete(uid: string): Promise<void> {
+    await db.vocab.delete(uid);
   }
 
   async count(): Promise<number> {
@@ -57,7 +57,6 @@ export class VocabStorage {
       const vocabWithProgress = demoData.vocab.map(vocab => ({
         ...vocab,
         content: vocab.content || '',
-        pronunciation: (vocab as { pronunciation?: string }).pronunciation || '',
         notes: vocab.notes || [],
         progress: {
           ...createEmptyCard(),

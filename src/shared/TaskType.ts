@@ -7,3 +7,5 @@ export type TaskType =
   | 'add-examples-to-goal'
   | 'add-milestones'
   | 'resource'
+  | 'complete-goal'
+  | 'milestone'

@@ -47,17 +47,7 @@
           </div>
 
           <!-- Pronunciation -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Pronunciation</span>
-            </label>
-            <input
-              v-model="formData.pronunciation"
-              type="text"
-              placeholder="Phonetic pronunciation"
-              class="input input-bordered"
-            />
-          </div>
+          <!-- Pronunciation removed - now handled as notes -->
 
           <!-- Priority -->
           <div class="form-control">

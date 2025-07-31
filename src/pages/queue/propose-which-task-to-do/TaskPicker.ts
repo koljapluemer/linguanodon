@@ -1,6 +1,5 @@
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
@@ -10,17 +9,13 @@ import { pickRandom } from '@/shared/arrayUtils';
 export class TaskPicker {
   private initialized = false;
   
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, immersionRepo: ImmersionContentRepoContract, exampleRepo: ExampleRepoContract, goalRepo: GoalRepoContract, resourceRepo: ResourceRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, exampleRepo: ExampleRepoContract, goalRepo: GoalRepoContract, resourceRepo: ResourceRepoContract) {
     // Configure proposers with repositories
     const addPronunciationProposer = TASK_REGISTRY['add-pronunciation'].proposer as { setVocabRepo?: (repo: VocabAndTranslationRepoContract) => void };
     if (addPronunciationProposer.setVocabRepo) {
       addPronunciationProposer.setVocabRepo(vocabRepo);
     }
     
-    const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer;
-    if ('setRepos' in immersionContentProposer && typeof immersionContentProposer.setRepos === 'function') {
-      immersionContentProposer.setRepos(immersionRepo, vocabRepo);
-    }
     
     const freeTranslateProposer = TASK_REGISTRY['free-translate'].proposer;
     if ('setRepos' in freeTranslateProposer && typeof freeTranslateProposer.setRepos === 'function') {
@@ -51,6 +46,11 @@ export class TaskPicker {
     const resourceProposer = TASK_REGISTRY['resource'].proposer as { setResourceRepo?: (repo: ResourceRepoContract) => void };
     if (resourceProposer.setResourceRepo) {
       resourceProposer.setResourceRepo(resourceRepo);
+    }
+    
+    const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as { setRepos?: (resourceRepo: ResourceRepoContract, vocabRepo: VocabAndTranslationRepoContract) => void };
+    if (immersionContentProposer.setRepos) {
+      immersionContentProposer.setRepos(resourceRepo, vocabRepo);
     }
     
     this.initialized = true;

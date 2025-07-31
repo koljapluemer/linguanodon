@@ -1,13 +1,13 @@
 import { ref, computed, inject, watch } from 'vue';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
-import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { ImmersionContentFormState, ImmersionContentFormData } from './types';
 import { immersionContentToFormData, formDataToImmersionContent } from './types';
 
 export function useImmersionContentForm(contentUid?: string) {
-  const immersionRepo = inject<ImmersionContentRepoContract>('immersionRepo');
-  if (!immersionRepo) {
-    throw new Error('ImmersionRepo not provided');
+  const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
+  if (!resourceRepo) {
+    throw new Error('ResourceRepo not provided');
   }
 
   const state = ref<ImmersionContentFormState>({
@@ -24,7 +24,7 @@ export function useImmersionContentForm(contentUid?: string) {
     isEditing: !!contentUid
   });
 
-  const loadedContentData = ref<ImmersionContentData | null>(null);
+  const loadedContentData = ref<ResourceData | null>(null);
 
   const isValid = computed(() => {
     const data = state.value.formData;
@@ -83,14 +83,14 @@ export function useImmersionContentForm(contentUid?: string) {
   }
 
   async function loadContent() {
-    if (!contentUid || !immersionRepo) return;
+    if (!contentUid || !resourceRepo) return;
 
     state.value.loading = true;
     state.value.error = null;
 
     try {
-      const content = await immersionRepo.getImmersionContentById(contentUid);
-      if (content) {
+      const content = await resourceRepo.getResourceById(contentUid);
+      if (content && content.isImmersionContent) {
         loadedContentData.value = content;
         state.value.formData = immersionContentToFormData(content);
       } else {
@@ -104,14 +104,14 @@ export function useImmersionContentForm(contentUid?: string) {
   }
 
   async function saveInternal(): Promise<void> {
-    if (!immersionRepo) throw new Error('ImmersionRepo not available');
+    if (!resourceRepo) throw new Error('ResourceRepo not available');
 
     // Serialize form data to avoid proxy issues
     const serializedFormData = serializeFormData(state.value.formData);
 
     if (state.value.isEditing && contentUid) {
       // Get existing content for update
-      const existingContent = await immersionRepo.getImmersionContentById(contentUid);
+      const existingContent = await resourceRepo.getResourceById(contentUid);
       if (!existingContent) {
         throw new Error('Content not found');
       }
@@ -121,15 +121,15 @@ export function useImmersionContentForm(contentUid?: string) {
         ...formDataToImmersionContent(serializedFormData, existingContent)
       };
       
-      await immersionRepo.updateImmersionContent(updatedContent);
+      await resourceRepo.updateResource(updatedContent);
     } else {
       // Create new content
-      await immersionRepo.saveImmersionContent(formDataToImmersionContent(serializedFormData));
+      await resourceRepo.saveResource(formDataToImmersionContent(serializedFormData));
     }
   }
 
   async function save(): Promise<boolean> {
-    if (!isValid.value || !immersionRepo) {
+    if (!isValid.value || !resourceRepo) {
       state.value.error = 'Please fill in required fields and check length limits';
       return false;
     }

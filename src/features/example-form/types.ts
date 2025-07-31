@@ -34,12 +34,30 @@ export function formDataToExampleData(formData: ExampleFormData, existingExample
     translation: formData.translation,
     associatedVocab: formData.associatedVocab,
     associatedTasks: [],
+    notes: [],
+    links: [],
+    progress: {
+      due: new Date(),
+      stability: 2.5,
+      difficulty: 5.0,
+      elapsed_days: 0,
+      scheduled_days: 1,
+      learning_steps: 0,
+      reps: 0,
+      lapses: 0,
+      state: 0,
+      streak: 0,
+      level: -1
+    },
     isUserCreated: true,
     lastDownloadedAt: null
   };
 
   if (existingExample) {
     baseData.associatedTasks = existingExample.associatedTasks;
+    baseData.notes = existingExample.notes;
+    baseData.links = existingExample.links;
+    baseData.progress = existingExample.progress;
     baseData.isUserCreated = existingExample.isUserCreated;
     baseData.lastDownloadedAt = existingExample.lastDownloadedAt;
   }

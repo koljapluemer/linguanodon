@@ -5,7 +5,6 @@ export interface VocabFormData {
   id?: string;
   language: string;
   content: string;
-  pronunciation: string;
   priority?: number;
   doNotPractice?: boolean;
   notes: NoteData[];
@@ -28,7 +27,6 @@ export function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = []): V
     id: vocab.uid,
     language: vocab.language,
     content: vocab.content || '',
-    pronunciation: vocab.pronunciation || '',
     priority: vocab.priority,
     doNotPractice: vocab.doNotPractice,
     notes: notes,
@@ -40,7 +38,6 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
   const baseData: Partial<VocabData> = {
     language: formData.language,
     content: formData.content,
-    pronunciation: formData.pronunciation,
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
     notes: formData.notes.map(note => note.uid),
