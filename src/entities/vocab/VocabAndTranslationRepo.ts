@@ -181,8 +181,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       filteredVocab = allVocab.filter(vocab => 
         vocab.content?.toLowerCase().includes(query) ||
         vocab.language.toLowerCase().includes(query) ||
-        vocab.pronunciation?.toLowerCase().includes(query) ||
-        (vocab.notes && vocab.notes.some(note => note.content.toLowerCase().includes(query)))
+        vocab.pronunciation?.toLowerCase().includes(query)
       );
     }
 
@@ -219,8 +218,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     const filteredVocab = allVocab.filter(vocab => 
       vocab.content?.toLowerCase().includes(query) ||
       vocab.language.toLowerCase().includes(query) ||
-      vocab.pronunciation?.toLowerCase().includes(query) ||
-      (vocab.notes && vocab.notes.some(note => note.content.toLowerCase().includes(query)))
+      vocab.pronunciation?.toLowerCase().includes(query)
     );
     
     return filteredVocab.length;

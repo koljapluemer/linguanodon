@@ -1,7 +1,7 @@
 import Dexie, { type Table } from 'dexie';
 import type { VocabData } from './VocabData';
 import { createEmptyCard } from 'ts-fsrs';
-import demoData from '@/shared/demo-data/load_this.json';
+import demoData from '@/shared/demo-data/demo.json';
 
 
 class VocabDatabase extends Dexie {
@@ -58,7 +58,7 @@ export class VocabStorage {
         ...vocab,
         content: vocab.content || '',
         pronunciation: (vocab as { pronunciation?: string }).pronunciation || '',
-        notes: (vocab as { notes?: Array<{ content: string; showBeforeExercise: boolean }> }).notes || [],
+        notes: vocab.notes || [],
         progress: {
           ...createEmptyCard(),
           streak: 0,

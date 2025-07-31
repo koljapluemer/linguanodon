@@ -5,12 +5,7 @@
         "language": "it",
         "content": "ciao",
         "pronunciation": "cha-oh",
-        "notes": [
-          {
-            "content": "Informal greeting",
-            "showBeforeExercise": true
-          }
-        ],
+        "notes": ["note-ciao-1"],
         "translations": ["hello-1", "bye-1"],
         "links": [],
         "associatedTasks": []
@@ -37,12 +32,7 @@
         "id": "mangiare-1",
         "language": "it",
         "content": "mangiare", 
-        "notes": [
-          {
-            "content": "Regular -are verb",
-            "showBeforeExercise": false
-          }
-        ],
+        "notes": ["note-mangiare-1"],
         "translations": ["eat-1"],
         "links": [],
         "associatedTasks": []
@@ -298,6 +288,18 @@
         "vocab": [],
         "examples": [],
         "wantToDoAgain": true
+      }
+    ],
+    "notes": [
+      {
+        "uid": "note-ciao-1",
+        "content": "Informal greeting",
+        "showBeforeExercise": true
+      },
+      {
+        "uid": "note-mangiare-1",
+        "content": "Regular -are verb",
+        "showBeforeExercise": false
       }
     ]
   }

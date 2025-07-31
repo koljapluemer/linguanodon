@@ -91,59 +91,13 @@
       <!-- Notes -->
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body">
-          <div class="flex justify-between items-center">
-            <h3 class="card-title">Notes</h3>
-            <button
-              type="button"
-              @click="$emit('addNote')"
-              class="btn btn-sm btn-outline"
-            >
-              <Plus class="w-4 h-4 mr-1" />
-              Add Note
-            </button>
-          </div>
-          
-          <div v-if="formData.notes.length === 0" class="text-gray-500 text-center py-4">
-            No notes yet. Click "Add Note" to get started.
-          </div>
-          
-          <div v-else class="space-y-4">
-            <div
-              v-for="(note, index) in formData.notes"
-              :key="index"
-              class="border rounded-lg p-4"
-            >
-              <div class="flex justify-between items-start gap-4">
-                <div class="flex-1">
-                  <textarea
-                    v-model="note.content"
-                    placeholder="Enter note content..."
-                    class="textarea textarea-bordered w-full"
-                    rows="2"
-                  ></textarea>
-                  
-                  <div class="form-control mt-2">
-                    <label class="cursor-pointer label justify-start gap-2">
-                      <input
-                        v-model="note.showBeforeExercise"
-                        type="checkbox"
-                        class="checkbox checkbox-sm"
-                      />
-                      <span class="label-text">Show before exercise</span>
-                    </label>
-                  </div>
-                </div>
-                
-                <button
-                  type="button"
-                  @click="$emit('removeNote', index)"
-                  class="btn btn-sm btn-ghost btn-circle text-error"
-                >
-                  <X class="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
+          <NoteList
+            :notes="formData.notes"
+            :show-before-exercise-option="true"
+            @add="$emit('addNote')"
+            @update="$emit('updateNote', $event)"
+            @delete="$emit('removeNote', $event)"
+          />
         </div>
       </div>
 
@@ -220,7 +174,9 @@
 
 <script setup lang="ts">
 import { Plus, X, Check } from 'lucide-vue-next';
+import NoteList from '@/entities/notes/NoteList.vue';
 import type { VocabFormData } from './types';
+import type { NoteData } from '@/entities/notes/NoteData';
 
 defineProps<{
   formData: VocabFormData;
@@ -233,7 +189,8 @@ defineProps<{
 
 defineEmits<{
   addNote: [];
-  removeNote: [index: number];
+  updateNote: [note: NoteData];
+  removeNote: [uid: string];
   addLink: [];
   removeLink: [index: number];
 }>();

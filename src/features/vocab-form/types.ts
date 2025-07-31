@@ -1,4 +1,5 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { NoteData } from '@/entities/notes/NoteData';
 
 export interface VocabFormData {
   id?: string;
@@ -7,10 +8,7 @@ export interface VocabFormData {
   pronunciation: string;
   priority?: number;
   doNotPractice?: boolean;
-  notes: Array<{
-    content: string;
-    showBeforeExercise: boolean;
-  }>;
+  notes: NoteData[];
   links: Array<{
     label: string;
     url: string;
@@ -25,7 +23,7 @@ export interface VocabFormState {
   isEditing: boolean;
 }
 
-export function vocabDataToFormData(vocab: VocabData): VocabFormData {
+export function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = []): VocabFormData {
   return {
     id: vocab.id,
     language: vocab.language,
@@ -33,7 +31,7 @@ export function vocabDataToFormData(vocab: VocabData): VocabFormData {
     pronunciation: vocab.pronunciation || '',
     priority: vocab.priority,
     doNotPractice: vocab.doNotPractice,
-    notes: vocab.notes ? [...vocab.notes] : [],
+    notes: notes,
     links: vocab.links ? [...vocab.links] : []
   };
 }
@@ -45,7 +43,7 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
     pronunciation: formData.pronunciation,
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
-    notes: formData.notes,
+    notes: formData.notes.map(note => note.uid),
     links: formData.links
   };
 

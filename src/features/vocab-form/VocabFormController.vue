@@ -8,6 +8,7 @@
       :is-valid="isValid"
       :is-editing="state.isEditing"
       @add-note="addNote"
+      @update-note="updateNote"
       @remove-note="removeNote"
       @add-link="addLink"
       @remove-link="removeLink"
@@ -28,7 +29,7 @@ const props = defineProps<{
   vocabId?: string;
 }>();
 
-const { state, loadedVocabData, isValid, loadVocab, addNote, removeNote, addLink, removeLink } = useVocabForm(props.vocabId);
+const { state, loadedVocabData, isValid, loadVocab, addNote, updateNote, removeNote, addLink, removeLink } = useVocabForm(props.vocabId);
 
 onMounted(() => {
   if (props.vocabId) {

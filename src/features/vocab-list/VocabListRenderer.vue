@@ -69,7 +69,7 @@
               <div v-if="item.notes && item.notes.length > 0" class="mt-2">
                 <p class="text-sm text-gray-700">
                   <span class="font-medium">Notes:</span> 
-                  {{ item.notes[0].content }}{{ item.notes.length > 1 ? '...' : '' }}
+                  {{ item.notes.length }} note{{ item.notes.length === 1 ? '' : 's' }}
                 </p>
               </div>
 

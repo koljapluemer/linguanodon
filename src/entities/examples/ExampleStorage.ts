@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { ExampleData } from './ExampleData';
-import demoData from '@/shared/demo-data/load_this.json';
+import demoData from '@/shared/demo-data/demo.json';
 
 class ExampleDatabase extends Dexie {
   examples!: Table<ExampleData>;

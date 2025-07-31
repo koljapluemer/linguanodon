@@ -1,3 +1,4 @@
+import type { LearningProgress } from "@/shared/LearningProgress";
 import type { LocalObject } from "@/shared/LocalObject";
 
 export interface FactCardData extends LocalObject {
@@ -6,4 +7,9 @@ export interface FactCardData extends LocalObject {
     front: string
     back: string
     priority: number;
+
+    doNotPractice?: boolean;
+
+
+    progress: LearningProgress;
 }

@@ -1,13 +1,19 @@
 import { ref, computed, inject, watch } from 'vue';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { NoteData } from '@/entities/notes/NoteData';
 import type { VocabFormState, VocabFormData } from './types';
 import { vocabDataToFormData, formDataToVocabData } from './types';
 
 export function useVocabForm(vocabId?: string) {
   const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+  const noteRepo = inject<NoteRepoContract>('noteRepo');
   if (!vocabRepo) {
     throw new Error('VocabRepo not provided');
+  }
+  if (!noteRepo) {
+    throw new Error('NoteRepo not provided');
   }
 
   const state = ref<VocabFormState>({
@@ -27,6 +33,7 @@ export function useVocabForm(vocabId?: string) {
   });
 
   const loadedVocabData = ref<VocabData | null>(null);
+  const loadedNotes = ref<NoteData[]>([]);
 
   const isValid = computed(() => {
     return state.value.formData.language.trim() !== '' && 
@@ -89,7 +96,22 @@ export function useVocabForm(vocabId?: string) {
       const vocab = await vocabRepo.getVocabByUID(vocabId);
       if (vocab) {
         loadedVocabData.value = vocab;
-        state.value.formData = vocabDataToFormData(vocab);
+        
+        // Load notes if vocab has note IDs
+        if (vocab.notes && vocab.notes.length > 0 && noteRepo) {
+          try {
+            const notes = await noteRepo.getNotesByUIDs(vocab.notes);
+            loadedNotes.value = notes;
+          } catch (error) {
+            console.error('Failed to load notes:', error);
+            // Continue without notes if they fail to load
+            loadedNotes.value = [];
+          }
+        } else {
+          loadedNotes.value = [];
+        }
+        
+        state.value.formData = vocabDataToFormData(vocab, loadedNotes.value);
       } else {
         state.value.error = 'Vocab not found';
       }
@@ -102,9 +124,33 @@ export function useVocabForm(vocabId?: string) {
 
   async function saveInternal(): Promise<void> {
     if (!vocabRepo) throw new Error('VocabRepo not available');
+    if (!noteRepo) throw new Error('NoteRepo not available');
 
     // Serialize form data to avoid proxy issues
     const serializedFormData = serializeFormData(state.value.formData);
+
+    // Save/update notes first
+    for (const note of serializedFormData.notes) {
+      if (note.uid && loadedNotes.value.find(n => n.uid === note.uid)) {
+        // Update existing note
+        await noteRepo.updateNote(note);
+      } else if (!note.uid || !loadedNotes.value.find(n => n.uid === note.uid)) {
+        // Create new note
+        const savedNote = await noteRepo.saveNote(note);
+        // Update the note in form data with the saved UID
+        const noteIndex = serializedFormData.notes.findIndex(n => n === note);
+        if (noteIndex >= 0) {
+          serializedFormData.notes[noteIndex] = savedNote;
+        }
+      }
+    }
+
+    // Delete notes that were removed from the form
+    const currentNoteUIDs = serializedFormData.notes.map(n => n.uid);
+    const notesToDelete = loadedNotes.value.filter(n => !currentNoteUIDs.includes(n.uid));
+    if (notesToDelete.length > 0) {
+      await noteRepo.deleteNotes(notesToDelete.map(n => n.uid));
+    }
 
     if (state.value.isEditing && vocabId) {
       // Get existing vocab for update
@@ -123,6 +169,9 @@ export function useVocabForm(vocabId?: string) {
       // Create new vocab
       await vocabRepo.saveVocab(formDataToVocabData(serializedFormData));
     }
+
+    // Update loaded notes to match current state
+    loadedNotes.value = [...serializedFormData.notes];
   }
 
   async function save(): Promise<boolean> {
@@ -146,14 +195,26 @@ export function useVocabForm(vocabId?: string) {
   }
 
   function addNote() {
-    state.value.formData.notes.push({
+    const newNote: NoteData = {
+      uid: crypto.randomUUID(),
       content: '',
       showBeforeExercise: false
-    });
+    };
+    state.value.formData.notes.push(newNote);
   }
 
-  function removeNote(index: number) {
-    state.value.formData.notes.splice(index, 1);
+  function updateNote(updatedNote: NoteData) {
+    const index = state.value.formData.notes.findIndex(n => n.uid === updatedNote.uid);
+    if (index >= 0) {
+      state.value.formData.notes[index] = updatedNote;
+    }
+  }
+
+  function removeNote(uid: string) {
+    const index = state.value.formData.notes.findIndex(n => n.uid === uid);
+    if (index >= 0) {
+      state.value.formData.notes.splice(index, 1);
+    }
   }
 
   function addLink() {
@@ -183,10 +244,12 @@ export function useVocabForm(vocabId?: string) {
   return {
     state: computed(() => state.value),
     loadedVocabData: computed(() => loadedVocabData.value),
+    loadedNotes: computed(() => loadedNotes.value),
     isValid,
     loadVocab,
     save,
     addNote,
+    updateNote,
     removeNote,
     addLink,
     removeLink,

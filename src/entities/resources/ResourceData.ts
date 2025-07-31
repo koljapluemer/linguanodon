@@ -6,5 +6,7 @@ export interface ResourceData extends TaskData, LocalObject {
   language: string;
 
   priority: number;
-  extractedUnits: string[]; // ids of vocabd
+  extractedVocab: string[]; // ids of VocabData
+  extractedExamples: string[]; // ids of ExampleData
+  extractedFactCards: string[]; // ids of FactCardData
 }

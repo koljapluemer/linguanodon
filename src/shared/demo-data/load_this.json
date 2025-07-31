@@ -7,6 +7,9 @@
       "translations": [
         "lOmP70oVtLo_Hamoudi_a3a7b829"
       ],
+      "notes": [
+        "note_hamoudi_1"
+      ],
       "links": [],
       "associatedTasks": []
     },
@@ -26,6 +29,10 @@
       "content": "كيف",
       "translations": [
         "lOmP70oVtLo_how_a1330899"
+      ],
+      "notes": [
+        "note_kayf_1",
+        "note_kayf_2"
       ],
       "links": [],
       "associatedTasks": []
@@ -52473,6 +52480,23 @@
       "associatedTasks": [],
       "isUserCreated": false,
       "lastDownloadedAt": null
+    }
+  ],
+  "notes": [
+    {
+      "uid": "note_hamoudi_1",
+      "content": "This is a proper name - 'Hamoudi' is a common Arabic nickname for Muhammad",
+      "showBeforeExercise": true
+    },
+    {
+      "uid": "note_kayf_1", 
+      "content": "In Levantine Arabic, 'kayf' can also mean 'why' in some contexts",
+      "showBeforeExercise": false
+    },
+    {
+      "uid": "note_kayf_2",
+      "content": "Remember: كيف شو؟ = How come? / What's up?",
+      "showBeforeExercise": true
     }
   ]
 }
