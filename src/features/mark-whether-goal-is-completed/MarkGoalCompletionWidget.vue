@@ -79,7 +79,7 @@ async function markCompleted(completed: boolean) {
   completionValue.value = completed;
   
   try {
-    const updatedGoal = await goalRepo.update(props.goal.id, {
+    const updatedGoal = await goalRepo.update(props.goal.uid, {
       wantToDoAgain: !completed
     });
     

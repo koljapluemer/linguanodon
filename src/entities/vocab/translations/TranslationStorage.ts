@@ -43,7 +43,7 @@ export class TranslationStorage {
     }
     
     await db.translations.add(translation);
-    return translation.id;
+    return translation.uid;
   }
 
   async getByContent(content: string): Promise<TranslationData | undefined> {

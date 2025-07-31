@@ -9,4 +9,7 @@ export interface ResourceData extends TaskData, LocalObject {
   extractedVocab: string[]; // ids of VocabData
   extractedExamples: string[]; // ids of ExampleData
   extractedFactCards: string[]; // ids of FactCardData
+  notes: string[]; // uids of notes
+  
+  isImmersionContent?: boolean;
 }

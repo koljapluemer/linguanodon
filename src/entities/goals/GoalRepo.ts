@@ -49,7 +49,7 @@ export class GoalRepo implements GoalRepoContract {
 
     const goal: GoalData = {
       ...goalData,
-      id,
+      uid: id,
       isUserCreated: true,
       lastDownloadedAt: null,
       coreTasks,
@@ -83,7 +83,7 @@ export class GoalRepo implements GoalRepoContract {
     // Remove parent reference from all sub-goals
     const subGoals = await this.getSubGoals(id);
     for (const subGoal of subGoals) {
-      await this.update(subGoal.id, { parentGoal: undefined });
+      await this.update(subGoal.uid, { parentGoal: undefined });
     }
 
     await goalStorage.goals.delete(id);

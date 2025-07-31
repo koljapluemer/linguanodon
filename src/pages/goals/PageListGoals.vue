@@ -17,7 +17,7 @@
     <div v-else class="space-y-4">
       <div
         v-for="goal in goals"
-        :key="goal.id"
+        :key="goal.uid"
         class="card bg-base-100 shadow-xl"
       >
         <div class="card-body">
@@ -40,10 +40,10 @@
                   {{ goal.milestones.length }} milestones
                 </span>
                 <span 
-                  v-if="vocabStats[goal.id]"
+                  v-if="vocabStats[goal.uid]"
                   class="badge badge-success"
                 >
-                  {{ Math.round(vocabStats[goal.id].topOfMindPercentage) }}% vocab mastered
+                  {{ Math.round(vocabStats[goal.uid].topOfMindPercentage) }}% vocab mastered
                 </span>
               </div>
 
@@ -54,13 +54,13 @@
 
             <div class="flex gap-2">
               <router-link 
-                :to="`/goals/${goal.id}`" 
+                :to="`/goals/${goal.uid}`" 
                 class="btn btn-sm btn-outline"
               >
                 Edit
               </router-link>
               <button 
-                @click="deleteGoal(goal.id)"
+                @click="deleteGoal(goal.uid)"
                 class="btn btn-sm btn-error btn-outline"
               >
                 Delete
@@ -102,7 +102,7 @@ async function loadGoals() {
         vocab && isCurrentlyTopOfMind(vocab)
       ).length;
       
-      vocabStats.value[goal.id] = {
+      vocabStats.value[goal.uid] = {
         topOfMindPercentage: validVocab.length > 0 
           ? (topOfMindCount / validVocab.length) * 100 
           : 0

@@ -61,7 +61,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     const unseenVocab = allVocab.filter(vocab => {
       // Check for null/undefined progress (shouldn't happen but handle gracefully)
       if (!vocab.progress) {
-        console.warn('Found vocab with null/undefined progress:', vocab.id);
+        console.warn('Found vocab with null/undefined progress:', vocab.uid);
         return !vocab.doNotPractice; // Still filter by doNotPractice
       }
       
@@ -191,7 +191,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     // Apply cursor-based pagination
     let startIndex = 0;
     if (cursor) {
-      startIndex = filteredVocab.findIndex(vocab => vocab.id === cursor);
+      startIndex = filteredVocab.findIndex(vocab => vocab.uid === cursor);
       if (startIndex === -1) startIndex = 0;
       else startIndex += 1; // Start after the cursor
     }
@@ -199,7 +199,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     const endIndex = startIndex + limit;
     const paginatedVocab = filteredVocab.slice(startIndex, endIndex);
     const hasMore = endIndex < filteredVocab.length;
-    const nextCursor = hasMore && paginatedVocab.length > 0 ? paginatedVocab[paginatedVocab.length - 1].id : undefined;
+    const nextCursor = hasMore && paginatedVocab.length > 0 ? paginatedVocab[paginatedVocab.length - 1].uid : undefined;
 
     return {
       vocab: paginatedVocab.map(v => this.ensureVocabFields(v)),
@@ -226,7 +226,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
   async saveVocab(vocab: Partial<VocabData>): Promise<VocabData> {
     const newVocab: VocabData = {
-      id: vocab.id || crypto.randomUUID(),
+      uid: vocab.uid || crypto.randomUUID(),
       language: vocab.language || '',
       content: vocab.content || '',
       pronunciation: vocab.pronunciation || '',
@@ -286,7 +286,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     
     // Find all vocab that use these translations
     const allVocab = await this.vocabStorage.getAll();
-    const matchingTranslationIds = new Set(matchingTranslations.map(t => t.id));
+    const matchingTranslationIds = new Set(matchingTranslations.map(t => t.uid));
     
     return allVocab
       .filter(vocab => vocab.translations.some(id => matchingTranslationIds.has(id)))

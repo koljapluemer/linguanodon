@@ -62,7 +62,7 @@ async function handleTaskCompleted() {
   if (!goal.value) return;
   
   // Mark the core task as completed
-  const updatedGoal = await goalRepo.update(goal.value.id, {
+  const updatedGoal = await goalRepo.update(goal.value.uid, {
     coreTasks: goal.value.coreTasks.map(task => 
       task.taskType === 'add-examples-to-goal' 
         ? { ...task, wantToDoAgain: false } 

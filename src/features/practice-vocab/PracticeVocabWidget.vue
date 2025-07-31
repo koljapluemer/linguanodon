@@ -42,7 +42,7 @@ const handleRating = async (rating: ExerciseRating) => {
   if (!props.vocab) return;
 
   try {
-    await vocabRepo.scoreVocab(props.vocab.id, rating);
+    await vocabRepo.scoreVocab(props.vocab.uid, rating);
     emit('finished');
   } catch (error) {
     console.error('Error scoring vocab:', error);
@@ -55,7 +55,7 @@ const handleDoNotPractice = async () => {
 
   try {
     // Get fresh vocab data to avoid conflicts
-    const freshVocab = await vocabRepo.getVocabByUID(props.vocab.id);
+    const freshVocab = await vocabRepo.getVocabByUID(props.vocab.uid);
     if (!freshVocab) {
       console.warn('Vocab not found for doNotPractice update');
       emit('finished');

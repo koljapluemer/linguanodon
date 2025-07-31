@@ -17,7 +17,7 @@
         <div class="space-y-2">
           <div
             v-for="vocab in associatedVocab"
-            :key="vocab.id"
+            :key="vocab.uid"
             class="flex items-center justify-between p-3 bg-base-200 rounded-lg"
           >
             <div class="flex-1">
@@ -31,7 +31,7 @@
             </div>
             <button
               class="btn btn-sm btn-ghost text-error"
-              @click="removeVocab(vocab.id)"
+              @click="removeVocab(vocab.uid)"
             >
               <X class="w-4 h-4" />
             </button>
@@ -238,7 +238,7 @@ async function saveEntry(index: number) {
     if (props.contentUid) {
       const content = await immersionRepo!.getImmersionContentById(props.contentUid);
       if (content) {
-        content.associatedUnits.push(newVocab.id);
+        content.associatedUnits.push(newVocab.uid);
         await immersionRepo!.updateImmersionContent(content);
       }
     }
@@ -270,7 +270,7 @@ async function removeVocab(vocabId: string) {
     if (content) {
       content.associatedUnits = content.associatedUnits.filter(id => id !== vocabId);
       await immersionRepo!.updateImmersionContent(content);
-      associatedVocab.value = associatedVocab.value.filter(v => v.id !== vocabId);
+      associatedVocab.value = associatedVocab.value.filter(v => v.uid !== vocabId);
     }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to remove vocab';

@@ -22,7 +22,7 @@ export class ProposeAddVocabToGoal implements TaskProposerContract {
         if (coreTask && coreTask.wantToDoAgain !== false) {
           return {
             taskType: 'add-vocab-to-goal',
-            data: { goalId: goal.id, goal }
+            data: { goalId: goal.uid, goal }
           };
         }
       }

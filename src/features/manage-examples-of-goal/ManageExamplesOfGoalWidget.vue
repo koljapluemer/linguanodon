@@ -7,7 +7,7 @@
     <div v-else class="space-y-2">
       <div
         v-for="example in examples"
-        :key="example.id"
+        :key="example.uid"
         class="flex items-center gap-3 p-3 border border-base-200 rounded-lg"
       >
         <div class="flex-1">
@@ -20,7 +20,7 @@
           </div>
         </div>
         <button
-          @click="removeExample(example.id)"
+          @click="removeExample(example.uid)"
           class="btn btn-sm btn-error btn-outline"
         >
           Remove
@@ -131,8 +131,8 @@ async function addExample() {
   });
   
   // Update goal to include this example
-  const updatedGoal = await goalRepo.update(props.goal.id, {
-    examples: [...props.goal.examples, example.id]
+  const updatedGoal = await goalRepo.update(props.goal.uid, {
+    examples: [...props.goal.examples, example.uid]
   });
   
   examples.value.push(example);
@@ -145,12 +145,12 @@ async function removeExample(exampleId: string) {
   
   // Remove from goal's examples array
   const updatedExamples = props.goal.examples.filter(id => id !== exampleId);
-  const updatedGoal = await goalRepo.update(props.goal.id, {
+  const updatedGoal = await goalRepo.update(props.goal.uid, {
     examples: updatedExamples
   });
   
   // Update local state
-  examples.value = examples.value.filter(e => e.id !== exampleId);
+  examples.value = examples.value.filter(e => e.uid !== exampleId);
   emit('goal-updated', updatedGoal);
 }
 

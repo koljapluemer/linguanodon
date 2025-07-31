@@ -22,7 +22,7 @@ export class ProposeAddExamplesToGoal implements TaskProposerContract {
         if (coreTask && coreTask.wantToDoAgain !== false) {
           return {
             taskType: 'add-examples-to-goal',
-            data: { goalId: goal.id, goal }
+            data: { goalId: goal.uid, goal }
           };
         }
       }

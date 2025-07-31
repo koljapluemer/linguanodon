@@ -34,7 +34,7 @@ const handleTaskSkipped = async () => {
 
   try {
     // Get fresh vocab data
-    const vocab = await vocabRepo.getVocabByUID(props.vocab.id);
+    const vocab = await vocabRepo.getVocabByUID(props.vocab.uid);
     if (!vocab) {
       console.warn('Vocab not found for task skip');
       emit('finished');

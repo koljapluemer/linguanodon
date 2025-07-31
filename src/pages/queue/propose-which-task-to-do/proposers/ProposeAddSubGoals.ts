@@ -22,7 +22,7 @@ export class ProposeAddSubGoals implements TaskProposerContract {
         if (coreTask && coreTask.wantToDoAgain !== false) {
           return {
             taskType: 'add-sub-goals',
-            data: { goalId: goal.id, goal }
+            data: { goalId: goal.uid, goal }
           };
         }
       }

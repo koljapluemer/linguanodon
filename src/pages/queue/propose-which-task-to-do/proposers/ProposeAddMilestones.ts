@@ -22,7 +22,7 @@ export class ProposeAddMilestones implements TaskProposerContract {
         if (coreTask && coreTask.wantToDoAgain !== false) {
           return {
             taskType: 'add-milestones',
-            data: { goalId: goal.id, goal }
+            data: { goalId: goal.uid, goal }
           };
         }
       }

@@ -91,7 +91,7 @@ function handleSave() {
   if (!isValid.value) return;
 
   const exampleData: ExampleData = {
-    id: localExample.value.id || crypto.randomUUID(),
+    uid: localExample.value.uid || crypto.randomUUID(),
     language: localExample.value.language!.trim(),
     content: localExample.value.content?.trim(),
     translation: localExample.value.translation?.trim(),

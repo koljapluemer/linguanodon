@@ -43,7 +43,7 @@
     <div v-else class="space-y-4">
       <div 
         v-for="item in vocab" 
-        :key="item.id"
+        :key="item.uid"
         class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow"
       >
         <div class="card-body">
@@ -76,13 +76,13 @@
               <!-- Actions -->
               <div class="flex gap-2 mt-3">
                 <router-link 
-                  :to="{ name: 'vocab-edit', params: { id: item.id } }"
+                  :to="{ name: 'vocab-edit', params: { id: item.uid } }"
                   class="btn btn-sm btn-outline"
                 >
                   Edit
                 </router-link>
                 <button 
-                  @click="$emit('delete', item.id)"
+                  @click="$emit('delete', item.uid)"
                   class="btn btn-sm btn-outline btn-error"
                 >
                   Delete

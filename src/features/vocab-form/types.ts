@@ -25,7 +25,7 @@ export interface VocabFormState {
 
 export function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = []): VocabFormData {
   return {
-    id: vocab.id,
+    id: vocab.uid,
     language: vocab.language,
     content: vocab.content || '',
     pronunciation: vocab.pronunciation || '',
@@ -48,7 +48,7 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
   };
 
   if (formData.id) {
-    baseData.id = formData.id;
+    baseData.uid = formData.id;
   }
 
   // Preserve existing data that's not in the form

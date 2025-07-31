@@ -31,7 +31,7 @@
     <div v-else class="grid gap-4">
       <div 
         v-for="example in examples" 
-        :key="example.id"
+        :key="example.uid"
         class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow"
       >
         <div class="card-body">
@@ -65,17 +65,17 @@
                 </div>
                 
                 <!-- Vocab Readiness Progress Bar -->
-                <div v-if="readinessPercentages[example.id] > 0" class="mt-2">
+                <div v-if="readinessPercentages[example.uid] > 0" class="mt-2">
                   <div class="flex items-center gap-2">
                     <span class="text-xs text-base-content/70">Readiness:</span>
                     <div class="flex-1">
                       <progress 
                         class="progress progress-primary w-full h-2" 
-                        :value="readinessPercentages[example.id]" 
+                        :value="readinessPercentages[example.uid]" 
                         max="100"
                       ></progress>
                     </div>
-                    <span class="text-xs text-base-content/70">{{ readinessPercentages[example.id] }}%</span>
+                    <span class="text-xs text-base-content/70">{{ readinessPercentages[example.uid] }}%</span>
                   </div>
                 </div>
               </div>
@@ -102,12 +102,12 @@
               </label>
               <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                 <li>
-                  <router-link :to="`/examples/${example.id}`">
+                  <router-link :to="`/examples/${example.uid}`">
                     Edit
                   </router-link>
                 </li>
                 <li>
-                  <button @click="handleDelete(example.id)" class="text-error">
+                  <button @click="handleDelete(example.uid)" class="text-error">
                     Delete
                   </button>
                 </li>
@@ -171,7 +171,7 @@ async function loadExamples() {
     // Calculate readiness percentages for all examples
     const percentages: Record<string, number> = {};
     for (const example of examples.value) {
-      percentages[example.id] = await calculateReadinessPercentage(example);
+      percentages[example.uid] = await calculateReadinessPercentage(example);
     }
     readinessPercentages.value = percentages;
   } catch (err) {

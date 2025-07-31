@@ -36,7 +36,7 @@ export class VocabPicker {
     }
     
     // Remove duplicates, shuffle, and limit to target number
-    const uniqueVocab = removeDuplicates(allProposals, vocab => vocab.id);
+    const uniqueVocab = removeDuplicates(allProposals, vocab => vocab.uid);
     const shuffled = shuffleArray(uniqueVocab);
     return shuffled.slice(0, Math.min(targetNumber, shuffled.length));
   }

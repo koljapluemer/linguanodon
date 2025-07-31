@@ -27,7 +27,7 @@ export class ExampleRepo implements ExampleRepoContract {
 
   async saveExample(example: Partial<ExampleData>): Promise<ExampleData> {
     const newExample: ExampleData = {
-      id: example.id || crypto.randomUUID(),
+      uid: example.uid || crypto.randomUUID(),
       language: example.language || '',
       content: example.content,
       translation: example.translation,

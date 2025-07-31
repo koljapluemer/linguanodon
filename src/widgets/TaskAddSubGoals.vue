@@ -73,7 +73,7 @@ async function handleTaskCompleted() {
       : task
   );
   
-  const updatedGoal = await goalRepo.update(goal.value.id, {
+  const updatedGoal = await goalRepo.update(goal.value.uid, {
     coreTasks: JSON.parse(JSON.stringify(updatedCoreTasks))
   });
   

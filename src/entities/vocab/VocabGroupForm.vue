@@ -3,7 +3,7 @@
     <h4 class="text-lg font-semibold">Vocabulary</h4>
     
     <!-- Existing vocab items -->
-    <div v-for="(vocab, index) in vocabItems" :key="vocab.id" class="space-y-2">
+    <div v-for="(vocab, index) in vocabItems" :key="vocab.uid" class="space-y-2">
       <VocabRowDisplay
         v-if="!editingIndex || editingIndex !== index"
         :vocab="vocab"
@@ -87,20 +87,20 @@ function saveVocab(index: number, updatedVocab: VocabData) {
   vocabItems.value[index] = updatedVocab;
   editingIndex.value = null;
   // Auto-save - emit the updated vocab IDs
-  emit('update:vocabIds', vocabItems.value.map(v => v.id));
+  emit('update:vocabIds', vocabItems.value.map(v => v.uid));
 }
 
 function deleteVocab(index: number) {
   vocabItems.value.splice(index, 1);
   // Auto-save - emit the updated vocab IDs
-  emit('update:vocabIds', vocabItems.value.map(v => v.id));
+  emit('update:vocabIds', vocabItems.value.map(v => v.uid));
 }
 
 function addNewVocab(vocab: VocabData) {
   vocabItems.value.push(vocab);
   resetNewVocab();
   // Auto-save - emit the updated vocab IDs
-  emit('update:vocabIds', vocabItems.value.map(v => v.id));
+  emit('update:vocabIds', vocabItems.value.map(v => v.uid));
 }
 
 function resetNewVocab() {

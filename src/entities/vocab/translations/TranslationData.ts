@@ -1,5 +1,5 @@
 export interface TranslationData {
-  id: string
-  content: string
-  note?: string
+  uid: string;
+  content: string;
+  notes: string[]; // uids of `NoteData`
 } 

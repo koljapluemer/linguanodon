@@ -7,7 +7,7 @@
     <div v-else class="space-y-2">
       <div
         v-for="vocab in vocabItems"
-        :key="vocab.id"
+        :key="vocab.uid"
         class="flex items-center gap-3 p-3 border border-base-200 rounded-lg"
       >
         <div class="flex-1">
@@ -26,7 +26,7 @@
           </div>
         </div>
         <button
-          @click="removeVocab(vocab.id)"
+          @click="removeVocab(vocab.uid)"
           class="btn btn-sm btn-error btn-outline"
         >
           Remove
@@ -130,7 +130,7 @@ async function loadVocab() {
   
   translations.value.clear();
   translationResults.forEach(t => {
-    translations.value.set(t.id, t);
+    translations.value.set(t.uid, t);
   });
 }
 
@@ -153,8 +153,8 @@ async function addVocab() {
   });
   
   // Update goal to include this vocab
-  const updatedGoal = await goalRepo.update(props.goal.id, {
-    vocab: [...props.goal.vocab, vocab.id]
+  const updatedGoal = await goalRepo.update(props.goal.uid, {
+    vocab: [...props.goal.vocab, vocab.uid]
   });
   
   vocabItems.value.push(vocab);
@@ -167,12 +167,12 @@ async function removeVocab(vocabId: string) {
   
   // Remove from goal's vocab array
   const updatedVocab = props.goal.vocab.filter(id => id !== vocabId);
-  const updatedGoal = await goalRepo.update(props.goal.id, {
+  const updatedGoal = await goalRepo.update(props.goal.uid, {
     vocab: updatedVocab
   });
   
   // Update local state
-  vocabItems.value = vocabItems.value.filter(v => v.id !== vocabId);
+  vocabItems.value = vocabItems.value.filter(v => v.uid !== vocabId);
   emit('goal-updated', updatedGoal);
 }
 

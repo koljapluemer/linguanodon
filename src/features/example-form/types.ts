@@ -18,7 +18,7 @@ export interface ExampleFormState {
 
 export function exampleDataToFormData(example: ExampleData): ExampleFormData {
   return {
-    id: example.id,
+    id: example.uid,
     language: example.language,
     content: example.content,
     translation: example.translation,
@@ -28,7 +28,7 @@ export function exampleDataToFormData(example: ExampleData): ExampleFormData {
 
 export function formDataToExampleData(formData: ExampleFormData, existingExample?: ExampleData): ExampleData {
   const baseData: ExampleData = {
-    id: formData.id || crypto.randomUUID(),
+    uid: formData.id || crypto.randomUUID(),
     language: formData.language,
     content: formData.content,
     translation: formData.translation,

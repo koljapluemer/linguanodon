@@ -3,7 +3,7 @@
     <h4 class="text-lg font-semibold">Examples</h4>
     
     <!-- Existing example items -->
-    <div v-for="(example, index) in exampleItems" :key="example.id" class="space-y-2">
+    <div v-for="(example, index) in exampleItems" :key="example.uid" class="space-y-2">
       <ExampleRowDisplay
         v-if="!editingIndex || editingIndex !== index"
         :example="example"
@@ -78,20 +78,20 @@ function saveExample(index: number, updatedExample: ExampleData) {
   exampleItems.value[index] = updatedExample;
   editingIndex.value = null;
   // Auto-save - emit the updated example IDs
-  emit('update:exampleIds', exampleItems.value.map(e => e.id));
+  emit('update:exampleIds', exampleItems.value.map(e => e.uid));
 }
 
 function deleteExample(index: number) {
   exampleItems.value.splice(index, 1);
   // Auto-save - emit the updated example IDs
-  emit('update:exampleIds', exampleItems.value.map(e => e.id));
+  emit('update:exampleIds', exampleItems.value.map(e => e.uid));
 }
 
 function addNewExample(example: ExampleData) {
   exampleItems.value.push(example);
   resetNewExample();
   // Auto-save - emit the updated example IDs
-  emit('update:exampleIds', exampleItems.value.map(e => e.id));
+  emit('update:exampleIds', exampleItems.value.map(e => e.uid));
 }
 
 function resetNewExample() {

@@ -32,7 +32,7 @@ const handleSave = async () => {
   
   isLoading.value = true;
   try {
-    await vocabRepo.addPronunciationToVocab(props.vocab.id, pronunciation.value.trim());
+    await vocabRepo.addPronunciationToVocab(props.vocab.uid, pronunciation.value.trim());
     emit('finished');
   } catch (error) {
     console.error('Error adding pronunciation:', error);

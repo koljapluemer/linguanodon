@@ -68,7 +68,7 @@ export class ProposeFreeTranslate implements TaskProposerContract {
       return {
         taskType: 'free-translate',
         data: {
-          exampleId: selectedExample.id,
+          exampleId: selectedExample.uid,
           example: selectedExample
         }
       };

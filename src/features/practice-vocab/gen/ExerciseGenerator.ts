@@ -47,9 +47,9 @@ export class ExerciseGenerator {
     const translationTexts = translations.map(t => t.content).join(', ');
     
     return {
-      id: `exercise-${vocab.id}-${Date.now()}`,
+      id: `exercise-${vocab.uid}-${Date.now()}`,
       type: 'try-to-remember',
-      vocabId: vocab.id,
+      vocabId: vocab.uid,
       prompt: 'How hard is this word to remember?',
       solution: translationTexts,
       vocab: {
@@ -64,9 +64,9 @@ export class ExerciseGenerator {
     const hasMore = translations.length > 8;
     
     return {
-      id: `exercise-${vocab.id}-${Date.now()}`,
+      id: `exercise-${vocab.uid}-${Date.now()}`,
       type: 'reveal',
-      vocabId: vocab.id,
+      vocabId: vocab.uid,
       prompt: 'What does this mean?',
       solution: hasMore ? `${translationTexts}...` : translationTexts,
       vocab: {
@@ -95,9 +95,9 @@ export class ExerciseGenerator {
     const solution = hasMore ? `${vocabContents.join(', ')}...` : vocabContents.join(', ');
     
     return {
-      id: `exercise-${vocab.id}-${Date.now()}`,
+      id: `exercise-${vocab.uid}-${Date.now()}`,
       type: 'reveal',
-      vocabId: vocab.id,
+      vocabId: vocab.uid,
       prompt: 'What vocab has this translation?',
       solution,
       vocab: {
@@ -128,9 +128,9 @@ export class ExerciseGenerator {
     }
     
     return {
-      id: `exercise-${vocab.id}-${Date.now()}`,
+      id: `exercise-${vocab.uid}-${Date.now()}`,
       type: 'choose-from-two-vocab-to-translation',
-      vocabId: vocab.id,
+      vocabId: vocab.uid,
       prompt: 'Choose the correct translation:',
       solution: correctAnswer,
       vocab: {
@@ -164,9 +164,9 @@ export class ExerciseGenerator {
     }
     
     return {
-      id: `exercise-${vocab.id}-${Date.now()}`,
+      id: `exercise-${vocab.uid}-${Date.now()}`,
       type: 'choose-from-four-vocab-to-translation',
-      vocabId: vocab.id,
+      vocabId: vocab.uid,
       prompt: 'Choose the correct translation:',
       solution: correctAnswer,
       vocab: {
@@ -197,9 +197,9 @@ export class ExerciseGenerator {
     }
     
     return {
-      id: `exercise-${vocab.id}-${Date.now()}`,
+      id: `exercise-${vocab.uid}-${Date.now()}`,
       type: 'choose-from-two-translation-to-vocab',
-      vocabId: vocab.id,
+      vocabId: vocab.uid,
       prompt: 'Choose the correct vocab:',
       solution: correctAnswer,
       vocab: {
@@ -236,9 +236,9 @@ export class ExerciseGenerator {
     }
     
     return {
-      id: `exercise-${vocab.id}-${Date.now()}`,
+      id: `exercise-${vocab.uid}-${Date.now()}`,
       type: 'choose-from-four-translation-to-vocab',
-      vocabId: vocab.id,
+      vocabId: vocab.uid,
       prompt: 'Choose the correct vocab:',
       solution: correctAnswer,
       vocab: {

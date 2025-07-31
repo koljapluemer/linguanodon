@@ -68,9 +68,9 @@ async function saveGoal() {
   try {
     let updatedGoal: GoalData;
     
-    if (props.goal.id) {
+    if (props.goal.uid) {
       // Update existing goal
-      updatedGoal = await goalRepo.update(props.goal.id, {
+      updatedGoal = await goalRepo.update(props.goal.uid, {
         title: goalTitle.value.trim(),
         prompt: goalPrompt.value.trim() || goalTitle.value.trim()
       });

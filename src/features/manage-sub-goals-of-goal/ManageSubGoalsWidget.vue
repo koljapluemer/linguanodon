@@ -7,7 +7,7 @@
     <div v-else class="space-y-2">
       <div
         v-for="subGoal in subGoals"
-        :key="subGoal.id"
+        :key="subGoal.uid"
         class="flex items-center gap-3 p-3 border border-base-200 rounded-lg"
       >
         <input
@@ -18,7 +18,7 @@
           @keydown.enter="updateSubGoal(subGoal)"
         />
         <button
-          @click="removeSubGoal(subGoal.id)"
+          @click="removeSubGoal(subGoal.uid)"
           class="btn btn-sm btn-error btn-outline"
         >
           Remove
@@ -79,7 +79,7 @@ async function addSubGoal() {
     title: newSubGoalTitle.value.trim(),
     prompt: newSubGoalTitle.value.trim(),
     taskType: 'complete-goal',
-    parentGoal: props.goal.id,
+    parentGoal: props.goal.uid,
     subGoals: [],
     milestones: [],
     vocab: [],
@@ -88,8 +88,8 @@ async function addSubGoal() {
   });
   
   // Update parent goal to include this sub-goal
-  const updatedGoal = await goalRepo.update(props.goal.id, {
-    subGoals: [...props.goal.subGoals, newSubGoal.id]
+  const updatedGoal = await goalRepo.update(props.goal.uid, {
+    subGoals: [...props.goal.subGoals, newSubGoal.uid]
   });
   
   subGoals.value.push(newSubGoal);
@@ -100,7 +100,7 @@ async function addSubGoal() {
 async function updateSubGoal(subGoal: GoalData) {
   if (!subGoal.title.trim()) return;
   
-  await goalRepo.update(subGoal.id, {
+  await goalRepo.update(subGoal.uid, {
     title: subGoal.title.trim(),
     prompt: subGoal.title.trim()
   });
@@ -111,7 +111,7 @@ async function removeSubGoal(subGoalId: string) {
   
   // Remove from parent goal's subGoals array
   const updatedSubGoals = props.goal.subGoals.filter(id => id !== subGoalId);
-  const updatedGoal = await goalRepo.update(props.goal.id, {
+  const updatedGoal = await goalRepo.update(props.goal.uid, {
     subGoals: updatedSubGoals
   });
   
@@ -119,7 +119,7 @@ async function removeSubGoal(subGoalId: string) {
   await goalRepo.delete(subGoalId);
   
   // Update local state
-  subGoals.value = subGoals.value.filter(sg => sg.id !== subGoalId);
+  subGoals.value = subGoals.value.filter(sg => sg.uid !== subGoalId);
   emit('goal-updated', updatedGoal);
 }
 

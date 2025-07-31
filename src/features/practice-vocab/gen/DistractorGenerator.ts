@@ -21,7 +21,7 @@ export class DistractorGenerator {
     const candidateTranslations: TranslationData[] = [];
     
     for (const vocab of dueVocab) {
-      if (vocab.id === targetVocab.id) continue; // Skip target vocab
+      if (vocab.uid === targetVocab.uid) continue; // Skip target vocab
       
       const vocabTranslations = await this.vocabRepo.getTranslationsByIds(vocab.translations);
       candidateTranslations.push(...vocabTranslations);

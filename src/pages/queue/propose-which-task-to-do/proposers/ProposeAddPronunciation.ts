@@ -18,7 +18,7 @@ export class ProposeAddPronunciation implements TaskProposerContract {
       return {
         taskType: 'add-pronunciation',
         data: {
-          vocabId: vocab.id,
+          vocabId: vocab.uid,
           vocab: vocab
         }
       };

@@ -120,7 +120,7 @@ async function loadGoal() {
   } else {
     // Create new goal structure for editing
     goal.value = {
-      id: '',
+      uid: '',
       title: '',
       prompt: '',
       taskType: 'complete-goal',
@@ -142,8 +142,8 @@ async function handleGoalUpdate(updatedGoal: GoalData) {
   goal.value = updatedGoal;
   
   // If this was a new goal creation, redirect to edit mode
-  if (!isEditing.value && updatedGoal.id) {
-    router.push(`/goals/${updatedGoal.id}`);
+  if (!isEditing.value && updatedGoal.uid) {
+    router.push(`/goals/${updatedGoal.uid}`);
   }
 }
 

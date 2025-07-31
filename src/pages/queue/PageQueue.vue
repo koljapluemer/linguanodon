@@ -96,7 +96,7 @@ const handleTaskFinished = async () => {
         </div>
         
         <PracticeVocabWidget 
-          :key="state.vocab.id"
+          :key="state.vocab.uid"
           :vocab="state.vocab"
           @finished="handleVocabFinished"
         />

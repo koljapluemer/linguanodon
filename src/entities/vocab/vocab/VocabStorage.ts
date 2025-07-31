@@ -36,7 +36,7 @@ export class VocabStorage {
 
   async add(vocab: VocabData): Promise<string> {
     await db.vocab.add(vocab);
-    return vocab.id;
+    return vocab.uid;
   }
 
   async update(vocab: VocabData): Promise<void> {

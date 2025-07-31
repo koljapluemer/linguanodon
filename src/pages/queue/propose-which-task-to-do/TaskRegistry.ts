@@ -7,8 +7,9 @@ import { ProposeAddVocabToGoal } from './proposers/ProposeAddVocabToGoal';
 import { ProposeAddExamplesToGoal } from './proposers/ProposeAddExamplesToGoal';
 import { ProposeAddMilestones } from './proposers/ProposeAddMilestones';
 import { ProposeResource } from './proposers/ProposeResource';
+import type { TaskType } from '@/shared/TaskType';
 
-export const TASK_REGISTRY: Record<string, TaskDefinition> = {
+export const TASK_REGISTRY: Record<TaskType, TaskDefinition> = {
   'add-pronunciation': {
     taskType: 'add-pronunciation',
     proposer: new ProposeAddPronunciation()

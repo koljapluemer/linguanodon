@@ -113,7 +113,7 @@ function handleSave() {
     .filter(t => t);
 
   const vocabData: VocabData = {
-    id: localVocab.value.id || crypto.randomUUID(),
+    uid: localVocab.value.uid || crypto.randomUUID(),
     content: localVocab.value.content!.trim(),
     language: localVocab.value.language!.trim(),
     pronunciation: localVocab.value.pronunciation?.trim() || '',

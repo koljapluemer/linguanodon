@@ -1,8 +1,11 @@
+import type { TaskType } from './TaskType';
+
 export interface TaskData {
-  taskType: string;
+  taskType: TaskType;
   title: string;
   prompt: string;
   evaluateAfterDoing?: boolean;
+  decideWhetherToDoAgainAfterDoing?: boolean;
   extraInfo?: string;
   lastShownAt?: Date;
   wantToDoAgain?: boolean;

@@ -100,7 +100,7 @@ async function removeMilestone(index: number) {
 }
 
 async function updateMilestones() {
-  const updatedGoal = await goalRepo.update(props.goal.id, {
+  const updatedGoal = await goalRepo.update(props.goal.uid, {
     milestones: milestones.value
   });
   
