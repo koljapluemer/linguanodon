@@ -15,5 +15,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "legacy/App.vue", "legacy/router.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "legacy/App.vue", "legacy/router.ts", "vitest.shims.d.ts"]
 }

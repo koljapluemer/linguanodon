@@ -5,7 +5,7 @@
       <div class="card bg-primary/10 border border-primary/20">
         <div class="card-body">
           <h2 class="card-title text-primary">{{ goal.title }}</h2>
-          <p v-if="goal.description" class="text-base-content/70">{{ goal.description }}</p>
+          <p v-if="goal.prompt" class="text-base-content/70">{{ goal.prompt }}</p>
           <div class="card-actions justify-end mt-4">
             <button class="btn btn-primary btn-sm" @click="handleTaskCompleted">
               Done Adding Sub-Goals
@@ -37,7 +37,6 @@
 import { ref, inject, onMounted } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import DoTaskWidget from '@/features/do-task/DoTaskWidget.vue';
 import ManageSubGoalsWidget from '@/features/manage-sub-goals-of-goal/ManageSubGoalsWidget.vue';
 
 const props = defineProps<{
