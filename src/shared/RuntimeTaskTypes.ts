@@ -2,6 +2,7 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { ExampleData } from '@/entities/examples/ExampleData';
 import type { GoalData } from '@/entities/goals/GoalData';
+import type { ResourceData } from '@/entities/resources/ResourceData';
 
 export type RuntimeTask = 
   | { 
@@ -31,6 +32,10 @@ export type RuntimeTask =
   | { 
       taskType: 'add-milestones'; 
       data: { goalId: string; goal: GoalData } 
+    }
+  | { 
+      taskType: 'resource'; 
+      data: { resourceId: string; resource: ResourceData } 
     };
 
 export interface TaskProposer<T = RuntimeTask> {

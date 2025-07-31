@@ -2,6 +2,7 @@
 import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
 import RenderTaskForAddingPronunciation from '@/widgets/task-for-adding-pronunciation/RenderTaskForAddingPronunciation.vue';
 import RenderTaskForImmersionContent from '@/widgets/task-for-immersion-content/RenderTaskForImmersionContent.vue';
+import RenderTaskForResource from '@/widgets/task-for-resource/RenderTaskForResource.vue';
 import FreeTranslateTaskWidget from '@/widgets/free-translate-task/FreeTranslateTaskWidget.vue';
 import TaskAddSubGoals from '@/widgets/TaskAddSubGoals.vue';
 import TaskAddVocabToGoal from '@/widgets/TaskAddVocabToGoal.vue';
@@ -35,6 +36,12 @@ const handleFinished = () => {
     <RenderTaskForImmersionContent
       v-else-if="task.taskType === 'immersion-content'"
       :content="task.data.content"
+      @finished="handleFinished"
+    />
+    
+    <RenderTaskForResource
+      v-else-if="task.taskType === 'resource'"
+      :resource="task.data.resource"
       @finished="handleFinished"
     />
     

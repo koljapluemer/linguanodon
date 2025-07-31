@@ -5,6 +5,7 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import { VocabPicker } from './propose-which-vocab-to-practice/VocabPicker';
 import { TaskPicker } from './propose-which-task-to-do/TaskPicker';
 
@@ -38,6 +39,7 @@ export function useQueuePreloader(
   immersionRepo: ImmersionContentRepoContract,
   exampleRepo: ExampleRepoContract,
   goalRepo: GoalRepoContract,
+  resourceRepo: ResourceRepoContract,
   config: Partial<PreloadConfig> = {}
 ) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
@@ -47,7 +49,7 @@ export function useQueuePreloader(
   vocabPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo, goalRepo);
   
   const taskPicker = new TaskPicker();
-  taskPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo, goalRepo);
+  taskPicker.initializeProposers(vocabRepo, immersionRepo, exampleRepo, goalRepo, resourceRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({

@@ -3,7 +3,7 @@ import { provide } from 'vue';
 import { setupRepositories } from './injectRepositories';
 
 // Setup and provide repositories
-const { vocabRepo, immersionRepo, exampleRepo, goalRepo, noteRepo, factCardRepo } = setupRepositories();
+const { vocabRepo, immersionRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo } = setupRepositories();
 
 provide('vocabRepo', vocabRepo);
 provide('immersionRepo', immersionRepo);
@@ -11,6 +11,7 @@ provide('exampleRepo', exampleRepo);
 provide('goalRepo', goalRepo);
 provide('noteRepo', noteRepo);
 provide('factCardRepo', factCardRepo);
+provide('resourceRepo', resourceRepo);
 </script>
 
 <template>
@@ -23,6 +24,7 @@ provide('factCardRepo', factCardRepo);
         <router-link :to="{ name: 'immersion-content-list' }" class="btn btn-ghost btn-sm">Immersion Content</router-link>
         <router-link :to="{ name: 'examples-list' }" class="btn btn-ghost btn-sm">Examples</router-link>
         <router-link :to="{ name: 'fact-cards-list' }" class="btn btn-ghost btn-sm">Fact Cards</router-link>
+        <router-link :to="{ name: 'resources-list' }" class="btn btn-ghost btn-sm">Resources</router-link>
         <router-link :to="{ name: 'goals-list' }" class="btn btn-ghost btn-sm">Goals</router-link>
 
       </nav>

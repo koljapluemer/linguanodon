@@ -6,6 +6,7 @@ import { ProposeAddSubGoals } from './proposers/ProposeAddSubGoals';
 import { ProposeAddVocabToGoal } from './proposers/ProposeAddVocabToGoal';
 import { ProposeAddExamplesToGoal } from './proposers/ProposeAddExamplesToGoal';
 import { ProposeAddMilestones } from './proposers/ProposeAddMilestones';
+import { ProposeResource } from './proposers/ProposeResource';
 
 export const TASK_REGISTRY: Record<string, TaskDefinition> = {
   'add-pronunciation': {
@@ -35,6 +36,10 @@ export const TASK_REGISTRY: Record<string, TaskDefinition> = {
   'add-milestones': {
     taskType: 'add-milestones',
     proposer: new ProposeAddMilestones()
+  },
+  'resource': {
+    taskType: 'resource',
+    proposer: new ProposeResource()
   }
 };
 

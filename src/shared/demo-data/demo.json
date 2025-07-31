@@ -385,5 +385,49 @@
         "content": "There are many false friends between Italian and English - always double-check!",
         "showBeforeExercise": false
       }
+    ],
+    "resources": [
+      {
+        "uid": "resource-grammar-articles-1",
+        "language": "Italian",
+        "priority": 1,
+        "extractedVocab": ["ciao-1", "casa-1"],
+        "extractedExamples": ["example-1"],
+        "extractedFactCards": ["fact-card-grammar-1"],
+        "taskType": "resource",
+        "title": "Italian Grammar: Definite Articles",
+        "prompt": "Extract important words, examples and facts from the resource",
+        "extraInfo": "This article explains how to use 'il', 'la', 'lo', 'gli', 'le' correctly in Italian. Pay attention to gender and number agreements.",
+        "isUserCreated": true,
+        "lastDownloadedAt": null
+      },
+      {
+        "uid": "resource-culture-food-1",
+        "language": "Italian",
+        "priority": 2,
+        "extractedVocab": ["mangiare-1"],
+        "extractedExamples": [],
+        "extractedFactCards": ["fact-card-culture-1"],
+        "taskType": "resource",
+        "title": "Italian Food Culture and Dining Customs",
+        "prompt": "Extract important words, examples and facts from the resource",
+        "extraInfo": "Learn about Italian meal traditions, from aperitivo to digestivo. Understand when and how Italians eat throughout the day.",
+        "isUserCreated": true,
+        "lastDownloadedAt": null
+      },
+      {
+        "uid": "resource-pronunciation-1",
+        "language": "Italian",
+        "priority": 0,
+        "extractedVocab": ["bene-1"],
+        "extractedExamples": [],
+        "extractedFactCards": ["fact-card-language-1"],
+        "taskType": "resource",
+        "title": "Italian Pronunciation Guide: Double Consonants",
+        "prompt": "Extract important words, examples and facts from the resource",
+        "extraInfo": "Master the difference between single and double consonants in Italian. This distinction changes meaning and is crucial for clear communication.",
+        "isUserCreated": true,
+        "lastDownloadedAt": null
+      }
     ]
   }

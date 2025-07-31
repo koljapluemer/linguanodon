@@ -8,6 +8,8 @@ import PageListExamples from '@/pages/examples/PageListExamples.vue';
 import PageManageExample from '@/pages/examples/PageManageExample.vue';
 import PageListFactCards from '@/pages/fact-cards/PageListFactCards.vue';
 import PageManageFactCard from '@/pages/fact-cards/PageManageFactCard.vue';
+import PageListResources from '@/pages/resources/PageListResources.vue';
+import PageManageResource from '@/pages/resources/PageManageResource.vue';
 import PageListGoals from '@/pages/goals/PageListGoals.vue';
 import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
 
@@ -82,6 +84,21 @@ const router = createRouter({
       path: '/fact-cards/:uid/edit',
       name: 'fact-cards-edit',
       component: PageManageFactCard
+    },
+    {
+      path: '/resources',
+      name: 'resources-list',
+      component: PageListResources
+    },
+    {
+      path: '/resources/new',
+      name: 'resources-new',
+      component: PageManageResource
+    },
+    {
+      path: '/resources/:uid/edit',
+      name: 'resources-edit',
+      component: PageManageResource
     },
     {
       path: '/goals',
