@@ -6,8 +6,9 @@ export interface FactCardData extends LocalObject {
     language: string
     front: string
     back: string
+    notes: string[] // array of NoteData uids
+ 
     priority: number;
-
     doNotPractice?: boolean;
 
 

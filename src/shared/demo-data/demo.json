@@ -290,6 +290,80 @@
         "wantToDoAgain": true
       }
     ],
+    "factCards": [
+      {
+        "uid": "fact-italian-subjunctive",
+        "language": "it",
+        "front": "When do you use the subjunctive mood in Italian?",
+        "back": "Use after expressions of **emotion**, **doubt**, **desire**, **necessity**, and with certain conjunctions like *che*, *affinché*, *benché*.\n\nExample: *Spero che tu **venga*** (I hope you come)",
+        "notes": ["note-subjunctive-1"],
+        "priority": 2,
+        "progress": {
+          "due": "2024-01-01T00:00:00.000Z",
+          "stability": 1,
+          "difficulty": 5,
+          "elapsed_days": 0,
+          "scheduled_days": 1,
+          "reps": 0,
+          "lapses": 0,
+          "state": 0,
+          "last_review": "2024-01-01T00:00:00.000Z",
+          "learning_steps": [1, 10],
+          "streak": 0,
+          "level": -1
+        },
+        "isUserCreated": true,
+        "lastDownloadedAt": null
+      },
+      {
+        "uid": "fact-italian-greeting",
+        "language": "it",
+        "front": "What are the traditional greeting customs in Italy?",
+        "back": "Italians typically greet with **kisses on both cheeks**, starting with the **left cheek**.\n\n- Close friends and family: 2 kisses\n- Business: handshake\n- Regional variations exist",
+        "notes": [],
+        "priority": 1,
+        "progress": {
+          "due": "2024-01-01T00:00:00.000Z",
+          "stability": 1,
+          "difficulty": 5,
+          "elapsed_days": 0,
+          "scheduled_days": 1,
+          "reps": 0,
+          "lapses": 0,
+          "state": 0,
+          "last_review": "2024-01-01T00:00:00.000Z",
+          "learning_steps": [1, 10],
+          "streak": 0,
+          "level": -1
+        },
+        "isUserCreated": true,
+        "lastDownloadedAt": null
+      },
+      {
+        "uid": "fact-false-friends",
+        "language": "it",
+        "front": "What's the difference between Italian 'libreria' and English 'library'?",
+        "back": "**False friend warning!**\n\n- *Libreria* = **bookstore** (where you buy books)\n- *Biblioteca* = **library** (where you borrow books)\n\nDon't confuse them when asking for directions!",
+        "notes": ["note-false-friends-1"],
+        "priority": 3,
+        "progress": {
+          "due": "2024-01-01T00:00:00.000Z",
+          "stability": 1,
+          "difficulty": 5,
+          "elapsed_days": 0,
+          "scheduled_days": 1,
+          "reps": 0,
+          "lapses": 0,
+          "state": 0,
+          "last_review": "2024-01-01T00:00:00.000Z",
+          "learning_steps": [1, 10],
+          "streak": 0,
+          "level": -1
+        },
+        "isUserCreated": true,
+        "lastDownloadedAt": null
+      }
+    ],
     "notes": [
       {
         "uid": "note-ciao-1",
@@ -299,6 +373,16 @@
       {
         "uid": "note-mangiare-1",
         "content": "Regular -are verb",
+        "showBeforeExercise": false
+      },
+      {
+        "uid": "note-subjunctive-1",
+        "content": "The subjunctive is one of the most challenging aspects of Italian grammar for English speakers",
+        "showBeforeExercise": false
+      },
+      {
+        "uid": "note-false-friends-1",
+        "content": "There are many false friends between Italian and English - always double-check!",
         "showBeforeExercise": false
       }
     ]

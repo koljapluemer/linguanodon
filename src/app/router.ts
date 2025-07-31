@@ -6,6 +6,8 @@ import PageListImmersionContent from '@/pages/immersion-content/PageListImmersio
 import PageManageImmersionContent from '@/pages/immersion-content/PageManageImmersionContent.vue';
 import PageListExamples from '@/pages/examples/PageListExamples.vue';
 import PageManageExample from '@/pages/examples/PageManageExample.vue';
+import PageListFactCards from '@/pages/fact-cards/PageListFactCards.vue';
+import PageManageFactCard from '@/pages/fact-cards/PageManageFactCard.vue';
 import PageListGoals from '@/pages/goals/PageListGoals.vue';
 import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
 
@@ -65,6 +67,21 @@ const router = createRouter({
       path: '/examples/:id',
       name: 'examples-edit',
       component: PageManageExample
+    },
+    {
+      path: '/fact-cards',
+      name: 'fact-cards-list',
+      component: PageListFactCards
+    },
+    {
+      path: '/fact-cards/new',
+      name: 'fact-cards-new',
+      component: PageManageFactCard
+    },
+    {
+      path: '/fact-cards/:uid/edit',
+      name: 'fact-cards-edit',
+      component: PageManageFactCard
     },
     {
       path: '/goals',
