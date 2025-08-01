@@ -10,6 +10,7 @@ import PageListResources from '@/pages/resources/PageListResources.vue';
 import PageManageResource from '@/pages/resources/PageManageResource.vue';
 import PageListGoals from '@/pages/goals/PageListGoals.vue';
 import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
+import PageDownloads from '@/pages/downloads/PageDownloads.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -97,6 +98,11 @@ const router = createRouter({
       path: '/goals/:id',
       name: 'goals-edit',
       component: PageManageGoal
+    },
+    {
+      path: '/downloads',
+      name: 'downloads',
+      component: PageDownloads
     }
   ]
 });
