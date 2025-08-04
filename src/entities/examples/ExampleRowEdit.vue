@@ -7,11 +7,11 @@
           <label class="label">
             <span class="label-text">Language *</span>
           </label>
-          <input
+          <LanguageDropdown
             v-model="localExample.language"
-            type="text"
-            placeholder="e.g., Italian"
-            class="input input-bordered input-sm"
+            placeholder="Select target language"
+            required
+            size="sm"
           />
         </div>
 
@@ -64,6 +64,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import type { ExampleData } from './ExampleData';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 
 const props = defineProps<{
   example: Partial<ExampleData>;

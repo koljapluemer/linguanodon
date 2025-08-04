@@ -52,7 +52,7 @@
             <div class="flex-1">
               <h3 class="card-title text-lg">{{ content.title }}</h3>
               <div class="flex items-center gap-4 text-sm text-base-content/70 mt-1">
-                <span>{{ content.language }}</span>
+                <LanguageDisplay :language-code="content.language" compact />
                 <span>Priority: {{ content.priority }}</span>
                 <span v-if="content.extractedVocab.length > 0">
                   {{ content.extractedVocab.length }} vocab units
@@ -145,6 +145,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');

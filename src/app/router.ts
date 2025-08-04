@@ -11,6 +11,7 @@ import PageManageResource from '@/pages/resources/PageManageResource.vue';
 import PageListGoals from '@/pages/goals/PageListGoals.vue';
 import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
+import PageLanguages from '@/pages/languages/PageLanguages.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -103,6 +104,11 @@ const router = createRouter({
       path: '/downloads',
       name: 'downloads',
       component: PageDownloads
+    },
+    {
+      path: '/languages',
+      name: 'languages',
+      component: PageLanguages
     }
   ]
 });

@@ -20,11 +20,11 @@
           <label class="label">
             <span class="label-text">Language *</span>
           </label>
-          <input
+          <LanguageDropdown
             v-model="localVocab.language"
-            type="text"
-            placeholder="e.g., Italian"
-            class="input input-bordered input-sm"
+            placeholder="Select language"
+            size="sm"
+            required
           />
         </div>
 
@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 import type { VocabData } from './vocab/VocabData';
 import { createEmptyCard } from 'ts-fsrs';
 

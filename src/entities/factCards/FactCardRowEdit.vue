@@ -7,11 +7,11 @@
           <label class="label">
             <span class="label-text">Language *</span>
           </label>
-          <input
+          <LanguageDropdown
             v-model="localFactCard.language"
-            type="text"
-            placeholder="e.g., Italian"
-            class="input input-bordered input-sm"
+            placeholder="Select target language"
+            required
+            size="sm"
           />
         </div>
 
@@ -90,6 +90,7 @@
 import { ref, computed, watch } from 'vue';
 import type { FactCardData } from './FactCardData';
 import { createEmptyCard } from 'ts-fsrs';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 
 const props = defineProps<{
   factCard: Partial<FactCardData>;

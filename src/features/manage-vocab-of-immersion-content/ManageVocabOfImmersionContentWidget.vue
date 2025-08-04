@@ -68,12 +68,12 @@
                     <label class="label">
                       <span class="label-text">Language *</span>
                     </label>
-                    <input
+                    <LanguageDropdown
                       v-model="entry.language"
-                      type="text"
-                      placeholder="e.g., Italian"
-                      class="input input-bordered input-sm"
-                      @input="handleEntryChange(index)"
+                      placeholder="Select target language"
+                      required
+                      size="sm"
+                      @update:modelValue="handleEntryChange(index)"
                     />
                   </div>
 
@@ -136,6 +136,7 @@ import { X, Check } from 'lucide-vue-next';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 
 interface Props {
   contentUid?: string;

@@ -38,7 +38,7 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
-                <span class="badge badge-outline">{{ example.language }}</span>
+                <LanguageDisplay :language-code="example.language" compact />
                 <span v-if="!example.isUserCreated" class="badge badge-info">External</span>
               </div>
               
@@ -126,6 +126,7 @@ import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContrac
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ExampleData } from '@/entities/examples/ExampleData';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 
 const exampleRepo = inject<ExampleRepoContract>('exampleRepo');
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');

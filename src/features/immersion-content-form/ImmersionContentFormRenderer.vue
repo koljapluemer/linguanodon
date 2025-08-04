@@ -39,11 +39,9 @@
             <label class="label">
               <span class="label-text">Language *</span>
             </label>
-            <input
+            <LanguageDropdown
               v-model="formData.language"
-              type="text"
-              placeholder="e.g., Italian, Spanish, French"
-              class="input input-bordered"
+              placeholder="Select target language"
               required
             />
           </div>
@@ -146,6 +144,7 @@ import { ref } from 'vue';
 import { Check } from 'lucide-vue-next';
 import type { ImmersionContentFormData } from './types';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 
 defineProps<{
   formData: ImmersionContentFormData;

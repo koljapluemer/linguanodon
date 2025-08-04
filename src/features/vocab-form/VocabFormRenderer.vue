@@ -23,11 +23,9 @@
             <label class="label">
               <span class="label-text">Language *</span>
             </label>
-            <input
+            <LanguageDropdown
               v-model="formData.language"
-              type="text"
-              placeholder="e.g., Italian, Spanish, French"
-              class="input input-bordered"
+              placeholder="Select target language"
               required
             />
           </div>
@@ -165,6 +163,7 @@
 <script setup lang="ts">
 import { Plus, X, Check } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 import type { VocabFormData } from './types';
 import type { NoteData } from '@/entities/notes/NoteData';
 

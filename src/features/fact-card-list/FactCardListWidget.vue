@@ -59,7 +59,7 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
-                <span class="badge badge-outline">{{ factCard.language }}</span>
+                <LanguageDisplay :language-code="factCard.language" compact />
                 <span v-if="!factCard.isUserCreated" class="badge badge-info">External</span>
                 <span v-if="factCard.doNotPractice" class="badge badge-warning">Excluded</span>
                 <span v-if="factCard.priority" class="badge badge-secondary">P{{ factCard.priority }}</span>
@@ -119,6 +119,7 @@ import { ref, computed, onMounted, inject } from 'vue';
 import type { FactCardRepoContract } from '@/entities/factCards/FactCardRepoContract';
 import type { FactCardData } from '@/entities/factCards/FactCardData';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 if (!factCardRepo) {

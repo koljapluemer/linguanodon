@@ -20,11 +20,9 @@
               <label class="label">
                 <span class="label-text">Language *</span>
               </label>
-              <input 
+              <LanguageDropdown
                 v-model="state.formData.language"
-                type="text" 
-                placeholder="e.g., it, fr, es"
-                class="input input-bordered" 
+                placeholder="Select target language"
                 required
               />
             </div>
@@ -93,6 +91,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useExampleForm } from './useExampleForm';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 
 interface Props {
   exampleId?: string;

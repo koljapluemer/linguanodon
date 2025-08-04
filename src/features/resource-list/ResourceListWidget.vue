@@ -38,7 +38,7 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
-                <span class="badge badge-outline">{{ resource.language }}</span>
+                <LanguageDisplay :language-code="resource.language" compact />
                 <span v-if="resource.priority" class="badge badge-secondary">P{{ resource.priority }}</span>
               </div>
               
@@ -90,6 +90,7 @@
 import { ref, onMounted, inject } from 'vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {

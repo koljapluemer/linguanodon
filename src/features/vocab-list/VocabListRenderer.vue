@@ -53,7 +53,9 @@
               <h3 class="text-lg font-semibold">
                 {{ item.content || '[No content]' }}
               </h3>
-              <p class="text-sm text-gray-600">{{ item.language }}</p>
+              <p class="text-sm text-gray-600">
+                <LanguageDisplay :language-code="item.language" />
+              </p>
               
               <!-- Pronunciation removed - now handled as notes -->
 
@@ -119,6 +121,7 @@
 
 <script setup lang="ts">
 import { Search } from 'lucide-vue-next';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 import type { VocabListItem } from './types';
 
 defineProps<{

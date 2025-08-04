@@ -51,12 +51,10 @@
               <label class="label">
                 <span class="label-text">Language *</span>
               </label>
-              <input
+              <LanguageDropdown
                 v-model="formData.language"
-                type="text"
-                placeholder="e.g., Italian"
-                class="input input-bordered"
-                :class="{ 'input-error': errors.language }"
+                placeholder="Select target language"
+                required
               />
               <div v-if="errors.language" class="label">
                 <span class="label-text-alt text-error">{{ errors.language }}</span>
@@ -126,6 +124,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 

@@ -12,7 +12,7 @@
       >
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-1">
-            <span class="badge badge-outline">{{ example.language }}</span>
+            <LanguageDisplay :language-code="example.language" compact />
             <span class="font-medium">{{ example.content || 'No content' }}</span>
           </div>
           <div v-if="example.translation" class="text-sm text-gray-600">
@@ -35,11 +35,11 @@
         <label class="label">
           <span class="label-text">Language</span>
         </label>
-        <input
+        <LanguageDropdown
           v-model="newExample.language"
-          type="text"
-          placeholder="e.g., Spanish"
-          class="input input-bordered input-sm"
+          placeholder="Select target language"
+          required
+          size="sm"
         />
       </div>
       
@@ -87,6 +87,8 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { ExampleData } from '@/entities/examples/ExampleData';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 
 const props = defineProps<{
   goal: GoalData;

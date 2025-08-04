@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between p-3 bg-base-200 rounded-lg">
     <div class="flex-1 cursor-pointer" @click="$emit('edit')">
       <div class="flex items-center gap-2 mb-2">
-        <span class="badge badge-outline">{{ factCard.language }}</span>
+        <LanguageDisplay :language-code="factCard.language" compact />
         <span v-if="factCard.priority" class="badge badge-secondary">P{{ factCard.priority }}</span>
         <span v-if="factCard.doNotPractice" class="badge badge-warning">Excluded</span>
       </div>
@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
 import type { FactCardData } from './FactCardData';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 
 defineProps<{
   factCard: FactCardData;

@@ -12,7 +12,7 @@
       >
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-1">
-            <span class="badge badge-outline">{{ vocab.language }}</span>
+            <LanguageDisplay :language-code="vocab.language" compact />
             <span class="font-medium">{{ vocab.content || 'No content' }}</span>
           </div>
           <div class="flex gap-1">
@@ -41,11 +41,11 @@
         <label class="label">
           <span class="label-text">Language</span>
         </label>
-        <input
+        <LanguageDropdown
           v-model="newVocab.language"
-          type="text"
-          placeholder="e.g., Spanish"
-          class="input input-bordered input-sm"
+          placeholder="Select target language"
+          required
+          size="sm"
         />
       </div>
       
@@ -94,6 +94,8 @@ import type { GoalData } from '@/entities/goals/GoalData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDisplay from '@/shared/LanguageDisplay.vue';
 
 const props = defineProps<{
   goal: GoalData;

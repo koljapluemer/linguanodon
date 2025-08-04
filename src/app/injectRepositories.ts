@@ -4,6 +4,7 @@ import { GoalRepo } from '@/entities/goals/GoalRepo';
 import { NoteRepo } from '@/entities/notes/NoteRepo';
 import { FactCardRepo } from '@/entities/factCards/FactCardRepo';
 import { ResourceRepo } from '@/entities/resources/ResourceRepo';
+import { LanguageRepo } from '@/entities/languages/LanguageRepo';
 
 export function setupRepositories() {
   // Create repository instances
@@ -13,6 +14,7 @@ export function setupRepositories() {
   const noteRepo = new NoteRepo();
   const factCardRepo = new FactCardRepo();
   const resourceRepo = new ResourceRepo();
+  const languageRepo = new LanguageRepo();
   
   return {
     vocabRepo,
@@ -20,12 +22,13 @@ export function setupRepositories() {
     goalRepo,
     noteRepo,
     factCardRepo,
-    resourceRepo
+    resourceRepo,
+    languageRepo
   };
 }
 
 export function provideRepositories(app: { provide: (key: string, value: unknown) => void }) {
-  const { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo } = setupRepositories();
+  const { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, languageRepo } = setupRepositories();
   
   app.provide('vocabRepo', vocabRepo);
   app.provide('exampleRepo', exampleRepo);
@@ -33,6 +36,7 @@ export function provideRepositories(app: { provide: (key: string, value: unknown
   app.provide('noteRepo', noteRepo);
   app.provide('factCardRepo', factCardRepo);
   app.provide('resourceRepo', resourceRepo);
+  app.provide('languageRepo', languageRepo);
   
-  return { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo };
+  return { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, languageRepo };
 }
