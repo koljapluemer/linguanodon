@@ -10,4 +10,5 @@
 
 <script setup lang="ts">
 import RemoteResourceSetsWidget from '@/widgets/remote-resource-sets/RemoteResourceSetsWidget.vue';
+
 </script>

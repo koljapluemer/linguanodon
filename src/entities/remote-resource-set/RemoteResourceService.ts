@@ -23,9 +23,7 @@ export class RemoteResourceService {
       const data = await response.json();
       return {
         name,
-        resources: data.resources || [],
-        isUserCreated: false,
-        lastDownloadedAt: null
+        resources: data.resources || []
       };
     } catch (error) {
       console.error(`Failed to fetch resource set ${name} for ${languageCode}:`, error);

@@ -49,8 +49,8 @@ async function downloadResourceSet(name: string) {
       const resourceData: Partial<ResourceData> = {
         language: remoteResource.language,
         priority: remoteResource.priority,
-        title: `Resource from ${name}`,
-        prompt: 'Extract important words, examples and facts from the resource',
+        title: remoteResource.title,
+        prompt: remoteResource.prompt,
         taskType: 'resource',
         isUserCreated: false,
         lastDownloadedAt: new Date(),

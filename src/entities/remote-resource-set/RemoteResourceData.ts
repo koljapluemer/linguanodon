@@ -1,11 +1,11 @@
-import type { LocalObject } from "@/shared/LocalObject";
-
 export interface RemoteResource {
   language: string;
   priority: number;
+  title: string;
+  prompt: string;
 }
 
-export interface RemoteResourceSet extends LocalObject {
+export interface RemoteResourceSet {
   name: string;
   resources: RemoteResource[];
 }
