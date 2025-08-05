@@ -1,0 +1,203 @@
+{
+  "name": "Common English Sentences",
+  "resources": [
+    {
+      "language": "apc",
+      "priority": 1,
+      "title": "Asking for and giving opinions",
+      "prompt": "Check out this resource about 'Asking for and giving opinions' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 2,
+      "title": "Explaining and justifying",
+      "prompt": "Check out this resource about 'Explaining and justifying' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 3,
+      "title": "Asking for",
+      "prompt": "Check out this resource about 'Asking for' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 4,
+      "title": "Giving clarifications",
+      "prompt": "Check out this resource about 'Giving clarifications' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 5,
+      "title": "Expressing agreement",
+      "prompt": "Check out this resource about 'Expressing agreement' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 6,
+      "title": "disagreement",
+      "prompt": "Check out this resource about 'disagreement' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 7,
+      "title": "Interrupting",
+      "prompt": "Check out this resource about 'Interrupting' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 8,
+      "title": "Describing people",
+      "prompt": "Check out this resource about 'Describing people' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 9,
+      "title": "Introducing oneself and giving personal info",
+      "prompt": "Check out this resource about 'Introducing oneself and giving personal info' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 10,
+      "title": "Talking about likes",
+      "prompt": "Check out this resource about 'Talking about likes' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 11,
+      "title": "dislikes",
+      "prompt": "Check out this resource about 'dislikes' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 12,
+      "title": "Talking about interests",
+      "prompt": "Check out this resource about 'Talking about interests' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 13,
+      "title": "Expressing preferences",
+      "prompt": "Check out this resource about 'Expressing preferences' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 14,
+      "title": "Making complaints",
+      "prompt": "Check out this resource about 'Making complaints' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 15,
+      "title": "Giving warnings",
+      "prompt": "Check out this resource about 'Giving warnings' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 16,
+      "title": "Asking for advice",
+      "prompt": "Check out this resource about 'Asking for advice' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 17,
+      "title": "Giving advice",
+      "prompt": "Check out this resource about 'Giving advice' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 18,
+      "title": "Asking for more detailed information",
+      "prompt": "Check out this resource about 'Asking for more detailed information' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 19,
+      "title": "Making suggestions",
+      "prompt": "Check out this resource about 'Making suggestions' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 20,
+      "title": "responding to suggestions - accepting & declining",
+      "prompt": "Check out this resource about 'responding to suggestions - accepting & declining' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 21,
+      "title": "Making plans",
+      "prompt": "Check out this resource about 'Making plans' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 22,
+      "title": "Making proposals",
+      "prompt": "Check out this resource about 'Making proposals' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 23,
+      "title": "talking in favour",
+      "prompt": "Check out this resource about 'talking in favour' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 24,
+      "title": "against a proposal",
+      "prompt": "Check out this resource about 'against a proposal' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 25,
+      "title": "Making predictions",
+      "prompt": "Check out this resource about 'Making predictions' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 26,
+      "title": "Expressing degrees of certainty and uncertainty",
+      "prompt": "Check out this resource about 'Expressing degrees of certainty and uncertainty' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 27,
+      "title": "Asking for descriptions",
+      "prompt": "Check out this resource about 'Asking for descriptions' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 28,
+      "title": "Giving descriptions",
+      "prompt": "Check out this resource about 'Giving descriptions' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 29,
+      "title": "Making comparisons",
+      "prompt": "Check out this resource about 'Making comparisons' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 30,
+      "title": "Making generalizations",
+      "prompt": "Check out this resource about 'Making generalizations' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 31,
+      "title": "Expressing disappointment",
+      "prompt": "Check out this resource about 'Expressing disappointment' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 32,
+      "title": "EFL ESL Invitation phrases",
+      "prompt": "Check out this resource about 'EFL ESL Invitation phrases' and learn useful English expressions for this topic."
+    },
+    {
+      "language": "apc",
+      "priority": 33,
+      "title": "Small talk phrases",
+      "prompt": "Check out this resource about 'Small talk phrases' and learn useful English expressions for this topic."
+    }
+  ]
+}
