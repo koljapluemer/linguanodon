@@ -17,7 +17,6 @@ const addLanguageSelected = ref<{ code: string; name: string; emoji?: string } |
 const addLanguageSaving = ref(false);
 const showDropdown = ref(false);
 
-const activeLanguages = computed(() => userLanguages.value.filter(lang => lang.isActive));
 
 async function loadLanguages() {
   loading.value = true;
