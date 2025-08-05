@@ -37,7 +37,7 @@ export class LanguageRepo implements LanguageRepoContract {
   }
 
   async delete(code: string): Promise<void> {
-    await this.storage.delete(code);
+    await this.storage.deleteLanguage(code);
   }
 
   async setActive(code: string, isActive: boolean): Promise<void> {

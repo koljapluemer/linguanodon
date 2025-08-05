@@ -102,11 +102,11 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const localFactCard = ref<Partial<FactCardData>>({ ...props.factCard });
+const localFactCard = ref({ language: '', ...props.factCard } as FactCardData);
 
 // Watch for changes in factCard prop
 watch(() => props.factCard, (newFactCard) => {
-  localFactCard.value = { ...newFactCard };
+  localFactCard.value = { language: '', ...newFactCard } as FactCardData;
 }, { deep: true });
 
 const isValid = computed(() => {

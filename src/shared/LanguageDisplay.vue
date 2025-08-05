@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
-const languageData = ref<LanguageData | null>(null);
+const languageData = ref<LanguageData | undefined>(undefined);
 const loading = ref(true);
 
 onMounted(async () => {

@@ -27,7 +27,7 @@ export class LanguageStorage extends Dexie {
     await this.languages.put(language);
   }
 
-  async delete(code: string): Promise<void> {
+  async deleteLanguage(code: string): Promise<void> {
     await this.languages.delete(code);
   }
 }

@@ -76,11 +76,11 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const localExample = ref<Partial<ExampleData>>({ ...props.example });
+const localExample = ref({ language: '', ...props.example } as ExampleData);
 
 // Watch for changes in example prop
 watch(() => props.example, (newExample) => {
-  localExample.value = { ...newExample };
+  localExample.value = { language: '', ...newExample } as ExampleData;
 }, { deep: true });
 
 const isValid = computed(() => {

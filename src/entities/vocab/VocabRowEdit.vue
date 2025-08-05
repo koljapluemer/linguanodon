@@ -78,12 +78,12 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const localVocab = ref<Partial<VocabData>>({ ...props.vocab });
+const localVocab = ref({ language: '', ...props.vocab } as VocabData);
 const translationsText = ref(Array.isArray(props.vocab.translations) ? props.vocab.translations.join(', ') : '');
 
 // Watch for changes in vocab prop
 watch(() => props.vocab, (newVocab) => {
-  localVocab.value = { ...newVocab };
+  localVocab.value = { language: '', ...newVocab } as VocabData;
   translationsText.value = Array.isArray(newVocab.translations) ? newVocab.translations.join(', ') : '';
 }, { deep: true });
 
