@@ -15,6 +15,7 @@ const error = ref<string | null>(null);
 const addLanguageSearch = ref('');
 const addLanguageSelected = ref<{ code: string; name: string; emoji?: string } | null>(null);
 const addLanguageSaving = ref(false);
+const showDropdown = ref(false);
 
 const activeLanguages = computed(() => userLanguages.value.filter(lang => lang.isActive));
 
@@ -82,6 +83,19 @@ async function removeLanguage(code: string) {
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to remove language';
   }
+}
+
+function selectLanguage(lang: { code: string; name: string; emoji?: string }) {
+  addLanguageSelected.value = lang;
+  addLanguageSearch.value = lang.name;
+  showDropdown.value = false;
+  addLanguage();
+}
+
+function hideDropdown() {
+  setTimeout(() => {
+    showDropdown.value = false;
+  }, 200);
 }
 </script>
 
@@ -152,39 +166,35 @@ async function removeLanguage(code: string) {
           </div>
 
           <!-- Add Language Section -->
-          <div class="form-control mt-4">
+          <div class="form-control mt-4 relative">
             <label class="label">
               <span class="label-text font-medium">Add Target Language</span>
             </label>
-            <div class="flex gap-2">
+            <div class="relative">
               <input 
                 v-model="addLanguageSearch" 
-                class="input input-bordered flex-1" 
-                placeholder="Search for a language..." 
+                class="input input-bordered w-full" 
+                placeholder="Type to search for a language..." 
+                @focus="showDropdown = true"
+                @blur="hideDropdown"
               />
-              <select 
-                v-model="addLanguageSelected" 
-                class="select select-bordered w-64"
-                :disabled="!addLanguageSearch || availableLanguages.length === 0"
+              <div 
+                v-if="showDropdown && addLanguageSearch && availableLanguages.length > 0" 
+                class="absolute top-full left-0 right-0 z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto"
               >
-                <option :value="null">
-                  {{ addLanguageSearch ? 'Select from results' : 'Type to search' }}
-                </option>
-                <option 
+                <button
                   v-for="lang in availableLanguages" 
-                  :key="lang.code" 
-                  :value="lang"
+                  :key="lang.code"
+                  class="w-full text-left px-4 py-2 hover:bg-base-200 focus:bg-base-200 border-none bg-transparent"
+                  @mousedown.prevent="selectLanguage(lang)"
                 >
-                  {{ lang.emoji ? `${lang.emoji} ` : '' }}{{ lang.name }} ({{ lang.code }})
-                </option>
-              </select>
-              <button 
-                class="btn btn-primary" 
-                :disabled="!addLanguageSelected || addLanguageSaving" 
-                @click="addLanguage"
-              >
-                {{ addLanguageSaving ? 'Adding...' : 'Add' }}
-              </button>
+                  <div class="flex items-center gap-2">
+                    <span v-if="lang.emoji">{{ lang.emoji }}</span>
+                    <span class="font-medium">{{ lang.name }}</span>
+                    <span class="text-sm text-base-content/60">({{ lang.code }})</span>
+                  </div>
+                </button>
+              </div>
             </div>
             <div v-if="addLanguageSearch && availableLanguages.length === 0" class="label">
               <span class="label-text-alt text-warning">No languages found matching your search.</span>
