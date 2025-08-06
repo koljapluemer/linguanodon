@@ -1,22 +1,31 @@
 <template>
-  <div class="flex items-center justify-between p-3 bg-base-200 rounded-lg">
-    <div class="flex-1 cursor-pointer" @click="$emit('edit')">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="badge badge-outline">
-          <LanguageDisplay :language-code="vocab.language" compact />
-        </span>
-        <span class="font-medium">{{ vocab.content }}</span>
-      </div>
-      <div class="text-sm text-base-content/70">
-        {{ vocab.translations.join(', ') }}
-      </div>
+  <div class="flex items-center gap-4 p-3 bg-base-200 rounded-lg cursor-pointer" @click="$emit('edit')">
+    <!-- Language -->
+    <div class="w-32">
+      <span class="badge badge-outline">
+        <LanguageDisplay :language-code="vocab.language" compact />
+      </span>
     </div>
-    <button
-      class="btn btn-sm btn-ghost text-error"
-      @click="$emit('delete')"
-    >
-      <X class="w-4 h-4" />
-    </button>
+
+    <!-- Content -->
+    <div class="flex-1">
+      <span class="font-medium">{{ vocab.content || '...' }}</span>
+    </div>
+
+    <!-- Translations -->
+    <div class="flex-1 font-medium">
+      {{ vocab.translations.join(', ') || '(no translations)' }}
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-2">
+      <button
+        class="btn btn-sm btn-ghost text-error"
+        @click.stop="$emit('delete')"
+      >
+        <X class="w-4 h-4" />
+      </button>
+    </div>
   </div>
 </template>
 
