@@ -13,6 +13,7 @@
       <FactCardRowEdit
         v-else
         :factCard="factCard"
+        :default-language="defaultLanguage"
         @save="saveFactCard(index, $event)"
         @cancel="cancelEditing"
       />
@@ -22,6 +23,7 @@
     <FactCardRowEdit
       :factCard="newFactCard"
       :is-new="true"
+      :default-language="defaultLanguage"
       @save="addNewFactCard"
       @cancel="resetNewFactCard"
     />
@@ -37,6 +39,7 @@ import FactCardRowEdit from './FactCardRowEdit.vue';
 
 const props = defineProps<{
   factCardIds: string[];
+  defaultLanguage?: string;
 }>();
 
 const emit = defineEmits<{
@@ -140,7 +143,7 @@ async function addNewFactCard(factCard: FactCardData) {
 
 function resetNewFactCard() {
   newFactCard.value = {
-    language: '',
+    language: props.defaultLanguage || '',
     front: '',
     back: ''
   };

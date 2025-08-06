@@ -2,6 +2,7 @@
   <div class="space-y-6">
     <VocabGroupForm
       :vocab-ids="vocabIds"
+      :default-language="defaultLanguage"
       @update:vocab-ids="handleVocabUpdate"
     />
   </div>
@@ -23,12 +24,14 @@ if (!resourceRepo) {
 }
 
 const vocabIds = ref<string[]>([]);
+const defaultLanguage = ref<string>('');
 
 async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
     vocabIds.value = [...resource.extractedVocab];
+    defaultLanguage.value = resource.language;
   }
 }
 

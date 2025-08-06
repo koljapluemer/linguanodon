@@ -12,6 +12,7 @@
             placeholder="Select target language"
             required
             size="sm"
+            :default-language="defaultLanguage"
           />
         </div>
 
@@ -95,6 +96,7 @@ import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 const props = defineProps<{
   factCard: Partial<FactCardData>;
   isNew?: boolean;
+  defaultLanguage?: string;
 }>();
 
 const emit = defineEmits<{
@@ -102,11 +104,17 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const localFactCard = ref({ language: '', ...props.factCard } as FactCardData);
+const localFactCard = ref({ 
+  language: props.factCard.language || (props.isNew ? props.defaultLanguage : '') || '', 
+  ...props.factCard 
+} as FactCardData);
 
 // Watch for changes in factCard prop
 watch(() => props.factCard, (newFactCard) => {
-  localFactCard.value = { language: '', ...newFactCard } as FactCardData;
+  localFactCard.value = { 
+    language: newFactCard.language || (props.isNew ? props.defaultLanguage : '') || '', 
+    ...newFactCard 
+  } as FactCardData;
 }, { deep: true });
 
 const isValid = computed(() => {

@@ -13,6 +13,7 @@
       <VocabRowEdit
         v-else
         :vocab="vocab"
+        :default-language="defaultLanguage"
         @save="saveVocab(index, $event)"
         @cancel="cancelEditing"
       />
@@ -22,6 +23,7 @@
     <VocabRowEdit
       :vocab="newVocab"
       :is-new="true"
+      :default-language="defaultLanguage"
       @save="addNewVocab"
       @cancel="resetNewVocab"
     />
@@ -37,6 +39,7 @@ import VocabRowEdit from './VocabRowEdit.vue';
 
 const props = defineProps<{
   vocabIds: string[];
+  defaultLanguage?: string;
 }>();
 
 const emit = defineEmits<{
@@ -141,7 +144,7 @@ async function addNewVocab(vocab: VocabData) {
 function resetNewVocab() {
   newVocab.value = {
     content: '',
-    language: '',
+    language: props.defaultLanguage || '',
     translations: []
   };
 }

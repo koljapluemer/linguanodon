@@ -13,6 +13,7 @@
       <ExampleRowEdit
         v-else
         :example="example"
+        :default-language="defaultLanguage"
         @save="saveExample(index, $event)"
         @cancel="cancelEditing"
       />
@@ -22,6 +23,7 @@
     <ExampleRowEdit
       :example="newExample"
       :is-new="true"
+      :default-language="defaultLanguage"
       @save="addNewExample"
       @cancel="resetNewExample"
     />
@@ -37,6 +39,7 @@ import ExampleRowEdit from './ExampleRowEdit.vue';
 
 const props = defineProps<{
   exampleIds: string[];
+  defaultLanguage?: string;
 }>();
 
 const emit = defineEmits<{
@@ -140,7 +143,7 @@ async function addNewExample(example: ExampleData) {
 
 function resetNewExample() {
   newExample.value = {
-    language: '',
+    language: props.defaultLanguage || '',
     content: '',
     translation: ''
   };

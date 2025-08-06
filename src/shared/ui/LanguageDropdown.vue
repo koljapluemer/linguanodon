@@ -9,6 +9,7 @@ interface Props {
   required?: boolean;
   size?: 'sm' | 'md' | 'lg';
   id?: string;
+  defaultLanguage?: string;
 }
 
 interface Emits {
@@ -38,7 +39,7 @@ onMounted(async () => {
 });
 
 const selectedLanguage = computed({
-  get: () => props.modelValue,
+  get: () => props.modelValue || props.defaultLanguage || '',
   set: (value: string) => emit('update:modelValue', value)
 });
 

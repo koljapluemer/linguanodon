@@ -2,6 +2,7 @@
   <div class="space-y-6">
     <FactCardGroupForm
       :fact-card-ids="factCardIds"
+      :default-language="defaultLanguage"
       @update:fact-card-ids="handleFactCardsUpdate"
     />
   </div>
@@ -23,12 +24,14 @@ if (!resourceRepo) {
 }
 
 const factCardIds = ref<string[]>([]);
+const defaultLanguage = ref<string>('');
 
 async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
     factCardIds.value = [...resource.extractedFactCards];
+    defaultLanguage.value = resource.language;
   }
 }
 

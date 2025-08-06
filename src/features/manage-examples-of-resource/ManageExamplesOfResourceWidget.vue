@@ -2,6 +2,7 @@
   <div class="space-y-6">
     <ExampleGroupForm
       :example-ids="exampleIds"
+      :default-language="defaultLanguage"
       @update:example-ids="handleExamplesUpdate"
     />
   </div>
@@ -23,12 +24,14 @@ if (!resourceRepo) {
 }
 
 const exampleIds = ref<string[]>([]);
+const defaultLanguage = ref<string>('');
 
 async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
     exampleIds.value = [...resource.extractedExamples];
+    defaultLanguage.value = resource.language;
   }
 }
 

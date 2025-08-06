@@ -25,6 +25,7 @@
             placeholder="Select language"
             size="sm"
             required
+            :default-language="defaultLanguage"
           />
         </div>
 
@@ -71,6 +72,7 @@ import { createEmptyCard } from 'ts-fsrs';
 const props = defineProps<{
   vocab: Partial<VocabData>;
   isNew?: boolean;
+  defaultLanguage?: string;
 }>();
 
 const emit = defineEmits<{
@@ -78,12 +80,18 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const localVocab = ref({ language: '', ...props.vocab } as VocabData);
+const localVocab = ref({ 
+  language: props.vocab.language || (props.isNew ? props.defaultLanguage : '') || '', 
+  ...props.vocab 
+} as VocabData);
 const translationsText = ref(Array.isArray(props.vocab.translations) ? props.vocab.translations.join(', ') : '');
 
 // Watch for changes in vocab prop
 watch(() => props.vocab, (newVocab) => {
-  localVocab.value = { language: '', ...newVocab } as VocabData;
+  localVocab.value = { 
+    language: newVocab.language || (props.isNew ? props.defaultLanguage : '') || '', 
+    ...newVocab 
+  } as VocabData;
   translationsText.value = Array.isArray(newVocab.translations) ? newVocab.translations.join(', ') : '';
 }, { deep: true });
 

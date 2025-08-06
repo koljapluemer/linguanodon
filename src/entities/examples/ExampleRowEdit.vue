@@ -12,6 +12,7 @@
             placeholder="Select target language"
             required
             size="sm"
+            :default-language="defaultLanguage"
           />
         </div>
 
@@ -69,6 +70,7 @@ import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 const props = defineProps<{
   example: Partial<ExampleData>;
   isNew?: boolean;
+  defaultLanguage?: string;
 }>();
 
 const emit = defineEmits<{
@@ -76,11 +78,17 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const localExample = ref({ language: '', ...props.example } as ExampleData);
+const localExample = ref({ 
+  language: props.example.language || (props.isNew ? props.defaultLanguage : '') || '', 
+  ...props.example 
+} as ExampleData);
 
 // Watch for changes in example prop
 watch(() => props.example, (newExample) => {
-  localExample.value = { language: '', ...newExample } as ExampleData;
+  localExample.value = { 
+    language: newExample.language || (props.isNew ? props.defaultLanguage : '') || '', 
+    ...newExample 
+  } as ExampleData;
 }, { deep: true });
 
 const isValid = computed(() => {
