@@ -29,8 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, inject } from 'vue';
 import type { ExampleData } from './ExampleData';
+import type { ExampleRepoContract } from './ExampleRepoContract';
 import ExampleRowDisplay from './ExampleRowDisplay.vue';
 import ExampleRowEdit from './ExampleRowEdit.vue';
 
@@ -42,6 +43,11 @@ const emit = defineEmits<{
   'update:exampleIds': [string[]];
 }>();
 
+const exampleRepo = inject<ExampleRepoContract>('exampleRepo');
+if (!exampleRepo) {
+  console.error('exampleRepo not provided');
+}
+
 const exampleItems = ref<ExampleData[]>([]);
 const editingIndex = ref<number | null>(null);
 const newExample = ref<Partial<ExampleData>>({
@@ -52,32 +58,25 @@ const newExample = ref<Partial<ExampleData>>({
 
 // Load example items when exampleIds change
 watch(() => props.exampleIds, async () => {
-  // For now, create mock data - in real implementation, load from example repo
-  exampleItems.value = props.exampleIds.map((id, index) => ({
-    uid: id,
-    language: 'Italian',
-    content: `Example sentence ${index + 1}`,
-    translation: `Translation ${index + 1}`,
-    associatedVocab: [],
-    associatedTasks: [],
-    notes: [],
-    links: [],
-    progress: {
-      due: new Date(),
-      stability: 2.5,
-      difficulty: 5.0,
-      elapsed_days: 0,
-      scheduled_days: 1,
-      learning_steps: 0,
-      reps: 0,
-      lapses: 0,
-      state: 0,
-      streak: 0,
-      level: -1
-    },
-    isUserCreated: true,
-    lastDownloadedAt: null
-  }));
+  if (!exampleRepo) {
+    exampleItems.value = [];
+    return;
+  }
+
+  if (props.exampleIds.length === 0) {
+    exampleItems.value = [];
+    return;
+  }
+
+  try {
+    const loadedExamples = await Promise.all(
+      props.exampleIds.map(id => exampleRepo.getExampleById(id))
+    );
+    exampleItems.value = loadedExamples.filter((example): example is ExampleData => example !== undefined);
+  } catch (error) {
+    console.error('Failed to load example items:', error);
+    exampleItems.value = [];
+  }
 }, { immediate: true });
 
 function startEditing(index: number) {
@@ -88,24 +87,55 @@ function cancelEditing() {
   editingIndex.value = null;
 }
 
-function saveExample(index: number, updatedExample: ExampleData) {
-  exampleItems.value[index] = updatedExample;
-  editingIndex.value = null;
-  // Auto-save - emit the updated example IDs
-  emit('update:exampleIds', exampleItems.value.map(e => e.uid));
+async function saveExample(index: number, updatedExample: ExampleData) {
+  if (!exampleRepo) {
+    console.error('exampleRepo not available');
+    return;
+  }
+  
+  try {
+    await exampleRepo.saveExample(updatedExample);
+    exampleItems.value[index] = updatedExample;
+    editingIndex.value = null;
+    // Auto-save - emit the updated example IDs
+    emit('update:exampleIds', exampleItems.value.map(e => e.uid));
+  } catch (error) {
+    console.error('Failed to save example:', error);
+  }
 }
 
-function deleteExample(index: number) {
-  exampleItems.value.splice(index, 1);
-  // Auto-save - emit the updated example IDs
-  emit('update:exampleIds', exampleItems.value.map(e => e.uid));
+async function deleteExample(index: number) {
+  if (!exampleRepo) {
+    console.error('exampleRepo not available');
+    return;
+  }
+  
+  const exampleToDelete = exampleItems.value[index];
+  try {
+    await exampleRepo.deleteExample(exampleToDelete.uid);
+    exampleItems.value.splice(index, 1);
+    // Auto-save - emit the updated example IDs
+    emit('update:exampleIds', exampleItems.value.map(e => e.uid));
+  } catch (error) {
+    console.error('Failed to delete example:', error);
+  }
 }
 
-function addNewExample(example: ExampleData) {
-  exampleItems.value.push(example);
-  resetNewExample();
-  // Auto-save - emit the updated example IDs
-  emit('update:exampleIds', exampleItems.value.map(e => e.uid));
+async function addNewExample(example: ExampleData) {
+  if (!exampleRepo) {
+    console.error('exampleRepo not available');
+    return;
+  }
+  
+  try {
+    const savedExample = await exampleRepo.saveExample(example);
+    exampleItems.value.push(savedExample);
+    resetNewExample();
+    // Auto-save - emit the updated example IDs
+    emit('update:exampleIds', exampleItems.value.map(e => e.uid));
+  } catch (error) {
+    console.error('Failed to add example:', error);
+  }
 }
 
 function resetNewExample() {

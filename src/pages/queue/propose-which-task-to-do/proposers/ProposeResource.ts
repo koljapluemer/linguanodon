@@ -9,7 +9,6 @@ export class ProposeResource implements TaskProposerContract {
 
   async proposeTask(): Promise<RuntimeTask | null> {
     if (!this.resourceRepo) {
-      console.warn('ResourceRepo not available for ProposeResource');
       return null;
     }
 

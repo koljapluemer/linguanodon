@@ -29,11 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, inject } from 'vue';
 import type { FactCardData } from './FactCardData';
+import type { FactCardRepoContract } from './FactCardRepoContract';
 import FactCardRowDisplay from './FactCardRowDisplay.vue';
 import FactCardRowEdit from './FactCardRowEdit.vue';
-import { createEmptyCard } from 'ts-fsrs';
 
 const props = defineProps<{
   factCardIds: string[];
@@ -42,6 +42,11 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:factCardIds': [string[]];
 }>();
+
+const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
+if (!factCardRepo) {
+  console.error('factCardRepo not provided');
+}
 
 const factCardItems = ref<FactCardData[]>([]);
 const editingIndex = ref<number | null>(null);
@@ -53,23 +58,25 @@ const newFactCard = ref<Partial<FactCardData>>({
 
 // Load fact card items when factCardIds change
 watch(() => props.factCardIds, async () => {
-  // For now, create mock data - in real implementation, load from fact card repo
-  factCardItems.value = props.factCardIds.map((id, index) => ({
-    uid: id,
-    language: 'Italian',
-    front: `Fact card front ${index + 1}`,
-    back: `Fact card back ${index + 1}`,
-    priority: 0,
-    doNotPractice: false,
-    notes: [],
-    progress: {
-      ...createEmptyCard(),
-      streak: 0,
-      level: -1
-    },
-    isUserCreated: true,
-    lastDownloadedAt: null
-  }));
+  if (!factCardRepo) {
+    factCardItems.value = [];
+    return;
+  }
+
+  if (props.factCardIds.length === 0) {
+    factCardItems.value = [];
+    return;
+  }
+
+  try {
+    const loadedFactCards = await Promise.all(
+      props.factCardIds.map(id => factCardRepo.getFactCardByUID(id))
+    );
+    factCardItems.value = loadedFactCards.filter((factCard): factCard is FactCardData => factCard !== undefined);
+  } catch (error) {
+    console.error('Failed to load fact card items:', error);
+    factCardItems.value = [];
+  }
 }, { immediate: true });
 
 function startEditing(index: number) {
@@ -80,24 +87,55 @@ function cancelEditing() {
   editingIndex.value = null;
 }
 
-function saveFactCard(index: number, updatedFactCard: FactCardData) {
-  factCardItems.value[index] = updatedFactCard;
-  editingIndex.value = null;
-  // Auto-save - emit the updated fact card IDs
-  emit('update:factCardIds', factCardItems.value.map(f => f.uid));
+async function saveFactCard(index: number, updatedFactCard: FactCardData) {
+  if (!factCardRepo) {
+    console.error('factCardRepo not available');
+    return;
+  }
+  
+  try {
+    await factCardRepo.saveFactCard(updatedFactCard);
+    factCardItems.value[index] = updatedFactCard;
+    editingIndex.value = null;
+    // Auto-save - emit the updated fact card IDs
+    emit('update:factCardIds', factCardItems.value.map(f => f.uid));
+  } catch (error) {
+    console.error('Failed to save fact card:', error);
+  }
 }
 
-function deleteFactCard(index: number) {
-  factCardItems.value.splice(index, 1);
-  // Auto-save - emit the updated fact card IDs
-  emit('update:factCardIds', factCardItems.value.map(f => f.uid));
+async function deleteFactCard(index: number) {
+  if (!factCardRepo) {
+    console.error('factCardRepo not available');
+    return;
+  }
+  
+  const factCardToDelete = factCardItems.value[index];
+  try {
+    await factCardRepo.deleteFactCard(factCardToDelete.uid);
+    factCardItems.value.splice(index, 1);
+    // Auto-save - emit the updated fact card IDs
+    emit('update:factCardIds', factCardItems.value.map(f => f.uid));
+  } catch (error) {
+    console.error('Failed to delete fact card:', error);
+  }
 }
 
-function addNewFactCard(factCard: FactCardData) {
-  factCardItems.value.push(factCard);
-  resetNewFactCard();
-  // Auto-save - emit the updated fact card IDs
-  emit('update:factCardIds', factCardItems.value.map(f => f.uid));
+async function addNewFactCard(factCard: FactCardData) {
+  if (!factCardRepo) {
+    console.error('factCardRepo not available');
+    return;
+  }
+  
+  try {
+    const savedFactCard = await factCardRepo.saveFactCard(factCard);
+    factCardItems.value.push(savedFactCard);
+    resetNewFactCard();
+    // Auto-save - emit the updated fact card IDs
+    emit('update:factCardIds', factCardItems.value.map(f => f.uid));
+  } catch (error) {
+    console.error('Failed to add fact card:', error);
+  }
 }
 
 function resetNewFactCard() {
