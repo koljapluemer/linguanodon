@@ -14,13 +14,12 @@
     <div v-else class="space-y-6">
       <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
-          <h2 class="card-title">Basic Information</h2>
-          
           <div class="space-y-6">
             <!-- Title -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Title *</label>
+              <label for="title" class="text-sm font-medium block">Title *</label>
               <input
+                id="title"
                 v-model="formData.title"
                 type="text"
                 placeholder="Resource title"
@@ -32,9 +31,10 @@
 
             <!-- Language -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Language *</label>
+              <label for="language" class="text-sm font-medium block">Language *</label>
               <div class="block">
                 <LanguageDropdown
+                  id="language"
                   v-model="formData.language"
                   placeholder="Select target language"
                   required
@@ -45,8 +45,9 @@
 
             <!-- Priority -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Priority</label>
+              <label for="priority" class="text-sm font-medium block">Priority</label>
               <input
+                id="priority"
                 v-model.number="formData.priority"
                 type="number"
                 placeholder="0"
@@ -56,8 +57,9 @@
 
             <!-- Prompt -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Prompt</label>
+              <label for="prompt" class="text-sm font-medium block">Prompt</label>
               <textarea
+                id="prompt"
                 v-model="formData.prompt"
                 placeholder="Task prompt for extracting content from this resource"
                 class="textarea textarea-bordered w-full block"
@@ -67,8 +69,9 @@
 
             <!-- Content -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Content</label>
+              <label for="content" class="text-sm font-medium block">Content</label>
               <textarea
+                id="content"
                 v-model="formData.content"
                 placeholder="Main content of the resource (text, article, etc.)"
                 class="textarea textarea-bordered w-full block"
@@ -78,8 +81,9 @@
 
             <!-- Link URL -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Link URL</label>
+              <label for="linkUrl" class="text-sm font-medium block">Link URL</label>
               <input
+                id="linkUrl"
                 v-model="formData.linkUrl"
                 type="url"
                 placeholder="https://example.com"
@@ -89,8 +93,9 @@
 
             <!-- Link Label -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Link Label</label>
+              <label for="linkLabel" class="text-sm font-medium block">Link Label</label>
               <input
+                id="linkLabel"
                 v-model="formData.linkLabel"
                 type="text"
                 placeholder="Link label (optional)"
@@ -100,8 +105,9 @@
 
             <!-- Extra Info -->
             <div class="space-y-2">
-              <label class="text-sm font-medium block">Extra Information</label>
+              <label for="extraInfo" class="text-sm font-medium block">Extra Information</label>
               <textarea
+                id="extraInfo"
                 v-model="formData.extraInfo"
                 placeholder="Additional context or information about this resource"
                 class="textarea textarea-bordered w-full block"

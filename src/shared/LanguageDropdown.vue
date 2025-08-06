@@ -8,6 +8,7 @@ interface Props {
   placeholder?: string;
   required?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  id?: string;
 }
 
 interface Emits {
@@ -52,6 +53,7 @@ const sizeClass = computed(() => {
 
 <template>
   <select 
+    :id="id"
     v-model="selectedLanguage"
     class="select select-bordered w-full"
     :class="sizeClass"
