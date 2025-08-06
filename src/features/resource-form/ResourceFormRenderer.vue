@@ -1,17 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto p-4">
-    <div class="mb-6">
-      <h1 class="text-3xl font-bold mb-2">
-        {{ isNew ? 'Add New Resource' : 'Edit Resource' }}
-      </h1>
-      <div class="text-sm breadcrumbs">
-        <ul>
-          <li><router-link to="/resources">Resources</router-link></li>
-          <li>{{ isNew ? 'New' : 'Edit' }}</li>
-        </ul>
-      </div>
-    </div>
-
+  <div class="max-w-4xl mx-auto">
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center p-8">
       <span class="loading loading-spinner loading-lg"></span>
@@ -28,106 +16,95 @@
         <div class="card-body">
           <h2 class="card-title">Basic Information</h2>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-6">
             <!-- Title -->
-            <div class="form-control md:col-span-2">
-              <label class="label">
-                <span class="label-text">Title *</span>
-              </label>
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Title *</label>
               <input
                 v-model="formData.title"
                 type="text"
                 placeholder="Resource title"
-                class="input input-bordered"
+                class="input input-bordered w-full block"
                 :class="{ 'input-error': errors.title }"
               />
-              <div v-if="errors.title" class="label">
-                <span class="label-text-alt text-error">{{ errors.title }}</span>
-              </div>
+              <div v-if="errors.title" class="text-sm text-error">{{ errors.title }}</div>
             </div>
 
             <!-- Language -->
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Language *</span>
-              </label>
-              <LanguageDropdown
-                v-model="formData.language"
-                placeholder="Select target language"
-                required
-              />
-              <div v-if="errors.language" class="label">
-                <span class="label-text-alt text-error">{{ errors.language }}</span>
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Language *</label>
+              <div class="block">
+                <LanguageDropdown
+                  v-model="formData.language"
+                  placeholder="Select target language"
+                  required
+                />
               </div>
+              <div v-if="errors.language" class="text-sm text-error">{{ errors.language }}</div>
             </div>
 
             <!-- Priority -->
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Priority</span>
-              </label>
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Priority</label>
               <input
                 v-model.number="formData.priority"
                 type="number"
                 placeholder="0"
-                class="input input-bordered"
+                class="input input-bordered w-24 block"
               />
             </div>
 
             <!-- Prompt -->
-            <div class="form-control md:col-span-2">
-              <label class="label">
-                <span class="label-text">Prompt</span>
-              </label>
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Prompt</label>
               <textarea
                 v-model="formData.prompt"
                 placeholder="Task prompt for extracting content from this resource"
-                class="textarea textarea-bordered"
+                class="textarea textarea-bordered w-full block"
                 rows="3"
               ></textarea>
             </div>
 
             <!-- Content -->
-            <div class="form-control md:col-span-2">
-              <label class="label">
-                <span class="label-text">Content</span>
-              </label>
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Content</label>
               <textarea
                 v-model="formData.content"
                 placeholder="Main content of the resource (text, article, etc.)"
-                class="textarea textarea-bordered"
+                class="textarea textarea-bordered w-full block"
                 rows="6"
               ></textarea>
             </div>
 
-            <!-- Link -->
-            <div class="form-control md:col-span-2">
-              <label class="label">
-                <span class="label-text">Link</span>
-              </label>
+            <!-- Link URL -->
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Link URL</label>
               <input
                 v-model="formData.linkUrl"
                 type="url"
                 placeholder="https://example.com"
-                class="input input-bordered mb-2"
+                class="input input-bordered w-full block"
               />
+            </div>
+
+            <!-- Link Label -->
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Link Label</label>
               <input
                 v-model="formData.linkLabel"
                 type="text"
                 placeholder="Link label (optional)"
-                class="input input-bordered"
+                class="input input-bordered w-64 block"
               />
             </div>
 
             <!-- Extra Info -->
-            <div class="form-control md:col-span-2">
-              <label class="label">
-                <span class="label-text">Extra Information</span>
-              </label>
+            <div class="space-y-2">
+              <label class="text-sm font-medium block">Extra Information</label>
               <textarea
                 v-model="formData.extraInfo"
                 placeholder="Additional context or information about this resource"
-                class="textarea textarea-bordered"
+                class="textarea textarea-bordered w-full block"
                 rows="4"
               ></textarea>
             </div>

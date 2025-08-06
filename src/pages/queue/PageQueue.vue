@@ -81,17 +81,6 @@ const handleTaskFinished = async () => {
 
       <!-- Vocab Exercise -->
       <div v-else-if="state.status === 'vocab'">
-        <div class="mb-4 text-center">
-          <div class="breadcrumbs">
-            <ul>
-              <li>Queue</li>
-              <li>Vocabulary Practice</li>
-            </ul>
-          </div>
-          <div class="text-sm text-base-content/70">
-            {{ state.batchIndex }} of {{ state.batchSize }} in current batch
-          </div>
-        </div>
         
         <PracticeVocabWidget 
           :key="state.vocab.uid"
@@ -102,15 +91,6 @@ const handleTaskFinished = async () => {
 
       <!-- Task -->
       <div v-else-if="state.status === 'task'">
-        <div class="mb-4 text-center">
-          <div class="breadcrumbs">
-            <ul>
-              <li>Queue</li>
-              <li>Task</li>
-            </ul>
-          </div>
-        </div>
-        
         <MetaTaskRenderer 
           :task="state.task"
           @finished="handleTaskFinished"
@@ -124,17 +104,6 @@ const handleTaskFinished = async () => {
           Refresh
         </button>
       </div>
-
-      <!-- Debug Info (in development) -->
-      <!-- Uncomment during development if needed -->
-      <!-- 
-      <div class="mt-8 p-4 bg-base-300 rounded-lg text-xs">
-        <details>
-          <summary class="cursor-pointer">Debug Queue State</summary>
-          <pre class="mt-2">{{ JSON.stringify({ state, preloaderStatus }, null, 2) }}</pre>
-        </details>
-      </div>
-      -->
     </div>
   </div>
 </template>

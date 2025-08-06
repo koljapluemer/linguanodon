@@ -53,7 +53,7 @@ const sizeClass = computed(() => {
 <template>
   <select 
     v-model="selectedLanguage"
-    class="select select-bordered"
+    class="select select-bordered w-full"
     :class="sizeClass"
     :required="required"
     :disabled="loading || availableLanguages.length === 0"
@@ -68,8 +68,8 @@ const sizeClass = computed(() => {
       :key="language.code" 
       :value="language.code"
     >
+      <span v-if="language.emoji" class="mr-1">{{ language.emoji }}</span>
       {{ formatLanguageDisplay(language, false) }}
-      <span v-if="language.emoji" class="ml-1">{{ language.emoji }}</span>
     </option>
   </select>
 </template>
