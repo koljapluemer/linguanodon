@@ -60,6 +60,22 @@ const handleEvaluationFinished = () => {
           </div>
         </div>
 
+        <!-- Resource Content Display -->
+        <div v-if="resource.content || resource.link" class="space-y-3">
+          <p v-if="resource.content" class="text-base-content/80">
+            {{ resource.content }}
+          </p>
+          <a 
+            v-if="resource.link"
+            :href="resource.link.url" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="link link-primary"
+          >
+            {{ resource.link.label }}
+          </a>
+        </div>
+
         <div v-if="resource.extraInfo" class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <MarkdownRenderer :content="resource.extraInfo" />
