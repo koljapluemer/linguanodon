@@ -91,7 +91,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useExampleForm } from './useExampleForm';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 
 interface Props {
   exampleId?: string;

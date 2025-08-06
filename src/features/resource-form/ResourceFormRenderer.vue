@@ -139,7 +139,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 

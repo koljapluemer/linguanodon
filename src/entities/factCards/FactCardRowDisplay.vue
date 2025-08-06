@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
 import type { FactCardData } from './FactCardData';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
 defineProps<{
   factCard: FactCardData;

@@ -126,7 +126,7 @@ import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContrac
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ExampleData } from '@/entities/examples/ExampleData';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
 const exampleRepo = inject<ExampleRepoContract>('exampleRepo');
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');

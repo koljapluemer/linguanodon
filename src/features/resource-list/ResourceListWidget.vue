@@ -96,7 +96,7 @@
 import { ref, onMounted, inject } from 'vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {

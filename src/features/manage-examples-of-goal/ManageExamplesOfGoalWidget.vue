@@ -87,8 +87,8 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { ExampleData } from '@/entities/examples/ExampleData';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
 const props = defineProps<{
   goal: GoalData;

@@ -90,7 +90,7 @@
 import { ref, computed, watch } from 'vue';
 import type { FactCardData } from './FactCardData';
 import { createEmptyCard } from 'ts-fsrs';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 
 const props = defineProps<{
   factCard: Partial<FactCardData>;

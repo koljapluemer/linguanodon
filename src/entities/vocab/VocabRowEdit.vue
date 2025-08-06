@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import type { VocabData } from './vocab/VocabData';
 import { createEmptyCard } from 'ts-fsrs';
 

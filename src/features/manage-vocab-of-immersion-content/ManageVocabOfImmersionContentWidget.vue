@@ -136,7 +136,7 @@ import { X, Check } from 'lucide-vue-next';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 
 interface Props {
   contentUid?: string;

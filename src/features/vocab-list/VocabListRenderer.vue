@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 import { Search } from 'lucide-vue-next';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 import type { VocabListItem } from './types';
 
 defineProps<{

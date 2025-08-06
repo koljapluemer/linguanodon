@@ -94,8 +94,8 @@ import type { GoalData } from '@/entities/goals/GoalData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
 const props = defineProps<{
   goal: GoalData;

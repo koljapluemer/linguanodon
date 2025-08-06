@@ -145,7 +145,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');

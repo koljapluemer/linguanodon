@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject, onMounted, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import { RemoteResourceService } from '@/entities/remote-resource-set';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';

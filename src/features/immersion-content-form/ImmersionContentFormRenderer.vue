@@ -144,7 +144,7 @@ import { ref } from 'vue';
 import { Check } from 'lucide-vue-next';
 import type { ImmersionContentFormData } from './types';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 
 defineProps<{
   formData: ImmersionContentFormData;

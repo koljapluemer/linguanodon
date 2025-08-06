@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import type { ExampleData } from './ExampleData';
-import LanguageDropdown from '@/shared/LanguageDropdown.vue';
+import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 
 const props = defineProps<{
   example: Partial<ExampleData>;

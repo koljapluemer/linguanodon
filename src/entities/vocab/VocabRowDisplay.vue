@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
-import LanguageDisplay from '@/shared/LanguageDisplay.vue';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 import type { VocabData } from './vocab/VocabData';
 
 defineProps<{
