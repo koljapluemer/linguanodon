@@ -3,6 +3,7 @@
     <VocabGroupForm
       :vocab-ids="vocabIds"
       :default-language="defaultLanguage"
+      :allow-edit-on-click="true"
       @update:vocab-ids="handleVocabUpdate"
     />
   </div>

@@ -4,18 +4,12 @@
     
     <!-- Existing vocab items -->
     <div v-for="(vocab, index) in vocabItems" :key="vocab.uid" class="space-y-2">
-      <VocabRowDisplay
-        v-if="!editingIndex || editingIndex !== index"
-        :vocab="vocab"
-        @edit="startEditing(index)"
-        @delete="deleteVocab(index)"
-      />
-      <VocabRowEdit
-        v-else
+      <VocabRowRender
         :vocab="vocab"
         :default-language="defaultLanguage"
+        :allow-edit-on-click="allowEditOnClick"
         @save="saveVocab(index, $event)"
-        @cancel="cancelEditing"
+        @delete="deleteVocab(index)"
       />
     </div>
     
@@ -34,12 +28,13 @@
 import { ref, watch, inject } from 'vue';
 import type { VocabData } from './vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';
-import VocabRowDisplay from './VocabRowDisplay.vue';
+import VocabRowRender from './VocabRowRender.vue';
 import VocabRowEdit from './VocabRowEdit.vue';
 
 const props = defineProps<{
   vocabIds: string[];
   defaultLanguage?: string;
+  allowEditOnClick?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -52,7 +47,6 @@ if (!vocabRepo) {
 }
 
 const vocabItems = ref<VocabData[]>([]);
-const editingIndex = ref<number | null>(null);
 const newVocab = ref<Partial<VocabData>>({
   content: '',
   language: '',
@@ -82,14 +76,6 @@ watch(() => props.vocabIds, async () => {
   }
 }, { immediate: true });
 
-function startEditing(index: number) {
-  editingIndex.value = index;
-}
-
-function cancelEditing() {
-  editingIndex.value = null;
-}
-
 async function saveVocab(index: number, updatedVocab: VocabData) {
   if (!vocabRepo) {
     console.error('vocabRepo not available');
@@ -97,13 +83,25 @@ async function saveVocab(index: number, updatedVocab: VocabData) {
   }
   
   try {
-    await vocabRepo.saveVocab(updatedVocab);
-    vocabItems.value[index] = updatedVocab;
-    editingIndex.value = null;
+    // Convert reactive proxy to plain object before saving to IndexedDB
+    const plainVocab = JSON.parse(JSON.stringify(updatedVocab));
+    console.log('Saving vocab:', plainVocab);
+    
+    // Use updateVocab for existing vocab (has UID and exists in list)
+    const originalVocab = vocabItems.value[index];
+    if (originalVocab && originalVocab.uid) {
+      await vocabRepo.updateVocab(plainVocab);
+    } else {
+      // Use saveVocab for new vocab
+      await vocabRepo.saveVocab(plainVocab);
+    }
+    
+    vocabItems.value[index] = plainVocab;
     // Auto-save - emit the updated vocab IDs
     emit('update:vocabIds', vocabItems.value.map(v => v.uid));
   } catch (error) {
     console.error('Failed to save vocab:', error);
+    console.error('Vocab data that failed:', JSON.parse(JSON.stringify(updatedVocab)));
   }
 }
 
@@ -131,7 +129,9 @@ async function addNewVocab(vocab: VocabData) {
   }
   
   try {
-    const savedVocab = await vocabRepo.saveVocab(vocab);
+    // Convert reactive proxy to plain object before saving to IndexedDB
+    const plainVocab = JSON.parse(JSON.stringify(vocab));
+    const savedVocab = await vocabRepo.saveVocab(plainVocab);
     vocabItems.value.push(savedVocab);
     resetNewVocab();
     // Auto-save - emit the updated vocab IDs

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-4 p-3 bg-base-200 rounded-lg cursor-pointer" @click="$emit('edit')">
+  <div class="flex items-center gap-4 p-3 bg-base-200 rounded-lg">
     <!-- Language -->
     <div class="w-32">
       <span class="badge badge-outline">
@@ -20,8 +20,15 @@
     <!-- Actions -->
     <div class="flex gap-2">
       <button
+        v-if="allowEditOnClick"
+        class="btn btn-sm btn-ghost"
+        @click="$emit('edit')"
+      >
+        <Edit class="w-4 h-4" />
+      </button>
+      <button
         class="btn btn-sm btn-ghost text-error"
-        @click.stop="$emit('delete')"
+        @click="$emit('delete')"
       >
         <X class="w-4 h-4" />
       </button>
@@ -30,12 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import { X } from 'lucide-vue-next';
+import { X, Edit } from 'lucide-vue-next';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 import type { VocabData } from './vocab/VocabData';
 
 defineProps<{
   vocab: VocabData;
+  allowEditOnClick?: boolean;
 }>();
 
 defineEmits<{
