@@ -14,7 +14,11 @@ def create_common_english_resource_set():
             "language": "apc",
             "priority": i,
             "title": entry["title"],
-            "prompt": f"Check out this resource about '{entry['title']}' and learn useful English expressions for this topic."
+            "prompt": f"Check out this resource about '{entry['title']}' and learn useful English expressions for this topic.",
+            "link": {
+                "label": entry["title"],
+                "url": entry["url"]
+            }
         }
         resources.append(resource)
     
