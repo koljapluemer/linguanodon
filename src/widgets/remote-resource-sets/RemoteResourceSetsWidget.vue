@@ -51,6 +51,8 @@ async function downloadResourceSet(name: string) {
         priority: remoteResource.priority,
         title: remoteResource.title,
         prompt: remoteResource.prompt,
+        content: remoteResource.content,
+        link: remoteResource.link,
         taskType: 'resource',
         isUserCreated: false,
         lastDownloadedAt: new Date(),

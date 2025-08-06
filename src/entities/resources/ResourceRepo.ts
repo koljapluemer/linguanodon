@@ -47,6 +47,10 @@ export class ResourceRepo implements ResourceRepoContract {
       notes: resource.notes || [],
       isImmersionContent: resource.isImmersionContent,
       
+      // Content and link fields
+      content: resource.content,
+      link: resource.link,
+      
       // TaskData fields
       taskType: resource.taskType || 'resource',
       title: resource.title,

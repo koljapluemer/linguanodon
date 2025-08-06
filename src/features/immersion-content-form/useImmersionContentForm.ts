@@ -14,6 +14,9 @@ export function useImmersionContentForm(contentUid?: string) {
     formData: {
       title: '',
       prompt: '',
+      content: '',
+      linkUrl: '',
+      linkLabel: '',
       extraInfo: '',
       language: '',
       priority: 1
@@ -152,6 +155,9 @@ export function useImmersionContentForm(contentUid?: string) {
     state.value.formData = {
       title: '',
       prompt: '',
+      content: '',
+      linkUrl: '',
+      linkLabel: '',
       extraInfo: '',
       language: '',
       priority: 1

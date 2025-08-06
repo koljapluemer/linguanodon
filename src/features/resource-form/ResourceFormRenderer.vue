@@ -87,6 +87,38 @@
               ></textarea>
             </div>
 
+            <!-- Content -->
+            <div class="form-control md:col-span-2">
+              <label class="label">
+                <span class="label-text">Content</span>
+              </label>
+              <textarea
+                v-model="formData.content"
+                placeholder="Main content of the resource (text, article, etc.)"
+                class="textarea textarea-bordered"
+                rows="6"
+              ></textarea>
+            </div>
+
+            <!-- Link -->
+            <div class="form-control md:col-span-2">
+              <label class="label">
+                <span class="label-text">Link</span>
+              </label>
+              <input
+                v-model="formData.linkUrl"
+                type="url"
+                placeholder="https://example.com"
+                class="input input-bordered mb-2"
+              />
+              <input
+                v-model="formData.linkLabel"
+                type="text"
+                placeholder="Link label (optional)"
+                class="input input-bordered"
+              />
+            </div>
+
             <!-- Extra Info -->
             <div class="form-control md:col-span-2">
               <label class="label">
@@ -150,6 +182,9 @@ const formData = ref({
   language: '',
   priority: 0,
   prompt: '',
+  content: '',
+  linkUrl: '',
+  linkLabel: '',
   extraInfo: ''
 });
 
@@ -191,6 +226,9 @@ async function loadResource() {
       language: resource.language,
       priority: resource.priority,
       prompt: resource.prompt || '',
+      content: resource.content || '',
+      linkUrl: resource.link?.url || '',
+      linkLabel: resource.link?.label || '',
       extraInfo: resource.extraInfo || ''
     };
   } catch (err) {
@@ -210,13 +248,24 @@ async function handleSave() {
   try {
     if (isNew.value) {
       // Create new resource
-      await repo.saveResource({
+      const resourceData: Partial<ResourceData> = {
         title: formData.value.title.trim(),
         language: formData.value.language.trim(),
         priority: formData.value.priority,
         prompt: formData.value.prompt.trim() || 'Extract important words, examples and facts from the resource',
+        content: formData.value.content.trim() || undefined,
         extraInfo: formData.value.extraInfo.trim() || undefined
-      });
+      };
+
+      // Add link if URL is provided
+      if (formData.value.linkUrl.trim()) {
+        resourceData.link = {
+          url: formData.value.linkUrl.trim(),
+          label: formData.value.linkLabel.trim() || 'Link'
+        };
+      }
+
+      await repo.saveResource(resourceData);
     } else {
       // Update existing resource
       const existing = await repo.getResourceById(props.resourceUid!);
@@ -231,7 +280,12 @@ async function handleSave() {
         language: formData.value.language.trim(),
         priority: formData.value.priority,
         prompt: formData.value.prompt.trim() || 'Extract important words, examples and facts from the resource',
-        extraInfo: formData.value.extraInfo.trim() || undefined
+        content: formData.value.content.trim() || undefined,
+        extraInfo: formData.value.extraInfo.trim() || undefined,
+        link: formData.value.linkUrl.trim() ? {
+          url: formData.value.linkUrl.trim(),
+          label: formData.value.linkLabel.trim() || 'Link'
+        } : undefined
       };
       
       await repo.updateResource(updatedResource);

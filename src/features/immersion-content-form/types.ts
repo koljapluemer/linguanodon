@@ -4,6 +4,9 @@ export interface ImmersionContentFormData {
   uid?: string;
   title: string;
   prompt: string;
+  content?: string;
+  linkUrl?: string;
+  linkLabel?: string;
   extraInfo?: string;
   language: string;
   priority: number;
@@ -22,6 +25,9 @@ export function immersionContentToFormData(content: ResourceData): ImmersionCont
     uid: content.uid,
     title: content.title,
     prompt: content.prompt,
+    content: content.content,
+    linkUrl: content.link?.url,
+    linkLabel: content.link?.label,
     extraInfo: content.extraInfo,
     language: content.language,
     priority: content.priority
@@ -35,11 +41,20 @@ export function formDataToImmersionContent(
   const baseData: Partial<ResourceData> = {
     title: formData.title,
     prompt: formData.prompt,
+    content: formData.content,
     extraInfo: formData.extraInfo,
     language: formData.language,
     priority: formData.priority,
     isImmersionContent: true
   };
+
+  // Add link if URL is provided
+  if (formData.linkUrl?.trim()) {
+    baseData.link = {
+      url: formData.linkUrl.trim(),
+      label: formData.linkLabel?.trim() || 'Link'
+    };
+  }
 
   if (formData.uid) {
     baseData.uid = formData.uid;
