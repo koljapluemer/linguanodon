@@ -19,7 +19,14 @@ defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 type TaskState = 'task' | 'evaluation';
+type ActiveTab = 'vocab' | 'examples' | 'facts';
+
 const currentState = ref<TaskState>('task');
+const activeTab = ref<ActiveTab>('vocab');
+
+const setActiveTab = (tab: ActiveTab) => {
+  activeTab.value = tab;
+};
 
 const handleTaskCompleted = () => {
   currentState.value = 'evaluation';
@@ -60,24 +67,54 @@ const handleEvaluationFinished = () => {
         </div>
       </div>
 
-      <!-- Vocabulary Management -->
+      <!-- Tabbed Interface -->
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body">
-          <ManageVocabOfResourceWidget :resource-uid="resource.uid" />
-        </div>
-      </div>
+          <!-- Tab Navigation -->
+          <div role="tablist" class="tabs tabs-bordered">
+            <button 
+              role="tab" 
+              class="tab"
+              :class="{ 'tab-active': activeTab === 'vocab' }"
+              @click="setActiveTab('vocab')"
+            >
+              Vocabulary
+            </button>
+            <button 
+              role="tab" 
+              class="tab"
+              :class="{ 'tab-active': activeTab === 'examples' }"
+              @click="setActiveTab('examples')"
+            >
+              Examples
+            </button>
+            <button 
+              role="tab" 
+              class="tab"
+              :class="{ 'tab-active': activeTab === 'facts' }"
+              @click="setActiveTab('facts')"
+            >
+              Fact Cards
+            </button>
+          </div>
 
-      <!-- Examples Management -->
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <ManageExamplesOfResourceWidget :resource-uid="resource.uid" />
-        </div>
-      </div>
+          <!-- Tab Content -->
+          <div class="mt-6">
+            <!-- Vocabulary Tab -->
+            <div v-if="activeTab === 'vocab'" role="tabpanel">
+              <ManageVocabOfResourceWidget :resource-uid="resource.uid" />
+            </div>
 
-      <!-- Facts Management -->
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <ManageFactsOfResourceWidget :resource-uid="resource.uid" />
+            <!-- Examples Tab -->
+            <div v-if="activeTab === 'examples'" role="tabpanel">
+              <ManageExamplesOfResourceWidget :resource-uid="resource.uid" />
+            </div>
+
+            <!-- Facts Tab -->
+            <div v-if="activeTab === 'facts'" role="tabpanel">
+              <ManageFactsOfResourceWidget :resource-uid="resource.uid" />
+            </div>
+          </div>
         </div>
       </div>
 
