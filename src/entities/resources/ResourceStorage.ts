@@ -1,6 +1,5 @@
 import Dexie, { type Table } from 'dexie';
 import type { ResourceData } from './ResourceData';
-import demoData from '@/shared/demo-data/demo.json';
 
 class ResourceDatabase extends Dexie {
   resources!: Table<ResourceData>;
@@ -17,17 +16,24 @@ const db = new ResourceDatabase();
 
 export class ResourceStorage {
   async getAll(): Promise<ResourceData[]> {
-    await this.ensureDemoData();
-    return await db.resources.toArray();
+    const resources = await db.resources.toArray();
+    console.log('ResourceStorage: Retrieved', resources.length, 'resources');
+    return resources;
   }
 
   async getByUID(uid: string): Promise<ResourceData | undefined> {
-    await this.ensureDemoData();
     return await db.resources.get(uid);
   }
 
   async add(resource: ResourceData): Promise<void> {
-    await db.resources.add(resource);
+    console.log('ResourceStorage: Adding resource to DB:', resource.title);
+    try {
+      await db.resources.add(resource);
+      console.log('ResourceStorage: Successfully added resource to DB:', resource.title);
+    } catch (error) {
+      console.error('ResourceStorage: Failed to add resource to DB:', error);
+      throw error;
+    }
   }
 
   async update(resource: ResourceData): Promise<void> {
@@ -42,10 +48,4 @@ export class ResourceStorage {
     return await db.resources.count();
   }
 
-  private async ensureDemoData(): Promise<void> {
-    const count = await db.resources.count();
-    if (count === 0 && demoData.resources) {
-      await db.resources.bulkAdd(demoData.resources as unknown as ResourceData[]);
-    }
-  }
 }

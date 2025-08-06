@@ -3,9 +3,15 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-bold">Resources</h1>
-      <router-link to="/resources/new" class="btn btn-primary">
-        Add New Resource
-      </router-link>
+      <div class="flex gap-2">
+        <button @click="loadResources" class="btn btn-ghost btn-sm" :disabled="loading">
+          <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+          <span v-else>Refresh</span>
+        </button>
+        <router-link to="/resources/new" class="btn btn-primary">
+          Add New Resource
+        </router-link>
+      </div>
     </div>
 
     <!-- Loading State -->
@@ -109,8 +115,11 @@ async function loadResources() {
   error.value = null;
   
   try {
+    console.log('Loading resources...');
     resources.value = await resourceRepo.getAllResources();
+    console.log(`Loaded ${resources.value.length} resources:`, resources.value.map(r => r.title));
   } catch (err) {
+    console.error('Error loading resources:', err);
     error.value = err instanceof Error ? err.message : 'Failed to load resources';
   } finally {
     loading.value = false;

@@ -1,7 +1,5 @@
 import Dexie, { type Table } from 'dexie';
 import type { VocabData } from './VocabData';
-import { createEmptyCard } from 'ts-fsrs';
-import demoData from '@/shared/demo-data/demo.json';
 
 
 class VocabDatabase extends Dexie {
@@ -20,17 +18,14 @@ const db = new VocabDatabase();
 export class VocabStorage {
   
   async getAll(): Promise<VocabData[]> {
-    await this.ensureDemoData();
     return await db.vocab.toArray();
   }
 
   async getById(uid: string): Promise<VocabData | undefined> {
-    await this.ensureDemoData();
     return await db.vocab.get(uid);
   }
 
   async getByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined> {
-    await this.ensureDemoData();
     return await db.vocab.where({ language, content }).first();
   }
 
@@ -51,21 +46,4 @@ export class VocabStorage {
     return await db.vocab.count();
   }
 
-  private async ensureDemoData(): Promise<void> {
-    const count = await db.vocab.count();
-    if (count === 0) {
-      const vocabWithProgress = demoData.vocab.map(vocab => ({
-        ...vocab,
-        content: vocab.content || '',
-        notes: vocab.notes || [],
-        progress: {
-          ...createEmptyCard(),
-          streak: 0,
-          level: -1
-        }
-      }));
-      
-      await db.vocab.bulkAdd(vocabWithProgress);
-    }
-  }
 }

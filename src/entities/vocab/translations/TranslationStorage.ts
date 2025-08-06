@@ -1,6 +1,5 @@
 import Dexie, { type Table } from 'dexie';
 import type { TranslationData } from './TranslationData';
-import demoData from '@/shared/demo-data/demo.json';
 
 
 class TranslationDatabase extends Dexie {
@@ -19,23 +18,18 @@ const db = new TranslationDatabase();
 export class TranslationStorage {
   
   async getAll(): Promise<TranslationData[]> {
-    await this.ensureDemoData();
     return await db.translations.toArray();
   }
 
   async getById(uid: string): Promise<TranslationData | undefined> {
-    await this.ensureDemoData();
     return await db.translations.get(uid);
   }
 
   async getByIds(uids: string[]): Promise<TranslationData[]> {
-    await this.ensureDemoData();
     return await db.translations.where('uid').anyOf(uids).toArray();
   }
 
   async add(translation: TranslationData): Promise<string> {
-    await this.ensureDemoData();
-    
     // Check for duplicate content
     const existing = await db.translations.where('content').equals(translation.content).first();
     if (existing) {
@@ -47,7 +41,6 @@ export class TranslationStorage {
   }
 
   async getByContent(content: string): Promise<TranslationData | undefined> {
-    await this.ensureDemoData();
     return await db.translations.where('content').equals(content).first();
   }
 
@@ -59,10 +52,4 @@ export class TranslationStorage {
     await db.translations.delete(uid);
   }
 
-  private async ensureDemoData(): Promise<void> {
-    const count = await db.translations.count();
-    if (count === 0) {
-      await db.translations.bulkAdd(demoData.translations);
-    }
-  }
 }

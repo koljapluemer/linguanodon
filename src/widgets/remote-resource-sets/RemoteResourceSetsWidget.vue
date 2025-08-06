@@ -37,15 +37,24 @@ async function loadResourceSets() {
 async function downloadResourceSet(name: string) {
   if (!selectedLanguage.value) return;
   
+  loading.value = true;
+  error.value = null;
+  
   try {
+    console.log(`Downloading resource set: ${name} for language: ${selectedLanguage.value}`);
+    
     const resourceSet = await remoteResourceService.getResourceSet(selectedLanguage.value, name);
     if (!resourceSet) {
       error.value = 'Failed to download resource set';
       return;
     }
 
+    console.log(`Found ${resourceSet.resources.length} resources to download`);
+
     // Convert each RemoteResource to ResourceData and save
     for (const remoteResource of resourceSet.resources) {
+      console.log(`Saving resource: ${remoteResource.title}`);
+      
       const resourceData: Partial<ResourceData> = {
         language: remoteResource.language,
         priority: remoteResource.priority,
@@ -62,14 +71,25 @@ async function downloadResourceSet(name: string) {
         notes: []
       };
       
-      await resourceRepo.saveResource(resourceData);
+      try {
+        await resourceRepo.saveResource(resourceData);
+        console.log(`Successfully saved resource: ${remoteResource.title}`);
+      } catch (saveError) {
+        console.error(`Failed to save resource ${remoteResource.title}:`, saveError);
+        error.value = `Failed to save resource: ${remoteResource.title}`;
+        return;
+      }
     }
 
     // Mark as downloaded
     remoteResourceService.markResourceSetAsDownloaded(name);
+    console.log(`Resource set "${name}" downloaded and marked as complete`);
     
   } catch (err) {
+    console.error('Download error:', err);
     error.value = err instanceof Error ? err.message : 'Failed to download resource set';
+  } finally {
+    loading.value = false;
   }
 }
 
@@ -130,15 +150,26 @@ onMounted(loadResourceSets);
                 <p class="text-sm text-base-content/60">Language: {{ selectedLanguage }}</p>
               </div>
               
-              <div v-if="isDownloaded(setName)" class="flex items-center gap-2 text-success">
-                <CheckCircle class="w-5 h-5" />
-                <span class="text-sm font-medium">Downloaded</span>
+              <div v-if="isDownloaded(setName)" class="flex items-center gap-2">
+                <div class="flex items-center gap-2 text-success mr-2">
+                  <CheckCircle class="w-5 h-5" />
+                  <span class="text-sm font-medium">Downloaded</span>
+                </div>
+                <button 
+                  @click="downloadResourceSet(setName)"
+                  class="btn btn-outline btn-sm"
+                  :disabled="loading"
+                >
+                  <Download class="w-4 h-4 mr-2" />
+                  Re-download
+                </button>
               </div>
               
               <button 
                 v-else
                 @click="downloadResourceSet(setName)"
                 class="btn btn-primary btn-sm"
+                :disabled="loading"
               >
                 <Download class="w-4 h-4 mr-2" />
                 Download
