@@ -5,12 +5,12 @@
         <!-- Content -->
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Content *</span>
+            <span class="label-text">Content</span>
           </label>
           <input
             v-model="localVocab.content"
             type="text"
-            placeholder="Vocabulary word or phrase"
+            placeholder="Vocabulary word or phrase (optional if translation provided)"
             class="input input-bordered input-sm"
           />
         </div>
@@ -32,12 +32,12 @@
         <!-- Translations -->
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Translations *</span>
+            <span class="label-text">Translations</span>
           </label>
           <input
             v-model="translationsText"
             type="text"
-            placeholder="Comma-separated translations"
+            placeholder="Comma-separated translations (required if no content)"
             class="input input-bordered input-sm"
           />
         </div>
@@ -88,9 +88,12 @@ watch(() => props.vocab, (newVocab) => {
 }, { deep: true });
 
 const isValid = computed(() => {
-  return localVocab.value.content?.trim() &&
-         localVocab.value.language?.trim() &&
-         translationsText.value.trim();
+  const hasContent = localVocab.value.content?.trim();
+  const hasTranslations = translationsText.value.trim();
+  const hasLanguage = localVocab.value.language?.trim();
+  
+  // Allow vocab with either content or translations (or both), plus language
+  return hasLanguage && (hasContent || hasTranslations);
 });
 
 function handleSave() {
@@ -103,7 +106,7 @@ function handleSave() {
 
   const vocabData: VocabData = {
     uid: localVocab.value.uid || crypto.randomUUID(),
-    content: localVocab.value.content!.trim(),
+    content: localVocab.value.content?.trim() || '',
     language: localVocab.value.language!.trim(),
     translations,
     notes: localVocab.value.notes || [],
