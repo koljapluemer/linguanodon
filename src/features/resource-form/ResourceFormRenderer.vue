@@ -79,29 +79,15 @@
               ></textarea>
             </div>
 
-            <!-- Link URL -->
-            <div class="space-y-2">
-              <label for="linkUrl" class="text-sm font-medium block">Link URL</label>
-              <input
-                id="linkUrl"
-                v-model="formData.linkUrl"
-                type="url"
-                placeholder="https://example.com"
-                class="input input-bordered w-full block"
-              />
-            </div>
-
-            <!-- Link Label -->
-            <div class="space-y-2">
-              <label for="linkLabel" class="text-sm font-medium block">Link Label</label>
-              <input
-                id="linkLabel"
-                v-model="formData.linkLabel"
-                type="text"
-                placeholder="Link label (optional)"
-                class="input input-bordered w-64 block"
-              />
-            </div>
+            <!-- Link -->
+            <LinkEdit
+              :url="formData.linkUrl"
+              :label="formData.linkLabel"
+              url-id="linkUrl"
+              label-id="linkLabel"
+              @update:url="formData.linkUrl = $event"
+              @update:label="formData.linkLabel = $event"
+            />
 
             <!-- Extra Info -->
             <div class="space-y-2">
@@ -140,6 +126,7 @@
 import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import LinkEdit from '@/shared/ui/LinkEdit.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 
