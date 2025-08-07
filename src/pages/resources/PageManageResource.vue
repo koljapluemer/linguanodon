@@ -16,6 +16,7 @@
             :resource-uid="route.params.uid as string"
             :show-delete-button="false"
             :show-disconnect-button="true"
+            :allow-jumping-to-vocab-page="true"
           />
         </div>
       </div>

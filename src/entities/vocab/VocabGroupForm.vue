@@ -10,6 +10,7 @@
         :allow-edit-on-click="allowEditOnClick"
         :show-delete-button="showDeleteButton"
         :show-disconnect-button="showDisconnectButton"
+        :allow-jumping-to-vocab-page="allowJumpingToVocabPage"
         @save="saveVocab(index, $event)"
         @delete="deleteVocab(index)"
         @disconnect="handleDisconnect(vocab.uid)"
@@ -40,6 +41,7 @@ const props = defineProps<{
   allowEditOnClick?: boolean;
   showDeleteButton?: boolean;
   showDisconnectButton?: boolean;
+  allowJumpingToVocabPage?: boolean;
 }>();
 
 const emit = defineEmits<{

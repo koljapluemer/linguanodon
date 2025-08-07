@@ -6,6 +6,7 @@
       :allow-edit-on-click="true"
       :show-delete-button="showDeleteButton ?? true"
       :show-disconnect-button="showDisconnectButton ?? true"
+      :allow-jumping-to-vocab-page="allowJumpingToVocabPage ?? false"
       @update:vocab-ids="handleVocabUpdate"
       @disconnect="handleVocabDisconnect"
     />
@@ -22,6 +23,7 @@ const props = defineProps<{
   resourceUid: string;
   showDeleteButton?: boolean;
   showDisconnectButton?: boolean;
+  allowJumpingToVocabPage?: boolean;
 }>();
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');

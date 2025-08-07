@@ -26,6 +26,14 @@
       >
         <Edit class="w-4 h-4" />
       </button>
+      <router-link
+        v-if="allowJumpingToVocabPage"
+        :to="`/vocab/${vocab.uid}/edit`"
+        class="btn btn-sm btn-ghost text-info"
+        title="Go to vocab page"
+      >
+        <ExternalLink class="w-4 h-4" />
+      </router-link>
       <button
         v-if="showDisconnectButton"
         class="btn btn-sm btn-ghost text-warning"
@@ -47,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { X, Edit, Unlink } from 'lucide-vue-next';
+import { X, Edit, Unlink, ExternalLink } from 'lucide-vue-next';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 import type { VocabData } from './vocab/VocabData';
 
@@ -56,6 +64,7 @@ defineProps<{
   allowEditOnClick?: boolean;
   showDeleteButton?: boolean;
   showDisconnectButton?: boolean;
+  allowJumpingToVocabPage?: boolean;
 }>();
 
 defineEmits<{
