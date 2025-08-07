@@ -10,16 +10,12 @@
       <ResourceFormRenderer :resource-uid="route.params.uid as string" />
       
       <!-- Associated Vocabulary Section -->
-      <div v-if="currentResourceData" class="card bg-base-100 shadow-xl mt-6">
+      <div v-if="route.params.uid" class="card bg-base-100 shadow-xl mt-6">
         <div class="card-body">
-          <VocabGroupForm
-            :vocab-ids="currentResourceData.extractedVocab"
-            :default-language="currentResourceData.language"
-            :allow-edit-on-click="false"
+          <ManageVocabOfResourceWidget 
+            :resource-uid="route.params.uid as string"
             :show-delete-button="false"
             :show-disconnect-button="true"
-            @update:vocab-ids="updateExtractedVocab"
-            @disconnect="handleVocabDisconnect"
           />
         </div>
       </div>
@@ -42,18 +38,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted, watch } from 'vue';
+import { ref, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import ResourceFormRenderer from '@/features/resource-form/ResourceFormRenderer.vue';
 import RenderTaskForResource from '@/widgets/task-for-resource/RenderTaskForResource.vue';
-import VocabGroupForm from '@/entities/vocab/VocabGroupForm.vue';
+import ManageVocabOfResourceWidget from '@/features/manage-vocab-of-resource/ManageVocabOfResourceWidget.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 
 const route = useRoute();
 const taskModal = ref<HTMLDialogElement>();
 const currentResource = ref<ResourceData>();
-const currentResourceData = ref<ResourceData>();
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {
@@ -74,43 +69,4 @@ const handleTaskFinished = () => {
   taskModal.value?.close();
   currentResource.value = undefined;
 };
-
-// Load resource data on mount and when route changes
-const loadResourceData = async () => {
-  if (!route.params.uid) return;
-  
-  const resource = await resourceRepo.getResourceById(route.params.uid as string);
-  if (resource) {
-    currentResourceData.value = resource;
-  }
-};
-
-// Function to update extracted vocab when vocab changes
-const updateExtractedVocab = async (vocabIds: string[]) => {
-  if (!currentResourceData.value) return;
-  
-  const updatedResource: ResourceData = {
-    ...currentResourceData.value,
-    extractedVocab: vocabIds
-  };
-  
-  await resourceRepo.updateResource(updatedResource);
-  currentResourceData.value = updatedResource;
-};
-
-// Function to handle vocab disconnection
-const handleVocabDisconnect = async (vocabUid: string) => {
-  if (!currentResourceData.value) return;
-  
-  try {
-    await resourceRepo.disconnectVocabFromResource(currentResourceData.value.uid, vocabUid);
-    // Refresh the resource data to reflect the changes
-    await loadResourceData();
-  } catch (error) {
-    console.error('Failed to disconnect vocab:', error);
-  }
-};
-
-onMounted(loadResourceData);
-watch(() => route.params.uid, loadResourceData);
 </script>

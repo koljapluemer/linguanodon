@@ -4,8 +4,8 @@
       :vocab-ids="vocabIds"
       :default-language="defaultLanguage"
       :allow-edit-on-click="true"
-      :show-delete-button="true"
-      :show-disconnect-button="true"
+      :show-delete-button="showDeleteButton ?? true"
+      :show-disconnect-button="showDisconnectButton ?? true"
       @update:vocab-ids="handleVocabUpdate"
       @disconnect="handleVocabDisconnect"
     />
@@ -20,6 +20,8 @@ import VocabGroupForm from '@/entities/vocab/VocabGroupForm.vue';
 
 const props = defineProps<{
   resourceUid: string;
+  showDeleteButton?: boolean;
+  showDisconnectButton?: boolean;
 }>();
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
