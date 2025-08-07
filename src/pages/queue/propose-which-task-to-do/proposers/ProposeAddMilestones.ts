@@ -19,7 +19,7 @@ export class ProposeAddMilestones implements TaskProposerContract {
         const coreTask = goal.coreTasks.find(t => t.taskType === 'add-milestones');
         
         // If this goal has the add-milestones task and it's not marked as complete
-        if (coreTask && coreTask.wantToDoAgain !== false) {
+        if (coreTask && coreTask.isActive !== false) {
           return {
             uid: crypto.randomUUID(),
             taskType: 'add-milestones',

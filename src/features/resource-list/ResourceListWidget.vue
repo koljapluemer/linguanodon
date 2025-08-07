@@ -50,8 +50,8 @@
               
               <h3 class="card-title">{{ resource.title }}</h3>
               
-              <div v-if="resource.prompt" class="text-base-content/70 mb-3">
-                {{ resource.prompt.substring(0, 150) }}{{ resource.prompt.length > 150 ? '...' : '' }}
+              <div v-if="resource.content" class="text-base-content/70 mb-3">
+                {{ resource.content.substring(0, 150) }}{{ resource.content.length > 150 ? '...' : '' }}
               </div>
 
               <!-- Extracted content counts -->

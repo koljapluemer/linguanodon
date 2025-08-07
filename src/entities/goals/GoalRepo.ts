@@ -18,32 +18,48 @@ export class GoalRepo implements GoalRepoContract {
     // Generate core tasks when goal is created
     const coreTasks: TaskData[] = [
       {
+        uid: crypto.randomUUID(),
         taskType: 'add-sub-goals',
         title: 'Add Sub-Goals',
         prompt: 'Add smaller goals that help you achieve this larger goal',
-        evaluateAfterDoing: false,
-        wantToDoAgain: true
+        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'big',
+        associatedUnits: []
       },
       {
+        uid: crypto.randomUUID(),
         taskType: 'add-vocab-to-goal',
         title: 'Add Vocabulary',
         prompt: 'Add vocabulary that you need to learn for this goal',
-        evaluateAfterDoing: false,
-        wantToDoAgain: true
+        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'big',
+        associatedUnits: []
       },
       {
+        uid: crypto.randomUUID(),
         taskType: 'add-examples-to-goal',
         title: 'Add Examples',
         prompt: 'Add example sentences or phrases related to this goal',
-        evaluateAfterDoing: false,
-        wantToDoAgain: true
+        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'big',
+        associatedUnits: []
       },
       {
+        uid: crypto.randomUUID(),
         taskType: 'add-milestones',
         title: 'Add Milestones',
         prompt: 'Add specific milestones to track your progress toward this goal',
-        evaluateAfterDoing: false,
-        wantToDoAgain: true
+        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'medium',
+        associatedUnits: []
       }
     ];
 
@@ -91,7 +107,7 @@ export class GoalRepo implements GoalRepoContract {
 
   async getIncompleteGoals(): Promise<GoalData[]> {
     const allGoals = await goalStorage.goals.toArray();
-    return allGoals.filter(goal => goal.wantToDoAgain !== false);
+    return allGoals.filter(goal => goal.isActive !== false);
   }
 
   async getSubGoals(parentId: string): Promise<GoalData[]> {

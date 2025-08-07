@@ -47,7 +47,7 @@
                 </span>
               </div>
 
-              <div v-if="goal.wantToDoAgain === false" class="mt-2">
+              <div v-if="goal.isActive === false" class="mt-2">
                 <span class="badge badge-success">Completed</span>
               </div>
             </div>

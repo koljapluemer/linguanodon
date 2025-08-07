@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import EvaluateTaskWidget from '@/features/evaluate-task-widget/EvaluateTaskWidget.vue';
+import EvaluateTaskWidget from '@/entities/tasks/EvaluateTaskWidget.vue';
 import ManageVocabOfResourceWidget from '@/features/manage-vocab-of-resource/ManageVocabOfResourceWidget.vue';
 import ManageExamplesOfResourceWidget from '@/features/manage-examples-of-resource/ManageExamplesOfResourceWidget.vue';
 import ManageFactsOfResourceWidget from '@/features/manage-facts-of-resource/ManageFactsOfResourceWidget.vue';
-import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
+// import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';  // TODO: Re-enable when TaskData provides content to display
 
 interface Props {
   resource: ResourceData;
@@ -55,8 +55,9 @@ const handleEvaluationFinished = () => {
       <div class="space-y-4">
         <div class="text-center">
           <h2 class="text-2xl font-bold mb-2">{{ resource.title }}</h2>
+          <!-- TODO: Get task prompt from TaskData instead of ResourceData -->
           <div class="text-base-content/70">
-            <MarkdownRenderer :content="resource.prompt || 'Extract important words, examples and facts from the resource'" />
+            <p>Extract important words, examples and facts from the resource</p>
           </div>
         </div>
 
@@ -76,11 +77,7 @@ const handleEvaluationFinished = () => {
           </a>
         </div>
 
-        <div v-if="resource.extraInfo" class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <MarkdownRenderer :content="resource.extraInfo" />
-          </div>
-        </div>
+        <!-- TODO: Display extra info from TaskData when available -->
       </div>
 
       <!-- Tabbed Interface -->

@@ -56,7 +56,7 @@ watch(() => props.task, async (task) => {
   if (task.taskType === 'add-pronunciation') {
     const vocabUid = task.associatedUnits.find(unit => unit.type === 'Vocab')?.uid;
     if (vocabUid && vocabRepo) {
-      vocabData.value = await vocabRepo.getVocabByUID(vocabUid);
+      vocabData.value = (await vocabRepo.getVocabByUID(vocabUid)) || null;
     }
   } else if (task.taskType === 'free-translate') {
     const exampleUid = task.associatedUnits.find(unit => unit.type === 'Example')?.uid;
@@ -73,7 +73,7 @@ watch(() => props.task, async (task) => {
   } else if (task.taskType === 'immersion-content') {
     const resourceUid = task.associatedUnits.find(unit => unit.type === 'Resource')?.uid;
     if (resourceUid && resourceRepo) {
-      resourceData.value = await resourceRepo.getResourceById(resourceUid);
+      resourceData.value = (await resourceRepo.getResourceById(resourceUid)) || null;
     }
   }
 }, { immediate: true });

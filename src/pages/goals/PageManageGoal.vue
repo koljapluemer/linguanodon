@@ -133,7 +133,11 @@ async function loadGoal() {
       examples: [],
       notes: [],
       factCards: [],
-      wantToDoAgain: true
+      evaluateCorrectnessAndConfidenceAfterDoing: false,
+      decideWhetherToDoAgainAfterDoing: true,
+      isActive: true,
+      taskSize: 'big',
+      associatedUnits: []
     };
   }
   

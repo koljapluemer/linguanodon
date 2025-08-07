@@ -24,11 +24,11 @@ export function immersionContentToFormData(content: ResourceData): ImmersionCont
   return {
     uid: content.uid,
     title: content.title,
-    prompt: content.prompt,
+    prompt: '', // Default empty since ResourceData no longer has prompt
     content: content.content,
     linkUrl: content.link?.url,
     linkLabel: content.link?.label,
-    extraInfo: content.extraInfo,
+    extraInfo: '', // Default empty since ResourceData no longer has extraInfo
     language: content.language,
     priority: content.priority
   };
@@ -40,9 +40,7 @@ export function formDataToImmersionContent(
 ): Partial<ResourceData> {
   const baseData: Partial<ResourceData> = {
     title: formData.title,
-    prompt: formData.prompt,
     content: formData.content,
-    extraInfo: formData.extraInfo,
     language: formData.language,
     priority: formData.priority,
     isImmersionContent: true
@@ -66,15 +64,8 @@ export function formDataToImmersionContent(
     baseData.examples = existingContent.examples;
     baseData.factCards = existingContent.factCards;
     baseData.notes = existingContent.notes;
-    baseData.taskType = existingContent.taskType;
-    baseData.evaluateAfterDoing = existingContent.evaluateAfterDoing;
+    baseData.tasks = existingContent.tasks;
     baseData.lastShownAt = existingContent.lastShownAt;
-    baseData.wantToDoAgain = existingContent.wantToDoAgain;
-    baseData.nextShownEarliestAt = existingContent.nextShownEarliestAt;
-    baseData.lastDifficultyRating = existingContent.lastDifficultyRating;
-    baseData.lastCorrectnessRating = existingContent.lastCorrectnessRating;
-    baseData.isUserCreated = existingContent.isUserCreated;
-    baseData.lastDownloadedAt = existingContent.lastDownloadedAt;
   }
 
   return baseData;

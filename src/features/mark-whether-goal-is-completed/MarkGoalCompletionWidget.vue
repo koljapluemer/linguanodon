@@ -32,24 +32,24 @@
           @click="markCompleted(true)"
           :class="[
             'btn',
-            goal.wantToDoAgain === false ? 'btn-success' : 'btn-outline btn-success'
+            goal.isActive === false ? 'btn-success' : 'btn-outline btn-success'
           ]"
           :disabled="saving"
         >
           <span v-if="saving && completionValue === true" class="loading loading-spinner loading-sm"></span>
-          {{ goal.wantToDoAgain === false ? 'Completed ✓' : 'Mark as Completed' }}
+          {{ goal.isActive === false ? 'Completed ✓' : 'Mark as Completed' }}
         </button>
         
         <button
           @click="markCompleted(false)"
           :class="[
             'btn',
-            goal.wantToDoAgain !== false ? 'btn-primary' : 'btn-outline btn-primary'
+            goal.isActive !== false ? 'btn-primary' : 'btn-outline btn-primary'
           ]"
           :disabled="saving"
         >
           <span v-if="saving && completionValue === false" class="loading loading-spinner loading-sm"></span>
-          {{ goal.wantToDoAgain !== false ? 'Still Working On It' : 'Resume Working' }}
+          {{ goal.isActive !== false ? 'Still Working On It' : 'Resume Working' }}
         </button>
       </div>
     </div>
@@ -80,7 +80,7 @@ async function markCompleted(completed: boolean) {
   
   try {
     const updatedGoal = await goalRepo.update(props.goal.uid, {
-      wantToDoAgain: !completed
+      isActive: !completed
     });
     
     emit('goal-updated', updatedGoal);

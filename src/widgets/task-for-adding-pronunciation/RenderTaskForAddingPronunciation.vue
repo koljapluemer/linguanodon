@@ -47,10 +47,15 @@ const handleTaskSkipped = async () => {
     if (!pronunciationTask) {
       // Create new task if it doesn't exist
       pronunciationTask = {
+        uid: crypto.randomUUID(),
         taskType: 'add-pronunciation',
         title: 'Add Pronunciation',
         prompt: 'Add pronunciation information for this vocabulary word',
-        evaluateAfterDoing: false
+        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'medium',
+        associatedUnits: []
       };
       vocab.associatedTasks.push(pronunciationTask);
     }

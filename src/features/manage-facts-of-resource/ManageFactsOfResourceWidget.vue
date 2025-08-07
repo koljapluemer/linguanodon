@@ -18,6 +18,11 @@ const props = defineProps<{
   resourceUid: string;
 }>();
 
+const emit = defineEmits<{
+  taskMayNowBeConsideredDone: [];
+  taskMayNowNotBeConsideredDone: [];
+}>();
+
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {
   throw new Error('ResourceRepo not provided');
@@ -25,18 +30,30 @@ if (!resourceRepo) {
 
 const factCardIds = ref<string[]>([]);
 const defaultLanguage = ref<string>('');
+const initialFactCardIds = ref<string[]>([]);
+const hasFactCardsChanged = ref(false);
 
 async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
     factCardIds.value = [...resource.factCards];
+    initialFactCardIds.value = [...resource.factCards];
     defaultLanguage.value = resource.language;
   }
 }
 
 async function handleFactCardsUpdate(newFactCardIds: string[]) {
   if (!resourceRepo) return;
+  
+  // Check if fact cards list has changed from initial state
+  const factCardsListChanged = JSON.stringify(newFactCardIds.sort()) !== JSON.stringify(initialFactCardIds.value.sort());
+  
+  if (factCardsListChanged && !hasFactCardsChanged.value) {
+    hasFactCardsChanged.value = true;
+    emit('taskMayNowBeConsideredDone');
+  }
+  
   // Auto-save - update the resource with new fact card IDs
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {

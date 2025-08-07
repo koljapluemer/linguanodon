@@ -51,6 +51,9 @@ async function loadAllVocab() {
   error.value = null;
   
   try {
+    if (!vocabRepo) {
+      throw new Error('Vocab repository not available');
+    }
     const allVocab = await vocabRepo.getVocab();
     vocabIds.value = allVocab.map(vocab => vocab.uid);
   } catch (err) {

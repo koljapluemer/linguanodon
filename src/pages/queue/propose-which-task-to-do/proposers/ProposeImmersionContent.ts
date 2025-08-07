@@ -20,12 +20,10 @@ export class ProposeImmersionContent implements TaskProposerContract {
       // Get all resources that are immersion content
       const allResources = await this.resourceRepo.getAllResources();
       const allContent = allResources.filter(resource => resource.isImmersionContent);
-      const now = new Date();
       
-      // Filter to only due content (nextShownEarliestAt does not exist or is in the past)
-      const dueContent = allContent.filter(content => 
-        !content.nextShownEarliestAt || content.nextShownEarliestAt <= now
-      );
+      // TODO: Check due status from TaskData instead of ResourceData
+      // For now, consider all immersion content as potentially due
+      const dueContent = allContent;
       
       // Check each due content for vocab readiness threshold
       for (const content of dueContent) {

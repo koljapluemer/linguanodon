@@ -55,17 +55,6 @@
               />
             </div>
 
-            <!-- Prompt -->
-            <div class="space-y-2">
-              <label for="prompt" class="text-sm font-medium block">Prompt</label>
-              <textarea
-                id="prompt"
-                v-model="formData.prompt"
-                placeholder="Task prompt for extracting content from this resource"
-                class="textarea textarea-bordered w-full block"
-                rows="3"
-              ></textarea>
-            </div>
 
             <!-- Content -->
             <div class="space-y-2">
@@ -89,17 +78,6 @@
               @update:label="formData.linkLabel = $event"
             />
 
-            <!-- Extra Info -->
-            <div class="space-y-2">
-              <label for="extraInfo" class="text-sm font-medium block">Extra Information</label>
-              <textarea
-                id="extraInfo"
-                v-model="formData.extraInfo"
-                placeholder="Additional context or information about this resource"
-                class="textarea textarea-bordered w-full block"
-                rows="4"
-              ></textarea>
-            </div>
           </div>
 
           <!-- Action Buttons -->
@@ -151,11 +129,9 @@ const formData = ref({
   title: '',
   language: '',
   priority: 0,
-  prompt: '',
   content: '',
   linkUrl: '',
-  linkLabel: '',
-  extraInfo: ''
+  linkLabel: ''
 });
 
 const errors = ref<Record<string, string>>({});
@@ -195,11 +171,9 @@ async function loadResource() {
       title: resource.title,
       language: resource.language,
       priority: resource.priority,
-      prompt: resource.prompt || '',
       content: resource.content || '',
       linkUrl: resource.link?.url || '',
-      linkLabel: resource.link?.label || '',
-      extraInfo: resource.extraInfo || ''
+      linkLabel: resource.link?.label || ''
     };
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load resource';
@@ -222,9 +196,7 @@ async function handleSave() {
         title: formData.value.title.trim(),
         language: formData.value.language.trim(),
         priority: formData.value.priority,
-        prompt: formData.value.prompt.trim() || 'Extract important words, examples and facts from the resource',
-        content: formData.value.content.trim() || undefined,
-        extraInfo: formData.value.extraInfo.trim() || undefined
+        content: formData.value.content.trim() || undefined
       };
 
       // Add link if URL is provided
@@ -249,9 +221,7 @@ async function handleSave() {
         title: formData.value.title.trim(),
         language: formData.value.language.trim(),
         priority: formData.value.priority,
-        prompt: formData.value.prompt.trim() || 'Extract important words, examples and facts from the resource',
         content: formData.value.content.trim() || undefined,
-        extraInfo: formData.value.extraInfo.trim() || undefined,
         link: formData.value.linkUrl.trim() ? {
           url: formData.value.linkUrl.trim(),
           label: formData.value.linkLabel.trim() || 'Link'

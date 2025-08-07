@@ -85,8 +85,8 @@ export class ExampleRepo implements ExampleRepoContract {
       if (freeTranslateTask) {
         // Has task: check if due and wants to do again
         const isDue = !freeTranslateTask.nextShownEarliestAt || freeTranslateTask.nextShownEarliestAt <= now;
-        const wantsToDoAgain = freeTranslateTask.wantToDoAgain;
-        return isDue && wantsToDoAgain;
+        // wantToDoAgain property was moved to TaskEvaluation, checking only if due
+        return isDue;
       } else {
         // No task: eligible if never done
         return true;

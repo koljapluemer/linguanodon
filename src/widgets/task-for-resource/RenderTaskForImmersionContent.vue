@@ -2,9 +2,9 @@
 import { ref } from 'vue';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 // import type { TaskEvaluation } from '@/shared/ExerciseTypes';
-import EvaluateTaskWidget from '@/features/evaluate-task-widget/EvaluateTaskWidget.vue';
+import EvaluateTaskWidget from '@/entities/tasks/EvaluateTaskWidget.vue';
 import ManageVocabOfImmersionContentWidget from '@/features/manage-vocab-of-immersion-content/ManageVocabOfImmersionContentWidget.vue';
-import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
+// import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';  // TODO: Re-enable when TaskData provides content to display
 
 interface Props {
   content: ResourceData;
@@ -47,16 +47,13 @@ const handleEvaluationFinished = (/* evaluation: TaskEvaluation */) => {
       <div class="space-y-4">
         <div class="text-center">
           <h2 class="text-2xl font-bold mb-2">{{ content.title }}</h2>
+          <!-- TODO: Get task prompt from TaskData instead of ResourceData -->
           <div class="text-base-content/70">
-            <MarkdownRenderer :content="content.prompt" />
+            <p>Consume this immersion content and extract vocabulary</p>
           </div>
         </div>
 
-        <div v-if="content.extraInfo" class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <MarkdownRenderer :content="content.extraInfo" />
-          </div>
-        </div>
+        <!-- TODO: Display extra info from TaskData when available -->
       </div>
 
       <!-- Vocab Management -->

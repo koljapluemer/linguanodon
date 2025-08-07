@@ -206,9 +206,18 @@ function handleClearOrCancel() {
   if (props.isNew) {
     // Clear/reset form to default values
     localVocab.value = {
+      uid: crypto.randomUUID(),
       language: props.defaultLanguage || '',
       content: '',
-      translations: []
+      notes: [],
+      translations: [],
+      links: [],
+      associatedTasks: [],
+      progress: {
+        ...createEmptyCard(),
+        streak: 0,
+        level: -1
+      }
     } as VocabData;
     translationsText.value = '';
   } else {

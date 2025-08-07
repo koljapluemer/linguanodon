@@ -68,8 +68,9 @@
                   ></div>
                 </div>
               </div>
-              <div class="mt-2">
-                <MarkdownRenderer :content="content.prompt" />
+              <!-- TODO: Display content description/prompt from TaskData when available -->
+              <div class="mt-2 text-base-content/70">
+                <p>Immersion content ready for consumption</p>
               </div>
             </div>
             
@@ -144,7 +145,7 @@ import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
-import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
+// import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';  // TODO: Re-enable when TaskData provides content to display
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
@@ -172,7 +173,6 @@ const filteredContent = computed(() => {
   const query = searchQuery.value.toLowerCase();
   return content.value.filter((item: ResourceData) =>
     item.title.toLowerCase().includes(query) ||
-    item.prompt.toLowerCase().includes(query) ||
     item.language.toLowerCase().includes(query)
   );
 });

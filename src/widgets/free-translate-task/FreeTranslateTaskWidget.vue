@@ -73,7 +73,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'complete', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy', wantToDoAgain: boolean): void;
+  (e: 'complete', rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): void;
 }
 
 const props = defineProps<Props>();
@@ -108,7 +108,7 @@ async function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
       if (freeTranslateTask) {
         // Update existing task
         freeTranslateTask.lastShownAt = now;
-        freeTranslateTask.wantToDoAgain = wantToDoAgain;
+        // wantToDoAgain is now handled in TaskEvaluation, not in TaskData
         freeTranslateTask.lastDifficultyRating = rating === 'Impossible' ? 1 : 
                                                 rating === 'Hard' ? 2 : 
                                                 rating === 'Doable' ? 3 : 4;
@@ -118,12 +118,16 @@ async function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
       } else {
         // Create new task
         const newTask = {
+          uid: crypto.randomUUID(),
           taskType: 'free-translate' as const,
           title: 'Free Translation',
           prompt: 'Attempt to translate this sentence',
-          evaluateAfterDoing: true,
+          evaluateCorrectnessAndConfidenceAfterDoing: true,
+          decideWhetherToDoAgainAfterDoing: true,
+          isActive: true,
+          taskSize: 'medium' as const,
+          associatedUnits: [],
           lastShownAt: now,
-          wantToDoAgain,
           lastDifficultyRating: rating === 'Impossible' ? 1 : 
                                rating === 'Hard' ? 2 : 
                                rating === 'Doable' ? 3 : 4,
@@ -139,6 +143,6 @@ async function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
     }
   }
   
-  emit('complete', rating, wantToDoAgain);
+  emit('complete', rating);
 }
 </script>

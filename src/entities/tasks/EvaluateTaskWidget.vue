@@ -2,9 +2,19 @@
 import { ref, computed } from 'vue';
 import type { TaskEvaluation } from '@/shared/ExerciseTypes';
 
+interface Props {
+  showDifficultyRating?: boolean;
+  showDoAgainDecision?: boolean;
+}
+
 interface Emits {
   (e: 'finished', evaluation: TaskEvaluation): void;
 }
+
+const props = withDefaults(defineProps<Props>(), {
+  showDifficultyRating: true,
+  showDoAgainDecision: true,
+});
 
 const emit = defineEmits<Emits>();
 
@@ -12,22 +22,21 @@ const correctnessRating = ref<number | null>(null);
 const difficultyRating = ref<number | null>(null);
 const wantToDoAgain = ref<'no' | 'yes' | 'maybe' | null>(null);
 
-/**
- *
- */
 const isFormValid = computed(() => {
-  return correctnessRating.value !== null && 
-         difficultyRating.value !== null && 
-         wantToDoAgain.value !== null;
+  const correctnessValid = !props.showDifficultyRating || correctnessRating.value !== null;
+  const difficultyValid = !props.showDifficultyRating || difficultyRating.value !== null;
+  const doAgainValid = !props.showDoAgainDecision || wantToDoAgain.value !== null;
+  
+  return correctnessValid && difficultyValid && doAgainValid;
 });
 
 const handleSubmit = () => {
   if (!isFormValid.value) return;
   
   const evaluation: TaskEvaluation = {
-    correctnessRating: correctnessRating.value!,
-    difficultyRating: difficultyRating.value!,
-    wantToDoAgain: wantToDoAgain.value!
+    correctnessRating: correctnessRating.value || 0,
+    difficultyRating: difficultyRating.value || 0,
+    wantToDoAgain: wantToDoAgain.value || 'maybe'
   };
   
   emit('finished', evaluation);
@@ -44,7 +53,7 @@ const handleSubmit = () => {
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body space-y-6">
         <!-- Correctness Rating -->
-        <div class="form-control">
+        <div v-if="showDifficultyRating" class="form-control">
           <label class="label">
             <span class="label-text">How well did you do?</span>
             <span class="label-text-alt">{{ correctnessRating ?? '?' }}/5</span>
@@ -63,7 +72,7 @@ const handleSubmit = () => {
         </div>
 
         <!-- Difficulty Rating -->
-        <div class="form-control">
+        <div v-if="showDifficultyRating" class="form-control">
           <label class="label">
             <span class="label-text">How difficult was it?</span>
             <span class="label-text-alt">{{ difficultyRating ?? '?' }}/5</span>
@@ -82,7 +91,7 @@ const handleSubmit = () => {
         </div>
 
         <!-- Want to do again -->
-        <div class="form-control">
+        <div v-if="showDoAgainDecision" class="form-control">
           <label class="label">
             <span class="label-text">Do this task again in the future?</span>
           </label>
@@ -109,6 +118,11 @@ const handleSubmit = () => {
               Yes
             </button>
           </div>
+        </div>
+        
+        <!-- Show message if no evaluation components are shown -->
+        <div v-if="!showDifficultyRating && !showDoAgainDecision" class="text-center text-base-content/70">
+          <p>Task completed successfully!</p>
         </div>
       </div>
     </div>

@@ -53,7 +53,7 @@ export class TaskStorage {
   }
 
   async getActive(): Promise<TaskData[]> {
-    return await db.tasks.where('isActive').equals(true).toArray();
+    return await db.tasks.where('isActive').equals(1).toArray();
   }
 
   async getRecentTasks(limit: number): Promise<TaskData[]> {

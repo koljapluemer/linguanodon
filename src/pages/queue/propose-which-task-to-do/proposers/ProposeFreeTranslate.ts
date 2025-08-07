@@ -68,8 +68,8 @@ export class ProposeFreeTranslate implements TaskProposerContract {
       return {
         uid: crypto.randomUUID(),
         taskType: 'free-translate',
-        title: `Translate: ${selectedExample.sourceText}`,
-        prompt: `Translate the following text: "${selectedExample.sourceText}".`,
+        title: `Translate: ${selectedExample.content}`,
+        prompt: `Translate the following text: "${selectedExample.content}".`,
         evaluateCorrectnessAndConfidenceAfterDoing: true,
         decideWhetherToDoAgainAfterDoing: true,
         isActive: true,

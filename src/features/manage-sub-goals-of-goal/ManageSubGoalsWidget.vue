@@ -87,7 +87,11 @@ async function addSubGoal() {
     examples: [],
     notes: [],
     factCards: [],
-    wantToDoAgain: true
+    evaluateCorrectnessAndConfidenceAfterDoing: false,
+    decideWhetherToDoAgainAfterDoing: true,
+    isActive: true,
+    taskSize: 'big',
+    associatedUnits: []
   });
   
   // Update parent goal to include this sub-goal
@@ -104,8 +108,7 @@ async function updateSubGoal(subGoal: GoalData) {
   if (!subGoal.title.trim()) return;
   
   await goalRepo.update(subGoal.uid, {
-    title: subGoal.title.trim(),
-    prompt: subGoal.title.trim()
+    title: subGoal.title.trim()
   });
 }
 

@@ -80,11 +80,15 @@ async function addMilestone() {
   if (!newMilestoneTitle.value.trim()) return;
   
   const newMilestone: TaskData = {
+    uid: crypto.randomUUID(),
     taskType: 'milestone',
     title: newMilestoneTitle.value.trim(),
     prompt: `Complete this milestone: ${newMilestoneTitle.value.trim()}`,
-    evaluateAfterDoing: false,
-    wantToDoAgain: true
+    evaluateCorrectnessAndConfidenceAfterDoing: false,
+    decideWhetherToDoAgainAfterDoing: true,
+    isActive: true,
+    taskSize: 'small',
+    associatedUnits: []
   };
   
   milestones.value.push(newMilestone);

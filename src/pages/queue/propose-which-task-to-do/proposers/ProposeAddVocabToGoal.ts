@@ -19,7 +19,7 @@ export class ProposeAddVocabToGoal implements TaskProposerContract {
         const coreTask = goal.coreTasks.find(t => t.taskType === 'add-vocab-to-goal');
         
         // If this goal has the add-vocab-to-goal task and it's not marked as complete
-        if (coreTask && coreTask.wantToDoAgain !== false) {
+        if (coreTask && coreTask.isActive !== false) {
           return {
             uid: crypto.randomUUID(),
             taskType: 'add-vocab-to-goal',

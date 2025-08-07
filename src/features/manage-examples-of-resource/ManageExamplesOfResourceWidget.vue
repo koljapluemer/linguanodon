@@ -18,6 +18,11 @@ const props = defineProps<{
   resourceUid: string;
 }>();
 
+const emit = defineEmits<{
+  taskMayNowBeConsideredDone: [];
+  taskMayNowNotBeConsideredDone: [];
+}>();
+
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {
   throw new Error('ResourceRepo not provided');
@@ -25,18 +30,30 @@ if (!resourceRepo) {
 
 const exampleIds = ref<string[]>([]);
 const defaultLanguage = ref<string>('');
+const initialExampleIds = ref<string[]>([]);
+const hasExamplesChanged = ref(false);
 
 async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
     exampleIds.value = [...resource.examples];
+    initialExampleIds.value = [...resource.examples];
     defaultLanguage.value = resource.language;
   }
 }
 
 async function handleExamplesUpdate(newExampleIds: string[]) {
   if (!resourceRepo) return;
+  
+  // Check if examples list has changed from initial state
+  const examplesListChanged = JSON.stringify(newExampleIds.sort()) !== JSON.stringify(initialExampleIds.value.sort());
+  
+  if (examplesListChanged && !hasExamplesChanged.value) {
+    hasExamplesChanged.value = true;
+    emit('taskMayNowBeConsideredDone');
+  }
+  
   // Auto-save - update the resource with new example IDs
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {

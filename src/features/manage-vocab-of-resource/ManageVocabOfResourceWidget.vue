@@ -30,6 +30,11 @@ const props = defineProps<{
   allowAddingNew?: boolean;
 }>();
 
+const emit = defineEmits<{
+  taskMayNowBeConsideredDone: [];
+  taskMayNowNotBeConsideredDone: [];
+}>();
+
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {
   throw new Error('ResourceRepo not provided');
@@ -37,18 +42,30 @@ if (!resourceRepo) {
 
 const vocabIds = ref<string[]>([]);
 const defaultLanguage = ref<string>('');
+const initialVocabIds = ref<string[]>([]);
+const hasVocabChanged = ref(false);
 
 async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
     vocabIds.value = [...resource.vocab];
+    initialVocabIds.value = [...resource.vocab];
     defaultLanguage.value = resource.language;
   }
 }
 
 async function handleVocabUpdate(newVocabIds: string[]) {
   if (!resourceRepo) return;
+  
+  // Check if vocab list has changed from initial state
+  const vocabListChanged = JSON.stringify(newVocabIds.sort()) !== JSON.stringify(initialVocabIds.value.sort());
+  
+  if (vocabListChanged && !hasVocabChanged.value) {
+    hasVocabChanged.value = true;
+    emit('taskMayNowBeConsideredDone');
+  }
+  
   // Auto-save - update the resource with new vocab IDs
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
@@ -67,6 +84,14 @@ async function handleVocabDisconnect(vocabUid: string) {
     await resourceRepo.disconnectVocabFromResource(props.resourceUid, vocabUid);
     // Refresh the vocab list
     await loadResource();
+    
+    // Check if vocab list has changed after disconnect
+    const vocabListChanged = JSON.stringify(vocabIds.value.sort()) !== JSON.stringify(initialVocabIds.value.sort());
+    
+    if (vocabListChanged && !hasVocabChanged.value) {
+      hasVocabChanged.value = true;
+      emit('taskMayNowBeConsideredDone');
+    }
   } catch (error) {
     console.error('Failed to disconnect vocab:', error);
   }
