@@ -8,6 +8,18 @@
         </button>
       </div>
       <ResourceFormRenderer :resource-uid="route.params.uid as string" />
+      
+      <!-- Associated Vocabulary Section -->
+      <div v-if="currentResourceData" class="card bg-base-100 shadow-xl mt-6">
+        <div class="card-body">
+          <VocabGroupForm
+            :vocab-ids="currentResourceData.extractedVocab"
+            :default-language="currentResourceData.language"
+            :allow-edit-on-click="false"
+            @update:vocab-ids="updateExtractedVocab"
+          />
+        </div>
+      </div>
     </div>
 
     <!-- Task Modal -->
@@ -27,16 +39,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import ResourceFormRenderer from '@/features/resource-form/ResourceFormRenderer.vue';
 import RenderTaskForResource from '@/widgets/task-for-resource/RenderTaskForResource.vue';
+import VocabGroupForm from '@/entities/vocab/VocabGroupForm.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 
 const route = useRoute();
 const taskModal = ref<HTMLDialogElement>();
 const currentResource = ref<ResourceData>();
+const currentResourceData = ref<ResourceData>();
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {
@@ -57,4 +71,30 @@ const handleTaskFinished = () => {
   taskModal.value?.close();
   currentResource.value = undefined;
 };
+
+// Load resource data on mount and when route changes
+const loadResourceData = async () => {
+  if (!route.params.uid) return;
+  
+  const resource = await resourceRepo.getResourceById(route.params.uid as string);
+  if (resource) {
+    currentResourceData.value = resource;
+  }
+};
+
+// Function to update extracted vocab when vocab changes
+const updateExtractedVocab = async (vocabIds: string[]) => {
+  if (!currentResourceData.value) return;
+  
+  const updatedResource: ResourceData = {
+    ...currentResourceData.value,
+    extractedVocab: vocabIds
+  };
+  
+  await resourceRepo.updateResource(updatedResource);
+  currentResourceData.value = updatedResource;
+};
+
+onMounted(loadResourceData);
+watch(() => route.params.uid, loadResourceData);
 </script>
