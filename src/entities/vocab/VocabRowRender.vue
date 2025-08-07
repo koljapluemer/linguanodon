@@ -5,8 +5,11 @@
       v-if="!isEditing"
       :vocab="vocab"
       :allow-edit-on-click="allowEditOnClick"
+      :show-delete-button="showDeleteButton"
+      :show-disconnect-button="showDisconnectButton"
       @edit="startEditing"
       @delete="$emit('delete')"
+      @disconnect="$emit('disconnect')"
     />
     
     <!-- Edit Mode -->
@@ -30,11 +33,14 @@ const props = defineProps<{
   vocab: VocabData;
   defaultLanguage?: string;
   allowEditOnClick?: boolean;
+  showDeleteButton?: boolean;
+  showDisconnectButton?: boolean;
 }>();
 
 const emit = defineEmits<{
   save: [VocabData];
   delete: [];
+  disconnect: [];
 }>();
 
 // Per-row edit state

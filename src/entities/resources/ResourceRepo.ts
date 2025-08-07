@@ -88,4 +88,19 @@ export class ResourceRepo implements ResourceRepoContract {
   async deleteResource(uid: string): Promise<void> {
     await this.storage.delete(uid);
   }
+
+  async disconnectVocabFromResource(resourceUid: string, vocabUid: string): Promise<void> {
+    const resource = await this.storage.getByUID(resourceUid);
+    if (!resource) {
+      throw new Error('Resource not found');
+    }
+
+    // Remove the vocab UID from the extractedVocab array
+    const updatedResource: ResourceData = {
+      ...resource,
+      extractedVocab: resource.extractedVocab.filter(id => id !== vocabUid)
+    };
+
+    await this.storage.update(updatedResource);
+  }
 }

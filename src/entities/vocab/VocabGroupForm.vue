@@ -8,8 +8,11 @@
         :vocab="vocab"
         :default-language="defaultLanguage"
         :allow-edit-on-click="allowEditOnClick"
+        :show-delete-button="showDeleteButton"
+        :show-disconnect-button="showDisconnectButton"
         @save="saveVocab(index, $event)"
         @delete="deleteVocab(index)"
+        @disconnect="handleDisconnect(vocab.uid)"
       />
     </div>
     
@@ -35,10 +38,13 @@ const props = defineProps<{
   vocabIds: string[];
   defaultLanguage?: string;
   allowEditOnClick?: boolean;
+  showDeleteButton?: boolean;
+  showDisconnectButton?: boolean;
 }>();
 
 const emit = defineEmits<{
   'update:vocabIds': [string[]];
+  'disconnect': [string]; // Emit vocab uid to disconnect
 }>();
 
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
@@ -147,5 +153,9 @@ function resetNewVocab() {
     language: props.defaultLanguage || '',
     translations: []
   };
+}
+
+function handleDisconnect(vocabUid: string) {
+  emit('disconnect', vocabUid);
 }
 </script>

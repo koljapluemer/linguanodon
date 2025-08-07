@@ -4,7 +4,10 @@
       :vocab-ids="vocabIds"
       :default-language="defaultLanguage"
       :allow-edit-on-click="true"
+      :show-delete-button="true"
+      :show-disconnect-button="true"
       @update:vocab-ids="handleVocabUpdate"
+      @disconnect="handleVocabDisconnect"
     />
   </div>
 </template>
@@ -47,6 +50,17 @@ async function handleVocabUpdate(newVocabIds: string[]) {
     };
     await resourceRepo.updateResource(updatedResource);
     vocabIds.value = newVocabIds;
+  }
+}
+
+async function handleVocabDisconnect(vocabUid: string) {
+  if (!resourceRepo) return;
+  try {
+    await resourceRepo.disconnectVocabFromResource(props.resourceUid, vocabUid);
+    // Refresh the vocab list
+    await loadResource();
+  } catch (error) {
+    console.error('Failed to disconnect vocab:', error);
   }
 }
 

@@ -16,7 +16,10 @@
             :vocab-ids="currentResourceData.extractedVocab"
             :default-language="currentResourceData.language"
             :allow-edit-on-click="false"
+            :show-delete-button="false"
+            :show-disconnect-button="true"
             @update:vocab-ids="updateExtractedVocab"
+            @disconnect="handleVocabDisconnect"
           />
         </div>
       </div>
@@ -93,6 +96,19 @@ const updateExtractedVocab = async (vocabIds: string[]) => {
   
   await resourceRepo.updateResource(updatedResource);
   currentResourceData.value = updatedResource;
+};
+
+// Function to handle vocab disconnection
+const handleVocabDisconnect = async (vocabUid: string) => {
+  if (!currentResourceData.value) return;
+  
+  try {
+    await resourceRepo.disconnectVocabFromResource(currentResourceData.value.uid, vocabUid);
+    // Refresh the resource data to reflect the changes
+    await loadResourceData();
+  } catch (error) {
+    console.error('Failed to disconnect vocab:', error);
+  }
 };
 
 onMounted(loadResourceData);

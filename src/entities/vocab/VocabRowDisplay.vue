@@ -27,8 +27,18 @@
         <Edit class="w-4 h-4" />
       </button>
       <button
+        v-if="showDisconnectButton"
+        class="btn btn-sm btn-ghost text-warning"
+        @click="$emit('disconnect')"
+        title="Disconnect from resource"
+      >
+        <Unlink class="w-4 h-4" />
+      </button>
+      <button
+        v-if="showDeleteButton"
         class="btn btn-sm btn-ghost text-error"
         @click="$emit('delete')"
+        title="Delete vocabulary"
       >
         <X class="w-4 h-4" />
       </button>
@@ -37,17 +47,20 @@
 </template>
 
 <script setup lang="ts">
-import { X, Edit } from 'lucide-vue-next';
+import { X, Edit, Unlink } from 'lucide-vue-next';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 import type { VocabData } from './vocab/VocabData';
 
 defineProps<{
   vocab: VocabData;
   allowEditOnClick?: boolean;
+  showDeleteButton?: boolean;
+  showDisconnectButton?: boolean;
 }>();
 
 defineEmits<{
   edit: [];
   delete: [];
+  disconnect: [];
 }>();
 </script>

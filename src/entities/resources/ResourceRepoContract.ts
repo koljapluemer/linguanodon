@@ -7,4 +7,5 @@ export interface ResourceRepoContract {
   saveResource(resource: Partial<ResourceData>): Promise<ResourceData>;
   updateResource(resource: ResourceData): Promise<void>;
   deleteResource(uid: string): Promise<void>;
+  disconnectVocabFromResource(resourceUid: string, vocabUid: string): Promise<void>;
 }
