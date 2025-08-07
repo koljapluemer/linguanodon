@@ -56,7 +56,7 @@
 import { ref, inject, onMounted } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { TaskData } from '@/shared/TaskData';
+import type { TaskData } from '@/entities/tasks/TaskData';
 
 const props = defineProps<{
   goal: GoalData;

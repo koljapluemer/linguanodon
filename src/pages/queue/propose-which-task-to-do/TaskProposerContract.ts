@@ -1,5 +1,5 @@
-import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
+import type { Task } from '@/entities/tasks/Task';
 
 export interface TaskProposerContract {
-  proposeTask(): Promise<RuntimeTask | null>;
+  proposeTask(): Promise<Task | null>;
 }

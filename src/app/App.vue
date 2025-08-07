@@ -3,7 +3,7 @@ import { provide } from 'vue';
 import { setupRepositories } from './injectRepositories';
 
 // Setup and provide repositories
-const { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, languageRepo } = setupRepositories();
+const { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, taskRepo, languageRepo } = setupRepositories();
 
 provide('vocabRepo', vocabRepo);
 provide('exampleRepo', exampleRepo);
@@ -11,6 +11,7 @@ provide('goalRepo', goalRepo);
 provide('noteRepo', noteRepo);
 provide('factCardRepo', factCardRepo);
 provide('resourceRepo', resourceRepo);
+provide('taskRepo', taskRepo);
 provide('languageRepo', languageRepo);
 </script>
 
@@ -25,6 +26,7 @@ provide('languageRepo', languageRepo);
         <router-link :to="{ name: 'fact-cards-list' }" class="btn btn-ghost btn-sm">Fact Cards</router-link>
         <router-link :to="{ name: 'resources-list' }" class="btn btn-ghost btn-sm">Resources</router-link>
         <router-link :to="{ name: 'goals-list' }" class="btn btn-ghost btn-sm">Goals</router-link>
+        <router-link :to="{ name: 'tasks' }" class="btn btn-ghost btn-sm">Tasks</router-link>
         <router-link :to="{ name: 'languages' }" class="btn btn-ghost btn-sm">Languages</router-link>
         <router-link :to="{ name: 'downloads' }" class="btn btn-ghost btn-sm">Downloads</router-link>
 

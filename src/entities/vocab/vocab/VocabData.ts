@@ -1,6 +1,6 @@
 import type { LearningProgress } from "@/shared/LearningProgress";
 import type { Link } from "@/shared/Link";
-import type { TaskData } from "@/shared/TaskData";
+import type { TaskData } from "@/entities/tasks/TaskData";
 
 
 export interface VocabData {

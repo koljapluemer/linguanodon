@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
@@ -16,7 +16,7 @@ interface PreloadConfig {
 
 interface PreloadedContent {
   vocabBatches: VocabData[][];
-  tasks: RuntimeTask[];
+  tasks: Task[];
 }
 
 interface PreloadStatus {
@@ -171,7 +171,7 @@ export function useQueuePreloader(
     return batch;
   }
 
-  function consumeNextTask(): RuntimeTask | null {
+  function consumeNextTask(): Task | null {
     const task = content.tasks.shift() || null;
     if (task) {
       status.tasksReady = content.tasks.length;
@@ -193,7 +193,7 @@ export function useQueuePreloader(
     return batch;
   }
 
-  async function forceLoadNextTask(): Promise<RuntimeTask | null> {
+  async function forceLoadNextTask(): Promise<Task | null> {
     const task = await taskPicker.pickTask();
     return task;
   }

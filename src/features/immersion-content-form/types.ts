@@ -62,9 +62,9 @@ export function formDataToImmersionContent(
 
   // Preserve existing data that's not in the form
   if (existingContent) {
-    baseData.extractedVocab = existingContent.extractedVocab;
-    baseData.extractedExamples = existingContent.extractedExamples;
-    baseData.extractedFactCards = existingContent.extractedFactCards;
+    baseData.vocab = existingContent.vocab;
+    baseData.examples = existingContent.examples;
+    baseData.factCards = existingContent.factCards;
     baseData.notes = existingContent.notes;
     baseData.taskType = existingContent.taskType;
     baseData.evaluateAfterDoing = existingContent.evaluateAfterDoing;

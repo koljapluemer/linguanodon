@@ -1,5 +1,5 @@
 import type { TaskProposerContract } from '../TaskProposerContract';
-import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
+import type { Task } from '@/entities/tasks/Task';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
@@ -14,7 +14,7 @@ export class ProposeFreeTranslate implements TaskProposerContract {
     private vocabRepo?: VocabAndTranslationRepoContract
   ) {}
 
-  async proposeTask(): Promise<RuntimeTask | null> {
+  async proposeTask(): Promise<Task | null> {
     if (!this.exampleRepo || !this.vocabRepo) {
       console.warn('Required repos not available for ProposeFreeTranslate');
       return null;
@@ -66,11 +66,20 @@ export class ProposeFreeTranslate implements TaskProposerContract {
       
       
       return {
+        uid: crypto.randomUUID(),
         taskType: 'free-translate',
-        data: {
-          exampleId: selectedExample.uid,
-          example: selectedExample
-        }
+        title: `Translate: ${selectedExample.sourceText}`,
+        prompt: `Translate the following text: "${selectedExample.sourceText}".`,
+        evaluateCorrectnessAndConfidenceAfterDoing: true,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'medium',
+        associatedUnits: [
+          { type: 'Example', uid: selectedExample.uid },
+          ...selectedExample.associatedVocab.map(vocabId => ({ type: 'Vocab' as const, uid: vocabId }))
+        ],
+        mayBeConsideredDone: false,
+        isDone: false
       };
     } catch (error) {
       console.error('Error proposing free-translate task:', error);

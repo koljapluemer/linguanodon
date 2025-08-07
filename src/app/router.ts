@@ -10,6 +10,7 @@ import PageListResources from '@/pages/resources/PageListResources.vue';
 import PageManageResource from '@/pages/resources/PageManageResource.vue';
 import PageListGoals from '@/pages/goals/PageListGoals.vue';
 import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
+import PageTasks from '@/pages/tasks/PageTasks.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
 import PageLanguages from '@/pages/languages/PageLanguages.vue';
 
@@ -99,6 +100,11 @@ const router = createRouter({
       path: '/goals/:id',
       name: 'goals-edit',
       component: PageManageGoal
+    },
+    {
+      path: '/tasks',
+      name: 'tasks',
+      component: PageTasks
     },
     {
       path: '/downloads',

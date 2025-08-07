@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
+import type { Task } from '@/entities/tasks/Task';
 import type { useQueuePreloader } from './useQueuePreloader';
 
 // State machine types
@@ -8,7 +8,7 @@ export type QueueState =
   | { status: 'initializing' }
   | { status: 'loading', message?: string }
   | { status: 'vocab', vocab: VocabData, batchIndex: number, batchSize: number }
-  | { status: 'task', task: RuntimeTask }
+  | { status: 'task', task: Task }
   | { status: 'empty', message: string }
   | { status: 'error', message: string };
 

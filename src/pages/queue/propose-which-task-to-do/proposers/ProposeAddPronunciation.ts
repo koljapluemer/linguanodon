@@ -1,11 +1,11 @@
 import type { TaskProposerContract } from '../TaskProposerContract';
-import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 
 export class ProposeAddPronunciation implements TaskProposerContract {
   constructor(private vocabRepo?: VocabAndTranslationRepoContract) {}
 
-  async proposeTask(): Promise<RuntimeTask | null> {
+  async proposeTask(): Promise<Task | null> {
     if (!this.vocabRepo) {
       console.warn('VocabRepo not available for ProposeAddPronunciation');
       return null;
@@ -16,11 +16,17 @@ export class ProposeAddPronunciation implements TaskProposerContract {
       if (!vocab) return null;
 
       return {
+        uid: crypto.randomUUID(),
         taskType: 'add-pronunciation',
-        data: {
-          vocabId: vocab.uid,
-          vocab: vocab
-        }
+        title: `Add pronunciation for "${vocab.content}"`,
+        prompt: `Add pronunciation for the word "${vocab.content}".`,
+        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'small',
+        associatedUnits: [{ type: 'Vocab', uid: vocab.uid }],
+        mayBeConsideredDone: false,
+        isDone: false
       };
     } catch (error) {
       console.error('Error proposing add pronunciation task:', error);

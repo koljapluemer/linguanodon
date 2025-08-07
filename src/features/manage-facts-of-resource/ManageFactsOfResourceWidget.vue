@@ -30,7 +30,7 @@ async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
-    factCardIds.value = [...resource.extractedFactCards];
+    factCardIds.value = [...resource.factCards];
     defaultLanguage.value = resource.language;
   }
 }
@@ -42,7 +42,7 @@ async function handleFactCardsUpdate(newFactCardIds: string[]) {
   if (resource) {
     const updatedResource: ResourceData = {
       ...resource,
-      extractedFactCards: newFactCardIds
+      factCards: newFactCardIds
     };
     await resourceRepo.updateResource(updatedResource);
     factCardIds.value = newFactCardIds;

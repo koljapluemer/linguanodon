@@ -54,8 +54,8 @@
               <div class="flex items-center gap-4 text-sm text-base-content/70 mt-1">
                 <LanguageDisplay :language-code="content.language" compact />
                 <span>Priority: {{ content.priority }}</span>
-                <span v-if="content.extractedVocab.length > 0">
-                  {{ content.extractedVocab.length }} vocab units
+                <span v-if="content.vocab.length > 0">
+                  {{ content.vocab.length }} vocab units
                 </span>
               </div>
               
@@ -206,15 +206,15 @@ async function loadVocabReadiness() {
   const readinessMap = new Map<string, { ready: number; total: number }>();
   
   for (const item of content.value) {
-    if (item.extractedVocab.length === 0) {
+    if (item.vocab.length === 0) {
       // Don't add to map if no associated vocab - progress bar will be hidden
       continue;
     }
     
     let readyCount = 0;
-    const totalCount = item.extractedVocab.length;
+    const totalCount = item.vocab.length;
     
-    for (const vocabId of item.extractedVocab) {
+    for (const vocabId of item.vocab) {
       const vocab = await vocabRepo!.getVocabByUID(vocabId);
       if (vocab && isCurrentlyTopOfMind(vocab)) {
         readyCount++;

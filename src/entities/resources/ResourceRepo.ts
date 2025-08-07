@@ -15,20 +15,14 @@ export class ResourceRepo implements ResourceRepoContract {
 
   async getRandomDueResource(): Promise<ResourceData | null> {
     const allResources = await this.storage.getAll();
-    const now = new Date();
     
-    // Filter to only due resources (nextShownEarliestAt does not exist or is in the past)
-    const dueResources = allResources.filter(resource => 
-      !resource.nextShownEarliestAt || resource.nextShownEarliestAt <= now
-    );
-    
-    if (dueResources.length === 0) {
+    if (allResources.length === 0) {
       return null;
     }
     
     // Pick a random resource
-    const randomIndex = Math.floor(Math.random() * dueResources.length);
-    return dueResources[randomIndex];
+    const randomIndex = Math.floor(Math.random() * allResources.length);
+    return allResources[randomIndex];
   }
 
   async saveResource(resource: Partial<ResourceData>): Promise<ResourceData> {
@@ -40,33 +34,17 @@ export class ResourceRepo implements ResourceRepoContract {
     const resourceData: ResourceData = {
       uid: resource.uid || crypto.randomUUID(),
       language: resource.language,
-      priority: resource.priority || 0,
-      extractedVocab: resource.extractedVocab || [],
-      extractedExamples: resource.extractedExamples || [],
-      extractedFactCards: resource.extractedFactCards || [],
-      notes: resource.notes || [],
-      isImmersionContent: resource.isImmersionContent,
-      
-      // Content and link fields
+      isImmersionContent: resource.isImmersionContent || false,
+      title: resource.title,
       content: resource.content,
       link: resource.link,
-      
-      // TaskData fields
-      taskType: resource.taskType || 'resource',
-      title: resource.title,
-      prompt: resource.prompt || '',
-      evaluateAfterDoing: resource.evaluateAfterDoing,
-      decideWhetherToDoAgainAfterDoing: resource.decideWhetherToDoAgainAfterDoing,
-      extraInfo: resource.extraInfo,
-      lastShownAt: resource.lastShownAt,
-      wantToDoAgain: resource.wantToDoAgain,
-      nextShownEarliestAt: resource.nextShownEarliestAt,
-      lastDifficultyRating: resource.lastDifficultyRating,
-      lastCorrectnessRating: resource.lastCorrectnessRating,
-      
-      // LocalObject fields
-      isUserCreated: resource.isUserCreated ?? true,
-      lastDownloadedAt: resource.lastDownloadedAt || null
+      priority: resource.priority || 0,
+      vocab: resource.vocab || [],
+      examples: resource.examples || [],
+      factCards: resource.factCards || [],
+      notes: resource.notes || [],
+      tasks: resource.tasks || [],
+      lastShownAt: resource.lastShownAt
     };
 
     console.log('ResourceRepo: Attempting to save resource:', resourceData.title);
@@ -98,7 +76,7 @@ export class ResourceRepo implements ResourceRepoContract {
     // Remove the vocab UID from the extractedVocab array
     const updatedResource: ResourceData = {
       ...resource,
-      extractedVocab: resource.extractedVocab.filter(id => id !== vocabUid)
+      vocab: resource.vocab.filter(id => id !== vocabUid)
     };
 
     await this.storage.update(updatedResource);

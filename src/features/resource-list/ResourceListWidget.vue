@@ -56,14 +56,14 @@
 
               <!-- Extracted content counts -->
               <div class="flex gap-4 text-sm text-base-content/60">
-                <span v-if="resource.extractedVocab.length > 0">
-                  {{ resource.extractedVocab.length }} vocab
+                <span v-if="resource.vocab.length > 0">
+                  {{ resource.vocab.length }} vocab
                 </span>
-                <span v-if="resource.extractedExamples.length > 0">
-                  {{ resource.extractedExamples.length }} examples
+                <span v-if="resource.examples.length > 0">
+                  {{ resource.examples.length }} examples
                 </span>
-                <span v-if="resource.extractedFactCards.length > 0">
-                  {{ resource.extractedFactCards.length }} facts
+                <span v-if="resource.factCards.length > 0">
+                  {{ resource.factCards.length }} facts
                 </span>
               </div>
             </div>

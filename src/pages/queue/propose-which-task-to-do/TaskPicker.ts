@@ -1,4 +1,4 @@
-import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
@@ -43,11 +43,6 @@ export class TaskPicker {
       addMilestonesProposer.setGoalRepo(goalRepo);
     }
     
-    const resourceProposer = TASK_REGISTRY['resource'].proposer as { setResourceRepo?: (repo: ResourceRepoContract) => void };
-    if (resourceProposer.setResourceRepo) {
-      resourceProposer.setResourceRepo(resourceRepo);
-    }
-    
     const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as { setRepos?: (resourceRepo: ResourceRepoContract, vocabRepo: VocabAndTranslationRepoContract) => void };
     if (immersionContentProposer.setRepos) {
       immersionContentProposer.setRepos(resourceRepo, vocabRepo);
@@ -56,13 +51,13 @@ export class TaskPicker {
     this.initialized = true;
   }
   
-  async pickTask(): Promise<RuntimeTask | null> {
+  async pickTask(): Promise<Task | null> {
     if (!this.initialized) {
       console.warn('TaskPicker not initialized with repositories');
       return null;
     }
     const proposers = Object.values(TASK_REGISTRY).map(def => def.proposer);
-    const proposals: RuntimeTask[] = [];
+    const proposals: Task[] = [];
     
     // Collect proposals from all proposers
     for (const proposer of proposers) {

@@ -1,4 +1,3 @@
-import type { TaskDefinition } from '@/shared/RuntimeTaskTypes';
 import { ProposeAddPronunciation } from './proposers/ProposeAddPronunciation';
 import { ProposeImmersionContent } from './proposers/ProposeImmersionContent';
 import { ProposeFreeTranslate } from './proposers/ProposeFreeTranslate';
@@ -7,7 +6,13 @@ import { ProposeAddVocabToGoal } from './proposers/ProposeAddVocabToGoal';
 import { ProposeAddExamplesToGoal } from './proposers/ProposeAddExamplesToGoal';
 import { ProposeAddMilestones } from './proposers/ProposeAddMilestones';
 import { ProposeResource } from './proposers/ProposeResource';
-import type { TaskType } from '@/shared/TaskType';
+import type { TaskType } from '@/entities/tasks/TaskData';
+import type { TaskProposerContract } from './TaskProposerContract';
+
+export interface TaskDefinition {
+  taskType: TaskType;
+  proposer: TaskProposerContract;
+}
 
 export const TASK_REGISTRY: Record<TaskType, TaskDefinition> = {
   'add-pronunciation': {
@@ -38,9 +43,17 @@ export const TASK_REGISTRY: Record<TaskType, TaskDefinition> = {
     taskType: 'add-milestones',
     proposer: new ProposeAddMilestones()
   },
-  'resource': {
-    taskType: 'resource',
-    proposer: new ProposeResource()
+  'add-vocab-to-resource': {
+    taskType: 'add-vocab-to-resource',
+    proposer: new ProposeResource() // TODO: Create specific proposer
+  },
+  'add-examples-to-resource': {
+    taskType: 'add-examples-to-resource',
+    proposer: new ProposeResource() // TODO: Create specific proposer
+  },
+  'add-fact-cards-to-resource': {
+    taskType: 'add-fact-cards-to-resource',
+    proposer: new ProposeResource() // TODO: Create specific proposer
   },
   'complete-goal': {
     taskType: 'complete-goal',

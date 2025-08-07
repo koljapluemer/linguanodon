@@ -1,11 +1,11 @@
 import type { TaskProposerContract } from '../TaskProposerContract';
-import type { RuntimeTask } from '@/shared/RuntimeTaskTypes';
+import type { Task } from '@/entities/tasks/Task';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 
 export class ProposeAddSubGoals implements TaskProposerContract {
   constructor(private goalRepo?: GoalRepoContract) {}
 
-  async proposeTask(): Promise<RuntimeTask | null> {
+  async proposeTask(): Promise<Task | null> {
     if (!this.goalRepo) {
       console.warn('GoalRepo not available for ProposeAddSubGoals');
       return null;
@@ -21,8 +21,17 @@ export class ProposeAddSubGoals implements TaskProposerContract {
         // If this goal has the add-sub-goals task and it's not marked as complete
         if (coreTask && coreTask.wantToDoAgain !== false) {
           return {
+            uid: crypto.randomUUID(),
             taskType: 'add-sub-goals',
-            data: { goalId: goal.uid, goal }
+            title: `Add sub-goals to "${goal.title}"`,
+            prompt: `Break down the goal "${goal.title}" into smaller, actionable sub-goals.`,
+            evaluateCorrectnessAndConfidenceAfterDoing: false,
+            decideWhetherToDoAgainAfterDoing: true,
+            isActive: true,
+            taskSize: 'big',
+            associatedUnits: [{ type: 'Goal', uid: goal.uid }],
+            mayBeConsideredDone: false,
+            isDone: false
           };
         }
       }

@@ -1,7 +1,7 @@
 import { goalStorage } from './GoalStorage';
 import type { GoalData } from './GoalData';
 import type { GoalRepoContract } from './GoalRepoContract';
-import type { TaskData } from '@/shared/TaskData';
+import type { TaskData } from '@/entities/tasks/TaskData';
 
 export class GoalRepo implements GoalRepoContract {
   async getAll(): Promise<GoalData[]> {

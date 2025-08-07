@@ -4,7 +4,6 @@ export interface RemoteResource {
   language: string;
   priority: number;
   title: string;
-  prompt: string;
 
   content?: string;
   link?: Link

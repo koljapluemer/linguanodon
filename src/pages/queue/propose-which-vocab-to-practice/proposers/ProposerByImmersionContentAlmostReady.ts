@@ -27,15 +27,15 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
       
       // Find the immersion content with the highest top-of-mind percentage below 90%
       for (const content of allContent) {
-        if (content.extractedVocab.length === 0) {
+        if (content.vocab.length === 0) {
           continue; // Skip content with no associated vocab
         }
         
         // Calculate top-of-mind percentage for this content
         let topOfMindCount = 0;
-        const totalCount = content.extractedVocab.length;
+        const totalCount = content.vocab.length;
         
-        for (const vocabId of content.extractedVocab) {
+        for (const vocabId of content.vocab) {
           const vocab = await this.vocabRepo.getVocabByUID(vocabId);
           if (vocab && isCurrentlyTopOfMind(vocab)) {
             topOfMindCount++;
@@ -59,7 +59,7 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
       const vocabToTrain: VocabData[] = [];
       const now = new Date();
       
-      for (const vocabId of bestContent.extractedVocab) {
+      for (const vocabId of bestContent.vocab) {
         const vocab = await this.vocabRepo.getVocabByUID(vocabId);
         if (vocab && !vocab.doNotPractice) {
           // Include vocab that is due for practice OR is new (never practiced)

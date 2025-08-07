@@ -1,5 +1,5 @@
 import type { LocalObject } from "@/shared/LocalObject";
-import type { TaskData } from "@/shared/TaskData";
+import type { TaskData } from "@/entities/tasks/TaskData";
 
 export interface GoalData extends LocalObject, TaskData {
   uid: string;

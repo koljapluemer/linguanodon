@@ -30,7 +30,7 @@ async function loadResource() {
   if (!resourceRepo) return;
   const resource = await resourceRepo.getResourceById(props.resourceUid);
   if (resource) {
-    exampleIds.value = [...resource.extractedExamples];
+    exampleIds.value = [...resource.examples];
     defaultLanguage.value = resource.language;
   }
 }
@@ -42,7 +42,7 @@ async function handleExamplesUpdate(newExampleIds: string[]) {
   if (resource) {
     const updatedResource: ResourceData = {
       ...resource,
-      extractedExamples: newExampleIds
+      examples: newExampleIds
     };
     await resourceRepo.updateResource(updatedResource);
     exampleIds.value = newExampleIds;
