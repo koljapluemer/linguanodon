@@ -17,6 +17,15 @@
       />
     </div>
     
+    <!-- Connect existing vocab row -->
+    <VocabRowConnect
+      v-if="allowConnectingExisting"
+      :default-language="defaultLanguage"
+      :exclude-ids="vocabIds"
+      @connect="connectExistingVocab"
+      @cancel="() => {}"
+    />
+    
     <!-- Add new vocab row -->
     <VocabRowEdit
       v-if="allowAddingNew !== false"
@@ -35,6 +44,7 @@ import type { VocabData } from './vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';
 import VocabRowRender from './VocabRowRender.vue';
 import VocabRowEdit from './VocabRowEdit.vue';
+import VocabRowConnect from './VocabRowConnect.vue';
 
 const props = defineProps<{
   vocabIds: string[];
@@ -44,6 +54,7 @@ const props = defineProps<{
   showDisconnectButton?: boolean;
   allowJumpingToVocabPage?: boolean;
   allowAddingNew?: boolean;
+  allowConnectingExisting?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -161,5 +172,16 @@ function resetNewVocab() {
 
 function handleDisconnect(vocabUid: string) {
   emit('disconnect', vocabUid);
+}
+
+async function connectExistingVocab(vocab: VocabData) {
+  try {
+    // Add the vocab to our local list
+    vocabItems.value.push(vocab);
+    // Emit the updated vocab IDs
+    emit('update:vocabIds', vocabItems.value.map(v => v.uid));
+  } catch (error) {
+    console.error('Failed to connect vocab:', error);
+  }
 }
 </script>

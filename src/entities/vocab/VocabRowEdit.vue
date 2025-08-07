@@ -46,9 +46,9 @@
         <div class="flex gap-2">
           <button
             class="btn btn-sm btn-ghost"
-            @click="$emit('cancel')"
+            @click="handleClearOrCancel"
           >
-            Cancel
+            {{ isNew ? 'Clear' : 'Cancel' }}
           </button>
           <button
             class="btn btn-sm btn-primary"
@@ -200,5 +200,20 @@ function handleSave() {
   };
 
   emit('save', vocabData);
+}
+
+function handleClearOrCancel() {
+  if (props.isNew) {
+    // Clear/reset form to default values
+    localVocab.value = {
+      language: props.defaultLanguage || '',
+      content: '',
+      translations: []
+    } as VocabData;
+    translationsText.value = '';
+  } else {
+    // Cancel editing - emit cancel event
+    emit('cancel');
+  }
 }
 </script>

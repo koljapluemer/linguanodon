@@ -118,7 +118,14 @@ const handleEvaluationFinished = () => {
           <div class="mt-6">
             <!-- Vocabulary Tab -->
             <div v-if="activeTab === 'vocab'" role="tabpanel">
-              <ManageVocabOfResourceWidget :resource-uid="resource.uid" />
+              <ManageVocabOfResourceWidget 
+                :resource-uid="resource.uid"
+                :show-delete-button="true"
+                :show-disconnect-button="true"
+                :allow-jumping-to-vocab-page="false"
+                :allow-connecting-existing="true"
+                :allow-adding-new="true"
+              />
             </div>
 
             <!-- Examples Tab -->

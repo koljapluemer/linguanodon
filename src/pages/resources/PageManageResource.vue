@@ -17,6 +17,7 @@
             :show-delete-button="false"
             :show-disconnect-button="true"
             :allow-jumping-to-vocab-page="true"
+            :allow-connecting-existing="true"
           />
         </div>
       </div>
