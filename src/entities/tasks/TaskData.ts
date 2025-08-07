@@ -27,6 +27,9 @@ export type TaskType =
   | 'add-vocab-to-resource'
   | 'add-examples-to-resource'
   | 'add-fact-cards-to-resource'
+  | 'vocab-try-to-remember'
+  | 'vocab-reveal'
+  | 'vocab-choose-from-options'
 
 type AssociatedEntity = 'Vocab' | 'Resource' | 'Example' | 'FactCard' | 'Goal'
 interface Association  {

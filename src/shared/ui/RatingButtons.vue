@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ExerciseRating } from '@/shared/ExerciseTypes';
+export type ExerciseRating = 'Impossible' | 'Hard' | 'Doable' | 'Easy';
 
 interface Props {
   prompt?: string;

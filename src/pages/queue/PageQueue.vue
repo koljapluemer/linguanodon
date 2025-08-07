@@ -5,7 +5,6 @@ import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContrac
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import { useCachedQueue } from './useCachedQueue';
-import PracticeVocabWidget from '@/features/practice-vocab/PracticeVocabWidget.vue';
 import MetaTaskRenderer from './MetaTaskRenderer.vue';
 
 // Inject repositories
@@ -21,7 +20,6 @@ if (!vocabRepo || !exampleRepo || !goalRepo || !resourceRepo) {
 const {
   state,
   initializeQueue,
-  completeCurrentVocab,
   completeCurrentTask,
   stateMachineDebug
 } = useCachedQueue(vocabRepo, exampleRepo, goalRepo, resourceRepo);
@@ -30,12 +28,6 @@ onMounted(async () => {
   await initializeQueue();
 });
 
-/**
- *
- */
-const handleVocabFinished = async () => {
-  await completeCurrentVocab();
-};
 
 /**
  *
@@ -79,15 +71,6 @@ const handleTaskFinished = async () => {
         </div>
       </div>
 
-      <!-- Vocab Exercise -->
-      <div v-else-if="state.status === 'vocab'">
-        
-        <PracticeVocabWidget 
-          :key="state.vocab.uid"
-          :vocab="state.vocab"
-          @finished="handleVocabFinished"
-        />
-      </div>
 
       <!-- Task -->
       <div v-else-if="state.status === 'task'">

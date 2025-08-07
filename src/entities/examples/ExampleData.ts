@@ -1,7 +1,6 @@
 import type { LearningProgress } from "@/shared/LearningProgress";
 import type { Link } from "@/shared/Link";
 import type { LocalObject } from "@/shared/LocalObject";
-import type { TaskData } from "@/entities/tasks/TaskData";
 
 export interface ExampleData extends LocalObject {
   uid: string;
@@ -10,7 +9,7 @@ export interface ExampleData extends LocalObject {
   translation?: string;
   situation?: string;
   associatedVocab: string[]; // ids of vocab
-  associatedTasks: TaskData[];
+  tasks: string[]; // ids of TaskData
   notes: string[]; // ids of NoteData repo
   links: Link[];
 

@@ -17,6 +17,9 @@ import TaskAddSubGoals from '@/widgets/TaskAddSubGoals.vue';
 import TaskAddVocabToGoal from '@/widgets/TaskAddVocabToGoal.vue';
 import TaskAddExamplesToGoal from '@/widgets/TaskAddExamplesToGoal.vue';
 import TaskAddMilestones from '@/widgets/TaskAddMilestones.vue';
+import TaskVocabTryToRemember from '@/widgets/TaskVocabTryToRemember.vue';
+import TaskVocabReveal from '@/widgets/TaskVocabReveal.vue';
+import TaskVocabChooseFromOptions from '@/widgets/TaskVocabChooseFromOptions.vue';
 
 interface Props {
   task: Task;
@@ -148,6 +151,25 @@ const handleFinished = () => {
       v-else-if="task.taskType === 'add-milestones' && goalUid"
       :goal-id="goalUid"
       @task-completed="handleFinished"
+    />
+    
+    <!-- Vocab Practice Tasks -->
+    <TaskVocabTryToRemember
+      v-else-if="task.taskType === 'vocab-try-to-remember'"
+      :task="task"
+      @finished="handleFinished"
+    />
+    
+    <TaskVocabReveal
+      v-else-if="task.taskType === 'vocab-reveal'"
+      :task="task"
+      @finished="handleFinished"
+    />
+    
+    <TaskVocabChooseFromOptions
+      v-else-if="task.taskType === 'vocab-choose-from-options'"
+      :task="task"
+      @finished="handleFinished"
     />
     
     <!-- Loading state while fetching associated data -->

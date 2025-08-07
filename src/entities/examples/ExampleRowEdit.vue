@@ -105,7 +105,7 @@ function handleSave() {
     content: localExample.value.content?.trim(),
     translation: localExample.value.translation?.trim(),
     associatedVocab: localExample.value.associatedVocab || [],
-    associatedTasks: localExample.value.associatedTasks || [],
+    tasks: localExample.value.tasks || [],
     notes: localExample.value.notes || [],
     links: localExample.value.links || [],
     progress: localExample.value.progress || {

@@ -62,6 +62,18 @@ export const TASK_REGISTRY: Record<TaskType, TaskDefinition> = {
   'milestone': {
     taskType: 'milestone',
     proposer: new ProposeResource() // Placeholder
+  },
+  'vocab-try-to-remember': {
+    taskType: 'vocab-try-to-remember',
+    proposer: new ProposeResource() // Placeholder - vocab tasks handled separately
+  },
+  'vocab-reveal': {
+    taskType: 'vocab-reveal',
+    proposer: new ProposeResource() // Placeholder - vocab tasks handled separately
+  },
+  'vocab-choose-from-options': {
+    taskType: 'vocab-choose-from-options',
+    proposer: new ProposeResource() // Placeholder - vocab tasks handled separately
   }
 };
 

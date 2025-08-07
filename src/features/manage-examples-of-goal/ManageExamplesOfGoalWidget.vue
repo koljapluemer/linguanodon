@@ -127,7 +127,7 @@ async function addExample() {
     content: newExample.value.content.trim() || undefined,
     translation: newExample.value.translation.trim() || undefined,
     associatedVocab: [],
-    associatedTasks: [],
+    tasks: [],
     isUserCreated: true,
     lastDownloadedAt: null
   });

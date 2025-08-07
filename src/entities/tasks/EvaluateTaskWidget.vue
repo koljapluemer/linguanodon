@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import type { TaskEvaluation } from '@/shared/ExerciseTypes';
+export interface TaskEvaluation {
+  correctnessRating: number; // 1-5 range slider
+  difficultyRating: number;  // 1-5 range slider
+  wantToDoAgain: 'no' | 'yes' | 'maybe';
+}
 
 interface Props {
   showDifficultyRating?: boolean;

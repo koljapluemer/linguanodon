@@ -209,7 +209,7 @@ async function saveEntry(index: number) {
       translations: [], // Will be handled separately
       notes: [],
       links: [],
-      associatedTasks: []
+      tasks: []
     });
 
     // TODO: Create translation entities and link them to vocab

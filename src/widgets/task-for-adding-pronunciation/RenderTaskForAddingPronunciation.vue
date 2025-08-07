@@ -2,6 +2,7 @@
 import { ref, inject, computed } from 'vue';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { Task } from '@/entities/tasks/Task';
 import { useTaskState } from '@/entities/tasks/useTaskState';
 import TaskInfo from '@/entities/tasks/TaskInfo.vue';
@@ -22,16 +23,23 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 
 type TaskState = 'task' | 'pronunciation' | 'evaluation' | 'do-again-decision';
 const currentState = ref<TaskState>('task');
 
 const currentTask = computed<Task | null>(() => {
-  const pronunciationTask = props.vocab.associatedTasks.find(task => task.taskType === 'add-pronunciation');
-  if (!pronunciationTask) return null;
-  
+  // Create a proper pronunciation task for this vocab
   return {
-    ...pronunciationTask,
+    uid: `pronunciation-${props.vocab.uid}`,
+    taskType: 'add-pronunciation',
+    title: `Add pronunciation for: ${props.vocab.content}`,
+    prompt: 'Add pronunciation information for this vocabulary word',
+    evaluateCorrectnessAndConfidenceAfterDoing: false,
+    decideWhetherToDoAgainAfterDoing: false,
+    isActive: true,
+    taskSize: 'small',
+    associatedUnits: [{ type: 'Vocab', uid: props.vocab.uid }],
     mayBeConsideredDone: false,
     isDone: false
   } as Task;
@@ -57,15 +65,32 @@ const handleNotNow = async () => {
   }
 
   try {
-    const vocab = await vocabRepo.getVocabByUID(props.vocab.uid);
+    const vocab = await vocabRepo!.getVocabByUID(props.vocab.uid);
     if (vocab) {
-      let pronunciationTask = vocab.associatedTasks.find(task => task.taskType === 'add-pronunciation');
-      if (pronunciationTask) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        pronunciationTask.nextShownEarliestAt = tomorrow;
-        await vocabRepo.updateVocab(vocab);
-      }
+      // Create and save the pronunciation task
+      const pronunciationTask = {
+        uid: `pronunciation-${props.vocab.uid}-${Date.now()}`,
+        taskType: 'add-pronunciation' as const,
+        title: `Add pronunciation for: ${props.vocab.content}`,
+        prompt: 'Add pronunciation information for this vocabulary word',
+        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        decideWhetherToDoAgainAfterDoing: false,
+        isActive: false, // Set to false since it's being skipped
+        taskSize: 'small' as const,
+        associatedUnits: [{ type: 'Vocab' as const, uid: props.vocab.uid }],
+        lastShownAt: new Date(),
+        nextShownEarliestAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days later
+      };
+      
+      await taskRepo.saveTask(pronunciationTask);
+      
+      // Add task to vocab's tasks array
+      const updatedVocab = {
+        ...vocab,
+        tasks: [...vocab.tasks, pronunciationTask.uid]
+      };
+      
+      await vocabRepo.updateVocab(updatedVocab);
     }
   } catch (error) {
     console.error('Error handling task skip:', error);

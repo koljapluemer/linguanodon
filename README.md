@@ -5,6 +5,7 @@ The ultimate language learning app. *Maybe*.
 ## Dev Notes
 
 - Last commit with legacy folder intact: `3f9177b1e080a`
+- Last commit with old exercise/task split: `bfc5bafa923`
 
 ## Credit
 

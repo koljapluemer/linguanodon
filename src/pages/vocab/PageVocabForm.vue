@@ -10,6 +10,11 @@
     </div>
 
     <VocabFormController :vocab-id="route.params.id as string" />
+
+    <!-- Associated Tasks -->
+    <div v-if="isEditing" class="mt-8">
+      <VocabTaskList :vocab-id="route.params.id as string" />
+    </div>
   </div>
 </template>
 
@@ -17,6 +22,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import VocabFormController from '@/features/vocab-form/VocabFormController.vue';
+import VocabTaskList from './VocabTaskList.vue';
 
 const route = useRoute();
 

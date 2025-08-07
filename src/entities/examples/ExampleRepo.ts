@@ -13,7 +13,7 @@ export class ExampleRepo implements ExampleRepoContract {
       translation: example.translation || '',
       situation: example.situation,
       associatedVocab: example.associatedVocab || [],
-      associatedTasks: example.associatedTasks || [],
+      tasks: example.tasks || [],
       notes: example.notes || [],
       links: example.links || [],
       prio: example.prio,
@@ -42,7 +42,7 @@ export class ExampleRepo implements ExampleRepoContract {
       translation: example.translation,
       situation: example.situation,
       associatedVocab: example.associatedVocab || [],
-      associatedTasks: example.associatedTasks || [],
+      tasks: example.tasks || [],
       notes: example.notes || [],
       links: example.links || [],
       prio: example.prio,
@@ -73,42 +73,27 @@ export class ExampleRepo implements ExampleRepoContract {
 
   async getExamplesForFreeTranslate(): Promise<ExampleData[]> {
     const allExamples = await this.storage.getAll();
-    const now = new Date();
     
     return allExamples.filter(example => {
       // Must not be user created
       if (example.isUserCreated) return false;
       
-      // Check for existing free-translate task
-      const freeTranslateTask = example.associatedTasks.find(task => task.taskType === 'free-translate');
-      
-      if (freeTranslateTask) {
-        // Has task: check if due and wants to do again
-        const isDue = !freeTranslateTask.nextShownEarliestAt || freeTranslateTask.nextShownEarliestAt <= now;
-        // wantToDoAgain property was moved to TaskEvaluation, checking only if due
-        return isDue;
-      } else {
-        // No task: eligible if never done
-        return true;
-      }
+      // TODO: Update to use TaskRepo to check for free-translate tasks
+      // For now, return true to enable all non-user-created examples
+      return true;
     }).map(e => this.ensureExampleFields(e));
   }
 
   async getExamplesForVocabPractice(): Promise<ExampleData[]> {
     const allExamples = await this.storage.getAll();
-    const now = new Date();
     
     return allExamples.filter(example => {
       // Must not be user created
       if (example.isUserCreated) return false;
       
-      // Check if due for free-translate or never done
-      const freeTranslateTask = example.associatedTasks.find(task => task.taskType === 'free-translate');
-      const isDueOrNeverDone = !freeTranslateTask || 
-                               !freeTranslateTask.nextShownEarliestAt || 
-                               freeTranslateTask.nextShownEarliestAt <= now;
-      
-      return isDueOrNeverDone;
+      // TODO: Update to use TaskRepo to check for free-translate tasks
+      // For now, return true to enable all non-user-created examples
+      return true;
     }).map(e => this.ensureExampleFields(e));
   }
 }

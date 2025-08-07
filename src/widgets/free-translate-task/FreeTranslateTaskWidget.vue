@@ -59,6 +59,7 @@
 import { ref, inject } from 'vue';
 import type { ExampleData } from '@/entities/examples/ExampleData';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import ElementBigText from '@/shared/ui/ElementBigText.vue';
 import ElementInstruction from '@/shared/ui/ElementInstruction.vue';
 import ElementImportantTextArea from '@/shared/ui/ElementImportantTextArea.vue';
@@ -80,6 +81,7 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const exampleRepo = inject<ExampleRepoContract>('exampleRepo');
+const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 
 const userInput = ref('');
 const isRevealed = ref(false);
@@ -100,44 +102,36 @@ async function handleRate(rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy') {
   if (exampleRepo) {
     try {
       const example = props.taskData.example;
-      const now = new Date();
       
-      // Find existing free-translate task or create new one
-      let freeTranslateTask = example.associatedTasks.find(task => task.taskType === 'free-translate');
+      // Create and save a proper free-translate task
+      const freeTranslateTask = {
+        uid: `free-translate-${example.uid}-${Date.now()}`,
+        taskType: 'free-translate' as const,
+        title: `Free translate: ${example.content}`,
+        prompt: 'Translate this example to practice your understanding',
+        evaluateCorrectnessAndConfidenceAfterDoing: true,
+        decideWhetherToDoAgainAfterDoing: true,
+        isActive: true,
+        taskSize: 'medium' as const,
+        associatedUnits: [{ type: 'Example' as const, uid: example.uid }],
+        lastShownAt: new Date(),
+        lastDifficultyRating: rating === 'Impossible' ? 1 : 
+                             rating === 'Hard' ? 2 : 
+                             rating === 'Doable' ? 3 : 4,
+        nextShownEarliestAt: new Date(Date.now() + (wantToDoAgain ? 24 : 168) * 60 * 60 * 1000)
+      };
       
-      if (freeTranslateTask) {
-        // Update existing task
-        freeTranslateTask.lastShownAt = now;
-        // wantToDoAgain is now handled in TaskEvaluation, not in TaskData
-        freeTranslateTask.lastDifficultyRating = rating === 'Impossible' ? 1 : 
-                                                rating === 'Hard' ? 2 : 
-                                                rating === 'Doable' ? 3 : 4;
-        // Set next shown time (24 hours later if want to do again, 7 days if not)
-        const hoursToAdd = wantToDoAgain ? 24 : 168; // 24 hours or 7 days
-        freeTranslateTask.nextShownEarliestAt = new Date(now.getTime() + (hoursToAdd * 60 * 60 * 1000));
-      } else {
-        // Create new task
-        const newTask = {
-          uid: crypto.randomUUID(),
-          taskType: 'free-translate' as const,
-          title: 'Free Translation',
-          prompt: 'Attempt to translate this sentence',
-          evaluateCorrectnessAndConfidenceAfterDoing: true,
-          decideWhetherToDoAgainAfterDoing: true,
-          isActive: true,
-          taskSize: 'medium' as const,
-          associatedUnits: [],
-          lastShownAt: now,
-          lastDifficultyRating: rating === 'Impossible' ? 1 : 
-                               rating === 'Hard' ? 2 : 
-                               rating === 'Doable' ? 3 : 4,
-          nextShownEarliestAt: new Date(now.getTime() + ((wantToDoAgain ? 24 : 168) * 60 * 60 * 1000))
-        };
-        example.associatedTasks.push(newTask);
-      }
+      // Save task to TaskRepo
+      await taskRepo.saveTask(freeTranslateTask);
+      
+      // Add task to example's tasks array  
+      const updatedExample = {
+        ...example,
+        tasks: [...(example.tasks || []), freeTranslateTask.uid]
+      };
       
       // Save updated example
-      await exampleRepo.updateExample(example);
+      await exampleRepo!.updateExample(updatedExample);
     } catch (error) {
       console.error('Error updating example task data:', error);
     }

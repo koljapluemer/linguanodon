@@ -33,7 +33,7 @@ export function formDataToExampleData(formData: ExampleFormData, existingExample
     content: formData.content,
     translation: formData.translation,
     associatedVocab: formData.associatedVocab,
-    associatedTasks: [],
+    tasks: [],
     notes: [],
     links: [],
     progress: {
@@ -54,7 +54,7 @@ export function formDataToExampleData(formData: ExampleFormData, existingExample
   };
 
   if (existingExample) {
-    baseData.associatedTasks = existingExample.associatedTasks;
+    baseData.tasks = existingExample.tasks;
     baseData.notes = existingExample.notes;
     baseData.links = existingExample.links;
     baseData.progress = existingExample.progress;

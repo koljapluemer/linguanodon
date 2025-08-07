@@ -51,7 +51,7 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
   // Preserve existing data that's not in the form
   if (existingVocab) {
     baseData.translations = existingVocab.translations;
-    baseData.associatedTasks = existingVocab.associatedTasks;
+    baseData.tasks = existingVocab.tasks;
     baseData.progress = existingVocab.progress;
   }
 

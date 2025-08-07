@@ -191,7 +191,7 @@ function handleSave() {
     translations,
     notes: localVocab.value.notes || [],
     links: localVocab.value.links || [],
-    associatedTasks: localVocab.value.associatedTasks || [],
+    tasks: localVocab.value.tasks || [],
     progress: localVocab.value.progress || {
       ...createEmptyCard(),
       streak: 0,
@@ -212,7 +212,7 @@ function handleClearOrCancel() {
       notes: [],
       translations: [],
       links: [],
-      associatedTasks: [],
+      tasks: [],
       progress: {
         ...createEmptyCard(),
         streak: 0,

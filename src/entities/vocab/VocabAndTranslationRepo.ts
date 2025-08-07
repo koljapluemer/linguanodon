@@ -17,7 +17,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       notes: vocab.notes || [],
       links: vocab.links || [],
       translations: vocab.translations || [],
-      associatedTasks: vocab.associatedTasks || []
+      tasks: vocab.tasks || []
     };
   }
 
@@ -38,13 +38,12 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
   async getRandomAlreadySeenDueVocab(count: number): Promise<VocabData[]> {
     const allVocab = await this.vocabStorage.getAll();
-    const now = new Date();
     
     const alreadySeenDueVocab = allVocab.filter(vocab => {
       // Must have been practiced before (reps > 0)
       const hasBeenPracticed = vocab.progress.reps > 0;
       // Must be due now
-      const isDue = vocab.progress.due <= now;
+      const isDue = vocab.progress.due <= new Date();
       // Must not be excluded from practice
       const isNotExcluded = !vocab.doNotPractice;
       
@@ -80,7 +79,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     if (!vocab) return;
 
     const scheduler = fsrs();
-    const now = new Date();
     
     // Map UI rating to FSRS rating
     const fsrsRating = rating === 'Impossible' ? Rating.Again : 
@@ -97,7 +95,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     }
 
     // Apply FSRS algorithm
-    const scheduling_cards = scheduler.repeat(vocab.progress, now);
+    const scheduling_cards = scheduler.repeat(vocab.progress, new Date());
     const updatedCard = scheduling_cards[fsrsRating].card;
 
     // Update streak and level based on rating
@@ -149,7 +147,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
   async getRandomVocabWithMissingPronunciation(): Promise<VocabData | null> {
     const allVocab = await this.vocabStorage.getAll();
-    const now = new Date();
     
     const withoutPronunciation = allVocab.filter(vocab => {
       // Since pronunciation is now handled as notes, we'll check for pronunciation notes
@@ -158,11 +155,8 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       const hasPriority = (vocab.priority ?? 1) >= 2;
       const isNotExcluded = !vocab.doNotPractice;
       
-      // Check if there's a pronunciation task that's not yet due
-      const pronunciationTask = vocab.associatedTasks.find(task => task.taskType === 'add-pronunciation');
-      const isTaskDue = !pronunciationTask || 
-                       !pronunciationTask.nextShownEarliestAt || 
-                       pronunciationTask.nextShownEarliestAt <= now;
+      // TODO: Update to use TaskRepo to check for pronunciation tasks
+      const isTaskDue = true; // For now, always allow
       
       return hasNoPronunciation && hasPriority && isNotExcluded && isTaskDue;
     });
@@ -234,7 +228,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       notes: vocab.notes || [],
       translations: vocab.translations || [],
       links: vocab.links || [],
-      associatedTasks: vocab.associatedTasks || [],
+      tasks: vocab.tasks || [],
       progress: vocab.progress || {
         ...createEmptyCard(),
         streak: 0,
@@ -257,12 +251,11 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   // Distractor generation methods
   async getDueVocabInLanguage(language: string): Promise<VocabData[]> {
     const allVocab = await this.vocabStorage.getAll();
-    const now = new Date();
     
     return allVocab.filter(vocab => 
       vocab.language === language &&
       vocab.progress.reps > 0 &&
-      vocab.progress.due <= now &&
+      vocab.progress.due <= new Date() &&
       !vocab.doNotPractice
     ).map(v => this.ensureVocabFields(v));
   }

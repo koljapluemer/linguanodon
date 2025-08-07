@@ -80,15 +80,15 @@
                 </div>
               </div>
               
-              <div v-if="example.associatedTasks.length > 0" class="mt-2">
+              <div v-if="example.tasks.length > 0" class="mt-2">
                 <h3 class="font-semibold text-sm">Tasks:</h3>
                 <div class="flex flex-wrap gap-1">
                   <span 
-                    v-for="task in example.associatedTasks" 
-                    :key="task.taskType"
+                    v-for="taskId in example.tasks" 
+                    :key="taskId"
                     class="badge badge-xs badge-accent"
                   >
-                    {{ task.taskType }}
+                    Task: {{ taskId.substring(0, 8) }}
                   </span>
                 </div>
               </div>

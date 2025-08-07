@@ -151,7 +151,7 @@ async function addVocab() {
     translations: [], // Empty for now
     notes: [],
     links: [],
-    associatedTasks: []
+    tasks: []
   });
   
   // Update goal to include this vocab
