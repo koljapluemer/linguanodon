@@ -19,6 +19,7 @@
     
     <!-- Add new vocab row -->
     <VocabRowEdit
+      v-if="allowAddingNew !== false"
       :vocab="newVocab"
       :is-new="true"
       :default-language="defaultLanguage"
@@ -42,6 +43,7 @@ const props = defineProps<{
   showDeleteButton?: boolean;
   showDisconnectButton?: boolean;
   allowJumpingToVocabPage?: boolean;
+  allowAddingNew?: boolean;
 }>();
 
 const emit = defineEmits<{
