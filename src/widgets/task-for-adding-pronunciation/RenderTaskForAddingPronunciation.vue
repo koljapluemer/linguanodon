@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, computed } from 'vue';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import DoTaskWidget from '@/features/do-task/DoTaskWidget.vue';
+import type { Task } from '@/entities/tasks/Task';
+import { useTaskState } from '@/entities/tasks/useTaskState';
+import TaskInfo from '@/entities/tasks/TaskInfo.vue';
+import TaskButtonsDisableSkipDone from '@/entities/tasks/TaskButtonsDisableSkipDone.vue';
+import TaskDecideWhetherToDoAgain from '@/entities/tasks/TaskDecideWhetherToDoAgain.vue';
+import TaskEvaluateCorrectnessAndConfidence from '@/entities/tasks/TaskEvaluateCorrectnessAndConfidence.vue';
 import AddPronunciationWidget from '@/features/add-pronunciation-to-vocab/AddPronunciationWidget.vue';
 
 interface Props {
@@ -18,85 +23,106 @@ const emit = defineEmits<Emits>();
 
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 
-type TaskState = 'task' | 'pronunciation';
+type TaskState = 'task' | 'pronunciation' | 'evaluation' | 'do-again-decision';
 const currentState = ref<TaskState>('task');
 
-const handleTaskCompleted = () => {
+const currentTask = computed<Task | null>(() => {
+  const pronunciationTask = props.vocab.associatedTasks.find(task => task.taskType === 'add-pronunciation');
+  if (!pronunciationTask) return null;
+  
+  return {
+    ...pronunciationTask,
+    mayBeConsideredDone: false,
+    isDone: false
+  } as Task;
+});
+
+// Use the task state composable
+const {
+  handleSkipAndDeactivate,
+  handleEvaluation,
+  handleDoAgainDecision
+} = useTaskState(() => currentTask.value, emit);
+
+// Override handleDone to go to pronunciation screen first
+const handleDone = () => {
   currentState.value = 'pronunciation';
 };
 
-const handleTaskSkipped = async () => {
+// Override handleNotNow to implement delay logic
+const handleNotNow = async () => {
   if (!vocabRepo) {
-    console.warn('VocabRepo not available for task skip');
     emit('finished');
     return;
   }
 
   try {
-    // Get fresh vocab data
     const vocab = await vocabRepo.getVocabByUID(props.vocab.uid);
-    if (!vocab) {
-      console.warn('Vocab not found for task skip');
-      emit('finished');
-      return;
+    if (vocab) {
+      let pronunciationTask = vocab.associatedTasks.find(task => task.taskType === 'add-pronunciation');
+      if (pronunciationTask) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        pronunciationTask.nextShownEarliestAt = tomorrow;
+        await vocabRepo.updateVocab(vocab);
+      }
     }
-
-    // Find or create the add-pronunciation task in associatedTasks
-    let pronunciationTask = vocab.associatedTasks.find(task => task.taskType === 'add-pronunciation');
-    
-    if (!pronunciationTask) {
-      // Create new task if it doesn't exist
-      pronunciationTask = {
-        uid: crypto.randomUUID(),
-        taskType: 'add-pronunciation',
-        title: 'Add Pronunciation',
-        prompt: 'Add pronunciation information for this vocabulary word',
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
-        decideWhetherToDoAgainAfterDoing: true,
-        isActive: true,
-        taskSize: 'medium',
-        associatedUnits: []
-      };
-      vocab.associatedTasks.push(pronunciationTask);
-    }
-
-    // Set nextShownEarliestAt to tomorrow
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    pronunciationTask.nextShownEarliestAt = tomorrow;
-
-    // Update vocab in repository
-    await vocabRepo.updateVocab(vocab);
-    
-    emit('finished');
   } catch (error) {
     console.error('Error handling task skip:', error);
-    emit('finished');
   }
-};
-
-const handlePronunciationFinished = () => {
-  // For add-pronunciation tasks, skip evaluation and finish directly
+  
   emit('finished');
 };
 
+const handlePronunciationFinished = () => {
+  if (!currentTask.value) {
+    emit('finished');
+    return;
+  }
+  
+  if (currentTask.value.evaluateCorrectnessAndConfidenceAfterDoing) {
+    currentState.value = 'evaluation';
+  } else if (currentTask.value.decideWhetherToDoAgainAfterDoing) {
+    currentState.value = 'do-again-decision';
+  } else {
+    emit('finished');
+  }
+};
 </script>
 
 <template>
-  <div>
-    <DoTaskWidget 
-      v-if="currentState === 'task'"
-      title="Add Pronunciation"
-      prompt="Find out how this word is pronounced and add below."
-      @completed="handleTaskCompleted"
-      @skipped="handleTaskSkipped"
-    />
+  <div class="space-y-6">
+    <div v-if="currentState === 'task' && currentTask">
+      <TaskInfo :task="currentTask" />
+      
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title">Ready to add pronunciation?</h3>
+          <p class="text-base-content/70">Click "Done" when you're ready to proceed.</p>
+        </div>
+      </div>
+      
+      <TaskButtonsDisableSkipDone 
+        :is-done-enabled="true"
+        @done="handleDone"
+        @skip-and-deactivate="handleSkipAndDeactivate"
+        @not-now="handleNotNow"
+      />
+    </div>
 
-    <AddPronunciationWidget 
-      v-else-if="currentState === 'pronunciation'"
-      :vocab="vocab"
-      @finished="handlePronunciationFinished"
-    />
-
+    <div v-else-if="currentState === 'pronunciation'">
+      <AddPronunciationWidget 
+        :vocab="vocab"
+        @finished="handlePronunciationFinished"
+      />
+    </div>
+    
+    <div v-else-if="currentState === 'evaluation'">
+      <TaskEvaluateCorrectnessAndConfidence @evaluation="handleEvaluation" />
+    </div>
+    
+    <div v-else-if="currentState === 'do-again-decision'">
+      <TaskDecideWhetherToDoAgain @decision="handleDoAgainDecision" />
+    </div>
   </div>
 </template>

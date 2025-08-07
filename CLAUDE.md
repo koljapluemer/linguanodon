@@ -68,9 +68,39 @@ The project follows **Feature-Sliced Design (FSD)** architecture with strict lay
 ## Code Organization Notes
 
 **Legacy Code**: Legacy implementation exists in `/legacy/` folder for reference only. New code goes in `/src/` following FSD principles.
+# DEXIE CLONING RULES
 
-**Exercise Generation**: Vocabulary exercises generated based on mastery level:
-- Level -1: "Try to remember" style
-- Higher levels: Reveal exercises from content to translations
+## The Problem
+Dexie uses `structuredClone()` internally which CANNOT clone:
+- Vue 3 reactive proxies (`ref`, `reactive`, `computed`)
+- Objects with non-enumerable properties
+- Functions, symbols, etc.
 
-**Task System**: Tasks are registered in `TaskRegistry.ts` and rendered via `MetaTaskRenderer`. Current tasks include pronunciation addition and immersion content consumption.
+## The Solution
+**ALWAYS** use `toRaw()` or manual object spreading when saving to Dexie:
+
+```typescript
+import { toRaw } from 'vue';
+
+// ❌ WRONG - will cause DataCloneError
+await taskRepo.saveTask(reactiveTaskObject);
+
+// ✅ CORRECT - use toRaw()  
+await taskRepo.saveTask(toRaw(reactiveTaskObject));
+
+// ✅ CORRECT - manual spreading
+await taskRepo.saveTask({
+  ...taskRef.value,
+  // additional properties
+});
+```
+
+## When This Happens
+- Saving Vue reactive objects directly to Dexie
+- Task objects that come from Vue computed/ref
+- Any object that has been made reactive by Vue
+
+## Remember
+- Use `toRaw()` before ALL Dexie save operations
+- Check if object came from Vue reactivity system
+- Manual object spread also works but is more verbose
