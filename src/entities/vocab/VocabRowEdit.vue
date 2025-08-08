@@ -68,6 +68,8 @@ import { ref, computed, watch, inject } from 'vue';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import type { VocabData } from './vocab/VocabData';
 import type { LanguageRepoContract } from '@/entities/languages';
+import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';
+import type { TranslationData } from './translations/TranslationData';
 import { createEmptyCard } from 'ts-fsrs';
 
 const props = defineProps<{
@@ -82,12 +84,29 @@ const emit = defineEmits<{
 }>();
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 
 const localVocab = ref({ 
   language: props.vocab.language || (props.isNew ? props.defaultLanguage : '') || '', 
   ...props.vocab 
 } as VocabData);
-const translationsText = ref(Array.isArray(props.vocab.translations) ? props.vocab.translations.join(', ') : '');
+const translationsText = ref('');
+
+// Load translation texts from IDs
+async function loadTranslationTexts() {
+  if (!vocabRepo || !props.vocab.translations || !Array.isArray(props.vocab.translations)) {
+    translationsText.value = '';
+    return;
+  }
+  
+  try {
+    const translations = await vocabRepo.getTranslationsByIds(props.vocab.translations);
+    translationsText.value = translations.map(t => t.content).join(', ');
+  } catch (error) {
+    console.error('Failed to load translation texts:', error);
+    translationsText.value = '';
+  }
+}
 
 // Watch for changes in vocab prop
 watch(() => props.vocab, (newVocab) => {
@@ -95,8 +114,11 @@ watch(() => props.vocab, (newVocab) => {
     language: newVocab.language || (props.isNew ? props.defaultLanguage : '') || '', 
     ...newVocab 
   } as VocabData;
-  translationsText.value = Array.isArray(newVocab.translations) ? newVocab.translations.join(', ') : '';
+  loadTranslationTexts();
 }, { deep: true });
+
+// Load initial translation texts
+loadTranslationTexts();
 
 // State machine for field requirements
 const fieldState = computed(() => {
@@ -176,19 +198,47 @@ const isValid = computed(() => {
   return hasLanguage && fieldState.value !== 'both-empty';
 });
 
-function handleSave() {
-  if (!isValid.value) return;
+async function handleSave() {
+  if (!isValid.value || !vocabRepo) return;
 
-  const translations = translationsText.value
+  const translationTexts = translationsText.value
     .split(',')
     .map(t => t.trim())
     .filter(t => t);
+
+  // Get or create translation objects with UUIDs
+  const translationIds: string[] = [];
+  
+  for (const translationText of translationTexts) {
+    try {
+      // Check if translation already exists
+      const existingTranslation = await vocabRepo.getTranslationByContent(translationText);
+      
+      if (existingTranslation) {
+        // Use existing translation ID
+        translationIds.push(existingTranslation.uid);
+      } else {
+        // Create new translation
+        const newTranslation: TranslationData = {
+          uid: crypto.randomUUID(),
+          content: translationText,
+          notes: []
+        };
+        
+        const savedTranslation = await vocabRepo.saveTranslation(newTranslation);
+        translationIds.push(savedTranslation.uid);
+      }
+    } catch (error) {
+      console.error(`Failed to process translation "${translationText}":`, error);
+      // Continue with other translations
+    }
+  }
 
   const vocabData: VocabData = {
     uid: localVocab.value.uid || crypto.randomUUID(),
     content: localVocab.value.content?.trim() || '',
     language: (localVocab.value.language || props.defaultLanguage)!,
-    translations,
+    translations: translationIds, // Now using proper translation IDs
     notes: localVocab.value.notes || [],
     links: localVocab.value.links || [],
     tasks: localVocab.value.tasks || [],

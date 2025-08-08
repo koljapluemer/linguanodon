@@ -9,7 +9,10 @@
       </router-link>
     </div>
 
-    <VocabFormController :vocab-id="route.params.id as string" />
+    <VocabFormController 
+      :vocab-id="route.params.id as string" 
+      @vocab-saved="handleVocabSaved"
+    />
 
     <!-- Associated Tasks -->
     <div v-if="isEditing" class="mt-8">
@@ -19,14 +22,33 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import VocabFormController from '@/features/vocab-form/VocabFormController.vue';
 import VocabTaskList from './VocabTaskList.vue';
+import { UpdateVocabTasksController } from '@/features/update-vocab-tasks/UpdateVocabTasksController';
+import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 
 const route = useRoute();
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const taskRepo = inject<TaskRepoContract>('taskRepo');
 
 const isEditing = computed(() => {
   return route.params.id && route.params.id !== 'new';
 });
+
+async function handleVocabSaved(vocabId: string) {
+  if (!vocabRepo || !taskRepo) {
+    console.warn('Repos not available for task update');
+    return;
+  }
+  
+  try {
+    const taskController = new UpdateVocabTasksController(vocabRepo, taskRepo);
+    await taskController.updateTasksForVocab(vocabId);
+  } catch (error) {
+    console.error('Failed to update vocab tasks:', error);
+  }
+}
 </script>

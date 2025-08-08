@@ -3,10 +3,11 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
+import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import type { VocabFormState, VocabFormData } from './types';
 import { vocabDataToFormData, formDataToVocabData } from './types';
 
-export function useVocabForm(vocabId?: string) {
+export function useVocabForm(vocabId?: string, emit?: (event: 'vocab-saved', vocabId: string) => void) {
   const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
   const noteRepo = inject<NoteRepoContract>('noteRepo');
   if (!vocabRepo) {
@@ -20,6 +21,7 @@ export function useVocabForm(vocabId?: string) {
     formData: {
       language: '',
       content: '',
+      translations: [],
       priority: undefined,
       doNotPractice: undefined,
       notes: [],
@@ -33,6 +35,7 @@ export function useVocabForm(vocabId?: string) {
 
   const loadedVocabData = ref<VocabData | null>(null);
   const loadedNotes = ref<NoteData[]>([]);
+  const loadedTranslations = ref<TranslationData[]>([]);
 
   const isValid = computed(() => {
     return state.value.formData.language.trim() !== '' && 
@@ -109,8 +112,22 @@ export function useVocabForm(vocabId?: string) {
         } else {
           loadedNotes.value = [];
         }
+
+        // Load translations if vocab has translation IDs
+        if (vocab.translations && vocab.translations.length > 0) {
+          try {
+            const translations = await vocabRepo.getTranslationsByIds(vocab.translations);
+            loadedTranslations.value = translations;
+          } catch (error) {
+            console.error('Failed to load translations:', error);
+            // Continue without translations if they fail to load
+            loadedTranslations.value = [];
+          }
+        } else {
+          loadedTranslations.value = [];
+        }
         
-        state.value.formData = vocabDataToFormData(vocab, loadedNotes.value);
+        state.value.formData = vocabDataToFormData(vocab, loadedNotes.value, loadedTranslations.value);
       } else {
         state.value.error = 'Vocab not found';
       }
@@ -151,6 +168,31 @@ export function useVocabForm(vocabId?: string) {
       await noteRepo.deleteNotes(notesToDelete.map(n => n.uid));
     }
 
+    // Save/update translations
+    for (const translation of serializedFormData.translations) {
+      if (translation.uid && loadedTranslations.value.find(t => t.uid === translation.uid)) {
+        // Update existing translation
+        await vocabRepo.updateTranslation(translation);
+      } else if (!translation.uid || !loadedTranslations.value.find(t => t.uid === translation.uid)) {
+        // Create new translation
+        const savedTranslation = await vocabRepo.saveTranslation(translation);
+        // Update the translation in form data with the saved UID
+        const translationIndex = serializedFormData.translations.findIndex(t => t === translation);
+        if (translationIndex >= 0) {
+          serializedFormData.translations[translationIndex] = savedTranslation;
+        }
+      }
+    }
+
+    // Delete translations that were removed from the form
+    const currentTranslationUIDs = serializedFormData.translations.map(t => t.uid);
+    const translationsToDelete = loadedTranslations.value.filter(t => !currentTranslationUIDs.includes(t.uid));
+    if (translationsToDelete.length > 0) {
+      await vocabRepo.deleteTranslations(translationsToDelete.map(t => t.uid));
+    }
+
+    let finalVocabId = vocabId;
+    
     if (state.value.isEditing && vocabId) {
       // Get existing vocab for update
       const existingVocab = await vocabRepo.getVocabByUID(vocabId);
@@ -164,13 +206,21 @@ export function useVocabForm(vocabId?: string) {
       };
       
       await vocabRepo.updateVocab(updatedVocab);
+      finalVocabId = updatedVocab.uid;
     } else {
       // Create new vocab
-      await vocabRepo.saveVocab(formDataToVocabData(serializedFormData));
+      const savedVocab = await vocabRepo.saveVocab(formDataToVocabData(serializedFormData));
+      finalVocabId = savedVocab.uid;
     }
 
-    // Update loaded notes to match current state
+    // Emit vocab-saved event
+    if (emit && finalVocabId) {
+      emit('vocab-saved', finalVocabId);
+    }
+
+    // Update loaded notes and translations to match current state
     loadedNotes.value = [...serializedFormData.notes];
+    loadedTranslations.value = [...serializedFormData.translations];
   }
 
   async function save(): Promise<boolean> {
@@ -231,6 +281,7 @@ export function useVocabForm(vocabId?: string) {
     state.value.formData = {
       language: '',
       content: '',
+      translations: [],
       priority: undefined,
       doNotPractice: undefined,
       notes: [],
@@ -243,6 +294,7 @@ export function useVocabForm(vocabId?: string) {
     state: computed(() => state.value),
     loadedVocabData: computed(() => loadedVocabData.value),
     loadedNotes: computed(() => loadedNotes.value),
+    loadedTranslations: computed(() => loadedTranslations.value),
     isValid,
     loadVocab,
     save,

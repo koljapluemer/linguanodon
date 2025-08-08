@@ -1,10 +1,12 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
+import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 
 export interface VocabFormData {
   id?: string;
   language: string;
   content: string;
+  translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;
   notes: NoteData[];
@@ -22,11 +24,12 @@ export interface VocabFormState {
   isEditing: boolean;
 }
 
-export function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = []): VocabFormData {
+export function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = [], translations: TranslationData[] = []): VocabFormData {
   return {
     id: vocab.uid,
     language: vocab.language,
     content: vocab.content || '',
+    translations: translations,
     priority: vocab.priority,
     doNotPractice: vocab.doNotPractice,
     notes: notes,
@@ -38,6 +41,7 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
   const baseData: Partial<VocabData> = {
     language: formData.language,
     content: formData.content,
+    translations: formData.translations.map(translation => translation.uid),
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
     notes: formData.notes.map(note => note.uid),
@@ -50,7 +54,6 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
 
   // Preserve existing data that's not in the form
   if (existingVocab) {
-    baseData.translations = existingVocab.translations;
     baseData.tasks = existingVocab.tasks;
     baseData.progress = existingVocab.progress;
   }

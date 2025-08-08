@@ -14,7 +14,7 @@
 
     <!-- Translations -->
     <div class="flex-1 font-medium">
-      {{ vocab.translations.join(', ') || '(no translations)' }}
+      {{ translationTexts.length > 0 ? translationTexts.join(', ') : '(no translations)' }}
     </div>
 
     <!-- Actions -->
@@ -55,11 +55,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, inject, watch } from 'vue';
 import { X, Edit, Unlink, ExternalLink } from 'lucide-vue-next';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 import type { VocabData } from './vocab/VocabData';
+import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';
 
-defineProps<{
+const props = defineProps<{
   vocab: VocabData;
   allowEditOnClick?: boolean;
   showDeleteButton?: boolean;
@@ -72,4 +74,33 @@ defineEmits<{
   delete: [];
   disconnect: [];
 }>();
+
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const translationTexts = ref<string[]>([]);
+
+// Load translation texts from IDs
+async function loadTranslationTexts() {
+  if (!vocabRepo || !props.vocab.translations || !Array.isArray(props.vocab.translations) || props.vocab.translations.length === 0) {
+    translationTexts.value = [];
+    return;
+  }
+  
+  try {
+    const translations = await vocabRepo.getTranslationsByIds(props.vocab.translations);
+    translationTexts.value = translations.map(t => t.content);
+  } catch (error) {
+    console.error('Failed to load translation texts:', error);
+    translationTexts.value = [];
+  }
+}
+
+// Load translations on mount
+onMounted(() => {
+  loadTranslationTexts();
+});
+
+// Watch for vocab changes
+watch(() => props.vocab.translations, () => {
+  loadTranslationTexts();
+}, { deep: true });
 </script>

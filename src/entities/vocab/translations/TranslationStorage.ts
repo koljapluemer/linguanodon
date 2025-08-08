@@ -52,4 +52,13 @@ export class TranslationStorage {
     await db.translations.delete(uid);
   }
 
+  async save(translation: TranslationData): Promise<TranslationData> {
+    await db.translations.put(translation);
+    return translation;
+  }
+
+  async deleteByIds(uids: string[]): Promise<void> {
+    await db.translations.where('uid').anyOf(uids).delete();
+  }
+
 }

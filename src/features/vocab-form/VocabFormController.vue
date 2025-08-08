@@ -29,7 +29,11 @@ const props = defineProps<{
   vocabId?: string;
 }>();
 
-const { state, loadedVocabData, isValid, loadVocab, addNote, updateNote, removeNote, addLink, removeLink } = useVocabForm(props.vocabId);
+const emit = defineEmits<{
+  'vocab-saved': [vocabId: string];
+}>();
+
+const { state, loadedVocabData, isValid, loadVocab, addNote, updateNote, removeNote, addLink, removeLink } = useVocabForm(props.vocabId, emit);
 
 onMounted(() => {
   if (props.vocabId) {

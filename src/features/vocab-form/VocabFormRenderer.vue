@@ -13,6 +13,35 @@
 
     <!-- Form -->
     <div v-else class="space-y-6">
+      <!-- Core Content - Big Type -->
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body">
+          <!-- Content -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-lg font-semibold">Content *</span>
+            </label>
+            <input
+              v-model="formData.content"
+              type="text"
+              placeholder="The word or phrase"
+              class="input input-bordered input-lg text-xl"
+              required
+            />
+          </div>
+
+          <!-- Translations -->
+          <div class="form-control mt-6">
+            <TranslationGroupForm
+              v-model="formData.translations"
+              :allow-edit-on-click="true"
+              :show-delete-button="true"
+              :allow-adding-new="true"
+            />
+          </div>
+        </div>
+      </div>
+
       <!-- Basic Information -->
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body">
@@ -26,20 +55,6 @@
             <LanguageDropdown
               v-model="formData.language"
               placeholder="Select target language"
-              required
-            />
-          </div>
-
-          <!-- Content -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Content *</span>
-            </label>
-            <input
-              v-model="formData.content"
-              type="text"
-              placeholder="The word or phrase"
-              class="input input-bordered"
               required
             />
           </div>
@@ -164,6 +179,7 @@
 import { Plus, X, Check } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import TranslationGroupForm from '@/entities/vocab/translations/TranslationGroupForm.vue';
 import type { VocabFormData } from './types';
 import type { NoteData } from '@/entities/notes/NoteData';
 

@@ -169,6 +169,10 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return await this.translationStorage.getByIds(ids);
   }
 
+  async getTranslationByContent(content: string): Promise<TranslationData | undefined> {
+    return await this.translationStorage.getByContent(content);
+  }
+
   async getVocabPaginated(cursor?: string, limit: number = 20, searchQuery?: string): Promise<VocabPaginationResult> {
     const allVocab = await this.vocabStorage.getAll();
     
@@ -285,5 +289,23 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return allVocab
       .filter(vocab => vocab.translations.some(id => matchingTranslationIds.has(id)))
       .map(v => this.ensureVocabFields(v));
+  }
+
+  async saveTranslation(translation: Partial<TranslationData>): Promise<TranslationData> {
+    const translationToSave: TranslationData = {
+      uid: translation.uid || crypto.randomUUID(),
+      content: translation.content || '',
+      notes: translation.notes || []
+    };
+    
+    return await this.translationStorage.save(translationToSave);
+  }
+
+  async updateTranslation(translation: TranslationData): Promise<void> {
+    await this.translationStorage.update(translation);
+  }
+
+  async deleteTranslations(ids: string[]): Promise<void> {
+    await this.translationStorage.deleteByIds(ids);
   }
 }

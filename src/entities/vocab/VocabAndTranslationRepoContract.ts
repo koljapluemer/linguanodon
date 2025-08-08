@@ -34,6 +34,10 @@ export interface VocabAndTranslationRepoContract {
   
   // Translation operations
   getTranslationsByIds(ids: string[]): Promise<TranslationData[]>;
+  getTranslationByContent(content: string): Promise<TranslationData | undefined>;
+  saveTranslation(translation: Partial<TranslationData>): Promise<TranslationData>;
+  updateTranslation(translation: TranslationData): Promise<void>;
+  deleteTranslations(ids: string[]): Promise<void>;
   
   // Distractor generation operations
   getDueVocabInLanguage(language: string): Promise<VocabData[]>;
