@@ -1,47 +1,49 @@
 <template>
   <div class="card bg-base-100 border-2 border-dashed border-base-300">
     <div class="card-body p-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Language -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Language *</span>
-          </label>
-          <LanguageDropdown
-            v-model="localExample.language"
-            placeholder="Select target language"
-            required
-            size="sm"
-            :default-language="defaultLanguage"
-          />
-        </div>
+      <FormFieldset legend="Example Details">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Language -->
+          <FormField label="Language" required>
+            <template #default="{ inputId }">
+              <LanguageDropdown
+                :id="inputId"
+                v-model="localExample.language"
+                placeholder="Select target language"
+                required
+                size="sm"
+                :default-language="defaultLanguage"
+              />
+            </template>
+          </FormField>
 
-        <!-- Content -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Content</span>
-          </label>
-          <input
-            v-model="localExample.content"
-            type="text"
-            placeholder="Example sentence"
-            class="input input-bordered input-sm"
-          />
-        </div>
+          <!-- Content -->
+          <FormField label="Content">
+            <template #default="{ inputId, inputClassString }">
+              <input
+                :id="inputId"
+                v-model="localExample.content"
+                type="text"
+                placeholder="Example sentence"
+                :class="inputClassString + ' input-sm'"
+              />
+            </template>
+          </FormField>
 
-        <!-- Translation -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Translation</span>
-          </label>
-          <input
-            v-model="localExample.translation"
-            type="text"
-            placeholder="Translation"
-            class="input input-bordered input-sm"
-          />
+          <!-- Translation -->
+          <FormField label="Translation">
+            <template #default="{ inputId, inputClassString }">
+              <input
+                :id="inputId"
+                v-model="localExample.translation"
+                type="text"
+                placeholder="Translation"
+                :class="inputClassString + ' input-sm'"
+              />
+            </template>
+          </FormField>
         </div>
-      </div>
+      </FormFieldset>
 
       <div class="flex justify-end gap-2 mt-4">
         <button
@@ -66,6 +68,8 @@
 import { ref, computed, watch } from 'vue';
 import type { ExampleData } from './ExampleData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   example: Partial<ExampleData>;

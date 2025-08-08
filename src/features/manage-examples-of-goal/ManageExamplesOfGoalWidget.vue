@@ -30,44 +30,44 @@
 
     <div class="divider">Add New Example</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Language</span>
-        </label>
-        <LanguageDropdown
-          v-model="newExample.language"
-          placeholder="Select target language"
-          required
-          size="sm"
-        />
-      </div>
+    <FormFieldset legend="New Example Entry" layout="horizontal">
+      <FormField label="Language" size="sm">
+        <template #default="{ inputId }">
+          <LanguageDropdown
+            :id="inputId"
+            v-model="newExample.language"
+            placeholder="Select target language"
+            required
+            size="sm"
+          />
+        </template>
+      </FormField>
       
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Content (Optional)</span>
-        </label>
-        <input
-          v-model="newExample.content"
-          type="text"
-          placeholder="e.g., Hola, ¿cómo estás?"
-          class="input input-bordered input-sm"
-        />
-      </div>
+      <FormField label="Content (Optional)" size="sm">
+        <template #default="{ inputId, inputClassString }">
+          <input
+            :id="inputId"
+            v-model="newExample.content"
+            type="text"
+            placeholder="e.g., Hola, ¿cómo estás?"
+            :class="inputClassString"
+          />
+        </template>
+      </FormField>
       
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Translation (Optional)</span>
-        </label>
-        <input
-          v-model="newExample.translation"
-          type="text"
-          placeholder="e.g., Hello, how are you?"
-          class="input input-bordered input-sm"
-          @keydown.enter="addExample"
-        />
-      </div>
-    </div>
+      <FormField label="Translation (Optional)" size="sm">
+        <template #default="{ inputId, inputClassString }">
+          <input
+            :id="inputId"
+            v-model="newExample.translation"
+            type="text"
+            placeholder="e.g., Hello, how are you?"
+            :class="inputClassString"
+            @keydown.enter="addExample"
+          />
+        </template>
+      </FormField>
+    </FormFieldset>
 
     <div class="flex justify-end">
       <button
@@ -89,6 +89,8 @@ import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContrac
 import type { ExampleData } from '@/entities/examples/ExampleData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   goal: GoalData;

@@ -2,6 +2,10 @@
 interface Props {
   modelValue?: string;
   placeholder?: string;
+  id?: string;
+  ariaLabel?: string;
+  ariaLabelledby?: string;
+  ariaDescribedby?: string;
 }
 
 interface Emits {
@@ -28,8 +32,12 @@ function handleInput(event: Event) {
 
 <template>
   <textarea
+    :id="props.id"
     :value="props.modelValue"
     :placeholder="props.placeholder"
+    :aria-label="props.ariaLabel"
+    :aria-labelledby="props.ariaLabelledby"
+    :aria-describedby="props.ariaDescribedby"
     @input="handleInput"
     class="textarea textarea-bordered w-full text-lg"
   ></textarea>

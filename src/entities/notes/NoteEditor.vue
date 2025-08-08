@@ -1,18 +1,24 @@
 <template>
-  <div class="border rounded-lg p-4">
-    <div class="flex justify-between items-start gap-4">
-      <div class="flex-1">
+  <FormFieldset legend="Note" layout="horizontal">
+    <FormField label="Content" full-width>
+      <template #default="{ inputId }">
         <textarea
+          :id="inputId"
           :value="note.content"
           @input="updateContent(($event.target as HTMLTextAreaElement).value)"
           placeholder="Enter note content..."
           class="textarea textarea-bordered w-full"
           rows="2"
         ></textarea>
-        
-        <div v-if="showBeforeExerciseOption" class="form-control mt-2">
-          <label class="cursor-pointer label justify-start gap-2">
+      </template>
+    </FormField>
+    
+    <div v-if="showBeforeExerciseOption" class="items-end">
+      <FormField label="">
+        <template #default="{ inputId }">
+          <label :for="inputId" class="cursor-pointer label justify-start gap-2">
             <input
+              :id="inputId"
               :checked="note.showBeforeExercise"
               @change="updateShowBeforeExercise(($event.target as HTMLInputElement).checked)"
               type="checkbox"
@@ -20,9 +26,11 @@
             />
             <span class="label-text">Show before exercise</span>
           </label>
-        </div>
-      </div>
-      
+        </template>
+      </FormField>
+    </div>
+    
+    <div class="flex items-end">
       <button
         type="button"
         @click="$emit('delete')"
@@ -31,12 +39,14 @@
         <X class="w-4 h-4" />
       </button>
     </div>
-  </div>
+  </FormFieldset>
 </template>
 
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
 import type { NoteData } from './NoteData';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   note: NoteData;

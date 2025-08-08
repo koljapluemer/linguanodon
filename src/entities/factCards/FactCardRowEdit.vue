@@ -1,72 +1,83 @@
 <template>
   <div class="card bg-base-100 border-2 border-dashed border-base-300">
     <div class="card-body p-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Language -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Language *</span>
-          </label>
-          <LanguageDropdown
-            v-model="localFactCard.language"
-            placeholder="Select target language"
-            required
-            size="sm"
-            :default-language="defaultLanguage"
-          />
-        </div>
+      <FormFieldset legend="Fact Card Details">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Language -->
+          <FormField label="Language" required>
+            <template #default="{ inputId }">
+              <LanguageDropdown
+                :id="inputId"
+                v-model="localFactCard.language"
+                placeholder="Select target language"
+                required
+                size="sm"
+                :default-language="defaultLanguage"
+              />
+            </template>
+          </FormField>
 
-        <!-- Priority -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Priority</span>
-          </label>
-          <input
-            v-model.number="localFactCard.priority"
-            type="number"
-            placeholder="0"
-            class="input input-bordered input-sm"
-          />
-        </div>
+          <!-- Priority -->
+          <FormField label="Priority">
+            <template #default="{ inputId, inputClassString }">
+              <input
+                :id="inputId"
+                v-model.number="localFactCard.priority"
+                type="number"
+                placeholder="0"
+                :class="inputClassString + ' input-sm'"
+              />
+            </template>
+          </FormField>
 
-        <!-- Front Content -->
-        <div class="form-control md:col-span-2">
-          <label class="label">
-            <span class="label-text">Front Content *</span>
-          </label>
-          <textarea
-            v-model="localFactCard.front"
-            placeholder="Front content of the fact card"
-            class="textarea textarea-bordered"
-            rows="3"
-          ></textarea>
-        </div>
+          <!-- Front Content -->
+          <div class="md:col-span-2">
+            <FormField label="Front Content" required>
+              <template #default="{ inputId }">
+                <textarea
+                  :id="inputId"
+                  v-model="localFactCard.front"
+                  placeholder="Front content of the fact card"
+                  class="textarea textarea-bordered w-full"
+                  rows="3"
+                ></textarea>
+              </template>
+            </FormField>
+          </div>
 
-        <!-- Back Content -->
-        <div class="form-control md:col-span-2">
-          <label class="label">
-            <span class="label-text">Back Content *</span>
-          </label>
-          <textarea
-            v-model="localFactCard.back"
-            placeholder="Back content of the fact card"
-            class="textarea textarea-bordered"
-            rows="3"
-          ></textarea>
-        </div>
+          <!-- Back Content -->
+          <div class="md:col-span-2">
+            <FormField label="Back Content" required>
+              <template #default="{ inputId }">
+                <textarea
+                  :id="inputId"
+                  v-model="localFactCard.back"
+                  placeholder="Back content of the fact card"
+                  class="textarea textarea-bordered w-full"
+                  rows="3"
+                ></textarea>
+              </template>
+            </FormField>
+          </div>
 
-        <!-- Do Not Practice -->
-        <div class="form-control">
-          <label class="label cursor-pointer">
-            <span class="label-text">Exclude from practice</span>
-            <input
-              v-model="localFactCard.doNotPractice"
-              type="checkbox"
-              class="checkbox"
-            />
-          </label>
+          <!-- Do Not Practice -->
+          <FormField label="Exclude from practice">
+            <template #default="{ inputId }">
+              <div class="form-control">
+                <label :for="inputId" class="label cursor-pointer justify-start gap-3">
+                  <input
+                    :id="inputId"
+                    v-model="localFactCard.doNotPractice"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                  <span class="label-text">Exclude this fact card from practice sessions</span>
+                </label>
+              </div>
+            </template>
+          </FormField>
         </div>
-      </div>
+      </FormFieldset>
 
       <div class="flex justify-end gap-2 mt-4">
         <button
@@ -92,6 +103,8 @@ import { ref, computed, watch } from 'vue';
 import type { FactCardData } from './FactCardData';
 import { createEmptyCard } from 'ts-fsrs';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   factCard: Partial<FactCardData>;

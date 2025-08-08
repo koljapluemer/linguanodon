@@ -38,8 +38,7 @@
 
       <!-- Add New Vocab Section -->
       <div>
-        <h4 class="text-lg font-semibold mb-3">Add New Vocabulary</h4>
-        <div class="space-y-4">
+        <FormFieldset legend="Add New Vocabulary">
           <!-- Dynamic vocab form entries -->
           <div
             v-for="(entry, index) in vocabEntries"
@@ -50,47 +49,46 @@
               <div class="flex items-start gap-4">
                 <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <!-- Content -->
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text">Content *</span>
-                    </label>
-                    <input
-                      v-model="entry.content"
-                      type="text"
-                      placeholder="Vocabulary word or phrase"
-                      class="input input-bordered input-sm"
-                      @input="handleEntryChange(index)"
-                    />
-                  </div>
+                  <FormField label="Content" required size="sm">
+                    <template #default="{ inputId, inputClassString }">
+                      <input
+                        :id="inputId"
+                        v-model="entry.content"
+                        type="text"
+                        placeholder="Vocabulary word or phrase"
+                        :class="inputClassString"
+                        @input="handleEntryChange(index)"
+                      />
+                    </template>
+                  </FormField>
 
                   <!-- Language -->
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text">Language *</span>
-                    </label>
-                    <LanguageDropdown
-                      v-model="entry.language"
-                      placeholder="Select target language"
-                      required
-                      size="sm"
-                      @update:modelValue="handleEntryChange(index)"
-                    />
-                  </div>
-
+                  <FormField label="Language" required size="sm">
+                    <template #default="{ inputId }">
+                      <LanguageDropdown
+                        :id="inputId"
+                        v-model="entry.language"
+                        placeholder="Select target language"
+                        required
+                        size="sm"
+                        @update:modelValue="handleEntryChange(index)"
+                      />
+                    </template>
+                  </FormField>
 
                   <!-- Translations -->
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text">Translations *</span>
-                    </label>
-                    <input
-                      v-model="entry.translations"
-                      type="text"
-                      placeholder="Comma-separated translations"
-                      class="input input-bordered input-sm"
-                      @input="handleEntryChange(index)"
-                    />
-                  </div>
+                  <FormField label="Translations" required size="sm">
+                    <template #default="{ inputId, inputClassString }">
+                      <input
+                        :id="inputId"
+                        v-model="entry.translations"
+                        type="text"
+                        placeholder="Comma-separated translations"
+                        :class="inputClassString"
+                        @input="handleEntryChange(index)"
+                      />
+                    </template>
+                  </FormField>
                 </div>
 
                 <div class="flex flex-col gap-2">
@@ -124,7 +122,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </FormFieldset>
       </div>
     </div>
   </div>
@@ -137,6 +135,8 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 interface Props {
   contentUid?: string;

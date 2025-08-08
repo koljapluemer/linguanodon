@@ -4,6 +4,8 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import ElementBigText from '@/shared/ui/ElementBigText.vue';
 import ElementInstruction from '@/shared/ui/ElementInstruction.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 interface Props {
   vocab: VocabData;
@@ -70,18 +72,20 @@ const handleSkip = () => {
         </div>
 
         <!-- Pronunciation input -->
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Pronunciation</span>
-          </label>
-          <input 
-            v-model="pronunciation"
-            type="text"
-            class="input input-bordered w-full"
-            placeholder="Enter pronunciation..."
-            @keyup.enter="handleSave"
-          />
-        </div>
+        <FormFieldset legend="Add Pronunciation">
+          <FormField label="Pronunciation">
+            <template #default="{ inputId, inputClassString }">
+              <input 
+                :id="inputId"
+                v-model="pronunciation"
+                type="text"
+                :class="inputClassString"
+                placeholder="Enter pronunciation..."
+                @keyup.enter="handleSave"
+              />
+            </template>
+          </FormField>
+        </FormFieldset>
       </div>
     </div>
 

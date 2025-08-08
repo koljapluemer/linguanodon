@@ -14,149 +14,146 @@
     <!-- Form -->
     <div v-else class="space-y-6">
       <!-- Core Content - Big Type -->
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <!-- Content -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text text-lg font-semibold">Content *</span>
-            </label>
+      <FormFieldset legend="Core Content">
+        <FormField label="Content" size="lg" required>
+          <template #default="{ inputId, inputClasses }">
             <input
+              :id="inputId"
               v-model="formData.content"
               type="text"
               placeholder="The word or phrase"
-              class="input input-bordered input-lg text-xl"
+              :class="inputClasses"
               required
             />
-          </div>
+          </template>
+        </FormField>
 
-          <!-- Translations -->
-          <div class="form-control mt-6">
-            <TranslationGroupForm
-              v-model="formData.translations"
-              :allow-edit-on-click="true"
-              :show-delete-button="true"
-              :allow-adding-new="true"
-            />
-          </div>
+        <!-- Translations -->
+        <div class="mt-6">
+          <TranslationGroupForm
+            v-model="formData.translations"
+            :allow-edit-on-click="true"
+            :show-delete-button="true"
+            :allow-adding-new="true"
+          />
         </div>
-      </div>
+      </FormFieldset>
 
       <!-- Basic Information -->
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <h3 class="card-title">Basic Information</h3>
-          
-          <!-- Language -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Language *</span>
-            </label>
+      <FormFieldset legend="Basic Information">
+        <FormField label="Language" required>
+          <template #default="{ inputId }">
             <LanguageDropdown
+              :id="inputId"
               v-model="formData.language"
               placeholder="Select target language"
               required
             />
-          </div>
+          </template>
+        </FormField>
 
-          <!-- Pronunciation -->
-          <!-- Pronunciation removed - now handled as notes -->
-
-          <!-- Priority -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Priority</span>
-            </label>
+        <FormField label="Priority">
+          <template #default="{ inputId, inputClasses }">
             <input
+              :id="inputId"
               v-model.number="formData.priority"
               type="number"
               min="1"
               max="5"
               placeholder="1"
-              class="input input-bordered w-24"
+              :class="inputClasses"
+              style="width: 6rem"
             />
-          </div>
+          </template>
+        </FormField>
 
-          <!-- Exclude from practice -->
-          <div class="form-control">
-            <label class="cursor-pointer label justify-start gap-2">
+        <FormField label="">
+          <template #default="{ inputId }">
+            <label :for="inputId" class="cursor-pointer label justify-start gap-2">
               <input
+                :id="inputId"
                 v-model="formData.doNotPractice"
                 type="checkbox"
                 class="checkbox"
               />
               <span class="label-text">Exclude from practice</span>
             </label>
-          </div>
-        </div>
-      </div>
+          </template>
+        </FormField>
+      </FormFieldset>
 
       <!-- Notes -->
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <NoteList
-            :notes="formData.notes"
-            :show-before-exercise-option="true"
-            @add="$emit('addNote')"
-            @update="$emit('updateNote', $event)"
-            @delete="$emit('removeNote', $event)"
-          />
-        </div>
-      </div>
+      <FormFieldset legend="Notes">
+        <NoteList
+          :notes="formData.notes"
+          :show-before-exercise-option="true"
+          @add="$emit('addNote')"
+          @update="$emit('updateNote', $event)"
+          @delete="$emit('removeNote', $event)"
+        />
+      </FormFieldset>
 
       <!-- Links -->
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <div class="flex justify-between items-center">
-            <h3 class="card-title">Links</h3>
-            <button
-              type="button"
-              @click="$emit('addLink')"
-              class="btn btn-sm btn-outline"
-            >
-              <Plus class="w-4 h-4 mr-1" />
-              Add Link
-            </button>
-          </div>
-          
-          <div v-if="formData.links.length === 0" class="text-gray-500 text-center py-4">
-            No links yet. Click "Add Link" to add external resources.
-          </div>
-          
-          <div v-else class="space-y-4">
-            <div
-              v-for="(link, index) in formData.links"
-              :key="index"
-              class="border rounded-lg p-4"
-            >
-              <div class="flex justify-between items-start gap-4">
-                <div class="flex-1 space-y-2">
-                  <input
-                    v-model="link.label"
-                    type="text"
-                    placeholder="Link label"
-                    class="input input-bordered input-sm w-full"
-                  />
-                  <input
-                    v-model="link.url"
-                    type="url"
-                    placeholder="https://..."
-                    class="input input-bordered input-sm w-full"
-                  />
-                </div>
+      <FormFieldset legend="Links">
+        <div class="flex justify-end mb-4">
+          <button
+            type="button"
+            @click="$emit('addLink')"
+            class="btn btn-sm btn-outline"
+          >
+            <Plus class="w-4 h-4 mr-1" />
+            Add Link
+          </button>
+        </div>
+        
+        <div v-if="formData.links.length === 0" class="text-gray-500 text-center py-4">
+          No links yet. Click "Add Link" to add external resources.
+        </div>
+        
+        <div v-else class="space-y-4">
+          <div
+            v-for="(link, index) in formData.links"
+            :key="index"
+            class="border rounded-lg p-4"
+          >
+            <div class="flex justify-between items-start gap-4">
+              <div class="flex-1 space-y-4">
+                <FormField label="Link label" size="sm">
+                  <template #default="{ inputId, inputClasses }">
+                    <input
+                      :id="inputId"
+                      v-model="link.label"
+                      type="text"
+                      placeholder="Link label"
+                      :class="inputClasses"
+                    />
+                  </template>
+                </FormField>
                 
-                <button
-                  type="button"
-                  @click="$emit('removeLink', index)"
-                  class="btn btn-sm btn-ghost btn-circle text-error"
-                >
-                  <X class="w-4 h-4" />
-                </button>
+                <FormField label="URL" size="sm">
+                  <template #default="{ inputId, inputClasses }">
+                    <input
+                      :id="inputId"
+                      v-model="link.url"
+                      type="url"
+                      placeholder="https://..."
+                      :class="inputClasses"
+                    />
+                  </template>
+                </FormField>
               </div>
+              
+              <button
+                type="button"
+                @click="$emit('removeLink', index)"
+                class="btn btn-sm btn-ghost btn-circle text-error"
+              >
+                <X class="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      </FormFieldset>
 
       <!-- Actions -->
       <div class="flex justify-between items-center">
@@ -180,6 +177,8 @@ import { Plus, X, Check } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import TranslationGroupForm from '@/entities/vocab/translations/TranslationGroupForm.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 import type { VocabFormData } from './types';
 import type { NoteData } from '@/entities/notes/NoteData';
 

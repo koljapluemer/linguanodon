@@ -1,16 +1,19 @@
 <template>
-  <div class="flex items-center gap-2 p-2 border border-dashed rounded">
-    <div class="flex-1 space-y-2">
-      <input
-        v-model="editTranslation.content"
-        class="input input-bordered w-full text-lg"
-        placeholder="Add new translation..."
-        @keyup.enter="save"
-        @keyup.escape="cancel"
-      />
-    </div>
+  <FormFieldset layout="horizontal">
+    <FormField label="Translation" size="lg" full-width>
+      <template #default="{ inputId, inputClasses }">
+        <input
+          :id="inputId"
+          v-model="editTranslation.content"
+          :class="inputClasses"
+          placeholder="Add new translation..."
+          @keyup.enter="save"
+          @keyup.escape="cancel"
+        />
+      </template>
+    </FormField>
     
-    <div class="flex gap-2">
+    <div class="flex gap-2 items-end">
       <button
         class="btn btn-sm btn-primary"
         :disabled="!editTranslation.content?.trim()"
@@ -26,11 +29,13 @@
         Cancel
       </button>
     </div>
-  </div>
+  </FormFieldset>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 import type { TranslationData } from './TranslationData';
 
 const props = defineProps<{

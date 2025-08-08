@@ -12,90 +12,81 @@
 
     <!-- Form -->
     <div v-else class="space-y-6">
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <div class="space-y-6">
-            <!-- Title -->
-            <div class="space-y-2">
-              <label for="title" class="text-sm font-medium block">Title *</label>
-              <input
-                id="title"
-                v-model="formData.title"
-                type="text"
-                placeholder="Resource title"
-                class="input input-bordered w-full block"
-                :class="{ 'input-error': errors.title }"
-              />
-              <div v-if="errors.title" class="text-sm text-error">{{ errors.title }}</div>
-            </div>
-
-            <!-- Language -->
-            <div class="space-y-2">
-              <label for="language" class="text-sm font-medium block">Language *</label>
-              <div class="block">
-                <LanguageDropdown
-                  id="language"
-                  v-model="formData.language"
-                  placeholder="Select target language"
-                  required
-                />
-              </div>
-              <div v-if="errors.language" class="text-sm text-error">{{ errors.language }}</div>
-            </div>
-
-            <!-- Priority -->
-            <div class="space-y-2">
-              <label for="priority" class="text-sm font-medium block">Priority</label>
-              <input
-                id="priority"
-                v-model.number="formData.priority"
-                type="number"
-                placeholder="0"
-                class="input input-bordered w-24 block"
-              />
-            </div>
-
-
-            <!-- Content -->
-            <div class="space-y-2">
-              <label for="content" class="text-sm font-medium block">Content</label>
-              <textarea
-                id="content"
-                v-model="formData.content"
-                placeholder="Main content of the resource (text, article, etc.)"
-                class="textarea textarea-bordered w-full block"
-                rows="6"
-              ></textarea>
-            </div>
-
-            <!-- Link -->
-            <LinkEdit
-              :url="formData.linkUrl"
-              :label="formData.linkLabel"
-              url-id="linkUrl"
-              label-id="linkLabel"
-              @update:url="formData.linkUrl = $event"
-              @update:label="formData.linkLabel = $event"
+      <FormFieldset legend="Resource Details">
+        <FormField label="Title" required>
+          <template #default="{ inputId, inputClasses }">
+            <input
+              :id="inputId"
+              v-model="formData.title"
+              type="text"
+              placeholder="Resource title"
+              :class="[inputClasses, { 'input-error': errors.title }]"
             />
+            <div v-if="errors.title" class="text-sm text-error mt-1">{{ errors.title }}</div>
+          </template>
+        </FormField>
 
-          </div>
+        <FormField label="Language" required>
+          <template #default="{ inputId }">
+            <LanguageDropdown
+              :id="inputId"
+              v-model="formData.language"
+              placeholder="Select target language"
+              required
+            />
+            <div v-if="errors.language" class="text-sm text-error mt-1">{{ errors.language }}</div>
+          </template>
+        </FormField>
 
-          <!-- Action Buttons -->
-          <div class="card-actions justify-end mt-6">
-            <router-link to="/resources" class="btn btn-ghost">
-              Cancel
-            </router-link>
-            <button
-              class="btn btn-primary"
-              :disabled="!isFormValid || saving"
-              @click="handleSave"
-            >
-              <span v-if="saving" class="loading loading-spinner loading-sm"></span>
-              <span v-else>{{ isNew ? 'Create Resource' : 'Save Changes' }}</span>
-            </button>
-          </div>
+        <FormField label="Priority">
+          <template #default="{ inputId, inputClasses }">
+            <input
+              :id="inputId"
+              v-model.number="formData.priority"
+              type="number"
+              placeholder="0"
+              :class="inputClasses"
+              style="width: 6rem"
+            />
+          </template>
+        </FormField>
+
+        <FormField label="Content">
+          <template #default="{ inputId }">
+            <textarea
+              :id="inputId"
+              v-model="formData.content"
+              placeholder="Main content of the resource (text, article, etc.)"
+              class="textarea textarea-bordered w-full"
+              rows="6"
+            ></textarea>
+          </template>
+        </FormField>
+
+        <LinkEdit
+          :url="formData.linkUrl"
+          :label="formData.linkLabel"
+          url-id="linkUrl"
+          label-id="linkLabel"
+          @update:url="formData.linkUrl = $event"
+          @update:label="formData.linkLabel = $event"
+        />
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end gap-2 mt-6">
+          <router-link to="/resources" class="btn btn-ghost">
+            Cancel
+          </router-link>
+          <button
+            class="btn btn-primary"
+            :disabled="!isFormValid || saving"
+            @click="handleSave"
+          >
+            <span v-if="saving" class="loading loading-spinner loading-sm"></span>
+            <span v-else>{{ isNew ? 'Create Resource' : 'Save Changes' }}</span>
+          </button>
         </div>
-      </div>
+      </FormFieldset>
     </div>
   </div>
 </template>
@@ -105,6 +96,8 @@ import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LinkEdit from '@/shared/ui/LinkEdit.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 

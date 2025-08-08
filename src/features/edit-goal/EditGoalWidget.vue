@@ -1,45 +1,47 @@
 <template>
-  <div class="space-y-4">
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-medium">Goal Title</span>
-      </label>
-      <div class="flex items-center gap-2">
-        <span class="text-sm text-gray-600">I want to be able to</span>
-        <input
-          v-model="goalTitle"
-          type="text"
-          placeholder="describe what you want to achieve..."
-          class="input input-bordered flex-1"
-          @blur="saveGoal"
-          @keydown.enter="saveGoal"
-        />
-      </div>
-    </div>
+  <FormFieldset legend="Goal Details">
+    <FormField label="Goal Title">
+      <template #default="{ inputId, inputClassString }">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">I want to be able to</span>
+          <input
+            :id="inputId"
+            v-model="goalTitle"
+            type="text"
+            placeholder="describe what you want to achieve..."
+            :class="`${inputClassString} flex-1`"
+            @blur="saveGoal"
+            @keydown.enter="saveGoal"
+          />
+        </div>
+      </template>
+    </FormField>
 
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text font-medium">Additional Details (Optional)</span>
-      </label>
-      <textarea
-        v-model="goalPrompt"
-        placeholder="Add any additional context or details about your goal..."
-        class="textarea textarea-bordered"
-        rows="3"
-        @blur="saveGoal"
-      />
-    </div>
+    <FormField label="Additional Details (Optional)">
+      <template #default="{ inputId }">
+        <textarea
+          :id="inputId"
+          v-model="goalPrompt"
+          placeholder="Add any additional context or details about your goal..."
+          class="textarea textarea-bordered w-full"
+          rows="3"
+          @blur="saveGoal"
+        />
+      </template>
+    </FormField>
 
     <div v-if="saving" class="text-sm text-gray-500">
       Saving...
     </div>
-  </div>
+  </FormFieldset>
 </template>
 
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   goal: GoalData;

@@ -1,71 +1,66 @@
 <template>
-  <div class="card bg-base-100 border-2 border-dashed border-base-300">
-    <div class="card-body p-4">
-      <div class="flex items-end gap-4">
-        <!-- Language -->
-        <div class="form-control w-32">
-          <label class="label">
-            <span class="label-text">Language *</span>
-          </label>
-          <LanguageDropdown
-            v-model="localVocab.language"
-            placeholder="Select language"
-            size="sm"
-            required
-            :default-language="defaultLanguage"
-          />
-        </div>
+  <FormFieldset layout="horizontal">
+    <FormField label="Language" required>
+      <template #default="{ inputId }">
+        <LanguageDropdown
+          :id="inputId"
+          v-model="localVocab.language"
+          placeholder="Select language"
+          size="sm"
+          required
+          :default-language="defaultLanguage"
+        />
+      </template>
+    </FormField>
 
-        <!-- Content -->
-        <div class="form-control flex-1">
-          <label class="label">
-            <span class="label-text">In {{ currentLanguageDisplay }}{{ contentRequired ? ' *' : '' }}</span>
-          </label>
-          <input
-            v-model="localVocab.content"
-            type="text"
-            :placeholder="contentPlaceholder"
-            class="input input-bordered input-sm"
-          />
-        </div>
+    <FormField :label="`In ${currentLanguageDisplay}${contentRequired ? ' *' : ''}`" size="sm" full-width>
+      <template #default="{ inputId, inputClasses }">
+        <input
+          :id="inputId"
+          v-model="localVocab.content"
+          type="text"
+          :placeholder="contentPlaceholder"
+          :class="inputClasses"
+        />
+      </template>
+    </FormField>
 
-        <!-- Translations -->
-        <div class="form-control flex-1">
-          <label class="label">
-            <span class="label-text">In your native language{{ translationsRequired ? ' *' : '' }}</span>
-          </label>
-          <input
-            v-model="translationsText"
-            type="text"
-            :placeholder="translationsPlaceholder"
-            class="input input-bordered input-sm"
-          />
-        </div>
+    <FormField :label="`In your native language${translationsRequired ? ' *' : ''}`" size="sm" full-width>
+      <template #default="{ inputId, inputClasses }">
+        <input
+          :id="inputId"
+          v-model="translationsText"
+          type="text"
+          :placeholder="translationsPlaceholder"
+          :class="inputClasses"
+        />
+      </template>
+    </FormField>
 
-        <!-- Actions -->
-        <div class="flex gap-2">
-          <button
-            class="btn btn-sm btn-ghost"
-            @click="handleClearOrCancel"
-          >
-            {{ isNew ? 'Clear' : 'Cancel' }}
-          </button>
-          <button
-            class="btn btn-sm btn-primary"
-            :disabled="!isValid"
-            @click="handleSave"
-          >
-            {{ isNew ? 'Add' : 'Save' }}
-          </button>
-        </div>
-      </div>
+    <!-- Actions -->
+    <div class="flex gap-2 items-end">
+      <button
+        class="btn btn-sm btn-ghost"
+        @click="handleClearOrCancel"
+      >
+        {{ isNew ? 'Clear' : 'Cancel' }}
+      </button>
+      <button
+        class="btn btn-sm btn-primary"
+        :disabled="!isValid"
+        @click="handleSave"
+      >
+        {{ isNew ? 'Add' : 'Save' }}
+      </button>
     </div>
-  </div>
+  </FormFieldset>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch, inject } from 'vue';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 import type { VocabData } from './vocab/VocabData';
 import type { LanguageRepoContract } from '@/entities/languages';
 import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';

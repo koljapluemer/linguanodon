@@ -3,6 +3,8 @@ import { ref, onMounted, computed, inject } from 'vue';
 import { Languages, X } from 'lucide-vue-next';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 import isoLangs from '@/entities/languages/isoLangs.json';
+import FormFieldset from '@/shared/ui/FormFieldset.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 
@@ -119,60 +121,54 @@ function hideDropdown() {
       <div v-if="error" class="alert alert-error mb-4">{{ error }}</div>
 
       <!-- Target Languages Card -->
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <h3 class="card-title text-lg flex items-center gap-2">
-            <Languages class="w-5 h-5" />
-            Target Languages
-          </h3>
-          <p class="text-base-content/70 text-sm mb-4">
-            Languages you want to learn. You can temporarily disable languages or remove them completely.
-          </p>
+      <FormFieldset legend="Target Languages">
+        <p class="text-base-content/70 text-sm mb-4">
+          Languages you want to learn. You can temporarily disable languages or remove them completely.
+        </p>
 
-          <div v-if="userLanguages.length > 0" class="space-y-2 mb-4">
-            <div v-for="language in userLanguages" :key="language.code" 
-                 class="flex items-center justify-between p-3 rounded-lg"
-                 :class="language.isActive ? 'bg-base-200' : 'bg-base-300 opacity-60'">
-              <div class="flex items-center gap-3">
-                <input 
-                  type="checkbox" 
-                  :checked="language.isActive"
-                  @change="toggleLanguageActive(language.code, !language.isActive)"
-                  class="checkbox checkbox-sm"
-                />
-                <div>
-                  <div class="font-medium flex items-center gap-2">
-                    <span v-if="language.emoji">{{ language.emoji }}</span>
-                    {{ language.name }}
-                  </div>
-                  <div class="text-sm text-base-content/60">{{ language.code }}</div>
+        <div v-if="userLanguages.length > 0" class="space-y-2 mb-4">
+          <div v-for="language in userLanguages" :key="language.code" 
+               class="flex items-center justify-between p-3 rounded-lg"
+               :class="language.isActive ? 'bg-base-200' : 'bg-base-300 opacity-60'">
+            <div class="flex items-center gap-3">
+              <input 
+                type="checkbox" 
+                :checked="language.isActive"
+                @change="toggleLanguageActive(language.code, !language.isActive)"
+                class="checkbox checkbox-sm"
+              />
+              <div>
+                <div class="font-medium flex items-center gap-2">
+                  <span v-if="language.emoji">{{ language.emoji }}</span>
+                  {{ language.name }}
                 </div>
+                <div class="text-sm text-base-content/60">{{ language.code }}</div>
               </div>
-              <button 
-                @click="removeLanguage(language.code)" 
-                class="btn btn-error btn-sm" 
-                title="Remove language completely"
-              >
-                <X class="w-4 h-4" />
-              </button>
             </div>
+            <button 
+              @click="removeLanguage(language.code)" 
+              class="btn btn-error btn-sm" 
+              title="Remove language completely"
+            >
+              <X class="w-4 h-4" />
+            </button>
           </div>
+        </div>
 
-          <div v-else class="text-center py-6 text-base-content/60">
-            <Languages class="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p>No target languages added yet.</p>
-            <p class="text-sm">Add languages you want to learn.</p>
-          </div>
+        <div v-else class="text-center py-6 text-base-content/60">
+          <Languages class="w-8 h-8 mx-auto mb-2 opacity-50" />
+          <p>No target languages added yet.</p>
+          <p class="text-sm">Add languages you want to learn.</p>
+        </div>
 
-          <!-- Add Language Section -->
-          <div class="form-control mt-4 relative">
-            <label class="label">
-              <span class="label-text font-medium">Add Target Language</span>
-            </label>
+        <!-- Add Language Section -->
+        <FormField label="Add Target Language">
+          <template #default="{ inputId, inputClassString }">
             <div class="relative">
               <input 
+                :id="inputId"
                 v-model="addLanguageSearch" 
-                class="input input-bordered w-full" 
+                :class="inputClassString" 
                 placeholder="Type to search for a language..." 
                 @focus="showDropdown = true"
                 @blur="hideDropdown"
@@ -195,12 +191,12 @@ function hideDropdown() {
                 </button>
               </div>
             </div>
-            <div v-if="addLanguageSearch && availableLanguages.length === 0" class="label">
-              <span class="label-text-alt text-warning">No languages found matching your search.</span>
+            <div v-if="addLanguageSearch && availableLanguages.length === 0" class="text-xs text-warning mt-1">
+              No languages found matching your search.
             </div>
-          </div>
-        </div>
-      </div>
+          </template>
+        </FormField>
+      </FormFieldset>
     </div>
   </div>
 </template>
