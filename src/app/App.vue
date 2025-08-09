@@ -28,6 +28,7 @@ provide('languageRepo', languageRepo);
         <router-link :to="{ name: 'goals-list' }" class="btn btn-ghost btn-sm">Goals</router-link>
         <router-link :to="{ name: 'tasks' }" class="btn btn-ghost btn-sm">Tasks</router-link>
         <router-link :to="{ name: 'languages' }" class="btn btn-ghost btn-sm">Languages</router-link>
+        <router-link :to="{ name: 'time-tracking' }" class="btn btn-ghost btn-sm">Time</router-link>
         <router-link :to="{ name: 'downloads' }" class="btn btn-ghost btn-sm">Downloads</router-link>
 
       </nav>

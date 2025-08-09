@@ -13,6 +13,7 @@ import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
 import PageTasks from '@/pages/tasks/PageTasks.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
 import PageLanguages from '@/pages/languages/PageLanguages.vue';
+import PageTimeTracking from '@/pages/time-tracking/PageTimeTracking.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -115,6 +116,11 @@ const router = createRouter({
       path: '/languages',
       name: 'languages',
       component: PageLanguages
+    },
+    {
+      path: '/time-tracking',
+      name: 'time-tracking',
+      component: PageTimeTracking
     }
   ]
 });

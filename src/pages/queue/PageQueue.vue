@@ -6,6 +6,7 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import { useCachedQueue } from './useCachedQueue';
 import MetaTaskRenderer from './MetaTaskRenderer.vue';
+import { useTimeTracking } from '@/shared/useTimeTracking';
 
 // Inject repositories
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
@@ -23,6 +24,9 @@ const {
   completeCurrentTask,
   stateMachineDebug
 } = useCachedQueue(vocabRepo, exampleRepo, goalRepo, resourceRepo);
+
+// Initialize time tracking for this page
+useTimeTracking();
 
 onMounted(async () => {
   await initializeQueue();
