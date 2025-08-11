@@ -3,7 +3,6 @@ import type { Link } from "@/shared/Link";
 export interface ResourceData {
   uid: string;
   language: string;
-  isImmersionContent: boolean;
 
 
   title: string;

@@ -193,7 +193,7 @@ async function loadContent() {
   
   try {
     const allResources = await resourceRepo!.getAllResources();
-    content.value = allResources.filter(resource => resource.isImmersionContent);
+    content.value = allResources;
     await loadVocabReadiness();
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load content';

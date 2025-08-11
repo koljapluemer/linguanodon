@@ -66,7 +66,6 @@ async function downloadResourceSet(name: string) {
         title: remoteResource.title,
         content: remoteResource.content,
         link: remoteResource.link,
-        isImmersionContent: false,
         vocab: [],
         examples: [],
         factCards: [],

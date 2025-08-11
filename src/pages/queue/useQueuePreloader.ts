@@ -1,35 +1,34 @@
 import { reactive } from 'vue';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
+import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import { VocabPicker } from './propose-which-vocab-to-practice/VocabPicker';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import { VocabPicker } from './propose-relevant-entities/which-vocab-to-practice/VocabPicker';
+import { ResourcePicker } from './propose-relevant-entities/which-resource-to-practice/ResourcePicker';
 import { TaskPicker } from './propose-which-task-to-do/TaskPicker';
+import { shuffleArray } from '@/shared/arrayUtils';
 
 interface PreloadConfig {
-  minVocabBuffer: number;
-  minTaskBuffer: number;
+  minTaskBatchBuffer: number;
   aggressiveThreshold: number;
 }
 
 interface PreloadedContent {
-  vocabBatches: VocabData[][];
-  tasks: Task[];
+  taskBatches: Task[][];
 }
 
 interface PreloadStatus {
-  vocabBatchesReady: number;
-  tasksReady: number;
-  isLoadingVocab: boolean;
-  isLoadingTask: boolean;
+  taskBatchesReady: number;
+  isLoadingBatch: boolean;
   lastError: string | null;
 }
 
 const DEFAULT_CONFIG: PreloadConfig = {
-  minVocabBuffer: 2,
-  minTaskBuffer: 2,
+  minTaskBatchBuffer: 2,
   aggressiveThreshold: 1
 };
 
@@ -38,6 +37,8 @@ export function useQueuePreloader(
   exampleRepo: ExampleRepoContract,
   goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
+  taskRepo: TaskRepoContract,
+  languageRepo: LanguageRepoContract,
   config: Partial<PreloadConfig> = {}
 ) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
@@ -46,151 +47,185 @@ export function useQueuePreloader(
   const vocabPicker = new VocabPicker();
   vocabPicker.initializeProposers(vocabRepo, resourceRepo, exampleRepo, goalRepo);
   
+  const resourcePicker = new ResourcePicker();
+  resourcePicker.initializeProposers(resourceRepo, languageRepo, taskRepo);
+  
   const taskPicker = new TaskPicker();
   taskPicker.initializeProposers(vocabRepo, exampleRepo, goalRepo, resourceRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({
-    vocabBatches: [],
-    tasks: []
+    taskBatches: []
   });
 
   // Status tracking
   const status = reactive<PreloadStatus>({
-    vocabBatchesReady: 0,
-    tasksReady: 0,
-    isLoadingVocab: false,
-    isLoadingTask: false,
+    taskBatchesReady: 0,
+    isLoadingBatch: false,
     lastError: null
   });
 
-  // Active loading promises to prevent duplicates
-  let vocabLoadingPromise: Promise<void> | null = null;
-  let taskLoadingPromise: Promise<void> | null = null;
+  // Active loading promise to prevent duplicates
+  let batchLoadingPromise: Promise<void> | null = null;
 
-  // Background vocab batch loading
-  async function loadVocabBatch() {
-    if (status.isLoadingVocab || vocabLoadingPromise) return;
+  // Convert TaskData to Task (add computed properties)
+  function taskDataToTask(taskData: TaskData): Task {
+    return {
+      ...taskData,
+      mayBeConsideredDone: false,
+      isDone: false
+    };
+  }
+
+  // Background task batch loading
+  async function loadTaskBatch() {
+    if (status.isLoadingBatch || batchLoadingPromise) return;
     
-    status.isLoadingVocab = true;
+    status.isLoadingBatch = true;
     status.lastError = null;
     
     try {
-      vocabLoadingPromise = (async () => {
-        const batch = await vocabPicker.pickVocabBatch();
-        content.vocabBatches.push(batch);
-        status.vocabBatchesReady = content.vocabBatches.length;
+      batchLoadingPromise = (async () => {
+        const batch: Task[] = [];
+        
+        // Step 1: Get 0-2 resource tasks
+        const resourceBatch = await resourcePicker.pickResourceBatch();
+        for (const resource of resourceBatch) {
+          try {
+            const resourceTasks = await taskRepo.getTasksByResourceId(resource.uid);
+            const activeTasks = resourceTasks.filter(task => task.isActive);
+            batch.push(...activeTasks.map(taskDataToTask));
+          } catch (error) {
+            console.error('Error loading tasks for resource:', resource.uid, error);
+          }
+        }
+        
+        // Step 2: Fill remaining slots with vocab-based tasks
+        const remainingSlots = Math.max(0, 20 - batch.length);
+        if (remainingSlots > 0) {
+          const vocabBatch = await vocabPicker.pickVocabBatch();
+          
+          // Get tasks for vocab batch (using existing task picker logic for vocab-based tasks)
+          let vocabTasksAdded = 0;
+          for (let i = 0; i < vocabBatch.length && vocabTasksAdded < remainingSlots; i++) {
+            try {
+              // Generate vocab-based tasks using existing task picker
+              const vocabTask = await taskPicker.pickTask();
+              if (vocabTask) {
+                batch.push(vocabTask);
+                vocabTasksAdded++;
+              }
+            } catch (error) {
+              console.error('Error generating vocab task:', error);
+            }
+          }
+        }
+        
+        // Step 3: Shuffle the final batch
+        const shuffledBatch = shuffleArray(batch);
+        content.taskBatches.push(shuffledBatch);
+        status.taskBatchesReady = content.taskBatches.length;
       })();
       
-      await vocabLoadingPromise;
+      await batchLoadingPromise;
     } catch (error) {
-      console.error('Preloader: Error loading vocab batch:', error);
-      status.lastError = 'Failed to load vocabulary';
+      console.error('Preloader: Error loading task batch:', error);
+      status.lastError = 'Failed to load task batch';
     } finally {
-      status.isLoadingVocab = false;
-      vocabLoadingPromise = null;
+      status.isLoadingBatch = false;
+      batchLoadingPromise = null;
       
       // Check if we need more
-      if (content.vocabBatches.length < finalConfig.minVocabBuffer) {
-        setTimeout(() => loadVocabBatch(), 100); // Brief delay to prevent spam
+      if (content.taskBatches.length < finalConfig.minTaskBatchBuffer) {
+        setTimeout(() => loadTaskBatch(), 100); // Brief delay to prevent spam
       }
     }
   }
 
-  // Track consecutive failed task loads to prevent infinite loops
-  let consecutiveFailedTaskLoads = 0;
-  const MAX_CONSECUTIVE_FAILED_LOADS = 3;
-
-  // Background task loading
-  async function loadTask() {
-    if (status.isLoadingTask || taskLoadingPromise) return;
-    
-    status.isLoadingTask = true;
-    status.lastError = null;
-    
-    try {
-      taskLoadingPromise = (async () => {
-        const task = await taskPicker.pickTask();
-        if (task) {
-          content.tasks.push(task);
-          status.tasksReady = content.tasks.length;
-          consecutiveFailedTaskLoads = 0; // Reset counter on success
-        } else {
-          consecutiveFailedTaskLoads++;
-        }
-      })();
-      
-      await taskLoadingPromise;
-    } catch (error) {
-      console.error('Preloader: Error loading task:', error);
-      status.lastError = 'Failed to load task';
-      consecutiveFailedTaskLoads++;
-    } finally {
-      status.isLoadingTask = false;
-      taskLoadingPromise = null;
-      
-      // Only continue loading if we haven't failed too many times
-      if (content.tasks.length < finalConfig.minTaskBuffer && consecutiveFailedTaskLoads < MAX_CONSECUTIVE_FAILED_LOADS) {
-        setTimeout(() => loadTask(), 100); // Brief delay to prevent spam
-      } else if (consecutiveFailedTaskLoads >= MAX_CONSECUTIVE_FAILED_LOADS) {
-        console.warn('Too many consecutive failed task loads, stopping task preloading');
-      }
-    }
-  }
 
   // Initialize preloading
   async function initialize() {
-    
-    // Load initial content in parallel
+    // Load initial task batches
     const promises = [];
     
-    // Load minimum vocab batches
-    for (let i = 0; i < finalConfig.minVocabBuffer; i++) {
-      promises.push(loadVocabBatch());
-    }
-    
-    // Load minimum tasks
-    for (let i = 0; i < finalConfig.minTaskBuffer; i++) {
-      promises.push(loadTask());
+    // Load minimum task batches
+    for (let i = 0; i < finalConfig.minTaskBatchBuffer; i++) {
+      promises.push(loadTaskBatch());
     }
     
     await Promise.all(promises);
   }
 
   // Consume methods (instant)
-  function consumeNextVocabBatch(): VocabData[] | null {
-    const batch = content.vocabBatches.shift() || null;
+  function consumeNextTaskBatch(): Task[] | null {
+    const batch = content.taskBatches.shift() || null;
     if (batch) {
-      status.vocabBatchesReady = content.vocabBatches.length;
+      status.taskBatchesReady = content.taskBatches.length;
       
       // Trigger background reload if buffer is low
-      if (content.vocabBatches.length <= finalConfig.aggressiveThreshold) {
-        loadVocabBatch();
+      if (content.taskBatches.length <= finalConfig.aggressiveThreshold) {
+        loadTaskBatch();
       }
     }
     return batch;
   }
 
   function consumeNextTask(): Task | null {
-    const task = content.tasks.shift() || null;
-    if (task) {
-      status.tasksReady = content.tasks.length;
-      
-      // Reset failed loads counter when successfully consuming tasks
-      consecutiveFailedTaskLoads = 0;
-      
-      // Trigger background reload if buffer is low
-      if (content.tasks.length <= finalConfig.aggressiveThreshold) {
-        loadTask();
+    // Get next task from the first available batch
+    for (let i = 0; i < content.taskBatches.length; i++) {
+      const batch = content.taskBatches[i];
+      if (batch.length > 0) {
+        const task = batch.shift();
+        
+        // Remove empty batches
+        if (batch.length === 0) {
+          content.taskBatches.splice(i, 1);
+          status.taskBatchesReady = content.taskBatches.length;
+          
+          // Trigger reload if buffer is low
+          if (content.taskBatches.length <= finalConfig.aggressiveThreshold) {
+            loadTaskBatch();
+          }
+        }
+        
+        return task || null;
       }
     }
-    return task;
+    return null;
   }
 
   // Force loading (for fallback scenarios)
-  async function forceLoadNextVocabBatch(): Promise<VocabData[]> {
-    const batch = await vocabPicker.pickVocabBatch();
-    return batch;
+  async function forceLoadNextTaskBatch(): Promise<Task[]> {
+    const batch: Task[] = [];
+    
+    // Get 0-2 resource tasks
+    const resourceBatch = await resourcePicker.pickResourceBatch();
+    for (const resource of resourceBatch) {
+      try {
+        const resourceTasks = await taskRepo.getTasksByResourceId(resource.uid);
+        const activeTasks = resourceTasks.filter(task => task.isActive);
+        batch.push(...activeTasks.map(taskDataToTask));
+      } catch (error) {
+        console.error('Error loading tasks for resource:', resource.uid, error);
+      }
+    }
+    
+    // Fill remaining slots with vocab-based tasks
+    const remainingSlots = Math.max(0, 20 - batch.length);
+    if (remainingSlots > 0) {
+      for (let i = 0; i < remainingSlots; i++) {
+        try {
+          const vocabTask = await taskPicker.pickTask();
+          if (vocabTask) {
+            batch.push(vocabTask);
+          }
+        } catch (error) {
+          console.error('Error generating vocab task:', error);
+        }
+      }
+    }
+    
+    return shuffleArray(batch);
   }
 
   async function forceLoadNextTask(): Promise<Task | null> {
@@ -199,26 +234,25 @@ export function useQueuePreloader(
   }
 
   // Status checks
-  const hasVocabReady = () => content.vocabBatches.length > 0;
-  const hasTaskReady = () => content.tasks.length > 0;
+  const hasTaskReady = () => {
+    return content.taskBatches.length > 0 && content.taskBatches.some(batch => batch.length > 0);
+  };
   const isHealthy = () => !status.lastError && 
-    content.vocabBatches.length >= finalConfig.aggressiveThreshold &&
-    content.tasks.length >= finalConfig.aggressiveThreshold;
+    content.taskBatches.length >= finalConfig.aggressiveThreshold;
 
   return {
     // Initialize
     initialize,
     
     // Consume (instant)
-    consumeNextVocabBatch,
+    consumeNextTaskBatch,
     consumeNextTask,
     
     // Force load (async fallback)
-    forceLoadNextVocabBatch,
+    forceLoadNextTaskBatch,
     forceLoadNextTask,
     
     // Status
-    hasVocabReady,
     hasTaskReady,
     isHealthy,
     status: status,

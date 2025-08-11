@@ -19,7 +19,7 @@ export class ProposeImmersionContent implements TaskProposerContract {
     try {
       // Get all resources that are immersion content
       const allResources = await this.resourceRepo.getAllResources();
-      const allContent = allResources.filter(resource => resource.isImmersionContent);
+      const allContent = allResources;
       
       // TODO: Check due status from TaskData instead of ResourceData
       // For now, consider all immersion content as potentially due

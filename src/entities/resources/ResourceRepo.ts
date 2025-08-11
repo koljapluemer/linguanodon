@@ -34,7 +34,6 @@ export class ResourceRepo implements ResourceRepoContract {
     const resourceData: ResourceData = {
       uid: resource.uid || crypto.randomUUID(),
       language: resource.language,
-      isImmersionContent: resource.isImmersionContent || false,
       title: resource.title,
       content: resource.content,
       link: resource.link,

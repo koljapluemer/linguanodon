@@ -20,7 +20,7 @@ export class ProposerByImmersionContentAlmostReady implements VocabProposerContr
     try {
       // Get all resources that are immersion content
       const allResources = await this.resourceRepo.getAllResources();
-      const allContent = allResources.filter(resource => resource.isImmersionContent);
+      const allContent = allResources;
       
       let bestContent = null;
       let bestPercentage = -1;

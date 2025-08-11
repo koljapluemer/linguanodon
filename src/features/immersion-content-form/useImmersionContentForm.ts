@@ -93,7 +93,7 @@ export function useImmersionContentForm(contentUid?: string) {
 
     try {
       const content = await resourceRepo.getResourceById(contentUid);
-      if (content && content.isImmersionContent) {
+      if (content) {
         loadedContentData.value = content;
         state.value.formData = immersionContentToFormData(content);
       } else {

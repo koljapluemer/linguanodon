@@ -2,6 +2,8 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import { useQueuePreloader } from './useQueuePreloader';
 import { useQueueStateMachine } from './useQueueStateMachine';
 
@@ -9,10 +11,12 @@ export function useCachedQueue(
   vocabRepo: VocabAndTranslationRepoContract,
   exampleRepo: ExampleRepoContract,
   goalRepo: GoalRepoContract,
-  resourceRepo: ResourceRepoContract
+  resourceRepo: ResourceRepoContract,
+  taskRepo: TaskRepoContract,
+  languageRepo: LanguageRepoContract
 ) {
   // Initialize preloader
-  const preloader = useQueuePreloader(vocabRepo, exampleRepo, goalRepo, resourceRepo);
+  const preloader = useQueuePreloader(vocabRepo, exampleRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
   
   // Initialize state machine with preloader
   const stateMachine = useQueueStateMachine(preloader);
@@ -22,17 +26,14 @@ export function useCachedQueue(
     // State
     state: stateMachine.state,
     
-    // Current items (compatibility with existing PageQueue)
-    currentVocab: stateMachine.currentVocab,
+    // Current items
     currentTask: stateMachine.currentTask,
     
-    // Status checks (compatibility with existing PageQueue)
-    hasVocabAvailable: () => preloader.hasVocabReady() || stateMachine.currentVocab.value !== null,
+    // Status checks
     hasTasksAvailable: () => preloader.hasTaskReady() || stateMachine.currentTask.value !== null,
     
     // Actions (updated to use state machine)
     initializeQueue: stateMachine.initialize,
-    completeCurrentVocab: stateMachine.completeCurrentVocab,
     completeCurrentTask: stateMachine.completeCurrentTask,
     
     // Computed helpers
@@ -43,7 +44,6 @@ export function useCachedQueue(
     // Debug access
     preloaderStatus: preloader.status,
     stateMachineDebug: {
-      vocabBatchState: stateMachine.vocabBatchState,
       retry: stateMachine.retry
     }
   };

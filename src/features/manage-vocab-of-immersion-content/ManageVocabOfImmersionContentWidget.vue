@@ -219,7 +219,7 @@ async function saveEntry(index: number) {
     // Associate vocab with resource content
     if (props.contentUid) {
       const content = await resourceRepo!.getResourceById(props.contentUid);
-      if (content && content.isImmersionContent) {
+      if (content) {
         content.vocab.push(newVocab.uid);
         await resourceRepo!.saveResource(content);
       }
@@ -249,7 +249,7 @@ async function removeVocab(vocabId: string) {
 
   try {
     const content = await resourceRepo!.getResourceById(props.contentUid);
-    if (content && content.isImmersionContent) {
+    if (content) {
       content.vocab = content.vocab.filter(id => id !== vocabId);
       await resourceRepo!.saveResource(content);
       associatedVocab.value = associatedVocab.value.filter(v => v.uid !== vocabId);
@@ -270,7 +270,7 @@ async function loadData() {
 
   try {
     const content = await resourceRepo!.getResourceById(props.contentUid);
-    if (content && content.isImmersionContent && content.vocab.length > 0) {
+    if (content && content.vocab.length > 0) {
       // Load associated vocab
       const vocabPromises = content.vocab.map(id => vocabRepo!.getVocabByUID(id));
       const vocabResults = await Promise.all(vocabPromises);

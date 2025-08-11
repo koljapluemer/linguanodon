@@ -43,7 +43,6 @@ export function formDataToImmersionContent(
     content: formData.content,
     language: formData.language,
     priority: formData.priority,
-    isImmersionContent: true
   };
 
   // Add link if URL is provided
