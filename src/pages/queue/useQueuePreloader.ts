@@ -9,7 +9,6 @@ import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import { VocabPicker } from './propose-relevant-entities/which-vocab-to-practice/VocabPicker';
 import { ResourcePicker } from './propose-relevant-entities/which-resource-to-practice/ResourcePicker';
-import { TaskPicker } from './propose-which-task-to-do/TaskPicker';
 import { shuffleArray } from '@/shared/arrayUtils';
 
 interface PreloadConfig {
@@ -49,9 +48,6 @@ export function useQueuePreloader(
   
   const resourcePicker = new ResourcePicker();
   resourcePicker.initializeProposers(resourceRepo, languageRepo, taskRepo);
-  
-  const taskPicker = new TaskPicker();
-  taskPicker.initializeProposers(vocabRepo, exampleRepo, goalRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({
@@ -105,18 +101,24 @@ export function useQueuePreloader(
         if (remainingSlots > 0) {
           const vocabBatch = await vocabPicker.pickVocabBatch();
           
-          // Get tasks for vocab batch (using existing task picker logic for vocab-based tasks)
+          // Get tasks for each vocab entity from TaskRepo
           let vocabTasksAdded = 0;
-          for (let i = 0; i < vocabBatch.length && vocabTasksAdded < remainingSlots; i++) {
+          for (const vocab of vocabBatch) {
+            if (vocabTasksAdded >= remainingSlots) break;
+            
             try {
-              // Generate vocab-based tasks using existing task picker
-              const vocabTask = await taskPicker.pickTask();
-              if (vocabTask) {
-                batch.push(vocabTask);
+              // Get existing tasks for this vocab from TaskRepo
+              const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
+              const activeTasks = vocabTasks.filter(task => task.isActive);
+              
+              // Add up to remaining slots
+              for (const task of activeTasks) {
+                if (vocabTasksAdded >= remainingSlots) break;
+                batch.push(taskDataToTask(task));
                 vocabTasksAdded++;
               }
             } catch (error) {
-              console.error('Error generating vocab task:', error);
+              console.error('Error loading vocab tasks for:', vocab.uid, error);
             }
           }
         }
@@ -213,14 +215,23 @@ export function useQueuePreloader(
     // Fill remaining slots with vocab-based tasks
     const remainingSlots = Math.max(0, 20 - batch.length);
     if (remainingSlots > 0) {
-      for (let i = 0; i < remainingSlots; i++) {
+      const vocabBatch = await vocabPicker.pickVocabBatch();
+      
+      let vocabTasksAdded = 0;
+      for (const vocab of vocabBatch) {
+        if (vocabTasksAdded >= remainingSlots) break;
+        
         try {
-          const vocabTask = await taskPicker.pickTask();
-          if (vocabTask) {
-            batch.push(vocabTask);
+          const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
+          const activeTasks = vocabTasks.filter(task => task.isActive);
+          
+          for (const task of activeTasks) {
+            if (vocabTasksAdded >= remainingSlots) break;
+            batch.push(taskDataToTask(task));
+            vocabTasksAdded++;
           }
         } catch (error) {
-          console.error('Error generating vocab task:', error);
+          console.error('Error loading vocab tasks for:', vocab.uid, error);
         }
       }
     }
@@ -229,8 +240,9 @@ export function useQueuePreloader(
   }
 
   async function forceLoadNextTask(): Promise<Task | null> {
-    const task = await taskPicker.pickTask();
-    return task;
+    // Try to get a single task from the batch generator
+    const batch = await forceLoadNextTaskBatch();
+    return batch.length > 0 ? batch[0] : null;
   }
 
   // Status checks

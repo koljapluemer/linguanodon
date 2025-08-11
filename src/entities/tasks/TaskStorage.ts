@@ -71,4 +71,11 @@ export class TaskStorage {
       task.associatedUnits.some(unit => unit.type === 'Resource' && unit.uid === resourceUid)
     );
   }
+
+  async getTasksWithAssociatedVocab(vocabUid: string): Promise<TaskData[]> {
+    const allTasks = await db.tasks.toArray();
+    return allTasks.filter(task => 
+      task.associatedUnits.some(unit => unit.type === 'Vocab' && unit.uid === vocabUid)
+    );
+  }
 }
