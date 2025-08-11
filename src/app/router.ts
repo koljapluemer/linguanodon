@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PageQueue from '@/pages/queue/PageQueue.vue';
-import PageVocabList from '@/pages/vocab/PageVocabList.vue';
-import PageVocabForm from '@/pages/vocab/PageVocabForm.vue';
-import PageListExamples from '@/pages/examples/PageListExamples.vue';
-import PageManageExample from '@/pages/examples/PageManageExample.vue';
-import PageListFactCards from '@/pages/fact-cards/PageListFactCards.vue';
-import PageManageFactCard from '@/pages/fact-cards/PageManageFactCard.vue';
-import PageListResources from '@/pages/resources/PageListResources.vue';
-import PageManageResource from '@/pages/resources/PageManageResource.vue';
-import PageListGoals from '@/pages/goals/PageListGoals.vue';
-import PageManageGoal from '@/pages/goals/PageManageGoal.vue';
-import PageTasks from '@/pages/tasks/PageTasks.vue';
+import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
+import PageVocabManage from '@/pages/vocab-manage/PageVocabManage.vue';
+import PageListExamples from '@/pages/examples-list/PageListExamples.vue';
+import PageManageExample from '@/pages/examples-manage/PageManageExample.vue';
+import PageListFactCards from '@/pages/fact-cards-list/PageListFactCards.vue';
+import PageManageFactCard from '@/pages/fact-cards-manage/PageManageFactCard.vue';
+import PageListResources from '@/pages/resources-list/PageListResources.vue';
+import PageManageResource from '@/pages/resources-manage/PageManageResource.vue';
+import PageListGoals from '@/pages/goals-list/PageListGoals.vue';
+import PageManageGoal from '@/pages/goals-manage/PageManageGoal.vue';
+import PageTasks from '@/pages/tasks-history/PageTasks.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
 import PageLanguages from '@/pages/languages/PageLanguages.vue';
 import PageTimeTracking from '@/pages/time-tracking/PageTimeTracking.vue';
@@ -35,12 +35,12 @@ const router = createRouter({
     {
       path: '/vocab/new',
       name: 'vocab-new',
-      component: PageVocabForm
+      component: PageVocabManage
     },
     {
       path: '/vocab/:id/edit',
       name: 'vocab-edit',
-      component: PageVocabForm
+      component: PageVocabManage
     },
     {
       path: '/examples',
