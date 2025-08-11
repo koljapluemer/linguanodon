@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import ExampleListWidget from '@/features/example-list/ExampleListWidget.vue';
+import ExampleListWidget from '@/features/examples-manage/ExampleListWidget.vue';
 </script>

@@ -67,8 +67,8 @@
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import ResourceFormRenderer from '@/features/resource-form/ResourceFormRenderer.vue';
-import ManageVocabOfResourceWidget from '@/features/manage-vocab-of-resource/ManageVocabOfResourceWidget.vue';
+import ResourceFormRenderer from '@/features/resource-manage/ResourceFormRenderer.vue';
+import ManageVocabOfResourceWidget from '@/features/resource-manage-its-vocab/ManageVocabOfResourceWidget.vue';
 import RenderAddVocabToResource from '@/widgets/task-add-vocab-to-resource/RenderAddVocabToResource.vue';
 import RenderAddExamplesToResource from '@/widgets/task-add-examples-to-resource/RenderAddExamplesToResource.vue';
 import RenderAddFactCardsToResource from '@/widgets/task-add-fact-cards-to-resource/RenderAddFactCardsToResource.vue';

@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import FactCardFormController from '@/features/fact-card-form/FactCardFormController.vue';
+import FactCardFormController from '@/features/fact-card-manage/FactCardFormController.vue';
 
 const route = useRoute();
 

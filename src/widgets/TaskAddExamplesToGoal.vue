@@ -49,7 +49,7 @@ import TaskInfo from '@/entities/tasks/TaskInfo.vue';
 import TaskButtonsDisableSkipDone from '@/entities/tasks/TaskButtonsDisableSkipDone.vue';
 import TaskDecideWhetherToDoAgain from '@/entities/tasks/TaskDecideWhetherToDoAgain.vue';
 import TaskEvaluateCorrectnessAndConfidence from '@/entities/tasks/TaskEvaluateCorrectnessAndConfidence.vue';
-import ManageExamplesOfGoalWidget from '@/features/manage-examples-of-goal/ManageExamplesOfGoalWidget.vue';
+import ManageExamplesOfGoalWidget from '@/features/goal-manage-its-examples/ManageExamplesOfGoalWidget.vue';
 
 const props = defineProps<{
   goalId: string;

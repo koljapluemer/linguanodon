@@ -88,12 +88,12 @@ import { ref, onMounted, inject, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import EditGoalWidget from '@/features/edit-goal/EditGoalWidget.vue';
-import MarkGoalCompletionWidget from '@/features/mark-whether-goal-is-completed/MarkGoalCompletionWidget.vue';
-import ManageSubGoalsWidget from '@/features/manage-sub-goals-of-goal/ManageSubGoalsWidget.vue';
-import ManageVocabOfGoalWidget from '@/features/manage-vocab-of-goal/ManageVocabOfGoalWidget.vue';
-import ManageExamplesOfGoalWidget from '@/features/manage-examples-of-goal/ManageExamplesOfGoalWidget.vue';
-import ManageMilestonesWidget from '@/features/manage-milestones/ManageMilestonesWidget.vue';
+import EditGoalWidget from '@/features/goal-edit/EditGoalWidget.vue';
+import MarkGoalCompletionWidget from '@/features/goal-manage-its-completion/MarkGoalCompletionWidget.vue';
+import ManageSubGoalsWidget from '@/features/goal-manage-its-sub-goals/ManageSubGoalsWidget.vue';
+import ManageVocabOfGoalWidget from '@/features/goal-manage-its-vocab/ManageVocabOfGoalWidget.vue';
+import ManageExamplesOfGoalWidget from '@/features/goal-manage-its-examples/ManageExamplesOfGoalWidget.vue';
+import ManageMilestonesWidget from '@/features/goal-manage-its-milestones/ManageMilestonesWidget.vue';
 
 const route = useRoute();
 const router = useRouter();

@@ -1,12 +1,10 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabProposerContract } from './VocabProposerContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { ProposerByAlreadySeenDueVocab } from './proposers/ProposerByAlreadySeenDueVocab';
 import { ProposerOfNewVocab } from './proposers/ProposerOfNewVocab';
-import { ProposerByImmersionContentAlmostReady } from './proposers/ProposerByImmersionContentAlmostReady';
 import { ProposerByExamples } from './proposers/ProposerByExamples';
 import { ProposerByGoals } from './proposers/ProposerByGoals';
 import { randomBetween, shuffleArray, removeDuplicates } from '@/shared/arrayUtils';
@@ -45,20 +43,17 @@ export class VocabPicker {
     this.proposers = proposers;
   }
 
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, resourceRepo: ResourceRepoContract, exampleRepo: ExampleRepoContract, goalRepo?: GoalRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, exampleRepo: ExampleRepoContract, goalRepo?: GoalRepoContract) {
     const alreadySeenDueProposer = new ProposerByAlreadySeenDueVocab();
     alreadySeenDueProposer.setVocabRepo(vocabRepo);
 
     const newVocabProposer = new ProposerOfNewVocab();
     newVocabProposer.setVocabRepo(vocabRepo);
 
-    const immersionProposer = new ProposerByImmersionContentAlmostReady();
-    immersionProposer.setRepos(vocabRepo, resourceRepo);
-
     const examplesProposer = new ProposerByExamples();
     examplesProposer.setRepos(exampleRepo, vocabRepo);
 
-    this.proposers = [alreadySeenDueProposer, newVocabProposer, immersionProposer, examplesProposer];
+    this.proposers = [alreadySeenDueProposer, newVocabProposer, examplesProposer];
 
     // Add goals proposer if goalRepo is available
     if (goalRepo) {

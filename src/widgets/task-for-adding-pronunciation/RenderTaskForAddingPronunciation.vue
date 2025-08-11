@@ -9,7 +9,7 @@ import TaskInfo from '@/entities/tasks/TaskInfo.vue';
 import TaskButtonsDisableSkipDone from '@/entities/tasks/TaskButtonsDisableSkipDone.vue';
 import TaskDecideWhetherToDoAgain from '@/entities/tasks/TaskDecideWhetherToDoAgain.vue';
 import TaskEvaluateCorrectnessAndConfidence from '@/entities/tasks/TaskEvaluateCorrectnessAndConfidence.vue';
-import AddPronunciationWidget from '@/features/add-pronunciation-to-vocab/AddPronunciationWidget.vue';
+import AddPronunciationWidget from '@/features/vocab-unit-add-pronunciation/AddPronunciationWidget.vue';
 
 interface Props {
   vocab: VocabData;

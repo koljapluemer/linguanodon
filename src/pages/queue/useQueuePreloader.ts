@@ -45,13 +45,13 @@ export function useQueuePreloader(
   
   // Initialize pickers
   const vocabPicker = new VocabPicker();
-  vocabPicker.initializeProposers(vocabRepo, resourceRepo, exampleRepo, goalRepo);
+  vocabPicker.initializeProposers(vocabRepo, exampleRepo, goalRepo);
   
   const resourcePicker = new ResourcePicker();
   resourcePicker.initializeProposers(resourceRepo, languageRepo, taskRepo);
   
   const taskPicker = new TaskPicker();
-  taskPicker.initializeProposers(vocabRepo, exampleRepo, goalRepo, resourceRepo);
+  taskPicker.initializeProposers(vocabRepo, exampleRepo, goalRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({

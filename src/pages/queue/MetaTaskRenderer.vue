@@ -8,7 +8,6 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import RenderTaskForAddingPronunciation from '@/widgets/task-for-adding-pronunciation/RenderTaskForAddingPronunciation.vue';
-import RenderTaskForImmersionContent from '@/widgets/task-for-resource/RenderTaskForImmersionContent.vue';
 import RenderAddVocabToResource from '@/widgets/task-add-vocab-to-resource/RenderAddVocabToResource.vue';
 import RenderAddExamplesToResource from '@/widgets/task-add-examples-to-resource/RenderAddExamplesToResource.vue';
 import RenderAddFactCardsToResource from '@/widgets/task-add-fact-cards-to-resource/RenderAddFactCardsToResource.vue';
@@ -42,6 +41,7 @@ const vocabData = ref<VocabData | null>(null);
 const exampleData = ref<ExampleData | null>(null);
 const resourceData = ref<ResourceData | null>(null);
 const freeTranslateTaskData = ref<{ exampleId: string; example: ExampleData } | null>(null);
+const loading = ref(false);
 
 // Extract associated entity UIDs
 const goalUid = computed(() => 
@@ -73,7 +73,6 @@ watch(() => props.task, async (task) => {
         };
       }
     }
-  } else if (task.taskType === 'immersion-content') {
     const resourceUid = task.associatedUnits.find(unit => unit.type === 'Resource')?.uid;
     if (resourceUid && resourceRepo) {
       resourceData.value = (await resourceRepo.getResourceById(resourceUid)) || null;
@@ -111,13 +110,6 @@ const handleFinished = () => {
     <RenderAddFactCardsToResource
       v-else-if="task.taskType === 'add-fact-cards-to-resource'"
       :task="task"
-      @finished="handleFinished"
-    />
-    
-    <!-- Immersion Content Task -->
-    <RenderTaskForImmersionContent
-      v-else-if="task.taskType === 'immersion-content' && resourceData"
-      :content="resourceData"
       @finished="handleFinished"
     />
     
@@ -173,7 +165,7 @@ const handleFinished = () => {
     />
     
     <!-- Loading state while fetching associated data -->
-    <div v-else-if="(task.taskType === 'add-pronunciation' && !vocabData) || (task.taskType === 'free-translate' && !freeTranslateTaskData) || (task.taskType === 'immersion-content' && !resourceData)" class="flex justify-center items-center p-8">
+    <div v-else-if="loading" class="flex justify-center items-center py-8">
       <div class="loading loading-spinner loading-lg"></div>
     </div>
     

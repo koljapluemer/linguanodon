@@ -16,7 +16,6 @@ export interface TaskData {
 
 export type TaskType = 
   | 'add-pronunciation' 
-  | 'immersion-content'
   | 'free-translate'
   | 'add-sub-goals'
   | 'add-vocab-to-goal'

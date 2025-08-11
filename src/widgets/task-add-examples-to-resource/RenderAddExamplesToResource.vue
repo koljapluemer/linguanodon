@@ -6,7 +6,7 @@ import TaskInfo from '@/entities/tasks/TaskInfo.vue';
 import TaskButtonsDisableSkipDone from '@/entities/tasks/TaskButtonsDisableSkipDone.vue';
 import TaskDecideWhetherToDoAgain from '@/entities/tasks/TaskDecideWhetherToDoAgain.vue';
 import TaskEvaluateCorrectnessAndConfidence from '@/entities/tasks/TaskEvaluateCorrectnessAndConfidence.vue';
-import ManageExamplesOfResourceWidget from '@/features/manage-examples-of-resource/ManageExamplesOfResourceWidget.vue';
+import ManageExamplesOfResourceWidget from '@/features/resource-manage-its-examples/ManageExamplesOfResourceWidget.vue';
 
 interface Props {
   task: Task;

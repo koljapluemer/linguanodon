@@ -1,5 +1,4 @@
 import { ProposeAddPronunciation } from './proposers/ProposeAddPronunciation';
-import { ProposeImmersionContent } from './proposers/ProposeImmersionContent';
 import { ProposeFreeTranslate } from './proposers/ProposeFreeTranslate';
 import { ProposeAddSubGoals } from './proposers/ProposeAddSubGoals';
 import { ProposeAddVocabToGoal } from './proposers/ProposeAddVocabToGoal';
@@ -18,10 +17,6 @@ export const TASK_REGISTRY: Record<TaskType, TaskDefinition> = {
   'add-pronunciation': {
     taskType: 'add-pronunciation',
     proposer: new ProposeAddPronunciation()
-  },
-  'immersion-content': {
-    taskType: 'immersion-content',
-    proposer: new ProposeImmersionContent()
   },
   'free-translate': {
     taskType: 'free-translate',

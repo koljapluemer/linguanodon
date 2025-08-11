@@ -2,14 +2,13 @@ import type { Task } from '@/entities/tasks/Task';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import { TASK_REGISTRY } from './TaskRegistry';
 import { pickRandom } from '@/shared/arrayUtils';
 
 export class TaskPicker {
   private initialized = false;
   
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, exampleRepo: ExampleRepoContract, goalRepo: GoalRepoContract, resourceRepo: ResourceRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, exampleRepo: ExampleRepoContract, goalRepo: GoalRepoContract) {
     // Configure proposers with repositories
     const addPronunciationProposer = TASK_REGISTRY['add-pronunciation'].proposer as { setVocabRepo?: (repo: VocabAndTranslationRepoContract) => void };
     if (addPronunciationProposer.setVocabRepo) {
@@ -41,11 +40,6 @@ export class TaskPicker {
     const addMilestonesProposer = TASK_REGISTRY['add-milestones'].proposer as { setGoalRepo?: (repo: GoalRepoContract) => void };
     if (addMilestonesProposer.setGoalRepo) {
       addMilestonesProposer.setGoalRepo(goalRepo);
-    }
-    
-    const immersionContentProposer = TASK_REGISTRY['immersion-content'].proposer as { setRepos?: (resourceRepo: ResourceRepoContract, vocabRepo: VocabAndTranslationRepoContract) => void };
-    if (immersionContentProposer.setRepos) {
-      immersionContentProposer.setRepos(resourceRepo, vocabRepo);
     }
     
     this.initialized = true;

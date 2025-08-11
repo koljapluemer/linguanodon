@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import ExampleFormController from '@/features/example-form/ExampleFormController.vue';
+import ExampleFormController from '@/features/example-manage/ExampleFormController.vue';
 
 const route = useRoute();
 

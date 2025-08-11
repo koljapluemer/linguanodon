@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import FactCardListWidget from '@/features/fact-card-list/FactCardListWidget.vue';
+import FactCardListWidget from '@/features/fact-cards-manage/FactCardListWidget.vue';
 </script>

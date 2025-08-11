@@ -83,7 +83,7 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-import { updateVocabTasks } from '@/features/update-vocab-tasks/updateVocabTasksService';
+import { updateVocabTasks } from '@/features/vocab-update-tasks/updateVocabTasksService';
 import { toRaw } from 'vue';
 
 interface Props {

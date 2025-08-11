@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import ResourceListWidget from '@/features/resource-list/ResourceListWidget.vue';
+import ResourceListWidget from '@/features/resources-manage/ResourceListWidget.vue';
 </script>

@@ -24,9 +24,9 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
-import VocabFormController from '@/features/manage-vocab/VocabFormController.vue';
+import VocabFormController from '@/features/vocab-unit-manage/VocabFormController.vue';
 import VocabTaskList from '@/widgets/vocab-task-list/VocabTaskListWidget.vue';
-import { UpdateVocabTasksController } from '@/features/update-vocab-tasks/UpdateVocabTasksController';
+import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 
