@@ -7,7 +7,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import { useCachedQueue } from './useCachedQueue';
-import MetaTaskRenderer from './MetaTaskRenderer.vue';
+import TaskRenderer from '@/entities/tasks/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 
 // Inject repositories
@@ -82,7 +82,7 @@ const handleTaskFinished = async () => {
 
       <!-- Task -->
       <div v-else-if="state.status === 'task'">
-        <MetaTaskRenderer 
+        <TaskRenderer 
           :task="state.task"
           @finished="handleTaskFinished"
         />

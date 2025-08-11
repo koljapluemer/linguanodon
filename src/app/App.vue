@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { provide } from 'vue';
 import { setupRepositories } from './injectRepositories';
+import { taskRegistry, TASK_REGISTRY_INJECTION_KEY } from './taskRegistry';
 
 // Setup and provide repositories
 const { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, taskRepo, languageRepo } = setupRepositories();
@@ -13,6 +14,7 @@ provide('factCardRepo', factCardRepo);
 provide('resourceRepo', resourceRepo);
 provide('taskRepo', taskRepo);
 provide('languageRepo', languageRepo);
+provide(TASK_REGISTRY_INJECTION_KEY, taskRegistry);
 </script>
 
 <template>
