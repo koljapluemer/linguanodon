@@ -6,6 +6,7 @@ import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import { useQueuePreloader } from './useQueuePreloader';
 import { useQueueStateMachine } from './useQueueStateMachine';
+import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 
 export function useCachedQueue(
   vocabRepo: VocabAndTranslationRepoContract,
@@ -18,8 +19,11 @@ export function useCachedQueue(
   // Initialize preloader
   const preloader = useQueuePreloader(vocabRepo, exampleRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
   
-  // Initialize state machine with preloader
-  const stateMachine = useQueueStateMachine(preloader);
+  // Initialize vocab task controller
+  const vocabTaskController = new UpdateVocabTasksController(vocabRepo, taskRepo);
+  
+  // Initialize state machine with preloader and vocab task controller
+  const stateMachine = useQueueStateMachine(preloader, vocabTaskController, vocabRepo);
 
   // Return the state machine interface with consistent naming for PageQueue
   return {

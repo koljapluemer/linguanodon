@@ -21,6 +21,12 @@ export class UpdateVocabTasksController {
     const translations = await this.vocabRepo.getTranslationsByIds(vocab.translations);
     if (translations.length === 0) return;
 
+    // Check if we already have active tasks for the current level
+    const hasActiveTasksForCurrentLevel = await this.checkActiveTasksForLevel(vocab);
+    if (hasActiveTasksForCurrentLevel) {
+      return; // No need to create new tasks
+    }
+
     // Generate appropriate tasks based on level
     const newTasks = await this.generateTasksForLevel(vocab, translations);
     
@@ -42,6 +48,51 @@ export class UpdateVocabTasksController {
     };
     
     await this.vocabRepo.updateVocab(toRaw(updatedVocab));
+  }
+
+  /**
+   * Check if vocab already has active tasks appropriate for its current level
+   */
+  private async checkActiveTasksForLevel(vocab: VocabData): Promise<boolean> {
+    if (vocab.tasks.length === 0) return false;
+
+    // Get existing tasks for this vocab
+    const existingTasks = await this.taskRepo.getTasksByVocabId(vocab.uid);
+    const activeTasks = existingTasks.filter(task => task.isActive);
+    
+    if (activeTasks.length === 0) return false;
+
+    const level = vocab.progress.level;
+    
+    // Check if we have active tasks matching the current level
+    for (const task of activeTasks) {
+      const matchesLevel = this.taskMatchesLevel(task, level);
+      if (matchesLevel) {
+        return true; // Found an active task for this level
+      }
+    }
+    
+    return false;
+  }
+
+  /**
+   * Check if a task matches the given level
+   */
+  private taskMatchesLevel(task: TaskData, level: number): boolean {
+    switch (level) {
+      case -1:
+        return task.taskType === 'vocab-try-to-remember';
+      case 0:
+        return task.taskType === 'vocab-choose-from-options' && 
+               task.title.includes('two-vocab-to-translation');
+      case 1:
+      case 2:
+        return task.taskType === 'vocab-choose-from-options';
+      case 3:
+      case 4:
+      default:
+        return task.taskType === 'vocab-reveal';
+    }
   }
 
   /**

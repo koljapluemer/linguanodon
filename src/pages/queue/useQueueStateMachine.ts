@@ -1,6 +1,8 @@
 import { ref, computed } from 'vue';
 import type { Task } from '@/entities/tasks/Task';
 import type { useQueuePreloader } from './useQueuePreloader';
+import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
+import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 
 // State machine types
 export type QueueState = 
@@ -12,7 +14,7 @@ export type QueueState =
 
 type PreloaderInstance = ReturnType<typeof useQueuePreloader>;
 
-export function useQueueStateMachine(preloader: PreloaderInstance) {
+export function useQueueStateMachine(preloader: PreloaderInstance, vocabTaskController: UpdateVocabTasksController, vocabRepo: VocabAndTranslationRepoContract) {
   // Current state
   const state = ref<QueueState>({ status: 'initializing' });
 
@@ -92,7 +94,27 @@ export function useQueueStateMachine(preloader: PreloaderInstance) {
       return;
     }
 
+    const completedTask = state.value.task;
     const fromStatus = state.value.status;
+    
+    // Check if this is a vocab-based task and update progress
+    if (completedTask.associatedUnits) {
+      for (const unit of completedTask.associatedUnits) {
+        if (unit.type === 'Vocab') {
+          try {
+            // Score the vocab with 'Doable' rating (task was completed successfully)
+            await vocabRepo.scoreVocab(unit.uid, 'Doable');
+            console.log(`Scored vocab: ${unit.uid}`);
+            
+            // Update tasks for vocab based on new progress
+            await vocabTaskController.updateTasksForVocab(unit.uid);
+            console.log(`Updated tasks for vocab: ${unit.uid}`);
+          } catch (error) {
+            console.error(`Failed to update progress for vocab ${unit.uid}:`, error);
+          }
+        }
+      }
+    }
     
     // Try to get next task
     const success = await tryTransitionToTask('task completed');
