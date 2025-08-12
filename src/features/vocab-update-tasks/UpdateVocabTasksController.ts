@@ -27,11 +27,15 @@ export class UpdateVocabTasksController {
       return; // No need to create new tasks
     }
 
-    // Generate appropriate tasks based on level
-    const newTasks = await this.generateTasksForLevel(vocab, translations);
+    // Delete tasks that no longer apply to current level
+    await this.deleteOutdatedTasks(vocab);
     
-    // Update existing tasks to inactive if they no longer apply
-    await this.deactivateOutdatedTasks(vocab);
+    // Get updated vocab after task deletion
+    const updatedVocab = await this.vocabRepo.getVocabByUID(vocab.uid);
+    if (!updatedVocab) return;
+    
+    // Generate appropriate tasks based on level
+    const newTasks = await this.generateTasksForLevel(updatedVocab, translations);
     
     // Save new tasks and update vocab.tasks array
     const taskUids: string[] = [];
@@ -42,12 +46,12 @@ export class UpdateVocabTasksController {
     }
     
     // Update vocab with new task references
-    const updatedVocab: VocabData = {
-      ...vocab,
-      tasks: [...vocab.tasks, ...taskUids]
+    const finalVocab: VocabData = {
+      ...updatedVocab,
+      tasks: [...updatedVocab.tasks, ...taskUids]
     };
     
-    await this.vocabRepo.updateVocab(toRaw(updatedVocab));
+    await this.vocabRepo.updateVocab(toRaw(finalVocab));
   }
 
   /**
@@ -263,44 +267,62 @@ export class UpdateVocabTasksController {
   }
 
   /**
-   * Deactivate tasks that no longer apply to current vocab level
+   * Delete tasks that no longer apply to current vocab level
    */
-  private async deactivateOutdatedTasks(vocab: VocabData): Promise<void> {
+  private async deleteOutdatedTasks(vocab: VocabData): Promise<void> {
     if (vocab.tasks.length === 0) return;
 
-    // TODO: Implement batch getByIds or loop through individual gets
-    const existingTasks: TaskData[] = [];
+    // Get existing tasks for this vocab
+    const existingTasks = await this.taskRepo.getTasksByVocabId(vocab.uid);
     const level = vocab.progress.level;
+    const tasksToDelete: string[] = [];
+    const tasksToKeep: string[] = [];
 
     for (const task of existingTasks) {
-      let shouldDeactivate = false;
+      let shouldDelete = false;
 
-      // Deactivate tasks that don't match current level
+      // Delete tasks that don't match current level
       switch (level) {
         case -1:
-          shouldDeactivate = task.taskType !== 'vocab-try-to-remember';
+          shouldDelete = task.taskType !== 'vocab-try-to-remember';
           break;
         case 0:
-          shouldDeactivate = task.taskType !== 'vocab-choose-from-options' || 
+          shouldDelete = task.taskType !== 'vocab-choose-from-options' || 
                            !task.title.includes('two-vocab-to-translation');
           break;
         case 1:
         case 2:
-          shouldDeactivate = task.taskType === 'vocab-try-to-remember';
+          shouldDelete = task.taskType === 'vocab-try-to-remember';
           break;
         case 3:
-          shouldDeactivate = task.taskType === 'vocab-choose-from-options';
+          shouldDelete = task.taskType === 'vocab-choose-from-options';
           break;
         default:
           // Level 4+ keeps reveal tasks
-          shouldDeactivate = task.taskType === 'vocab-choose-from-options';
+          shouldDelete = task.taskType === 'vocab-choose-from-options';
           break;
       }
 
-      if (shouldDeactivate && task.isActive) {
-        const updatedTask: TaskData = { ...task, isActive: false };
-        await this.taskRepo.saveTask(toRaw(updatedTask));
+      if (shouldDelete) {
+        tasksToDelete.push(task.uid);
+      } else {
+        tasksToKeep.push(task.uid);
       }
+    }
+
+    // Delete outdated tasks
+    for (const taskUid of tasksToDelete) {
+      await this.taskRepo.deleteTask(taskUid);
+      console.log(`Deleted outdated task: ${taskUid}`);
+    }
+
+    // Update vocab tasks array to only contain valid tasks
+    if (tasksToDelete.length > 0) {
+      const updatedVocab: VocabData = {
+        ...vocab,
+        tasks: tasksToKeep
+      };
+      await this.vocabRepo.updateVocab(toRaw(updatedVocab));
     }
   }
 
