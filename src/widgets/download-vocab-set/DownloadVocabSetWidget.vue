@@ -19,7 +19,7 @@ const loading = ref(false);
 const error = ref<string | null>(null);
 
 const remoteVocabService = new RemoteVocabService();
-const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabAndTranslationRepo')!;
+const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 
 async function loadVocabSets() {
@@ -59,13 +59,18 @@ async function downloadVocabSet(name: string) {
     console.log(`Found ${vocabSet.vocabs.length} vocab items to download`);
 
     for (const remoteVocab of vocabSet.vocabs) {
-      console.log(`Saving vocab: ${remoteVocab.content}`);
+      console.log(`Processing vocab: ${remoteVocab.content}`);
       
-      const vocabUid = crypto.randomUUID();
+      // Check if vocab already exists
+      let existingVocab = await vocabAndTranslationRepo.getVocabByLanguageAndContent(
+        remoteVocab.language, 
+        remoteVocab.content
+      );
+      
       const translationUids: string[] = [];
       const noteUids: string[] = [];
 
-      // Save notes first
+      // Process vocab notes
       if (remoteVocab.notes) {
         for (const remoteNote of remoteVocab.notes) {
           const noteUid = crypto.randomUUID();
@@ -79,50 +84,74 @@ async function downloadVocabSet(name: string) {
         }
       }
 
-      // Save translations
+      // Process translations with duplicate checking
       for (const remoteTranslation of remoteVocab.translations) {
-        const translationUid = crypto.randomUUID();
-        const translationNoteUids: string[] = [];
-
-        // Save translation notes
-        if (remoteTranslation.notes) {
-          for (const remoteNote of remoteTranslation.notes) {
-            const noteUid = crypto.randomUUID();
-            const noteData: Partial<NoteData> = {
-              uid: noteUid,
-              content: remoteNote.content,
-              showBeforeExercise: remoteNote.showBeforeExercise
-            };
-            await noteRepo.saveNote(noteData);
-            translationNoteUids.push(noteUid);
-          }
-        }
-
-        const translationData: Partial<TranslationData> = {
-          uid: translationUid,
-          content: remoteTranslation.content,
-          notes: translationNoteUids
-        };
+        // Check if translation already exists
+        let existingTranslation = await vocabAndTranslationRepo.getTranslationByContent(remoteTranslation.content);
         
-        await vocabAndTranslationRepo.saveTranslation(translationData);
-        translationUids.push(translationUid);
+        if (existingTranslation) {
+          console.log(`Translation already exists: ${remoteTranslation.content}`);
+          translationUids.push(existingTranslation.uid);
+        } else {
+          // Create new translation
+          const translationUid = crypto.randomUUID();
+          const translationNoteUids: string[] = [];
+
+          // Save translation notes
+          if (remoteTranslation.notes) {
+            for (const remoteNote of remoteTranslation.notes) {
+              const noteUid = crypto.randomUUID();
+              const noteData: Partial<NoteData> = {
+                uid: noteUid,
+                content: remoteNote.content,
+                showBeforeExercise: remoteNote.showBeforeExercise
+              };
+              await noteRepo.saveNote(noteData);
+              translationNoteUids.push(noteUid);
+            }
+          }
+
+          const translationData: Partial<TranslationData> = {
+            uid: translationUid,
+            content: remoteTranslation.content,
+            notes: translationNoteUids
+          };
+          
+          await vocabAndTranslationRepo.saveTranslation(translationData);
+          translationUids.push(translationUid);
+          console.log(`Created new translation: ${remoteTranslation.content}`);
+        }
       }
 
-      // Save vocab
-      const vocabData: Partial<VocabData> = {
-        uid: vocabUid,
-        language: remoteVocab.language,
-        content: remoteVocab.content,
-        priority: remoteVocab.priority,
-        notes: noteUids,
-        translations: translationUids,
-        links: remoteVocab.links || [],
-        tasks: [],
-        progress: createEmptyCard()
-      };
-      
-      await vocabAndTranslationRepo.saveVocab(toRaw(vocabData));
-      console.log(`Successfully saved vocab: ${remoteVocab.content}`);
+      if (existingVocab) {
+        // Merge with existing vocab - add new translations
+        const updatedTranslations = [...new Set([...existingVocab.translations, ...translationUids])];
+        const updatedNotes = [...new Set([...existingVocab.notes, ...noteUids])];
+        
+        await vocabAndTranslationRepo.updateVocab({
+          ...existingVocab,
+          translations: updatedTranslations,
+          notes: updatedNotes
+        });
+        console.log(`Updated existing vocab: ${remoteVocab.content}`);
+      } else {
+        // Create new vocab
+        const vocabUid = crypto.randomUUID();
+        const vocabData: Partial<VocabData> = {
+          uid: vocabUid,
+          language: remoteVocab.language,
+          content: remoteVocab.content,
+          priority: remoteVocab.priority,
+          notes: noteUids,
+          translations: translationUids,
+          links: remoteVocab.links || [],
+          tasks: [],
+          progress: createEmptyCard()
+        };
+        
+        await vocabAndTranslationRepo.saveVocab(toRaw(vocabData));
+        console.log(`Created new vocab: ${remoteVocab.content}`);
+      }
     }
 
     // Mark as downloaded
