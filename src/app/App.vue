@@ -28,7 +28,6 @@ provide(TASK_REGISTRY_INJECTION_KEY, taskRegistry);
         <router-link :to="{ name: 'fact-cards-list' }" class="btn btn-ghost btn-sm">Fact Cards</router-link>
         <router-link :to="{ name: 'resources-list' }" class="btn btn-ghost btn-sm">Resources</router-link>
         <router-link :to="{ name: 'goals-list' }" class="btn btn-ghost btn-sm">Goals</router-link>
-        <router-link :to="{ name: 'tasks' }" class="btn btn-ghost btn-sm">Tasks</router-link>
         <router-link :to="{ name: 'languages' }" class="btn btn-ghost btn-sm">Languages</router-link>
         <router-link :to="{ name: 'time-tracking' }" class="btn btn-ghost btn-sm">Time</router-link>
         <router-link :to="{ name: 'downloads' }" class="btn btn-ghost btn-sm">Downloads</router-link>
