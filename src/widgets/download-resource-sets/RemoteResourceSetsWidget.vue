@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteResourceService } from './RemoteResourceService';
+import { RemoteResourceService } from '@/features/download-resource-sets/RemoteResourceService';
+import { UpdateResourceTasksController } from '@/features/resource-update-tasks/UpdateResourceTasksController';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-import type { TaskData } from '@/entities/tasks/TaskData';
 
 const props = defineProps<{
   selectedLanguage: string;
@@ -18,6 +18,9 @@ const error = ref<string | null>(null);
 const remoteResourceService = new RemoteResourceService();
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
 const taskRepo = inject<TaskRepoContract>('taskRepo')!;
+
+// Initialize resource task controller
+const resourceTaskController = new UpdateResourceTasksController(resourceRepo, taskRepo);
 
 
 async function loadResourceSets() {
@@ -79,51 +82,8 @@ async function downloadResourceSet(name: string) {
         const savedResource = await resourceRepo.saveResource(resourceData);
         console.log(`Successfully saved resource: ${remoteResource.title}`);
         
-        // Create the three associated tasks for this resource
-        const taskTypes: Array<{ type: 'add-vocab-to-resource' | 'add-examples-to-resource' | 'add-fact-cards-to-resource', title: string, prompt: string }> = [
-          {
-            type: 'add-vocab-to-resource',
-            title: `Extract vocabulary from "${remoteResource.title}"`,
-            prompt: 'Go through the resource and identify important vocabulary words. Add them with translations and context.'
-          },
-          {
-            type: 'add-examples-to-resource',
-            title: `Find examples in "${remoteResource.title}"`,
-            prompt: 'Look for useful example sentences or phrases in the resource that demonstrate language patterns.'
-          },
-          {
-            type: 'add-fact-cards-to-resource',
-            title: `Create fact cards for "${remoteResource.title}"`,
-            prompt: 'Extract important facts, cultural information, or key concepts from the resource into fact cards.'
-          }
-        ];
-        
-        const taskUids: string[] = [];
-        
-        for (const taskType of taskTypes) {
-          const taskUid = crypto.randomUUID();
-          const taskData: TaskData = {
-            uid: taskUid,
-            taskType: taskType.type,
-            title: taskType.title,
-            prompt: taskType.prompt,
-            evaluateCorrectnessAndConfidenceAfterDoing: true,
-            decideWhetherToDoAgainAfterDoing: true,
-            isActive: true,
-            taskSize: 'medium',
-            associatedUnits: [{ type: 'Resource', uid: resourceUid }]
-          };
-          
-          await taskRepo.saveTask(taskData);
-          taskUids.push(taskUid);
-          console.log(`Created task: ${taskType.title}`);
-        }
-        
-        // Update the resource with task references
-        await resourceRepo.updateResource({
-          ...savedResource,
-          tasks: taskUids
-        });
+        // Create tasks for the new resource using the feature
+        await resourceTaskController.createTasksForResource(savedResource.uid);
         
       } catch (saveError) {
         console.error(`Failed to save resource ${remoteResource.title}:`, saveError);

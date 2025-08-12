@@ -44,8 +44,8 @@
 
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
-import RemoteResourceSetsWidget from '@/features/download-resource-sets/RemoteResourceSetsWidget.vue';
-import DownloadVocabSetWidget from '@/features/download-vocab-sets/DownloadVocabSetWidget.vue';
+import RemoteResourceSetsWidget from '@/widgets/download-resource-sets/RemoteResourceSetsWidget.vue';
+import DownloadVocabSetWidget from '@/widgets/download-vocab-sets/DownloadVocabSetWidget.vue';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
 

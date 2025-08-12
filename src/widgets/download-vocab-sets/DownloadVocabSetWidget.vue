@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteVocabService } from './RemoteVocabService';
+import { RemoteVocabService } from '@/features/download-vocab-sets/RemoteVocabService';
+import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 
 const props = defineProps<{
   selectedLanguage: string;
@@ -18,6 +20,10 @@ const error = ref<string | null>(null);
 const remoteVocabService = new RemoteVocabService();
 const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
+const taskRepo = inject<TaskRepoContract>('taskRepo')!;
+
+// Initialize vocab task controller
+const vocabTaskController = new UpdateVocabTasksController(vocabAndTranslationRepo, taskRepo);
 
 async function loadVocabSets() {
   if (!props.selectedLanguage) {
@@ -114,7 +120,10 @@ async function downloadVocabSet(name: string) {
           tasks: []
         };
         
-        await vocabAndTranslationRepo.saveVocab(vocabData);
+        const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
+        
+        // 5. Create tasks for the new vocab
+        await vocabTaskController.updateTasksForVocab(savedVocab.uid);
       }
     }
 
