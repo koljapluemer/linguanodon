@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref, inject, onMounted, watch } from 'vue';
+import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import { RemoteResourceService } from '@/entities/remote-resource-set';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { TaskData } from '@/entities/tasks/TaskData';
 
-const selectedLanguage = ref('');
+const props = defineProps<{
+  selectedLanguage: string;
+}>();
+
 const availableResourceSets = ref<string[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -19,7 +21,7 @@ const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 
 
 async function loadResourceSets() {
-  if (!selectedLanguage.value) {
+  if (!props.selectedLanguage) {
     availableResourceSets.value = [];
     return;
   }
@@ -28,7 +30,7 @@ async function loadResourceSets() {
   error.value = null;
   
   try {
-    const sets = await remoteResourceService.getAvailableResourceSets(selectedLanguage.value);
+    const sets = await remoteResourceService.getAvailableResourceSets(props.selectedLanguage);
     availableResourceSets.value = sets;
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load resource sets';
@@ -38,15 +40,15 @@ async function loadResourceSets() {
 }
 
 async function downloadResourceSet(name: string) {
-  if (!selectedLanguage.value) return;
+  if (!props.selectedLanguage) return;
   
   loading.value = true;
   error.value = null;
   
   try {
-    console.log(`Downloading resource set: ${name} for language: ${selectedLanguage.value}`);
+    console.log(`Downloading resource set: ${name} for language: ${props.selectedLanguage}`);
     
-    const resourceSet = await remoteResourceService.getResourceSet(selectedLanguage.value, name);
+    const resourceSet = await remoteResourceService.getResourceSet(props.selectedLanguage, name);
     if (!resourceSet) {
       error.value = 'Failed to download resource set';
       return;
@@ -146,8 +148,7 @@ function isDownloaded(name: string): boolean {
   return remoteResourceService.isResourceSetDownloaded(name);
 }
 
-watch(selectedLanguage, loadResourceSets);
-onMounted(loadResourceSets);
+watch(() => props.selectedLanguage, loadResourceSets, { immediate: true });
 </script>
 
 <template>
@@ -156,16 +157,6 @@ onMounted(loadResourceSets);
       <div class="card-body">
         <h2 class="card-title text-xl mb-4">Remote Resource Sets</h2>
         
-        <div class="form-control mb-6">
-          <label class="label">
-            <span class="label-text font-medium">Select Language</span>
-          </label>
-          <LanguageDropdown 
-            v-model="selectedLanguage" 
-            placeholder="Choose a language to see available resource sets"
-            class="w-full max-w-xs"
-          />
-        </div>
 
         <div v-if="error" class="alert alert-error mb-4">
           {{ error }}
@@ -176,7 +167,7 @@ onMounted(loadResourceSets);
           <span class="ml-4">Loading resource sets...</span>
         </div>
 
-        <div v-else-if="!selectedLanguage" class="text-center py-8 text-base-content/60">
+        <div v-else-if="!props.selectedLanguage" class="text-center py-8 text-base-content/60">
           <Download class="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p>Select a language to view available resource sets</p>
         </div>
@@ -196,7 +187,7 @@ onMounted(loadResourceSets);
             >
               <div>
                 <h4 class="font-medium">{{ setName }}</h4>
-                <p class="text-sm text-base-content/60">Language: {{ selectedLanguage }}</p>
+                <p class="text-sm text-base-content/60">Language: {{ props.selectedLanguage }}</p>
               </div>
               
               <div v-if="isDownloaded(setName)" class="flex items-center gap-2">

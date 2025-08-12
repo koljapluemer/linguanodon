@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, inject, onMounted, watch } from 'vue';
+import { ref, inject, watch } from 'vue';
 import { toRaw } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import { RemoteVocabService } from '@/entities/remote-vocab-set/RemoteVocabService';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
@@ -11,7 +10,10 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { NoteData } from '@/entities/notes/NoteData';
 import { createEmptyCard } from 'ts-fsrs';
 
-const selectedLanguage = ref('');
+const props = defineProps<{
+  selectedLanguage: string;
+}>();
+
 const availableVocabSets = ref<string[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -21,7 +23,7 @@ const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabAn
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 
 async function loadVocabSets() {
-  if (!selectedLanguage.value) {
+  if (!props.selectedLanguage) {
     availableVocabSets.value = [];
     return;
   }
@@ -30,7 +32,7 @@ async function loadVocabSets() {
   error.value = null;
   
   try {
-    const sets = await remoteVocabService.getAvailableVocabSets(selectedLanguage.value);
+    const sets = await remoteVocabService.getAvailableVocabSets(props.selectedLanguage);
     availableVocabSets.value = sets;
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load vocab sets';
@@ -40,15 +42,15 @@ async function loadVocabSets() {
 }
 
 async function downloadVocabSet(name: string) {
-  if (!selectedLanguage.value) return;
+  if (!props.selectedLanguage) return;
   
   loading.value = true;
   error.value = null;
   
   try {
-    console.log(`Downloading vocab set: ${name} for language: ${selectedLanguage.value}`);
+    console.log(`Downloading vocab set: ${name} for language: ${props.selectedLanguage}`);
     
-    const vocabSet = await remoteVocabService.getVocabSet(selectedLanguage.value, name);
+    const vocabSet = await remoteVocabService.getVocabSet(props.selectedLanguage, name);
     if (!vocabSet) {
       error.value = 'Failed to download vocab set';
       return;
@@ -139,8 +141,7 @@ function isDownloaded(name: string): boolean {
   return remoteVocabService.isVocabSetDownloaded(name);
 }
 
-watch(selectedLanguage, loadVocabSets);
-onMounted(loadVocabSets);
+watch(() => props.selectedLanguage, loadVocabSets, { immediate: true });
 </script>
 
 <template>
@@ -149,16 +150,6 @@ onMounted(loadVocabSets);
       <div class="card-body">
         <h2 class="card-title text-xl mb-4">Remote Vocab Sets</h2>
         
-        <div class="form-control mb-6">
-          <label class="label">
-            <span class="label-text font-medium">Select Language</span>
-          </label>
-          <LanguageDropdown 
-            v-model="selectedLanguage" 
-            placeholder="Choose a language to see available vocab sets"
-            class="w-full max-w-xs"
-          />
-        </div>
 
         <div v-if="error" class="alert alert-error mb-4">
           {{ error }}
@@ -169,7 +160,7 @@ onMounted(loadVocabSets);
           <span class="ml-4">Loading vocab sets...</span>
         </div>
 
-        <div v-else-if="!selectedLanguage" class="text-center py-8 text-base-content/60">
+        <div v-else-if="!props.selectedLanguage" class="text-center py-8 text-base-content/60">
           <Download class="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p>Select a language to view available vocab sets</p>
         </div>
@@ -189,7 +180,7 @@ onMounted(loadVocabSets);
             >
               <div>
                 <h4 class="font-medium">{{ setName }}</h4>
-                <p class="text-sm text-base-content/60">Language: {{ selectedLanguage }}</p>
+                <p class="text-sm text-base-content/60">Language: {{ props.selectedLanguage }}</p>
               </div>
               
               <div v-if="isDownloaded(setName)" class="flex items-center gap-2">
