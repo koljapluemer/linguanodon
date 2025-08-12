@@ -8,4 +8,7 @@ export interface NoteRepoContract {
   updateNote(note: NoteData): Promise<void>;
   deleteNote(uid: string): Promise<void>;
   deleteNotes(uids: string[]): Promise<void>;
+  
+  // Remote import operations
+  createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean }[]): Promise<string[]>;
 }

@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
-import { toRaw } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteVocabService } from '@/entities/remote-vocab-set/RemoteVocabService';
+import { RemoteVocabService } from './RemoteVocabService';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { NoteData } from '@/entities/notes/NoteData';
-import { createEmptyCard } from 'ts-fsrs';
 
 const props = defineProps<{
   selectedLanguage: string;
@@ -58,99 +55,66 @@ async function downloadVocabSet(name: string) {
 
     console.log(`Found ${vocabSet.vocabs.length} vocab items to download`);
 
+    // Process each remote vocab completely at feature level
     for (const remoteVocab of vocabSet.vocabs) {
-      console.log(`Processing vocab: ${remoteVocab.content}`);
-      
-      // Check if vocab already exists
-      let existingVocab = await vocabAndTranslationRepo.getVocabByLanguageAndContent(
-        remoteVocab.language, 
-        remoteVocab.content
-      );
-      
+      if (!remoteVocab.content) continue;
+
+      // 1. Create notes and get their UIDs
+      const vocabNoteUids = remoteVocab.notes 
+        ? await noteRepo.createNotesFromRemote(remoteVocab.notes)
+        : [];
+
+      // 2. Create translations and get their UIDs
       const translationUids: string[] = [];
-      const noteUids: string[] = [];
-
-      // Process vocab notes
-      if (remoteVocab.notes) {
-        for (const remoteNote of remoteVocab.notes) {
-          const noteUid = crypto.randomUUID();
-          const noteData: Partial<NoteData> = {
-            uid: noteUid,
-            content: remoteNote.content,
-            showBeforeExercise: remoteNote.showBeforeExercise
-          };
-          await noteRepo.saveNote(noteData);
-          noteUids.push(noteUid);
-        }
-      }
-
-      // Process translations with duplicate checking
       for (const remoteTranslation of remoteVocab.translations) {
         // Check if translation already exists
         let existingTranslation = await vocabAndTranslationRepo.getTranslationByContent(remoteTranslation.content);
         
         if (existingTranslation) {
-          console.log(`Translation already exists: ${remoteTranslation.content}`);
           translationUids.push(existingTranslation.uid);
         } else {
-          // Create new translation
-          const translationUid = crypto.randomUUID();
-          const translationNoteUids: string[] = [];
+          // Create translation notes first
+          const translationNoteUids = remoteTranslation.notes
+            ? await noteRepo.createNotesFromRemote(remoteTranslation.notes)
+            : [];
 
-          // Save translation notes
-          if (remoteTranslation.notes) {
-            for (const remoteNote of remoteTranslation.notes) {
-              const noteUid = crypto.randomUUID();
-              const noteData: Partial<NoteData> = {
-                uid: noteUid,
-                content: remoteNote.content,
-                showBeforeExercise: remoteNote.showBeforeExercise
-              };
-              await noteRepo.saveNote(noteData);
-              translationNoteUids.push(noteUid);
-            }
-          }
-
+          // Create new translation with note UIDs
           const translationData: Partial<TranslationData> = {
-            uid: translationUid,
             content: remoteTranslation.content,
             notes: translationNoteUids
           };
           
-          await vocabAndTranslationRepo.saveTranslation(translationData);
-          translationUids.push(translationUid);
-          console.log(`Created new translation: ${remoteTranslation.content}`);
+          const savedTranslation = await vocabAndTranslationRepo.saveTranslation(translationData);
+          translationUids.push(savedTranslation.uid);
         }
       }
 
+      // 3. Check if vocab already exists
+      let existingVocab = await vocabAndTranslationRepo.getVocabByLanguageAndContent(
+        remoteVocab.language, 
+        remoteVocab.content
+      );
+
       if (existingVocab) {
-        // Merge with existing vocab - add new translations
-        const updatedTranslations = [...new Set([...existingVocab.translations, ...translationUids])];
-        const updatedNotes = [...new Set([...existingVocab.notes, ...noteUids])];
-        
+        // Merge with existing vocab
         await vocabAndTranslationRepo.updateVocab({
           ...existingVocab,
-          translations: updatedTranslations,
-          notes: updatedNotes
+          translations: [...new Set([...existingVocab.translations, ...translationUids])],
+          notes: [...new Set([...existingVocab.notes, ...vocabNoteUids])]
         });
-        console.log(`Updated existing vocab: ${remoteVocab.content}`);
       } else {
-        // Create new vocab
-        const vocabUid = crypto.randomUUID();
+        // 4. Create complete VocabData (except uid which saveVocab handles)
         const vocabData: Partial<VocabData> = {
-          uid: vocabUid,
           language: remoteVocab.language,
           content: remoteVocab.content,
           priority: remoteVocab.priority,
-          notes: noteUids,
+          notes: vocabNoteUids,
           translations: translationUids,
           links: remoteVocab.links || [],
-          tasks: [],
-          progress: createEmptyCard()
+          tasks: []
         };
         
-        await vocabAndTranslationRepo.saveVocab(toRaw(vocabData));
-        console.log(`Created new vocab: ${remoteVocab.content}`);
+        await vocabAndTranslationRepo.saveVocab(vocabData);
       }
     }
 

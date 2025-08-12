@@ -1,4 +1,4 @@
-import type { RemoteResourceSet } from './RemoteResourceData';
+import type { RemoteResourceSet } from '@/shared/types/RemoteResourceData';
 
 export class RemoteResourceService {
   async getAvailableResourceSets(languageCode: string): Promise<string[]> {

@@ -1,4 +1,4 @@
-import type { RemoteVocabSet } from './RemoteVocabData';
+import type { RemoteVocabSet } from '@/shared/types/RemoteVocabData';
 
 export class RemoteVocabService {
   async getAvailableVocabSets(languageCode: string): Promise<string[]> {

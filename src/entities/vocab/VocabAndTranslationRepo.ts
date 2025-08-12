@@ -308,4 +308,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   async deleteTranslations(ids: string[]): Promise<void> {
     await this.translationStorage.deleteByIds(ids);
   }
+
+
 }

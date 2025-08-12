@@ -45,4 +45,20 @@ export class NoteRepo implements NoteRepoContract {
   async deleteNotes(uids: string[]): Promise<void> {
     await this.storage.deleteMultiple(uids);
   }
+
+  async createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean }[]): Promise<string[]> {
+    const noteUids: string[] = [];
+    
+    for (const remoteNote of remoteNotes) {
+      const noteData: Partial<NoteData> = {
+        uid: crypto.randomUUID(),
+        content: remoteNote.content,
+        showBeforeExercise: remoteNote.showBeforeExercise
+      };
+      const savedNote = await this.saveNote(noteData);
+      noteUids.push(savedNote.uid);
+    }
+    
+    return noteUids;
+  }
 }

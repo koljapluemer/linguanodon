@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteResourceService } from '@/entities/remote-resource-set';
+import { RemoteResourceService } from './RemoteResourceService';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
