@@ -1,0 +1,20 @@
+import type { Link } from "@/shared/Link";
+
+export interface RemoteTranslation {
+  content: string;
+  notes?: { content: string; showBeforeExercise?: boolean }[];
+}
+
+export interface RemoteVocab {
+  language: string;
+  priority: number;
+  content?: string;
+  translations: RemoteTranslation[];
+  links?: Link[];
+  notes?: { content: string; showBeforeExercise?: boolean }[];
+}
+
+export interface RemoteVocabSet {
+  name: string;
+  vocabs: RemoteVocab[];
+}

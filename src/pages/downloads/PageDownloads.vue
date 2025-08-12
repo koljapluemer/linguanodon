@@ -5,10 +5,12 @@
     </div>
     
     <RemoteResourceSetsWidget />
+    <DownloadVocabSetWidget />
   </div>
 </template>
 
 <script setup lang="ts">
 import RemoteResourceSetsWidget from '@/widgets/remote-resource-sets/RemoteResourceSetsWidget.vue';
+import DownloadVocabSetWidget from '@/widgets/download-vocab-set/DownloadVocabSetWidget.vue';
 
 </script>
