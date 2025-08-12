@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, inject, onMounted } from 'vue';
 import type { Task } from '@/entities/tasks/Task';
 import { useTaskState } from '@/entities/tasks/useTaskState';
 import TaskInfo from '@/entities/tasks/TaskInfo.vue';
@@ -7,6 +7,9 @@ import TaskButtonsDisableSkipDone from '@/entities/tasks/TaskButtonsDisableSkipD
 import TaskDecideWhetherToDoAgain from '@/entities/tasks/TaskDecideWhetherToDoAgain.vue';
 import TaskEvaluateCorrectnessAndConfidence from '@/entities/tasks/TaskEvaluateCorrectnessAndConfidence.vue';
 import ManageFactsOfResourceWidget from '@/features/resource-manage-its-facts/ManageFactsOfResourceWidget.vue';
+import LinkDisplay from '@/shared/ui/LinkDisplay.vue';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { ResourceData } from '@/entities/resources/ResourceData';
 
 interface Props {
   task: Task;
@@ -41,6 +44,25 @@ const resourceUid = computed(() => {
   const resourceAssociation = props.task.associatedUnits.find(unit => unit.type === 'Resource');
   return resourceAssociation?.uid;
 });
+
+// Resource data and loading
+const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
+const resource = ref<ResourceData | null>(null);
+
+const loadResource = async () => {
+  if (!resourceUid.value || !resourceRepo) return;
+  
+  try {
+    const resourceData = await resourceRepo.getResourceById(resourceUid.value);
+    resource.value = resourceData || null;
+  } catch (error) {
+    console.error('Failed to load resource:', error);
+  }
+};
+
+onMounted(() => {
+  loadResource();
+});
 </script>
 
 <template>
@@ -49,6 +71,14 @@ const resourceUid = computed(() => {
     <div v-if="currentState === 'task'">
       <!-- Task Header -->
       <TaskInfo :task="task" />
+      
+      <!-- Resource Link -->
+      <div v-if="resource?.link" class="card bg-base-100 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title">Resource</h3>
+          <LinkDisplay :url="resource.link.url" :label="resource.link.label" />
+        </div>
+      </div>
       
       <!-- Fact Cards Management Widget -->
       <div class="card bg-base-100 shadow-lg">
