@@ -13,6 +13,7 @@ import PageManageGoal from '@/pages/goals-manage/PageManageGoal.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
 import PageLanguages from '@/pages/languages/PageLanguages.vue';
 import PageTimeTracking from '@/pages/time-tracking/PageTimeTracking.vue';
+import PageMyMaterial from '@/pages/my-material/PageMyMaterial.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -25,6 +26,11 @@ const router = createRouter({
       path: '/queue',
       name: 'queue',
       component: PageQueue
+    },
+    {
+      path: '/my-material',
+      name: 'my-material',
+      component: PageMyMaterial
     },
     {
       path: '/vocab',
