@@ -129,15 +129,23 @@ def main():
         }
         
         # Ensure output directory exists
-        os.makedirs("vocab_sets", exist_ok=True)
+        os.makedirs("vocab_sets/apc", exist_ok=True)
         
         # Write to JSON file
-        output_file = "vocab_sets/1000_common_levantine.json"
+        output_file = "vocab_sets/apc/1000_common_levantine.json"
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(vocab_set, f, ensure_ascii=False, indent=2)
         
         print(f"Successfully wrote {output_file}")
         print(f"Total vocabulary items: {len(vocabs)}")
+        
+        # Create index.json for the language
+        index_file = "vocab_sets/apc/index.json"
+        index_data = ["1000_common_levantine"]
+        with open(index_file, 'w', encoding='utf-8') as f:
+            json.dump(index_data, f, ensure_ascii=False, indent=2)
+        
+        print(f"Successfully wrote {index_file}")
         
     except Exception as e:
         print(f"Error: {e}")
