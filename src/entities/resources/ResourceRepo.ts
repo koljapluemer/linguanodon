@@ -34,7 +34,6 @@ export class ResourceRepo implements ResourceRepoContract {
       link: resource.link,
       priority: resource.priority,
       vocab: resource.vocab,
-      examples: resource.examples,
       factCards: resource.factCards,
       notes: resource.notes,
       tasks: []

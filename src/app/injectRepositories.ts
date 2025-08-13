@@ -1,5 +1,4 @@
 import { VocabAndTranslationRepo } from '@/entities/vocab/VocabAndTranslationRepo';
-import { ExampleRepo } from '@/entities/examples/ExampleRepo';
 import { GoalRepo } from '@/entities/goals/GoalRepo';
 import { NoteRepo } from '@/entities/notes/NoteRepo';
 import { FactCardRepo } from '@/entities/factCards/FactCardRepo';
@@ -12,7 +11,6 @@ import { taskRegistry, TASK_REGISTRY_INJECTION_KEY } from './taskRegistry';
 export function setupRepositories() {
   // Create repository instances
   const vocabRepo = new VocabAndTranslationRepo();
-  const exampleRepo = new ExampleRepo();
   const goalRepo = new GoalRepo();
   const noteRepo = new NoteRepo();
   const factCardRepo = new FactCardRepo();
@@ -23,7 +21,6 @@ export function setupRepositories() {
   
   return {
     vocabRepo,
-    exampleRepo,
     goalRepo,
     noteRepo,
     factCardRepo,
@@ -35,10 +32,9 @@ export function setupRepositories() {
 }
 
 export function provideRepositories(app: { provide: (key: string | symbol, value: unknown) => void }) {
-  const { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo } = setupRepositories();
+  const { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo } = setupRepositories();
   
   app.provide('vocabRepo', vocabRepo);
-  app.provide('exampleRepo', exampleRepo);
   app.provide('goalRepo', goalRepo);
   app.provide('noteRepo', noteRepo);
   app.provide('factCardRepo', factCardRepo);
@@ -48,5 +44,5 @@ export function provideRepositories(app: { provide: (key: string | symbol, value
   app.provide('languageRepo', languageRepo);
   app.provide(TASK_REGISTRY_INJECTION_KEY, taskRegistry);
   
-  return { vocabRepo, exampleRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo };
+  return { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo };
 }

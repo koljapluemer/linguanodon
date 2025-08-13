@@ -1,11 +1,9 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabProposerContract } from './VocabProposerContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { ProposerByAlreadySeenDueVocab } from './proposers/ProposerByAlreadySeenDueVocab';
 import { ProposerOfNewVocab } from './proposers/ProposerOfNewVocab';
-import { ProposerByExamples } from './proposers/ProposerByExamples';
 import { ProposerByGoals } from './proposers/ProposerByGoals';
 import { randomBetween, shuffleArray, removeDuplicates } from '@/shared/arrayUtils';
 
@@ -43,17 +41,14 @@ export class VocabPicker {
     this.proposers = proposers;
   }
 
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, exampleRepo: ExampleRepoContract, goalRepo?: GoalRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, goalRepo?: GoalRepoContract) {
     const alreadySeenDueProposer = new ProposerByAlreadySeenDueVocab();
     alreadySeenDueProposer.setVocabRepo(vocabRepo);
 
     const newVocabProposer = new ProposerOfNewVocab();
     newVocabProposer.setVocabRepo(vocabRepo);
 
-    const examplesProposer = new ProposerByExamples();
-    examplesProposer.setRepos(exampleRepo, vocabRepo);
-
-    this.proposers = [alreadySeenDueProposer, newVocabProposer, examplesProposer];
+    this.proposers = [alreadySeenDueProposer, newVocabProposer];
 
     // Add goals proposer if goalRepo is available
     if (goalRepo) {

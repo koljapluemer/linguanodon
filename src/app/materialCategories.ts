@@ -1,6 +1,5 @@
 import { 
   BookOpen, 
-  MessageSquare, 
   FileText, 
   Archive, 
   Target,
@@ -23,13 +22,6 @@ export const materialCategories: MaterialCategory[] = [
     icon: BookOpen,
     route: { name: 'vocab-list' },
     color: 'text-blue-600'
-  },
-  {
-    name: 'Examples',
-    description: 'Example sentences and phrases',
-    icon: MessageSquare,
-    route: { name: 'examples-list' },
-    color: 'text-green-600'
   },
   {
     name: 'Fact Cards',

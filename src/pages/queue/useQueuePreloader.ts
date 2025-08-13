@@ -2,7 +2,6 @@ import { reactive } from 'vue';
 import type { Task } from '@/entities/tasks/Task';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
@@ -33,7 +32,6 @@ const DEFAULT_CONFIG: PreloadConfig = {
 
 export function useQueuePreloader(
   vocabRepo: VocabAndTranslationRepoContract,
-  exampleRepo: ExampleRepoContract,
   goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
@@ -44,7 +42,7 @@ export function useQueuePreloader(
   
   // Initialize pickers
   const vocabPicker = new VocabPicker();
-  vocabPicker.initializeProposers(vocabRepo, exampleRepo, goalRepo);
+  vocabPicker.initializeProposers(vocabRepo, goalRepo);
   
   const resourcePicker = new ResourcePicker();
   resourcePicker.initializeProposers(resourceRepo, languageRepo, taskRepo);

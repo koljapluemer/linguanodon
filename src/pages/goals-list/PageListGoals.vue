@@ -24,7 +24,6 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <h2 class="card-title text-lg">{{ goal.title }}</h2>
-              <p class="text-sm text-gray-600 mt-1">{{ goal.prompt }}</p>
               
               <div class="flex gap-4 mt-3 text-sm">
                 <span class="badge badge-outline">
@@ -32,12 +31,6 @@
                 </span>
                 <span class="badge badge-outline">
                   {{ goal.vocab.length }} vocab
-                </span>
-                <span class="badge badge-outline">
-                  {{ goal.examples.length }} examples
-                </span>
-                <span class="badge badge-outline">
-                  {{ goal.milestones.length }} milestones
                 </span>
                 <span 
                   v-if="vocabStats[goal.uid]"
@@ -47,9 +40,6 @@
                 </span>
               </div>
 
-              <div v-if="goal.isActive === false" class="mt-2">
-                <span class="badge badge-success">Completed</span>
-              </div>
             </div>
 
             <div class="flex gap-2">

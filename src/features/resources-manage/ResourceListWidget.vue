@@ -59,9 +59,6 @@
                 <span v-if="resource.vocab.length > 0">
                   {{ resource.vocab.length }} vocab
                 </span>
-                <span v-if="resource.examples.length > 0">
-                  {{ resource.examples.length }} examples
-                </span>
                 <span v-if="resource.factCards.length > 0">
                   {{ resource.factCards.length }} facts
                 </span>

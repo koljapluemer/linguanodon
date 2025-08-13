@@ -46,7 +46,7 @@ export class UpdateResourceTasksController {
     const baseUid = `resource-task-${resource.uid}-${Date.now()}`;
 
     const taskTypes: Array<{
-      type: 'add-vocab-to-resource' | 'add-examples-to-resource' | 'add-fact-cards-to-resource';
+      type: 'add-vocab-to-resource' | 'add-fact-cards-to-resource';
       title: string;
       prompt: string;
     }> = [
@@ -54,11 +54,6 @@ export class UpdateResourceTasksController {
         type: 'add-vocab-to-resource',
         title: `Extract vocabulary from "${resource.title}"`,
         prompt: 'Go through the resource and identify important vocabulary words. Add them with translations and context.'
-      },
-      {
-        type: 'add-examples-to-resource',
-        title: `Find examples in "${resource.title}"`,
-        prompt: 'Look for useful example sentences or phrases in the resource that demonstrate language patterns.'
       },
       {
         type: 'add-fact-cards-to-resource',

@@ -191,7 +191,6 @@ async function handleSave() {
         priority: formData.value.priority,
         content: formData.value.content.trim() || undefined,
         vocab: [],
-        examples: [],
         factCards: [],
         notes: []
       };

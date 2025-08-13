@@ -70,7 +70,6 @@ async function downloadResourceSet(name: string) {
         content: remoteResource.content,
         link: remoteResource.link,
         vocab: [],
-        examples: [],
         factCards: [],
         notes: []
       };

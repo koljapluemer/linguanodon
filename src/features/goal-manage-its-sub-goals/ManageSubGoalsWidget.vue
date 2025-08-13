@@ -76,22 +76,12 @@ async function addSubGoal() {
   if (!newSubGoalTitle.value.trim()) return;
   
   const newSubGoal = await goalRepo.create({
-    uid: crypto.randomUUID(),
     title: newSubGoalTitle.value.trim(),
-    prompt: newSubGoalTitle.value.trim(),
-    taskType: 'complete-goal',
     parentGoal: props.goal.uid,
     subGoals: [],
-    milestones: [],
     vocab: [],
-    examples: [],
     notes: [],
-    factCards: [],
-    evaluateCorrectnessAndConfidenceAfterDoing: false,
-    decideWhetherToDoAgainAfterDoing: true,
-    isActive: true,
-    taskSize: 'big',
-    associatedUnits: []
+    factCards: []
   });
   
   // Update parent goal to include this sub-goal

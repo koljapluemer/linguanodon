@@ -53,7 +53,7 @@ export class GoalRepo implements GoalRepoContract {
 
   async getIncompleteGoals(): Promise<GoalData[]> {
     const allGoals = await goalStorage.goals.toArray();
-    return allGoals.filter(goal => goal.isActive !== false);
+    return allGoals; // All goals are considered active since isActive was removed
   }
 
   async getSubGoals(parentId: string): Promise<GoalData[]> {

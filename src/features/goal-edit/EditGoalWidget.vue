@@ -67,7 +67,6 @@ async function saveGoal() {
         title: goalTitle.value.trim(),
         subGoals: [],
         vocab: [],
-        examples: [],
         notes: [],
         factCards: []
       });

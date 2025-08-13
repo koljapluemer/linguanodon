@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import PageQueue from '@/pages/queue/PageQueue.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabManage from '@/pages/vocab-manage/PageVocabManage.vue';
-import PageListExamples from '@/pages/examples-list/PageListExamples.vue';
-import PageManageExample from '@/pages/examples-manage/PageManageExample.vue';
 import PageListFactCards from '@/pages/fact-cards-list/PageListFactCards.vue';
 import PageManageFactCard from '@/pages/fact-cards-manage/PageManageFactCard.vue';
 import PageListResources from '@/pages/resources-list/PageListResources.vue';
@@ -48,21 +46,6 @@ const router = createRouter({
       path: '/vocab/:id/edit',
       name: 'vocab-edit',
       component: PageVocabManage
-    },
-    {
-      path: '/examples',
-      name: 'examples-list',
-      component: PageListExamples
-    },
-    {
-      path: '/examples/new',
-      name: 'examples-new',
-      component: PageManageExample
-    },
-    {
-      path: '/examples/:id',
-      name: 'examples-edit',
-      component: PageManageExample
     },
     {
       path: '/fact-cards',

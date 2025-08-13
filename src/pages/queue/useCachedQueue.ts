@@ -1,5 +1,4 @@
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
@@ -10,14 +9,13 @@ import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/Update
 
 export function useCachedQueue(
   vocabRepo: VocabAndTranslationRepoContract,
-  exampleRepo: ExampleRepoContract,
   goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract
 ) {
   // Initialize preloader
-  const preloader = useQueuePreloader(vocabRepo, exampleRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
+  const preloader = useQueuePreloader(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
   
   // Initialize vocab task controller
   const vocabTaskController = new UpdateVocabTasksController(vocabRepo, taskRepo);

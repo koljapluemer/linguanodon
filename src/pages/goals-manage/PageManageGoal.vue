@@ -25,16 +25,6 @@
         </div>
       </section>
 
-      <!-- Mark Completion Section -->
-      <section class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Goal Completion</h2>
-          <MarkGoalCompletionWidget 
-            :goal="goal"
-            @goal-updated="handleGoalUpdate"
-          />
-        </div>
-      </section>
 
       <!-- Sub-goals Section -->
       <section class="card bg-base-100 shadow-xl">
@@ -58,27 +48,7 @@
         </div>
       </section>
 
-      <!-- Examples Section -->
-      <section class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Examples</h2>
-          <ManageExamplesOfGoalWidget 
-            :goal="goal"
-            @goal-updated="handleGoalUpdate"
-          />
-        </div>
-      </section>
 
-      <!-- Milestones Section -->
-      <section class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Milestones</h2>
-          <ManageMilestonesWidget 
-            :goal="goal"
-            @goal-updated="handleGoalUpdate"
-          />
-        </div>
-      </section>
     </div>
   </div>
 </template>
@@ -89,11 +59,8 @@ import { useRoute, useRouter } from 'vue-router';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import EditGoalWidget from '@/features/goal-edit/EditGoalWidget.vue';
-import MarkGoalCompletionWidget from '@/features/goal-manage-its-completion/MarkGoalCompletionWidget.vue';
 import ManageSubGoalsWidget from '@/features/goal-manage-its-sub-goals/ManageSubGoalsWidget.vue';
 import ManageVocabOfGoalWidget from '@/features/goal-manage-its-vocab/ManageVocabOfGoalWidget.vue';
-import ManageExamplesOfGoalWidget from '@/features/goal-manage-its-examples/ManageExamplesOfGoalWidget.vue';
-import ManageMilestonesWidget from '@/features/goal-manage-its-milestones/ManageMilestonesWidget.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -125,7 +92,6 @@ async function loadGoal() {
       subGoals: [],
       tasks: [],
       vocab: [],
-      examples: [],
       notes: [],
       factCards: []
     };

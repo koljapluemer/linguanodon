@@ -16,7 +16,7 @@ const showMaterialSubmenu = ref(false);
 // Show submenu on individual material pages, hide on overview page
 const isOnMyMaterialOverviewPage = computed(() => route.name === 'my-material');
 const isOnMaterialPage = computed(() => {
-  const materialPages = ['vocab-list', 'examples-list', 'fact-cards-list', 'resources-list', 'goals-list'];
+  const materialPages = ['vocab-list', 'fact-cards-list', 'resources-list', 'immersion-content-list', 'goals-list'];
   return materialPages.includes(route.name as string);
 });
 const shouldShowSubmenu = computed(() => isOnMaterialPage.value && !isOnMyMaterialOverviewPage.value);

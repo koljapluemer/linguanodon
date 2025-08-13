@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted } from 'vue';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { ExampleRepoContract } from '@/entities/examples/ExampleRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
@@ -12,13 +11,12 @@ import { useTimeTracking } from '@/shared/useTimeTracking';
 
 // Inject repositories
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
-const exampleRepo = inject<ExampleRepoContract>('exampleRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const taskRepo = inject<TaskRepoContract>('taskRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
 
-if (!vocabRepo || !exampleRepo || !goalRepo || !resourceRepo || !taskRepo || !languageRepo) {
+if (!vocabRepo || !goalRepo || !resourceRepo || !taskRepo || !languageRepo) {
   throw new Error('Repositories not available');
 }
 
@@ -27,7 +25,7 @@ const {
   initializeQueue,
   completeCurrentTask,
   stateMachineDebug
-} = useCachedQueue(vocabRepo, exampleRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
+} = useCachedQueue(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
 
 // Initialize time tracking for this page
 useTimeTracking();

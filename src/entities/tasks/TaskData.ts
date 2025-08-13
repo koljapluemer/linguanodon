@@ -11,7 +11,7 @@ export interface TaskData {
   nextShownEarliestAt?: Date;
   lastDifficultyRating?: number;
   lastCorrectnessRating?: number;
-  associatedUnits: Association[]; // used to persist references to vocab, examples, resources etc. used for this task
+  associatedUnits: Association[]; // used to persist references to vocab, resources, fact cards, goals etc. used for this task
 } 
 
 export type TaskType = 
@@ -19,18 +19,16 @@ export type TaskType =
   | 'free-translate'
   | 'add-sub-goals'
   | 'add-vocab-to-goal'
-  | 'add-examples-to-goal'
   | 'add-milestones'
   | 'complete-goal'
   | 'milestone'
   | 'add-vocab-to-resource'
-  | 'add-examples-to-resource'
   | 'add-fact-cards-to-resource'
   | 'vocab-try-to-remember'
   | 'vocab-reveal'
   | 'vocab-choose-from-options'
 
-type AssociatedEntity = 'Vocab' | 'Resource' | 'Example' | 'FactCard' | 'Goal'
+type AssociatedEntity = 'Vocab' | 'Resource' | 'FactCard' | 'Goal'
 interface Association  {
   type: AssociatedEntity
   uid: string

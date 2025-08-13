@@ -12,7 +12,6 @@ export interface ResourceData {
 
   priority: number;
   vocab: string[]; // ids of VocabData
-  examples: string[]; // ids of ExampleData
   factCards: string[]; // ids of FactCardData
   notes: string[]; // uids of notes
   

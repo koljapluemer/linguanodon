@@ -6,7 +6,6 @@ export interface GoalData {
   parentGoal?: string; // uid of parent goal (each goal has only one parent)
   tasks: string[]; // uids of TaskData
   vocab: string[]; // uids of Vocab
-  examples: string[]; // uids of Examples
   factCards: string[];
   notes: string[];
 
