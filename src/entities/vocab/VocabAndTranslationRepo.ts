@@ -31,6 +31,14 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return vocab ? this.ensureVocabFields(vocab) : undefined;
   }
 
+  async getVocabByUIDs(uids: string[]): Promise<VocabData[]> {
+    const vocabPromises = uids.map(uid => this.vocabStorage.getById(uid));
+    const vocabResults = await Promise.all(vocabPromises);
+    return vocabResults
+      .filter((vocab): vocab is VocabData => vocab !== undefined)
+      .map(v => this.ensureVocabFields(v));
+  }
+
   async getVocabByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined> {
     const vocab = await this.vocabStorage.getByLanguageAndContent(language, content);
     return vocab ? this.ensureVocabFields(vocab) : undefined;
@@ -71,6 +79,31 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     });
     
     return pickRandom(unseenVocab, count).map(v => this.ensureVocabFields(v));
+  }
+
+  async getDueOrUnseenVocabFromIds(uids: string[]): Promise<VocabData[]> {
+    const vocabList = await this.getVocabByUIDs(uids);
+    
+    return vocabList.filter(vocab => {
+      // Must not be excluded from practice
+      if (vocab.doNotPractice) {
+        return false;
+      }
+      
+      // Check for null/undefined progress (shouldn't happen but handle gracefully)
+      if (!vocab.progress) {
+        console.warn('Found vocab with null/undefined progress:', vocab.uid);
+        return true; // Consider unseen if no progress
+      }
+      
+      // Unseen: never practiced before (reps === 0)
+      const isUnseen = vocab.progress.reps === 0;
+      
+      // Due: has been practiced and is due now
+      const isDue = vocab.progress.reps > 0 && vocab.progress.due <= new Date();
+      
+      return isUnseen || isDue;
+    });
   }
 
 

@@ -11,9 +11,11 @@ export interface VocabAndTranslationRepoContract {
   // Vocab operations
   getVocab(): Promise<VocabData[]>;
   getVocabByUID(uid: string): Promise<VocabData | undefined>;
+  getVocabByUIDs(uids: string[]): Promise<VocabData[]>;
   getVocabByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined>;
   getRandomAlreadySeenDueVocab(count: number): Promise<VocabData[]>;
   getRandomUnseenVocab(count: number): Promise<VocabData[]>;
+  getDueOrUnseenVocabFromIds(uids: string[]): Promise<VocabData[]>;
   
   // Pagination operations
   getVocabPaginated(cursor?: string, limit?: number, searchQuery?: string): Promise<VocabPaginationResult>;

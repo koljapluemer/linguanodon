@@ -2,9 +2,11 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabProposerContract } from './VocabProposerContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { ProposerByAlreadySeenDueVocab } from './proposers/ProposerByAlreadySeenDueVocab';
 import { ProposerOfNewVocab } from './proposers/ProposerOfNewVocab';
 import { ProposerByGoals } from './proposers/ProposerByGoals';
+import { ProposerByImmersionContent } from './proposers/ProposerByImmersionContent';
 import { randomBetween, shuffleArray, removeDuplicates } from '@/shared/arrayUtils';
 
 export class VocabPicker {
@@ -41,7 +43,7 @@ export class VocabPicker {
     this.proposers = proposers;
   }
 
-  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, goalRepo?: GoalRepoContract) {
+  initializeProposers(vocabRepo: VocabAndTranslationRepoContract, goalRepo?: GoalRepoContract, immersionContentRepo?: ImmersionContentRepoContract) {
     const alreadySeenDueProposer = new ProposerByAlreadySeenDueVocab();
     alreadySeenDueProposer.setVocabRepo(vocabRepo);
 
@@ -55,6 +57,13 @@ export class VocabPicker {
       const goalsProposer = new ProposerByGoals();
       goalsProposer.setRepos(goalRepo, vocabRepo);
       this.proposers.push(goalsProposer);
+    }
+
+    // Add immersion content proposer if immersionContentRepo is available
+    if (immersionContentRepo) {
+      const immersionContentProposer = new ProposerByImmersionContent();
+      immersionContentProposer.setRepos(immersionContentRepo, vocabRepo);
+      this.proposers.push(immersionContentProposer);
     }
   }
 }

@@ -6,6 +6,7 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { VocabPicker } from './propose-relevant-entities/which-vocab-to-practice/VocabPicker';
 import { ResourcePicker } from './propose-relevant-entities/which-resource-to-practice/ResourcePicker';
 import { shuffleArray } from '@/shared/arrayUtils';
@@ -36,13 +37,14 @@ export function useQueuePreloader(
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,
+  immersionContentRepo: ImmersionContentRepoContract,
   config: Partial<PreloadConfig> = {}
 ) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
   
   // Initialize pickers
   const vocabPicker = new VocabPicker();
-  vocabPicker.initializeProposers(vocabRepo, goalRepo);
+  vocabPicker.initializeProposers(vocabRepo, goalRepo, immersionContentRepo);
   
   const resourcePicker = new ResourcePicker();
   resourcePicker.initializeProposers(resourceRepo, languageRepo, taskRepo);

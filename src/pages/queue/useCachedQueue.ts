@@ -3,6 +3,7 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { useQueuePreloader } from './useQueuePreloader';
 import { useQueueStateMachine } from './useQueueStateMachine';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
@@ -12,10 +13,11 @@ export function useCachedQueue(
   goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
-  languageRepo: LanguageRepoContract
+  languageRepo: LanguageRepoContract,
+  immersionContentRepo: ImmersionContentRepoContract
 ) {
   // Initialize preloader
-  const preloader = useQueuePreloader(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
+  const preloader = useQueuePreloader(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo, immersionContentRepo);
   
   // Initialize vocab task controller
   const vocabTaskController = new UpdateVocabTasksController(vocabRepo, taskRepo);
