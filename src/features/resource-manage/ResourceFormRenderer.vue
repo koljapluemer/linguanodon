@@ -64,12 +64,8 @@
         </FormField>
 
         <LinkEdit
-          :url="formData.linkUrl"
-          :label="formData.linkLabel"
-          url-id="linkUrl"
-          label-id="linkLabel"
-          @update:url="formData.linkUrl = $event"
-          @update:label="formData.linkLabel = $event"
+          :link="formData.link"
+          @update:link="formData.link = $event"
         />
 
         <!-- Action Buttons -->
@@ -100,6 +96,7 @@ import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
+import type { Link } from '@/shared/Link';
 
 const props = defineProps<{
   resourceUid?: string;
@@ -123,8 +120,7 @@ const formData = ref({
   language: '',
   priority: 0,
   content: '',
-  linkUrl: '',
-  linkLabel: ''
+  link: { label: '', url: '' } as Link
 });
 
 const errors = ref<Record<string, string>>({});
@@ -165,8 +161,7 @@ async function loadResource() {
       language: resource.language,
       priority: resource.priority,
       content: resource.content || '',
-      linkUrl: resource.link?.url || '',
-      linkLabel: resource.link?.label || ''
+      link: resource.link || { label: '', url: '' }
     };
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load resource';
@@ -196,10 +191,13 @@ async function handleSave() {
       };
 
       // Add link if URL is provided
-      if (formData.value.linkUrl.trim()) {
+      if (formData.value.link.url.trim()) {
         resourceData.link = {
-          url: formData.value.linkUrl.trim(),
-          label: formData.value.linkLabel.trim() || 'Link'
+          url: formData.value.link.url.trim(),
+          label: formData.value.link.label.trim() || 'Link',
+          owner: formData.value.link.owner?.trim() || undefined,
+          ownerLink: formData.value.link.ownerLink?.trim() || undefined,
+          license: formData.value.link.license?.trim() || undefined
         };
       }
 
@@ -218,9 +216,12 @@ async function handleSave() {
         language: formData.value.language.trim(),
         priority: formData.value.priority,
         content: formData.value.content.trim() || undefined,
-        link: formData.value.linkUrl.trim() ? {
-          url: formData.value.linkUrl.trim(),
-          label: formData.value.linkLabel.trim() || 'Link'
+        link: formData.value.link.url.trim() ? {
+          url: formData.value.link.url.trim(),
+          label: formData.value.link.label.trim() || 'Link',
+          owner: formData.value.link.owner?.trim() || undefined,
+          ownerLink: formData.value.link.ownerLink?.trim() || undefined,
+          license: formData.value.link.license?.trim() || undefined
         } : undefined
       };
       

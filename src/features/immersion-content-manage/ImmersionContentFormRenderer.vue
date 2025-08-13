@@ -64,12 +64,8 @@
         </FormField>
 
         <LinkEdit
-          :url="formData.linkUrl"
-          :label="formData.linkLabel"
-          url-id="linkUrl"
-          label-id="linkLabel"
-          @update:url="formData.linkUrl = $event"
-          @update:label="formData.linkLabel = $event"
+          :link="formData.link"
+          @update:link="formData.link = $event"
         />
 
         <!-- Action Buttons -->
@@ -100,6 +96,7 @@ import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
+import type { Link } from '@/shared/Link';
 
 const props = defineProps<{
   immersionContentUid?: string;
@@ -123,8 +120,7 @@ const formData = ref({
   language: '',
   priority: 0,
   content: '',
-  linkUrl: '',
-  linkLabel: ''
+  link: { label: '', url: '' } as Link
 });
 
 const errors = ref<Record<string, string>>({});
@@ -165,8 +161,7 @@ async function loadImmersionContent() {
       language: content.language,
       priority: content.priority,
       content: content.content || '',
-      linkUrl: content.link?.url || '',
-      linkLabel: content.link?.label || ''
+      link: content.link || { label: '', url: '' }
     };
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load immersion content';
@@ -197,10 +192,13 @@ async function handleSave() {
       };
 
       // Add link if URL is provided
-      if (formData.value.linkUrl.trim()) {
+      if (formData.value.link.url.trim()) {
         contentData.link = {
-          url: formData.value.linkUrl.trim(),
-          label: formData.value.linkLabel.trim() || 'Link'
+          url: formData.value.link.url.trim(),
+          label: formData.value.link.label.trim() || 'Link',
+          owner: formData.value.link.owner?.trim() || undefined,
+          ownerLink: formData.value.link.ownerLink?.trim() || undefined,
+          license: formData.value.link.license?.trim() || undefined
         };
       }
 
@@ -219,9 +217,12 @@ async function handleSave() {
         language: formData.value.language.trim(),
         priority: formData.value.priority,
         content: formData.value.content.trim() || undefined,
-        link: formData.value.linkUrl.trim() ? {
-          url: formData.value.linkUrl.trim(),
-          label: formData.value.linkLabel.trim() || 'Link'
+        link: formData.value.link.url.trim() ? {
+          url: formData.value.link.url.trim(),
+          label: formData.value.link.label.trim() || 'Link',
+          owner: formData.value.link.owner?.trim() || undefined,
+          ownerLink: formData.value.link.ownerLink?.trim() || undefined,
+          license: formData.value.link.license?.trim() || undefined
         } : undefined
       };
       

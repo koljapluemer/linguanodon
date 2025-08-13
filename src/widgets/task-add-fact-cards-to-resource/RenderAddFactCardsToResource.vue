@@ -76,7 +76,7 @@ onMounted(() => {
       <div v-if="resource?.link" class="card bg-base-100 shadow-lg">
         <div class="card-body">
           <h3 class="card-title">Resource</h3>
-          <LinkDisplay :url="resource.link.url" :label="resource.link.label" />
+          <LinkDisplay :link="resource.link" />
         </div>
       </div>
       
