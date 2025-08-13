@@ -1,0 +1,149 @@
+<template>
+  <div class="space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold">Immersion Content</h1>
+      <div class="flex gap-2">
+        <button @click="loadImmersionContent" class="btn btn-ghost btn-sm" :disabled="loading">
+          <span v-if="loading" class="loading loading-spinner loading-sm"></span>
+          <span v-else>Refresh</span>
+        </button>
+        <router-link to="/immersion-content/new" class="btn btn-primary">
+          Add New Content
+        </router-link>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div v-if="loading" class="flex justify-center p-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="alert alert-error">
+      <span>{{ error }}</span>
+    </div>
+
+    <!-- Empty State -->
+    <div v-else-if="immersionContent.length === 0" class="text-center p-12">
+      <h3 class="text-lg font-semibold mb-2">No immersion content yet</h3>
+      <p class="text-base-content/70 mb-4">Create your first immersion content to get started.</p>
+      <router-link to="/immersion-content/new" class="btn btn-primary">
+        Add New Content
+      </router-link>
+    </div>
+
+    <!-- Immersion Content List -->
+    <div v-else class="grid gap-4">
+      <div 
+        v-for="content in immersionContent" 
+        :key="content.uid"
+        class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow"
+      >
+        <div class="card-body">
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <LanguageDisplay :language-code="content.language" compact />
+                <span v-if="content.priority" class="badge badge-secondary">P{{ content.priority }}</span>
+              </div>
+              
+              <h3 class="card-title">{{ content.title }}</h3>
+              
+              <div v-if="content.content" class="text-base-content/70 mb-3">
+                {{ content.content.substring(0, 150) }}{{ content.content.length > 150 ? '...' : '' }}
+              </div>
+
+              <!-- Vocab counts -->
+              <div class="flex gap-4 text-sm text-base-content/60">
+                <span v-if="content.neededVocab.length > 0">
+                  {{ content.neededVocab.length }} needed vocab
+                </span>
+                <span v-if="content.extractedVocab.length > 0">
+                  {{ content.extractedVocab.length }} extracted vocab
+                </span>
+                <span v-if="content.extractedFactCards.length > 0">
+                  {{ content.extractedFactCards.length }} facts
+                </span>
+              </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex gap-2 ml-4">
+              <router-link
+                :to="`/immersion-content/${content.uid}/edit`"
+                class="btn btn-sm btn-outline"
+              >
+                Edit
+              </router-link>
+              <button
+                @click="deleteImmersionContent(content.uid)"
+                class="btn btn-sm btn-outline btn-error"
+                :disabled="deleting"
+              >
+                <span v-if="deleting" class="loading loading-spinner loading-sm"></span>
+                <span v-else>Delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, inject } from 'vue';
+import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
+import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
+
+const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
+if (!immersionContentRepo) {
+  throw new Error('ImmersionContentRepo not provided');
+}
+
+const immersionContent = ref<ImmersionContentData[]>([]);
+const loading = ref(false);
+const deleting = ref(false);
+const error = ref<string | null>(null);
+
+async function loadImmersionContent() {
+  if (!immersionContentRepo) return;
+  
+  loading.value = true;
+  error.value = null;
+  
+  try {
+    console.log('Loading immersion content...');
+    immersionContent.value = await immersionContentRepo.getAllImmersionContent();
+    console.log(`Loaded ${immersionContent.value.length} immersion content items:`, immersionContent.value.map(c => c.title));
+  } catch (err) {
+    console.error('Error loading immersion content:', err);
+    error.value = err instanceof Error ? err.message : 'Failed to load immersion content';
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function deleteImmersionContent(uid: string) {
+  if (!confirm('Are you sure you want to delete this immersion content?') || !immersionContentRepo) {
+    return;
+  }
+  
+  deleting.value = true;
+  try {
+    await immersionContentRepo.deleteImmersionContent(uid);
+    // Remove from local list
+    immersionContent.value = immersionContent.value.filter(c => c.uid !== uid);
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to delete immersion content';
+  } finally {
+    deleting.value = false;
+  }
+}
+
+onMounted(() => {
+  loadImmersionContent();
+});
+</script>
