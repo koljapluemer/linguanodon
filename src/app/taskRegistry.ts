@@ -1,14 +1,14 @@
 import type { Component } from 'vue';
 
 // Import all task widgets
-import RenderTaskForAddingPronunciation from '@/widgets/task-for-adding-pronunciation/RenderTaskForAddingPronunciation.vue';
-import RenderAddVocabToResource from '@/widgets/task-add-vocab-to-resource/RenderAddVocabToResource.vue';
-import RenderAddFactCardsToResource from '@/widgets/task-add-fact-cards-to-resource/RenderAddFactCardsToResource.vue';
-import TaskAddSubGoals from '@/widgets/TaskAddSubGoals.vue';
-import TaskAddVocabToGoal from '@/widgets/TaskAddVocabToGoal.vue';
-import TaskVocabTryToRemember from '@/widgets/TaskVocabTryToRemember.vue';
-import TaskVocabReveal from '@/widgets/TaskVocabReveal.vue';
-import TaskVocabChooseFromOptions from '@/widgets/TaskVocabChooseFromOptions.vue';
+import RenderTaskForAddingPronunciation from '@/widgets/task-vocab-add-pronunciation/RenderTaskForAddingPronunciation.vue';
+import RenderAddVocabToResource from '@/widgets/task-resource-add-vocab/RenderAddVocabToResource.vue';
+import RenderAddFactCardsToResource from '@/widgets/task-resource-add-fact-cards/RenderAddFactCardsToResource.vue';
+import TaskAddSubGoals from '@/widgets/task-goal-add-sub-goals/TaskAddSubGoals.vue';
+import TaskAddVocabToGoal from '@/widgets/task-goal-add-vocab/TaskAddVocabToGoal.vue';
+import TaskVocabTryToRemember from '@/widgets/task-vocab-try-to-remember/TaskVocabTryToRemember.vue';
+import TaskVocabReveal from '@/widgets/task-vocab-reveal/TaskVocabReveal.vue';
+import TaskVocabChooseFromOptions from '@/widgets/task-vocab-single-choice/TaskVocabChooseFromOptions.vue';
 
 export interface TaskRegistryEntry {
   component: Component;
