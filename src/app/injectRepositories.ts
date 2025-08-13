@@ -7,6 +7,7 @@ import { ImmersionContentRepo } from '@/entities/immersion-content/ImmersionCont
 import { TaskRepo } from '@/entities/tasks/TaskRepo';
 import { LanguageRepo } from '@/entities/languages/LanguageRepo';
 import { taskRegistry, TASK_REGISTRY_INJECTION_KEY } from './taskRegistry';
+import { initializeUpdateVocabTasksService } from '@/features/vocab-update-tasks/updateVocabTasksService';
 
 export function setupRepositories() {
   // Create repository instances
@@ -33,6 +34,9 @@ export function setupRepositories() {
 
 export function provideRepositories(app: { provide: (key: string | symbol, value: unknown) => void }) {
   const { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo } = setupRepositories();
+  
+  // Initialize the vocab tasks service
+  initializeUpdateVocabTasksService(vocabRepo, taskRepo);
   
   app.provide('vocabRepo', vocabRepo);
   app.provide('goalRepo', goalRepo);

@@ -2,6 +2,7 @@
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
 import { RemoteImmersionContentService } from '@/features/download-immersion-content-sets/RemoteImmersionContentService';
+import { updateVocabTasks } from '@/features/vocab-update-tasks/updateVocabTasksService';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
@@ -125,6 +126,9 @@ async function downloadImmersionContentSet(name: string) {
             
             const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
             neededVocabUids.push(savedVocab.uid);
+            
+            // Generate tasks for the new vocab
+            await updateVocabTasks(savedVocab.uid);
           }
         }
       }
