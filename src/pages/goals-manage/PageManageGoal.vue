@@ -122,22 +122,12 @@ async function loadGoal() {
     goal.value = {
       uid: '',
       title: '',
-      prompt: '',
-      taskType: 'complete-goal',
-      isUserCreated: true,
-      lastDownloadedAt: null,
       subGoals: [],
-      milestones: [],
-      coreTasks: [],
+      tasks: [],
       vocab: [],
       examples: [],
       notes: [],
-      factCards: [],
-      evaluateCorrectnessAndConfidenceAfterDoing: false,
-      decideWhetherToDoAgainAfterDoing: true,
-      isActive: true,
-      taskSize: 'big',
-      associatedUnits: []
+      factCards: []
     };
   }
   

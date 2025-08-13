@@ -53,10 +53,17 @@ if (!exampleRepo) {
 
 const exampleItems = ref<ExampleData[]>([]);
 const editingIndex = ref<number | null>(null);
-const newExample = ref<Partial<ExampleData>>({
+const newExample = ref<Omit<ExampleData, 'uid' | 'progress' | 'tasks'>>({
   language: '',
   content: '',
-  translation: ''
+  translation: '',
+  situation: '',
+  associatedVocab: [],
+  notes: [],
+  links: [],
+  prio: 1,
+  isUserCreated: true,
+  lastDownloadedAt: null
 });
 
 // Load example items when exampleIds change
@@ -145,7 +152,14 @@ function resetNewExample() {
   newExample.value = {
     language: props.defaultLanguage || '',
     content: '',
-    translation: ''
+    translation: '',
+    situation: '',
+    associatedVocab: [],
+    notes: [],
+    links: [],
+    prio: 1,
+    isUserCreated: true,
+    lastDownloadedAt: null
   };
 }
 </script>

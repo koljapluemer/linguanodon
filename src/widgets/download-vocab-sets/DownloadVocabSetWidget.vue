@@ -85,7 +85,7 @@ async function downloadVocabSet(name: string) {
             : [];
 
           // Create new translation with note UIDs
-          const translationData: Partial<TranslationData> = {
+          const translationData: Omit<TranslationData, 'uid'> = {
             content: remoteTranslation.content,
             notes: translationNoteUids
           };
@@ -110,14 +110,14 @@ async function downloadVocabSet(name: string) {
         });
       } else {
         // 4. Create complete VocabData (except uid which saveVocab handles)
-        const vocabData: Partial<VocabData> = {
+        const vocabData: Omit<VocabData, 'uid' | 'progress' | 'tasks'> = {
           language: remoteVocab.language,
           content: remoteVocab.content,
           priority: remoteVocab.priority,
+          doNotPractice: remoteVocab.doNotPractice,
           notes: vocabNoteUids,
           translations: translationUids,
-          links: remoteVocab.links || [],
-          tasks: []
+          links: remoteVocab.links || []
         };
         
         const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);

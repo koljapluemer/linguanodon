@@ -25,25 +25,19 @@ export class ResourceRepo implements ResourceRepoContract {
     return allResources[randomIndex];
   }
 
-  async saveResource(resource: Partial<ResourceData>): Promise<ResourceData> {
-    // Validate required fields
-    if (!resource.title || !resource.language) {
-      throw new Error('Title and language are required');
-    }
-
+  async saveResource(resource: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'>): Promise<ResourceData> {
     const resourceData: ResourceData = {
-      uid: resource.uid || crypto.randomUUID(),
+      uid: crypto.randomUUID(),
       language: resource.language,
       title: resource.title,
       content: resource.content,
       link: resource.link,
-      priority: resource.priority || 0,
-      vocab: resource.vocab || [],
-      examples: resource.examples || [],
-      factCards: resource.factCards || [],
-      notes: resource.notes || [],
-      tasks: resource.tasks || [],
-      lastShownAt: resource.lastShownAt
+      priority: resource.priority,
+      vocab: resource.vocab,
+      examples: resource.examples,
+      factCards: resource.factCards,
+      notes: resource.notes,
+      tasks: []
     };
 
     console.log('ResourceRepo: Attempting to save resource:', resourceData.title);

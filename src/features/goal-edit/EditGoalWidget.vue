@@ -17,18 +17,6 @@
       </template>
     </FormField>
 
-    <FormField label="Additional Details (Optional)">
-      <template #default="{ inputId }">
-        <textarea
-          :id="inputId"
-          v-model="goalPrompt"
-          placeholder="Add any additional context or details about your goal..."
-          class="textarea textarea-bordered w-full"
-          rows="3"
-          @blur="saveGoal"
-        />
-      </template>
-    </FormField>
 
     <div v-if="saving" class="text-sm text-gray-500">
       Saving...
@@ -54,12 +42,10 @@ const emit = defineEmits<{
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 
 const goalTitle = ref(props.goal.title);
-const goalPrompt = ref(props.goal.prompt || '');
 const saving = ref(false);
 
 watch(() => props.goal, (newGoal) => {
   goalTitle.value = newGoal.title;
-  goalPrompt.value = newGoal.prompt || '';
 }, { immediate: true });
 
 async function saveGoal() {
@@ -73,27 +59,17 @@ async function saveGoal() {
     if (props.goal.uid) {
       // Update existing goal
       updatedGoal = await goalRepo.update(props.goal.uid, {
-        title: goalTitle.value.trim(),
-        prompt: goalPrompt.value.trim() || goalTitle.value.trim()
+        title: goalTitle.value.trim()
       });
     } else {
       // Create new goal
       updatedGoal = await goalRepo.create({
-        uid: crypto.randomUUID(),
         title: goalTitle.value.trim(),
-        prompt: goalPrompt.value.trim() || goalTitle.value.trim(),
-        taskType: 'complete-goal',
         subGoals: [],
-        milestones: [],
         vocab: [],
         examples: [],
         notes: [],
-        factCards: [],
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
-        decideWhetherToDoAgainAfterDoing: true,
-        isActive: true,
-        taskSize: 'big',
-        associatedUnits: []
+        factCards: []
       });
     }
     

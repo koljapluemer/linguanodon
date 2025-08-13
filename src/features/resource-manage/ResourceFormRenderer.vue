@@ -185,11 +185,15 @@ async function handleSave() {
   try {
     if (isNew.value) {
       // Create new resource
-      const resourceData: Partial<ResourceData> = {
+      const resourceData: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'> = {
         title: formData.value.title.trim(),
         language: formData.value.language.trim(),
         priority: formData.value.priority,
-        content: formData.value.content.trim() || undefined
+        content: formData.value.content.trim() || undefined,
+        vocab: [],
+        examples: [],
+        factCards: [],
+        notes: []
       };
 
       // Add link if URL is provided

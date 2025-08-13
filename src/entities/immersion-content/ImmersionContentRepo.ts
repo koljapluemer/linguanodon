@@ -25,25 +25,19 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
     return allImmersionContent[randomIndex];
   }
 
-  async saveImmersionContent(immersionContent: Partial<ImmersionContentData>): Promise<ImmersionContentData> {
-    // Validate required fields
-    if (!immersionContent.title || !immersionContent.language) {
-      throw new Error('Title and language are required');
-    }
-
+  async saveImmersionContent(immersionContent: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'>): Promise<ImmersionContentData> {
     const immersionContentData: ImmersionContentData = {
-      uid: immersionContent.uid || crypto.randomUUID(),
+      uid: crypto.randomUUID(),
       language: immersionContent.language,
       title: immersionContent.title,
       content: immersionContent.content,
       link: immersionContent.link,
-      priority: immersionContent.priority || 0,
-      neededVocab: immersionContent.neededVocab || [],
-      notes: immersionContent.notes || [],
-      extractedVocab: immersionContent.extractedVocab || [],
-      extractedFactCards: immersionContent.extractedFactCards || [],
-      tasks: immersionContent.tasks || [],
-      lastShownAt: immersionContent.lastShownAt
+      priority: immersionContent.priority,
+      neededVocab: immersionContent.neededVocab,
+      notes: immersionContent.notes,
+      extractedVocab: immersionContent.extractedVocab,
+      extractedFactCards: immersionContent.extractedFactCards,
+      tasks: []
     };
 
     console.log('ImmersionContentRepo: Attempting to save immersion content:', immersionContentData.title);

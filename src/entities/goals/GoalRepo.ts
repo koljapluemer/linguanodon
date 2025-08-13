@@ -1,7 +1,6 @@
 import { goalStorage } from './GoalStorage';
 import type { GoalData } from './GoalData';
 import type { GoalRepoContract } from './GoalRepoContract';
-import type { TaskData } from '@/entities/tasks/TaskData';
 
 export class GoalRepo implements GoalRepoContract {
   async getAll(): Promise<GoalData[]> {
@@ -12,71 +11,18 @@ export class GoalRepo implements GoalRepoContract {
     return await goalStorage.goals.get(id);
   }
 
-  async create(goalData: Omit<GoalData, 'id' | 'isUserCreated' | 'lastDownloadedAt' | 'coreTasks'>): Promise<GoalData> {
-    const id = crypto.randomUUID();
-    
-    // Generate core tasks when goal is created
-    const coreTasks: TaskData[] = [
-      {
-        uid: crypto.randomUUID(),
-        taskType: 'add-sub-goals',
-        title: 'Add Sub-Goals',
-        prompt: 'Add smaller goals that help you achieve this larger goal',
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
-        decideWhetherToDoAgainAfterDoing: true,
-        isActive: true,
-        taskSize: 'big',
-        associatedUnits: []
-      },
-      {
-        uid: crypto.randomUUID(),
-        taskType: 'add-vocab-to-goal',
-        title: 'Add Vocabulary',
-        prompt: 'Add vocabulary that you need to learn for this goal',
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
-        decideWhetherToDoAgainAfterDoing: true,
-        isActive: true,
-        taskSize: 'big',
-        associatedUnits: []
-      },
-      {
-        uid: crypto.randomUUID(),
-        taskType: 'add-examples-to-goal',
-        title: 'Add Examples',
-        prompt: 'Add example sentences or phrases related to this goal',
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
-        decideWhetherToDoAgainAfterDoing: true,
-        isActive: true,
-        taskSize: 'big',
-        associatedUnits: []
-      },
-      {
-        uid: crypto.randomUUID(),
-        taskType: 'add-milestones',
-        title: 'Add Milestones',
-        prompt: 'Add specific milestones to track your progress toward this goal',
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
-        decideWhetherToDoAgainAfterDoing: true,
-        isActive: true,
-        taskSize: 'medium',
-        associatedUnits: []
-      }
-    ];
-
+  async create(goalData: Omit<GoalData, 'uid' | 'tasks'>): Promise<GoalData> {
     const goal: GoalData = {
       ...goalData,
-      uid: id,
-      isUserCreated: true,
-      lastDownloadedAt: null,
-      coreTasks,
-      taskType: 'complete-goal'
+      uid: crypto.randomUUID(),
+      tasks: [] // Tasks will be created by a feature layer
     };
 
     await goalStorage.goals.add(goal);
     return goal;
   }
 
-  async update(id: string, updates: Partial<GoalData>): Promise<GoalData> {
+  async update(id: string, updates: Omit<Partial<GoalData>, 'uid' | 'tasks'>): Promise<GoalData> {
     await goalStorage.goals.update(id, updates);
     const updated = await this.getById(id);
     if (!updated) {

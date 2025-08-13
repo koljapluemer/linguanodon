@@ -29,22 +29,22 @@ export class FactCardRepo implements FactCardRepoContract {
     return factCard ? this.ensureFactCardFields(factCard) : undefined;
   }
 
-  async saveFactCard(factCard: Partial<FactCardData>): Promise<FactCardData> {
+  async saveFactCard(factCard: Omit<FactCardData, 'uid' | 'progress'>): Promise<FactCardData> {
     const newFactCard: FactCardData = {
-      uid: factCard.uid || crypto.randomUUID(),
-      language: factCard.language || '',
-      front: factCard.front || '',
-      back: factCard.back || '',
-      notes: factCard.notes || [],
-      priority: factCard.priority ?? 1,
+      uid: crypto.randomUUID(),
+      language: factCard.language,
+      front: factCard.front,
+      back: factCard.back,
+      notes: factCard.notes,
+      priority: factCard.priority,
       doNotPractice: factCard.doNotPractice,
-      progress: factCard.progress || {
+      progress: {
         ...createEmptyCard(),
         streak: 0,
         level: -1
       },
-      isUserCreated: factCard.isUserCreated ?? true,
-      lastDownloadedAt: factCard.lastDownloadedAt ?? null
+      isUserCreated: factCard.isUserCreated,
+      lastDownloadedAt: factCard.lastDownloadedAt
     };
 
     await this.storage.add(newFactCard);

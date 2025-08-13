@@ -23,10 +23,10 @@ export class NoteRepo implements NoteRepoContract {
     return notes.map(note => this.ensureNoteFields(note));
   }
 
-  async saveNote(note: Partial<NoteData>): Promise<NoteData> {
+  async saveNote(note: Omit<NoteData, 'uid'>): Promise<NoteData> {
     const newNote: NoteData = {
-      uid: note.uid || crypto.randomUUID(),
-      content: note.content || '',
+      uid: crypto.randomUUID(),
+      content: note.content,
       showBeforeExercise: note.showBeforeExercise ?? false
     };
 
@@ -50,8 +50,7 @@ export class NoteRepo implements NoteRepoContract {
     const noteUids: string[] = [];
     
     for (const remoteNote of remoteNotes) {
-      const noteData: Partial<NoteData> = {
-        uid: crypto.randomUUID(),
+      const noteData: Omit<NoteData, 'uid'> = {
         content: remoteNote.content,
         showBeforeExercise: remoteNote.showBeforeExercise
       };

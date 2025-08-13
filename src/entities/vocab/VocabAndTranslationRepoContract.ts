@@ -20,7 +20,7 @@ export interface VocabAndTranslationRepoContract {
   getTotalVocabCount(searchQuery?: string): Promise<number>;
   
   // CRUD operations
-  saveVocab(vocab: Partial<VocabData>): Promise<VocabData>;
+  saveVocab(vocab: Omit<VocabData, 'uid' | 'progress' | 'tasks'>): Promise<VocabData>;
   updateVocab(vocab: VocabData): Promise<void>;
   deleteVocab(id: string): Promise<void>;
   
@@ -35,7 +35,7 @@ export interface VocabAndTranslationRepoContract {
   // Translation operations
   getTranslationsByIds(ids: string[]): Promise<TranslationData[]>;
   getTranslationByContent(content: string): Promise<TranslationData | undefined>;
-  saveTranslation(translation: Partial<TranslationData>): Promise<TranslationData>;
+  saveTranslation(translation: Omit<TranslationData, 'uid'>): Promise<TranslationData>;
   updateTranslation(translation: TranslationData): Promise<void>;
   deleteTranslations(ids: string[]): Promise<void>;
   

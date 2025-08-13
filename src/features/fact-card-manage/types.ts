@@ -31,25 +31,25 @@ export function factCardDataToFormData(factCard: FactCardData, notes: NoteData[]
   };
 }
 
-export function formDataToFactCardData(formData: FactCardFormData, existingFactCard?: FactCardData): Partial<FactCardData> {
-  const baseData: Partial<FactCardData> = {
+export function formDataToFactCardData(formData: FactCardFormData, existingFactCard?: FactCardData): Omit<FactCardData, 'progress'> | FactCardData {
+  const baseData: Omit<FactCardData, 'progress'> = {
+    uid: formData.uid || crypto.randomUUID(),
     language: formData.language,
     front: formData.front,
     back: formData.back,
     notes: formData.notes.map(note => note.uid),
-    priority: formData.priority,
-    doNotPractice: formData.doNotPractice
+    priority: formData.priority ?? 1,
+    doNotPractice: formData.doNotPractice,
+    isUserCreated: existingFactCard?.isUserCreated ?? true,
+    lastDownloadedAt: existingFactCard?.lastDownloadedAt ?? null
   };
 
-  if (formData.uid) {
-    baseData.uid = formData.uid;
-  }
-
-  // Preserve existing data that's not in the form
+  // For updates, include existing progress
   if (existingFactCard) {
-    baseData.progress = existingFactCard.progress;
-    baseData.isUserCreated = existingFactCard.isUserCreated;
-    baseData.lastDownloadedAt = existingFactCard.lastDownloadedAt;
+    return {
+      ...baseData,
+      progress: existingFactCard.progress
+    };
   }
 
   return baseData;

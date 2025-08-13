@@ -53,10 +53,14 @@ if (!factCardRepo) {
 
 const factCardItems = ref<FactCardData[]>([]);
 const editingIndex = ref<number | null>(null);
-const newFactCard = ref<Partial<FactCardData>>({
+const newFactCard = ref<Omit<FactCardData, 'uid' | 'progress'>>({
   language: '',
   front: '',
-  back: ''
+  back: '',
+  notes: [],
+  priority: 1,
+  isUserCreated: true,
+  lastDownloadedAt: null
 });
 
 // Load fact card items when factCardIds change
@@ -145,7 +149,11 @@ function resetNewFactCard() {
   newFactCard.value = {
     language: props.defaultLanguage || '',
     front: '',
-    back: ''
+    back: '',
+    notes: [],
+    priority: 1,
+    isUserCreated: true,
+    lastDownloadedAt: null
   };
 }
 </script>

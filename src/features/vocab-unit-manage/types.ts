@@ -37,8 +37,9 @@ export function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = [], tr
   };
 }
 
-export function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData): Partial<VocabData> {
-  const baseData: Partial<VocabData> = {
+export function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData): Omit<VocabData, 'progress' | 'tasks'> | VocabData {
+  const baseData: Omit<VocabData, 'progress' | 'tasks'> = {
+    uid: formData.id || crypto.randomUUID(),
     language: formData.language,
     content: formData.content,
     translations: formData.translations.map(translation => translation.uid),
@@ -48,14 +49,13 @@ export function formDataToVocabData(formData: VocabFormData, existingVocab?: Voc
     links: formData.links
   };
 
-  if (formData.id) {
-    baseData.uid = formData.id;
-  }
-
-  // Preserve existing data that's not in the form
+  // For updates, include existing progress and tasks
   if (existingVocab) {
-    baseData.tasks = existingVocab.tasks;
-    baseData.progress = existingVocab.progress;
+    return {
+      ...baseData,
+      tasks: existingVocab.tasks,
+      progress: existingVocab.progress
+    };
   }
 
   return baseData;

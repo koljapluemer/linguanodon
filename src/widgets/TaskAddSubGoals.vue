@@ -5,7 +5,6 @@
       <div class="card bg-primary/10 border border-primary/20">
         <div class="card-body">
           <h2 class="card-title text-primary">{{ goal.title }}</h2>
-          <p v-if="goal.prompt" class="text-base-content/70">{{ goal.prompt }}</p>
           <div class="card-actions justify-end mt-4">
             <button class="btn btn-primary btn-sm" @click="handleTaskCompleted">
               Done Adding Sub-Goals
@@ -66,18 +65,9 @@ function handleGoalUpdate(updatedGoal: GoalData) {
 async function handleTaskCompleted() {
   if (!goal.value) return;
   
-  // Mark the core task as completed - convert to plain object
-  const updatedCoreTasks = goal.value.coreTasks.map(task => 
-    task.taskType === 'add-sub-goals' 
-      ? { ...task, wantToDoAgain: false } 
-      : task
-  );
-  
-  const updatedGoal = await goalRepo.update(goal.value.uid, {
-    coreTasks: JSON.parse(JSON.stringify(updatedCoreTasks))
-  });
-  
-  goal.value = updatedGoal;
+  // In the new structure, task completion should be handled by a feature layer
+  // that coordinates between TaskRepo and GoalRepo
+  // For now, just emit completion - the task management will be handled elsewhere
   emit('task-completed');
 }
 

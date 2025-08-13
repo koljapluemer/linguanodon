@@ -63,15 +63,9 @@ const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const goal = ref<GoalData | null>(null);
 
 const currentTask = computed<Task | null>(() => {
-  if (!goal.value) return null;
-  const coreTask = goal.value.coreTasks.find(t => t.taskType === 'add-vocab-to-goal');
-  if (!coreTask) return null;
-  
-  return {
-    ...coreTask,
-    mayBeConsideredDone: false,
-    isDone: false
-  } as Task;
+  // TODO: Task management moved to feature layer
+  // Core tasks are no longer embedded in goals
+  return null;
 });
 
 // Use the task state composable

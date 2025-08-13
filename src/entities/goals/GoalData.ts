@@ -1,12 +1,10 @@
-import type { LocalObject } from "@/shared/LocalObject";
-import type { TaskData } from "@/entities/tasks/TaskData";
-
-export interface GoalData extends LocalObject, TaskData {
+export interface GoalData {
   uid: string;
+  title: string;
+  doNotPractice?: boolean;
   subGoals: string[]; // array of uids of other goals
   parentGoal?: string; // uid of parent goal (each goal has only one parent)
-  milestones: TaskData[];
-  coreTasks: TaskData[]; // auto-generated when goal is created
+  tasks: string[]; // uids of TaskData
   vocab: string[]; // uids of Vocab
   examples: string[]; // uids of Examples
   factCards: string[];

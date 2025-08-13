@@ -63,9 +63,7 @@ async function downloadResourceSet(name: string) {
     for (const remoteResource of resourceSet.resources) {
       console.log(`Saving resource: ${remoteResource.title}`);
       
-      const resourceUid = crypto.randomUUID();
-      const resourceData: Partial<ResourceData> = {
-        uid: resourceUid,
+      const resourceData: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'> = {
         language: remoteResource.language,
         priority: remoteResource.priority,
         title: remoteResource.title,
@@ -74,8 +72,7 @@ async function downloadResourceSet(name: string) {
         vocab: [],
         examples: [],
         factCards: [],
-        notes: [],
-        tasks: []
+        notes: []
       };
       
       try {

@@ -185,11 +185,15 @@ async function handleSave() {
   try {
     if (isNew.value) {
       // Create new immersion content
-      const contentData: Partial<ImmersionContentData> = {
+      const contentData: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'> = {
         title: formData.value.title.trim(),
         language: formData.value.language.trim(),
         priority: formData.value.priority,
-        content: formData.value.content.trim() || undefined
+        content: formData.value.content.trim() || undefined,
+        neededVocab: [],
+        notes: [],
+        extractedVocab: [],
+        extractedFactCards: []
       };
 
       // Add link if URL is provided

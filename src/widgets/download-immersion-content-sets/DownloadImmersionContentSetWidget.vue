@@ -93,7 +93,7 @@ async function downloadImmersionContentSet(name: string) {
                 : [];
 
               // Create new translation with note UIDs
-              const translationData: Partial<TranslationData> = {
+              const translationData: Omit<TranslationData, 'uid'> = {
                 content: remoteTranslation.content,
                 notes: translationNoteUids
               };
@@ -113,14 +113,14 @@ async function downloadImmersionContentSet(name: string) {
             neededVocabUids.push(existingVocab.uid);
           } else {
             // Create new vocab
-            const vocabData: Partial<VocabData> = {
+            const vocabData: Omit<VocabData, 'uid' | 'progress' | 'tasks'> = {
               language: remoteVocab.language,
               priority: remoteVocab.priority,
               content: remoteVocab.content,
+              doNotPractice: remoteVocab.doNotPractice,
               translations: translationUids,
               links: remoteVocab.links || [],
-              notes: vocabNoteUids,
-              tasks: []
+              notes: vocabNoteUids
             };
             
             const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
@@ -130,9 +130,7 @@ async function downloadImmersionContentSet(name: string) {
       }
 
       // 3. Create the immersion content
-      const immersionContentUid = crypto.randomUUID();
-      const immersionContentData: Partial<ImmersionContentData> = {
-        uid: immersionContentUid,
+      const immersionContentData: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'> = {
         language: remoteImmersionContent.language,
         priority: remoteImmersionContent.priority,
         title: remoteImmersionContent.title,
@@ -141,8 +139,7 @@ async function downloadImmersionContentSet(name: string) {
         neededVocab: neededVocabUids,
         notes: noteUids,
         extractedVocab: [],
-        extractedFactCards: [],
-        tasks: []
+        extractedFactCards: []
       };
       
       try {

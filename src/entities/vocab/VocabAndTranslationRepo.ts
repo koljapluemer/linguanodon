@@ -224,16 +224,18 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return filteredVocab.length;
   }
 
-  async saveVocab(vocab: Partial<VocabData>): Promise<VocabData> {
+  async saveVocab(vocab: Omit<VocabData, 'uid' | 'progress' | 'tasks'>): Promise<VocabData> {
     const newVocab: VocabData = {
-      uid: vocab.uid || crypto.randomUUID(),
-      language: vocab.language || '',
-      content: vocab.content || '',
-      notes: vocab.notes || [],
-      translations: vocab.translations || [],
-      links: vocab.links || [],
-      tasks: vocab.tasks || [],
-      progress: vocab.progress || {
+      uid: crypto.randomUUID(),
+      language: vocab.language,
+      content: vocab.content,
+      priority: vocab.priority,
+      doNotPractice: vocab.doNotPractice,
+      notes: vocab.notes,
+      translations: vocab.translations,
+      links: vocab.links,
+      tasks: [],
+      progress: {
         ...createEmptyCard(),
         streak: 0,
         level: -1
@@ -291,11 +293,11 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       .map(v => this.ensureVocabFields(v));
   }
 
-  async saveTranslation(translation: Partial<TranslationData>): Promise<TranslationData> {
+  async saveTranslation(translation: Omit<TranslationData, 'uid'>): Promise<TranslationData> {
     const translationToSave: TranslationData = {
-      uid: translation.uid || crypto.randomUUID(),
-      content: translation.content || '',
-      notes: translation.notes || []
+      uid: crypto.randomUUID(),
+      content: translation.content,
+      notes: translation.notes
     };
     
     return await this.translationStorage.save(translationToSave);

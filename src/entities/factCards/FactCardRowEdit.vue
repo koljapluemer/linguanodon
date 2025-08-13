@@ -107,7 +107,7 @@ import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
-  factCard: Partial<FactCardData>;
+  factCard: Omit<FactCardData, 'uid' | 'progress'> | FactCardData;
   isNew?: boolean;
   defaultLanguage?: string;
 }>();
@@ -118,15 +118,15 @@ const emit = defineEmits<{
 }>();
 
 const localFactCard = ref({ 
-  language: props.factCard.language || (props.isNew ? props.defaultLanguage : '') || '', 
-  ...props.factCard 
+  ...props.factCard,
+  language: props.factCard.language || (props.isNew ? props.defaultLanguage : '') || ''
 } as FactCardData);
 
 // Watch for changes in factCard prop
 watch(() => props.factCard, (newFactCard) => {
   localFactCard.value = { 
-    language: newFactCard.language || (props.isNew ? props.defaultLanguage : '') || '', 
-    ...newFactCard 
+    ...newFactCard,
+    language: newFactCard.language || (props.isNew ? props.defaultLanguage : '') || '' 
   } as FactCardData;
 }, { deep: true });
 

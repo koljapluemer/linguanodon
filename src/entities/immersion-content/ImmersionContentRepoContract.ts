@@ -4,7 +4,7 @@ export interface ImmersionContentRepoContract {
   getAllImmersionContent(): Promise<ImmersionContentData[]>;
   getImmersionContentById(uid: string): Promise<ImmersionContentData | undefined>;
   getRandomDueImmersionContent(): Promise<ImmersionContentData | null>;
-  saveImmersionContent(immersionContent: Partial<ImmersionContentData>): Promise<ImmersionContentData>;
+  saveImmersionContent(immersionContent: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'>): Promise<ImmersionContentData>;
   updateImmersionContent(immersionContent: ImmersionContentData): Promise<void>;
   deleteImmersionContent(uid: string): Promise<void>;
   disconnectNeededVocabFromImmersionContent(immersionContentUid: string, vocabUid: string): Promise<void>;

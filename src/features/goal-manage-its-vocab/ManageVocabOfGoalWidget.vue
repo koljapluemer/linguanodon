@@ -152,8 +152,7 @@ async function addVocab() {
     content: newVocab.value.content.trim() || undefined,
     translations: [], // Empty for now
     notes: [],
-    links: [],
-    tasks: []
+    links: []
   });
   
   // Update goal to include this vocab
