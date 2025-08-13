@@ -1,19 +1,9 @@
 <template>
-  <div class="space-y-6">
-    <h3 class="text-lg font-semibold">Needed Vocabulary</h3>
-    <VocabGroupForm
-      :vocab-ids="vocabIds"
-      :default-language="defaultLanguage"
-      :allow-edit-on-click="true"
-      :show-delete-button="showDeleteButton ?? true"
-      :show-disconnect-button="showDisconnectButton ?? true"
-      :allow-jumping-to-vocab-page="allowJumpingToVocabPage ?? false"
-      :allow-connecting-existing="allowConnectingExisting ?? false"
-      :allow-adding-new="allowAddingNew ?? true"
-      @update:vocab-ids="handleVocabUpdate"
-      @disconnect="handleVocabDisconnect"
-    />
-  </div>
+  <VocabGroupForm :vocab-ids="vocabIds" :default-language="defaultLanguage" :allow-edit-on-click="true"
+    :show-delete-button="showDeleteButton ?? true" :show-disconnect-button="showDisconnectButton ?? true"
+    :allow-jumping-to-vocab-page="allowJumpingToVocabPage ?? false"
+    :allow-connecting-existing="allowConnectingExisting ?? false" :allow-adding-new="allowAddingNew ?? true"
+    @update:vocab-ids="handleVocabUpdate" @disconnect="handleVocabDisconnect" />
 </template>
 
 <script setup lang="ts">
@@ -34,6 +24,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   taskMayNowBeConsideredDone: [];
   taskMayNowNotBeConsideredDone: [];
+  'update:needed-vocab-ids': [string[]];
 }>();
 
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
@@ -53,20 +44,21 @@ async function loadImmersionContent() {
     vocabIds.value = [...content.neededVocab];
     initialVocabIds.value = [...content.neededVocab];
     defaultLanguage.value = content.language;
+    emit('update:needed-vocab-ids', vocabIds.value);
   }
 }
 
 async function handleVocabUpdate(newVocabIds: string[]) {
   if (!immersionContentRepo) return;
-  
+
   // Check if vocab list has changed from initial state
   const vocabListChanged = JSON.stringify(newVocabIds.sort()) !== JSON.stringify(initialVocabIds.value.sort());
-  
+
   if (vocabListChanged && !hasVocabChanged.value) {
     hasVocabChanged.value = true;
     emit('taskMayNowBeConsideredDone');
   }
-  
+
   // Auto-save - update the immersion content with new vocab IDs
   const content = await immersionContentRepo.getImmersionContentById(props.immersionContentUid);
   if (content) {
@@ -76,6 +68,7 @@ async function handleVocabUpdate(newVocabIds: string[]) {
     };
     await immersionContentRepo.updateImmersionContent(updatedContent);
     vocabIds.value = newVocabIds;
+    emit('update:needed-vocab-ids', vocabIds.value);
   }
 }
 
@@ -85,14 +78,16 @@ async function handleVocabDisconnect(vocabUid: string) {
     await immersionContentRepo.disconnectNeededVocabFromImmersionContent(props.immersionContentUid, vocabUid);
     // Refresh the vocab list
     await loadImmersionContent();
-    
+
     // Check if vocab list has changed after disconnect
     const vocabListChanged = JSON.stringify(vocabIds.value.sort()) !== JSON.stringify(initialVocabIds.value.sort());
-    
+
     if (vocabListChanged && !hasVocabChanged.value) {
       hasVocabChanged.value = true;
       emit('taskMayNowBeConsideredDone');
     }
+
+    emit('update:needed-vocab-ids', vocabIds.value);
   } catch (error) {
     console.error('Failed to disconnect needed vocab:', error);
   }
