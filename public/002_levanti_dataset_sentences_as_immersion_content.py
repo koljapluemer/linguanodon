@@ -41,7 +41,7 @@ def convert_to_remote_immersion_content(sentence_data, index):
         "content": apc_sentence,
         "neededVocab": needed_vocab if needed_vocab else None,
         "notes": [{
-            "content": f"English: {eng_sentence}",
+            "content": f"Translation: {eng_sentence}",
             "showBeforeExercise": False
         }]
     }
