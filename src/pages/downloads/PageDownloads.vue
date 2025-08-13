@@ -25,6 +25,13 @@
       >
         Vocab Sets
       </a>
+      <a 
+        class="tab"
+        :class="{ 'tab-active': activeTab === 'immersion-content-sets' }"
+        @click="activeTab = 'immersion-content-sets'"
+      >
+        Immersion Content Sets
+      </a>
     </div>
 
     <div v-if="!selectedLanguage" class="text-center py-16 text-base-content/60">
@@ -39,6 +46,10 @@
     <div v-else-if="activeTab === 'vocab-sets'">
       <DownloadVocabSetWidget :selected-language="selectedLanguage" />
     </div>
+    
+    <div v-else-if="activeTab === 'immersion-content-sets'">
+      <DownloadImmersionContentSetWidget :selected-language="selectedLanguage" />
+    </div>
   </div>
 </template>
 
@@ -46,6 +57,7 @@
 import { ref, inject, onMounted } from 'vue';
 import RemoteResourceSetsWidget from '@/widgets/download-resource-sets/RemoteResourceSetsWidget.vue';
 import DownloadVocabSetWidget from '@/widgets/download-vocab-sets/DownloadVocabSetWidget.vue';
+import DownloadImmersionContentSetWidget from '@/widgets/download-immersion-content-sets/DownloadImmersionContentSetWidget.vue';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
 
