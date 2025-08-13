@@ -20,7 +20,7 @@ const error = ref<string | null>(null);
 const remoteImmersionContentService = new RemoteImmersionContentService();
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
-const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabAndTranslationRepo')!;
+const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
 
 async function loadImmersionContentSets() {
   if (!props.selectedLanguage) {
