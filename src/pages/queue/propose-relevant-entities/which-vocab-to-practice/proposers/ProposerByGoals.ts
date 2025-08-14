@@ -34,7 +34,9 @@ export class ProposerByGoals implements VocabProposerContract {
       // Get vocab from the selected goal
       const vocabPromises = selectedGoal.vocab.map(id => this.vocabRepo!.getVocabByUID(id));
       const vocabResults = await Promise.all(vocabPromises);
-      const goalVocab = vocabResults.filter((v): v is VocabData => v !== undefined);
+      const goalVocab = vocabResults
+        .filter((v): v is VocabData => v !== undefined)
+        .filter(vocab => !vocab.doNotPractice); // Exclude vocab marked as doNotPractice
 
       if (goalVocab.length === 0) {
         return [];
