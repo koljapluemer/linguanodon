@@ -8,6 +8,7 @@ import { TaskRepo } from '@/entities/tasks/TaskRepo';
 import { LanguageRepo } from '@/entities/languages/LanguageRepo';
 import { taskRegistry, TASK_REGISTRY_INJECTION_KEY } from './taskRegistry';
 import { initializeUpdateVocabTasksService } from '@/features/vocab-update-tasks/updateVocabTasksService';
+import { initializeUpdateGoalTasksService } from '@/features/goal-update-tasks/updateGoalTasksService';
 
 export function setupRepositories() {
   // Create repository instances
@@ -37,6 +38,9 @@ export function provideRepositories(app: { provide: (key: string | symbol, value
   
   // Initialize the vocab tasks service
   initializeUpdateVocabTasksService(vocabRepo, taskRepo);
+  
+  // Initialize the goal tasks service
+  initializeUpdateGoalTasksService(goalRepo, taskRepo);
   
   app.provide('vocabRepo', vocabRepo);
   app.provide('goalRepo', goalRepo);

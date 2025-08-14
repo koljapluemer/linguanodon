@@ -78,4 +78,11 @@ export class TaskStorage {
       task.associatedUnits.some(unit => unit.type === 'Vocab' && unit.uid === vocabUid)
     );
   }
+
+  async getTasksWithAssociatedGoal(goalUid: string): Promise<TaskData[]> {
+    const allTasks = await db.tasks.toArray();
+    return allTasks.filter(task => 
+      task.associatedUnits.some(unit => unit.type === 'Goal' && unit.uid === goalUid)
+    );
+  }
 }

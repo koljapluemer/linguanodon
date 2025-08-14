@@ -3,6 +3,7 @@ import type { Task } from '@/entities/tasks/Task';
 import type { useQueuePreloader } from './useQueuePreloader';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import { updateGoalTasks } from '@/features/goal-update-tasks/updateGoalTasksService';
 
 // State machine types
 export type QueueState = 
@@ -97,7 +98,7 @@ export function useQueueStateMachine(preloader: PreloaderInstance, vocabTaskCont
     const completedTask = state.value.task;
     const fromStatus = state.value.status;
     
-    // Check if this is a vocab-based task and update progress
+    // Check if this is a vocab-based or goal-based task and update progress
     if (completedTask.associatedUnits) {
       for (const unit of completedTask.associatedUnits) {
         if (unit.type === 'Vocab') {
@@ -111,6 +112,14 @@ export function useQueueStateMachine(preloader: PreloaderInstance, vocabTaskCont
             console.log(`Updated tasks for vocab: ${unit.uid}`);
           } catch (error) {
             console.error(`Failed to update progress for vocab ${unit.uid}:`, error);
+          }
+        } else if (unit.type === 'Goal') {
+          try {
+            // Update tasks for goal after completion
+            await updateGoalTasks(unit.uid);
+            console.log(`Updated tasks for goal: ${unit.uid}`);
+          } catch (error) {
+            console.error(`Failed to update tasks for goal ${unit.uid}:`, error);
           }
         }
       }

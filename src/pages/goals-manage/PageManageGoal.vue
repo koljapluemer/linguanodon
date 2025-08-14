@@ -61,6 +61,7 @@ import type { GoalData } from '@/entities/goals/GoalData';
 import EditGoalWidget from '@/features/goal-edit/EditGoalWidget.vue';
 import ManageSubGoalsWidget from '@/features/goal-manage-its-sub-goals/ManageSubGoalsWidget.vue';
 import ManageVocabOfGoalWidget from '@/features/goal-manage-its-vocab/ManageVocabOfGoalWidget.vue';
+import { updateGoalTasks } from '@/features/goal-update-tasks/updateGoalTasksService';
 
 const route = useRoute();
 const router = useRouter();
@@ -102,6 +103,15 @@ async function loadGoal() {
 
 async function handleGoalUpdate(updatedGoal: GoalData) {
   goal.value = updatedGoal;
+  
+  // Generate tasks for this goal (on creation or update)
+  if (updatedGoal.uid) {
+    try {
+      await updateGoalTasks(updatedGoal.uid);
+    } catch (error) {
+      console.error('Failed to update goal tasks:', error);
+    }
+  }
   
   // If this was a new goal creation, redirect to edit mode
   if (!isEditing.value && updatedGoal.uid) {

@@ -3,11 +3,11 @@ export interface GoalData {
   title: string;
   doNotPractice?: boolean;
   subGoals: string[]; // array of uids of other goals
-  parentGoal?: string; // uid of parent goal (each goal has only one parent)
   tasks: string[]; // uids of TaskData
   vocab: string[]; // uids of Vocab
-  factCards: string[];
-  notes: string[];
+  factCards: string[]; // uids of FactCardData
+  notes: string[]; // uids of NoteData
 
   prio?: number;
+  parentGoal?: string; // uid of parent goal (legacy field - to be removed)
 }

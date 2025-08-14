@@ -96,6 +96,26 @@ export function useQueuePreloader(
           }
         }
         
+        // Step 1.5: Add 1 goal-based task per batch (as per requirement)
+        try {
+          const goals = await goalRepo.getAll();
+          const eligibleGoals = goals.filter(goal => !goal.doNotPractice);
+          
+          if (eligibleGoals.length > 0) {
+            // Pick a random goal
+            const randomGoal = eligibleGoals[Math.floor(Math.random() * eligibleGoals.length)];
+            const goalTasks = await taskRepo.getTasksByGoalId(randomGoal.uid);
+            const activeGoalTasks = goalTasks.filter(task => task.isActive);
+            
+            if (activeGoalTasks.length > 0) {
+              // Add the first active goal task
+              batch.push(taskDataToTask(activeGoalTasks[0]));
+            }
+          }
+        } catch (error) {
+          console.error('Error loading goal tasks:', error);
+        }
+        
         // Step 2: Fill remaining slots with vocab-based tasks
         const remainingSlots = Math.max(0, 20 - batch.length);
         if (remainingSlots > 0) {
