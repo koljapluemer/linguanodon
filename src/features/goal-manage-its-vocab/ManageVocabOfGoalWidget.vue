@@ -36,7 +36,9 @@
 
     <div class="divider">Add New Vocabulary</div>
 
-    <FormFieldset legend="New Vocabulary Entry" layout="horizontal">
+    <div class="space-y-4">
+      <h3 class="text-md font-semibold">New Vocabulary Entry</h3>
+      <div class="flex flex-wrap gap-4">
       <FormField label="Language" size="sm">
         <template #default="{ inputId }">
           <LanguageDropdown
@@ -73,7 +75,8 @@
           />
         </template>
       </FormField>
-    </FormFieldset>
+      </div>
+    </div>
 
     <div class="flex justify-end">
       <button
@@ -96,7 +99,6 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{

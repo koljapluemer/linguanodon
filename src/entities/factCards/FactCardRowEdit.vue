@@ -1,7 +1,8 @@
 <template>
   <div class="card bg-base-100 border-2 border-dashed border-base-300">
     <div class="card-body p-4">
-      <FormFieldset legend="Fact Card Details">
+      <div class="space-y-4">
+        <h3 class="text-md font-semibold">Fact Card Details</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Language -->
           <FormField label="Language" required>
@@ -77,7 +78,7 @@
             </template>
           </FormField>
         </div>
-      </FormFieldset>
+      </div>
 
       <div class="flex justify-end gap-2 mt-4">
         <button
@@ -103,7 +104,6 @@ import { ref, computed, watch } from 'vue';
 import type { FactCardData } from './FactCardData';
 import { createEmptyCard } from 'ts-fsrs';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{

@@ -1,5 +1,7 @@
 <template>
-  <FormFieldset legend="Note" layout="horizontal">
+  <div class="space-y-4">
+    <h4 class="text-md font-medium">Note</h4>
+    <div class="flex flex-wrap gap-4">
     <FormField label="Content" full-width>
       <template #default="{ inputId }">
         <textarea
@@ -39,13 +41,13 @@
         <X class="w-4 h-4" />
       </button>
     </div>
-  </FormFieldset>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
 import type { NoteData } from './NoteData';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{

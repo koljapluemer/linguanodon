@@ -4,7 +4,6 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import ElementBigText from '@/shared/ui/ElementBigText.vue';
 import ElementInstruction from '@/shared/ui/ElementInstruction.vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 interface Props {
@@ -72,7 +71,8 @@ const handleSkip = () => {
         </div>
 
         <!-- Pronunciation input -->
-        <FormFieldset legend="Add Pronunciation">
+        <div class="space-y-6">
+          <h3 class="text-lg font-semibold">Add Pronunciation</h3>
           <FormField label="Pronunciation">
             <template #default="{ inputId, inputClassString }">
               <input 
@@ -85,7 +85,7 @@ const handleSkip = () => {
               />
             </template>
           </FormField>
-        </FormFieldset>
+        </div>
       </div>
     </div>
 

@@ -3,7 +3,6 @@ import { ref, onMounted, computed, inject } from 'vue';
 import { Languages, X } from 'lucide-vue-next';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 import isoLangs from '@/entities/languages/isoLangs.json';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
@@ -121,7 +120,8 @@ function hideDropdown() {
       <div v-if="error" class="alert alert-error mb-4">{{ error }}</div>
 
       <!-- Target Languages Card -->
-      <FormFieldset legend="Target Languages">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Target Languages</h2>
         <p class="text-base-content/70 text-sm mb-4">
           Languages you want to learn. You can temporarily disable languages or remove them completely.
         </p>
@@ -196,7 +196,7 @@ function hideDropdown() {
             </div>
           </template>
         </FormField>
-      </FormFieldset>
+      </div>
     </div>
   </div>
 </template>

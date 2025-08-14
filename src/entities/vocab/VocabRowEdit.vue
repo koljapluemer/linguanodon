@@ -1,5 +1,5 @@
 <template>
-  <FormFieldset layout="horizontal">
+  <div class="flex flex-wrap gap-4">
     <FormField label="Language" required>
       <template #default="{ inputId }">
         <LanguageDropdown
@@ -53,13 +53,12 @@
         {{ isNew ? 'Add' : 'Save' }}
       </button>
     </div>
-  </FormFieldset>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch, inject } from 'vue';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 import type { VocabData } from './vocab/VocabData';
 import type { LanguageRepoContract } from '@/entities/languages';

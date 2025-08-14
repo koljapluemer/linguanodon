@@ -14,7 +14,9 @@
     <!-- Form -->
     <div v-else class="space-y-6">
       <!-- Core Content - Big Type -->
-      <FormFieldset legend="Core Content">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Core Content</h2>
+        
         <FormField label="Content" size="lg" required>
           <template #default="{ inputId, inputClasses }">
             <input
@@ -37,10 +39,12 @@
             :allow-adding-new="true"
           />
         </div>
-      </FormFieldset>
+      </div>
 
       <!-- Basic Information -->
-      <FormFieldset legend="Basic Information">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Basic Information</h2>
+        
         <FormField label="Language" required>
           <template #default="{ inputId }">
             <LanguageDropdown
@@ -80,10 +84,12 @@
             </label>
           </template>
         </FormField>
-      </FormFieldset>
+      </div>
 
       <!-- Notes -->
-      <FormFieldset legend="Notes">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Notes</h2>
+        
         <NoteList
           :notes="formData.notes"
           :show-before-exercise-option="true"
@@ -91,11 +97,12 @@
           @update="$emit('updateNote', $event)"
           @delete="$emit('removeNote', $event)"
         />
-      </FormFieldset>
+      </div>
 
       <!-- Links -->
-      <FormFieldset legend="Links">
-        <div class="flex justify-end mb-4">
+      <div class="space-y-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-semibold">Links</h2>
           <button
             type="button"
             @click="$emit('addLink')"
@@ -153,7 +160,7 @@
             </div>
           </div>
         </div>
-      </FormFieldset>
+      </div>
 
       <!-- Actions -->
       <div class="flex justify-between items-center">
@@ -177,7 +184,6 @@ import { Plus, X, Check } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import TranslationGroupForm from '@/entities/vocab/translations/TranslationGroupForm.vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 import type { VocabFormData } from './types';
 import type { NoteData } from '@/entities/notes/NoteData';

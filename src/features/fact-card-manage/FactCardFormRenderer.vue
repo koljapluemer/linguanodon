@@ -14,7 +14,8 @@
     <!-- Form -->
     <div v-else class="space-y-6">
       <!-- Basic Information -->
-      <FormFieldset legend="Basic Information">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Basic Information</h2>
         <!-- Language -->
         <FormField label="Language" required>
           <template #default="{ inputId }">
@@ -53,10 +54,11 @@
             <span class="label-text">Exclude from practice</span>
           </label>
         </div>
-      </FormFieldset>
+      </div>
 
       <!-- Card Content -->
-      <FormFieldset legend="Card Content">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Card Content</h2>
         <!-- Front -->
         <FormField label="Front" required>
           <template #default="{ inputId }">
@@ -84,10 +86,11 @@
             <div class="text-xs text-base-content/60 mt-1">Supports basic Markdown</div>
           </template>
         </FormField>
-      </FormFieldset>
+      </div>
 
       <!-- Notes -->
-      <FormFieldset legend="Notes">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Notes</h2>
         <NoteList
           :notes="formData.notes"
           :show-before-exercise-option="false"
@@ -95,7 +98,7 @@
           @update="$emit('updateNote', $event)"
           @delete="$emit('removeNote', $event)"
         />
-      </FormFieldset>
+      </div>
 
       <!-- Actions -->
       <div class="flex justify-between items-center">
@@ -120,7 +123,6 @@ import NoteList from '@/entities/notes/NoteList.vue';
 import type { FactCardFormData } from './types';
 import type { NoteData } from '@/entities/notes/NoteData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 defineProps<{

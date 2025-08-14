@@ -1,5 +1,5 @@
 <template>
-  <FormFieldset layout="horizontal">
+  <div class="flex flex-wrap gap-4">
     <FormField label="Translation" size="lg" full-width>
       <template #default="{ inputId, inputClasses }">
         <input
@@ -29,12 +29,11 @@
         Cancel
       </button>
     </div>
-  </FormFieldset>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 import type { TranslationData } from './TranslationData';
 

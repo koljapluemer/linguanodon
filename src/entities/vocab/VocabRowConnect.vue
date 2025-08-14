@@ -1,7 +1,8 @@
 <template>
   <div class="card bg-base-100 border-2 border-dashed border-base-300">
     <div class="card-body p-4">
-      <FormFieldset legend="Connect Vocabulary">
+      <div class="space-y-4">
+        <h3 class="text-md font-semibold">Connect Vocabulary</h3>
         <FormField label="Connect Existing Vocabulary">
           <template #default="{ inputId, inputClassString }">
             <div class="relative">
@@ -56,7 +57,7 @@
             </div>
           </template>
         </FormField>
-      </FormFieldset>
+      </div>
     </div>
   </div>
 </template>
@@ -65,7 +66,6 @@
 import { ref, computed, inject } from 'vue';
 import type { VocabData } from './vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{

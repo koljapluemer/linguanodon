@@ -12,7 +12,8 @@
 
     <!-- Form -->
     <div v-else class="space-y-6">
-      <FormFieldset legend="Immersion Content Details">
+      <div class="space-y-6">
+        <h2 class="text-lg font-semibold">Immersion Content Details</h2>
         <FormField label="Title" required>
           <template #default="{ inputId, inputClasses }">
             <input
@@ -82,7 +83,7 @@
             <span v-else>{{ isNew ? 'Create Content' : 'Save Changes' }}</span>
           </button>
         </div>
-      </FormFieldset>
+      </div>
     </div>
   </div>
 </template>
@@ -92,7 +93,6 @@ import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LinkEdit from '@/shared/ui/LinkEdit.vue';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';

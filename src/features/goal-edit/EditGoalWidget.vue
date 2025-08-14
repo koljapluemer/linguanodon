@@ -1,5 +1,7 @@
 <template>
-  <FormFieldset legend="Goal Details">
+  <div class="space-y-6">
+    <h2 class="text-lg font-semibold">Goal Details</h2>
+    
     <FormField label="Goal Title">
       <template #default="{ inputId, inputClassString }">
         <div class="flex items-center gap-2">
@@ -17,18 +19,16 @@
       </template>
     </FormField>
 
-
     <div v-if="saving" class="text-sm text-gray-500">
       Saving...
     </div>
-  </FormFieldset>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import FormFieldset from '@/shared/ui/FormFieldset.vue';
 import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{

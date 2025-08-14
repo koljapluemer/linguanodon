@@ -4,20 +4,6 @@ This document explains how to create consistent forms using our standardized for
 
 ## Components
 
-### `FormFieldset.vue` - Section Wrapper
-Groups related form fields with proper semantic structure.
-
-```vue
-<FormFieldset legend="Section Name" size="md" layout="vertical">
-  <!-- form fields go here -->
-</FormFieldset>
-```
-
-**Props:**
-- `legend?: string` - Section title (appears as legend element)
-- `size?: 'sm' | 'md' | 'lg'` - Fieldset width
-- `layout?: 'vertical' | 'horizontal'` - Field arrangement
-
 ### `FormField.vue` - Label + Input Wrapper
 Provides proper accessibility and consistent styling for individual fields.
 
@@ -51,7 +37,9 @@ Provides proper accessibility and consistent styling for individual fields.
 ### Basic Vertical Form
 ```vue
 <template>
-  <FormFieldset legend="User Details">
+  <div class="space-y-6">
+    <h2 class="text-lg font-semibold">User Details</h2>
+    
     <FormField label="Name" required>
       <template #default="{ inputId, inputClasses }">
         <input
@@ -75,25 +63,28 @@ Provides proper accessibility and consistent styling for individual fields.
         />
       </template>
     </FormField>
-  </FormFieldset>
+  </div>
 </template>
 ```
 
 ### Horizontal Layout
 ```vue
-<FormFieldset layout="horizontal">
-  <FormField label="First Name" size="sm" fullWidth>
-    <template #default="{ inputId, inputClasses }">
-      <input :id="inputId" v-model="first" :class="inputClasses" type="text" />
-    </template>
-  </FormField>
-  
-  <FormField label="Last Name" size="sm" fullWidth>
-    <template #default="{ inputId, inputClasses }">
-      <input :id="inputId" v-model="last" :class="inputClasses" type="text" />
-    </template>
-  </FormField>
-</FormFieldset>
+<div class="space-y-4">
+  <h3 class="text-md font-semibold">Name</h3>
+  <div class="flex flex-wrap gap-4">
+    <FormField label="First Name" size="sm" fullWidth>
+      <template #default="{ inputId, inputClasses }">
+        <input :id="inputId" v-model="first" :class="inputClasses" type="text" />
+      </template>
+    </FormField>
+    
+    <FormField label="Last Name" size="sm" fullWidth>
+      <template #default="{ inputId, inputClasses }">
+        <input :id="inputId" v-model="last" :class="inputClasses" type="text" />
+      </template>
+    </FormField>
+  </div>
+</div>
 ```
 
 ### With Custom Components
@@ -141,11 +132,11 @@ Provides proper accessibility and consistent styling for individual fields.
 
 ## Requirements
 
-1. **Always use FormFieldset** - Wrap related fields in fieldsets with legends
+1. **Use semantic headings** - Use `<h2>`, `<h3>` etc. to group related fields with proper heading hierarchy
 2. **Labels above inputs** - Never place labels to the left of inputs
 3. **Use accessibility attributes** - Always bind `inputId` to input elements
-4. **Avoid excessive styling** - Don't wrap fieldsets in additional cards/containers
-5. **Import required components** - Add FormFieldset and FormField imports
+4. **Proper spacing** - Use `space-y-6` for section spacing and `space-y-4` for field groups
+5. **Import required components** - Add FormField import
 
 ## Styling Components with @apply
 
@@ -180,11 +171,13 @@ If you need to add scoped styles that use Tailwind @apply, add the @reference di
 
 **With this:**
 ```vue
-<FormFieldset legend="Basic Information">
+<div class="space-y-6">
+  <h2 class="text-lg font-semibold">Basic Information</h2>
+  
   <FormField label="Name" required>
     <template #default="{ inputId, inputClasses }">
       <input :id="inputId" :class="inputClasses" v-model="name" />
     </template>
   </FormField>
-</FormFieldset>
+</div>
 ```

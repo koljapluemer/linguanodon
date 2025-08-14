@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import LinkDisplay from './LinkDisplay.vue';
-import FormFieldset from './FormFieldset.vue';
 import FormField from './FormField.vue';
 import type { Link } from '@/shared/Link';
 
@@ -58,7 +57,9 @@ const hasValidUrl = computed(() => {
 </script>
 
 <template>
-  <FormFieldset legend="Link">
+  <div class="space-y-6">
+    <h3 class="text-lg font-semibold">Link</h3>
+    
     <FormField label="URL">
       <template #default="{ inputId, inputClasses }">
         <input
@@ -126,5 +127,5 @@ const hasValidUrl = computed(() => {
         <LinkDisplay :link="link" />
       </div>
     </div>
-  </FormFieldset>
+  </div>
 </template>
