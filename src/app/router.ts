@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PageQueue from '@/pages/queue/PageQueue.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
-import PageVocabManage from '@/pages/vocab-manage/PageVocabManage.vue';
+import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageListFactCards from '@/pages/fact-cards-list/PageListFactCards.vue';
 import PageManageFactCard from '@/pages/fact-cards-manage/PageManageFactCard.vue';
 import PageListResources from '@/pages/resources-list/PageListResources.vue';
@@ -40,12 +40,12 @@ const router = createRouter({
     {
       path: '/vocab/new',
       name: 'vocab-new',
-      component: PageVocabManage
+      component: PageVocabEdit
     },
     {
       path: '/vocab/:id/edit',
       name: 'vocab-edit',
-      component: PageVocabManage
+      component: PageVocabEdit
     },
     {
       path: '/fact-cards',
