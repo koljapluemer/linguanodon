@@ -24,82 +24,53 @@
 
       <!-- Form -->
       <div v-else class="space-y-6">
-        <!-- Core Content - Big Type -->
-        <div class="space-y-6">
-          <h2 class="text-lg font-semibold">Core Content</h2>
+        <!-- Core Content -->
+        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+          <h2 class="text-lg font-semibold pb-4">Vocabulary Details</h2>
           
-          <FormField label="Content" size="lg" required>
-            <template #default="{ inputId, inputClasses }">
-              <input
-                :id="inputId"
-                v-model="state.formData.content"
-                type="text"
-                placeholder="The word or phrase"
-                :class="inputClasses"
-                required
-              />
-            </template>
-          </FormField>
+          <InlineInput
+            v-model="state.formData.content"
+            label="Content"
+            placeholder="The word or phrase"
+            required
+          />
 
-          <!-- Translations -->
-          <div class="mt-6">
-            <TranslationGroupForm
-              v-model="state.formData.translations"
-              :allow-edit-on-click="true"
-              :show-delete-button="true"
-              :allow-adding-new="true"
-            />
-          </div>
+          <InlineLanguageSelect
+            v-model="state.formData.language"
+            label="Language"
+            placeholder="Select target language"
+            required
+          />
+
+          <InlineInput
+            v-model="state.formData.priority"
+            label="Priority"
+            type="number"
+            :min="1"
+            :max="5"
+            placeholder="1"
+          />
+
+          <InlineToggle
+            v-model="state.formData.doNotPractice"
+            label="Exclude from practice"
+          />
         </div>
 
-        <!-- Basic Information -->
-        <div class="space-y-6">
-          <h2 class="text-lg font-semibold">Basic Information</h2>
-          
-          <FormField label="Language" required>
-            <template #default="{ inputId }">
-              <LanguageDropdown
-                :id="inputId"
-                v-model="state.formData.language"
-                placeholder="Select target language"
-                required
-              />
-            </template>
-          </FormField>
-
-          <FormField label="Priority">
-            <template #default="{ inputId, inputClasses }">
-              <input
-                :id="inputId"
-                v-model.number="state.formData.priority"
-                type="number"
-                min="1"
-                max="5"
-                placeholder="1"
-                :class="inputClasses"
-                style="width: 6rem"
-              />
-            </template>
-          </FormField>
-
-          <FormField label="">
-            <template #default="{ inputId }">
-              <label :for="inputId" class="cursor-pointer label justify-start gap-2">
-                <input
-                  :id="inputId"
-                  v-model="state.formData.doNotPractice"
-                  type="checkbox"
-                  class="checkbox"
-                />
-                <span class="label-text">Exclude from practice</span>
-              </label>
-            </template>
-          </FormField>
+        <!-- Translations -->
+        <div class="mt-8">
+          <h2 class="text-lg font-semibold mb-4">Translations</h2>
+          <TranslationGroupForm
+            v-model="state.formData.translations"
+            :allow-edit-on-click="true"
+            :show-delete-button="true"
+            :allow-adding-new="true"
+          />
         </div>
 
         <!-- Notes -->
-        <div class="space-y-6">
-          <h2 class="text-lg font-semibold">Notes</h2>
+        <div class="mt-8">
+          <h2 class="text-lg font-semibold mb-4">Notes</h2>
           
           <NoteList
             :notes="state.formData.notes"
@@ -111,8 +82,8 @@
         </div>
 
         <!-- Links -->
-        <div class="space-y-6">
-          <div class="flex justify-between items-center">
+        <div class="mt-8">
+          <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold">Links</h2>
             <button
               type="button"
@@ -132,39 +103,27 @@
             <div
               v-for="(link, index) in state.formData.links"
               :key="index"
-              class="border rounded-lg p-4"
+              class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 divide-y divide-gray-200 dark:divide-gray-700"
             >
-              <div class="flex justify-between items-start gap-4">
-                <div class="flex-1 space-y-4">
-                  <FormField label="Link label" size="sm">
-                    <template #default="{ inputId, inputClasses }">
-                      <input
-                        :id="inputId"
-                        v-model="link.label"
-                        type="text"
-                        placeholder="Link label"
-                        :class="inputClasses"
-                      />
-                    </template>
-                  </FormField>
-                  
-                  <FormField label="URL" size="sm">
-                    <template #default="{ inputId, inputClasses }">
-                      <input
-                        :id="inputId"
-                        v-model="link.url"
-                        type="url"
-                        placeholder="https://..."
-                        :class="inputClasses"
-                      />
-                    </template>
-                  </FormField>
+              <InlineInput
+                v-model="link.label"
+                label="Link label"
+                placeholder="Link label"
+              />
+              
+              <div class="flex items-center justify-between pt-2">
+                <div class="flex-1">
+                  <InlineInput
+                    v-model="link.url"
+                    label="URL"
+                    type="url"
+                    placeholder="https://..."
+                  />
                 </div>
-                
                 <button
                   type="button"
                   @click="removeLink(index)"
-                  class="btn btn-sm btn-ghost btn-circle text-error"
+                  class="ml-4 btn btn-sm btn-ghost btn-circle text-error flex-shrink-0"
                 >
                   <X class="w-4 h-4" />
                 </button>
@@ -173,8 +132,8 @@
           </div>
         </div>
 
-        <!-- Actions -->
-        <div class="flex justify-between items-center">
+        <!-- Auto-save Status -->
+        <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
           <div class="flex items-center gap-2">
             <span v-if="state.saving" class="text-sm text-base-content/70 flex items-center gap-1">
               <span class="loading loading-spinner loading-sm"></span>
@@ -213,10 +172,11 @@ import { computed, inject, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { Plus, X, Check } from 'lucide-vue-next';
 import { useVocabForm } from './useVocabForm';
+import InlineInput from '@/shared/ui/InlineInput.vue';
+import InlineLanguageSelect from '@/shared/ui/InlineLanguageSelect.vue';
+import InlineToggle from '@/shared/ui/InlineToggle.vue';
 import NoteList from '@/entities/notes/NoteList.vue';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import TranslationGroupForm from '@/entities/vocab/translations/TranslationGroupForm.vue';
-import FormField from '@/shared/ui/FormField.vue';
 import DebugVocabProgress from '@/shared/ui/DebugVocabProgress.vue';
 import VocabTaskList from '@/widgets/vocab-task-list/VocabTaskListWidget.vue';
 import TaskModal from '@/entities/tasks/TaskModal.vue';

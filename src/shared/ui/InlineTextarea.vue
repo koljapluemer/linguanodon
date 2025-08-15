@@ -1,0 +1,107 @@
+<template>
+  <div class="flex items-start justify-between py-2">
+    <div class="flex-1">
+      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        {{ label }}
+        <span v-if="required" class="text-red-500">*</span>
+      </label>
+      
+      <div v-if="!isEditing" class="mt-1 flex items-start justify-between">
+        <div class="text-base text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
+          {{ displayValue || placeholder }}
+        </div>
+        <button
+          @click="startEditing"
+          class="ml-2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
+          :aria-label="`Edit ${label}`"
+        >
+          <Edit2 class="w-4 h-4" />
+        </button>
+      </div>
+      
+      <div v-else class="mt-1 flex flex-col gap-2">
+        <textarea
+          ref="textareaRef"
+          :value="modelValue"
+          @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
+          @keydown.ctrl.enter="saveEdit"
+          @keydown.escape="cancelEdit"
+          :placeholder="placeholder"
+          :required="required"
+          :rows="rows"
+          class="textarea textarea-bordered resize-none"
+        ></textarea>
+        <div class="flex items-center gap-2">
+          <button
+            @click="saveEdit"
+            class="btn btn-sm btn-success"
+            :aria-label="`Save ${label}`"
+          >
+            <Check class="w-4 h-4" />
+          </button>
+          <button
+            @click="cancelEdit"
+            class="btn btn-sm btn-ghost"
+            :aria-label="`Cancel editing ${label}`"
+          >
+            <X class="w-4 h-4" />
+          </button>
+          <span class="text-xs text-gray-500 ml-auto">
+            Ctrl+Enter to save, Esc to cancel
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, nextTick } from 'vue';
+import { Edit2, Check, X } from 'lucide-vue-next';
+
+interface Props {
+  modelValue: string | undefined;
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  rows?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '',
+  required: false,
+  rows: 3
+});
+
+const emit = defineEmits<{
+  'update:modelValue': [value: string | undefined];
+}>();
+
+const isEditing = ref(false);
+const originalValue = ref<string | undefined>();
+const textareaRef = ref<HTMLTextAreaElement>();
+
+const displayValue = computed(() => {
+  if (props.modelValue === undefined || props.modelValue === '') {
+    return null;
+  }
+  return props.modelValue;
+});
+
+async function startEditing() {
+  originalValue.value = props.modelValue;
+  isEditing.value = true;
+  await nextTick();
+  textareaRef.value?.focus();
+  textareaRef.value?.select();
+}
+
+function saveEdit() {
+  isEditing.value = false;
+}
+
+function cancelEdit() {
+  emit('update:modelValue', originalValue.value);
+  isEditing.value = false;
+}
+</script>
