@@ -13,6 +13,7 @@
       label="Content"
       placeholder="The word or phrase"
       required
+      size="large"
       @update:modelValue="$emit('field-change')"
     />
 

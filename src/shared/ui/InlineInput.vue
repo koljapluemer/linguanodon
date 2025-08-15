@@ -7,7 +7,7 @@
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-center justify-between">
-        <span class="text-base text-gray-900 dark:text-gray-100">
+        <span :class="displayValueClasses">
           {{ displayValue || placeholder }}
         </span>
         <button
@@ -32,7 +32,7 @@
           :min="min"
           :max="max"
           :step="step"
-          class="flex-1 input input-sm input-bordered"
+          :class="inputClasses"
         />
         <button
           @click="saveEdit"
@@ -66,12 +66,14 @@ interface Props {
   min?: number;
   max?: number;
   step?: number;
+  size?: 'small' | 'medium' | 'big' | 'large';
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   required: false,
-  type: 'text'
+  type: 'text',
+  size: 'medium'
 });
 
 const emit = defineEmits<{
@@ -87,6 +89,28 @@ const displayValue = computed(() => {
     return null;
   }
   return String(props.modelValue);
+});
+
+const displayValueClasses = computed(() => {
+  const baseClasses = 'text-gray-900 dark:text-gray-100';
+  const sizeClasses = {
+    small: 'text-sm',
+    medium: 'text-lg',
+    big: 'text-2xl',
+    large: 'text-8xl font-extrabold'
+  };
+  return `${baseClasses} ${sizeClasses[props.size]}`;
+});
+
+const inputClasses = computed(() => {
+  const baseClasses = 'flex-1 input input-bordered';
+  const sizeClasses = {
+    small: 'input-sm text-sm',
+    medium: 'text-lg',
+    big: 'input-lg text-2xl',
+    large: 'input-xl'
+  };
+  return `${baseClasses} ${sizeClasses[props.size]}`;
 });
 
 async function startEditing() {

@@ -15,7 +15,7 @@
             class="toggle toggle-sm"
             :class="modelValue ? 'toggle-success' : ''"
           />
-          <span class="text-base text-gray-900 dark:text-gray-100">
+          <span :class="displayValueClasses">
             {{ modelValue ? 'Yes' : 'No' }}
           </span>
         </div>
@@ -35,9 +35,9 @@
             :checked="tempValue"
             @change="tempValue = ($event.target as HTMLInputElement).checked"
             type="checkbox"
-            class="toggle toggle-sm toggle-success"
+            :class="toggleClasses"
           />
-          <span class="text-sm">{{ tempValue ? 'Yes' : 'No' }}</span>
+          <span :class="editingValueClasses">{{ tempValue ? 'Yes' : 'No' }}</span>
         </div>
         <div class="ml-auto flex items-center gap-2">
           <button
@@ -61,17 +61,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { Edit2, Check, X } from 'lucide-vue-next';
 
 interface Props {
   modelValue: boolean | undefined;
   label: string;
   required?: boolean;
+  size?: 'small' | 'medium' | 'big' | 'large';
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  required: false
+  required: false,
+  size: 'medium'
 });
 
 const emit = defineEmits<{
@@ -82,6 +84,38 @@ const isEditing = ref(false);
 const originalValue = ref<boolean | undefined>();
 const tempValue = ref<boolean>(false);
 const toggleRef = ref<HTMLInputElement>();
+
+const displayValueClasses = computed(() => {
+  const baseClasses = 'text-gray-900 dark:text-gray-100';
+  const sizeClasses = {
+    small: 'text-sm',
+    medium: 'text-lg',
+    big: 'text-2xl',
+    large: 'text-8xl font-extrabold'
+  };
+  return `${baseClasses} ${sizeClasses[props.size]}`;
+});
+
+const editingValueClasses = computed(() => {
+  const sizeClasses = {
+    small: 'text-sm',
+    medium: 'text-lg',
+    big: 'text-2xl',
+    large: 'text-8xl font-extrabold'
+  };
+  return sizeClasses[props.size];
+});
+
+const toggleClasses = computed(() => {
+  const baseClasses = 'toggle toggle-success';
+  const sizeClasses = {
+    small: 'toggle-sm',
+    medium: '',
+    big: 'toggle-lg',
+    large: 'toggle-xl'
+  };
+  return `${baseClasses} ${sizeClasses[props.size]}`;
+});
 
 async function startEditing() {
   originalValue.value = props.modelValue;

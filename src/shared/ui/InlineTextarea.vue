@@ -7,7 +7,7 @@
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-start justify-between">
-        <div class="text-base text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
+        <div :class="displayValueClasses">
           {{ displayValue || placeholder }}
         </div>
         <button
@@ -29,7 +29,7 @@
           :placeholder="placeholder"
           :required="required"
           :rows="rows"
-          class="textarea textarea-bordered resize-none"
+          :class="textareaClasses"
         ></textarea>
         <div class="flex items-center gap-2">
           <button
@@ -65,12 +65,14 @@ interface Props {
   placeholder?: string;
   required?: boolean;
   rows?: number;
+  size?: 'small' | 'medium' | 'big' | 'large';
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   required: false,
-  rows: 3
+  rows: 3,
+  size: 'medium'
 });
 
 const emit = defineEmits<{
@@ -86,6 +88,28 @@ const displayValue = computed(() => {
     return null;
   }
   return props.modelValue;
+});
+
+const displayValueClasses = computed(() => {
+  const baseClasses = 'text-gray-900 dark:text-gray-100 whitespace-pre-wrap';
+  const sizeClasses = {
+    small: 'text-sm',
+    medium: 'text-lg',
+    big: 'text-2xl',
+    large: 'text-8xl font-extrabold'
+  };
+  return `${baseClasses} ${sizeClasses[props.size]}`;
+});
+
+const textareaClasses = computed(() => {
+  const baseClasses = 'textarea textarea-bordered resize-none';
+  const sizeClasses = {
+    small: 'textarea-sm text-sm',
+    medium: 'text-lg',
+    big: 'textarea-lg text-2xl',
+    large: 'textarea-xl'
+  };
+  return `${baseClasses} ${sizeClasses[props.size]}`;
 });
 
 async function startEditing() {
