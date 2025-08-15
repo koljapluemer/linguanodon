@@ -18,36 +18,24 @@
     </div>
 
     <!-- Associated Tasks -->
-    <div v-if="isEditing" class="mt-8">
-      <VocabTaskList 
-        :vocab-id="route.params.id as string" 
-        @task-selected="openTaskModal"
-      />
+    <div v-if="isEditing && currentVocabTaskIds.length > 0" class="mt-8">
+      <h2 class="text-xl font-semibold mb-4">Associated Tasks</h2>
+      <TaskModalTriggerList :task-ids="currentVocabTaskIds" />
     </div>
-
-    <TaskModal 
-      ref="taskModal"
-      :task="currentTask"
-      @finished="handleTaskFinished"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import VocabEditFormController from './ui/VocabEditFormController.vue';
-import VocabTaskList from '@/widgets/vocab-task-list/VocabTaskListWidget.vue';
-import TaskModal from '@/entities/tasks/TaskModal.vue';
+import TaskModalTriggerList from '@/widgets/do-task/TaskModalTriggerList.vue';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-import type { TaskData } from '@/entities/tasks/TaskData';
-import type { Task } from '@/entities/tasks/Task';
 
 const route = useRoute();
-const taskModal = ref<InstanceType<typeof TaskModal>>();
-const currentTask = ref<Task>();
+const currentVocabTaskIds = ref<string[]>([]);
 
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 const taskRepo = inject<TaskRepoContract>('taskRepo');
@@ -56,19 +44,20 @@ const isEditing = computed(() => {
   return route.params.id && route.params.id !== 'new';
 });
 
-const openTaskModal = async (task: TaskData) => {
-  currentTask.value = {
-    ...task,
-    mayBeConsideredDone: false,
-    isDone: false
-  };
-  taskModal.value?.show();
-};
-
-const handleTaskFinished = async () => {
-  currentTask.value = undefined;
-  // VocabTaskList will handle reloading its own tasks
-};
+// Watch for vocab ID changes and load task IDs
+watch(() => route.params.id, async (vocabId) => {
+  if (vocabId && vocabId !== 'new' && vocabRepo) {
+    try {
+      const vocab = await vocabRepo.getVocabByUID(vocabId as string);
+      currentVocabTaskIds.value = vocab?.tasks || [];
+    } catch (error) {
+      console.error('Failed to load vocab tasks:', error);
+      currentVocabTaskIds.value = [];
+    }
+  } else {
+    currentVocabTaskIds.value = [];
+  }
+}, { immediate: true });
 
 async function handleVocabSaved(vocabId: string) {
   if (!vocabRepo || !taskRepo) {
@@ -79,7 +68,10 @@ async function handleVocabSaved(vocabId: string) {
   try {
     const taskController = new UpdateVocabTasksController(vocabRepo, taskRepo);
     await taskController.updateTasksForVocab(vocabId);
-    // VocabTaskList will handle reloading its own tasks
+    
+    // Reload task IDs for this vocab
+    const vocab = await vocabRepo.getVocabByUID(vocabId);
+    currentVocabTaskIds.value = vocab?.tasks || [];
   } catch (error) {
     console.error('Failed to update vocab tasks:', error);
   }

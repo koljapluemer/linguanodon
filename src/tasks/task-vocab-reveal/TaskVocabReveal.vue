@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import type { Task } from '@/entities/tasks/Task';
-import { useTaskState } from '@/entities/tasks/useTaskState';
+import type { TaskData } from '@/entities/tasks/TaskData';
 import TaskInfo from '@/entities/tasks/TaskInfo.vue';
-import TaskDecideWhetherToDoAgain from '@/entities/tasks/TaskDecideWhetherToDoAgain.vue';
-import TaskEvaluateCorrectnessAndConfidence from '@/entities/tasks/TaskEvaluateCorrectnessAndConfidence.vue';
 import ElementBigText from '@/shared/ui/ElementBigText.vue';
 import ElementRevealButton from '@/shared/ui/ElementRevealButton.vue';
 import RatingButtons from '@/shared/ui/RatingButtons.vue';
 
 interface Props {
-  task: Task;
+  task: TaskData;
 }
 
 interface Emits {
@@ -23,13 +20,6 @@ const emit = defineEmits<Emits>();
 const isRevealed = ref(false);
 
 // Use the task state composable
-const {
-  currentState,
-  enableDone,
-  handleDone,
-  handleEvaluation,
-  handleDoAgainDecision
-} = useTaskState(() => props.task, emit);
 
 // Extract task metadata - these will be properly set during task generation
 const isReverse = computed(() => {
@@ -54,16 +44,14 @@ const solution = computed(() => {
 
 const handleRate = () => {
   // Auto-enable done after rating
-  enableDone();
-  // Proceed to task completion flow
-  handleDone();
+  emit('finished');
 };
 </script>
 
 <template>
   <div class="space-y-6">
     <!-- Task Screen -->
-    <div v-if="currentState === 'task'">
+    <div>
       <!-- Task Header -->
       <TaskInfo :task="task" />
       
@@ -106,14 +94,5 @@ const handleRate = () => {
       </div>
     </div>
     
-    <!-- Evaluation Screen -->
-    <div v-else-if="currentState === 'evaluation'">
-      <TaskEvaluateCorrectnessAndConfidence @evaluation="handleEvaluation" />
-    </div>
-    
-    <!-- Do Again Decision Screen -->
-    <div v-else-if="currentState === 'do-again-decision'">
-      <TaskDecideWhetherToDoAgain @decision="handleDoAgainDecision" />
-    </div>
   </div>
 </template>

@@ -3,6 +3,7 @@ import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+import type { TaskData } from '@/entities/tasks/TaskData';
 import { shuffleArray } from '@/shared/arrayUtils';
 
 export class ProposerByNewResource implements ResourceProposerContract {
@@ -53,13 +54,13 @@ export class ProposerByNewResource implements ResourceProposerContract {
         const tasks = await this.taskRepo.getTasksByResourceId(resource.uid);
         
         const hasRequiredTask = requiredTaskTypes.some(taskType => {
-          const matchingTasks = tasks.filter(task => task.taskType === taskType);
+          const matchingTasks = tasks.filter((task: TaskData) => task.taskType === taskType);
           
           if (matchingTasks.length === 0) {
             return true;
           }
           
-          return matchingTasks.some(task => task.isActive);
+          return matchingTasks.some((task: TaskData) => task.isActive);
         });
 
         if (hasRequiredTask) {

@@ -7,7 +7,7 @@ import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { useCachedQueue } from './useCachedQueue';
-import TaskRenderer from '@/entities/tasks/TaskRenderer.vue';
+import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 
 // Inject repositories

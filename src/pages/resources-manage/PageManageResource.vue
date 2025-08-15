@@ -20,23 +20,13 @@
       </div>
 
       <!-- Associated Tasks Section -->
-      <div v-if="route.params.uid && resourceTasks.length > 0" class="card bg-base-100 shadow-xl mt-6">
+      <div v-if="route.params.uid && resourceTaskIds.length > 0" class="card bg-base-100 shadow-xl mt-6">
         <div class="card-body">
           <h2 class="card-title">Tasks</h2>
-          <TaskList 
-            :tasks="resourceTasks"
-            action-button-text="Start Task"
-            @task-selected="openTaskModal"
-          />
+          <TaskModalTriggerList :task-ids="resourceTaskIds" />
         </div>
       </div>
     </div>
-
-    <TaskModal 
-      ref="taskModal"
-      :task="currentTask"
-      @finished="handleTaskFinished"
-    />
   </div>
 </template>
 
@@ -45,17 +35,12 @@ import { ref, inject, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import ResourceFormRenderer from '@/features/resource-manage/ResourceFormRenderer.vue';
 import ManageVocabOfResourceWidget from '@/features/resource-manage-its-vocab/ManageVocabOfResourceWidget.vue';
-import TaskList from '@/entities/tasks/TaskList.vue';
-import TaskModal from '@/entities/tasks/TaskModal.vue';
+import TaskModalTriggerList from '@/widgets/do-task/TaskModalTriggerList.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-import type { TaskData } from '@/entities/tasks/TaskData';
-import type { Task } from '@/entities/tasks/Task';
 
 const route = useRoute();
-const taskModal = ref<InstanceType<typeof TaskModal>>();
-const currentTask = ref<Task>();
-const resourceTasks = ref<TaskData[]>([]);
+const resourceTaskIds = ref<string[]>([]);
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const taskRepo = inject<TaskRepoContract>('taskRepo');
@@ -71,22 +56,7 @@ const loadResourceTasks = async () => {
   if (!route.params.uid) return;
   
   const tasks = await taskRepo.getTasksByResourceId(route.params.uid as string);
-  resourceTasks.value = tasks;
-};
-
-const openTaskModal = async (task: TaskData) => {
-  currentTask.value = {
-    ...task,
-    mayBeConsideredDone: false,
-    isDone: false
-  };
-  taskModal.value?.show();
-};
-
-const handleTaskFinished = async () => {
-  currentTask.value = undefined;
-  // Reload tasks to reflect any changes
-  await loadResourceTasks();
+  resourceTaskIds.value = tasks.map(task => task.uid);
 };
 
 onMounted(() => {

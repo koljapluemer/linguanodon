@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import type { Task } from '@/entities/tasks/Task';
+import type { TaskData } from '@/entities/tasks/TaskData';
 import type { useQueuePreloader } from './useQueuePreloader';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
@@ -9,7 +9,7 @@ import { updateGoalTasks } from '@/features/goal-update-tasks/updateGoalTasksSer
 export type QueueState = 
   | { status: 'initializing' }
   | { status: 'loading', message?: string }
-  | { status: 'task', task: Task }
+  | { status: 'task', task: TaskData }
   | { status: 'empty', message: string }
   | { status: 'error', message: string };
 

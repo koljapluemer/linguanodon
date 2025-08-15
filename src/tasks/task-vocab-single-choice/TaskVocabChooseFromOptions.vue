@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, inject, onMounted } from 'vue';
-import type { Task } from '@/entities/tasks/Task';
+import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import { useTaskState } from '@/entities/tasks/useTaskState';
 import TaskInfo from '@/entities/tasks/TaskInfo.vue';
-import TaskDecideWhetherToDoAgain from '@/entities/tasks/TaskDecideWhetherToDoAgain.vue';
-import TaskEvaluateCorrectnessAndConfidence from '@/entities/tasks/TaskEvaluateCorrectnessAndConfidence.vue';
 import { DistractorGenerator } from '@/entities/vocab/DistractorGenerator';
 import { shuffleArray } from '@/shared/arrayUtils';
 
@@ -17,7 +14,7 @@ interface AnswerOption {
 }
 
 interface Props {
-  task: Task;
+  task: TaskData;
 }
 
 interface Emits {
@@ -30,13 +27,6 @@ const emit = defineEmits<Emits>();
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
 
 // Use the task state composable
-const {
-  currentState,
-  enableDone,
-  handleDone,
-  handleEvaluation,
-  handleDoAgainDecision
-} = useTaskState(() => props.task, emit);
 
 // Exercise state
 const selectedIndex = ref<number | null>(null);
@@ -164,8 +154,7 @@ function selectOption(index: number) {
     isAnswered.value = true;
     setTimeout(() => {
       // Auto-enable done and proceed
-      enableDone();
-      handleDone();
+      emit('finished');
     }, 350);
   } else {
     // Wrong answer: mark first attempt as wrong, disable button
@@ -212,7 +201,7 @@ onMounted(loadVocabData);
 <template>
   <div class="space-y-6">
     <!-- Task Screen -->
-    <div v-if="currentState === 'task'">
+    <div>
       <!-- Task Header -->
       <TaskInfo :task="task" />
       
@@ -266,14 +255,5 @@ onMounted(loadVocabData);
       </div>
     </div>
     
-    <!-- Evaluation Screen -->
-    <div v-else-if="currentState === 'evaluation'">
-      <TaskEvaluateCorrectnessAndConfidence @evaluation="handleEvaluation" />
-    </div>
-    
-    <!-- Do Again Decision Screen -->
-    <div v-else-if="currentState === 'do-again-decision'">
-      <TaskDecideWhetherToDoAgain @decision="handleDoAgainDecision" />
-    </div>
   </div>
 </template>

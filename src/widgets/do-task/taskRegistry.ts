@@ -1,14 +1,14 @@
 import type { Component } from 'vue';
 
 // Import all task widgets
-import RenderTaskForAddingPronunciation from '@/widgets/task-vocab-add-pronunciation/RenderTaskForAddingPronunciation.vue';
-import RenderAddVocabToResource from '@/widgets/task-resource-add-vocab/RenderAddVocabToResource.vue';
-import RenderAddFactCardsToResource from '@/widgets/task-resource-add-fact-cards/RenderAddFactCardsToResource.vue';
-import TaskAddSubGoals from '@/widgets/task-goal-add-sub-goals/TaskAddSubGoals.vue';
-import TaskAddVocabToGoal from '@/widgets/task-goal-add-vocab/TaskAddVocabToGoal.vue';
-import TaskVocabTryToRemember from '@/widgets/task-vocab-try-to-remember/TaskVocabTryToRemember.vue';
-import TaskVocabReveal from '@/widgets/task-vocab-reveal/TaskVocabReveal.vue';
-import TaskVocabChooseFromOptions from '@/widgets/task-vocab-single-choice/TaskVocabChooseFromOptions.vue';
+import RenderTaskForAddingPronunciation from '@/tasks/task-vocab-add-pronunciation/RenderTaskForAddingPronunciation.vue';
+import RenderAddVocabToResource from '@/tasks/task-resource-add-vocab/RenderAddVocabToResource.vue';
+import RenderAddFactCardsToResource from '@/tasks/task-resource-add-fact-cards/RenderAddFactCardsToResource.vue';
+import TaskAddSubGoals from '@/tasks/task-goal-add-sub-goals/TaskAddSubGoals.vue';
+import TaskAddVocabToGoal from '@/tasks/task-goal-add-vocab/TaskAddVocabToGoal.vue';
+import TaskVocabTryToRemember from '@/tasks/task-vocab-try-to-remember/TaskVocabTryToRemember.vue';
+import TaskVocabReveal from '@/tasks/task-vocab-reveal/TaskVocabReveal.vue';
+import TaskVocabChooseFromOptions from '@/tasks/task-vocab-single-choice/TaskVocabChooseFromOptions.vue';
 
 export interface TaskRegistryEntry {
   component: Component;

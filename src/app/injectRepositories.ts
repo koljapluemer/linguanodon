@@ -6,7 +6,6 @@ import { ResourceRepo } from '@/entities/resources/ResourceRepo';
 import { ImmersionContentRepo } from '@/entities/immersion-content/ImmersionContentRepo';
 import { TaskRepo } from '@/entities/tasks/TaskRepo';
 import { LanguageRepo } from '@/entities/languages/LanguageRepo';
-import { taskRegistry, TASK_REGISTRY_INJECTION_KEY } from './taskRegistry';
 import { initializeUpdateVocabTasksService } from '@/features/vocab-update-tasks/updateVocabTasksService';
 import { initializeUpdateGoalTasksService } from '@/features/goal-update-tasks/updateGoalTasksService';
 
@@ -50,7 +49,6 @@ export function provideRepositories(app: { provide: (key: string | symbol, value
   app.provide('immersionContentRepo', immersionContentRepo);
   app.provide('taskRepo', taskRepo);
   app.provide('languageRepo', languageRepo);
-  app.provide(TASK_REGISTRY_INJECTION_KEY, taskRegistry);
   
   return { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo };
 }

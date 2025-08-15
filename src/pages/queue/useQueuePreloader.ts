@@ -1,5 +1,4 @@
 import { reactive } from 'vue';
-import type { Task } from '@/entities/tasks/Task';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
@@ -17,7 +16,7 @@ interface PreloadConfig {
 }
 
 interface PreloadedContent {
-  taskBatches: Task[][];
+  taskBatches: TaskData[][];
 }
 
 interface PreloadStatus {
@@ -64,14 +63,7 @@ export function useQueuePreloader(
   // Active loading promise to prevent duplicates
   let batchLoadingPromise: Promise<void> | null = null;
 
-  // Convert TaskData to Task (add computed properties)
-  function taskDataToTask(taskData: TaskData): Task {
-    return {
-      ...taskData,
-      mayBeConsideredDone: false,
-      isDone: false
-    };
-  }
+  // TaskData is used directly now, no conversion needed
 
   // Background task batch loading
   async function loadTaskBatch() {
@@ -82,7 +74,7 @@ export function useQueuePreloader(
     
     try {
       batchLoadingPromise = (async () => {
-        const batch: Task[] = [];
+        const batch: TaskData[] = [];
         
         // Step 1: Get 0-2 resource tasks
         const resourceBatch = await resourcePicker.pickResourceBatch();
@@ -90,7 +82,7 @@ export function useQueuePreloader(
           try {
             const resourceTasks = await taskRepo.getTasksByResourceId(resource.uid);
             const activeTasks = resourceTasks.filter(task => task.isActive);
-            batch.push(...activeTasks.map(taskDataToTask));
+            batch.push(...activeTasks);
           } catch (error) {
             console.error('Error loading tasks for resource:', resource.uid, error);
           }
@@ -109,7 +101,7 @@ export function useQueuePreloader(
             
             if (activeGoalTasks.length > 0) {
               // Add the first active goal task
-              batch.push(taskDataToTask(activeGoalTasks[0]));
+              batch.push(activeGoalTasks[0]);
             }
           }
         } catch (error) {
@@ -134,7 +126,7 @@ export function useQueuePreloader(
               // Add up to remaining slots
               for (const task of activeTasks) {
                 if (vocabTasksAdded >= remainingSlots) break;
-                batch.push(taskDataToTask(task));
+                batch.push(task);
                 vocabTasksAdded++;
               }
             } catch (error) {
@@ -179,7 +171,7 @@ export function useQueuePreloader(
   }
 
   // Consume methods (instant)
-  function consumeNextTaskBatch(): Task[] | null {
+  function consumeNextTaskBatch(): TaskData[] | null {
     const batch = content.taskBatches.shift() || null;
     if (batch) {
       status.taskBatchesReady = content.taskBatches.length;
@@ -192,7 +184,7 @@ export function useQueuePreloader(
     return batch;
   }
 
-  function consumeNextTask(): Task | null {
+  function consumeNextTask(): TaskData | null {
     // Get next task from the first available batch
     for (let i = 0; i < content.taskBatches.length; i++) {
       const batch = content.taskBatches[i];
@@ -217,8 +209,8 @@ export function useQueuePreloader(
   }
 
   // Force loading (for fallback scenarios)
-  async function forceLoadNextTaskBatch(): Promise<Task[]> {
-    const batch: Task[] = [];
+  async function forceLoadNextTaskBatch(): Promise<TaskData[]> {
+    const batch: TaskData[] = [];
     
     // Get 0-2 resource tasks
     const resourceBatch = await resourcePicker.pickResourceBatch();
@@ -226,7 +218,7 @@ export function useQueuePreloader(
       try {
         const resourceTasks = await taskRepo.getTasksByResourceId(resource.uid);
         const activeTasks = resourceTasks.filter(task => task.isActive);
-        batch.push(...activeTasks.map(taskDataToTask));
+        batch.push(...activeTasks);
       } catch (error) {
         console.error('Error loading tasks for resource:', resource.uid, error);
       }
@@ -247,7 +239,7 @@ export function useQueuePreloader(
           
           for (const task of activeTasks) {
             if (vocabTasksAdded >= remainingSlots) break;
-            batch.push(taskDataToTask(task));
+            batch.push(task);
             vocabTasksAdded++;
           }
         } catch (error) {
@@ -259,7 +251,7 @@ export function useQueuePreloader(
     return shuffleArray(batch);
   }
 
-  async function forceLoadNextTask(): Promise<Task | null> {
+  async function forceLoadNextTask(): Promise<TaskData | null> {
     // Try to get a single task from the batch generator
     const batch = await forceLoadNextTaskBatch();
     return batch.length > 0 ? batch[0] : null;
