@@ -194,11 +194,12 @@ export class UpdateVocabTasksController {
       taskType: 'vocab-try-to-remember',
       title: vocab.content || 'Unknown vocab',
       prompt: `How hard is this word to remember? Solution: ${translationTexts}`,
-      evaluateCorrectnessAndConfidenceAfterDoing: false,
+      evaluateDifficultyAfterDoing: false,
       decideWhetherToDoAgainAfterDoing: false,
+      isOneTime: false,
       isActive: true,
       taskSize: 'small',
-      associatedUnits: [{ type: 'Vocab', uid: vocab.uid }]
+      associatedVocab: [vocab.uid]
     };
   }
 
@@ -212,11 +213,12 @@ export class UpdateVocabTasksController {
         taskType: 'vocab-reveal',
         title: `reverse-${randomTranslation.content}`,
         prompt: `What vocab has this translation? Solution: ${solution}`,
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        evaluateDifficultyAfterDoing: false,
         decideWhetherToDoAgainAfterDoing: false,
+        isOneTime: false,
         isActive: true,
         taskSize: 'small',
-        associatedUnits: [{ type: 'Vocab', uid: vocab.uid }]
+        associatedVocab: [vocab.uid]
       };
     } else {
       const translationTexts = translations.slice(0, 8).map(t => t.content).join(', ');
@@ -228,11 +230,12 @@ export class UpdateVocabTasksController {
         taskType: 'vocab-reveal',
         title: vocab.content || 'Unknown vocab',
         prompt: `What does this mean? Solution: ${solution}`,
-        evaluateCorrectnessAndConfidenceAfterDoing: false,
+        evaluateDifficultyAfterDoing: false,
         decideWhetherToDoAgainAfterDoing: false,
+        isOneTime: false,
         isActive: true,
         taskSize: 'small',
-        associatedUnits: [{ type: 'Vocab', uid: vocab.uid }]
+        associatedVocab: [vocab.uid]
       };
     }
   }
@@ -258,11 +261,12 @@ export class UpdateVocabTasksController {
       taskType: 'vocab-choose-from-options',
       title,
       prompt,
-      evaluateCorrectnessAndConfidenceAfterDoing: false,
+      evaluateDifficultyAfterDoing: false,
       decideWhetherToDoAgainAfterDoing: false,
+      isOneTime: false,
       isActive: true,
       taskSize: 'small',
-      associatedUnits: [{ type: 'Vocab', uid: vocab.uid }]
+      associatedVocab: [vocab.uid]
     };
   }
 

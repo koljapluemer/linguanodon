@@ -26,10 +26,9 @@ const handleFactsMayNotBeConsideredDone = () => {
   // Widget state handling
 };
 
-// Get the resource ID from associated units
+// Get the resource ID from associated resources
 const resourceUid = computed(() => {
-  const resourceAssociation = props.task.associatedUnits.find(unit => unit.type === 'Resource');
-  return resourceAssociation?.uid;
+  return props.task.associatedResources?.[0];
 });
 
 // Resource data and loading

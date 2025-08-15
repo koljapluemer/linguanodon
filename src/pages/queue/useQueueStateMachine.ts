@@ -1,9 +1,6 @@
 import { ref, computed } from 'vue';
-import type { TaskData } from '@/entities/tasks/TaskData';
 import type { useQueuePreloader } from './useQueuePreloader';
-import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import { updateGoalTasks } from '@/features/goal-update-tasks/updateGoalTasksService';
+import type { TaskData } from '@/entities/tasks/TaskData';
 
 // State machine types
 export type QueueState = 
@@ -15,7 +12,7 @@ export type QueueState =
 
 type PreloaderInstance = ReturnType<typeof useQueuePreloader>;
 
-export function useQueueStateMachine(preloader: PreloaderInstance, vocabTaskController: UpdateVocabTasksController, vocabRepo: VocabAndTranslationRepoContract) {
+export function useQueueStateMachine(preloader: PreloaderInstance) {
   // Current state
   const state = ref<QueueState>({ status: 'initializing' });
 
@@ -95,35 +92,8 @@ export function useQueueStateMachine(preloader: PreloaderInstance, vocabTaskCont
       return;
     }
 
-    const completedTask = state.value.task;
-    const fromStatus = state.value.status;
-    
-    // Check if this is a vocab-based or goal-based task and update progress
-    if (completedTask.associatedUnits) {
-      for (const unit of completedTask.associatedUnits) {
-        if (unit.type === 'Vocab') {
-          try {
-            // Score the vocab with 'Doable' rating (task was completed successfully)
-            await vocabRepo.scoreVocab(unit.uid, 'Doable');
-            console.log(`Scored vocab: ${unit.uid}`);
-            
-            // Update tasks for vocab based on new progress
-            await vocabTaskController.updateTasksForVocab(unit.uid);
-            console.log(`Updated tasks for vocab: ${unit.uid}`);
-          } catch (error) {
-            console.error(`Failed to update progress for vocab ${unit.uid}:`, error);
-          }
-        } else if (unit.type === 'Goal') {
-          try {
-            // Update tasks for goal after completion
-            await updateGoalTasks(unit.uid);
-            console.log(`Updated tasks for goal: ${unit.uid}`);
-          } catch (error) {
-            console.error(`Failed to update tasks for goal ${unit.uid}:`, error);
-          }
-        }
-      }
-    }
+    // TaskRenderer now handles ALL entity updates and task completion logic
+    // No entity processing needed here
     
     // Try to get next task
     const success = await tryTransitionToTask('task completed');
@@ -133,7 +103,7 @@ export function useQueueStateMachine(preloader: PreloaderInstance, vocabTaskCont
         status: 'empty', 
         message: 'Excellent work! No more tasks are currently available.' 
       };
-      logTransition(fromStatus, 'empty', 'no tasks after task completion');
+      logTransition('task', 'empty', 'no tasks after task completion');
     }
   }
 

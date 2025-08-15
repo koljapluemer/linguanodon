@@ -104,3 +104,12 @@ await taskRepo.saveTask({
 - Use `toRaw()` before ALL Dexie save operations
 - Check if object came from Vue reactivity system
 - Manual object spread also works but is more verbose
+
+# TASK HANDLING ARCHITECTURE
+
+CRITICAL: TaskRenderer (src/widgets/do-task/TaskRenderer.vue) handles ALL task completion logic:
+- Entity updates (vocab, fact cards, goals, resources) 
+- Task state changes (isActive, lastShownAt, difficulty ratings)
+- Associated entity scoring and progress updates
+
+NEVER implement task completion logic anywhere else (queue state machines, task components, etc.)

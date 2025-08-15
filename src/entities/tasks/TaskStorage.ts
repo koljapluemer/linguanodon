@@ -7,7 +7,7 @@ class TaskDatabase extends Dexie {
   constructor() {
     super('TaskDatabase');
     this.version(1).stores({
-      tasks: 'uid, taskType, isActive, lastShownAt'
+      tasks: 'uid, taskType, isActive, lastShownAt, isOneTime'
     });
   }
 }
@@ -68,21 +68,28 @@ export class TaskStorage {
   async getTasksWithAssociatedResource(resourceUid: string): Promise<TaskData[]> {
     const allTasks = await db.tasks.toArray();
     return allTasks.filter(task => 
-      task.associatedUnits.some(unit => unit.type === 'Resource' && unit.uid === resourceUid)
+      task.associatedResources?.includes(resourceUid)
     );
   }
 
   async getTasksWithAssociatedVocab(vocabUid: string): Promise<TaskData[]> {
     const allTasks = await db.tasks.toArray();
     return allTasks.filter(task => 
-      task.associatedUnits.some(unit => unit.type === 'Vocab' && unit.uid === vocabUid)
+      task.associatedVocab?.includes(vocabUid)
     );
   }
 
   async getTasksWithAssociatedGoal(goalUid: string): Promise<TaskData[]> {
     const allTasks = await db.tasks.toArray();
     return allTasks.filter(task => 
-      task.associatedUnits.some(unit => unit.type === 'Goal' && unit.uid === goalUid)
+      task.associatedGoals?.includes(goalUid)
+    );
+  }
+
+  async getTasksWithAssociatedFactCard(factCardUid: string): Promise<TaskData[]> {
+    const allTasks = await db.tasks.toArray();
+    return allTasks.filter(task => 
+      task.associatedFactCards?.includes(factCardUid)
     );
   }
 }

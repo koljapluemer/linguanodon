@@ -1,7 +1,7 @@
 import { FactCardStorage } from './FactCardStorage';
 import type { FactCardRepoContract } from './FactCardRepoContract';
 import type { FactCardData } from './FactCardData';
-import { createEmptyCard } from 'ts-fsrs';
+import { createEmptyCard, fsrs, type Rating } from 'ts-fsrs';
 
 export class FactCardRepo implements FactCardRepoContract {
   private storage = new FactCardStorage();
@@ -57,5 +57,44 @@ export class FactCardRepo implements FactCardRepoContract {
 
   async deleteFactCard(uid: string): Promise<void> {
     await this.storage.delete(uid);
+  }
+
+  async scoreFactCard(factCardId: string, rating: Rating): Promise<void> {
+    const factCard = await this.getFactCardByUID(factCardId);
+    if (!factCard) return;
+
+    const f = fsrs();
+    const now = new Date();
+    const scheduling_cards = f.repeat(factCard.progress, now);
+    
+    // Get the appropriate card based on rating using Rating enum (exclude Manual rating)
+    const card = scheduling_cards[rating as Exclude<Rating, Rating.Manual>].card;
+
+    const updatedFactCard: FactCardData = {
+      ...factCard,
+      progress: {
+        ...card,
+        level: Math.max(0, factCard.progress.level + (rating >= 3 ? 1 : -1)),
+        streak: rating >= 3 ? factCard.progress.streak + 1 : 0,
+        last_review: new Date()
+      }
+    };
+
+    await this.updateFactCard(updatedFactCard);
+  }
+
+  async updateLastReview(factCardId: string): Promise<void> {
+    const factCard = await this.getFactCardByUID(factCardId);
+    if (!factCard) return;
+
+    const updatedFactCard: FactCardData = {
+      ...factCard,
+      progress: {
+        ...factCard.progress,
+        last_review: new Date()
+      }
+    };
+
+    await this.updateFactCard(updatedFactCard);
   }
 }

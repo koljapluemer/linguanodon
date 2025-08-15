@@ -50,16 +50,16 @@ const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const goal = ref<GoalData | null>(null);
 
 async function loadGoal() {
-  // Extract goal ID from task's associated units
-  const goalAssociation = props.task.associatedUnits.find(unit => unit.type === 'Goal');
-  if (!goalAssociation) {
+  // Extract goal ID from task's associated goals
+  const goalUid = props.task.associatedGoals?.[0];
+  if (!goalUid) {
     console.error('No goal association found in task');
     return;
   }
   
-  const loadedGoal = await goalRepo.getById(goalAssociation.uid);
+  const loadedGoal = await goalRepo.getById(goalUid);
   if (!loadedGoal) {
-    console.error(`Goal with id ${goalAssociation.uid} not found`);
+    console.error(`Goal with id ${goalUid} not found`);
     return;
   }
   goal.value = loadedGoal;

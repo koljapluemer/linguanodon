@@ -1,4 +1,5 @@
 import type { FactCardData } from './FactCardData';
+import type { Rating } from 'ts-fsrs';
 
 export interface FactCardRepoContract {
   // Basic CRUD operations
@@ -7,4 +8,8 @@ export interface FactCardRepoContract {
   saveFactCard(factCard: Omit<FactCardData, 'uid' | 'progress'>): Promise<FactCardData>;
   updateFactCard(factCard: FactCardData): Promise<void>;
   deleteFactCard(uid: string): Promise<void>;
+
+  // Progress operations
+  scoreFactCard(factCardId: string, rating: Rating): Promise<void>;
+  updateLastReview(factCardId: string): Promise<void>;
 }

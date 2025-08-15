@@ -6,7 +6,6 @@ import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoCont
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { useQueuePreloader } from './useQueuePreloader';
 import { useQueueStateMachine } from './useQueueStateMachine';
-import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 
 export function useCachedQueue(
   vocabRepo: VocabAndTranslationRepoContract,
@@ -19,11 +18,8 @@ export function useCachedQueue(
   // Initialize preloader
   const preloader = useQueuePreloader(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo, immersionContentRepo);
   
-  // Initialize vocab task controller
-  const vocabTaskController = new UpdateVocabTasksController(vocabRepo, taskRepo);
-  
-  // Initialize state machine with preloader and vocab task controller
-  const stateMachine = useQueueStateMachine(preloader, vocabTaskController, vocabRepo);
+  // Initialize state machine with preloader only (TaskRenderer handles entity updates)
+  const stateMachine = useQueueStateMachine(preloader);
 
   // Return the state machine interface with consistent naming for PageQueue
   return {

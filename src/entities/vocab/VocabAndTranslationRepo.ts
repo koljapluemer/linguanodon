@@ -107,16 +107,12 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   }
 
 
-  async scoreVocab(vocabId: string, rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): Promise<void> {
+  async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
     const vocab = await this.vocabStorage.getById(vocabId);
     if (!vocab) return;
 
     const scheduler = fsrs();
-    
-    // Map UI rating to FSRS rating
-    const fsrsRating = rating === 'Impossible' ? Rating.Again : 
-                      rating === 'Hard' ? Rating.Hard : 
-                      rating === 'Doable' ? Rating.Good : Rating.Easy;
+    const fsrsRating = rating;
 
     // Handle level -1 (new vocab)
     if (vocab.progress.level === -1) {
@@ -128,8 +124,11 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     }
 
     // Apply FSRS algorithm
-    const scheduling_cards = scheduler.repeat(vocab.progress, new Date());
-    const updatedCard = scheduling_cards[fsrsRating].card;
+    const now = new Date();
+    const scheduling_cards = scheduler.repeat(vocab.progress, now);
+    
+    // Get the appropriate card based on rating using Rating enum (exclude Manual rating)
+    const updatedCard = scheduling_cards[fsrsRating as Exclude<Rating, Rating.Manual>].card;
 
     // Update streak and level based on rating
     if (fsrsRating === Rating.Again || fsrsRating === Rating.Hard) {
@@ -159,6 +158,14 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       ...updatedCard
     };
 
+    await this.vocabStorage.update(vocab);
+  }
+
+  async updateLastReview(vocabId: string): Promise<void> {
+    const vocab = await this.vocabStorage.getById(vocabId);
+    if (!vocab) return;
+
+    vocab.progress.last_review = new Date();
     await this.vocabStorage.update(vocab);
   }
 

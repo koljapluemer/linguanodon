@@ -11,6 +11,5 @@ export interface FactCardData extends LocalObject {
     priority: number;
     doNotPractice?: boolean;
 
-
     progress: LearningProgress;
 }

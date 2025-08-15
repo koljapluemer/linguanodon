@@ -1,21 +1,20 @@
+import type { Rating } from "ts-fsrs";
+
 export interface TaskData {
   uid: string;
   taskType: string;
   title: string;
   prompt: string;
-  evaluateCorrectnessAndConfidenceAfterDoing: boolean;
+  evaluateDifficultyAfterDoing: boolean;
   decideWhetherToDoAgainAfterDoing: boolean;
+  isOneTime: boolean;
   isActive: boolean;
   taskSize: 'big' | 'medium' | 'small';
   lastShownAt?: Date;
-  nextShownEarliestAt?: Date;
-  lastDifficultyRating?: number;
-  lastCorrectnessRating?: number;
-  associatedUnits: Association[]; // used to persist references to vocab, resources, fact cards, goals etc. used for this task
-} 
+  lastDifficultyRating?: Rating;
 
-type AssociatedEntity = 'Vocab' | 'Resource' | 'FactCard' | 'Goal'
-interface Association  {
-  type: AssociatedEntity
-  uid: string
-}
+  associatedVocab?: string[] // uids of vocab data
+  associatedResources?: string[] // uids of resourcee data
+  associatedFactCards?: string[] // uids of fact card data
+  associatedGoals?: string[] // uids of goal data
+} 

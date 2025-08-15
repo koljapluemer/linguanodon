@@ -85,11 +85,12 @@ export class UpdateGoalTasksController {
       taskType: 'goal-add-vocab',
       title: `Add vocabulary to "${goal.title}"`,
       prompt: `Add more vocabulary to help achieve this goal: ${goal.title}`,
-      evaluateCorrectnessAndConfidenceAfterDoing: false,
-      decideWhetherToDoAgainAfterDoing: true, // User decides if they want to do this again
+      evaluateDifficultyAfterDoing: false,
+      decideWhetherToDoAgainAfterDoing: true,
+      isOneTime: false,
       isActive: true,
       taskSize: 'medium',
-      associatedUnits: [{ type: 'Goal', uid: goal.uid }]
+      associatedGoals: [goal.uid]
     };
   }
 
@@ -99,11 +100,12 @@ export class UpdateGoalTasksController {
       taskType: 'goal-add-sub-goals',
       title: `Add sub-goals to "${goal.title}"`,
       prompt: `Break down this goal into smaller, achievable sub-goals: ${goal.title}`,
-      evaluateCorrectnessAndConfidenceAfterDoing: false,
-      decideWhetherToDoAgainAfterDoing: true, // User decides if they want to do this again
+      evaluateDifficultyAfterDoing: false,
+      decideWhetherToDoAgainAfterDoing: true,
+      isOneTime: false,
       isActive: true,
       taskSize: 'medium',
-      associatedUnits: [{ type: 'Goal', uid: goal.uid }]
+      associatedGoals: [goal.uid]
     };
   }
 

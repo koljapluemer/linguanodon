@@ -71,11 +71,12 @@ export class UpdateResourceTasksController {
         taskType: taskType.type,
         title: taskType.title,
         prompt: taskType.prompt,
-        evaluateCorrectnessAndConfidenceAfterDoing: true,
+        evaluateDifficultyAfterDoing: true,
         decideWhetherToDoAgainAfterDoing: true,
+        isOneTime: false,
         isActive: true,
         taskSize: 'medium',
-        associatedUnits: [{ type: 'Resource', uid: resource.uid }]
+        associatedResources: [resource.uid]
       });
     }
 

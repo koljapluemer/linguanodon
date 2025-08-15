@@ -8,6 +8,7 @@ export interface TaskRepoContract {
   getTasksByResourceId(resourceUid: string): Promise<TaskData[]>;
   getTasksByVocabId(vocabUid: string): Promise<TaskData[]>;
   getTasksByGoalId(goalUid: string): Promise<TaskData[]>;
+  getTasksByFactCardId(factCardUid: string): Promise<TaskData[]>;
   getTasksByType(taskType: string): Promise<TaskData[]>;
   getRecentTasks(limit: number): Promise<TaskData[]>;
 }

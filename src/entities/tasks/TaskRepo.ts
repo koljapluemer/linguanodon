@@ -48,6 +48,10 @@ export class TaskRepo implements TaskRepoContract {
     return await this.storage.getTasksWithAssociatedGoal(goalUid);
   }
 
+  async getTasksByFactCardId(factCardUid: string): Promise<TaskData[]> {
+    return await this.storage.getTasksWithAssociatedFactCard(factCardUid);
+  }
+
   async getTasksByType(taskType: string): Promise<TaskData[]> {
     return await this.storage.getByTaskType(taskType);
   }

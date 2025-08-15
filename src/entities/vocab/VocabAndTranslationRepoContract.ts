@@ -1,5 +1,6 @@
 import type { VocabData } from './vocab/VocabData';
 import type { TranslationData } from './translations/TranslationData';
+import type { Rating } from 'ts-fsrs';
 
 export interface VocabPaginationResult {
   vocab: VocabData[];
@@ -27,7 +28,8 @@ export interface VocabAndTranslationRepoContract {
   deleteVocab(id: string): Promise<void>;
   
   // Progress operations
-  scoreVocab(vocabId: string, rating: 'Impossible' | 'Hard' | 'Doable' | 'Easy'): Promise<void>;
+  scoreVocab(vocabId: string, rating: Rating): Promise<void>;
+  updateLastReview(vocabId: string): Promise<void>;
   
   // Pronunciation operations
   addPronunciationToVocab(uid: string, pronunciation: string): Promise<void>;

@@ -37,10 +37,9 @@ const vocab = ref<VocabData | null>(null);
 const translations = ref<TranslationData[]>([]);
 const loading = ref(true);
 
-// Get the vocab ID from associated units
+// Get the vocab ID from associated vocab
 const vocabUid = computed(() => {
-  const vocabAssociation = props.task.associatedUnits.find(unit => unit.type === 'Vocab');
-  return vocabAssociation?.uid;
+  return props.task.associatedVocab?.[0];
 });
 
 // Extract task type info from task metadata
