@@ -1,4 +1,4 @@
-import { ref, computed, inject, watch } from 'vue';
+import { ref, computed, inject } from 'vue';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
@@ -42,46 +42,6 @@ export function useVocabForm(vocabId?: string, emit?: (event: 'vocab-saved', voc
            state.value.formData.content.trim() !== '';
   });
 
-  // Auto-save functionality
-  let autoSaveTimeout: number | null = null;
-
-  function scheduleAutoSave() {
-    if (autoSaveTimeout) {
-      clearTimeout(autoSaveTimeout);
-    }
-    
-    // Auto-save after 1 second of inactivity
-    autoSaveTimeout = window.setTimeout(() => {
-      if (state.value.isEditing && isValid.value && !state.value.saving) {
-        autoSave();
-      }
-    }, 1000);
-  }
-
-  async function autoSave() {
-    if (!state.value.isEditing || !vocabId || !isValid.value) return;
-
-    try {
-      state.value.saving = true;
-      await saveInternal();
-    } catch (error) {
-      console.warn('Auto-save failed:', error);
-      // Don't show error for auto-save failures
-    } finally {
-      state.value.saving = false;
-    }
-  }
-
-  // Watch for form changes to trigger auto-save
-  watch(
-    () => state.value.formData,
-    () => {
-      if (state.value.isEditing) {
-        scheduleAutoSave();
-      }
-    },
-    { deep: true }
-  );
 
   // Helper function to serialize form data and avoid proxy issues
   function serializeFormData(formData: VocabFormData): VocabFormData {

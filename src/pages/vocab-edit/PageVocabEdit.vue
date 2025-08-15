@@ -33,6 +33,7 @@
             label="Content"
             placeholder="The word or phrase"
             required
+            @update:modelValue="handleFieldChange"
           />
 
           <InlineLanguageSelect
@@ -40,6 +41,7 @@
             label="Language"
             placeholder="Select target language"
             required
+            @update:modelValue="handleFieldChange"
           />
 
           <InlineInput
@@ -49,11 +51,13 @@
             :min="1"
             :max="5"
             placeholder="1"
+            @update:modelValue="handleFieldChange"
           />
 
           <InlineToggle
             v-model="state.formData.doNotPractice"
             label="Exclude from practice"
+            @update:modelValue="handleFieldChange"
           />
         </div>
 
@@ -109,6 +113,7 @@
                 v-model="link.label"
                 label="Link label"
                 placeholder="Link label"
+                @update:modelValue="handleFieldChange"
               />
               
               <div class="flex items-center justify-between pt-2">
@@ -118,6 +123,7 @@
                     label="URL"
                     type="url"
                     placeholder="https://..."
+                    @update:modelValue="handleFieldChange"
                   />
                 </div>
                 <button
@@ -132,19 +138,6 @@
           </div>
         </div>
 
-        <!-- Auto-save Status -->
-        <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div class="flex items-center gap-2">
-            <span v-if="state.saving" class="text-sm text-base-content/70 flex items-center gap-1">
-              <span class="loading loading-spinner loading-sm"></span>
-              Auto-saving...
-            </span>
-            <span v-else-if="state.isEditing" class="text-sm text-success flex items-center gap-1">
-              <Check class="w-4 h-4" />
-              Changes saved automatically
-            </span>
-          </div>
-        </div>
       </div>
     </div>
     
@@ -170,7 +163,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { Plus, X, Check } from 'lucide-vue-next';
+import { Plus, X } from 'lucide-vue-next';
 import { useVocabForm } from './useVocabForm';
 import InlineInput from '@/shared/ui/InlineInput.vue';
 import InlineLanguageSelect from '@/shared/ui/InlineLanguageSelect.vue';
@@ -198,10 +191,17 @@ const isEditing = computed(() => {
 });
 
 // Use the vocab form composable
-const { state, loadedVocabData, loadVocab, addNote, updateNote, removeNote, addLink, removeLink } = useVocabForm(
+const { state, loadedVocabData, loadVocab, save, addNote, updateNote, removeNote, addLink, removeLink } = useVocabForm(
   route.params.id as string, 
   (vocabId: string) => handleVocabSaved(vocabId)
 );
+
+// Save immediately when any field changes
+async function handleFieldChange() {
+  if (state.value.isEditing) {
+    await save();
+  }
+}
 
 // Load vocab data on mount if editing
 onMounted(() => {
