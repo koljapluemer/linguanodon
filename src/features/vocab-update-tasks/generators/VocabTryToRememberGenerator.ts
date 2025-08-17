@@ -14,7 +14,6 @@ export class VocabTryToRememberGenerator extends VocabTaskGeneratorBase {
       uid,
       vocab,
       'vocab-try-to-remember',
-      vocab.content || 'Unknown vocab',
       'Try to remember the meaning of this word',
       'small',
       false, // don't evaluate difficulty

@@ -83,8 +83,7 @@ export class UpdateGoalTasksController {
     return {
       uid,
       taskType: 'add-vocab-to-goal',
-      title: `Add vocabulary to "${goal.title}"`,
-      prompt: `Add more vocabulary to help achieve this goal: ${goal.title}`,
+      prompt: `Add more vocabulary that helps you achieve this goal.`,
       evaluateDifficultyAfterDoing: false,
       decideWhetherToDoAgainAfterDoing: true,
       isOneTime: false,
@@ -98,8 +97,7 @@ export class UpdateGoalTasksController {
     return {
       uid,
       taskType: 'add-sub-goals',
-      title: `Add sub-goals to "${goal.title}"`,
-      prompt: `Break down this goal into smaller, achievable sub-goals: ${goal.title}`,
+      prompt: `Break down this goal into smaller, achievable sub-goals.`,
       evaluateDifficultyAfterDoing: false,
       decideWhetherToDoAgainAfterDoing: true,
       isOneTime: false,

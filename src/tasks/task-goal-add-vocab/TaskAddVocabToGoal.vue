@@ -1,7 +1,6 @@
 <template>
   <div class="space-y-6">
     <div v-if="goal">
-      <h2 class="text-xl font-semibold">{{ task.title }}</h2>
       
       <div class="card bg-base-100 shadow-xl">
         <div class="card-body">

@@ -1,8 +1,7 @@
 <template>
   <div class="space-y-4">
-    <!-- Task Title and Prompt -->
+    <!-- Task Prompt -->
     <div class="space-y-2">
-      <h2 class="text-xl font-bold">{{ props.task.title }}</h2>
       <p class="text-base-content/70">{{ props.task.prompt }}</p>
     </div>
 

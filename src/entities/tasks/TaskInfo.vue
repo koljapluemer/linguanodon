@@ -2,7 +2,6 @@
   <div class="p-4 border border-gray-200 dark:border-gray-700 rounded">
     <div class="flex items-start justify-between">
       <div class="flex-1">
-        <h3 class="font-medium text-sm">{{ task.title }}</h3>
         <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ task.prompt }}</p>
         <div class="text-xs text-gray-500 dark:text-gray-500 mt-2 space-y-1">
           <div>Status: {{ task.isActive ? 'Active' : 'Disabled' }}</div>

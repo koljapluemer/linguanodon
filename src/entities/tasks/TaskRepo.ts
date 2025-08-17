@@ -15,16 +15,16 @@ export class TaskRepo implements TaskRepoContract {
   }
 
   async saveTask(task: TaskData): Promise<void> {
-    console.log('TaskRepo: Attempting to save task:', task.title);
+    console.log('TaskRepo: Attempting to save task:', task.uid);
     
     try {
       const existingTask = await this.storage.getByUID(task.uid);
       if (existingTask) {
         await this.storage.update(task);
-        console.log('TaskRepo: Successfully updated task:', task.title, task.uid);
+        console.log('TaskRepo: Successfully updated task:', task.uid);
       } else {
         await this.storage.add(task);
-        console.log('TaskRepo: Successfully created task:', task.title, task.uid);
+        console.log('TaskRepo: Successfully created task:', task.uid);
       }
     } catch (error) {
       console.error('TaskRepo: Failed to save task:', error);

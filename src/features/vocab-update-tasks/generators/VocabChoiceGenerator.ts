@@ -19,7 +19,6 @@ export class VocabChooseFromTwoTargetToNativeGenerator extends VocabTaskGenerato
       uid,
       vocab,
       'vocab-choose-from-two-target-to-native',
-      vocab.content || 'Unknown vocab',
       'Choose the correct translation',
       'small',
       true,  // evaluate difficulty
@@ -45,7 +44,6 @@ export class VocabChooseFromTwoNativeToTargetGenerator extends VocabTaskGenerato
       uid,
       vocab,
       'vocab-choose-from-two-native-to-target',
-      vocab.content || 'Unknown vocab',
       'Choose the correct vocab',
       'small',
       true,  // evaluate difficulty
@@ -71,7 +69,6 @@ export class VocabChooseFromFourTargetToNativeGenerator extends VocabTaskGenerat
       uid,
       vocab,
       'vocab-choose-from-four-target-to-native',
-      vocab.content || 'Unknown vocab',
       'Choose the correct translation',
       'small',
       true,  // evaluate difficulty
@@ -97,7 +94,6 @@ export class VocabChooseFromFourNativeToTargetGenerator extends VocabTaskGenerat
       uid,
       vocab,
       'vocab-choose-from-four-native-to-target',
-      vocab.content || 'Unknown vocab',
       'Choose the correct vocab',
       'small',
       true,  // evaluate difficulty

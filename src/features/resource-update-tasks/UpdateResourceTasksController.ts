@@ -26,7 +26,7 @@ export class UpdateResourceTasksController {
     for (const taskData of newTasks) {
       await this.taskRepo.saveTask(toRaw(taskData));
       taskUids.push(taskData.uid);
-      console.log(`Created task: ${taskData.title}`);
+      console.log(`Created task: ${taskData.uid}`);
     }
     
     // Update resource with task references
@@ -69,7 +69,6 @@ export class UpdateResourceTasksController {
       tasks.push({
         uid: taskUid,
         taskType: taskType.type,
-        title: taskType.title,
         prompt: taskType.prompt,
         evaluateDifficultyAfterDoing: true,
         decideWhetherToDoAgainAfterDoing: true,

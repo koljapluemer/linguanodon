@@ -29,7 +29,6 @@ export class AddPronunciationGenerator extends VocabTaskGeneratorBase {
       uid,
       vocab,
       'add-pronunciation',
-      vocab.content || 'Unknown vocab',
       'Research the pronunciation and add it',
       'medium',
       false, // don't evaluate difficulty

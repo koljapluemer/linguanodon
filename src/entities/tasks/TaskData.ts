@@ -3,7 +3,6 @@ import type { Rating } from "ts-fsrs";
 export interface TaskData {
   uid: string;
   taskType: TaskName;
-  title: string;
   prompt: string;
   evaluateDifficultyAfterDoing: boolean;
   decideWhetherToDoAgainAfterDoing: boolean;

@@ -19,7 +19,6 @@ export class VocabRevealTargetToNativeGenerator extends VocabTaskGeneratorBase {
       uid,
       vocab,
       'vocab-reveal-target-to-native',
-      vocab.content || 'Unknown vocab',
       'What does this mean?',
       'small',
       true,  // evaluate difficulty
@@ -45,7 +44,6 @@ export class VocabRevealNativeToTargetGenerator extends VocabTaskGeneratorBase {
       uid,
       vocab,
       'vocab-reveal-native-to-target',
-      vocab.content || 'Unknown vocab',
       'What vocab has this translation?',
       'small',
       true,  // evaluate difficulty

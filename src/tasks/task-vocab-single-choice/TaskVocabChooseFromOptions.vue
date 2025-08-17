@@ -42,13 +42,13 @@ const vocabUid = computed(() => {
   return props.task.associatedVocab?.[0];
 });
 
-// Extract task type info from task metadata
+// Extract task type info from task type
 const isReverse = computed(() => {
-  return props.task.title.includes('translation-to-vocab');
+  return props.task.taskType.includes('native-to-target');
 });
 
 const optionCount = computed(() => {
-  return props.task.title.includes('four') ? 4 : 2;
+  return props.task.taskType.includes('four') ? 4 : 2;
 });
 
 const displayContent = computed(() => {

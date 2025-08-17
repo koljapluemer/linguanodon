@@ -11,7 +11,6 @@ export abstract class VocabTaskGeneratorBase {
     uid: string,
     vocab: VocabData,
     taskType: TaskData['taskType'],
-    title: string,
     prompt: string,
     size: TaskData['taskSize'],
     evaluateDifficulty: boolean,
@@ -21,7 +20,6 @@ export abstract class VocabTaskGeneratorBase {
     return {
       uid,
       taskType,
-      title,
       prompt,
       evaluateDifficultyAfterDoing: evaluateDifficulty,
       decideWhetherToDoAgainAfterDoing: decideAgain,
