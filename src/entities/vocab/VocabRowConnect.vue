@@ -1,9 +1,9 @@
 <template>
-  <FormField label="Connect Existing Vocabulary">
-    <template #default="{ inputId, inputClassString }">
-      <div class="relative">
-        <input :id="inputId" v-model="searchQuery" type="text" placeholder="Type to search for existing vocab..."
-          :class="inputClassString + ' input-sm'" @focus="showDropdown = true" @blur="hideDropdown" />
+  <div class="flex flex-col space-y-1">
+    <label class="text-sm font-medium">Connect Existing Vocabulary</label>
+    <div class="relative">
+      <input v-model="searchQuery" type="text" placeholder="Type to search for existing vocab..."
+        class="input input-bordered input-sm w-full" @focus="showDropdown = true" @blur="hideDropdown" />
 
         <!-- Search Results Dropdown -->
         <div v-if="showDropdown && searchQuery && searchResults.length > 0"
@@ -38,16 +38,14 @@
         <div v-if="loading" class="mt-2">
           <span class="text-sm text-base-content/60">Searching...</span>
         </div>
-      </div>
-    </template>
-  </FormField>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue';
 import type { VocabData } from './vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';
-import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   defaultLanguage?: string;

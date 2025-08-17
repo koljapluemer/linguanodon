@@ -17,31 +17,27 @@
       <div class="space-y-6">
         <h2 class="text-lg font-semibold">Basic Information</h2>
         <!-- Language -->
-        <FormField label="Language" required>
-          <template #default="{ inputId }">
-            <LanguageDropdown
-              :id="inputId"
-              v-model="formData.language"
-              placeholder="Select target language"
-              required
-            />
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Language *</label>
+          <LanguageDropdown
+            v-model="formData.language"
+            placeholder="Select target language"
+            required
+          />
+        </div>
 
         <!-- Priority -->
-        <FormField label="Priority">
-          <template #default="{ inputId, inputClassString }">
-            <input
-              :id="inputId"
-              v-model.number="formData.priority"
-              type="number"
-              min="1"
-              placeholder="1"
-              :class="inputClassString"
-              style="width: 6rem;"
-            />
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Priority</label>
+          <input
+            v-model.number="formData.priority"
+            type="number"
+            min="1"
+            placeholder="1"
+            class="input input-bordered w-full"
+            style="width: 6rem;"
+          />
+        </div>
 
         <!-- Exclude from practice -->
         <div class="form-control">
@@ -60,32 +56,28 @@
       <div class="space-y-6">
         <h2 class="text-lg font-semibold">Card Content</h2>
         <!-- Front -->
-        <FormField label="Front" required>
-          <template #default="{ inputId }">
-            <textarea
-              :id="inputId"
-              v-model="formData.front"
-              placeholder="Enter the front of the card (e.g., question, prompt, or concept)"
-              class="textarea textarea-bordered h-32 w-full"
-              required
-            ></textarea>
-            <div class="text-xs text-base-content/60 mt-1">Supports basic Markdown</div>
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Front *</label>
+          <textarea
+            v-model="formData.front"
+            placeholder="Enter the front of the card (e.g., question, prompt, or concept)"
+            class="textarea textarea-bordered h-32 w-full"
+            required
+          ></textarea>
+          <div class="text-xs text-base-content/60 mt-1">Supports basic Markdown</div>
+        </div>
 
         <!-- Back -->
-        <FormField label="Back" required>
-          <template #default="{ inputId }">
-            <textarea
-              :id="inputId"
-              v-model="formData.back"
-              placeholder="Enter the back of the card (e.g., answer, explanation, or details)"
-              class="textarea textarea-bordered h-32 w-full"
-              required
-            ></textarea>
-            <div class="text-xs text-base-content/60 mt-1">Supports basic Markdown</div>
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Back *</label>
+          <textarea
+            v-model="formData.back"
+            placeholder="Enter the back of the card (e.g., answer, explanation, or details)"
+            class="textarea textarea-bordered h-32 w-full"
+            required
+          ></textarea>
+          <div class="text-xs text-base-content/60 mt-1">Supports basic Markdown</div>
+        </div>
       </div>
 
       <!-- Notes -->
@@ -123,7 +115,6 @@ import NoteList from '@/entities/notes/NoteList.vue';
 import type { FactCardFormData } from './types';
 import type { NoteData } from '@/entities/notes/NoteData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import FormField from '@/shared/ui/FormField.vue';
 
 defineProps<{
   formData: FactCardFormData;

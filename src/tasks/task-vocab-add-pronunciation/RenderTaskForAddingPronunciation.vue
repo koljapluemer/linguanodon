@@ -3,7 +3,6 @@ import { ref, inject, onMounted, watch } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import FormField from '@/shared/ui/FormField.vue';
 
 interface Props {
   task: TaskData;
@@ -46,17 +45,15 @@ onMounted(loadVocab);
       <div class="card-body">
         <h3 class="text-xl font-semibold mb-4">{{ vocab.content }}</h3>
         
-        <FormField label="Pronunciation">
-          <template #default="{ inputId, inputClassString }">
-            <input 
-              :id="inputId"
-              v-model="pronunciation"
-              type="text" 
-              placeholder="Enter pronunciation..."
-              :class="inputClassString"
-            />
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Pronunciation</label>
+          <input 
+            v-model="pronunciation"
+            type="text" 
+            placeholder="Enter pronunciation..."
+            class="input input-bordered w-full"
+          />
+        </div>
       </div>
     </div>
   </div>

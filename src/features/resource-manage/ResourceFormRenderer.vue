@@ -14,55 +14,48 @@
     <div v-else class="space-y-6">
       <div class="space-y-6">
         <h2 class="text-lg font-semibold">Resource Details</h2>
-        <FormField label="Title" required>
-          <template #default="{ inputId, inputClasses }">
-            <input
-              :id="inputId"
-              v-model="formData.title"
-              type="text"
-              placeholder="Resource title"
-              :class="[inputClasses, { 'input-error': errors.title }]"
-            />
-            <div v-if="errors.title" class="text-sm text-error mt-1">{{ errors.title }}</div>
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Title *</label>
+          <input
+            v-model="formData.title"
+            type="text"
+            placeholder="Resource title"
+            class="input input-bordered w-full"
+            :class="{ 'input-error': errors.title }"
+          />
+          <div v-if="errors.title" class="text-sm text-error mt-1">{{ errors.title }}</div>
+        </div>
 
-        <FormField label="Language" required>
-          <template #default="{ inputId }">
-            <LanguageDropdown
-              :id="inputId"
-              v-model="formData.language"
-              placeholder="Select target language"
-              required
-            />
-            <div v-if="errors.language" class="text-sm text-error mt-1">{{ errors.language }}</div>
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Language *</label>
+          <LanguageDropdown
+            v-model="formData.language"
+            placeholder="Select target language"
+            required
+          />
+          <div v-if="errors.language" class="text-sm text-error mt-1">{{ errors.language }}</div>
+        </div>
 
-        <FormField label="Priority">
-          <template #default="{ inputId, inputClasses }">
-            <input
-              :id="inputId"
-              v-model.number="formData.priority"
-              type="number"
-              placeholder="0"
-              :class="inputClasses"
-              style="width: 6rem"
-            />
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Priority</label>
+          <input
+            v-model.number="formData.priority"
+            type="number"
+            placeholder="0"
+            class="input input-bordered w-full"
+            style="width: 6rem"
+          />
+        </div>
 
-        <FormField label="Content">
-          <template #default="{ inputId }">
-            <textarea
-              :id="inputId"
-              v-model="formData.content"
-              placeholder="Main content of the resource (text, article, etc.)"
-              class="textarea textarea-bordered w-full"
-              rows="6"
-            ></textarea>
-          </template>
-        </FormField>
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Content</label>
+          <textarea
+            v-model="formData.content"
+            placeholder="Main content of the resource (text, article, etc.)"
+            class="textarea textarea-bordered w-full"
+            rows="6"
+          ></textarea>
+        </div>
 
         <LinkEdit
           :link="formData.link"
@@ -93,7 +86,6 @@ import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LinkEdit from '@/shared/ui/LinkEdit.vue';
-import FormField from '@/shared/ui/FormField.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { Link } from '@/shared/Link';

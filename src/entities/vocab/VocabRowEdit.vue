@@ -1,41 +1,35 @@
 <template>
   <div class="flex flex-row gap-4">
-    <FormField label="Language" required>
-      <template #default="{ inputId }">
-        <LanguageDropdown
-          :id="inputId"
-          v-model="localVocab.language"
-          placeholder="Select language"
-          size="sm"
-          required
-          :default-language="defaultLanguage"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">Language *</label>
+      <LanguageDropdown
+        v-model="localVocab.language"
+        placeholder="Select language"
+        size="sm"
+        required
+        :default-language="defaultLanguage"
+      />
+    </div>
 
-    <FormField :label="`In ${currentLanguageDisplay}${contentRequired ? ' *' : ''}`" size="sm">
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="localVocab.content"
-          type="text"
-          :placeholder="contentPlaceholder"
-          :class="inputClasses"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">{{ `In ${currentLanguageDisplay}${contentRequired ? ' *' : ''}` }}</label>
+      <input
+        v-model="localVocab.content"
+        type="text"
+        :placeholder="contentPlaceholder"
+        class="input input-sm input-bordered w-full"
+      />
+    </div>
 
-    <FormField :label="`In your native language${translationsRequired ? ' *' : ''}`" size="sm" full-width>
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="translationsText"
-          type="text"
-          :placeholder="translationsPlaceholder"
-          :class="inputClasses"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1 flex-1">
+      <label class="text-sm font-medium">{{ `In your native language${translationsRequired ? ' *' : ''}` }}</label>
+      <input
+        v-model="translationsText"
+        type="text"
+        :placeholder="translationsPlaceholder"
+        class="input input-sm input-bordered w-full"
+      />
+    </div>
 
     <!-- Actions -->
     <div class="flex gap-2 items-end">
@@ -59,7 +53,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, inject } from 'vue';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import FormField from '@/shared/ui/FormField.vue';
 import type { VocabData } from './vocab/VocabData';
 import type { LanguageRepoContract } from '@/entities/languages';
 import type { VocabAndTranslationRepoContract } from './VocabAndTranslationRepoContract';

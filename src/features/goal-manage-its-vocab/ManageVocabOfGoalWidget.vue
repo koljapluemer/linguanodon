@@ -39,42 +39,36 @@
     <div class="space-y-4">
       <h3 class="text-md font-semibold">New Vocabulary Entry</h3>
       <div class="flex flex-wrap gap-4">
-      <FormField label="Language" size="sm">
-        <template #default="{ inputId }">
-          <LanguageDropdown
-            :id="inputId"
-            v-model="newVocab.language"
-            placeholder="Select target language"
-            required
-            size="sm"
-          />
-        </template>
-      </FormField>
+      <div class="flex flex-col space-y-1">
+        <label class="text-sm font-medium">Language</label>
+        <LanguageDropdown
+          v-model="newVocab.language"
+          placeholder="Select target language"
+          required
+          size="sm"
+        />
+      </div>
       
-      <FormField label="Content (Optional)" size="sm">
-        <template #default="{ inputId, inputClassString }">
-          <input
-            :id="inputId"
-            v-model="newVocab.content"
-            type="text"
-            placeholder="e.g., hola"
-            :class="inputClassString"
-          />
-        </template>
-      </FormField>
+      <div class="flex flex-col space-y-1">
+        <label class="text-sm font-medium">Content (Optional)</label>
+        <input
+          v-model="newVocab.content"
+          type="text"
+          placeholder="e.g., hola"
+          class="input input-bordered input-sm w-full"
+        />
+      </div>
       
-      <FormField label="Translation (Optional)" size="sm">
-        <template #default="{ inputId, inputClassString }">
-          <input
-            :id="inputId"
-            v-model="newVocab.translation"
-            type="text"
-            placeholder="e.g., hello"
-            :class="inputClassString"
-            @keydown.enter="addVocab"
-          />
-        </template>
-      </FormField>
+      <div class="flex flex-col space-y-1">
+        <label class="text-sm font-medium">Translation (Optional)</label>
+        <input
+          v-model="newVocab.translation"
+          type="text"
+          placeholder="e.g., hello"
+          class="input input-bordered input-sm w-full"
+          @keydown.enter="addVocab"
+        />
+      </div>
       </div>
     </div>
 
@@ -99,7 +93,6 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
-import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   goal: GoalData;

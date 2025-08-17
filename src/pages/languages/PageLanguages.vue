@@ -3,7 +3,6 @@ import { ref, onMounted, computed, inject } from 'vue';
 import { Languages, X } from 'lucide-vue-next';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 import isoLangs from '@/entities/languages/isoLangs.json';
-import FormField from '@/shared/ui/FormField.vue';
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 
@@ -162,40 +161,38 @@ function hideDropdown() {
         </div>
 
         <!-- Add Language Section -->
-        <FormField label="Add Target Language">
-          <template #default="{ inputId, inputClassString }">
-            <div class="relative">
-              <input 
-                :id="inputId"
-                v-model="addLanguageSearch" 
-                :class="inputClassString" 
-                placeholder="Type to search for a language..." 
-                @focus="showDropdown = true"
-                @blur="hideDropdown"
-              />
-              <div 
-                v-if="showDropdown && addLanguageSearch && availableLanguages.length > 0" 
-                class="absolute top-full left-0 right-0 z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto"
+        <div class="flex flex-col space-y-1">
+          <label class="text-sm font-medium">Add Target Language</label>
+          <div class="relative">
+            <input 
+              v-model="addLanguageSearch" 
+              class="input input-bordered w-full" 
+              placeholder="Type to search for a language..." 
+              @focus="showDropdown = true"
+              @blur="hideDropdown"
+            />
+            <div 
+              v-if="showDropdown && addLanguageSearch && availableLanguages.length > 0" 
+              class="absolute top-full left-0 right-0 z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto"
+            >
+              <button
+                v-for="lang in availableLanguages" 
+                :key="lang.code"
+                class="w-full text-left px-4 py-2 hover:bg-base-200 focus:bg-base-200 border-none bg-transparent"
+                @mousedown.prevent="selectLanguage(lang)"
               >
-                <button
-                  v-for="lang in availableLanguages" 
-                  :key="lang.code"
-                  class="w-full text-left px-4 py-2 hover:bg-base-200 focus:bg-base-200 border-none bg-transparent"
-                  @mousedown.prevent="selectLanguage(lang)"
-                >
-                  <div class="flex items-center gap-2">
-                    <span v-if="lang.emoji">{{ lang.emoji }}</span>
-                    <span class="font-medium">{{ lang.name }}</span>
-                    <span class="text-sm text-base-content/60">({{ lang.code }})</span>
-                  </div>
-                </button>
-              </div>
+                <div class="flex items-center gap-2">
+                  <span v-if="lang.emoji">{{ lang.emoji }}</span>
+                  <span class="font-medium">{{ lang.name }}</span>
+                  <span class="text-sm text-base-content/60">({{ lang.code }})</span>
+                </div>
+              </button>
             </div>
             <div v-if="addLanguageSearch && availableLanguages.length === 0" class="text-xs text-warning mt-1">
               No languages found matching your search.
             </div>
-          </template>
-        </FormField>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -1,17 +1,15 @@
 <template>
   <div class="flex flex-wrap gap-4">
-    <FormField label="Translation" size="lg" full-width>
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="editTranslation.content"
-          :class="inputClasses"
-          placeholder="Add new translation..."
-          @keyup.enter="save"
-          @keyup.escape="cancel"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1 flex-1">
+      <label class="text-sm font-medium">Translation</label>
+      <input
+        v-model="editTranslation.content"
+        class="input input-bordered input-lg w-full"
+        placeholder="Add new translation..."
+        @keyup.enter="save"
+        @keyup.escape="cancel"
+      />
+    </div>
     
     <div class="flex gap-2 items-end">
       <button
@@ -34,7 +32,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import FormField from '@/shared/ui/FormField.vue';
 import type { TranslationData } from './TranslationData';
 
 const props = defineProps<{

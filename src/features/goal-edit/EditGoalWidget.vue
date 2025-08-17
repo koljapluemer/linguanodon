@@ -2,22 +2,20 @@
   <div class="space-y-6">
     <h2 class="text-lg font-semibold">Goal Details</h2>
     
-    <FormField label="Goal Title">
-      <template #default="{ inputId, inputClassString }">
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-gray-600">I want to be able to</span>
-          <input
-            :id="inputId"
-            v-model="goalTitle"
-            type="text"
-            placeholder="describe what you want to achieve..."
-            :class="`${inputClassString} flex-1`"
-            @blur="saveGoal"
-            @keydown.enter="saveGoal"
-          />
-        </div>
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">Goal Title</label>
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-600">I want to be able to</span>
+        <input
+          v-model="goalTitle"
+          type="text"
+          placeholder="describe what you want to achieve..."
+          class="input input-bordered w-full flex-1"
+          @blur="saveGoal"
+          @keydown.enter="saveGoal"
+        />
+      </div>
+    </div>
 
     <div v-if="saving" class="text-sm text-gray-500">
       Saving...
@@ -29,7 +27,6 @@
 import { ref, inject, watch } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   goal: GoalData;

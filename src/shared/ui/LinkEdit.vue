@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import LinkDisplay from './LinkDisplay.vue';
-import FormField from './FormField.vue';
 import type { Link } from '@/shared/Link';
 
 interface Props {
@@ -60,65 +59,55 @@ const hasValidUrl = computed(() => {
   <div class="space-y-6">
     <h3 class="text-lg font-semibold">Link</h3>
     
-    <FormField label="URL">
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="urlValue"
-          type="url"
-          placeholder="https://example.com"
-          :class="inputClasses"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">URL</label>
+      <input
+        v-model="urlValue"
+        type="url"
+        placeholder="https://example.com"
+        class="input input-bordered w-full"
+      />
+    </div>
 
-    <FormField label="Label">
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="labelValue"
-          type="text"
-          placeholder="Link label (optional)"
-          :class="inputClasses"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">Label</label>
+      <input
+        v-model="labelValue"
+        type="text"
+        placeholder="Link label (optional)"
+        class="input input-bordered w-full"
+      />
+    </div>
 
-    <FormField label="Owner">
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="ownerValue"
-          type="text"
-          placeholder="Content owner/creator (optional)"
-          :class="inputClasses"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">Owner</label>
+      <input
+        v-model="ownerValue"
+        type="text"
+        placeholder="Content owner/creator (optional)"
+        class="input input-bordered w-full"
+      />
+    </div>
 
-    <FormField label="Owner Link">
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="ownerLinkValue"
-          type="url"
-          placeholder="Owner's website/profile (optional)"
-          :class="inputClasses"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">Owner Link</label>
+      <input
+        v-model="ownerLinkValue"
+        type="url"
+        placeholder="Owner's website/profile (optional)"
+        class="input input-bordered w-full"
+      />
+    </div>
 
-    <FormField label="License">
-      <template #default="{ inputId, inputClasses }">
-        <input
-          :id="inputId"
-          v-model="licenseValue"
-          type="text"
-          placeholder="License type (e.g., CC BY-SA, MIT, etc.)"
-          :class="inputClasses"
-        />
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">License</label>
+      <input
+        v-model="licenseValue"
+        type="text"
+        placeholder="License type (e.g., CC BY-SA, MIT, etc.)"
+        class="input input-bordered w-full"
+      />
+    </div>
 
     <!-- Preview -->
     <div v-if="hasValidUrl" class="mt-4">

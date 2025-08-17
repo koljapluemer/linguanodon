@@ -2,34 +2,29 @@
   <div class="space-y-4">
     <h4 class="text-md font-medium">Note</h4>
     <div class="flex flex-wrap gap-4">
-    <FormField label="Content" full-width>
-      <template #default="{ inputId }">
-        <textarea
-          :id="inputId"
-          :value="note.content"
-          @input="updateContent(($event.target as HTMLTextAreaElement).value)"
-          placeholder="Enter note content..."
-          class="textarea textarea-bordered w-full"
-          rows="2"
-        ></textarea>
-      </template>
-    </FormField>
+    <div class="flex flex-col space-y-1 flex-1">
+      <label class="text-sm font-medium">Content</label>
+      <textarea
+        :value="note.content"
+        @input="updateContent(($event.target as HTMLTextAreaElement).value)"
+        placeholder="Enter note content..."
+        class="textarea textarea-bordered w-full"
+        rows="2"
+      ></textarea>
+    </div>
     
     <div v-if="showBeforeExerciseOption" class="items-end">
-      <FormField label="">
-        <template #default="{ inputId }">
-          <label :for="inputId" class="cursor-pointer label justify-start gap-2">
-            <input
-              :id="inputId"
-              :checked="note.showBeforeExercise"
-              @change="updateShowBeforeExercise(($event.target as HTMLInputElement).checked)"
-              type="checkbox"
-              class="checkbox checkbox-sm"
-            />
-            <span class="label-text">Show before exercise</span>
-          </label>
-        </template>
-      </FormField>
+      <div class="flex flex-col space-y-1">
+        <label class="cursor-pointer label justify-start gap-2">
+          <input
+            :checked="note.showBeforeExercise"
+            @change="updateShowBeforeExercise(($event.target as HTMLInputElement).checked)"
+            type="checkbox"
+            class="checkbox checkbox-sm"
+          />
+          <span class="label-text">Show before exercise</span>
+        </label>
+      </div>
     </div>
     
     <div class="flex items-end">
@@ -48,7 +43,6 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
 import type { NoteData } from './NoteData';
-import FormField from '@/shared/ui/FormField.vue';
 
 const props = defineProps<{
   note: NoteData;
