@@ -1,54 +1,20 @@
 <template>
   <div class="space-y-4">
-    <!-- Task Prompt -->
-    <div class="space-y-2">
-      <p class="text-base-content/70">{{ props.task.prompt }}</p>
-    </div>
 
-    <!-- Task Controls or Rating/Decision Components -->
-    <div v-if="!isDone">
-      <!-- Task Action Buttons -->
-      <TaskButtonsDisableSkipDone
-        :isDoneEnabled="mayBeConsideredDone"
-        @done="handleDone"
-        @notNow="handleNotNow"
-        @skipAndDeactivate="handleSkipAndDeactivate"
-      />
-    </div>
-    
-    <div v-else-if="showDifficultyRating">
-      <!-- Difficulty Rating Component -->
-      <TaskEvaluateDifficulty @rating="handleDifficultyRating" />
-    </div>
-    
-    <div v-else-if="showDecisionComponent">
-      <!-- Do Again Decision Component -->
-      <TaskDecideWhetherToDoAgain @decision="handleDoAgainDecision" />
-    </div>
+    <TaskPrompt :prompt="task.prompt" />
+
+    <TaskButtonsDisableSkipDone :showDoneButton="!isDone"  :isDoneEnabled="mayBeConsideredDone" @done="handleDone" @notNow="handleNotNow"
+      @skipAndDeactivate="handleSkipAndDeactivate" v-if="!isDone" />
+    <TaskEvaluateDifficulty @rating="handleDifficultyRating" v-if="isDone && showDifficultyRating" />
+    <TaskDecideWhetherToDoAgain @decision="handleDoAgainDecision" v-if="isDone && showDecisionComponent" />
+
 
     <!-- Actual Task Component -->
-    <div v-if="!isDone">
-      <component
-        :is="getTaskComponent(props.task.taskType)"
-        v-if="getTaskComponent(props.task.taskType)"
-        :task="props.task"
-        @finished="handleTaskFinished"
-        @complete="handleTaskFinished"
-        @task-completed="handleTaskFinished"
-        @taskWasDone="handleTaskWasDone"
+    <div class="big-card">
+      <component :is="getTaskComponent(props.task.taskType)" :task="props.task" @finished="handleTaskFinished"
+        @complete="handleTaskFinished" @task-completed="handleTaskFinished" @taskWasDone="handleTaskWasDone"
         @taskNowMayBeConsideredDone="handleTaskNowMayBeConsideredDone"
-        @taskNowMayNotBeConsideredDone="handleTaskNowMayNotBeConsideredDone"
-      />
-      
-      <div v-else class="alert alert-error">
-        <div>
-          <p class="text-sm opacity-70">Task type: {{ props.task.taskType }}</p>
-          <p class="text-sm opacity-70">Unable to load task component.</p>
-        </div>
-        <button class="btn btn-sm" @click="handleSkipAndDeactivate">
-          Skip Task
-        </button>
-      </div>
+        @taskNowMayNotBeConsideredDone="handleTaskNowMayNotBeConsideredDone" />
     </div>
   </div>
 </template>
@@ -69,6 +35,7 @@ import type { Rating } from 'ts-fsrs';
 import TaskButtonsDisableSkipDone from './ui/TaskButtonsDisableSkipDone.vue';
 import TaskEvaluateDifficulty from './ui/TaskEvaluateDifficulty.vue';
 import TaskDecideWhetherToDoAgain from './ui/TaskDecideWhetherToDoAgain.vue';
+import TaskPrompt from '@/widgets/do-task/ui/TaskPrompt.vue';
 
 interface Props {
   task: TaskData;
@@ -125,19 +92,19 @@ function handleTaskFinished() {
 // Button event handlers
 function handleDone() {
   isDone.value = true;
-  
+
   // Check if we need to show difficulty rating
   if (props.task.evaluateDifficultyAfterDoing) {
     showDifficultyRating.value = true;
     return;
   }
-  
+
   // Check if we need to show do-again decision
   if (props.task.decideWhetherToDoAgainAfterDoing) {
     showDecisionComponent.value = true;
     return;
   }
-  
+
   // Neither rating nor decision needed, finish immediately
   finishTask();
 }
@@ -155,13 +122,13 @@ function handleSkipAndDeactivate() {
 function handleDifficultyRating(rating: Rating) {
   difficultyRating.value = rating;
   showDifficultyRating.value = false;
-  
+
   // Check if we need to show do-again decision
   if (props.task.decideWhetherToDoAgainAfterDoing) {
     showDecisionComponent.value = true;
     return;
   }
-  
+
   // No decision needed, finish
   finishTask();
 }
@@ -183,12 +150,12 @@ async function finishTask() {
       ...(props.task.isOneTime && { isActive: false }),
       ...(doAgainDecision.value !== null && { isActive: doAgainDecision.value })
     };
-    
+
     await taskRepo!.saveTask(toRaw(updatedTask));
-    
+
     // Update associated entities
     await updateAssociatedEntities();
-    
+
     emit('finished');
   } catch (error) {
     console.error('Error finishing task:', error);
@@ -203,7 +170,7 @@ async function updateTaskAsSkipped() {
       lastShownAt: new Date(),
       isActive: false
     };
-    
+
     await taskRepo!.saveTask(toRaw(updatedTask));
     emit('finished');
   } catch (error) {
@@ -218,10 +185,10 @@ async function updateAssociatedEntities() {
     console.log('TaskRenderer: Processing associated vocab:', props.task.associatedVocab);
     console.log('TaskRenderer: Task isOneTime:', props.task.isOneTime);
     console.log('TaskRenderer: Difficulty rating:', difficultyRating.value);
-    
+
     for (const vocabUid of props.task.associatedVocab) {
       console.log(`TaskRenderer: Processing vocab UID: ${vocabUid}`);
-      
+
       if (props.task.isOneTime) {
         // Just update last review time
         console.log(`TaskRenderer: Updating last review for one-time task, vocab: ${vocabUid}`);
@@ -235,7 +202,7 @@ async function updateAssociatedEntities() {
       } else {
         console.log(`TaskRenderer: No action taken for vocab ${vocabUid} - not one-time and no difficulty rating`);
       }
-      
+
       // Update vocab tasks after scoring/reviewing
       if (taskRepo && noteRepo) {
         console.log(`TaskRenderer: Updating tasks for vocab: ${vocabUid}`);
@@ -247,7 +214,7 @@ async function updateAssociatedEntities() {
   } else {
     console.log('TaskRenderer: No associated vocab to process');
   }
-  
+
   // Update associated fact cards
   if (props.task.associatedFactCards?.length && factCardRepo) {
     for (const factCardUid of props.task.associatedFactCards) {
@@ -260,7 +227,7 @@ async function updateAssociatedEntities() {
       }
     }
   }
-  
+
   // Update associated resources
   if (props.task.associatedResources?.length && resourceRepo) {
     for (const resourceUid of props.task.associatedResources) {
@@ -274,7 +241,7 @@ async function updateAssociatedEntities() {
       }
     }
   }
-  
+
   // Update associated goals
   if (props.task.associatedGoals?.length && goalRepo) {
     for (const goalUid of props.task.associatedGoals) {

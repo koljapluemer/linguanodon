@@ -1,38 +1,26 @@
 <template>
-  <div class="space-y-4">
-    <div class="text-center">
-      <h3 class="text-lg font-semibold mb-2">How difficult was this task?</h3>
-    </div>
+  <div class="big-card">
+    <div class="card-body items-center text-center">
+      <div class="card-title">How difficult was this task?</div>
 
-    <div class="flex justify-center gap-2">
-      <button
-        class="btn btn-sm btn-success"
-        :class="difficultyRating === Rating.Easy ? 'btn-primary' : 'btn-outline'"
-        @click="handleRating(Rating.Easy)"
-      >
-        Easy
-      </button>
-      <button
-        class="btn btn-sm btn-info"
-        :class="difficultyRating === Rating.Good ? 'btn-primary' : 'btn-outline'"
-        @click="handleRating(Rating.Good)"
-      >
-        Doable
-      </button>
-      <button
-        class="btn btn-sm btn-warning"
-        :class="difficultyRating === Rating.Hard ? 'btn-primary' : 'btn-outline'"
-        @click="handleRating(Rating.Hard)"
-      >
-        Difficult
-      </button>
-      <button
-        class="btn btn-sm btn-error"
-        :class="difficultyRating === Rating.Again ? 'btn-primary' : 'btn-outline'"
-        @click="handleRating(Rating.Again)"
-      >
-        Impossible
-      </button>
+      <div class="card-actions">
+        <button class="btn btn-sm btn-success" :class="difficultyRating === Rating.Easy ? 'btn-primary' : 'btn-outline'"
+          @click="handleRating(Rating.Easy)">
+          Easy
+        </button>
+        <button class="btn btn-sm btn-info" :class="difficultyRating === Rating.Good ? 'btn-primary' : 'btn-outline'"
+          @click="handleRating(Rating.Good)">
+          Doable
+        </button>
+        <button class="btn btn-sm btn-warning" :class="difficultyRating === Rating.Hard ? 'btn-primary' : 'btn-outline'"
+          @click="handleRating(Rating.Hard)">
+          Difficult
+        </button>
+        <button class="btn btn-sm btn-error" :class="difficultyRating === Rating.Again ? 'btn-primary' : 'btn-outline'"
+          @click="handleRating(Rating.Again)">
+          Impossible
+        </button>
+      </div>
     </div>
   </div>
 </template>

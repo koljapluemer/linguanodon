@@ -4,7 +4,6 @@ import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import TaskInfo from '@/entities/tasks/TaskInfo.vue';
 import { DistractorGenerator } from '@/entities/vocab/DistractorGenerator';
 import { shuffleArray } from '@/shared/arrayUtils';
 
@@ -53,7 +52,7 @@ const optionCount = computed(() => {
 
 const displayContent = computed(() => {
   if (!vocab.value) return '';
-  
+
   if (isReverse.value) {
     // For translation-to-vocab, show random translation
     const randomTranslation = translations.value[Math.floor(Math.random() * translations.value.length)];
@@ -79,7 +78,7 @@ async function loadVocabData() {
 
     vocab.value = vocabData;
     translations.value = await vocabRepo.getTranslationsByIds(vocabData.translations);
-    
+
     await generateOptions();
   } catch (error) {
     console.error('Failed to load vocab data:', error);
@@ -149,12 +148,8 @@ function selectOption(index: number) {
   const isCorrect = answerOptions.value[index].isCorrect;
 
   if (isCorrect) {
-    // Correct answer: make green and proceed after delay
     isAnswered.value = true;
-    setTimeout(() => {
-      // Auto-enable done and proceed
-      emit('finished');
-    }, 350);
+    emit('finished')
   } else {
     // Wrong answer: mark first attempt as wrong, disable button
     firstAttemptWrong.value = true;
@@ -198,61 +193,37 @@ onMounted(loadVocabData);
 </script>
 
 <template>
-  <div class="space-y-6">
-    <!-- Task Screen -->
-    <div>
-      <!-- Task Header -->
-      <TaskInfo :task="task" />
-      
-      <!-- Loading State -->
-      <div v-if="loading" class="text-center py-8">
-        <span class="loading loading-spinner loading-lg"></span>
-        <p class="mt-2 text-gray-500">Loading exercise...</p>
-      </div>
-      
-      <!-- Exercise Content -->
-      <div v-else-if="vocab && answerOptions.length > 0">
-        <!-- Vocab Content Card -->
-        <div class="card bg-base-100 shadow-xl mb-6">
-          <div class="card-body text-center">
-            <h2 class="text-3xl font-bold">{{ displayContent }}</h2>
-          </div>
-        </div>
 
-        <!-- Answer Options -->
-        <div v-if="optionCount === 2" class="flex justify-center gap-4">
-          <button 
-            v-for="(option, index) in answerOptions" 
-            :key="index"
-            :class="getButtonClass(index)"
-            :disabled="isButtonDisabled(index)"
-            @click="selectOption(index)"
-            class="btn btn-lg px-8 py-4 min-h-16"
-          >
-            {{ option.content }}
-          </button>
-        </div>
+  <!-- Loading State -->
+  <div v-if="loading" class="text-center py-8">
+    <span class="loading loading-spinner loading-lg"></span>
+    <p class="mt-2 text-gray-500">Loading exercise...</p>
+  </div>
 
-        <!-- 2x2 Grid for 4 options -->
-        <div v-else class="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
-          <button 
-            v-for="(option, index) in answerOptions" 
-            :key="index"
-            :class="getButtonClass(index)"
-            :disabled="isButtonDisabled(index)"
-            @click="selectOption(index)"
-            class="btn btn-lg px-6 py-4 min-h-16 text-wrap"
-          >
-            {{ option.content }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Error State -->
-      <div v-else class="alert alert-error">
-        <span>Failed to load exercise data</span>
-      </div>
+  <!-- Exercise Content -->
+  <div v-else-if="vocab && answerOptions.length > 0" class="card-body text-center items-center">
+    <div class="card-title text-8xl mb-8">{{ displayContent }}
     </div>
-    
+
+    <!-- Answer Options -->
+    <div v-if="optionCount === 2" class="card-actions">
+      <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
+        :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg">
+        {{ option.content }}
+      </button>
+    </div>
+
+    <div v-else class="card-actions">
+      <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
+        :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg">
+        {{ option.content }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div v-else class="alert alert-error">
+    <span>Failed to load exercise data</span>
+
   </div>
 </template>

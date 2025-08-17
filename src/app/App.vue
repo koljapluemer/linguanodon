@@ -25,4 +25,9 @@ if (app) {
 <style>
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+.big-card {
+  @apply card bg-base-100 shadow-xl;
+}
 </style>
