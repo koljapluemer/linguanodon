@@ -19,8 +19,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  taskMayNowBeConsideredDone: [];
-  taskMayNowNotBeConsideredDone: [];
+  'fact-card-list-changed': [];
 }>();
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
@@ -51,7 +50,7 @@ async function handleFactCardsUpdate(newFactCardIds: string[]) {
   
   if (factCardsListChanged && !hasFactCardsChanged.value) {
     hasFactCardsChanged.value = true;
-    emit('taskMayNowBeConsideredDone');
+    emit('fact-card-list-changed');
   }
   
   // Auto-save - update the resource with new fact card IDs

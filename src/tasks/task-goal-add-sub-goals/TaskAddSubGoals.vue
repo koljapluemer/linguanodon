@@ -28,9 +28,6 @@ const props = defineProps<{
   goalId: string;
 }>();
 
-const emit = defineEmits<{
-  'task-completed': [];
-}>();
 
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const goal = ref<GoalData | null>(null);
@@ -48,14 +45,6 @@ function handleGoalUpdate(updatedGoal: GoalData) {
   goal.value = updatedGoal;
 }
 
-async function handleTaskCompleted() {
-  if (!goal.value) return;
-
-  // In the new structure, task completion should be handled by a feature layer
-  // that coordinates between TaskRepo and GoalRepo
-  // For now, just emit completion - the task management will be handled elsewhere
-  emit('task-completed');
-}
 
 onMounted(loadGoal);
 </script>

@@ -1,7 +1,5 @@
 <template>
   <div class="space-y-4">
-    <h4 class="text-lg font-semibold">Vocabulary</h4>
-    
     <!-- Existing vocab items -->
     <div v-for="(vocab, index) in vocabItems" :key="vocab.uid" class="space-y-2">
       <VocabRowRender

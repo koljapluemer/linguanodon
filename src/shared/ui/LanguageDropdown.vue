@@ -56,7 +56,7 @@ const sizeClass = computed(() => {
   <select 
     :id="id"
     v-model="selectedLanguage"
-    class="select select-bordered w-full"
+    class="select select-bordered"
     :class="sizeClass"
     :required="required"
     :disabled="loading || availableLanguages.length === 0"

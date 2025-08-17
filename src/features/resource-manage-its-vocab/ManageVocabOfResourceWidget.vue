@@ -31,8 +31,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  taskMayNowBeConsideredDone: [];
-  taskMayNowNotBeConsideredDone: [];
+  'vocab-list-changed': [];
 }>();
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
@@ -63,7 +62,7 @@ async function handleVocabUpdate(newVocabIds: string[]) {
   
   if (vocabListChanged && !hasVocabChanged.value) {
     hasVocabChanged.value = true;
-    emit('taskMayNowBeConsideredDone');
+    emit('vocab-list-changed');
   }
   
   // Auto-save - update the resource with new vocab IDs
@@ -90,7 +89,7 @@ async function handleVocabDisconnect(vocabUid: string) {
     
     if (vocabListChanged && !hasVocabChanged.value) {
       hasVocabChanged.value = true;
-      emit('taskMayNowBeConsideredDone');
+      emit('vocab-list-changed');
     }
   } catch (error) {
     console.error('Failed to disconnect vocab:', error);

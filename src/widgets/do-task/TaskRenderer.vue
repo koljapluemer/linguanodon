@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-4">
 
-    <TaskPrompt :prompt="task.prompt" />
+    <TaskPrompt :prompt="task.prompt"/>
 
     <TaskButtonsDisableSkipDone :showDoneButton="!isDone"  :isDoneEnabled="mayBeConsideredDone" @done="handleDone" @notNow="handleNotNow"
-      @skipAndDeactivate="handleSkipAndDeactivate" v-if="!isDone" />
-    <TaskEvaluateDifficulty @rating="handleDifficultyRating" v-if="isDone && showDifficultyRating" />
-    <TaskDecideWhetherToDoAgain @decision="handleDoAgainDecision" v-if="isDone && showDecisionComponent" />
+      @skipAndDeactivate="handleSkipAndDeactivate" v-if="!isDone" :key="task.uid" />
+    <TaskEvaluateDifficulty @rating="handleDifficultyRating" v-if="isDone && showDifficultyRating" :key="task.uid" />
+    <TaskDecideWhetherToDoAgain @decision="handleDoAgainDecision" v-if="isDone && showDecisionComponent" :key="task.uid" />
 
 
     <!-- Actual Task Component -->

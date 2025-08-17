@@ -2,28 +2,21 @@
 import { computed, ref, inject, onMounted } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import ManageVocabOfResourceWidget from '@/features/resource-manage-its-vocab/ManageVocabOfResourceWidget.vue';
-import LinkDisplay from '@/shared/ui/LinkDisplay.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
+import LinkDisplayAsButton from '@/shared/ui/LinkDisplayAsButton.vue';
 
 interface Props {
   task: TaskData;
 }
 
 interface Emits {
-  (e: 'finished'): void;
+  (e: 'taskNowMayBeConsideredDone'): void;
+  (e: 'taskNowMayNotBeConsideredDone'): void;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-
-// Widget-specific handlers that trigger finished
-const handleVocabMayBeConsideredDone = () => {
-  // Could emit finished here if needed
-};
-const handleVocabMayNotBeConsideredDone = () => {
-  // Widget state handling
-};
 
 // Get the resource ID from associated resources
 const resourceUid = computed(() => {
@@ -45,35 +38,22 @@ const loadResource = async () => {
   }
 };
 
+function handleVocabListChanged() {
+  emit('taskNowMayBeConsideredDone');
+}
+
 onMounted(() => {
   loadResource();
 });
 </script>
 
 <template>
-  <!-- Resource Link -->
-  <LinkDisplay v-if="resource?.link" :link="resource.link" />
+  <div class="card-body">
+    <LinkDisplayAsButton v-if="resource?.link" :link="resource.link" size="large" />
+    <p class="text-lg my-2" v-if="resource?.content">{{ resource.content }}</p>
 
-  <p class="text-lg my-2" v-if="resource?.content">{{ resource.content }}</p>
-
-  <!-- Vocab Management Widget -->
-  <div class="card bg-base-100 shadow-lg">
-    <div class="card-body">
-      <h3 class="card-title">Add Vocabulary</h3>
-      <ManageVocabOfResourceWidget v-if="resourceUid" :resource-uid="resourceUid" :show-delete-button="true"
-        :show-disconnect-button="true" :allow-jumping-to-vocab-page="false" :allow-connecting-existing="true"
-        :allow-adding-new="true" @task-may-now-be-considered-done="handleVocabMayBeConsideredDone"
-        @task-may-now-not-be-considered-done="handleVocabMayNotBeConsideredDone" />
-    </div>
-  </div>
-
-  <!-- Action Buttons -->
-  <div class="flex gap-2 mt-4">
-    <button class="btn btn-primary" @click="emit('finished')">
-      Done
-    </button>
-    <button class="btn btn-ghost" @click="emit('finished')">
-      Skip
-    </button>
+    <ManageVocabOfResourceWidget v-if="resourceUid" :resource-uid="resourceUid" :show-delete-button="true"
+      :show-disconnect-button="true" :allow-jumping-to-vocab-page="false" :allow-connecting-existing="true"
+      :allow-adding-new="true" @vocab-list-changed="handleVocabListChanged" />
   </div>
 </template>

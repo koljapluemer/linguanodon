@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap gap-4">
+  <div class="flex flex-row gap-4">
     <FormField label="Language" required>
       <template #default="{ inputId }">
         <LanguageDropdown
@@ -13,7 +13,7 @@
       </template>
     </FormField>
 
-    <FormField :label="`In ${currentLanguageDisplay}${contentRequired ? ' *' : ''}`" size="sm" full-width>
+    <FormField :label="`In ${currentLanguageDisplay}${contentRequired ? ' *' : ''}`" size="sm">
       <template #default="{ inputId, inputClasses }">
         <input
           :id="inputId"

@@ -1,65 +1,46 @@
 <template>
-  <div class="card bg-base-100 border-2 border-dashed border-base-300">
-    <div class="card-body p-4">
-      <div class="space-y-4">
-        <h3 class="text-md font-semibold">Connect Vocabulary</h3>
-        <FormField label="Connect Existing Vocabulary">
-          <template #default="{ inputId, inputClassString }">
-            <div class="relative">
-              <input
-                :id="inputId"
-                v-model="searchQuery"
-                type="text"
-                placeholder="Type to search for existing vocab..."
-                :class="inputClassString + ' input-sm'"
-                @focus="showDropdown = true"
-                @blur="hideDropdown"
-              />
-              
-              <!-- Search Results Dropdown -->
-              <div 
-                v-if="showDropdown && searchQuery && searchResults.length > 0" 
-                class="absolute top-full left-0 right-0 z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto"
-              >
-                <button
-                  v-for="vocab in searchResults" 
-                  :key="vocab.uid"
-                  class="w-full text-left px-4 py-3 hover:bg-base-200 focus:bg-base-200 border-none bg-transparent"
-                  @mousedown.prevent="selectVocab(vocab)"
-                >
-                  <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                      <div class="flex items-center gap-3">
-                        <div class="w-20">
-                          <span class="badge badge-outline badge-sm">
-                            {{ vocab.language }}
-                          </span>
-                        </div>
-                        <div class="font-medium">{{ vocab.content || '...' }}</div>
-                        <div class="text-sm text-base-content/60">
-                          {{ vocab.translations.join(', ') || '(no translations)' }}
-                        </div>
-                      </div>
-                    </div>
+  <FormField label="Connect Existing Vocabulary">
+    <template #default="{ inputId, inputClassString }">
+      <div class="relative">
+        <input :id="inputId" v-model="searchQuery" type="text" placeholder="Type to search for existing vocab..."
+          :class="inputClassString + ' input-sm'" @focus="showDropdown = true" @blur="hideDropdown" />
+
+        <!-- Search Results Dropdown -->
+        <div v-if="showDropdown && searchQuery && searchResults.length > 0"
+          class="absolute top-full left-0 right-0 z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+          <button v-for="vocab in searchResults" :key="vocab.uid"
+            class="w-full text-left px-4 py-3 hover:bg-base-200 focus:bg-base-200 border-none bg-transparent"
+            @mousedown.prevent="selectVocab(vocab)">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <div class="flex items-center gap-3">
+                  <div class="w-20">
+                    <span class="badge badge-outline badge-sm">
+                      {{ vocab.language }}
+                    </span>
                   </div>
-                </button>
-              </div>
-              
-              <!-- No results message -->
-              <div v-if="searchQuery && searchResults.length === 0 && !loading" class="mt-2">
-                <span class="text-sm text-warning">No vocabulary found matching your search.</span>
-              </div>
-              
-              <!-- Loading indicator -->
-              <div v-if="loading" class="mt-2">
-                <span class="text-sm text-base-content/60">Searching...</span>
+                  <div class="font-medium">{{ vocab.content || '...' }}</div>
+                  <div class="text-sm text-base-content/60">
+                    {{ vocab.translations.join(', ') || '(no translations)' }}
+                  </div>
+                </div>
               </div>
             </div>
-          </template>
-        </FormField>
+          </button>
+        </div>
+
+        <!-- No results message -->
+        <div v-if="searchQuery && searchResults.length === 0 && !loading" class="mt-2">
+          <span class="text-sm text-warning">No vocabulary found matching your search.</span>
+        </div>
+
+        <!-- Loading indicator -->
+        <div v-if="loading" class="mt-2">
+          <span class="text-sm text-base-content/60">Searching...</span>
+        </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </FormField>
 </template>
 
 <script setup lang="ts">
@@ -91,22 +72,22 @@ const showDropdown = ref(false);
 // Search results based on query
 const searchResults = computed(() => {
   if (!searchQuery.value.trim()) return [];
-  
+
   const query = searchQuery.value.toLowerCase();
-  
+
   return allVocab.value
     .filter(vocab => {
       // Exclude already connected vocab
       if (props.excludeIds?.includes(vocab.uid)) return false;
-      
+
       // Search in content
       if (vocab.content?.toLowerCase().includes(query)) return true;
-      
+
       // Search in translations
-      if (vocab.translations.some(translation => 
+      if (vocab.translations.some(translation =>
         translation.toLowerCase().includes(query)
       )) return true;
-      
+
       return false;
     })
     .slice(0, 20); // Limit results
@@ -115,7 +96,7 @@ const searchResults = computed(() => {
 // Load all vocab when component mounts
 async function loadAllVocab() {
   if (!vocabRepo) return;
-  
+
   loading.value = true;
   try {
     allVocab.value = await vocabRepo.getVocab();
