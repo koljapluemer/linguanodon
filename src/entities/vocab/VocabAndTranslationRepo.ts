@@ -5,6 +5,7 @@ import type { VocabData } from './vocab/VocabData';
 import type { TranslationData } from './translations/TranslationData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
 import { pickRandom } from '@/shared/arrayUtils';
+import { isUnseen, isSeen } from './vocab/vocabUtils';
 
 export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract {
   private vocabStorage = new VocabStorage();
@@ -48,14 +49,14 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     const allVocab = await this.vocabStorage.getAll();
     
     const alreadySeenDueVocab = allVocab.filter(vocab => {
-      // Must have been practiced before (reps > 0)
-      const hasBeenPracticed = vocab.progress.reps > 0;
+      // Must have been seen before (level >= 0)
+      const hasBeenSeen = isSeen(vocab);
       // Must be due now
       const isDue = vocab.progress.due <= new Date();
       // Must not be excluded from practice
       const isNotExcluded = !vocab.doNotPractice;
       
-      return hasBeenPracticed && isDue && isNotExcluded;
+      return hasBeenSeen && isDue && isNotExcluded;
     });
     
     return pickRandom(alreadySeenDueVocab, count).map(v => this.ensureVocabFields(v));
@@ -71,11 +72,11 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
         return !vocab.doNotPractice; // Still filter by doNotPractice
       }
       
-      // Never practiced before (reps === 0) and not excluded from practice
-      const isUnseen = vocab.progress.reps === 0;
+      // Never seen before (level === -1) and not excluded from practice
+      const vocabIsUnseen = isUnseen(vocab);
       const isNotExcluded = !vocab.doNotPractice;
       
-      return isUnseen && isNotExcluded;
+      return vocabIsUnseen && isNotExcluded;
     });
     
     return pickRandom(unseenVocab, count).map(v => this.ensureVocabFields(v));
@@ -96,20 +97,25 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
         return true; // Consider unseen if no progress
       }
       
-      // Unseen: never practiced before (reps === 0)
-      const isUnseen = vocab.progress.reps === 0;
+      // Unseen: never seen before (level === -1)
+      const vocabIsUnseen = isUnseen(vocab);
       
-      // Due: has been practiced and is due now
-      const isDue = vocab.progress.reps > 0 && vocab.progress.due <= new Date();
+      // Due: has been seen and is due now
+      const isDue = isSeen(vocab) && vocab.progress.due <= new Date();
       
-      return isUnseen || isDue;
+      return vocabIsUnseen || isDue;
     });
   }
 
 
   async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
+    console.log(`VocabRepo.scoreVocab: Starting - vocabId: ${vocabId}, rating: ${rating}`);
     const vocab = await this.vocabStorage.getById(vocabId);
-    if (!vocab) return;
+    if (!vocab) {
+      console.log(`VocabRepo.scoreVocab: Vocab not found for ID: ${vocabId}`);
+      return;
+    }
+    console.log(`VocabRepo.scoreVocab: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current reps: ${vocab.progress.reps}`);
 
     const scheduler = fsrs();
     const fsrsRating = rating;
@@ -159,14 +165,34 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     };
 
     await this.vocabStorage.update(vocab);
+    console.log(`VocabRepo.scoreVocab: Successfully updated vocab ${vocabId} - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}, new due: ${vocab.progress.due}`);
   }
 
   async updateLastReview(vocabId: string): Promise<void> {
+    console.log(`VocabRepo.updateLastReview: Starting - vocabId: ${vocabId}`);
     const vocab = await this.vocabStorage.getById(vocabId);
-    if (!vocab) return;
+    if (!vocab) {
+      console.log(`VocabRepo.updateLastReview: Vocab not found for ID: ${vocabId}`);
+      return;
+    }
+    console.log(`VocabRepo.updateLastReview: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current last_review: ${vocab.progress.last_review}`);
 
-    vocab.progress.last_review = new Date();
+    // Initialize FSRS card for new vocab
+    if (vocab.progress.level === -1) {
+      console.log(`VocabRepo.updateLastReview: Initializing FSRS card for new vocab ${vocabId}`);
+      vocab.progress = {
+        ...createEmptyCard(),
+        streak: 0,
+        level: 0
+      };
+      console.log(`VocabRepo.updateLastReview: Initialized FSRS card - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}`);
+    }
+
+    // Always update last review time
+    const newLastReview = new Date();
+    vocab.progress.last_review = newLastReview;
     await this.vocabStorage.update(vocab);
+    console.log(`VocabRepo.updateLastReview: Successfully updated vocab ${vocabId} - level: ${vocab.progress.level}, new last_review: ${newLastReview}`);
   }
 
   async addPronunciationToVocab(_uid: string, _pronunciation: string): Promise<void> {
@@ -300,7 +326,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     
     return allVocab.filter(vocab => 
       vocab.language === language &&
-      vocab.progress.reps > 0 &&
+      isSeen(vocab) &&
       vocab.progress.due <= new Date() &&
       !vocab.doNotPractice
     ).map(v => this.ensureVocabFields(v));
@@ -356,7 +382,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     
     return allVocab.filter(vocab => 
       languages.includes(vocab.language) &&
-      vocab.progress.reps > 0 &&
+      isSeen(vocab) &&
       vocab.progress.due <= new Date() &&
       !vocab.doNotPractice
     ).map(v => this.ensureVocabFields(v));
@@ -367,7 +393,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     
     const unseenVocab = allVocab.filter(vocab => 
       languages.includes(vocab.language) &&
-      vocab.progress.reps === 0 &&
+      isUnseen(vocab) &&
       !vocab.doNotPractice
     ).map(v => this.ensureVocabFields(v));
     

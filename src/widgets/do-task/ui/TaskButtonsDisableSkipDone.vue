@@ -1,13 +1,13 @@
 <template>
   <div class="flex justify-center gap-4">
     <button 
-      class="btn btn-sm btn-error btn-outline" 
+      class="btn" 
       @click="$emit('skipAndDeactivate')"
     >
       Skip and Deactivate
     </button>
     <button 
-      class="btn btn-sm btn-ghost" 
+      class="btn" 
       @click="$emit('notNow')"
     >
       Not now

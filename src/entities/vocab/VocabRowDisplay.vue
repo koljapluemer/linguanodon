@@ -51,6 +51,7 @@
         <X class="w-4 h-4" />
       </button>
     </div>
+    reps: {{ vocab.progress.reps }}
   </div>
 </template>
 

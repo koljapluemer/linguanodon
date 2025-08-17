@@ -17,11 +17,12 @@
       />
     </div>
 
-    <!-- Associated Tasks -->
     <div v-if="isEditing && currentVocabTaskIds.length > 0" class="mt-8">
       <h2 class="text-xl font-semibold mb-4">Associated Tasks</h2>
       <TaskModalTriggerList :task-ids="currentVocabTaskIds" />
     </div>
+
+
   </div>
 </template>
 
