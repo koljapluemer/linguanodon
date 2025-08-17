@@ -202,22 +202,23 @@ onMounted(loadVocabData);
 
   <!-- Exercise Content -->
   <div v-else-if="vocab && answerOptions.length > 0" class="card-body text-center items-center">
-    <div class="card-title text-8xl mb-8">{{ displayContent }}
+    <div class="card-title text-6xl mb-8">{{ displayContent }}
     </div>
 
-    <!-- Answer Options -->
-    <div v-if="optionCount === 2" class="card-actions">
+    <!-- Answer Options - only show when not answered -->
+    <div v-if="!isAnswered" class="card-actions">
       <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
         :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg">
         {{ option.content }}
       </button>
     </div>
 
-    <div v-else class="card-actions">
-      <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
-        :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg">
-        {{ option.content }}
-      </button>
+    <!-- Correct Answer Display - show when answered -->
+    <div v-if="isAnswered" class="w-full">
+      <div class="divider"></div>
+      <div class="text-6xl mt-4">
+        {{ answerOptions.find(opt => opt.isCorrect)?.content }}
+      </div>
     </div>
   </div>
 
