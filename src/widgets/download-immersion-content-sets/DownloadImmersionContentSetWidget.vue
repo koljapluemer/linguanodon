@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteImmersionContentService } from '@/features/download-immersion-content-sets/RemoteImmersionContentService';
+import { RemoteImmersionContentService } from '@/widgets/download-immersion-content-sets/RemoteImmersionContentService';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteSetService } from '@/features/download-resource-sets/RemoteSetService';
+import { RemoteSetService } from '@/widgets/download-resource-sets/RemoteSetService';
 import { UpdateResourceTasksController } from '@/features/resource-update-tasks/UpdateResourceTasksController';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';

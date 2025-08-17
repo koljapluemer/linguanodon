@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteVocabService } from '@/features/download-vocab-sets/RemoteVocabService';
+import { RemoteVocabService } from '@/widgets/download-vocab-sets/RemoteVocabService';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
