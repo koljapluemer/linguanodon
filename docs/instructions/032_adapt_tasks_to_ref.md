@@ -1,0 +1,4 @@
+- read [this reference](docs/reference/tasks.md) in detail
+- some structural changes were made to `TaskData` and the taskRegistry. Adapt where needed.
+- Then, adapt task generation logic and the task widgets to the reference.
+- Keep it simple. Do not add endless redundant information, extra buttons or text nor endless nested cards!
