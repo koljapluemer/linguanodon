@@ -41,7 +41,8 @@ export function formDataToFactCardData(formData: FactCardFormData, existingFactC
     priority: formData.priority ?? 1,
     doNotPractice: formData.doNotPractice,
     isUserCreated: existingFactCard?.isUserCreated ?? true,
-    lastDownloadedAt: existingFactCard?.lastDownloadedAt ?? null
+    lastDownloadedAt: existingFactCard?.lastDownloadedAt ?? null,
+    origins: existingFactCard?.origins ?? ['user-added']
   };
 
   // For updates, include existing progress

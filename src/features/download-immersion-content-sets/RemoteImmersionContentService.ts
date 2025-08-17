@@ -1,4 +1,4 @@
-import type { RemoteImmersionContentSet } from '@/shared/types/RemoteImmersionContentData';
+import type { RemoteImmersionContentSet } from '@/entities/local-sets/flavors/RemoteImmersionContentSet';
 
 export class RemoteImmersionContentService {
   async getAvailableImmersionContentSets(languageCode: string): Promise<string[]> {

@@ -60,7 +60,8 @@ const newFactCard = ref<Omit<FactCardData, 'uid' | 'progress'>>({
   notes: [],
   priority: 1,
   isUserCreated: true,
-  lastDownloadedAt: null
+  lastDownloadedAt: null,
+  origins: ['user-added']
 });
 
 // Load fact card items when factCardIds change
@@ -153,7 +154,8 @@ function resetNewFactCard() {
     notes: [],
     priority: 1,
     isUserCreated: true,
-    lastDownloadedAt: null
+    lastDownloadedAt: null,
+    origins: ['user-added']
   };
 }
 </script>

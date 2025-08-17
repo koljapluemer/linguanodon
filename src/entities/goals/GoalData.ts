@@ -13,4 +13,6 @@ export interface GoalData {
 
   lastShownAt?: Date;
 
+  origins: string[] // uid of set, or the string "user-added"
+
 }

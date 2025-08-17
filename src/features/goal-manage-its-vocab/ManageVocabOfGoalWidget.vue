@@ -147,7 +147,8 @@ async function addVocab() {
     content: newVocab.value.content.trim() || undefined,
     translations: [], // Empty for now
     notes: [],
-    links: []
+    links: [],
+    origins: ['user-added']
   });
   
   // Update goal to include this vocab

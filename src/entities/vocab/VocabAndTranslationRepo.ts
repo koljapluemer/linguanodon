@@ -300,6 +300,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       notes: vocab.notes,
       translations: vocab.translations,
       links: vocab.links,
+      origins: vocab.origins,
       tasks: [],
       progress: {
         ...createEmptyCard(),

@@ -9,7 +9,3 @@ export interface RemoteResource {
   link?: Link
 }
 
-export interface RemoteResourceSet {
-  name: string;
-  resources: RemoteResource[];
-}

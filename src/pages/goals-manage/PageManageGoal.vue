@@ -94,7 +94,8 @@ async function loadGoal() {
       tasks: [],
       vocab: [],
       notes: [],
-      factCards: []
+      factCards: [],
+      origins: ['user-added']
     };
   }
   

@@ -8,6 +8,7 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 
 const props = defineProps<{
   selectedLanguage: string;
@@ -16,11 +17,13 @@ const props = defineProps<{
 const availableVocabSets = ref<string[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
+const downloadedSets = ref<Map<string, Date>>(new Map());
 
 const remoteVocabService = new RemoteVocabService();
 const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 const taskRepo = inject<TaskRepoContract>('taskRepo')!;
+const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
 
 // Initialize vocab task controller
 const vocabTaskController = new UpdateVocabTasksController(vocabAndTranslationRepo, taskRepo, noteRepo);
@@ -37,10 +40,19 @@ async function loadVocabSets() {
   try {
     const sets = await remoteVocabService.getAvailableVocabSets(props.selectedLanguage);
     availableVocabSets.value = sets;
+    await loadDownloadedSets();
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load vocab sets';
   } finally {
     loading.value = false;
+  }
+}
+
+async function loadDownloadedSets() {
+  const localSets = await localSetRepo.getLocalSetsByLanguage(props.selectedLanguage);
+  downloadedSets.value.clear();
+  for (const localSet of localSets) {
+    downloadedSets.value.set(localSet.name, localSet.lastDownloadedAt);
   }
 }
 
@@ -52,6 +64,14 @@ async function downloadVocabSet(name: string) {
   
   try {
     console.log(`Downloading vocab set: ${name} for language: ${props.selectedLanguage}`);
+    
+    // First create or get the local set entry
+    const localSet = await localSetRepo.saveLocalSet({
+      name,
+      language: props.selectedLanguage,
+      description: `Vocab set: ${name}`,
+      lastDownloadedAt: new Date()
+    });
     
     const vocabSet = await remoteVocabService.getVocabSet(props.selectedLanguage, name);
     if (!vocabSet) {
@@ -117,7 +137,8 @@ async function downloadVocabSet(name: string) {
           doNotPractice: remoteVocab.doNotPractice,
           notes: vocabNoteUids,
           translations: translationUids,
-          links: remoteVocab.links || []
+          links: remoteVocab.links || [],
+          origins: [localSet.uid]
         };
         
         const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
@@ -127,8 +148,8 @@ async function downloadVocabSet(name: string) {
       }
     }
 
-    // Mark as downloaded
-    remoteVocabService.markVocabSetAsDownloaded(name);
+    // Reload downloaded sets to update UI
+    await loadDownloadedSets();
     console.log(`Vocab set "${name}" downloaded and marked as complete`);
     
   } catch (err) {
@@ -140,7 +161,11 @@ async function downloadVocabSet(name: string) {
 }
 
 function isDownloaded(name: string): boolean {
-  return remoteVocabService.isVocabSetDownloaded(name);
+  return downloadedSets.value.has(name);
+}
+
+function getDownloadDate(name: string): Date | undefined {
+  return downloadedSets.value.get(name);
 }
 
 watch(() => props.selectedLanguage, loadVocabSets, { immediate: true });
@@ -173,7 +198,6 @@ watch(() => props.selectedLanguage, loadVocabSets, { immediate: true });
         </div>
 
         <div v-else class="space-y-3">
-          <h3 class="text-lg font-semibold">Available Vocab Sets</h3>
           <div class="grid gap-3">
             <div 
               v-for="setName in availableVocabSets" 
@@ -186,9 +210,12 @@ watch(() => props.selectedLanguage, loadVocabSets, { immediate: true });
               </div>
               
               <div v-if="isDownloaded(setName)" class="flex items-center gap-2">
-                <div class="flex items-center gap-2 text-success mr-2">
-                  <CheckCircle class="w-5 h-5" />
-                  <span class="text-sm font-medium">Downloaded</span>
+                <div class="flex flex-col gap-1 text-success mr-2">
+                  <div class="flex items-center gap-2">
+                    <CheckCircle class="w-5 h-5" />
+                    <span class="text-sm font-medium">Downloaded</span>
+                  </div>
+                  <span class="text-xs text-base-content/60">{{ getDownloadDate(setName)?.toLocaleDateString() }}</span>
                 </div>
                 <button 
                   @click="downloadVocabSet(setName)"

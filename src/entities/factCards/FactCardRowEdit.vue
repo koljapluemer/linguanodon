@@ -142,7 +142,8 @@ function handleSave() {
       level: -1
     },
     isUserCreated: localFactCard.value.isUserCreated ?? true,
-    lastDownloadedAt: localFactCard.value.lastDownloadedAt || null
+    lastDownloadedAt: localFactCard.value.lastDownloadedAt || null,
+    origins: localFactCard.value.origins || []
   };
 
   emit('save', factCardData);

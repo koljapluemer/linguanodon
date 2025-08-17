@@ -12,4 +12,6 @@ export interface FactCardData extends LocalObject {
     doNotPractice?: boolean;
 
     progress: LearningProgress;
+
+    origins: string[] // uid of set, or the string "user-added"
 }

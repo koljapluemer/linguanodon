@@ -81,7 +81,8 @@ async function addSubGoal() {
     subGoals: [],
     vocab: [],
     notes: [],
-    factCards: []
+    factCards: [],
+    origins: ['user-added']
   });
   
   // Update parent goal to include this sub-goal

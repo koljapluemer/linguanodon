@@ -1,5 +1,5 @@
 import type { Link } from "@/shared/Link";
-import type { RemoteVocab } from "@/shared/types/RemoteVocabData";
+import type { RemoteVocab } from "@/entities/local-sets/remote-data/RemoteVocabData";
 
 export interface RemoteImmersionContent {
   language: string;
@@ -13,7 +13,3 @@ export interface RemoteImmersionContent {
   notes?: { content: string; showBeforeExercise?: boolean }[];
 }
 
-export interface RemoteImmersionContentSet {
-  name: string;
-  immersionContent: RemoteImmersionContent[];
-}

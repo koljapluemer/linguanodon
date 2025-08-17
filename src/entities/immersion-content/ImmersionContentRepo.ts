@@ -37,6 +37,7 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       notes: immersionContent.notes,
       extractedVocab: immersionContent.extractedVocab,
       extractedFactCards: immersionContent.extractedFactCards,
+      origins: immersionContent.origins,
       tasks: []
     };
 

@@ -6,6 +6,7 @@ import { ResourceRepo } from '@/entities/resources/ResourceRepo';
 import { ImmersionContentRepo } from '@/entities/immersion-content/ImmersionContentRepo';
 import { TaskRepo } from '@/entities/tasks/TaskRepo';
 import { LanguageRepo } from '@/entities/languages/LanguageRepo';
+import { LocalSetRepo } from '@/entities/local-sets/LocalSetRepo';
 
 export function setupRepositories() {
   // Create repository instances
@@ -17,6 +18,7 @@ export function setupRepositories() {
   const immersionContentRepo = new ImmersionContentRepo();
   const taskRepo = new TaskRepo();
   const languageRepo = new LanguageRepo();
+  const localSetRepo = new LocalSetRepo();
   
   return {
     vocabRepo,
@@ -26,12 +28,13 @@ export function setupRepositories() {
     resourceRepo,
     immersionContentRepo,
     taskRepo,
-    languageRepo
+    languageRepo,
+    localSetRepo
   };
 }
 
 export function provideRepositories(app: { provide: (key: string | symbol, value: unknown) => void }) {
-  const { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo } = setupRepositories();
+  const { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo } = setupRepositories();
   
   app.provide('vocabRepo', vocabRepo);
   app.provide('goalRepo', goalRepo);
@@ -41,6 +44,7 @@ export function provideRepositories(app: { provide: (key: string | symbol, value
   app.provide('immersionContentRepo', immersionContentRepo);
   app.provide('taskRepo', taskRepo);
   app.provide('languageRepo', languageRepo);
+  app.provide('localSetRepo', localSetRepo);
   
-  return { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo };
+  return { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo };
 }

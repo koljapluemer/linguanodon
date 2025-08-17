@@ -179,7 +179,8 @@ async function handleSave() {
         content: formData.value.content.trim() || undefined,
         vocab: [],
         factCards: [],
-        notes: []
+        notes: [],
+        origins: ['user-added']
       };
 
       // Add link if URL is provided

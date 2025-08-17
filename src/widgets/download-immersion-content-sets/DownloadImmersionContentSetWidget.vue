@@ -10,6 +10,7 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 
 const props = defineProps<{
   selectedLanguage: string;
@@ -18,12 +19,14 @@ const props = defineProps<{
 const availableImmersionContentSets = ref<string[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
+const downloadedSets = ref<Map<string, Date>>(new Map());
 
 const remoteImmersionContentService = new RemoteImmersionContentService();
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
 const taskRepo = inject<TaskRepoContract>('taskRepo')!;
+const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
 
 async function loadImmersionContentSets() {
   if (!props.selectedLanguage) {
@@ -37,10 +40,19 @@ async function loadImmersionContentSets() {
   try {
     const sets = await remoteImmersionContentService.getAvailableImmersionContentSets(props.selectedLanguage);
     availableImmersionContentSets.value = sets;
+    await loadDownloadedSets();
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load immersion content sets';
   } finally {
     loading.value = false;
+  }
+}
+
+async function loadDownloadedSets() {
+  const localSets = await localSetRepo.getLocalSetsByLanguage(props.selectedLanguage);
+  downloadedSets.value.clear();
+  for (const localSet of localSets) {
+    downloadedSets.value.set(localSet.name, localSet.lastDownloadedAt);
   }
 }
 
@@ -52,6 +64,14 @@ async function downloadImmersionContentSet(name: string) {
   
   try {
     console.log(`Downloading immersion content set: ${name} for language: ${props.selectedLanguage}`);
+    
+    // First create or get the local set entry
+    const localSet = await localSetRepo.saveLocalSet({
+      name,
+      language: props.selectedLanguage,
+      description: `Immersion content set: ${name}`,
+      lastDownloadedAt: new Date()
+    });
     
     const immersionContentSet = await remoteImmersionContentService.getImmersionContentSet(props.selectedLanguage, name);
     if (!immersionContentSet) {
@@ -123,7 +143,8 @@ async function downloadImmersionContentSet(name: string) {
               doNotPractice: remoteVocab.doNotPractice,
               translations: translationUids,
               links: remoteVocab.links || [],
-              notes: vocabNoteUids
+              notes: vocabNoteUids,
+              origins: [localSet.uid]
             };
             
             const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
@@ -146,7 +167,8 @@ async function downloadImmersionContentSet(name: string) {
         neededVocab: neededVocabUids,
         notes: noteUids,
         extractedVocab: [],
-        extractedFactCards: []
+        extractedFactCards: [],
+        origins: [localSet.uid]
       };
       
       try {
@@ -160,8 +182,8 @@ async function downloadImmersionContentSet(name: string) {
       }
     }
 
-    // Mark as downloaded
-    remoteImmersionContentService.markImmersionContentSetAsDownloaded(name);
+    // Reload downloaded sets to update UI
+    await loadDownloadedSets();
     console.log(`Immersion content set "${name}" downloaded and marked as complete`);
     
   } catch (err) {
@@ -173,7 +195,11 @@ async function downloadImmersionContentSet(name: string) {
 }
 
 function isDownloaded(name: string): boolean {
-  return remoteImmersionContentService.isImmersionContentSetDownloaded(name);
+  return downloadedSets.value.has(name);
+}
+
+function getDownloadDate(name: string): Date | undefined {
+  return downloadedSets.value.get(name);
 }
 
 watch(() => props.selectedLanguage, loadImmersionContentSets, { immediate: true });
@@ -206,7 +232,6 @@ watch(() => props.selectedLanguage, loadImmersionContentSets, { immediate: true 
         </div>
 
         <div v-else class="space-y-3">
-          <h3 class="text-lg font-semibold">Available Immersion Content Sets</h3>
           <div class="grid gap-3">
             <div 
               v-for="setName in availableImmersionContentSets" 
@@ -219,9 +244,12 @@ watch(() => props.selectedLanguage, loadImmersionContentSets, { immediate: true 
               </div>
               
               <div v-if="isDownloaded(setName)" class="flex items-center gap-2">
-                <div class="flex items-center gap-2 text-success mr-2">
-                  <CheckCircle class="w-5 h-5" />
-                  <span class="text-sm font-medium">Downloaded</span>
+                <div class="flex flex-col gap-1 text-success mr-2">
+                  <div class="flex items-center gap-2">
+                    <CheckCircle class="w-5 h-5" />
+                    <span class="text-sm font-medium">Downloaded</span>
+                  </div>
+                  <span class="text-xs text-base-content/60">{{ getDownloadDate(setName)?.toLocaleDateString() }}</span>
                 </div>
                 <button 
                   @click="downloadImmersionContentSet(setName)"

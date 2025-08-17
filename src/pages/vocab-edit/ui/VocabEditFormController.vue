@@ -71,7 +71,8 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
     notes: formData.notes.map(note => note.uid),
-    links: formData.links
+    links: formData.links,
+    origins: existingVocab?.origins || ['user-added']
   };
 
   // For updates, include existing progress and tasks

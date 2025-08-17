@@ -55,7 +55,8 @@ function formDataToVocabData(formData: VocabFormData): Omit<VocabData, 'progress
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
     notes: formData.notes.map(note => note.uid),
-    links: formData.links
+    links: formData.links,
+    origins: ['user-added']
   };
 }
 

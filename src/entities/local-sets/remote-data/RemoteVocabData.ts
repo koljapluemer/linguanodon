@@ -15,7 +15,3 @@ export interface RemoteVocab {
   notes?: { content: string; showBeforeExercise?: boolean }[];
 }
 
-export interface RemoteVocabSet {
-  name: string;
-  vocabs: RemoteVocab[];
-}

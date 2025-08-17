@@ -233,7 +233,8 @@ async function handleSave() {
       ...createEmptyCard(),
       streak: 0,
       level: -1
-    }
+    },
+    origins: localVocab.value.origins || []
   };
 
   emit('save', vocabData);
@@ -254,7 +255,8 @@ function handleClearOrCancel() {
         ...createEmptyCard(),
         streak: 0,
         level: -1
-      }
+      },
+      origins: ['user-added']
     } as VocabData;
     translationsText.value = '';
   } else {

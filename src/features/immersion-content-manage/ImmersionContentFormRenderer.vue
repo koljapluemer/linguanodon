@@ -180,7 +180,8 @@ async function handleSave() {
         neededVocab: [],
         notes: [],
         extractedVocab: [],
-        extractedFactCards: []
+        extractedFactCards: [],
+        origins: ['user-added']
       };
 
       // Add link if URL is provided

@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { RemoteResourceService } from '@/features/download-resource-sets/RemoteResourceService';
+import { RemoteSetService } from '@/features/download-resource-sets/RemoteSetService';
 import { UpdateResourceTasksController } from '@/features/resource-update-tasks/UpdateResourceTasksController';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 
 const props = defineProps<{
   selectedLanguage: string;
 }>();
 
 const availableResourceSets = ref<string[]>([]);
+const downloadedSets = ref<Set<string>>(new Set());
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-const remoteResourceService = new RemoteResourceService();
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
 const taskRepo = inject<TaskRepoContract>('taskRepo')!;
+const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
+
+const remoteSetService = new RemoteSetService(localSetRepo);
 
 // Initialize resource task controller
 const resourceTaskController = new UpdateResourceTasksController(resourceRepo, taskRepo);
@@ -26,6 +30,7 @@ const resourceTaskController = new UpdateResourceTasksController(resourceRepo, t
 async function loadResourceSets() {
   if (!props.selectedLanguage) {
     availableResourceSets.value = [];
+    downloadedSets.value.clear();
     return;
   }
 
@@ -33,8 +38,20 @@ async function loadResourceSets() {
   error.value = null;
   
   try {
-    const sets = await remoteResourceService.getAvailableResourceSets(props.selectedLanguage);
+    const sets = await remoteSetService.getAvailableResourceSets(props.selectedLanguage);
     availableResourceSets.value = sets;
+    
+    // Load downloaded status for each set
+    const downloadedStatuses = await Promise.all(
+      sets.map(async (setName) => ({
+        name: setName,
+        isDownloaded: await remoteSetService.isResourceSetDownloaded(setName)
+      }))
+    );
+    
+    downloadedSets.value = new Set(
+      downloadedStatuses.filter(s => s.isDownloaded).map(s => s.name)
+    );
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load resource sets';
   } finally {
@@ -51,13 +68,16 @@ async function downloadResourceSet(name: string) {
   try {
     console.log(`Downloading resource set: ${name} for language: ${props.selectedLanguage}`);
     
-    const resourceSet = await remoteResourceService.getResourceSet(props.selectedLanguage, name);
+    const resourceSet = await remoteSetService.getResourceSet(props.selectedLanguage, name);
     if (!resourceSet) {
       error.value = 'Failed to download resource set';
       return;
     }
 
     console.log(`Found ${resourceSet.resources.length} resources to download`);
+
+    // Mark as downloaded and get the local set UID
+    const savedLocalSet = await remoteSetService.markResourceSetAsDownloaded(name, props.selectedLanguage, `Resource set with ${resourceSet.resources.length} items`);
 
     // Convert each RemoteResource to ResourceData and save
     for (const remoteResource of resourceSet.resources) {
@@ -71,7 +91,8 @@ async function downloadResourceSet(name: string) {
         link: remoteResource.link,
         vocab: [],
         factCards: [],
-        notes: []
+        notes: [],
+        origins: [savedLocalSet.uid] // Add the local set UID to origins
       };
       
       try {
@@ -89,7 +110,8 @@ async function downloadResourceSet(name: string) {
     }
 
     // Mark as downloaded
-    remoteResourceService.markResourceSetAsDownloaded(name);
+    await remoteSetService.markResourceSetAsDownloaded(name, props.selectedLanguage, `Resource set with ${resourceSet.resources.length} items`);
+    downloadedSets.value.add(name);
     console.log(`Resource set "${name}" downloaded and marked as complete`);
     
   } catch (err) {
@@ -101,7 +123,7 @@ async function downloadResourceSet(name: string) {
 }
 
 function isDownloaded(name: string): boolean {
-  return remoteResourceService.isResourceSetDownloaded(name);
+  return downloadedSets.value.has(name);
 }
 
 watch(() => props.selectedLanguage, loadResourceSets, { immediate: true });
@@ -134,7 +156,6 @@ watch(() => props.selectedLanguage, loadResourceSets, { immediate: true });
         </div>
 
         <div v-else class="space-y-3">
-          <h3 class="text-lg font-semibold">Available Resource Sets</h3>
           <div class="grid gap-3">
             <div 
               v-for="setName in availableResourceSets" 

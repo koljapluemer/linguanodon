@@ -44,7 +44,8 @@ export class FactCardRepo implements FactCardRepoContract {
         level: -1
       },
       isUserCreated: factCard.isUserCreated,
-      lastDownloadedAt: factCard.lastDownloadedAt
+      lastDownloadedAt: factCard.lastDownloadedAt,
+      origins: factCard.origins
     };
 
     await this.storage.add(newFactCard);
