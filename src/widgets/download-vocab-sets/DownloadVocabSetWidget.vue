@@ -23,7 +23,7 @@ const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 
 // Initialize vocab task controller
-const vocabTaskController = new UpdateVocabTasksController(vocabAndTranslationRepo, taskRepo);
+const vocabTaskController = new UpdateVocabTasksController(vocabAndTranslationRepo, taskRepo, noteRepo);
 
 async function loadVocabSets() {
   if (!props.selectedLanguage) {

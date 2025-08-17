@@ -64,6 +64,8 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { FactCardRepoContract } from '@/entities/factCards/FactCardRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
+import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { Rating } from 'ts-fsrs';
 import TaskButtonsDisableSkipDone from './ui/TaskButtonsDisableSkipDone.vue';
 import TaskEvaluateDifficulty from './ui/TaskEvaluateDifficulty.vue';
@@ -85,6 +87,7 @@ const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
+const noteRepo = inject<NoteRepoContract>('noteRepo');
 
 if (!taskRepo) {
   throw new Error('TaskRepo not provided');
@@ -99,7 +102,7 @@ const difficultyRating = ref<Rating | null>(null);
 const doAgainDecision = ref<boolean | null>(null);
 
 function getTaskComponent(taskType: string) {
-  return taskRegistry[taskType]?.component;
+  return taskRegistry[taskType as keyof typeof taskRegistry];
 }
 
 // Task component event handlers
@@ -175,7 +178,7 @@ async function finishTask() {
   try {
     // Update task data
     const updatedTask: TaskData = {
-      ...props.task,
+      ...toRaw(props.task),
       lastShownAt: new Date(),
       ...(difficultyRating.value && { lastDifficultyRating: difficultyRating.value }),
       ...(props.task.isOneTime && { isActive: false }),
@@ -197,7 +200,7 @@ async function finishTask() {
 async function updateTaskAsSkipped() {
   try {
     const updatedTask: TaskData = {
-      ...props.task,
+      ...toRaw(props.task),
       lastShownAt: new Date(),
       isActive: false
     };
@@ -220,6 +223,12 @@ async function updateAssociatedEntities() {
       } else if (difficultyRating.value) {
         // Score the vocab
         await vocabRepo.scoreVocab(vocabUid, difficultyRating.value);
+      }
+      
+      // Update vocab tasks after scoring/reviewing
+      if (taskRepo && noteRepo) {
+        const updateVocabTasksController = new UpdateVocabTasksController(vocabRepo, taskRepo, noteRepo);
+        await updateVocabTasksController.updateTasksForVocab(vocabUid);
       }
     }
   }

@@ -82,7 +82,7 @@ export class UpdateGoalTasksController {
   private createAddVocabTask(uid: string, goal: GoalData): TaskData {
     return {
       uid,
-      taskType: 'goal-add-vocab',
+      taskType: 'add-vocab-to-goal',
       title: `Add vocabulary to "${goal.title}"`,
       prompt: `Add more vocabulary to help achieve this goal: ${goal.title}`,
       evaluateDifficultyAfterDoing: false,
@@ -97,7 +97,7 @@ export class UpdateGoalTasksController {
   private createAddSubGoalsTask(uid: string, goal: GoalData): TaskData {
     return {
       uid,
-      taskType: 'goal-add-sub-goals',
+      taskType: 'add-sub-goals',
       title: `Add sub-goals to "${goal.title}"`,
       prompt: `Break down this goal into smaller, achievable sub-goals: ${goal.title}`,
       evaluateDifficultyAfterDoing: false,

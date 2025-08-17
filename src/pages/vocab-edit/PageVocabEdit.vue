@@ -33,12 +33,14 @@ import TaskModalTriggerList from '@/widgets/do-task/TaskModalTriggerList.vue';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 
 const route = useRoute();
 const currentVocabTaskIds = ref<string[]>([]);
 
 const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
 const taskRepo = inject<TaskRepoContract>('taskRepo');
+const noteRepo = inject<NoteRepoContract>('noteRepo');
 
 const isEditing = computed(() => {
   return route.params.id && route.params.id !== 'new';
@@ -66,7 +68,7 @@ async function handleVocabSaved(vocabId: string) {
   }
   
   try {
-    const taskController = new UpdateVocabTasksController(vocabRepo, taskRepo);
+    const taskController = new UpdateVocabTasksController(vocabRepo, taskRepo, noteRepo);
     await taskController.updateTasksForVocab(vocabId);
     
     // Reload task IDs for this vocab

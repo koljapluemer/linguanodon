@@ -1,74 +1,67 @@
 <script setup lang="ts">
-import { ref, inject, computed } from 'vue';
+import { ref, inject, onMounted, watch } from 'vue';
+import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import AddPronunciationWidget from '@/features/vocab-unit-add-pronunciation/AddPronunciationWidget.vue';
+import FormField from '@/shared/ui/FormField.vue';
 
 interface Props {
-  task: { associatedUnits: Array<{type: string, uid: string}> };
+  task: TaskData;
 }
 
 interface Emits {
-  (e: 'finished'): void;
+  (e: 'taskNowMayBeConsideredDone'): void;
+  (e: 'taskNowMayNotBeConsideredDone'): void;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
-
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
 const vocab = ref<VocabData | null>(null);
-
-const vocabUid = computed(() => {
-  const vocabAssociation = props.task.associatedUnits.find(unit => unit.type === 'Vocab');
-  return vocabAssociation?.uid;
-});
+const pronunciation = ref('');
 
 const loadVocab = async () => {
-  if (!vocabUid.value || !vocabRepo) return;
+  const vocabUid = props.task.associatedVocab?.[0];
+  if (!vocabUid) return;
   
-  const vocabData = await vocabRepo.getVocabByUID(vocabUid.value);
+  const vocabData = await vocabRepo.getVocabByUID(vocabUid);
   vocab.value = vocabData || null;
 };
 
-const handlePronunciationFinished = () => {
-  emit('finished');
-};
-
-// Load vocab data on mount
-import { onMounted } from 'vue';
-onMounted(() => {
-  loadVocab();
+watch(pronunciation, (newValue) => {
+  if (newValue.trim().length > 0) {
+    emit('taskNowMayBeConsideredDone');
+  } else {
+    emit('taskNowMayNotBeConsideredDone');
+  }
 });
+
+onMounted(loadVocab);
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div v-if="vocab">
-      <div class="card bg-base-100 shadow-lg">
-        <div class="card-body">
-          <h3 class="card-title">Add Pronunciation</h3>
-          <p class="text-lg mb-4">{{ vocab.content }}</p>
-          <AddPronunciationWidget 
-            :vocab="vocab"
-            @finished="handlePronunciationFinished"
-          />
-        </div>
-      </div>
-      
-      <div class="flex gap-2 mt-4">
-        <button class="btn btn-primary" @click="emit('finished')">
-          Done
-        </button>
-        <button class="btn btn-ghost" @click="emit('finished')">
-          Skip
-        </button>
+  <div v-if="vocab" class="space-y-4">
+    <div class="card bg-base-100 shadow-sm">
+      <div class="card-body">
+        <h3 class="text-xl font-semibold mb-4">{{ vocab.content }}</h3>
+        
+        <FormField label="Pronunciation">
+          <template #default="{ inputId, inputClassString }">
+            <input 
+              :id="inputId"
+              v-model="pronunciation"
+              type="text" 
+              placeholder="Enter pronunciation..."
+              :class="inputClassString"
+            />
+          </template>
+        </FormField>
       </div>
     </div>
-    
-    <div v-else class="text-center py-8">
-      <span class="loading loading-spinner loading-lg"></span>
-      <p class="mt-2 text-gray-500">Loading vocabulary...</p>
-    </div>
+  </div>
+  
+  <div v-else class="flex justify-center py-8">
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>

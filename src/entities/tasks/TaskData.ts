@@ -28,8 +28,8 @@ export type TaskName = |
   'vocab-try-to-remember' |
   'vocab-reveal-target-to-native' |
   'vocab-reveal-native-to-target' |
-  "vocab-choose-from-two-target-to-native" |
-  "vocab-choose-from-two-native-to-target" |
-  "vocab-choose-from-four-target-to-native" | 
-  "vocab-choose-from-four-native-to-target" 
+  'vocab-choose-from-two-target-to-native' |
+  'vocab-choose-from-two-native-to-target' |
+  'vocab-choose-from-four-target-to-native' | 
+  'vocab-choose-from-four-native-to-target' 
 

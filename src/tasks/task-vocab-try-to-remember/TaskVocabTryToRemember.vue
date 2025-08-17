@@ -1,66 +1,58 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
-import ElementBigText from '@/shared/ui/ElementBigText.vue';
-import RatingButtons from '@/shared/ui/RatingButtons.vue';
+import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 
 interface Props {
   task: TaskData;
 }
 
 interface Emits {
-  (e: 'finished'): void;
+  (e: 'taskNowMayBeConsideredDone'): void;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
-// Extracted vocab and translation data from task
-const vocabContent = computed(() => {
-  // Extract from task metadata or associatedUnits
-  return props.task.title; // Assuming title contains the vocab content
-});
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocab = ref<VocabData | null>(null);
+const translations = ref<string[]>([]);
 
-const translations = computed(() => {
-  // Extract from task metadata - this would be set when task is created
-  return props.task.prompt.split(': ')[1] || ''; // Simple extraction, will be improved in task generation
-});
-
-const handleRate = () => {
-  emit('finished');
+const loadVocab = async () => {
+  const vocabUid = props.task.associatedVocab?.[0];
+  if (!vocabUid) return;
+  
+  const vocabData = await vocabRepo.getVocabByUID(vocabUid);
+  if (vocabData) {
+    vocab.value = vocabData;
+    const translationData = await vocabRepo.getTranslationsByIds(vocabData.translations);
+    translations.value = translationData.map(t => t.content);
+  }
+  
+  // Can be considered done immediately
+  emit('taskNowMayBeConsideredDone');
 };
+
+onMounted(loadVocab);
 </script>
 
 <template>
-  <div class="space-y-6">
-    <!-- Exercise Card -->
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title">{{ task.title }}</h2>
+  <div v-if="vocab" class="space-y-4">
+    <div class="card bg-base-100 shadow-sm">
+      <div class="card-body text-center">
+        <div class="text-3xl font-bold mb-4">{{ vocab.content }}</div>
         
-        <!-- Vocab Content -->
-        <div class="mb-4 text-center">
-          <ElementBigText :is-extra-big="true">
-            {{ vocabContent }}
-          </ElementBigText>
-        </div>
-
-        <!-- Divider -->
-        <div class="border-t-2 border-dotted border-base-300 my-4"></div>
-
-        <!-- Solution -->
-        <div class="mb-6 text-center">
-          <ElementBigText :is-extra-big="true">
-            {{ translations }}
-          </ElementBigText>
+        <div class="divider">Translation</div>
+        
+        <div class="text-xl text-gray-600">
+          {{ translations.join(', ') }}
         </div>
       </div>
     </div>
-
-    <!-- Rating -->
-    <RatingButtons 
-      prompt="How hard is this word to remember?" 
-      @rate="handleRate" 
-    />
+  </div>
+  
+  <div v-else class="flex justify-center py-8">
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>

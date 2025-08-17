@@ -1,98 +1,92 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, inject, onMounted, watch } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
-import TaskInfo from '@/entities/tasks/TaskInfo.vue';
-import ElementBigText from '@/shared/ui/ElementBigText.vue';
-import ElementRevealButton from '@/shared/ui/ElementRevealButton.vue';
-import RatingButtons from '@/shared/ui/RatingButtons.vue';
+import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
 
 interface Props {
   task: TaskData;
 }
 
 interface Emits {
-  (e: 'finished'): void;
+  (e: 'taskNowMayBeConsideredDone'): void;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
+const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocab = ref<VocabData | null>(null);
+const translations = ref<string[]>([]);
 const isRevealed = ref(false);
 
-// Use the task state composable
-
-// Extract task metadata - these will be properly set during task generation
-const isReverse = computed(() => {
-  return props.task.title.includes('reverse') || props.task.prompt.includes('vocab');
-});
+const isNativeToTarget = computed(() => props.task.taskType === 'vocab-reveal-native-to-target');
 
 const frontContent = computed(() => {
-  // This will be properly extracted from task metadata during task generation
-  if (isReverse.value) {
-    // Show translation, ask for vocab
-    return props.task.prompt.split(': ')[1] || props.task.title;
+  if (!vocab.value || translations.value.length === 0) return '';
+  
+  if (isNativeToTarget.value) {
+    return translations.value[0]; // Show translation
   } else {
-    // Show vocab, ask for translation
-    return props.task.title;
+    return vocab.value.content; // Show vocab
   }
 });
 
 const solution = computed(() => {
-  // This will be properly stored in task metadata during task generation
-  return props.task.prompt.split('Solution: ')[1] || props.task.title;
+  if (!vocab.value || translations.value.length === 0) return '';
+  
+  if (isNativeToTarget.value) {
+    return vocab.value.content; // Show vocab as solution
+  } else {
+    return translations.value.join(', '); // Show translations as solution
+  }
 });
 
-const handleRate = () => {
-  // Auto-enable done after rating
-  emit('finished');
+const loadVocab = async () => {
+  const vocabUid = props.task.associatedVocab?.[0];
+  if (!vocabUid) return;
+  
+  const vocabData = await vocabRepo.getVocabByUID(vocabUid);
+  if (vocabData) {
+    vocab.value = vocabData;
+    const translationData = await vocabRepo.getTranslationsByIds(vocabData.translations);
+    translations.value = translationData.map(t => t.content);
+  }
 };
+
+watch(isRevealed, (revealed) => {
+  if (revealed) {
+    emit('taskNowMayBeConsideredDone');
+  }
+});
+
+onMounted(loadVocab);
 </script>
 
 <template>
-  <div class="space-y-6">
-    <!-- Task Screen -->
-    <div>
-      <!-- Task Header -->
-      <TaskInfo :task="task" />
-      
-      <!-- Exercise Card -->
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <!-- Front Content (vocab or translation) -->
-          <div class="mb-4 text-center">
-            <ElementBigText :is-extra-big="true">
-              {{ frontContent }}
-            </ElementBigText>
-          </div>
-
-          <!-- Solution (when revealed) -->
-          <div v-if="isRevealed">
-            <!-- Divider -->
-            <div class="border-t-2 border-dotted border-base-300 my-4"></div>
-
-            <!-- Solution -->
-            <div class="mb-6 text-center">
-              <ElementBigText :is-extra-big="false">
-                {{ solution }}
-              </ElementBigText>
-            </div>
-          </div>
+  <div v-if="vocab" class="space-y-4">
+    <div class="card bg-base-100 shadow-sm">
+      <div class="card-body text-center">
+        <div class="text-3xl font-bold mb-4">{{ frontContent }}</div>
+        
+        <div v-if="isRevealed">
+          <div class="divider">Answer</div>
+          <div class="text-xl text-gray-600">{{ solution }}</div>
+        </div>
+        
+        <div v-else class="mt-6">
+          <button 
+            class="btn btn-primary"
+            @click="isRevealed = true"
+          >
+            Reveal
+          </button>
         </div>
       </div>
-
-      <!-- Action Buttons -->
-      <div class="flex justify-center gap-2 w-full">
-        <!-- Reveal Button -->
-        <ElementRevealButton v-if="!isRevealed" @click="isRevealed = true" />
-
-        <!-- Rating (when revealed) -->
-        <RatingButtons 
-          v-if="isRevealed" 
-          prompt="How difficult was this?" 
-          @rate="handleRate" 
-        />
-      </div>
     </div>
-    
+  </div>
+  
+  <div v-else class="flex justify-center py-8">
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>

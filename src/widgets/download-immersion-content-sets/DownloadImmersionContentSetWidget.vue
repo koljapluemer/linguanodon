@@ -2,11 +2,12 @@
 import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
 import { RemoteImmersionContentService } from '@/features/download-immersion-content-sets/RemoteImmersionContentService';
-import { updateVocabTasks } from '@/features/vocab-update-tasks/updateVocabTasksService';
+import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
 
@@ -22,6 +23,7 @@ const remoteImmersionContentService = new RemoteImmersionContentService();
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 
 async function loadImmersionContentSets() {
   if (!props.selectedLanguage) {
@@ -128,7 +130,8 @@ async function downloadImmersionContentSet(name: string) {
             neededVocabUids.push(savedVocab.uid);
             
             // Generate tasks for the new vocab
-            await updateVocabTasks(savedVocab.uid);
+            const updateVocabTasksController = new UpdateVocabTasksController(vocabAndTranslationRepo, taskRepo, noteRepo);
+            await updateVocabTasksController.updateTasksForVocab(savedVocab.uid);
           }
         }
       }
