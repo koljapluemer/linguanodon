@@ -351,5 +351,29 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     await this.translationStorage.deleteByIds(ids);
   }
 
+  async getDueVocabInLanguages(languages: string[]): Promise<VocabData[]> {
+    const allVocab = await this.vocabStorage.getAll();
+    
+    return allVocab.filter(vocab => 
+      languages.includes(vocab.language) &&
+      vocab.progress.reps > 0 &&
+      vocab.progress.due <= new Date() &&
+      !vocab.doNotPractice
+    ).map(v => this.ensureVocabFields(v));
+  }
+
+  async getRandomUnseenVocabInLanguages(languages: string[], count: number): Promise<VocabData[]> {
+    const allVocab = await this.vocabStorage.getAll();
+    
+    const unseenVocab = allVocab.filter(vocab => 
+      languages.includes(vocab.language) &&
+      vocab.progress.reps === 0 &&
+      !vocab.doNotPractice
+    ).map(v => this.ensureVocabFields(v));
+    
+    // Shuffle and return requested count
+    const shuffled = unseenVocab.sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, Math.min(count, shuffled.length));
+  }
 
 }

@@ -1,13 +1,10 @@
 import { reactive } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
-import { VocabPicker } from './propose-relevant-entities/which-vocab-to-practice/VocabPicker';
-import { ResourcePicker } from './propose-relevant-entities/which-resource-to-practice/ResourcePicker';
+import { makeLesson } from './lesson-generator/makeLesson';
 import { shuffleArray } from '@/shared/arrayUtils';
 
 interface PreloadConfig {
@@ -32,21 +29,12 @@ const DEFAULT_CONFIG: PreloadConfig = {
 
 export function useQueuePreloader(
   vocabRepo: VocabAndTranslationRepoContract,
-  goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,
-  immersionContentRepo: ImmersionContentRepoContract,
   config: Partial<PreloadConfig> = {}
 ) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
-  
-  // Initialize pickers
-  const vocabPicker = new VocabPicker();
-  vocabPicker.initializeProposers(vocabRepo, goalRepo, immersionContentRepo);
-  
-  const resourcePicker = new ResourcePicker();
-  resourcePicker.initializeProposers(resourceRepo, languageRepo, taskRepo);
 
   // Preloaded content buffers
   const content = reactive<PreloadedContent>({
@@ -63,9 +51,7 @@ export function useQueuePreloader(
   // Active loading promise to prevent duplicates
   let batchLoadingPromise: Promise<void> | null = null;
 
-  // TaskData is used directly now, no conversion needed
-
-  // Background task batch loading
+  // Generate a lesson using the new lesson system
   async function loadTaskBatch() {
     if (status.isLoadingBatch || batchLoadingPromise) return;
     
@@ -74,70 +60,18 @@ export function useQueuePreloader(
     
     try {
       batchLoadingPromise = (async () => {
-        const batch: TaskData[] = [];
+        // Generate a lesson using the new lesson system
+        const lesson = await makeLesson(vocabRepo, resourceRepo, taskRepo, languageRepo);
         
-        // Step 1: Get 0-2 resource tasks
-        const resourceBatch = await resourcePicker.pickResourceBatch();
-        for (const resource of resourceBatch) {
-          try {
-            const resourceTasks = await taskRepo.getTasksByResourceId(resource.uid);
-            const activeTasks = resourceTasks.filter(task => task.isActive);
-            batch.push(...activeTasks);
-          } catch (error) {
-            console.error('Error loading tasks for resource:', resource.uid, error);
-          }
+        if (lesson.length === 0) {
+          console.warn('Generated lesson is empty');
+          status.lastError = 'No tasks generated for lesson';
+          return;
         }
         
-        // Step 1.5: Add 1 goal-based task per batch (as per requirement)
-        try {
-          const goals = await goalRepo.getAll();
-          const eligibleGoals = goals.filter(goal => !goal.doNotPractice);
-          
-          if (eligibleGoals.length > 0) {
-            // Pick a random goal
-            const randomGoal = eligibleGoals[Math.floor(Math.random() * eligibleGoals.length)];
-            const goalTasks = await taskRepo.getTasksByGoalId(randomGoal.uid);
-            const activeGoalTasks = goalTasks.filter(task => task.isActive);
-            
-            if (activeGoalTasks.length > 0) {
-              // Add the first active goal task
-              batch.push(activeGoalTasks[0]);
-            }
-          }
-        } catch (error) {
-          console.error('Error loading goal tasks:', error);
-        }
-        
-        // Step 2: Fill remaining slots with vocab-based tasks
-        const remainingSlots = Math.max(0, 20 - batch.length);
-        if (remainingSlots > 0) {
-          const vocabBatch = await vocabPicker.pickVocabBatch();
-          
-          // Get tasks for each vocab entity from TaskRepo
-          let vocabTasksAdded = 0;
-          for (const vocab of vocabBatch) {
-            if (vocabTasksAdded >= remainingSlots) break;
-            
-            try {
-              // Get existing tasks for this vocab from TaskRepo
-              const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
-              const activeTasks = vocabTasks.filter(task => task.isActive);
-              
-              // Add up to remaining slots
-              for (const task of activeTasks) {
-                if (vocabTasksAdded >= remainingSlots) break;
-                batch.push(task);
-                vocabTasksAdded++;
-              }
-            } catch (error) {
-              console.error('Error loading vocab tasks for:', vocab.uid, error);
-            }
-          }
-        }
-        
-        // Step 3: Shuffle the final batch
-        const shuffledBatch = shuffleArray(batch);
-        content.taskBatches.push(shuffledBatch);
+        // Shuffle the lesson
+        const shuffledLesson = shuffleArray(lesson);
+        content.taskBatches.push(shuffledLesson);
         status.taskBatchesReady = content.taskBatches.length;
       })();
       
@@ -155,7 +89,6 @@ export function useQueuePreloader(
       }
     }
   }
-
 
   // Initialize preloading
   async function initialize() {
@@ -210,49 +143,17 @@ export function useQueuePreloader(
 
   // Force loading (for fallback scenarios)
   async function forceLoadNextTaskBatch(): Promise<TaskData[]> {
-    const batch: TaskData[] = [];
-    
-    // Get 0-2 resource tasks
-    const resourceBatch = await resourcePicker.pickResourceBatch();
-    for (const resource of resourceBatch) {
-      try {
-        const resourceTasks = await taskRepo.getTasksByResourceId(resource.uid);
-        const activeTasks = resourceTasks.filter(task => task.isActive);
-        batch.push(...activeTasks);
-      } catch (error) {
-        console.error('Error loading tasks for resource:', resource.uid, error);
-      }
+    try {
+      const lesson = await makeLesson(vocabRepo, resourceRepo, taskRepo, languageRepo);
+      return shuffleArray(lesson);
+    } catch (error) {
+      console.error('Error force loading lesson:', error);
+      return [];
     }
-    
-    // Fill remaining slots with vocab-based tasks
-    const remainingSlots = Math.max(0, 20 - batch.length);
-    if (remainingSlots > 0) {
-      const vocabBatch = await vocabPicker.pickVocabBatch();
-      
-      let vocabTasksAdded = 0;
-      for (const vocab of vocabBatch) {
-        if (vocabTasksAdded >= remainingSlots) break;
-        
-        try {
-          const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
-          const activeTasks = vocabTasks.filter(task => task.isActive);
-          
-          for (const task of activeTasks) {
-            if (vocabTasksAdded >= remainingSlots) break;
-            batch.push(task);
-            vocabTasksAdded++;
-          }
-        } catch (error) {
-          console.error('Error loading vocab tasks for:', vocab.uid, error);
-        }
-      }
-    }
-    
-    return shuffleArray(batch);
   }
 
   async function forceLoadNextTask(): Promise<TaskData | null> {
-    // Try to get a single task from the batch generator
+    // Try to get a single task from the lesson generator
     const batch = await forceLoadNextTaskBatch();
     return batch.length > 0 ? batch[0] : null;
   }
@@ -261,6 +162,7 @@ export function useQueuePreloader(
   const hasTaskReady = () => {
     return content.taskBatches.length > 0 && content.taskBatches.some(batch => batch.length > 0);
   };
+  
   const isHealthy = () => !status.lastError && 
     content.taskBatches.length >= finalConfig.aggressiveThreshold;
 

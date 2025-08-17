@@ -68,6 +68,10 @@ async function handleVocabSaved(vocabId: string) {
   }
   
   try {
+    if (!noteRepo) {
+      console.error('NoteRepo not available');
+      return;
+    }
     const taskController = new UpdateVocabTasksController(vocabRepo, taskRepo, noteRepo);
     await taskController.updateTasksForVocab(vocabId);
     

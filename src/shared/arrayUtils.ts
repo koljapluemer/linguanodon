@@ -60,3 +60,11 @@ export function removeDuplicates<T>(array: T[], keyFn?: (item: T) => string | nu
 export function randomBetween(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+/**
+ * Picks a single random item from an array
+ */
+export function randomFromArray<T>(array: T[]): T | null {
+  if (array.length === 0) return null;
+  return array[Math.floor(Math.random() * array.length)];
+}

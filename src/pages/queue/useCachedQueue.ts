@@ -9,14 +9,14 @@ import { useQueueStateMachine } from './useQueueStateMachine';
 
 export function useCachedQueue(
   vocabRepo: VocabAndTranslationRepoContract,
-  goalRepo: GoalRepoContract,
+  _goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,
-  immersionContentRepo: ImmersionContentRepoContract
+  _immersionContentRepo: ImmersionContentRepoContract
 ) {
-  // Initialize preloader
-  const preloader = useQueuePreloader(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo, immersionContentRepo);
+  // Initialize preloader with new lesson system
+  const preloader = useQueuePreloader(vocabRepo, resourceRepo, taskRepo, languageRepo);
   
   // Initialize state machine with preloader only (TaskRenderer handles entity updates)
   const stateMachine = useQueueStateMachine(preloader);

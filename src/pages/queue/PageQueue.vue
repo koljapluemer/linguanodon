@@ -38,7 +38,7 @@ onMounted(async () => {
 
 
 /**
- *
+ * Handle task completion
  */
 const handleTaskFinished = async () => {
   await completeCurrentTask();
@@ -83,6 +83,7 @@ const handleTaskFinished = async () => {
       <!-- Task -->
       <div v-else-if="state.status === 'task'">
         <TaskRenderer 
+          :key="state.task.uid"
           :task="state.task"
           @finished="handleTaskFinished"
         />
