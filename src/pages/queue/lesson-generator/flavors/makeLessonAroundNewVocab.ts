@@ -16,6 +16,7 @@ export async function makeLessonAroundNewVocab(
 ): Promise<TaskData[]> {
   
   const tasks: TaskData[] = [];
+  const usedVocabIds = new Set<string>();
   
   try {
     // Get due vocab (reduced amount compared to due-only lesson)
@@ -25,6 +26,8 @@ export async function makeLessonAroundNewVocab(
     
     // Add tasks for due vocab
     for (const vocab of selectedDueVocab) {
+      if (usedVocabIds.has(vocab.uid)) continue;
+      
       try {
         const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
         const activeTasks = vocabTasks.filter(task => task.isActive);
@@ -33,6 +36,7 @@ export async function makeLessonAroundNewVocab(
           const randomTask = randomFromArray(activeTasks);
           if (randomTask) {
             tasks.push(randomTask);
+            usedVocabIds.add(vocab.uid);
           }
         }
       } catch (error) {
@@ -44,8 +48,9 @@ export async function makeLessonAroundNewVocab(
     const newVocabCount = randomBetween(MIN_NEW_VOCAB_COUNT, MAX_NEW_VOCAB_COUNT);
     const newVocab = await vocabRepo.getRandomUnseenVocabInLanguages(languages, newVocabCount);
     
-    // Add tasks for new vocab
-    for (const vocab of newVocab) {
+    // Add tasks for new vocab (filter out any already used)
+    const availableNewVocab = newVocab.filter(vocab => !usedVocabIds.has(vocab.uid));
+    for (const vocab of availableNewVocab) {
       try {
         const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
         const activeTasks = vocabTasks.filter(task => task.isActive);
@@ -54,6 +59,7 @@ export async function makeLessonAroundNewVocab(
           const randomTask = randomFromArray(activeTasks);
           if (randomTask) {
             tasks.push(randomTask);
+            usedVocabIds.add(vocab.uid);
           }
         }
       } catch (error) {

@@ -90,6 +90,9 @@ export async function makeLessonAroundHighMasteryImmersionContent(
     const unseenVocab = validNeededVocab.filter(vocab => vocab.progress.level <= 0);
     const seenVocab = validNeededVocab.filter(vocab => vocab.progress.level > 0);
     
+    // Track used vocab IDs to prevent duplicates
+    const usedVocabIds = new Set<string>();
+    
     // Filter due vocab from seen vocab by checking individual due dates
     const validDueSeenVocab = seenVocab.filter(vocab => 
       vocab.progress.due <= new Date() && !vocab.doNotPractice
@@ -101,14 +104,17 @@ export async function makeLessonAroundHighMasteryImmersionContent(
       const selectedUnseenVocab = pickRandom(unseenVocab, unseenCount);
       
       for (const vocab of selectedUnseenVocab) {
+        if (usedVocabIds.has(vocab.uid) || tasks.length >= targetTaskCount) continue;
+        
         try {
           const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
           const activeTasks = vocabTasks.filter(task => task.isActive);
           
           if (activeTasks.length > 0) {
             const randomTask = randomFromArray(activeTasks);
-            if (randomTask && tasks.length < targetTaskCount) {
+            if (randomTask) {
               tasks.push(randomTask);
+              usedVocabIds.add(vocab.uid);
             }
           }
         } catch (error) {
@@ -119,18 +125,22 @@ export async function makeLessonAroundHighMasteryImmersionContent(
     
     // 2. Add due seen vocab from needed vocab until we hit task limit
     if (tasks.length < targetTaskCount && validDueSeenVocab.length > 0) {
+      const availableDueVocab = validDueSeenVocab.filter(vocab => !usedVocabIds.has(vocab.uid));
       const remainingSlots = targetTaskCount - tasks.length;
-      const selectedDueVocab = pickRandom(validDueSeenVocab, remainingSlots);
+      const selectedDueVocab = pickRandom(availableDueVocab, remainingSlots);
       
       for (const vocab of selectedDueVocab) {
+        if (tasks.length >= targetTaskCount) break;
+        
         try {
           const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
           const activeTasks = vocabTasks.filter(task => task.isActive);
           
           if (activeTasks.length > 0) {
             const randomTask = randomFromArray(activeTasks);
-            if (randomTask && tasks.length < targetTaskCount) {
+            if (randomTask) {
               tasks.push(randomTask);
+              usedVocabIds.add(vocab.uid);
             }
           }
         } catch (error) {
@@ -145,21 +155,23 @@ export async function makeLessonAroundHighMasteryImmersionContent(
       const globalDueVocab = await vocabRepo.getDueVocabInLanguages(languages);
       
       // Filter out vocab we already used
-      const usedVocabIds = new Set(tasks.map(task => task.associatedVocab?.[0]).filter(Boolean));
       const availableDueVocab = globalDueVocab.filter(vocab => !usedVocabIds.has(vocab.uid));
       
       if (availableDueVocab.length > 0) {
         const selectedGlobalVocab = pickRandom(availableDueVocab, remainingSlots);
         
         for (const vocab of selectedGlobalVocab) {
+          if (tasks.length >= targetTaskCount) break;
+          
           try {
             const vocabTasks = await taskRepo.getTasksByVocabId(vocab.uid);
             const activeTasks = vocabTasks.filter(task => task.isActive);
             
             if (activeTasks.length > 0) {
               const randomTask = randomFromArray(activeTasks);
-              if (randomTask && tasks.length < targetTaskCount) {
+              if (randomTask) {
                 tasks.push(randomTask);
+                usedVocabIds.add(vocab.uid);
               }
             }
           } catch (error) {
