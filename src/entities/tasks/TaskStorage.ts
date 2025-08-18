@@ -17,7 +17,6 @@ const db = new TaskDatabase();
 export class TaskStorage {
   async getAll(): Promise<TaskData[]> {
     const tasks = await db.tasks.toArray();
-    console.log('TaskStorage: Retrieved', tasks.length, 'tasks');
     return tasks;
   }
 
@@ -26,10 +25,8 @@ export class TaskStorage {
   }
 
   async add(task: TaskData): Promise<void> {
-    console.log('TaskStorage: Adding task to DB:', task.uid);
     try {
       await db.tasks.add(task);
-      console.log('TaskStorage: Successfully added task to DB:', task.uid);
     } catch (error) {
       console.error('TaskStorage: Failed to add task to DB:', error);
       throw error;

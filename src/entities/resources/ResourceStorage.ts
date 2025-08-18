@@ -17,7 +17,6 @@ const db = new ResourceDatabase();
 export class ResourceStorage {
   async getAll(): Promise<ResourceData[]> {
     const resources = await db.resources.toArray();
-    console.log('ResourceStorage: Retrieved', resources.length, 'resources');
     return resources;
   }
 
@@ -26,10 +25,8 @@ export class ResourceStorage {
   }
 
   async add(resource: ResourceData): Promise<void> {
-    console.log('ResourceStorage: Adding resource to DB:', resource.title);
     try {
       await db.resources.add(resource);
-      console.log('ResourceStorage: Successfully added resource to DB:', resource.title);
     } catch (error) {
       console.error('ResourceStorage: Failed to add resource to DB:', error);
       throw error;

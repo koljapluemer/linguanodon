@@ -63,8 +63,6 @@ async function downloadImmersionContentSet(name: string) {
   error.value = null;
   
   try {
-    console.log(`Downloading immersion content set: ${name} for language: ${props.selectedLanguage}`);
-    
     // First create or get the local set entry
     const localSet = await localSetRepo.saveLocalSet({
       name,
@@ -79,11 +77,9 @@ async function downloadImmersionContentSet(name: string) {
       return;
     }
 
-    console.log(`Found ${immersionContentSet.immersionContent.length} immersion content items to download`);
 
     // Process each remote immersion content
     for (const remoteImmersionContent of immersionContentSet.immersionContent) {
-      console.log(`Processing immersion content: ${remoteImmersionContent.title}`);
       
       // 1. Create notes and get their UIDs
       const noteUids = remoteImmersionContent.notes 
@@ -196,7 +192,6 @@ async function downloadImmersionContentSet(name: string) {
           priority: shouldIncrementPriority ? (existingImmersionContent.priority ?? 0) + 1 : existingImmersionContent.priority
         });
         
-        console.log(`Updated existing immersion content: ${remoteImmersionContent.title}`);
       } else {
         // Create new immersion content
         const immersionContentData: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'> = {
@@ -214,7 +209,6 @@ async function downloadImmersionContentSet(name: string) {
         
         try {
           await immersionContentRepo.saveImmersionContent(immersionContentData);
-          console.log(`Successfully saved new immersion content: ${remoteImmersionContent.title}`);
           
         } catch (saveError) {
           console.error(`Failed to save immersion content ${remoteImmersionContent.title}:`, saveError);
@@ -226,7 +220,6 @@ async function downloadImmersionContentSet(name: string) {
 
     // Reload downloaded sets to update UI
     await loadDownloadedSets();
-    console.log(`Immersion content set "${name}" downloaded and marked as complete`);
     
   } catch (err) {
     console.error('Download error:', err);

@@ -66,22 +66,17 @@ async function downloadResourceSet(name: string) {
   error.value = null;
   
   try {
-    console.log(`Downloading resource set: ${name} for language: ${props.selectedLanguage}`);
-    
     const resourceSet = await remoteSetService.getResourceSet(props.selectedLanguage, name);
     if (!resourceSet) {
       error.value = 'Failed to download resource set';
       return;
     }
 
-    console.log(`Found ${resourceSet.resources.length} resources to download`);
-
     // Mark as downloaded and get the local set UID
     const savedLocalSet = await remoteSetService.markResourceSetAsDownloaded(name, props.selectedLanguage, `Resource set with ${resourceSet.resources.length} items`);
 
     // Convert each RemoteResource to ResourceData and save
     for (const remoteResource of resourceSet.resources) {
-      console.log(`Processing resource: ${remoteResource.title}`);
       
       // Check if resource already exists
       let existingResource = await resourceRepo.getResourceByTitleAndLanguage(
@@ -104,7 +99,6 @@ async function downloadResourceSet(name: string) {
           priority: shouldIncrementPriority ? (existingResource.priority ?? 0) + 1 : existingResource.priority
         });
         
-        console.log(`Updated existing resource: ${remoteResource.title}`);
       } else {
         // Create new resource
         const resourceData: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'> = {
@@ -121,7 +115,6 @@ async function downloadResourceSet(name: string) {
         
         try {
           const savedResource = await resourceRepo.saveResource(resourceData);
-          console.log(`Successfully saved new resource: ${remoteResource.title}`);
           
           // Create tasks for the new resource using the feature
           await resourceTaskController.createTasksForResource(savedResource.uid);
@@ -137,7 +130,6 @@ async function downloadResourceSet(name: string) {
     // Mark as downloaded
     await remoteSetService.markResourceSetAsDownloaded(name, props.selectedLanguage, `Resource set with ${resourceSet.resources.length} items`);
     downloadedSets.value.add(name);
-    console.log(`Resource set "${name}" downloaded and marked as complete`);
     
   } catch (err) {
     console.error('Download error:', err);

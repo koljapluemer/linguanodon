@@ -47,11 +47,9 @@ export class ResourceRepo implements ResourceRepoContract {
       tasks: []
     };
 
-    console.log('ResourceRepo: Attempting to save resource:', resourceData.title);
     
     try {
       await this.storage.add(resourceData);
-      console.log('ResourceRepo: Successfully saved resource:', resourceData.title, resourceData.uid);
       return resourceData;
     } catch (error) {
       console.error('ResourceRepo: Failed to save resource:', error);

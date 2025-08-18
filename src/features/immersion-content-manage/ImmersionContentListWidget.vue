@@ -115,9 +115,7 @@ async function loadImmersionContent() {
   error.value = null;
   
   try {
-    console.log('Loading immersion content...');
     immersionContent.value = await immersionContentRepo.getAllImmersionContent();
-    console.log(`Loaded ${immersionContent.value.length} immersion content items:`, immersionContent.value.map(c => c.title));
   } catch (err) {
     console.error('Error loading immersion content:', err);
     error.value = err instanceof Error ? err.message : 'Failed to load immersion content';

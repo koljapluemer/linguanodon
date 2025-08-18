@@ -104,7 +104,6 @@ async function saveVocab(index: number, updatedVocab: VocabData) {
   try {
     // Convert reactive proxy to plain object before saving to IndexedDB
     const plainVocab = JSON.parse(JSON.stringify(updatedVocab));
-    console.log('Saving vocab:', plainVocab);
     
     // Use updateVocab for existing vocab (has UID and exists in list)
     const originalVocab = vocabItems.value[index];

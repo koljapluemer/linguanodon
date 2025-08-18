@@ -182,37 +182,21 @@ async function updateTaskAsSkipped() {
 async function updateAssociatedEntities() {
   // Update associated vocab
   if (props.task.associatedVocab?.length && vocabRepo) {
-    console.log('TaskRenderer: Processing associated vocab:', props.task.associatedVocab);
-    console.log('TaskRenderer: Task isOneTime:', props.task.isOneTime);
-    console.log('TaskRenderer: Difficulty rating:', difficultyRating.value);
-
     for (const vocabUid of props.task.associatedVocab) {
-      console.log(`TaskRenderer: Processing vocab UID: ${vocabUid}`);
-
       if (props.task.isOneTime) {
         // Just update last review time
-        console.log(`TaskRenderer: Updating last review for one-time task, vocab: ${vocabUid}`);
         await vocabRepo.updateLastReview(vocabUid);
-        console.log(`TaskRenderer: Successfully updated last review for vocab: ${vocabUid}`);
       } else if (difficultyRating.value) {
         // Score the vocab
-        console.log(`TaskRenderer: Scoring vocab ${vocabUid} with rating: ${difficultyRating.value}`);
         await vocabRepo.scoreVocab(vocabUid, difficultyRating.value);
-        console.log(`TaskRenderer: Successfully scored vocab: ${vocabUid}`);
-      } else {
-        console.log(`TaskRenderer: No action taken for vocab ${vocabUid} - not one-time and no difficulty rating`);
       }
 
       // Update vocab tasks after scoring/reviewing
       if (taskRepo && noteRepo) {
-        console.log(`TaskRenderer: Updating tasks for vocab: ${vocabUid}`);
         const updateVocabTasksController = new UpdateVocabTasksController(vocabRepo, taskRepo, noteRepo);
         await updateVocabTasksController.updateTasksForVocab(vocabUid);
-        console.log(`TaskRenderer: Successfully updated tasks for vocab: ${vocabUid}`);
       }
     }
-  } else {
-    console.log('TaskRenderer: No associated vocab to process');
   }
 
   // Update associated fact cards

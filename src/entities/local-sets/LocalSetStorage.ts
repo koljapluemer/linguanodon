@@ -17,7 +17,6 @@ const db = new LocalSetDatabase();
 export class LocalSetStorage {
   async getAll(): Promise<LocalSetData[]> {
     const localSets = await db.localSets.toArray();
-    console.log('LocalSetStorage: Retrieved', localSets.length, 'local sets');
     return localSets;
   }
 
@@ -34,10 +33,8 @@ export class LocalSetStorage {
   }
 
   async add(localSet: LocalSetData): Promise<void> {
-    console.log('LocalSetStorage: Adding local set to DB:', localSet.name);
     try {
       await db.localSets.add(localSet);
-      console.log('LocalSetStorage: Successfully added local set to DB:', localSet.name);
     } catch (error) {
       console.error('LocalSetStorage: Failed to add local set to DB:', error);
       throw error;

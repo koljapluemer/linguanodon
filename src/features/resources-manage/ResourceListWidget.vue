@@ -112,9 +112,7 @@ async function loadResources() {
   error.value = null;
   
   try {
-    console.log('Loading resources...');
     resources.value = await resourceRepo.getAllResources();
-    console.log(`Loaded ${resources.value.length} resources:`, resources.value.map(r => r.title));
   } catch (err) {
     console.error('Error loading resources:', err);
     error.value = err instanceof Error ? err.message : 'Failed to load resources';

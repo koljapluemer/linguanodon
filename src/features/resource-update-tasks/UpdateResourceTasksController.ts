@@ -26,7 +26,6 @@ export class UpdateResourceTasksController {
     for (const taskData of newTasks) {
       await this.taskRepo.saveTask(toRaw(taskData));
       taskUids.push(taskData.uid);
-      console.log(`Created task: ${taskData.uid}`);
     }
     
     // Update resource with task references

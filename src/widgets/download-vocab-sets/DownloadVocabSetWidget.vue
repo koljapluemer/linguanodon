@@ -63,7 +63,6 @@ async function downloadVocabSet(name: string) {
   error.value = null;
   
   try {
-    console.log(`Downloading vocab set: ${name} for language: ${props.selectedLanguage}`);
     
     // First create or get the local set entry
     const localSet = await localSetRepo.saveLocalSet({
@@ -79,7 +78,6 @@ async function downloadVocabSet(name: string) {
       return;
     }
 
-    console.log(`Found ${vocabSet.vocabs.length} vocab items to download`);
 
     // Process each remote vocab completely at feature level
     for (const remoteVocab of vocabSet.vocabs) {
@@ -159,7 +157,6 @@ async function downloadVocabSet(name: string) {
 
     // Reload downloaded sets to update UI
     await loadDownloadedSets();
-    console.log(`Vocab set "${name}" downloaded and marked as complete`);
     
   } catch (err) {
     console.error('Download error:', err);

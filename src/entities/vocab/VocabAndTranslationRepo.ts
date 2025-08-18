@@ -109,13 +109,13 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
 
   async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
-    console.log(`VocabRepo.scoreVocab: Starting - vocabId: ${vocabId}, rating: ${rating}`);
+    console.warn(`VocabRepo.scoreVocab: Starting - vocabId: ${vocabId}, rating: ${rating}`);
     const vocab = await this.vocabStorage.getById(vocabId);
     if (!vocab) {
-      console.log(`VocabRepo.scoreVocab: Vocab not found for ID: ${vocabId}`);
+      console.warn(`VocabRepo.scoreVocab: Vocab not found for ID: ${vocabId}`);
       return;
     }
-    console.log(`VocabRepo.scoreVocab: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current reps: ${vocab.progress.reps}`);
+    console.warn(`VocabRepo.scoreVocab: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current reps: ${vocab.progress.reps}`);
 
     const scheduler = fsrs();
     const fsrsRating = rating;
@@ -165,34 +165,34 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     };
 
     await this.vocabStorage.update(vocab);
-    console.log(`VocabRepo.scoreVocab: Successfully updated vocab ${vocabId} - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}, new due: ${vocab.progress.due}`);
+    console.warn(`VocabRepo.scoreVocab: Successfully updated vocab ${vocabId} - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}, new due: ${vocab.progress.due}`);
   }
 
   async updateLastReview(vocabId: string): Promise<void> {
-    console.log(`VocabRepo.updateLastReview: Starting - vocabId: ${vocabId}`);
+    console.warn(`VocabRepo.updateLastReview: Starting - vocabId: ${vocabId}`);
     const vocab = await this.vocabStorage.getById(vocabId);
     if (!vocab) {
-      console.log(`VocabRepo.updateLastReview: Vocab not found for ID: ${vocabId}`);
+      console.warn(`VocabRepo.updateLastReview: Vocab not found for ID: ${vocabId}`);
       return;
     }
-    console.log(`VocabRepo.updateLastReview: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current last_review: ${vocab.progress.last_review}`);
+    console.warn(`VocabRepo.updateLastReview: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current last_review: ${vocab.progress.last_review}`);
 
     // Initialize FSRS card for new vocab
     if (vocab.progress.level === -1) {
-      console.log(`VocabRepo.updateLastReview: Initializing FSRS card for new vocab ${vocabId}`);
+      console.warn(`VocabRepo.updateLastReview: Initializing FSRS card for new vocab ${vocabId}`);
       vocab.progress = {
         ...createEmptyCard(),
         streak: 0,
         level: 0
       };
-      console.log(`VocabRepo.updateLastReview: Initialized FSRS card - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}`);
+      console.warn(`VocabRepo.updateLastReview: Initialized FSRS card - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}`);
     }
 
     // Always update last review time
     const newLastReview = new Date();
     vocab.progress.last_review = newLastReview;
     await this.vocabStorage.update(vocab);
-    console.log(`VocabRepo.updateLastReview: Successfully updated vocab ${vocabId} - level: ${vocab.progress.level}, new last_review: ${newLastReview}`);
+    console.warn(`VocabRepo.updateLastReview: Successfully updated vocab ${vocabId} - level: ${vocab.progress.level}, new last_review: ${newLastReview}`);
   }
 
   async addPronunciationToVocab(_uid: string, _pronunciation: string): Promise<void> {

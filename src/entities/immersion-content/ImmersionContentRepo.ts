@@ -48,11 +48,9 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       tasks: []
     };
 
-    console.log('ImmersionContentRepo: Attempting to save immersion content:', immersionContentData.title);
     
     try {
       await this.storage.add(immersionContentData);
-      console.log('ImmersionContentRepo: Successfully saved immersion content:', immersionContentData.title, immersionContentData.uid);
       return immersionContentData;
     } catch (error) {
       console.error('ImmersionContentRepo: Failed to save immersion content:', error);

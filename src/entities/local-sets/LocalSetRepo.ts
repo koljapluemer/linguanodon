@@ -30,11 +30,9 @@ export class LocalSetRepo implements LocalSetRepoContract {
       lastDownloadedAt: localSet.lastDownloadedAt
     };
 
-    console.log('LocalSetRepo: Attempting to save local set:', localSetData.name);
     
     try {
       await this.storage.add(localSetData);
-      console.log('LocalSetRepo: Successfully saved local set:', localSetData.name, localSetData.uid);
       return localSetData;
     } catch (error) {
       console.error('LocalSetRepo: Failed to save local set:', error);

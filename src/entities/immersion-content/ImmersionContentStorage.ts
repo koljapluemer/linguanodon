@@ -17,7 +17,6 @@ const db = new ImmersionContentDatabase();
 export class ImmersionContentStorage {
   async getAll(): Promise<ImmersionContentData[]> {
     const immersionContent = await db.immersionContent.toArray();
-    console.log('ImmersionContentStorage: Retrieved', immersionContent.length, 'immersion content items');
     return immersionContent;
   }
 
@@ -26,10 +25,8 @@ export class ImmersionContentStorage {
   }
 
   async add(immersionContent: ImmersionContentData): Promise<void> {
-    console.log('ImmersionContentStorage: Adding immersion content to DB:', immersionContent.title);
     try {
       await db.immersionContent.add(immersionContent);
-      console.log('ImmersionContentStorage: Successfully added immersion content to DB:', immersionContent.title);
     } catch (error) {
       console.error('ImmersionContentStorage: Failed to add immersion content to DB:', error);
       throw error;
