@@ -109,13 +109,10 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
 
   async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
-    console.warn(`VocabRepo.scoreVocab: Starting - vocabId: ${vocabId}, rating: ${rating}`);
     const vocab = await this.vocabStorage.getById(vocabId);
     if (!vocab) {
-      console.warn(`VocabRepo.scoreVocab: Vocab not found for ID: ${vocabId}`);
       return;
     }
-    console.warn(`VocabRepo.scoreVocab: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current reps: ${vocab.progress.reps}`);
 
     const scheduler = fsrs();
     const fsrsRating = rating;
@@ -165,40 +162,32 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     };
 
     await this.vocabStorage.update(vocab);
-    console.warn(`VocabRepo.scoreVocab: Successfully updated vocab ${vocabId} - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}, new due: ${vocab.progress.due}`);
   }
 
   async updateLastReview(vocabId: string): Promise<void> {
-    console.warn(`VocabRepo.updateLastReview: Starting - vocabId: ${vocabId}`);
     const vocab = await this.vocabStorage.getById(vocabId);
     if (!vocab) {
-      console.warn(`VocabRepo.updateLastReview: Vocab not found for ID: ${vocabId}`);
       return;
     }
-    console.warn(`VocabRepo.updateLastReview: Found vocab - content: "${vocab.content}", current level: ${vocab.progress.level}, current last_review: ${vocab.progress.last_review}`);
 
     // Initialize FSRS card for new vocab
     if (vocab.progress.level === -1) {
-      console.warn(`VocabRepo.updateLastReview: Initializing FSRS card for new vocab ${vocabId}`);
       vocab.progress = {
         ...createEmptyCard(),
         streak: 0,
         level: 0
       };
-      console.warn(`VocabRepo.updateLastReview: Initialized FSRS card - new level: ${vocab.progress.level}, new reps: ${vocab.progress.reps}`);
     }
 
     // Always update last review time
     const newLastReview = new Date();
     vocab.progress.last_review = newLastReview;
     await this.vocabStorage.update(vocab);
-    console.warn(`VocabRepo.updateLastReview: Successfully updated vocab ${vocabId} - level: ${vocab.progress.level}, new last_review: ${newLastReview}`);
   }
 
   async addPronunciationToVocab(_uid: string, _pronunciation: string): Promise<void> {
     // Pronunciation is now handled as notes - this method will be deprecated
     // The pronunciation task should create a note instead
-    console.warn('addPronunciationToVocab is deprecated - pronunciation should be added as notes');
     // Suppress unused parameter warnings with void operator
     void _uid;
     void _pronunciation;
