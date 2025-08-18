@@ -12,7 +12,6 @@
     <!-- Actual Task Component -->
     <div class="big-card">
       <component :is="getTaskComponent(props.task.taskType)" :task="props.task" @finished="handleTaskFinished"
-        @complete="handleTaskFinished" @task-completed="handleTaskFinished" @taskWasDone="handleTaskWasDone"
         @taskNowMayBeConsideredDone="handleTaskNowMayBeConsideredDone"
         @taskNowMayNotBeConsideredDone="handleTaskNowMayNotBeConsideredDone" />
     </div>
@@ -72,9 +71,6 @@ function getTaskComponent(taskType: string) {
 }
 
 // Task component event handlers
-function handleTaskWasDone() {
-  // Task component indicates it's done
-}
 
 function handleTaskNowMayBeConsideredDone() {
   mayBeConsideredDone.value = true;
