@@ -133,6 +133,22 @@ async function downloadImmersionContentSet(name: string) {
           );
 
           if (existingVocab) {
+            // Ensure origins is treated as a set and check if this set is already included
+            const existingOrigins = new Set(existingVocab.origins);
+            const shouldIncrementPriority = !existingOrigins.has(localSet.uid);
+            
+            // Add new origin to the set
+            existingOrigins.add(localSet.uid);
+            
+            // Merge with existing vocab
+            await vocabAndTranslationRepo.updateVocab({
+              ...existingVocab,
+              translations: [...new Set([...existingVocab.translations, ...translationUids])],
+              notes: [...new Set([...existingVocab.notes, ...vocabNoteUids])],
+              origins: [...existingOrigins],
+              priority: shouldIncrementPriority ? (existingVocab.priority ?? 0) + 1 : existingVocab.priority
+            });
+            
             neededVocabUids.push(existingVocab.uid);
           } else {
             // Create new vocab
@@ -144,7 +160,7 @@ async function downloadImmersionContentSet(name: string) {
               translations: translationUids,
               links: remoteVocab.links || [],
               notes: vocabNoteUids,
-              origins: [localSet.uid]
+              origins: [localSet.uid] // Unique by design for new vocab
             };
             
             const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
@@ -157,28 +173,54 @@ async function downloadImmersionContentSet(name: string) {
         }
       }
 
-      // 3. Create the immersion content
-      const immersionContentData: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'> = {
-        language: remoteImmersionContent.language,
-        priority: remoteImmersionContent.priority,
-        title: remoteImmersionContent.title,
-        content: remoteImmersionContent.content,
-        link: remoteImmersionContent.link,
-        neededVocab: neededVocabUids,
-        notes: noteUids,
-        extractedVocab: [],
-        extractedFactCards: [],
-        origins: [localSet.uid]
-      };
-      
-      try {
-        await immersionContentRepo.saveImmersionContent(immersionContentData);
-        console.log(`Successfully saved immersion content: ${remoteImmersionContent.title}`);
+      // 3. Check if immersion content already exists
+      let existingImmersionContent = await immersionContentRepo.getImmersionContentByTitleAndLanguage(
+        remoteImmersionContent.title,
+        remoteImmersionContent.language
+      );
+
+      if (existingImmersionContent) {
+        // Ensure origins is treated as a set and check if this set is already included
+        const existingOrigins = new Set(existingImmersionContent.origins);
+        const shouldIncrementPriority = !existingOrigins.has(localSet.uid);
         
-      } catch (saveError) {
-        console.error(`Failed to save immersion content ${remoteImmersionContent.title}:`, saveError);
-        error.value = `Failed to save immersion content: ${remoteImmersionContent.title}`;
-        return;
+        // Add new origin to the set
+        existingOrigins.add(localSet.uid);
+        
+        // Merge with existing immersion content
+        await immersionContentRepo.updateImmersionContent({
+          ...existingImmersionContent,
+          neededVocab: [...new Set([...existingImmersionContent.neededVocab, ...neededVocabUids])],
+          notes: [...new Set([...existingImmersionContent.notes, ...noteUids])],
+          origins: [...existingOrigins],
+          priority: shouldIncrementPriority ? (existingImmersionContent.priority ?? 0) + 1 : existingImmersionContent.priority
+        });
+        
+        console.log(`Updated existing immersion content: ${remoteImmersionContent.title}`);
+      } else {
+        // Create new immersion content
+        const immersionContentData: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'> = {
+          language: remoteImmersionContent.language,
+          priority: remoteImmersionContent.priority,
+          title: remoteImmersionContent.title,
+          content: remoteImmersionContent.content,
+          link: remoteImmersionContent.link,
+          neededVocab: neededVocabUids,
+          notes: noteUids,
+          extractedVocab: [],
+          extractedFactCards: [],
+          origins: [localSet.uid] // Unique by design for new immersion content
+        };
+        
+        try {
+          await immersionContentRepo.saveImmersionContent(immersionContentData);
+          console.log(`Successfully saved new immersion content: ${remoteImmersionContent.title}`);
+          
+        } catch (saveError) {
+          console.error(`Failed to save immersion content ${remoteImmersionContent.title}:`, saveError);
+          error.value = `Failed to save immersion content: ${remoteImmersionContent.title}`;
+          return;
+        }
       }
     }
 

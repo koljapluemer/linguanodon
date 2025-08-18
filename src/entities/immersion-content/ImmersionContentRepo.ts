@@ -13,6 +13,13 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
     return await this.storage.getByUID(uid);
   }
 
+  async getImmersionContentByTitleAndLanguage(title: string, language: string): Promise<ImmersionContentData | undefined> {
+    const allImmersionContent = await this.storage.getAll();
+    return allImmersionContent.find(content => 
+      content.title === title && content.language === language
+    );
+  }
+
   async getRandomDueImmersionContent(): Promise<ImmersionContentData | null> {
     const allImmersionContent = await this.storage.getAll();
     

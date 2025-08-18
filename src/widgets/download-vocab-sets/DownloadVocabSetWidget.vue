@@ -122,11 +122,20 @@ async function downloadVocabSet(name: string) {
       );
 
       if (existingVocab) {
+        // Ensure origins is treated as a set and check if this set is already included
+        const existingOrigins = new Set(existingVocab.origins);
+        const shouldIncrementPriority = !existingOrigins.has(localSet.uid);
+        
+        // Add new origin to the set
+        existingOrigins.add(localSet.uid);
+        
         // Merge with existing vocab
         await vocabAndTranslationRepo.updateVocab({
           ...existingVocab,
           translations: [...new Set([...existingVocab.translations, ...translationUids])],
-          notes: [...new Set([...existingVocab.notes, ...vocabNoteUids])]
+          notes: [...new Set([...existingVocab.notes, ...vocabNoteUids])],
+          origins: [...existingOrigins],
+          priority: shouldIncrementPriority ? (existingVocab.priority ?? 0) + 1 : existingVocab.priority
         });
       } else {
         // 4. Create complete VocabData (except uid which saveVocab handles)
@@ -138,7 +147,7 @@ async function downloadVocabSet(name: string) {
           notes: vocabNoteUids,
           translations: translationUids,
           links: remoteVocab.links || [],
-          origins: [localSet.uid]
+          origins: [localSet.uid] // Unique by design for new vocab
         };
         
         const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);

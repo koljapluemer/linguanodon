@@ -81,31 +81,56 @@ async function downloadResourceSet(name: string) {
 
     // Convert each RemoteResource to ResourceData and save
     for (const remoteResource of resourceSet.resources) {
-      console.log(`Saving resource: ${remoteResource.title}`);
+      console.log(`Processing resource: ${remoteResource.title}`);
       
-      const resourceData: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'> = {
-        language: remoteResource.language,
-        priority: remoteResource.priority,
-        title: remoteResource.title,
-        content: remoteResource.content,
-        link: remoteResource.link,
-        vocab: [],
-        factCards: [],
-        notes: [],
-        origins: [savedLocalSet.uid] // Add the local set UID to origins
-      };
-      
-      try {
-        const savedResource = await resourceRepo.saveResource(resourceData);
-        console.log(`Successfully saved resource: ${remoteResource.title}`);
+      // Check if resource already exists
+      let existingResource = await resourceRepo.getResourceByTitleAndLanguage(
+        remoteResource.title,
+        remoteResource.language
+      );
+
+      if (existingResource) {
+        // Ensure origins is treated as a set and check if this set is already included
+        const existingOrigins = new Set(existingResource.origins);
+        const shouldIncrementPriority = !existingOrigins.has(savedLocalSet.uid);
         
-        // Create tasks for the new resource using the feature
-        await resourceTaskController.createTasksForResource(savedResource.uid);
+        // Add new origin to the set
+        existingOrigins.add(savedLocalSet.uid);
         
-      } catch (saveError) {
-        console.error(`Failed to save resource ${remoteResource.title}:`, saveError);
-        error.value = `Failed to save resource: ${remoteResource.title}`;
-        return;
+        // Merge with existing resource
+        await resourceRepo.updateResource({
+          ...existingResource,
+          origins: [...existingOrigins],
+          priority: shouldIncrementPriority ? (existingResource.priority ?? 0) + 1 : existingResource.priority
+        });
+        
+        console.log(`Updated existing resource: ${remoteResource.title}`);
+      } else {
+        // Create new resource
+        const resourceData: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'> = {
+          language: remoteResource.language,
+          priority: remoteResource.priority,
+          title: remoteResource.title,
+          content: remoteResource.content,
+          link: remoteResource.link,
+          vocab: [],
+          factCards: [],
+          notes: [],
+          origins: [savedLocalSet.uid] // Unique by design for new resource
+        };
+        
+        try {
+          const savedResource = await resourceRepo.saveResource(resourceData);
+          console.log(`Successfully saved new resource: ${remoteResource.title}`);
+          
+          // Create tasks for the new resource using the feature
+          await resourceTaskController.createTasksForResource(savedResource.uid);
+          
+        } catch (saveError) {
+          console.error(`Failed to save resource ${remoteResource.title}:`, saveError);
+          error.value = `Failed to save resource: ${remoteResource.title}`;
+          return;
+        }
       }
     }
 

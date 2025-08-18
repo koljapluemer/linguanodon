@@ -13,6 +13,13 @@ export class ResourceRepo implements ResourceRepoContract {
     return await this.storage.getByUID(uid);
   }
 
+  async getResourceByTitleAndLanguage(title: string, language: string): Promise<ResourceData | undefined> {
+    const allResources = await this.storage.getAll();
+    return allResources.find(resource => 
+      resource.title === title && resource.language === language
+    );
+  }
+
   async getRandomDueResource(): Promise<ResourceData | null> {
     const allResources = await this.storage.getAll();
     
