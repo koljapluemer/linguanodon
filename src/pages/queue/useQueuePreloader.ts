@@ -4,6 +4,7 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { makeLesson } from './lesson-generator/makeLesson';
 import { shuffleArray } from '@/shared/arrayUtils';
 
@@ -32,6 +33,7 @@ export function useQueuePreloader(
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,
+  immersionContentRepo: ImmersionContentRepoContract,
   config: Partial<PreloadConfig> = {}
 ) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
@@ -61,7 +63,7 @@ export function useQueuePreloader(
     try {
       batchLoadingPromise = (async () => {
         // Generate a lesson using the new lesson system
-        const lesson = await makeLesson(vocabRepo, resourceRepo, taskRepo, languageRepo);
+        const lesson = await makeLesson(vocabRepo, resourceRepo, taskRepo, languageRepo, immersionContentRepo);
         
         if (lesson.length === 0) {
           console.warn('Generated lesson is empty');
@@ -144,7 +146,7 @@ export function useQueuePreloader(
   // Force loading (for fallback scenarios)
   async function forceLoadNextTaskBatch(): Promise<TaskData[]> {
     try {
-      const lesson = await makeLesson(vocabRepo, resourceRepo, taskRepo, languageRepo);
+      const lesson = await makeLesson(vocabRepo, resourceRepo, taskRepo, languageRepo, immersionContentRepo);
       return shuffleArray(lesson);
     } catch (error) {
       console.error('Error force loading lesson:', error);

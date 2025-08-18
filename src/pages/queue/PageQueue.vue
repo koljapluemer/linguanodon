@@ -27,7 +27,7 @@ const {
   initializeQueue,
   completeCurrentTask,
   stateMachineDebug
-} = useCachedQueue(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo);
+} = useCachedQueue(vocabRepo, goalRepo, resourceRepo, taskRepo, languageRepo, immersionContentRepo);
 
 // Initialize time tracking for this page
 useTimeTracking();

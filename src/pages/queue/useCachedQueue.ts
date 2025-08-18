@@ -3,6 +3,7 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { useQueuePreloader } from './useQueuePreloader';
 import { useQueueStateMachine } from './useQueueStateMachine';
 
@@ -11,10 +12,11 @@ export function useCachedQueue(
   _goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
-  languageRepo: LanguageRepoContract
+  languageRepo: LanguageRepoContract,
+  immersionContentRepo: ImmersionContentRepoContract
 ) {
   // Initialize preloader with new lesson system
-  const preloader = useQueuePreloader(vocabRepo, resourceRepo, taskRepo, languageRepo);
+  const preloader = useQueuePreloader(vocabRepo, resourceRepo, taskRepo, languageRepo, immersionContentRepo);
   
   // Initialize state machine with preloader only (TaskRenderer handles entity updates)
   const stateMachine = useQueueStateMachine(preloader);

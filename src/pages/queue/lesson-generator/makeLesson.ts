@@ -3,16 +3,21 @@ import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndT
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { shuffleArray } from '@/shared/arrayUtils';
 import { makeLessonAroundDueVocab } from './flavors/makeLessonAroundDueVocab';
 import { makeLessonAroundNewVocab } from './flavors/makeLessonAroundNewVocab';
 import { makeLessonAroundResourceExtraction } from './flavors/makeLessonAroundResourceExtraction';
+import { makeLessonAroundRandomImmersionContent } from './flavors/makeLessonAroundRandomImmersionContent';
+import { makeLessonAroundLowMasteryImmersionContent } from './flavors/makeLessonAroundLowMasteryImmersionContent';
+import { makeLessonAroundHighMasteryImmersionContent } from './flavors/makeLessonAroundHighMasteryImmersionContent';
 
 export async function makeLesson(
   vocabRepo: VocabAndTranslationRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
-  languageRepo: LanguageRepoContract
+  languageRepo: LanguageRepoContract,
+  immersionContentRepo: ImmersionContentRepoContract
 ): Promise<TaskData[]> {
   
   try {
@@ -30,7 +35,10 @@ export async function makeLesson(
     const allFlavors = [
       () => makeLessonAroundDueVocab(vocabRepo, taskRepo, languageCodes),
       () => makeLessonAroundNewVocab(vocabRepo, taskRepo, languageCodes), 
-      () => makeLessonAroundResourceExtraction(vocabRepo, resourceRepo, taskRepo, languageCodes)
+      () => makeLessonAroundResourceExtraction(vocabRepo, resourceRepo, taskRepo, languageCodes),
+      () => makeLessonAroundRandomImmersionContent(vocabRepo, taskRepo, immersionContentRepo, languageCodes),
+      () => makeLessonAroundLowMasteryImmersionContent(vocabRepo, taskRepo, immersionContentRepo, languageCodes),
+      () => makeLessonAroundHighMasteryImmersionContent(vocabRepo, taskRepo, immersionContentRepo, languageCodes)
     ];
     
     // Shuffle flavors to try them in random order

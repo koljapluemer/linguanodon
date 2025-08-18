@@ -4,16 +4,15 @@
       <div class="mb-4">
         <h1 class="text-2xl font-bold">Manage Immersion Content</h1>
       </div>
-      <ImmersionContentFormRenderer :immersion-content-uid="route.params.uid as string" />
+      <ImmersionContentFormRenderer :immersionContentUid="route.params.uid as string"></ImmersionContentFormRenderer>
 
-      <!-- Needed Vocabulary Section -->
       <div v-if="route.params.uid" class="card bg-base-100 shadow-xl mt-6">
         <div class="card-body">
           <VocabProgressWidget 
             :vocab-ids="neededVocabIds"
           />
           <ManageNeededVocabWidget 
-            :immersion-content-uid="route.params.uid as string"
+            :immersionContentUid="route.params.uid as string"
             :show-delete-button="false"
             :show-disconnect-button="true"
             :allow-jumping-to-vocab-page="true"
@@ -27,8 +26,8 @@
       <div v-if="route.params.uid" class="card bg-base-100 shadow-xl mt-6">
         <div class="card-body">
           <ManageExtractedVocabWidget 
-            :immersion-content-uid="route.params.uid as string"
-            :show-delete-button="false"
+            :immersionContentUid="route.params.uid as string"
+            :showDeleteButton="false"
             :show-disconnect-button="true"
             :allow-jumping-to-vocab-page="true"
             :allow-connecting-existing="true"
