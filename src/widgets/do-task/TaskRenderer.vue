@@ -154,8 +154,13 @@ async function finishTask() {
 
     emit('finished');
   } catch (error) {
+    if (error && typeof error === 'object' && 'name' in error && error.name === 'QuotaExceededError') {
+      console.error('Storage full, task completion may be incomplete:', error);
+      emit('finished'); // Still emit to prevent hang
+      return;
+    }
     console.error('Error finishing task:', error);
-    emit('finished');
+    emit('finished'); // Always emit to prevent hang
   }
 }
 
@@ -170,8 +175,13 @@ async function updateTaskAsSkipped() {
     await taskRepo!.saveTask(toRaw(updatedTask));
     emit('finished');
   } catch (error) {
+    if (error && typeof error === 'object' && 'name' in error && error.name === 'QuotaExceededError') {
+      console.error('Storage full, task skip may be incomplete:', error);
+      emit('finished'); // Still emit to prevent hang
+      return;
+    }
     console.error('Error skipping task:', error);
-    emit('finished');
+    emit('finished'); // Always emit to prevent hang
   }
 }
 

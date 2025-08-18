@@ -71,7 +71,12 @@ export function useQueueStateMachine(preloader: PreloaderInstance) {
     logTransition(fromStatus, 'loading', `${reason} - force loading task`);
     
     try {
-      const forcedTask = await preloader.forceLoadNextTask();
+      const forcedTask = await Promise.race([
+        preloader.forceLoadNextTask(),
+        new Promise<null>((_, reject) => 
+          setTimeout(() => reject(new Error('Force load timeout')), 5000)
+        )
+      ]);
       if (forcedTask) {
         state.value = { status: 'task', task: forcedTask };
         logTransition('loading', 'task', `${reason} - force loaded task`);
@@ -79,6 +84,12 @@ export function useQueueStateMachine(preloader: PreloaderInstance) {
       }
     } catch (error) {
       console.error('StateMachine: Force loading task failed:', error);
+      // Force transition to empty instead of hanging in loading
+      state.value = { 
+        status: 'empty', 
+        message: 'Unable to load more tasks. Please try refreshing.' 
+      };
+      logTransition('loading', 'empty', 'force load failed - giving up');
     }
 
     return false;
