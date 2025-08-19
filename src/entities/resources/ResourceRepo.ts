@@ -20,16 +20,21 @@ export class ResourceRepo implements ResourceRepoContract {
     );
   }
 
-  async getRandomDueResource(): Promise<ResourceData | null> {
+  async getRandomDueResource(languages?: string[]): Promise<ResourceData | null> {
     const allResources = await this.storage.getAll();
     
-    if (allResources.length === 0) {
+    // Filter by languages if provided
+    const filteredResources = languages 
+      ? allResources.filter(resource => languages.includes(resource.language))
+      : allResources;
+    
+    if (filteredResources.length === 0) {
       return null;
     }
     
     // Pick a random resource
-    const randomIndex = Math.floor(Math.random() * allResources.length);
-    return allResources[randomIndex];
+    const randomIndex = Math.floor(Math.random() * filteredResources.length);
+    return filteredResources[randomIndex];
   }
 
   async saveResource(resource: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'>): Promise<ResourceData> {

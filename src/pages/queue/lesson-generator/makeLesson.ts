@@ -5,12 +5,12 @@ import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { shuffleArray } from '@/shared/arrayUtils';
-import { makeLessonAroundDueVocab } from './flavors/makeLessonAroundDueVocab';
-import { makeLessonAroundNewVocab } from './flavors/makeLessonAroundNewVocab';
-import { makeLessonAroundResourceExtraction } from './flavors/makeLessonAroundResourceExtraction';
-import { makeLessonAroundRandomImmersionContent } from './flavors/makeLessonAroundRandomImmersionContent';
-import { makeLessonAroundLowMasteryImmersionContent } from './flavors/makeLessonAroundLowMasteryImmersionContent';
-import { makeLessonAroundHighMasteryImmersionContent } from './flavors/makeLessonAroundHighMasteryImmersionContent';
+import { DueVocabStrategy } from './flavors/makeLessonAroundDueVocab';
+import { NewVocabStrategy } from './flavors/makeLessonAroundNewVocab';
+import { ResourceExtractionStrategy } from './flavors/makeLessonAroundResourceExtraction';
+import { RandomImmersionContentStrategy } from './flavors/makeLessonAroundRandomImmersionContent';
+import { LowMasteryImmersionContentStrategy } from './flavors/makeLessonAroundLowMasteryImmersionContent';
+import { HighMasteryImmersionContentStrategy } from './flavors/makeLessonAroundHighMasteryImmersionContent';
 
 export async function makeLesson(
   vocabRepo: VocabAndTranslationRepoContract,
@@ -31,34 +31,42 @@ export async function makeLesson(
     
     const languageCodes = activeLanguages.map(lang => lang.code);
     
-    // Define available lesson flavors
-    const allFlavors = [
-      () => makeLessonAroundDueVocab(vocabRepo, taskRepo, languageCodes),
-      () => makeLessonAroundNewVocab(vocabRepo, taskRepo, languageCodes), 
-      () => makeLessonAroundResourceExtraction(vocabRepo, resourceRepo, taskRepo, languageCodes),
-      () => makeLessonAroundRandomImmersionContent(vocabRepo, taskRepo, immersionContentRepo, languageCodes),
-      () => makeLessonAroundLowMasteryImmersionContent(vocabRepo, taskRepo, immersionContentRepo, languageCodes),
-      () => makeLessonAroundHighMasteryImmersionContent(vocabRepo, taskRepo, immersionContentRepo, languageCodes)
+    // Create shared dependencies for all strategies
+    const dependencies = {
+      vocabRepo,
+      taskRepo,
+      resourceRepo,
+      immersionContentRepo
+    };
+
+    // Define available lesson strategies
+    const allStrategies = [
+      new DueVocabStrategy(dependencies),
+      new NewVocabStrategy(dependencies),
+      new ResourceExtractionStrategy(dependencies),
+      new RandomImmersionContentStrategy(dependencies),
+      new LowMasteryImmersionContentStrategy(dependencies),
+      new HighMasteryImmersionContentStrategy(dependencies)
     ];
     
-    // Shuffle flavors to try them in random order
-    const shuffledFlavors = shuffleArray([...allFlavors]);
+    // Shuffle strategies to try them in random order
+    const shuffledStrategies = shuffleArray([...allStrategies]);
     
-    // Try each flavor until we get tasks or exhaust all options
-    for (const flavor of shuffledFlavors) {
+    // Try each strategy until we get tasks or exhaust all options
+    for (const strategy of shuffledStrategies) {
       try {
-        const tasks = await flavor();
+        const tasks = await strategy.generateLesson(languageCodes);
         if (tasks.length > 0) {
           return tasks;
         }
       } catch (error) {
-        console.warn('Error with lesson flavor:', error);
-        // Continue to next flavor
+        console.warn('Error with lesson strategy:', error);
+        // Continue to next strategy
       }
     }
     
-    // All flavors tried and no tasks generated
-    console.warn('All lesson flavors exhausted, no tasks generated');
+    // All strategies tried and no tasks generated
+    console.warn('All lesson strategies exhausted, no tasks generated');
     return [];
     
   } catch (error) {
