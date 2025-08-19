@@ -1,7 +1,7 @@
 import type { ImmersionContentData } from './ImmersionContentData';
 
 export interface ImmersionContentRepoContract {
-  getAllImmersionContent(): Promise<ImmersionContentData[]>;
+  getAllImmersionContent(setsToAvoid?: string[]): Promise<ImmersionContentData[]>;
   getImmersionContentById(uid: string): Promise<ImmersionContentData | undefined>;
   getImmersionContentByTitleAndLanguage(title: string, language: string): Promise<ImmersionContentData | undefined>;
   getRandomDueImmersionContent(): Promise<ImmersionContentData | null>;

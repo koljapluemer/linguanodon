@@ -5,6 +5,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import { randomBetween, pickRandom, shuffleArray } from '@/shared/arrayUtils';
 import { getRandomActiveTaskForVocab } from './utils/getRandomActiveTaskForVocab';
+import { useSetTracking, type EntityWithOrigins } from './utils/useSetTracking';
 
 const MIN_TASK_COUNT = 5;
 const MAX_TASK_COUNT = 20;
@@ -21,6 +22,7 @@ export abstract class BaseLessonStrategy {
   protected readonly taskRepo: TaskRepoContract;
   protected readonly resourceRepo: ResourceRepoContract;
   protected readonly immersionContentRepo: ImmersionContentRepoContract;
+  protected readonly setTracking = useSetTracking();
   
   constructor(dependencies: LessonStrategyDependencies) {
     this.vocabRepo = dependencies.vocabRepo;
@@ -43,7 +45,12 @@ export abstract class BaseLessonStrategy {
         tasks.push(...fillupTasks);
       }
 
-      return shuffleArray(tasks);
+      const shuffledTasks = shuffleArray(tasks);
+      
+      // Record the sets used in this lesson for future diversity
+      await this.recordLessonSets(shuffledTasks);
+      
+      return shuffledTasks;
     } catch (error) {
       console.warn(`Error in ${this.constructor.name}:`, error);
       return [];
@@ -81,6 +88,47 @@ export abstract class BaseLessonStrategy {
     }
     
     return tasks;
+  }
+
+  /**
+   * Records the sets used in the current lesson based on the tasks generated
+   */
+  private async recordLessonSets(tasks: TaskData[]): Promise<void> {
+    const entitiesWithOrigins: EntityWithOrigins[] = [];
+    
+    // Collect all associated entities from tasks
+    for (const task of tasks) {
+      // Add vocab entities
+      if (task.associatedVocab) {
+        for (const vocabUid of task.associatedVocab) {
+          try {
+            const vocab = await this.vocabRepo.getVocabByUID(vocabUid);
+            if (vocab) {
+              entitiesWithOrigins.push(vocab);
+            }
+          } catch (error) {
+            console.warn('Error fetching vocab for set tracking:', vocabUid, error);
+          }
+        }
+      }
+      
+      // Add resource entities
+      if (task.associatedResources) {
+        for (const resourceUid of task.associatedResources) {
+          try {
+            const resource = await this.resourceRepo.getResourceById(resourceUid);
+            if (resource) {
+              entitiesWithOrigins.push(resource);
+            }
+          } catch (error) {
+            console.warn('Error fetching resource for set tracking:', resourceUid, error);
+          }
+        }
+      }
+    }
+    
+    // Record the sets used
+    this.setTracking.recordUsedSets(entitiesWithOrigins);
   }
 
 }

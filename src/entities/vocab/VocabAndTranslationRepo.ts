@@ -1,15 +1,46 @@
-import { VocabStorage } from './vocab/VocabStorage';
-import { TranslationStorage } from './translations/TranslationStorage';
+import Dexie, { type Table } from 'dexie';
 import type { VocabAndTranslationRepoContract, VocabPaginationResult } from './VocabAndTranslationRepoContract';
 import type { VocabData } from './vocab/VocabData';
 import type { TranslationData } from './translations/TranslationData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
 import { pickRandom } from '@/shared/arrayUtils';
-import { isUnseen, isSeen } from './vocab/vocabUtils';
+
+// Utility functions
+function isUnseen(vocab: VocabData): boolean {
+  return vocab.progress.level === -1;
+}
+
+function isSeen(vocab: VocabData): boolean {
+  return vocab.progress.level >= 0;
+}
+
+// Database classes
+class VocabDatabase extends Dexie {
+  vocab!: Table<VocabData>;
+
+  constructor() {
+    super('VocabDatabase');
+    this.version(1).stores({
+      vocab: 'uid, language, content, *origins'
+    });
+  }
+}
+
+class TranslationDatabase extends Dexie {
+  translations!: Table<TranslationData>;
+
+  constructor() {
+    super('TranslationDatabase');
+    this.version(1).stores({
+      translations: 'uid, content'
+    });
+  }
+}
+
+const vocabDb = new VocabDatabase();
+const translationDb = new TranslationDatabase();
 
 export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract {
-  private vocabStorage = new VocabStorage();
-  private translationStorage = new TranslationStorage();
 
   private ensureVocabFields(vocab: VocabData): VocabData {
     return {
@@ -23,63 +54,49 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   }
 
   async getVocab(): Promise<VocabData[]> {
-    const vocab = await this.vocabStorage.getAll();
+    const vocab = await vocabDb.vocab.toArray();
     return vocab.map(v => this.ensureVocabFields(v));
   }
 
   async getVocabByUID(uid: string): Promise<VocabData | undefined> {
-    const vocab = await this.vocabStorage.getById(uid);
+    const vocab = await vocabDb.vocab.get(uid);
     return vocab ? this.ensureVocabFields(vocab) : undefined;
   }
 
   async getVocabByUIDs(uids: string[]): Promise<VocabData[]> {
-    const vocabPromises = uids.map(uid => this.vocabStorage.getById(uid));
-    const vocabResults = await Promise.all(vocabPromises);
-    return vocabResults
-      .filter((vocab): vocab is VocabData => vocab !== undefined)
-      .map(v => this.ensureVocabFields(v));
+    const vocab = await vocabDb.vocab.where('uid').anyOf(uids).toArray();
+    return vocab.map(v => this.ensureVocabFields(v));
   }
 
   async getVocabByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined> {
-    const vocab = await this.vocabStorage.getByLanguageAndContent(language, content);
+    const vocab = await vocabDb.vocab.where({ language, content }).first();
     return vocab ? this.ensureVocabFields(vocab) : undefined;
   }
 
   async getRandomAlreadySeenDueVocab(count: number): Promise<VocabData[]> {
-    const allVocab = await this.vocabStorage.getAll();
+    const vocab = await vocabDb.vocab
+      .filter(vocab => 
+        isSeen(vocab) &&
+        vocab.progress.due <= new Date() &&
+        !vocab.doNotPractice
+      )
+      .toArray();
     
-    const alreadySeenDueVocab = allVocab.filter(vocab => {
-      // Must have been seen before (level >= 0)
-      const hasBeenSeen = isSeen(vocab);
-      // Must be due now
-      const isDue = vocab.progress.due <= new Date();
-      // Must not be excluded from practice
-      const isNotExcluded = !vocab.doNotPractice;
-      
-      return hasBeenSeen && isDue && isNotExcluded;
-    });
-    
-    return pickRandom(alreadySeenDueVocab, count).map(v => this.ensureVocabFields(v));
+    return pickRandom(vocab, count).map(v => this.ensureVocabFields(v));
   }
 
   async getRandomUnseenVocab(count: number): Promise<VocabData[]> {
-    const allVocab = await this.vocabStorage.getAll();
+    const vocab = await vocabDb.vocab
+      .filter(vocab => {
+        if (!vocab.progress) {
+          console.warn('Found vocab with null/undefined progress:', vocab.uid);
+          return !vocab.doNotPractice;
+        }
+        return isUnseen(vocab) && !vocab.doNotPractice;
+      })
+      .toArray();
     
-    const unseenVocab = allVocab.filter(vocab => {
-      // Check for null/undefined progress (shouldn't happen but handle gracefully)
-      if (!vocab.progress) {
-        console.warn('Found vocab with null/undefined progress:', vocab.uid);
-        return !vocab.doNotPractice; // Still filter by doNotPractice
-      }
-      
-      // Never seen before (level === -1) and not excluded from practice
-      const vocabIsUnseen = isUnseen(vocab);
-      const isNotExcluded = !vocab.doNotPractice;
-      
-      return vocabIsUnseen && isNotExcluded;
-    });
-    
-    return pickRandom(unseenVocab, count).map(v => this.ensureVocabFields(v));
+    return pickRandom(vocab, count).map(v => this.ensureVocabFields(v));
   }
 
   async getDueOrUnseenVocabFromIds(uids: string[]): Promise<VocabData[]> {
@@ -109,7 +126,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
 
   async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
-    const vocab = await this.vocabStorage.getById(vocabId);
+    const vocab = await vocabDb.vocab.get(vocabId);
     if (!vocab) {
       return;
     }
@@ -161,11 +178,11 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       ...updatedCard
     };
 
-    await this.vocabStorage.update(vocab);
+    await vocabDb.vocab.put(vocab);
   }
 
   async updateLastReview(vocabId: string): Promise<void> {
-    const vocab = await this.vocabStorage.getById(vocabId);
+    const vocab = await vocabDb.vocab.get(vocabId);
     if (!vocab) {
       return;
     }
@@ -182,7 +199,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     // Always update last review time
     const newLastReview = new Date();
     vocab.progress.last_review = newLastReview;
-    await this.vocabStorage.update(vocab);
+    await vocabDb.vocab.put(vocab);
   }
 
   async addPronunciationToVocab(_uid: string, _pronunciation: string): Promise<void> {
@@ -201,7 +218,7 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   }
 
   async getRandomVocabWithMissingPronunciation(): Promise<VocabData | null> {
-    const allVocab = await this.vocabStorage.getAll();
+    const allVocab = await vocabDb.vocab.toArray();
     
     const withoutPronunciation = allVocab.filter(vocab => {
       // Since pronunciation is now handled as notes, we'll check for pronunciation notes
@@ -221,15 +238,15 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
   }
 
   async getTranslationsByIds(ids: string[]): Promise<TranslationData[]> {
-    return await this.translationStorage.getByIds(ids);
+    return await translationDb.translations.where('uid').anyOf(ids).toArray();
   }
 
   async getTranslationByContent(content: string): Promise<TranslationData | undefined> {
-    return await this.translationStorage.getByContent(content);
+    return await translationDb.translations.where('content').equals(content).first();
   }
 
   async getVocabPaginated(cursor?: string, limit: number = 20, searchQuery?: string): Promise<VocabPaginationResult> {
-    const allVocab = await this.vocabStorage.getAll();
+    const allVocab = await vocabDb.vocab.toArray();
     
     // Apply search filter if provided
     let filteredVocab = allVocab;
@@ -266,10 +283,10 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
 
   async getTotalVocabCount(searchQuery?: string): Promise<number> {
     if (!searchQuery || !searchQuery.trim()) {
-      return await this.vocabStorage.count();
+      return await vocabDb.vocab.count();
     }
 
-    const allVocab = await this.vocabStorage.getAll();
+    const allVocab = await vocabDb.vocab.toArray();
     const query = searchQuery.toLowerCase().trim();
     const filteredVocab = allVocab.filter(vocab => 
       vocab.content?.toLowerCase().includes(query) ||
@@ -298,50 +315,51 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       }
     };
 
-    await this.vocabStorage.add(newVocab);
+    await vocabDb.vocab.add(newVocab);
     return newVocab;
   }
 
   async updateVocab(vocab: VocabData): Promise<void> {
-    await this.vocabStorage.update(vocab);
+    await vocabDb.vocab.put(vocab);
   }
 
   async deleteVocab(id: string): Promise<void> {
-    await this.vocabStorage.delete(id);
+    await vocabDb.vocab.delete(id);
   }
 
   // Distractor generation methods
   async getDueVocabInLanguage(language: string): Promise<VocabData[]> {
-    const allVocab = await this.vocabStorage.getAll();
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .equals(language)
+      .filter(vocab => 
+        isSeen(vocab) &&
+        vocab.progress.due <= new Date() &&
+        !vocab.doNotPractice
+      )
+      .toArray();
     
-    return allVocab.filter(vocab => 
-      vocab.language === language &&
-      isSeen(vocab) &&
-      vocab.progress.due <= new Date() &&
-      !vocab.doNotPractice
-    ).map(v => this.ensureVocabFields(v));
+    return vocab.map(v => this.ensureVocabFields(v));
   }
 
   async getAllTranslationsInLanguage(language: string): Promise<TranslationData[]> {
     // Get all vocab in the language, then collect their translations
-    const allVocab = await this.vocabStorage.getAll();
-    const vocabInLanguage = allVocab.filter(vocab => vocab.language === language);
+    const vocabInLanguage = await vocabDb.vocab.where('language').equals(language).toArray();
     
     const allTranslationIds = vocabInLanguage.flatMap(vocab => vocab.translations);
     const uniqueTranslationIds = [...new Set(allTranslationIds)];
     
-    return await this.translationStorage.getByIds(uniqueTranslationIds);
+    return await translationDb.translations.where('uid').anyOf(uniqueTranslationIds).toArray();
   }
 
   async findVocabByTranslationContent(translationContent: string): Promise<VocabData[]> {
     // Find all translations with this content
-    const allTranslations = await this.translationStorage.getAll();
-    const matchingTranslations = allTranslations.filter(t => t.content === translationContent);
+    const matchingTranslations = await translationDb.translations.where('content').equals(translationContent).toArray();
     
     if (matchingTranslations.length === 0) return [];
     
     // Find all vocab that use these translations
-    const allVocab = await this.vocabStorage.getAll();
+    const allVocab = await vocabDb.vocab.toArray();
     const matchingTranslationIds = new Set(matchingTranslations.map(t => t.uid));
     
     return allVocab
@@ -356,39 +374,60 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       notes: translation.notes
     };
     
-    return await this.translationStorage.save(translationToSave);
+    await translationDb.translations.add(translationToSave);
+    return translationToSave;
   }
 
   async updateTranslation(translation: TranslationData): Promise<void> {
-    await this.translationStorage.update(translation);
+    await translationDb.translations.put(translation);
   }
 
   async deleteTranslations(ids: string[]): Promise<void> {
-    await this.translationStorage.deleteByIds(ids);
+    await translationDb.translations.where('uid').anyOf(ids).delete();
   }
 
-  async getDueVocabInLanguages(languages: string[]): Promise<VocabData[]> {
-    const allVocab = await this.vocabStorage.getAll();
+  async getDueVocabInLanguages(languages: string[], setsToAvoid?: string[]): Promise<VocabData[]> {
+    let query = vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => 
+        isSeen(vocab) &&
+        vocab.progress.due <= new Date() &&
+        !vocab.doNotPractice
+      );
+
+    // Database-level filtering for set avoidance
+    if (setsToAvoid && setsToAvoid.length > 0) {
+      query = query.filter(vocab => 
+        !vocab.origins.some(origin => setsToAvoid.includes(origin))
+      );
+    }
     
-    return allVocab.filter(vocab => 
-      languages.includes(vocab.language) &&
-      isSeen(vocab) &&
-      vocab.progress.due <= new Date() &&
-      !vocab.doNotPractice
-    ).map(v => this.ensureVocabFields(v));
+    const vocab = await query.toArray();
+    return vocab.map(v => this.ensureVocabFields(v));
   }
 
-  async getRandomUnseenVocabInLanguages(languages: string[], count: number): Promise<VocabData[]> {
-    const allVocab = await this.vocabStorage.getAll();
+  async getRandomUnseenVocabInLanguages(languages: string[], count: number, setsToAvoid?: string[]): Promise<VocabData[]> {
+    let query = vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => 
+        isUnseen(vocab) &&
+        !vocab.doNotPractice
+      );
+
+    // Database-level filtering for set avoidance
+    if (setsToAvoid && setsToAvoid.length > 0) {
+      query = query.filter(vocab => 
+        !vocab.origins.some(origin => setsToAvoid.includes(origin))
+      );
+    }
     
-    const unseenVocab = allVocab.filter(vocab => 
-      languages.includes(vocab.language) &&
-      isUnseen(vocab) &&
-      !vocab.doNotPractice
-    ).map(v => this.ensureVocabFields(v));
+    const vocab = await query.toArray();
+    const ensuredVocab = vocab.map(v => this.ensureVocabFields(v));
     
     // Shuffle and return requested count
-    const shuffled = unseenVocab.sort(() => Math.random() - 0.5);
+    const shuffled = ensuredVocab.sort(() => Math.random() - 0.5);
     return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 

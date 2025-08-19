@@ -5,8 +5,17 @@ import { ImmersionContentStorage } from './ImmersionContentStorage';
 export class ImmersionContentRepo implements ImmersionContentRepoContract {
   private storage = new ImmersionContentStorage();
 
-  async getAllImmersionContent(): Promise<ImmersionContentData[]> {
-    return await this.storage.getAll();
+  async getAllImmersionContent(setsToAvoid?: string[]): Promise<ImmersionContentData[]> {
+    const allContent = await this.storage.getAll();
+    
+    // Deterministically filter out content from avoided sets if specified
+    if (setsToAvoid && setsToAvoid.length > 0) {
+      return allContent.filter(content =>
+        !content.origins.some(origin => setsToAvoid.includes(origin))
+      );
+    }
+    
+    return allContent;
   }
 
   async getImmersionContentById(uid: string): Promise<ImmersionContentData | undefined> {

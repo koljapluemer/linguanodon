@@ -20,13 +20,20 @@ export class ResourceRepo implements ResourceRepoContract {
     );
   }
 
-  async getRandomDueResource(languages?: string[]): Promise<ResourceData | null> {
+  async getRandomDueResource(languages?: string[], setsToAvoid?: string[]): Promise<ResourceData | null> {
     const allResources = await this.storage.getAll();
     
     // Filter by languages if provided
-    const filteredResources = languages 
+    let filteredResources = languages 
       ? allResources.filter(resource => languages.includes(resource.language))
       : allResources;
+    
+    // Deterministically filter out resources from avoided sets if specified
+    if (setsToAvoid && setsToAvoid.length > 0) {
+      filteredResources = filteredResources.filter(resource =>
+        !resource.origins.some(origin => setsToAvoid.includes(origin))
+      );
+    }
     
     if (filteredResources.length === 0) {
       return null;
