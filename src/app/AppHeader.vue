@@ -35,7 +35,7 @@ const toggleMaterialSubmenu = () => {
 <template>
   <div>
     <header class="flex justify-between items-center p-4">
-      <h1 class="text-2xl font-bold">Linguanodon</h1>
+      <h1 class="text-2xl font-bold">Unnamed Language App</h1>
       
       <nav class="flex gap-2 justify-center">
         <!-- Practice -->
