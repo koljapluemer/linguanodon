@@ -1,0 +1,2391 @@
+{
+  "name": "YouTube Videos (apc)",
+  "immersionContent": [
+    {
+      "language": "apc",
+      "priority": 1,
+      "title": "YouTube Video - lOmP70oVtLo",
+      "content": "Watch this video: https://www.youtube.com/watch?v=lOmP70oVtLo",
+      "neededVocab": [
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حمودي",
+          "translations": [
+            {
+              "content": "Hamoudi"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وصلوا",
+          "translations": [
+            {
+              "content": "arrived"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وصلوا",
+          "translations": [
+            {
+              "content": "They arrived"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كيف",
+          "translations": [
+            {
+              "content": "How"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "قعت",
+          "translations": [
+            {
+              "content": "I sat"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الكرسي",
+          "translations": [
+            {
+              "content": "The chair"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "مثل",
+          "translations": [
+            {
+              "content": "Like"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حضرتك",
+          "translations": [
+            {
+              "content": "You (formal)"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كبن",
+          "translations": [
+            {
+              "content": "Kabin (likely a colloquial term, context needed)"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كف",
+          "translations": [
+            {
+              "content": "enough"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "على",
+          "translations": [
+            {
+              "content": "on"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الكرس",
+          "translations": [
+            {
+              "content": "chair"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شو",
+          "translations": [
+            {
+              "content": "what"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بدك",
+          "translations": [
+            {
+              "content": "you want"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نطلب",
+          "translations": [
+            {
+              "content": "to order"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يا عمري",
+          "translations": [
+            {
+              "content": "my dear"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شي",
+          "translations": [
+            {
+              "content": "thing"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نزال",
+          "translations": [
+            {
+              "content": "to drop"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اسم",
+          "translations": [
+            {
+              "content": "name"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بوكس",
+          "translations": [
+            {
+              "content": "box"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نطلبه",
+          "translations": [
+            {
+              "content": "We ask for"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اوكي",
+          "translations": [
+            {
+              "content": "Okay"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بليز",
+          "translations": [
+            {
+              "content": "Please"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ماتوش",
+          "translations": [
+            {
+              "content": "Don't"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ورق",
+          "translations": [
+            {
+              "content": "Paper"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ع",
+          "translations": [
+            {
+              "content": "On"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "والله",
+          "translations": [
+            {
+              "content": "By God"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "طالب",
+          "translations": [
+            {
+              "content": "student"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بس",
+          "translations": [
+            {
+              "content": "but"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "زعال",
+          "translations": [
+            {
+              "content": "angry"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "زعاله",
+          "translations": [
+            {
+              "content": "shouting"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عم",
+          "translations": [
+            {
+              "content": "am/are/is"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تطعمين",
+          "translations": [
+            {
+              "content": "you (feminine) feed"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كيف",
+          "translations": [
+            {
+              "content": "how"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "طعميه",
+          "translations": [
+            {
+              "content": "feed him"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "طعمي",
+          "translations": [
+            {
+              "content": "feed me"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بدي",
+          "translations": [
+            {
+              "content": "I want"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شي",
+          "translations": [
+            {
+              "content": "something"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "منكب",
+          "translations": [
+            {
+              "content": "shoulder"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يعني",
+          "translations": [
+            {
+              "content": "means"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اتبق",
+          "translations": [
+            {
+              "content": "stay"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اصبتم",
+          "translations": [
+            {
+              "content": "you have been afflicted"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بالعين",
+          "translations": [
+            {
+              "content": "with the evil eye"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "صبيهم",
+          "translations": [
+            {
+              "content": "their boy"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "فكره",
+          "translations": [
+            {
+              "content": "idea"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "صبه",
+          "translations": [
+            {
+              "content": "she put"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عين",
+          "translations": [
+            {
+              "content": "eye"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "فكري",
+          "translations": [
+            {
+              "content": "my thought"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "هلا",
+          "translations": [
+            {
+              "content": "now"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الفاتوره",
+          "translations": [
+            {
+              "content": "the invoice"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ب",
+          "translations": [
+            {
+              "content": "to"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تدفع",
+          "translations": [
+            {
+              "content": "pay"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نصيب",
+          "translations": [
+            {
+              "content": "share"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "content": "YouTube Video ID: lOmP70oVtLo\nSubtitle language: ar",
+          "showBeforeExercise": false
+        }
+      ]
+    },
+    {
+      "language": "apc",
+      "priority": 1,
+      "title": "YouTube Video - saXs-rRFTpM",
+      "content": "Watch this video: https://www.youtube.com/watch?v=saXs-rRFTpM",
+      "neededVocab": [
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ابو",
+          "translations": [
+            {
+              "content": "father of"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "علي",
+          "translations": [
+            {
+              "content": "Ali"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بيزعل",
+          "translations": [
+            {
+              "content": "he gets upset"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بلا",
+          "translations": [
+            {
+              "content": "without"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ما",
+          "translations": [
+            {
+              "content": "not"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "هون",
+          "translations": [
+            {
+              "content": "here"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بدي",
+          "translations": [
+            {
+              "content": "I want"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اصل",
+          "translations": [
+            {
+              "content": "origin"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "لك",
+          "translations": [
+            {
+              "content": "to you"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "خلص",
+          "translations": [
+            {
+              "content": "finished"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شو",
+          "translations": [
+            {
+              "content": "what"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بدك",
+          "translations": [
+            {
+              "content": "you want"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "فيه",
+          "translations": [
+            {
+              "content": "in it"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "رايح",
+          "translations": [
+            {
+              "content": "going"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وجاي",
+          "translations": [
+            {
+              "content": "and coming"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اوكي",
+          "translations": [
+            {
+              "content": "Okay"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اهلا",
+          "translations": [
+            {
+              "content": "Hello"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وسهلا",
+          "translations": [
+            {
+              "content": "Welcome"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نورت",
+          "translations": [
+            {
+              "content": "You illuminated"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وشرفت",
+          "translations": [
+            {
+              "content": "You honored"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "انا",
+          "translations": [
+            {
+              "content": "I"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بس",
+          "translations": [
+            {
+              "content": "but"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "قالوا",
+          "translations": [
+            {
+              "content": "they said"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "لي",
+          "translations": [
+            {
+              "content": "to me"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "انك",
+          "translations": [
+            {
+              "content": "that you"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "جيّت",
+          "translations": [
+            {
+              "content": "you came"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نزلت",
+          "translations": [
+            {
+              "content": "you went down"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ركت",
+          "translations": [
+            {
+              "content": "you rode"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يا",
+          "translations": [
+            {
+              "content": "O"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كبير",
+          "translations": [
+            {
+              "content": "big"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "احلى",
+          "translations": [
+            {
+              "content": "more beautiful"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "برجر",
+          "translations": [
+            {
+              "content": "burger"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وصلك",
+          "translations": [
+            {
+              "content": "delivered"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اياها",
+          "translations": [
+            {
+              "content": "to you"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "من",
+          "translations": [
+            {
+              "content": "from"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تحت",
+          "translations": [
+            {
+              "content": "under"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ايدي",
+          "translations": [
+            {
+              "content": "my hand"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ببيك",
+          "translations": [
+            {
+              "content": "you want"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ما شاء الله",
+          "translations": [
+            {
+              "content": "what God has willed"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "قاللك",
+          "translations": [
+            {
+              "content": "he told you"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شيس",
+          "translations": [
+            {
+              "content": "what"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "مين",
+          "translations": [
+            {
+              "content": "who"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بيع",
+          "translations": [
+            {
+              "content": "sell"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "قال",
+          "translations": [
+            {
+              "content": "said"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "احلى",
+          "translations": [
+            {
+              "content": "most beautiful"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بقوللك",
+          "translations": [
+            {
+              "content": "I'm telling you"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "هلا",
+          "translations": [
+            {
+              "content": "now"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "والله",
+          "translations": [
+            {
+              "content": "by God"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "قسما",
+          "translations": [
+            {
+              "content": "I swear"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بالله",
+          "translations": [
+            {
+              "content": "by God"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "خص",
+          "translations": [
+            {
+              "content": "relation"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "قاللي",
+          "translations": [
+            {
+              "content": "told me"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اص",
+          "translations": [
+            {
+              "content": "the son of"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "content": "YouTube Video ID: saXs-rRFTpM\nSubtitle language: ar",
+          "showBeforeExercise": false
+        }
+      ]
+    },
+    {
+      "language": "apc",
+      "priority": 1,
+      "title": "YouTube Video - XBmjxD5nQLc",
+      "content": "Watch this video: https://www.youtube.com/watch?v=XBmjxD5nQLc",
+      "neededVocab": [
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يا",
+          "translations": [
+            {
+              "content": "O"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اخوان",
+          "translations": [
+            {
+              "content": "brothers"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "هي",
+          "translations": [
+            {
+              "content": "she"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ماشية",
+          "translations": [
+            {
+              "content": "walking"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الشريرة",
+          "translations": [
+            {
+              "content": "evil"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الحقيقية",
+          "translations": [
+            {
+              "content": "real"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الموجوده",
+          "translations": [
+            {
+              "content": "existing"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حياتنا",
+          "translations": [
+            {
+              "content": "our lives"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الواقعيه",
+          "translations": [
+            {
+              "content": "realistic"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "راح",
+          "translations": [
+            {
+              "content": "will"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اكشف",
+          "translations": [
+            {
+              "content": "reveal"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عن",
+          "translations": [
+            {
+              "content": "about"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وجهها",
+          "translations": [
+            {
+              "content": "her face"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يا",
+          "translations": [
+            {
+              "content": "oh"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اليوم",
+          "translations": [
+            {
+              "content": "today"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "قررت",
+          "translations": [
+            {
+              "content": "I decided"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اروح",
+          "translations": [
+            {
+              "content": "to go"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حتى",
+          "translations": [
+            {
+              "content": "in order to"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اكشف",
+          "translations": [
+            {
+              "content": "Reveal"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وجه",
+          "translations": [
+            {
+              "content": "Face"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حقيقيه",
+          "translations": [
+            {
+              "content": "Real"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "موجوده",
+          "translations": [
+            {
+              "content": "present"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نص",
+          "translations": [
+            {
+              "content": "middle"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الغابه",
+          "translations": [
+            {
+              "content": "forest"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ما",
+          "translations": [
+            {
+              "content": "not"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تفري",
+          "translations": [
+            {
+              "content": "leave"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "معي",
+          "translations": [
+            {
+              "content": "with me"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اي",
+          "translations": [
+            {
+              "content": "any"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حدا",
+          "translations": [
+            {
+              "content": "someone"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يلا",
+          "translations": [
+            {
+              "content": "come on"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تعالوا",
+          "translations": [
+            {
+              "content": "come"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "هلا",
+          "translations": [
+            {
+              "content": "now"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "انا",
+          "translations": [
+            {
+              "content": "I"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وصلت",
+          "translations": [
+            {
+              "content": "arrived"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "زي",
+          "translations": [
+            {
+              "content": "like"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ما",
+          "translations": [
+            {
+              "content": "what"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "انتم",
+          "translations": [
+            {
+              "content": "you (plural)"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شايفين",
+          "translations": [
+            {
+              "content": "seeing"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الغابه",
+          "translations": [
+            {
+              "content": "the forest"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شوفوا",
+          "translations": [
+            {
+              "content": "look"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شوفوا",
+          "translations": [
+            {
+              "content": "Look"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الله",
+          "translations": [
+            {
+              "content": "God"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "المهم",
+          "translations": [
+            {
+              "content": "Important"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "رح",
+          "translations": [
+            {
+              "content": "Will"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ادور",
+          "translations": [
+            {
+              "content": "Search"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عليه",
+          "translations": [
+            {
+              "content": "On him/it"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "هي",
+          "translations": [
+            {
+              "content": "This"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وجه",
+          "translations": [
+            {
+              "content": "face"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تفري",
+          "translations": [
+            {
+              "content": "spare"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حدا",
+          "translations": [
+            {
+              "content": "one"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "رح",
+          "translations": [
+            {
+              "content": "will"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "رح",
+          "translations": [
+            {
+              "content": "I will"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "واحد",
+          "translations": [
+            {
+              "content": "one"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اثنين",
+          "translations": [
+            {
+              "content": "two"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ثلاثه",
+          "translations": [
+            {
+              "content": "three"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حطوا",
+          "translations": [
+            {
+              "content": "put"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "لايك",
+          "translations": [
+            {
+              "content": "like"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كثير",
+          "translations": [
+            {
+              "content": "many/much"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اشتراك",
+          "translations": [
+            {
+              "content": "subscription"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عشان",
+          "translations": [
+            {
+              "content": "to"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وجهك",
+          "translations": [
+            {
+              "content": "your face"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حابين",
+          "translations": [
+            {
+              "content": "we want"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تشوفوا",
+          "translations": [
+            {
+              "content": "you see"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الفيديو",
+          "translations": [
+            {
+              "content": "the video"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كامل",
+          "translations": [
+            {
+              "content": "full"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كامل",
+          "translations": [
+            {
+              "content": "complete"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عندي",
+          "translations": [
+            {
+              "content": "I have"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اليوتيوب",
+          "translations": [
+            {
+              "content": "YouTube"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "content": "YouTube Video ID: XBmjxD5nQLc\nSubtitle language: ar",
+          "showBeforeExercise": false
+        }
+      ]
+    },
+    {
+      "language": "apc",
+      "priority": 1,
+      "title": "YouTube Video - DWw0yoi9xtM",
+      "content": "Watch this video: https://www.youtube.com/watch?v=DWw0yoi9xtM",
+      "neededVocab": [
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بودي",
+          "translations": [
+            {
+              "content": "I want"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "العجوز",
+          "translations": [
+            {
+              "content": "old woman"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "راقصه",
+          "translations": [
+            {
+              "content": "dancer"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يا الله",
+          "translations": [
+            {
+              "content": "Oh God"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "انا",
+          "translations": [
+            {
+              "content": "I"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "انزل",
+          "translations": [
+            {
+              "content": "to go down"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اكشف",
+          "translations": [
+            {
+              "content": "reveal"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وجه",
+          "translations": [
+            {
+              "content": "face"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بسرعة",
+          "translations": [
+            {
+              "content": "quickly"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "بسرعه",
+          "translations": [
+            {
+              "content": "quickly"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "انزل",
+          "translations": [
+            {
+              "content": "come down"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وجهها",
+          "translations": [
+            {
+              "content": "her face"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يلا",
+          "translations": [
+            {
+              "content": "let's go"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "هلا",
+          "translations": [
+            {
+              "content": "now"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "راح",
+          "translations": [
+            {
+              "content": "going"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يكشف",
+          "translations": [
+            {
+              "content": "reveals"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "راقبوا",
+          "translations": [
+            {
+              "content": "watch"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "را",
+          "translations": [
+            {
+              "content": "he will"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اخوان",
+          "translations": [
+            {
+              "content": "brothers"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "راح",
+          "translations": [
+            {
+              "content": "going to"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يكشف",
+          "translations": [
+            {
+              "content": "reveal"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "معقول",
+          "translations": [
+            {
+              "content": "reasonable"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "مش",
+          "translations": [
+            {
+              "content": "not"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عارف",
+          "translations": [
+            {
+              "content": "know"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عارف",
+          "translations": [
+            {
+              "content": "knowing"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شو",
+          "translations": [
+            {
+              "content": "what"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "راح",
+          "translations": [
+            {
+              "content": "will"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يصير",
+          "translations": [
+            {
+              "content": "happen"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عن جد",
+          "translations": [
+            {
+              "content": "seriously"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وضعي",
+          "translations": [
+            {
+              "content": "my situation"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كثير",
+          "translations": [
+            {
+              "content": "very"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "خطير",
+          "translations": [
+            {
+              "content": "dangerous"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "يا",
+          "translations": [
+            {
+              "content": "O"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "نزل",
+          "translations": [
+            {
+              "content": "came down"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "لكي",
+          "translations": [
+            {
+              "content": "to"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عن",
+          "translations": [
+            {
+              "content": "about"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الوجه",
+          "translations": [
+            {
+              "content": "the face"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "العجوز",
+          "translations": [
+            {
+              "content": "the old (woman/man)"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تاخر",
+          "translations": [
+            {
+              "content": "delayed"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شكل",
+          "translations": [
+            {
+              "content": "shape"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "وصل",
+          "translations": [
+            {
+              "content": "arrived"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "جال",
+          "translations": [
+            {
+              "content": "said"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "رايك",
+          "translations": [
+            {
+              "content": "opinion"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ما",
+          "translations": [
+            {
+              "content": "not"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تخاف",
+          "translations": [
+            {
+              "content": "to be afraid"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ميدو",
+          "translations": [
+            {
+              "content": "Mido"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شوي",
+          "translations": [
+            {
+              "content": "a little"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "شوي",
+          "translations": [
+            {
+              "content": "slowly"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "واحد",
+          "translations": [
+            {
+              "content": "one"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اثنين",
+          "translations": [
+            {
+              "content": "two"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "ثلاثه",
+          "translations": [
+            {
+              "content": "three"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "اذا",
+          "translations": [
+            {
+              "content": "if"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "حبيت",
+          "translations": [
+            {
+              "content": "I liked"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "تعرف",
+          "translations": [
+            {
+              "content": "to know"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "صار",
+          "translations": [
+            {
+              "content": "happened"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "الفيديو",
+          "translations": [
+            {
+              "content": "the video"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "كامل",
+          "translations": [
+            {
+              "content": "full"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "عندي",
+          "translations": [
+            {
+              "content": "with me"
+            }
+          ]
+        },
+        {
+          "language": "apc",
+          "priority": 1,
+          "content": "باليوتيوب",
+          "translations": [
+            {
+              "content": "on YouTube"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "content": "YouTube Video ID: DWw0yoi9xtM\nSubtitle language: ar",
+          "showBeforeExercise": false
+        }
+      ]
+    }
+  ]
+}
