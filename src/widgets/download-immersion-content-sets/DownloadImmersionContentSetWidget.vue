@@ -156,7 +156,9 @@ async function downloadImmersionContentSet(name: string) {
               translations: translationUids,
               links: remoteVocab.links || [],
               notes: vocabNoteUids,
-              origins: [localSet.uid] // Unique by design for new vocab
+              origins: [localSet.uid], // Unique by design for new vocab
+              relatedVocab: [],
+              notRelatedVocab: []
             };
             
             const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);

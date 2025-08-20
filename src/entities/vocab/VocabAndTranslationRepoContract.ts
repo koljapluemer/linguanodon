@@ -36,6 +36,12 @@ export interface VocabAndTranslationRepoContract {
   hasPronunciation(uid: string): Promise<boolean>;
   getRandomVocabWithMissingPronunciation(): Promise<VocabData | null>;
   
+  // Related vocab operations
+  addRelatedVocab(uid: string, relatedVocabUid: string): Promise<void>;
+  removeRelatedVocab(uid: string, relatedVocabUid: string): Promise<void>;
+  addNotRelatedVocab(uid: string, notRelatedVocabUid: string): Promise<void>;
+  removeNotRelatedVocab(uid: string, notRelatedVocabUid: string): Promise<void>;
+  
   // Translation operations
   getTranslationsByIds(ids: string[]): Promise<TranslationData[]>;
   getTranslationByContent(content: string): Promise<TranslationData | undefined>;

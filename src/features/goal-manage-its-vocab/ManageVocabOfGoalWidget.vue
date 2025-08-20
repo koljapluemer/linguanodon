@@ -148,7 +148,9 @@ async function addVocab() {
     translations: [], // Empty for now
     notes: [],
     links: [],
-    origins: ['user-added']
+    origins: ['user-added'],
+    relatedVocab: [],
+    notRelatedVocab: []
   });
   
   // Update goal to include this vocab

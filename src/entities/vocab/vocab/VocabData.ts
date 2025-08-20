@@ -16,5 +16,8 @@ export interface VocabData {
 
   origins: string[] // uid of set, or the string "user-added"
 
+  relatedVocab: string[]; // uids of other vocab
+  notRelatedVocab: string[]; // uids of other vocab
+
 }
 

@@ -234,7 +234,9 @@ async function handleSave() {
       streak: 0,
       level: -1
     },
-    origins: localVocab.value.origins || []
+    origins: localVocab.value.origins || [],
+    relatedVocab: localVocab.value.relatedVocab || [],
+    notRelatedVocab: localVocab.value.notRelatedVocab || []
   };
 
   emit('save', vocabData);
@@ -256,7 +258,9 @@ function handleClearOrCancel() {
         streak: 0,
         level: -1
       },
-      origins: ['user-added']
+      origins: ['user-added'],
+      relatedVocab: [],
+      notRelatedVocab: []
     } as VocabData;
     translationsText.value = '';
   } else {

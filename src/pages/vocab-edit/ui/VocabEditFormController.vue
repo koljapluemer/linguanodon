@@ -72,7 +72,9 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     doNotPractice: formData.doNotPractice,
     notes: formData.notes.map(note => note.uid),
     links: formData.links,
-    origins: existingVocab?.origins || ['user-added']
+    origins: existingVocab?.origins || ['user-added'],
+    relatedVocab: existingVocab?.relatedVocab || [],
+    notRelatedVocab: existingVocab?.notRelatedVocab || []
   };
 
   // For updates, include existing progress and tasks

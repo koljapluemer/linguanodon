@@ -49,7 +49,9 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       notes: vocab.notes || [],
       links: vocab.links || [],
       translations: vocab.translations || [],
-      tasks: vocab.tasks || []
+      tasks: vocab.tasks || [],
+      relatedVocab: vocab.relatedVocab || [],
+      notRelatedVocab: vocab.notRelatedVocab || []
     };
   }
 
@@ -307,6 +309,8 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       translations: vocab.translations,
       links: vocab.links,
       origins: vocab.origins,
+      relatedVocab: vocab.relatedVocab || [],
+      notRelatedVocab: vocab.notRelatedVocab || [],
       tasks: [],
       progress: {
         ...createEmptyCard(),
@@ -429,6 +433,56 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     // Shuffle and return requested count
     const shuffled = ensuredVocab.sort(() => Math.random() - 0.5);
     return shuffled.slice(0, Math.min(count, shuffled.length));
+  }
+
+  async addRelatedVocab(uid: string, relatedVocabUid: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(uid);
+    if (!vocab) return;
+    
+    const relatedVocab = vocab.relatedVocab || [];
+    if (!relatedVocab.includes(relatedVocabUid)) {
+      relatedVocab.push(relatedVocabUid);
+      vocab.relatedVocab = relatedVocab;
+      await vocabDb.vocab.put(vocab);
+    }
+  }
+
+  async removeRelatedVocab(uid: string, relatedVocabUid: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(uid);
+    if (!vocab) return;
+    
+    const relatedVocab = vocab.relatedVocab || [];
+    const index = relatedVocab.indexOf(relatedVocabUid);
+    if (index > -1) {
+      relatedVocab.splice(index, 1);
+      vocab.relatedVocab = relatedVocab;
+      await vocabDb.vocab.put(vocab);
+    }
+  }
+
+  async addNotRelatedVocab(uid: string, notRelatedVocabUid: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(uid);
+    if (!vocab) return;
+    
+    const notRelatedVocab = vocab.notRelatedVocab || [];
+    if (!notRelatedVocab.includes(notRelatedVocabUid)) {
+      notRelatedVocab.push(notRelatedVocabUid);
+      vocab.notRelatedVocab = notRelatedVocab;
+      await vocabDb.vocab.put(vocab);
+    }
+  }
+
+  async removeNotRelatedVocab(uid: string, notRelatedVocabUid: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(uid);
+    if (!vocab) return;
+    
+    const notRelatedVocab = vocab.notRelatedVocab || [];
+    const index = notRelatedVocab.indexOf(notRelatedVocabUid);
+    if (index > -1) {
+      notRelatedVocab.splice(index, 1);
+      vocab.notRelatedVocab = notRelatedVocab;
+      await vocabDb.vocab.put(vocab);
+    }
   }
 
 }

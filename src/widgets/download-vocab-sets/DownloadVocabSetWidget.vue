@@ -145,7 +145,9 @@ async function downloadVocabSet(name: string) {
           notes: vocabNoteUids,
           translations: translationUids,
           links: remoteVocab.links || [],
-          origins: [localSet.uid] // Unique by design for new vocab
+          origins: [localSet.uid], // Unique by design for new vocab
+          relatedVocab: [],
+          notRelatedVocab: []
         };
         
         const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
