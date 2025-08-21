@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const vocabSchema = z.object({
+export const goalSchema = z.object({
     id: z.string().optional(),
     language: z.string(),
     title: z.string(),

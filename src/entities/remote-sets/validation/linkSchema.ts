@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const vocabSchema = z.object({
+export const linkSchema = z.object({
     id: z.string().optional(),
     label: z.string(),
     url: z.string(),
