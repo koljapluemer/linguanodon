@@ -1,0 +1,20 @@
+[project]
+name = "public"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kolja Sam",email = "github@koljapluemer.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "youtube-transcript-api (==1.2.2)",
+    "openai (==1.100.2)",
+    "dotenv (==0.9.9)",
+    "selenium (>=4.35.0,<5.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
