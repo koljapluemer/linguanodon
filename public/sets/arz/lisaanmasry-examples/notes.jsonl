@@ -1,184 +1,146 @@
-{"id": "1", "content": "mihtaeg 'asawwa' ilmahal bitaeA-i", "noteType": "pronunciation"}
-{"id": "2", "content": "mihtaeg", "noteType": "pronunciation"}
-{"id": "3", "content": "participle", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "4", "content": "mihtaega", "noteType": "pronunciation"}
-{"id": "5", "content": "participle", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "6", "content": "mihtageen", "noteType": "pronunciation"}
-{"id": "7", "content": "participle", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "8", "content": "something"}
-{"id": "9", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "10", "content": "do something"}
-{"id": "11", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "12", "content": "sawwa'", "noteType": "pronunciation"}
-{"id": "13", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "14", "content": "yisawwa'", "noteType": "pronunciation"}
-{"id": "15", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "16", "content": "musawwa'", "noteType": "pronunciation"}
-{"id": "17", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "18", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "19", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "20", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "21", "content": "mahall", "noteType": "pronunciation"}
-{"id": "22", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "23", "content": "mahallaet", "noteType": "pronunciation"}
-{"id": "24", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "1", "content": "'ana bashtaghal bi-ilnahaar", "noteType": "pronunciation"}
+{"id": "2", "content": "'ana", "noteType": "pronunciation"}
+{"id": "3", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "4", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "5", "content": "'ishtaghal", "noteType": "pronunciation"}
+{"id": "6", "content": "intransitive verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "7", "content": "yishtaghal", "noteType": "pronunciation"}
+{"id": "8", "content": "intransitive verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "9", "content": "do"}
+{"id": "10", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "11", "content": "bi-", "noteType": "pronunciation"}
+{"id": "12", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "13", "content": "part of day, eg the afternoon"}
+{"id": "14", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "15", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "16", "content": "nahaar", "noteType": "pronunciation"}
+{"id": "17", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "18", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "19", "content": "not night"}
+{"id": "20", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "21", "content": "ilgaww harr wi ilshams bitahra' fi ilnaes", "noteType": "pronunciation"}
+{"id": "22", "content": "gaww", "noteType": "pronunciation"}
+{"id": "23", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "24", "content": "air, not mood"}
 {"id": "25", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "26", "content": "shop"}
-{"id": "27", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "28", "content": "bitaeA", "noteType": "pronunciation"}
-{"id": "29", "content": "participle", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "30", "content": "bitaeAit", "noteType": "pronunciation"}
-{"id": "31", "content": "participle", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "32", "content": "bitooA", "noteType": "pronunciation"}
-{"id": "33", "content": "participle", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "34", "content": "participle", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "35", "content": "own"}
-{"id": "36", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "37", "content": "-i", "noteType": "pronunciation"}
-{"id": "38", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "39", "content": "-ni", "noteType": "pronunciation"}
-{"id": "40", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "41", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "42", "content": "wazn-ak 'add ieeh?", "noteType": "pronunciation"}
-{"id": "43", "content": "Lit. how much"}
-{"id": "44", "content": "wazn", "noteType": "pronunciation"}
-{"id": "45", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "46", "content": "'aoozaen", "noteType": "pronunciation"}
-{"id": "47", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "48", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "49", "content": "-ak", "noteType": "pronunciation"}
-{"id": "50", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "51", "content": "-ik", "noteType": "pronunciation"}
-{"id": "52", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "53", "content": "-ukum", "noteType": "pronunciation"}
-{"id": "54", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "55", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "56", "content": "'add 'ieeh", "noteType": "pronunciation"}
-{"id": "57", "content": "query", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "58", "content": "query", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "59", "content": "quantity"}
-{"id": "60", "content": "query", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "61", "content": "'add 'ieeh", "noteType": "pronunciation"}
-{"id": "62", "content": "query", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "63", "content": "query", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "64", "content": "quantity"}
-{"id": "65", "content": "query", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "66", "content": "'ahmad itchaani' maAa muhammad Aalashaen huwwa ghaaz-uh 'awi", "noteType": "pronunciation"}
-{"id": "67", "content": "'itchaeni' maAa", "noteType": "pronunciation"}
-{"id": "68", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "69", "content": "yitchaeni' maAa", "noteType": "pronunciation"}
-{"id": "70", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "71", "content": "mitchaeni'", "noteType": "pronunciation"}
-{"id": "72", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "73", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "74", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "75", "content": "'itchaeni' maAa", "noteType": "pronunciation"}
-{"id": "76", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "77", "content": "yitchaeni' maAa", "noteType": "pronunciation"}
-{"id": "78", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "79", "content": "mitchaeni'", "noteType": "pronunciation"}
-{"id": "80", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "81", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "82", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "83", "content": "Aalashaen", "noteType": "pronunciation"}
-{"id": "84", "content": "conjunction", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "85", "content": "Aashaen", "noteType": "pronunciation"}
-{"id": "86", "content": "conjunction", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "87", "content": "because"}
-{"id": "88", "content": "conjunction", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "89", "content": "conjunction", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "90", "content": "abbr. because"}
-{"id": "91", "content": "conjunction", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "92", "content": "huwwa", "noteType": "pronunciation"}
-{"id": "93", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "94", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "95", "content": "ghaaz", "noteType": "pronunciation"}
-{"id": "96", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "97", "content": "yigheez", "noteType": "pronunciation"}
-{"id": "98", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "99", "content": "ghaayiz", "noteType": "pronunciation"}
-{"id": "100", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "101", "content": "mitghaaz", "noteType": "pronunciation"}
-{"id": "102", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "103", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "104", "content": "-uh", "noteType": "pronunciation"}
-{"id": "105", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "106", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "107", "content": "'awi", "noteType": "pronunciation"}
-{"id": "108", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "109", "content": "'awi", "noteType": "pronunciation"}
-{"id": "110", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "111", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "112", "content": "very"}
-{"id": "113", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "114", "content": "very"}
-{"id": "115", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "116", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "117", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "118", "content": "'ana katabt-l-ak 'aa'imit ilmushtarayaat", "noteType": "pronunciation"}
-{"id": "119", "content": "'ana", "noteType": "pronunciation"}
-{"id": "120", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "121", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "122", "content": "katab", "noteType": "pronunciation"}
+{"id": "26", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "27", "content": "environment"}
+{"id": "28", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "29", "content": "harr", "noteType": "pronunciation"}
+{"id": "30", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "31", "content": "haar", "noteType": "pronunciation"}
+{"id": "32", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "33", "content": "weather"}
+{"id": "34", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "35", "content": "wa", "noteType": "pronunciation"}
+{"id": "36", "content": "conjunction", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "37", "content": "also"}
+{"id": "38", "content": "conjunction", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "39", "content": "shams", "noteType": "pronunciation"}
+{"id": "40", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "41", "content": "shumoos", "noteType": "pronunciation"}
+{"id": "42", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "43", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "44", "content": "hara'", "noteType": "pronunciation"}
+{"id": "45", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "46", "content": "yihra'", "noteType": "pronunciation"}
+{"id": "47", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "48", "content": "mahroo'", "noteType": "pronunciation"}
+{"id": "49", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "50", "content": "something"}
+{"id": "51", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "52", "content": "fi", "noteType": "pronunciation"}
+{"id": "53", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "54", "content": "place"}
+{"id": "55", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "56", "content": "naes", "noteType": "pronunciation"}
+{"id": "57", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "58", "content": "'anas", "noteType": "pronunciation"}
+{"id": "59", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "60", "content": "in general"}
+{"id": "61", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "62", "content": "people"}
+{"id": "63", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "64", "content": "'ana mirtaeh fi ilshughl", "noteType": "pronunciation"}
+{"id": "65", "content": "'ana", "noteType": "pronunciation"}
+{"id": "66", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "67", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "68", "content": "mirtaeh", "noteType": "pronunciation"}
+{"id": "69", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "70", "content": "mirtaeha", "noteType": "pronunciation"}
+{"id": "71", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "72", "content": "mirtaheen", "noteType": "pronunciation"}
+{"id": "73", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "74", "content": "relaxed"}
+{"id": "75", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "76", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "77", "content": "fi", "noteType": "pronunciation"}
+{"id": "78", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "79", "content": "place"}
+{"id": "80", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "81", "content": "shughl", "noteType": "pronunciation"}
+{"id": "82", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "83", "content": "'ashaghael", "noteType": "pronunciation"}
+{"id": "84", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "85", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "86", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "87", "content": "bahibb 'anaem Aala ilkanuba", "noteType": "pronunciation"}
+{"id": "88", "content": "habb", "noteType": "pronunciation"}
+{"id": "89", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "90", "content": "yihibb", "noteType": "pronunciation"}
+{"id": "91", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "92", "content": "haebib", "noteType": "pronunciation"}
+{"id": "93", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "94", "content": "mahboob", "noteType": "pronunciation"}
+{"id": "95", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "96", "content": "enjoy"}
+{"id": "97", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "98", "content": "naem", "noteType": "pronunciation"}
+{"id": "99", "content": "intransitive verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "100", "content": "yinaem", "noteType": "pronunciation"}
+{"id": "101", "content": "intransitive verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "102", "content": "naeyim", "noteType": "pronunciation"}
+{"id": "103", "content": "intransitive verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "104", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "105", "content": "Aala", "noteType": "pronunciation"}
+{"id": "106", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "107", "content": "the surface of prepositi"}
+{"id": "108", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "109", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "110", "content": "kanaba", "noteType": "pronunciation"}
+{"id": "111", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "112", "content": "kanab", "noteType": "pronunciation"}
+{"id": "113", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "114", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "115", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "116", "content": "'ana Aamalt tabcha lazeeza ilnahardah", "noteType": "pronunciation"}
+{"id": "117", "content": "'ana", "noteType": "pronunciation"}
+{"id": "118", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "119", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "120", "content": "Aamal", "noteType": "pronunciation"}
+{"id": "121", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "122", "content": "yiAmil", "noteType": "pronunciation"}
 {"id": "123", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "124", "content": "yiktib", "noteType": "pronunciation"}
+{"id": "124", "content": "Aaamal", "noteType": "pronunciation"}
 {"id": "125", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "126", "content": "kaatib", "noteType": "pronunciation"}
+{"id": "126", "content": "maAmool", "noteType": "pronunciation"}
 {"id": "127", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "128", "content": "maktoob", "noteType": "pronunciation"}
-{"id": "129", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "130", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "131", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "132", "content": "li-", "noteType": "pronunciation"}
-{"id": "133", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "134", "content": "so./st."}
-{"id": "135", "content": "preposition", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "136", "content": "-ak", "noteType": "pronunciation"}
-{"id": "137", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "138", "content": "-ik", "noteType": "pronunciation"}
-{"id": "139", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "140", "content": "-kum", "noteType": "pronunciation"}
-{"id": "141", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "142", "content": "object"}
-{"id": "143", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "144", "content": "'a'mit ilmushtarayaat", "noteType": "pronunciation"}
-{"id": "145", "content": "expression", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "146", "content": "'awa'm ilmushtarayaat", "noteType": "pronunciation"}
-{"id": "147", "content": "expression", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "148", "content": "expression", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "149", "content": "'a'mit ilmushtarayaat", "noteType": "pronunciation"}
-{"id": "150", "content": "expression", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "151", "content": "'awa'm ilmushtarayaat", "noteType": "pronunciation"}
-{"id": "152", "content": "expression", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "153", "content": "expression", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "154", "content": "soot-ha rufayaA 'awi", "noteType": "pronunciation"}
-{"id": "155", "content": "Lit. high = thin"}
-{"id": "156", "content": "soot", "noteType": "pronunciation"}
-{"id": "157", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "158", "content": "'aswaat", "noteType": "pronunciation"}
-{"id": "159", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "160", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "161", "content": "-ha", "noteType": "pronunciation"}
-{"id": "162", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "163", "content": "object"}
-{"id": "164", "content": "pronoun", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "165", "content": "rufayaA", "noteType": "pronunciation"}
-{"id": "166", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "167", "content": "rafiyaA", "noteType": "pronunciation"}
-{"id": "168", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "169", "content": "rufayaAa", "noteType": "pronunciation"}
-{"id": "170", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "171", "content": "rufayaAeen", "noteType": "pronunciation"}
-{"id": "172", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "173", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "174", "content": "'awi", "noteType": "pronunciation"}
-{"id": "175", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "176", "content": "'awi", "noteType": "pronunciation"}
-{"id": "177", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "178", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "179", "content": "very"}
-{"id": "180", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "181", "content": "very"}
-{"id": "182", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "183", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
-{"id": "184", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "128", "content": "verb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "129", "content": "tabcha", "noteType": "pronunciation"}
+{"id": "130", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "131", "content": "tabeech", "noteType": "pronunciation"}
+{"id": "132", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "133", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "134", "content": "cooked"}
+{"id": "135", "content": "noun", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "136", "content": "lazeez", "noteType": "pronunciation"}
+{"id": "137", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "138", "content": "lazeeza", "noteType": "pronunciation"}
+{"id": "139", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "140", "content": "luzaez", "noteType": "pronunciation"}
+{"id": "141", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "142", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "143", "content": "adjective", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "144", "content": "ilnahardah", "noteType": "pronunciation"}
+{"id": "145", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}
+{"id": "146", "content": "adverb", "noteType": "linguistic type", "showBeforeExercice": true}

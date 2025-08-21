@@ -1,40 +1,36 @@
-{"id": "1", "content": "I need to (do some) marketing for my shop"}
-{"id": "2", "content": "need", "notes": ["8", "9"]}
-{"id": "3", "content": "need (to)", "notes": ["10", "11"]}
-{"id": "4", "content": "market", "notes": ["18"]}
-{"id": "5", "content": "advertise", "notes": ["19"]}
-{"id": "6", "content": "advocate", "notes": ["20"]}
-{"id": "7", "content": "shop", "notes": ["25"]}
-{"id": "8", "content": "store", "notes": ["26", "27"]}
-{"id": "9", "content": "belonging (to)", "notes": ["34"]}
-{"id": "10", "content": "belong (to)", "notes": ["35", "36"]}
-{"id": "11", "content": "me", "notes": ["41"]}
-{"id": "12", "content": "what is your weight?"}
-{"id": "13", "content": "weight", "notes": ["48"]}
-{"id": "14", "content": "your", "notes": ["55"]}
-{"id": "15", "content": "(to what) extent", "notes": ["58"]}
-{"id": "16", "content": "how much", "notes": ["59", "60"]}
-{"id": "17", "content": "Ahmed had a fight with Mohammed because he teased him a lot"}
-{"id": "18", "content": "fight (with)", "notes": ["73"]}
-{"id": "19", "content": "(have a) fight (with)", "notes": ["74"]}
-{"id": "20", "content": "for", "notes": ["87", "88"]}
-{"id": "21", "content": "because", "notes": ["89"]}
-{"id": "22", "content": "cos", "notes": ["90", "91"]}
-{"id": "23", "content": "he", "notes": ["94"]}
-{"id": "24", "content": "tease", "notes": ["103"]}
-{"id": "25", "content": "him", "notes": ["106"]}
-{"id": "26", "content": "very", "notes": ["111"]}
-{"id": "27", "content": "bloody", "notes": ["112", "113"]}
-{"id": "28", "content": "really", "notes": ["114", "115"]}
-{"id": "29", "content": "very much", "notes": ["116"]}
-{"id": "30", "content": "so (very)", "notes": ["117"]}
-{"id": "31", "content": "I wrote a shopping list for you"}
-{"id": "32", "content": "I", "notes": ["121"]}
-{"id": "33", "content": "type", "notes": ["130"]}
-{"id": "34", "content": "write", "notes": ["131"]}
-{"id": "35", "content": "you", "notes": ["142", "143"]}
-{"id": "36", "content": "shopping list", "notes": ["148"]}
-{"id": "37", "content": "her voice is very high"}
-{"id": "38", "content": "voice", "notes": ["160"]}
-{"id": "39", "content": "her", "notes": ["163", "164"]}
-{"id": "40", "content": "thin", "notes": ["173"]}
+{"id": "1", "content": "I work during the day"}
+{"id": "2", "content": "I", "notes": ["4", "67", "119"]}
+{"id": "3", "content": "work", "notes": ["9", "10", "85"]}
+{"id": "4", "content": "in", "notes": ["13", "14"]}
+{"id": "5", "content": "during", "notes": ["15"]}
+{"id": "6", "content": "daytime", "notes": ["18"]}
+{"id": "7", "content": "day", "notes": ["19", "20"]}
+{"id": "8", "content": "the weather is hot and the sun is burning people"}
+{"id": "9", "content": "atmosphere", "notes": ["24", "25"]}
+{"id": "10", "content": "weather", "notes": ["26"]}
+{"id": "11", "content": "climate", "notes": ["27", "28"]}
+{"id": "12", "content": "hot", "notes": ["33", "34"]}
+{"id": "13", "content": "and", "notes": ["37", "38"]}
+{"id": "14", "content": "sun", "notes": ["43"]}
+{"id": "15", "content": "burn", "notes": ["50", "51"]}
+{"id": "16", "content": "at", "notes": ["54", "55", "79", "80"]}
+{"id": "17", "content": "people", "notes": ["60", "61"]}
+{"id": "18", "content": "folk", "notes": ["62", "63"]}
+{"id": "19", "content": "I feel comfortable at work"}
+{"id": "20", "content": "comfortable", "notes": ["74", "75"]}
+{"id": "21", "content": "relaxed", "notes": ["76"]}
+{"id": "22", "content": "job", "notes": ["86"]}
+{"id": "23", "content": "I like to sleep on the sofa"}
+{"id": "24", "content": "like", "notes": ["96", "97"]}
+{"id": "25", "content": "sleep", "notes": ["104"]}
+{"id": "26", "content": "on", "notes": ["107", "108"]}
+{"id": "27", "content": "onto", "notes": ["109"]}
+{"id": "28", "content": "couch", "notes": ["114"]}
+{"id": "29", "content": "sofa", "notes": ["115"]}
+{"id": "30", "content": "I made a delicious meal today"}
+{"id": "31", "content": "make", "notes": ["128"]}
+{"id": "32", "content": "cooked meal", "notes": ["133"]}
+{"id": "33", "content": "meal", "notes": ["134", "135"]}
+{"id": "34", "content": "delicious", "notes": ["142"]}
+{"id": "35", "content": "tasty", "notes": ["143"]}
+{"id": "36", "content": "today", "notes": ["146"]}

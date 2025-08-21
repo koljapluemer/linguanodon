@@ -133,6 +133,13 @@ def create_translation(content, notes=None):
     # Check if translation with this content already exists
     for existing in translation_data:
         if existing["content"] == content:
+            # Update existing translation with new notes
+            if notes:
+                if "notes" not in existing:
+                    existing["notes"] = []
+                for note_id in notes:
+                    if note_id not in existing["notes"]:
+                        existing["notes"].append(note_id)
             return existing["id"]
     
     # Create new translation
