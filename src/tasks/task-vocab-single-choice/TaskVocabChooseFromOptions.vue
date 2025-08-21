@@ -2,9 +2,10 @@
 import { ref, computed, inject, onMounted } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
-import { DistractorGenerator } from '@/entities/vocab/DistractorGenerator';
+import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import { DistractorGenerator } from '@/pages/queue/lesson-generator/utils/DistractorGenerator';
 import { shuffleArray } from '@/shared/arrayUtils';
 
 interface AnswerOption {
@@ -23,7 +24,8 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
+const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 
 // Use the task state composable
 
@@ -77,7 +79,7 @@ async function loadVocabData() {
     }
 
     vocab.value = vocabData;
-    translations.value = await vocabRepo.getTranslationsByIds(vocabData.translations);
+    translations.value = await translationRepo.getTranslationsByIds(vocabData.translations);
 
     await generateOptions();
   } catch (error) {
@@ -90,7 +92,7 @@ async function loadVocabData() {
 async function generateOptions() {
   if (!vocab.value || translations.value.length === 0) return;
 
-  const distractorGen = new DistractorGenerator(vocabRepo);
+  const distractorGen = new DistractorGenerator(vocabRepo, translationRepo);
   const options: AnswerOption[] = [];
 
   if (isReverse.value) {

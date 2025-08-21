@@ -1,5 +1,5 @@
 import type { TaskData } from '@/entities/tasks/TaskData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
@@ -11,14 +11,14 @@ const MIN_TASK_COUNT = 5;
 const MAX_TASK_COUNT = 20;
 
 export interface LessonStrategyDependencies {
-  vocabRepo: VocabAndTranslationRepoContract;
+  vocabRepo: VocabRepoContract;
   taskRepo: TaskRepoContract;
   resourceRepo: ResourceRepoContract;
   immersionContentRepo: ImmersionContentRepoContract;
 }
 
 export abstract class BaseLessonStrategy {
-  protected readonly vocabRepo: VocabAndTranslationRepoContract;
+  protected readonly vocabRepo: VocabRepoContract;
   protected readonly taskRepo: TaskRepoContract;
   protected readonly resourceRepo: ResourceRepoContract;
   protected readonly immersionContentRepo: ImmersionContentRepoContract;

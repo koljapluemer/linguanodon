@@ -24,7 +24,8 @@ import { toRaw } from 'vue';
 import { taskRegistry } from './taskRegistry';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { FactCardRepoContract } from '@/entities/factCards/FactCardRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
@@ -48,7 +49,8 @@ const emit = defineEmits<{
 
 // Injected repositories
 const taskRepo = inject<TaskRepoContract>('taskRepo');
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
+const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
@@ -198,8 +200,8 @@ async function updateAssociatedEntities() {
       }
 
       // Update vocab tasks after scoring/reviewing
-      if (taskRepo && noteRepo) {
-        const updateVocabTasksController = new UpdateVocabTasksController(vocabRepo, taskRepo, noteRepo);
+      if (taskRepo && noteRepo && translationRepo) {
+        const updateVocabTasksController = new UpdateVocabTasksController(vocabRepo, translationRepo, taskRepo, noteRepo);
         await updateVocabTasksController.updateTasksForVocab(vocabUid);
       }
     }

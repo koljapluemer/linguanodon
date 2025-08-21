@@ -1,11 +1,12 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import { levenshteinDistance, isLengthWithinRange } from '@/shared/stringUtils';
 import { shuffleArray } from '@/shared/arrayUtils';
 
 export class DistractorGenerator {
-  constructor(private vocabRepo: VocabAndTranslationRepoContract) {}
+  constructor(private vocabRepo: VocabRepoContract, private translationRepo: TranslationRepoContract) {}
 
   /**
    * Find ideal wrong translation for vocab-to-translation exercises
@@ -23,7 +24,7 @@ export class DistractorGenerator {
     for (const vocab of dueVocab) {
       if (vocab.uid === targetVocab.uid) continue; // Skip target vocab
       
-      const vocabTranslations = await this.vocabRepo.getTranslationsByIds(vocab.translations);
+      const vocabTranslations = await this.translationRepo.getTranslationsByIds(vocab.translations);
       candidateTranslations.push(...vocabTranslations);
     }
     
@@ -87,7 +88,7 @@ export class DistractorGenerator {
     targetVocab: VocabData,
     correctTranslations: TranslationData[]
   ): Promise<string | null> {
-    const allTranslations = await this.vocabRepo.getAllTranslationsInLanguage(targetVocab.language);
+    const allTranslations = await this.translationRepo.getAllTranslationsInLanguage(targetVocab.language);
     const correctContents = new Set(correctTranslations.map(t => t.content));
     
     const candidates = allTranslations.filter(t => !correctContents.has(t.content));

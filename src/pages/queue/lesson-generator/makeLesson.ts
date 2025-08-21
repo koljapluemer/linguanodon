@@ -1,5 +1,5 @@
 import type { TaskData } from '@/entities/tasks/TaskData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
@@ -13,7 +13,7 @@ import { LowMasteryImmersionContentStrategy } from './flavors/makeLessonAroundLo
 import { HighMasteryImmersionContentStrategy } from './flavors/makeLessonAroundHighMasteryImmersionContent';
 
 export async function makeLesson(
-  vocabRepo: VocabAndTranslationRepoContract,
+  vocabRepo: VocabRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,

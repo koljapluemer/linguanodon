@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import VocabAddFormCorePropsRenderer from './VocabAddFormCorePropsRenderer.vue';
 import VocabAddFormAdvancedPropsRenderer from './VocabAddFormAdvancedPropsRenderer.vue';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 
 interface VocabFormData {

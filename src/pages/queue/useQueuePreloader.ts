@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
@@ -29,7 +29,7 @@ const DEFAULT_CONFIG: PreloadConfig = {
 };
 
 export function useQueuePreloader(
-  vocabRepo: VocabAndTranslationRepoContract,
+  vocabRepo: VocabRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,

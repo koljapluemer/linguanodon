@@ -25,14 +25,14 @@
 <script setup lang="ts">
 import { ref, watch, inject, computed } from 'vue';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import { calculateVocabMastery } from '@/entities/vocab/vocabMastery';
 
 const props = defineProps<{
   vocabIds: string[];
 }>();
 
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
 if (!vocabRepo) {
   throw new Error('VocabRepo not provided');
 }

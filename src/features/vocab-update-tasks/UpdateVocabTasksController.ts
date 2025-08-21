@@ -1,5 +1,6 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import { VocabTaskCoordinator } from './VocabTaskCoordinator';
@@ -9,7 +10,8 @@ export class UpdateVocabTasksController {
   private coordinator = new VocabTaskCoordinator();
 
   constructor(
-    private vocabRepo: VocabAndTranslationRepoContract,
+    private vocabRepo: VocabRepoContract,
+    private translationRepo: TranslationRepoContract,
     private taskRepo: TaskRepoContract,
     private noteRepo: NoteRepoContract
   ) {}
@@ -22,7 +24,7 @@ export class UpdateVocabTasksController {
     if (!vocab) return;
 
     const [translations, notes] = await Promise.all([
-      this.vocabRepo.getTranslationsByIds(vocab.translations),
+      this.translationRepo.getTranslationsByIds(vocab.translations),
       this.noteRepo.getNotesByUIDs(vocab.notes)
     ]);
 

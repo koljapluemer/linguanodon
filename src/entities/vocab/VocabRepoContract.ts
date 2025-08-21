@@ -1,5 +1,4 @@
 import type { VocabData } from './vocab/VocabData';
-import type { TranslationData } from './translations/TranslationData';
 import type { Rating } from 'ts-fsrs';
 
 export interface VocabPaginationResult {
@@ -8,7 +7,7 @@ export interface VocabPaginationResult {
   hasMore: boolean;
 }
 
-export interface VocabAndTranslationRepoContract {
+export interface VocabRepoContract {
   // Vocab operations
   getVocab(): Promise<VocabData[]>;
   getVocabByUID(uid: string): Promise<VocabData | undefined>;
@@ -42,17 +41,9 @@ export interface VocabAndTranslationRepoContract {
   addNotRelatedVocab(uid: string, notRelatedVocabUid: string): Promise<void>;
   removeNotRelatedVocab(uid: string, notRelatedVocabUid: string): Promise<void>;
   
-  // Translation operations
-  getTranslationsByIds(ids: string[]): Promise<TranslationData[]>;
-  getTranslationByContent(content: string): Promise<TranslationData | undefined>;
-  saveTranslation(translation: Omit<TranslationData, 'uid' | 'origins'>): Promise<TranslationData>;
-  updateTranslation(translation: TranslationData): Promise<void>;
-  deleteTranslations(ids: string[]): Promise<void>;
-  
-  // Distractor generation operations
+  // Query operations for distractor generation
   getDueVocabInLanguage(language: string): Promise<VocabData[]>;
   getDueVocabInLanguages(languages: string[], setsToAvoid?: string[]): Promise<VocabData[]>;
   getRandomUnseenVocabInLanguages(languages: string[], count: number, setsToAvoid?: string[]): Promise<VocabData[]>;
-  getAllTranslationsInLanguage(language: string): Promise<TranslationData[]>;
   findVocabByTranslationContent(translationContent: string): Promise<VocabData[]>;
 }

@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import { Plus, X } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 
 interface VocabFormData {

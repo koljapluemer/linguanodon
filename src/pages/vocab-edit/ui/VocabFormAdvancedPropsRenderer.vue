@@ -95,7 +95,7 @@ import { Plus, X } from 'lucide-vue-next';
 import InlineInput from '@/shared/ui/InlineInput.vue';
 import InlineToggle from '@/shared/ui/InlineToggle.vue';
 import NoteList from '@/entities/notes/NoteList.vue';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 
 interface VocabFormData {
   id?: string;

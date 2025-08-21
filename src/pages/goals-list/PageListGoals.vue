@@ -67,12 +67,12 @@
 import { ref, onMounted, inject } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 
 const goals = ref<GoalData[]>([]);
 const vocabStats = ref<Record<string, { topOfMindPercentage: number }>>({});

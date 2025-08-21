@@ -88,9 +88,10 @@
 import { ref, inject, onMounted, computed } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 
@@ -103,7 +104,8 @@ const emit = defineEmits<{
 }>();
 
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
+const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 
 const vocabItems = ref<VocabData[]>([]);
 const translations = ref<Map<string, TranslationData>>(new Map());
@@ -125,7 +127,7 @@ async function loadVocab() {
   
   // Load translations for display
   const allTranslationIds = vocabItems.value.flatMap(v => v.translations);
-  const translationResults = await vocabRepo.getTranslationsByIds(allTranslationIds);
+  const translationResults = await translationRepo.getTranslationsByIds(allTranslationIds);
   
   translations.value.clear();
   translationResults.forEach(t => {

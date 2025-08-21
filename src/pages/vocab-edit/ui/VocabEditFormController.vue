@@ -21,11 +21,12 @@
 import { ref, computed, inject, onMounted } from 'vue';
 import { toRaw } from 'vue';
 import VocabFormMetaRenderer from './VocabFormMetaRenderer.vue';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 
 interface VocabFormData {
   id?: string;
@@ -97,10 +98,14 @@ const emit = defineEmits<{
   'vocab-saved': [vocabId: string];
 }>();
 
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
+const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const noteRepo = inject<NoteRepoContract>('noteRepo');
 if (!vocabRepo) {
   throw new Error('VocabRepo not provided');
+}
+if (!translationRepo) {
+  throw new Error('TranslationRepo not provided');
 }
 if (!noteRepo) {
   throw new Error('NoteRepo not provided');
@@ -158,9 +163,9 @@ async function loadVocab() {
         loadedNotes.value = [];
       }
 
-      if (vocab.translations && vocab.translations.length > 0) {
+      if (vocab.translations && vocab.translations.length > 0 && translationRepo) {
         try {
-          const translations = await vocabRepo.getTranslationsByIds(vocab.translations);
+          const translations = await translationRepo.getTranslationsByIds(vocab.translations);
           loadedTranslations.value = translations;
         } catch (error) {
           console.error('Failed to load translations:', error);
@@ -183,6 +188,7 @@ async function loadVocab() {
 
 async function saveInternal(): Promise<void> {
   if (!vocabRepo) throw new Error('VocabRepo not available');
+  if (!translationRepo) throw new Error('TranslationRepo not available');
   if (!noteRepo) throw new Error('NoteRepo not available');
 
   const serializedFormData = serializeFormData(state.value.formData);
@@ -207,9 +213,9 @@ async function saveInternal(): Promise<void> {
 
   for (const translation of serializedFormData.translations) {
     if (translation.uid && loadedTranslations.value.find(t => t.uid === translation.uid)) {
-      await vocabRepo.updateTranslation(toRaw(translation));
+      await translationRepo.updateTranslation(toRaw(translation));
     } else if (!translation.uid || !loadedTranslations.value.find(t => t.uid === translation.uid)) {
-      const savedTranslation = await vocabRepo.saveTranslation(toRaw(translation));
+      const savedTranslation = await translationRepo.saveTranslation(toRaw(translation));
       const translationIndex = serializedFormData.translations.findIndex(t => t === translation);
       if (translationIndex >= 0) {
         serializedFormData.translations[translationIndex] = savedTranslation;
@@ -220,7 +226,7 @@ async function saveInternal(): Promise<void> {
   const currentTranslationUIDs = serializedFormData.translations.map(t => t.uid);
   const translationsToDelete = loadedTranslations.value.filter(t => !currentTranslationUIDs.includes(t.uid));
   if (translationsToDelete.length > 0) {
-    await vocabRepo.deleteTranslations(translationsToDelete.map(t => t.uid));
+    await translationRepo.deleteTranslations(translationsToDelete.map(t => t.uid));
   }
 
   let finalVocabId = props.vocabId;

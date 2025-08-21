@@ -20,11 +20,12 @@
 import { ref, computed, inject } from 'vue';
 import { toRaw } from 'vue';
 import VocabAddFormMetaRenderer from './VocabAddFormMetaRenderer.vue';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 
 interface VocabFormData {
   language: string;
@@ -66,10 +67,14 @@ const emit = defineEmits<{
   'vocab-saved': [vocabId: string];
 }>();
 
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
+const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const noteRepo = inject<NoteRepoContract>('noteRepo');
 if (!vocabRepo) {
   throw new Error('VocabRepo not provided');
+}
+if (!translationRepo) {
+  throw new Error('TranslationRepo not provided');
 }
 if (!noteRepo) {
   throw new Error('NoteRepo not provided');
@@ -101,6 +106,7 @@ function serializeFormData(formData: VocabFormData): VocabFormData {
 
 async function saveInternal(): Promise<void> {
   if (!vocabRepo) throw new Error('VocabRepo not available');
+  if (!translationRepo) throw new Error('TranslationRepo not available');
   if (!noteRepo) throw new Error('NoteRepo not available');
 
   const serializedFormData = serializeFormData(state.value.formData);
@@ -114,7 +120,7 @@ async function saveInternal(): Promise<void> {
   }
 
   for (const translation of serializedFormData.translations) {
-    const savedTranslation = await vocabRepo.saveTranslation(toRaw(translation));
+    const savedTranslation = await translationRepo.saveTranslation(toRaw(translation));
     const translationIndex = serializedFormData.translations.findIndex(t => t === translation);
     if (translationIndex >= 0) {
       serializedFormData.translations[translationIndex] = savedTranslation;

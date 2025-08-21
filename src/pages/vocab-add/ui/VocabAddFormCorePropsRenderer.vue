@@ -54,8 +54,8 @@
 
 <script setup lang="ts">
 import { ref, computed, inject, onMounted } from 'vue';
-import TranslationGroupForm from '@/entities/vocab/translations/TranslationGroupForm.vue';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import TranslationGroupForm from '@/entities/translations/TranslationGroupForm.vue';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 import { formatLanguageDisplay } from '@/entities/languages';

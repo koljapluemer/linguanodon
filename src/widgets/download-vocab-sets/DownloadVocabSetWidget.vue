@@ -3,9 +3,10 @@ import { ref, inject, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
 import { RemoteVocabService } from '@/widgets/download-vocab-sets/RemoteVocabService';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
@@ -20,13 +21,14 @@ const error = ref<string | null>(null);
 const downloadedSets = ref<Map<string, Date>>(new Map());
 
 const remoteVocabService = new RemoteVocabService();
-const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
+const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
 
 // Initialize vocab task controller
-const vocabTaskController = new UpdateVocabTasksController(vocabAndTranslationRepo, taskRepo, noteRepo);
+const vocabTaskController = new UpdateVocabTasksController(vocabRepo, translationRepo, taskRepo, noteRepo);
 
 async function loadVocabSets() {
   if (!props.selectedLanguage) {
@@ -92,7 +94,7 @@ async function downloadVocabSet(name: string) {
       const translationUids: string[] = [];
       for (const remoteTranslation of remoteVocab.translations) {
         // Check if translation already exists
-        let existingTranslation = await vocabAndTranslationRepo.getTranslationByContent(remoteTranslation.content);
+        let existingTranslation = await translationRepo.getTranslationByContent(remoteTranslation.content);
         
         if (existingTranslation) {
           translationUids.push(existingTranslation.uid);
@@ -108,13 +110,13 @@ async function downloadVocabSet(name: string) {
             notes: translationNoteUids
           };
           
-          const savedTranslation = await vocabAndTranslationRepo.saveTranslation(translationData);
+          const savedTranslation = await translationRepo.saveTranslation(translationData);
           translationUids.push(savedTranslation.uid);
         }
       }
 
       // 3. Check if vocab already exists
-      let existingVocab = await vocabAndTranslationRepo.getVocabByLanguageAndContent(
+      let existingVocab = await vocabRepo.getVocabByLanguageAndContent(
         remoteVocab.language, 
         remoteVocab.content
       );
@@ -128,7 +130,7 @@ async function downloadVocabSet(name: string) {
         existingOrigins.add(localSet.uid);
         
         // Merge with existing vocab
-        await vocabAndTranslationRepo.updateVocab({
+        await vocabRepo.updateVocab({
           ...existingVocab,
           translations: [...new Set([...existingVocab.translations, ...translationUids])],
           notes: [...new Set([...existingVocab.notes, ...vocabNoteUids])],
@@ -150,7 +152,7 @@ async function downloadVocabSet(name: string) {
           notRelatedVocab: []
         };
         
-        const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
+        const savedVocab = await vocabRepo.saveVocab(vocabData);
         
         // 5. Create tasks for the new vocab
         await vocabTaskController.updateTasksForVocab(savedVocab.uid);

@@ -1,7 +1,6 @@
 import Dexie, { type Table } from 'dexie';
-import type { VocabAndTranslationRepoContract, VocabPaginationResult } from './VocabAndTranslationRepoContract';
+import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
 import type { VocabData } from './vocab/VocabData';
-import type { TranslationData } from './translations/TranslationData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
 import { pickRandom } from '@/shared/arrayUtils';
 
@@ -14,7 +13,6 @@ function isSeen(vocab: VocabData): boolean {
   return vocab.progress.level >= 0;
 }
 
-// Database classes
 class VocabDatabase extends Dexie {
   vocab!: Table<VocabData>;
 
@@ -26,21 +24,9 @@ class VocabDatabase extends Dexie {
   }
 }
 
-class TranslationDatabase extends Dexie {
-  translations!: Table<TranslationData>;
-
-  constructor() {
-    super('TranslationDatabase');
-    this.version(1).stores({
-      translations: 'uid, content, *origins'
-    });
-  }
-}
-
 const vocabDb = new VocabDatabase();
-const translationDb = new TranslationDatabase();
 
-export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract {
+export class VocabRepo implements VocabRepoContract {
 
   private ensureVocabFields(vocab: VocabData): VocabData {
     return {
@@ -125,7 +111,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       return vocabIsUnseen || isDue;
     });
   }
-
 
   async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
     const vocab = await vocabDb.vocab.get(vocabId);
@@ -239,14 +224,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     return pickRandom(withoutPronunciation, 1)[0];
   }
 
-  async getTranslationsByIds(ids: string[]): Promise<TranslationData[]> {
-    return await translationDb.translations.where('uid').anyOf(ids).toArray();
-  }
-
-  async getTranslationByContent(content: string): Promise<TranslationData | undefined> {
-    return await translationDb.translations.where('content').equals(content).first();
-  }
-
   async getVocabPaginated(cursor?: string, limit: number = 20, searchQuery?: string): Promise<VocabPaginationResult> {
     const allVocab = await vocabDb.vocab.toArray();
     
@@ -331,7 +308,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     await vocabDb.vocab.delete(id);
   }
 
-  // Distractor generation methods
   async getDueVocabInLanguage(language: string): Promise<VocabData[]> {
     const vocab = await vocabDb.vocab
       .where('language')
@@ -344,51 +320,6 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       .toArray();
     
     return vocab.map(v => this.ensureVocabFields(v));
-  }
-
-  async getAllTranslationsInLanguage(language: string): Promise<TranslationData[]> {
-    // Get all vocab in the language, then collect their translations
-    const vocabInLanguage = await vocabDb.vocab.where('language').equals(language).toArray();
-    
-    const allTranslationIds = vocabInLanguage.flatMap(vocab => vocab.translations);
-    const uniqueTranslationIds = [...new Set(allTranslationIds)];
-    
-    return await translationDb.translations.where('uid').anyOf(uniqueTranslationIds).toArray();
-  }
-
-  async findVocabByTranslationContent(translationContent: string): Promise<VocabData[]> {
-    // Find all translations with this content
-    const matchingTranslations = await translationDb.translations.where('content').equals(translationContent).toArray();
-    
-    if (matchingTranslations.length === 0) return [];
-    
-    // Find all vocab that use these translations
-    const allVocab = await vocabDb.vocab.toArray();
-    const matchingTranslationIds = new Set(matchingTranslations.map(t => t.uid));
-    
-    return allVocab
-      .filter(vocab => vocab.translations.some(id => matchingTranslationIds.has(id)))
-      .map(v => this.ensureVocabFields(v));
-  }
-
-  async saveTranslation(translation: Omit<TranslationData, 'uid' | 'origins'>): Promise<TranslationData> {
-    const translationToSave: TranslationData = {
-      uid: crypto.randomUUID(),
-      content: translation.content,
-      notes: translation.notes,
-      origins: []
-    };
-    
-    await translationDb.translations.add(translationToSave);
-    return translationToSave;
-  }
-
-  async updateTranslation(translation: TranslationData): Promise<void> {
-    await translationDb.translations.put(translation);
-  }
-
-  async deleteTranslations(ids: string[]): Promise<void> {
-    await translationDb.translations.where('uid').anyOf(ids).delete();
   }
 
   async getDueVocabInLanguages(languages: string[], setsToAvoid?: string[]): Promise<VocabData[]> {
@@ -486,4 +417,11 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
     }
   }
 
+  async findVocabByTranslationContent(translationContent: string): Promise<VocabData[]> {
+    // This method needs translation context to work properly
+    // For now, return empty array as this functionality should be in a feature
+    console.warn('findVocabByTranslationContent called on VocabRepo - this needs translation context');
+    void translationContent;
+    return [];
+  }
 }

@@ -1,4 +1,4 @@
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
@@ -8,7 +8,7 @@ import { useQueuePreloader } from './useQueuePreloader';
 import { useQueueStateMachine } from './useQueueStateMachine';
 
 export function useCachedQueue(
-  vocabRepo: VocabAndTranslationRepoContract,
+  vocabRepo: VocabRepoContract,
   _goalRepo: GoalRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,

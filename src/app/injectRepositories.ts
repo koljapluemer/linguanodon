@@ -1,4 +1,5 @@
-import { VocabAndTranslationRepo } from '@/entities/vocab/VocabAndTranslationRepo';
+import { VocabRepo } from '@/entities/vocab/VocabRepo';
+import { TranslationRepo } from '@/entities/translations/TranslationRepo';
 import { GoalRepo } from '@/entities/goals/GoalRepo';
 import { NoteRepo } from '@/entities/notes/NoteRepo';
 import { FactCardRepo } from '@/entities/factCards/FactCardRepo';
@@ -10,7 +11,8 @@ import { LocalSetRepo } from '@/entities/local-sets/LocalSetRepo';
 
 export function setupRepositories() {
   // Create repository instances
-  const vocabRepo = new VocabAndTranslationRepo();
+  const vocabRepo = new VocabRepo();
+  const translationRepo = new TranslationRepo();
   const goalRepo = new GoalRepo();
   const noteRepo = new NoteRepo();
   const factCardRepo = new FactCardRepo();
@@ -22,6 +24,7 @@ export function setupRepositories() {
   
   return {
     vocabRepo,
+    translationRepo,
     goalRepo,
     noteRepo,
     factCardRepo,
@@ -34,9 +37,10 @@ export function setupRepositories() {
 }
 
 export function provideRepositories(app: { provide: (key: string | symbol, value: unknown) => void }) {
-  const { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo } = setupRepositories();
+  const { vocabRepo, translationRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo } = setupRepositories();
   
   app.provide('vocabRepo', vocabRepo);
+  app.provide('translationRepo', translationRepo);
   app.provide('goalRepo', goalRepo);
   app.provide('noteRepo', noteRepo);
   app.provide('factCardRepo', factCardRepo);
@@ -46,5 +50,5 @@ export function provideRepositories(app: { provide: (key: string | symbol, value
   app.provide('languageRepo', languageRepo);
   app.provide('localSetRepo', localSetRepo);
   
-  return { vocabRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo };
+  return { vocabRepo, translationRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo };
 }

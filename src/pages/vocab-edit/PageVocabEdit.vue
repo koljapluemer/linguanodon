@@ -51,7 +51,8 @@ import { useRoute } from 'vue-router';
 import VocabEditFormController from './ui/VocabEditFormController.vue';
 import TaskModalTriggerList from '@/widgets/do-task/TaskModalTriggerList.vue';
 import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
@@ -61,7 +62,8 @@ const route = useRoute();
 const currentVocabTaskIds = ref<string[]>([]);
 const currentVocab = ref<VocabData | null>(null);
 
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
+const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const taskRepo = inject<TaskRepoContract>('taskRepo');
 const noteRepo = inject<NoteRepoContract>('noteRepo');
 
@@ -93,7 +95,7 @@ watch(() => route.params.id, async (vocabId) => {
 }, { immediate: true });
 
 async function handleVocabSaved(vocabId: string) {
-  if (!vocabRepo || !taskRepo) {
+  if (!vocabRepo || !taskRepo || !translationRepo) {
     console.warn('Repos not available for task update');
     return;
   }
@@ -103,7 +105,7 @@ async function handleVocabSaved(vocabId: string) {
       console.error('NoteRepo not available');
       return;
     }
-    const taskController = new UpdateVocabTasksController(vocabRepo, taskRepo, noteRepo);
+    const taskController = new UpdateVocabTasksController(vocabRepo, translationRepo, taskRepo, noteRepo);
     await taskController.updateTasksForVocab(vocabId);
     
     // Reload task IDs and vocab data for this vocab

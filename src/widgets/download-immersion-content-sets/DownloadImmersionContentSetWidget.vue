@@ -6,10 +6,11 @@ import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/Update
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { TranslationData } from '@/entities/vocab/translations/TranslationData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 
 const props = defineProps<{
@@ -24,7 +25,8 @@ const downloadedSets = ref<Map<string, Date>>(new Map());
 const remoteImmersionContentService = new RemoteImmersionContentService();
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
-const vocabAndTranslationRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
+const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
 
@@ -101,7 +103,7 @@ async function downloadImmersionContentSet(name: string) {
           const translationUids: string[] = [];
           for (const remoteTranslation of remoteVocab.translations) {
             // Check if translation already exists
-            let existingTranslation = await vocabAndTranslationRepo.getTranslationByContent(remoteTranslation.content);
+            let existingTranslation = await translationRepo.getTranslationByContent(remoteTranslation.content);
             
             if (existingTranslation) {
               translationUids.push(existingTranslation.uid);
@@ -117,13 +119,13 @@ async function downloadImmersionContentSet(name: string) {
                 notes: translationNoteUids
               };
               
-              const savedTranslation = await vocabAndTranslationRepo.saveTranslation(translationData);
+              const savedTranslation = await translationRepo.saveTranslation(translationData);
               translationUids.push(savedTranslation.uid);
             }
           }
 
           // Check if vocab already exists
-          let existingVocab = await vocabAndTranslationRepo.getVocabByLanguageAndContent(
+          let existingVocab = await vocabRepo.getVocabByLanguageAndContent(
             remoteVocab.language,
             remoteVocab.content
           );
@@ -137,7 +139,7 @@ async function downloadImmersionContentSet(name: string) {
             existingOrigins.add(localSet.uid);
             
             // Merge with existing vocab
-            await vocabAndTranslationRepo.updateVocab({
+            await vocabRepo.updateVocab({
               ...existingVocab,
               translations: [...new Set([...existingVocab.translations, ...translationUids])],
               notes: [...new Set([...existingVocab.notes, ...vocabNoteUids])],
@@ -161,11 +163,11 @@ async function downloadImmersionContentSet(name: string) {
               notRelatedVocab: []
             };
             
-            const savedVocab = await vocabAndTranslationRepo.saveVocab(vocabData);
+            const savedVocab = await vocabRepo.saveVocab(vocabData);
             neededVocabUids.push(savedVocab.uid);
             
             // Generate tasks for the new vocab
-            const updateVocabTasksController = new UpdateVocabTasksController(vocabAndTranslationRepo, taskRepo, noteRepo);
+            const updateVocabTasksController = new UpdateVocabTasksController(vocabRepo, translationRepo, taskRepo, noteRepo);
             await updateVocabTasksController.updateTasksForVocab(savedVocab.uid);
           }
         }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, onMounted } from 'vue';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
@@ -11,14 +12,15 @@ import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 
 // Inject repositories
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo');
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
+const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const taskRepo = inject<TaskRepoContract>('taskRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
 
-if (!vocabRepo || !goalRepo || !resourceRepo || !taskRepo || !languageRepo || !immersionContentRepo) {
+if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !taskRepo || !languageRepo || !immersionContentRepo) {
   throw new Error('Repositories not available');
 }
 

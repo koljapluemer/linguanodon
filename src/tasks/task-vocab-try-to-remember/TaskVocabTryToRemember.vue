@@ -2,7 +2,8 @@
 import { ref, inject, onMounted } from 'vue';
 import type { TaskData } from '@/entities/tasks/TaskData';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { VocabAndTranslationRepoContract } from '@/entities/vocab/VocabAndTranslationRepoContract';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 
 interface Props {
   task: TaskData;
@@ -15,7 +16,8 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
-const vocabRepo = inject<VocabAndTranslationRepoContract>('vocabRepo')!;
+const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
+const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 const vocab = ref<VocabData | null>(null);
 const translations = ref<string[]>([]);
 
@@ -26,7 +28,7 @@ const loadVocab = async () => {
   const vocabData = await vocabRepo.getVocabByUID(vocabUid);
   if (vocabData) {
     vocab.value = vocabData;
-    const translationData = await vocabRepo.getTranslationsByIds(vocabData.translations);
+    const translationData = await translationRepo.getTranslationsByIds(vocabData.translations);
     translations.value = translationData.map(t => t.content);
   }
 
