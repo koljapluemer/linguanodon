@@ -59,8 +59,6 @@ const newFactCard = ref<Omit<FactCardData, 'uid' | 'progress'>>({
   back: '',
   notes: [],
   priority: 1,
-  isUserCreated: true,
-  lastDownloadedAt: null,
   origins: ['user-added']
 });
 
@@ -153,8 +151,6 @@ function resetNewFactCard() {
     back: '',
     notes: [],
     priority: 1,
-    isUserCreated: true,
-    lastDownloadedAt: null,
     origins: ['user-added']
   };
 }

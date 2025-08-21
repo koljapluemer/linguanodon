@@ -40,8 +40,6 @@ export function formDataToFactCardData(formData: FactCardFormData, existingFactC
     notes: formData.notes.map(note => note.uid),
     priority: formData.priority ?? 1,
     doNotPractice: formData.doNotPractice,
-    isUserCreated: existingFactCard?.isUserCreated ?? true,
-    lastDownloadedAt: existingFactCard?.lastDownloadedAt ?? null,
     origins: existingFactCard?.origins ?? ['user-added']
   };
 

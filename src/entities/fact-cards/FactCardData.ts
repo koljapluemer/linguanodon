@@ -1,7 +1,6 @@
 import type { LearningProgress } from "@/shared/LearningProgress";
-import type { LocalObject } from "@/shared/LocalObject";
 
-export interface FactCardData extends LocalObject {
+export interface FactCardData {
     uid: string
     language: string
     front: string

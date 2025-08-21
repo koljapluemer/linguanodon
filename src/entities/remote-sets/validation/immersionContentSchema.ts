@@ -6,7 +6,7 @@ export const immersionContentSchema = z.object({
     title: z.string(),
     content: z.string().optional(),
     priority: z.number().optional(),
-    links: z.string().optional(),
+    link: z.string().optional(),
     neededVocab: z.array(z.string()).optional(),
     notes: z.array(z.string()).optional(),
 })

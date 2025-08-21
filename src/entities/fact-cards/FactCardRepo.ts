@@ -13,9 +13,7 @@ export class FactCardRepo implements FactCardRepoContract {
       back: factCard.back || '',
       language: factCard.language || '',
       notes: factCard.notes || [],
-      priority: factCard.priority ?? 1,
-      isUserCreated: factCard.isUserCreated ?? true,
-      lastDownloadedAt: factCard.lastDownloadedAt ?? null
+      priority: factCard.priority ?? 1
     };
   }
 
@@ -43,8 +41,6 @@ export class FactCardRepo implements FactCardRepoContract {
         streak: 0,
         level: -1
       },
-      isUserCreated: factCard.isUserCreated,
-      lastDownloadedAt: factCard.lastDownloadedAt,
       origins: factCard.origins
     };
 
