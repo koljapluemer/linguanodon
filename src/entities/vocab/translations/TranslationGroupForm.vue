@@ -42,7 +42,7 @@ const emit = defineEmits<{
 }>();
 
 const translations = ref<TranslationData[]>([...props.modelValue]);
-const newTranslation = ref<Partial<TranslationData>>({
+const newTranslation = ref<Pick<TranslationData, 'content' | 'notes'>>({
   content: '',
   notes: []
 });
@@ -65,8 +65,13 @@ function deleteTranslation(index: number) {
   translations.value.splice(index, 1);
 }
 
-function addNewTranslation(translation: TranslationData) {
-  translations.value.push(translation);
+function addNewTranslation(translationData: Omit<TranslationData, 'uid' | 'origins'>) {
+  const newTranslation: TranslationData = {
+    uid: crypto.randomUUID(),
+    ...translationData,
+    origins: []
+  };
+  translations.value.push(newTranslation);
   resetNewTranslation();
 }
 

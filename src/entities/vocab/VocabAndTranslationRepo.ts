@@ -32,7 +32,7 @@ class TranslationDatabase extends Dexie {
   constructor() {
     super('TranslationDatabase');
     this.version(1).stores({
-      translations: 'uid, content'
+      translations: 'uid, content, *origins'
     });
   }
 }
@@ -371,11 +371,12 @@ export class VocabAndTranslationRepo implements VocabAndTranslationRepoContract 
       .map(v => this.ensureVocabFields(v));
   }
 
-  async saveTranslation(translation: Omit<TranslationData, 'uid'>): Promise<TranslationData> {
+  async saveTranslation(translation: Omit<TranslationData, 'uid' | 'origins'>): Promise<TranslationData> {
     const translationToSave: TranslationData = {
       uid: crypto.randomUUID(),
       content: translation.content,
-      notes: translation.notes
+      notes: translation.notes,
+      origins: []
     };
     
     await translationDb.translations.add(translationToSave);

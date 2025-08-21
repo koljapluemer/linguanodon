@@ -206,8 +206,7 @@ async function handleSave() {
         translationIds.push(existingTranslation.uid);
       } else {
         // Create new translation
-        const newTranslation: TranslationData = {
-          uid: crypto.randomUUID(),
+        const newTranslation: Omit<TranslationData, 'uid' | 'origins'> = {
           content: translationText,
           notes: []
         };

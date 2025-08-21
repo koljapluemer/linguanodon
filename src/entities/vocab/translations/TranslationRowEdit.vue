@@ -35,16 +35,16 @@ import { ref } from 'vue';
 import type { TranslationData } from './TranslationData';
 
 const props = defineProps<{
-  translation?: Partial<TranslationData>;
+  translation?: Pick<TranslationData, 'content' | 'notes'> & { uid?: string };
   isNew?: boolean;
 }>();
 
 const emit = defineEmits<{
-  'save': [TranslationData];
+  'save': [Omit<TranslationData, 'uid' | 'origins'>];
   'cancel': [];
 }>();
 
-const editTranslation = ref<Partial<TranslationData>>({
+const editTranslation = ref<Pick<TranslationData, 'content' | 'notes'>>({
   content: '',
   notes: [],
   ...props.translation
@@ -53,13 +53,12 @@ const editTranslation = ref<Partial<TranslationData>>({
 function save() {
   if (!editTranslation.value.content?.trim()) return;
   
-  const newTranslation: TranslationData = {
-    uid: editTranslation.value.uid || crypto.randomUUID(),
+  const translationToSave: Omit<TranslationData, 'uid' | 'origins'> = {
     content: editTranslation.value.content.trim(),
     notes: editTranslation.value.notes || []
   };
   
-  emit('save', newTranslation);
+  emit('save', translationToSave);
   
   // Reset for new translations
   if (props.isNew) {

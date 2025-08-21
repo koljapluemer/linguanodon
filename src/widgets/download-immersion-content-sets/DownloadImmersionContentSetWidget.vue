@@ -112,7 +112,7 @@ async function downloadImmersionContentSet(name: string) {
                 : [];
 
               // Create new translation with note UIDs
-              const translationData: Omit<TranslationData, 'uid'> = {
+              const translationData: Omit<TranslationData, 'uid' | 'origins'> = {
                 content: remoteTranslation.content,
                 notes: translationNoteUids
               };
