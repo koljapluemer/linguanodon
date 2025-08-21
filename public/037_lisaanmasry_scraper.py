@@ -31,6 +31,9 @@ translation_id = 0
 note_id = 0
 link_id = 0
 
+# Shared link ID - created once, used by all
+shared_link_id = None
+
 def get_next_vocab_id():
     global vocab_id
     vocab_id += 1
@@ -250,7 +253,7 @@ def process_sentence_data(driver):
         print(f'Error extracting sentence data: {e}')
         return None
 
-def process_word_forms_and_meanings(driver, word_lang, word_base_type):
+def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_link_id):
     """Process word forms and meanings, return lists of form and meaning vocab IDs"""
     form_vocab_ids = []
     meaning_vocab_ids = []
@@ -285,16 +288,8 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type):
                     linguistic_type_note_id = create_note(word_base_type, "linguistic type", True)
                     notes.append(linguistic_type_note_id)
 
-                # Create link for this word form
-                # Generate word URL based on the old scraper pattern
-                word_url = f"https://eu.lisaanmasry.org/online/word.php?word={form_arabic}"
-                link_id = create_link(
-                    "www.lisaanmasry.org",
-                    word_url,
-                    "Mike Green",
-                    "https://eu.lisaanmasry.org/info/en/copyright.html",
-                    "Non-Commercial, Credit Required"
-                )
+                # Use the same shared link as sentences
+                link_id = shared_link_id
 
                 # Create vocab entry for this form
                 type_info = f"{word_base_type} {form_type}".strip() if form_type else word_base_type
@@ -349,14 +344,7 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type):
                 # Create translation entry
                 translation_id = create_translation(form_en, notes if notes else None)
 
-                # Create link for meaning (same as sentence link)
-                link_id = create_link(
-                    "www.lisaanmasry.org",
-                    "https://eu.lisaanmasry.org/online/example.php",
-                    "Mike Green", 
-                    "https://eu.lisaanmasry.org/info/en/copyright.html",
-                    "Non-Commercial, Credit Required"
-                )
+                # Use the same shared link as sentences
 
                 # English meanings are translations, not vocab entries
                 # Update the Arabic forms to reference this translation
@@ -375,9 +363,23 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type):
     except (NoSuchElementException, TimeoutException) as e:
         print(f'No meanings table found: {e}')
 
+    # Update related vocab for form entries (similar forms of same word)
+    for i, form_id in enumerate(form_vocab_ids):
+        other_forms = [fid for j, fid in enumerate(form_vocab_ids) if i != j]
+        if other_forms:
+            # Find the vocab entry and update it
+            for vocab_entry in vocab_data:
+                if vocab_entry["id"] == form_id:
+                    if "relatedVocab" not in vocab_entry:
+                        vocab_entry["relatedVocab"] = []
+                    for other_form in other_forms:
+                        if other_form not in vocab_entry["relatedVocab"]:
+                            vocab_entry["relatedVocab"].append(other_form)
+                    break
+
     return form_vocab_ids, []  # No meaning vocab IDs since English meanings are translations
 
-def process_individual_words(driver, arz_p, sentence_vocab_id):
+def process_individual_words(driver, arz_p, sentence_vocab_id, shared_link_id):
     """Process individual words in the sentence"""
     word_spans = arz_p.find_elements(By.TAG_NAME, "span")
     print(f'Found {len(word_spans)} word spans')
@@ -412,7 +414,7 @@ def process_individual_words(driver, arz_p, sentence_vocab_id):
                 continue
 
             # Process forms and meanings for this word
-            form_vocab_ids, _ = process_word_forms_and_meanings(driver, word_lang, word_base_type)
+            form_vocab_ids, _ = process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_link_id)
             
             # Add only form vocab IDs to the word list (meanings are translations)
             word_vocab_ids.extend(form_vocab_ids)
@@ -441,14 +443,16 @@ def scrape_sentence(driver, url):
         if not sentence_data:
             return False
 
-        # Create shared link for sentences
-        sentence_link_id = create_link(
-            "www.lisaanmasry.org",
-            "https://eu.lisaanmasry.org/online/example.php",
-            "Mike Green",
-            "https://eu.lisaanmasry.org/info/en/copyright.html",
-            "Non-Commercial, Credit Required"
-        )
+        # Create shared link once if it doesn't exist
+        global shared_link_id
+        if shared_link_id is None:
+            shared_link_id = create_link(
+                "www.lisaanmasry.org",
+                "https://eu.lisaanmasry.org/online/example.php",
+                "Mike Green",
+                "https://eu.lisaanmasry.org/info/en/copyright.html",
+                "Non-Commercial, Credit Required"
+            )
 
         # Create notes for sentence if needed
         sentence_notes = []
@@ -469,13 +473,13 @@ def scrape_sentence(driver, url):
             content=sentence_data['sentence_arz'],
             notes=sentence_notes if sentence_notes else None,
             translations=[sentence_translation_id],
-            links=[sentence_link_id]
+            links=[shared_link_id]
         )
 
         # English sentence is already created as a translation above, not as a vocab entry
 
         # Process individual words
-        word_vocab_ids = process_individual_words(driver, sentence_data['arz_p'], sentence_vocab_id)
+        word_vocab_ids = process_individual_words(driver, sentence_data['arz_p'], sentence_vocab_id, shared_link_id)
 
         print(f'Successfully processed sentence: {sentence_data["sentence_arz"]}')
         return True

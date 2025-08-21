@@ -24,7 +24,7 @@ Note the following:
 - respect the logic from before for getting the language tag
 - *both* the sentences and the words in them are to be made `vocab` lines!
 - in each sentence, add the ids of the word-vocab that's in it to its `relatedVocab` (other way around isn't necessary, this relationship is automatically mutual)
-- for word vocab, add synonyms of it (see scraper doc) to its `relatedVocab`
+- for word vocab, add synonyms/related words of it (see scraper doc) to its `relatedVocab`
 - if you find a transliteration (for word or sentence), make a note with `noteType` "pronunciation" and link the note id to the relevant object. Add notes that you find for sentences/words as notes as well
 - every vocab should reference a `link`, that goes as follows:
   - label "www.lisaanmasry.org"

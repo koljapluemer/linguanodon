@@ -1,45 +1,40 @@
-{"id": "1", "content": "the vegetables are rotten because of the humidity"}
-{"id": "2", "content": "greens", "notes": ["6", "7"]}
-{"id": "3", "content": "vegetable", "notes": ["8"]}
-{"id": "4", "content": "rotten", "notes": ["15"]}
-{"id": "5", "content": "because of", "notes": ["18"]}
-{"id": "6", "content": "by", "notes": ["19", "20"]}
-{"id": "7", "content": "through", "notes": ["21", "22"]}
-{"id": "8", "content": "humidity", "notes": ["25"]}
-{"id": "9", "content": "moisture", "notes": ["26"]}
-{"id": "10", "content": "just move because the time of your flight is approaching"}
-{"id": "11", "content": "barely", "notes": ["32"]}
-{"id": "12", "content": "just", "notes": ["33", "34"]}
-{"id": "13", "content": "move", "notes": ["43", "44"]}
-{"id": "14", "content": "for", "notes": ["49", "50"]}
-{"id": "15", "content": "because", "notes": ["51"]}
-{"id": "16", "content": "cos", "notes": ["52", "53"]}
-{"id": "17", "content": "time", "notes": ["60", "61"]}
-{"id": "18", "content": "flight", "notes": ["64", "65"]}
-{"id": "19", "content": "approach", "notes": ["72"]}
-{"id": "20", "content": "draw near (to)", "notes": ["73"]}
-{"id": "21", "content": "(get) close (to)", "notes": ["74"]}
-{"id": "22", "content": "the water tap is broken"}
-{"id": "23", "content": "tap", "notes": ["80"]}
-{"id": "24", "content": "faucet", "notes": ["81"]}
-{"id": "25", "content": "water", "notes": ["84"]}
-{"id": "26", "content": "break", "notes": ["91"]}
-{"id": "27", "content": "this shop opens from morning till afternoon"}
-{"id": "28", "content": "shop", "notes": ["97"]}
-{"id": "29", "content": "store", "notes": ["98", "99"]}
-{"id": "30", "content": "this", "notes": ["106", "107"]}
-{"id": "31", "content": "these", "notes": ["108"]}
-{"id": "32", "content": "that", "notes": ["109", "110"]}
-{"id": "33", "content": "open", "notes": ["119"]}
-{"id": "34", "content": "from", "notes": ["122", "123"]}
-{"id": "35", "content": "morning", "notes": ["128", "129"]}
-{"id": "36", "content": "till", "notes": ["132"]}
-{"id": "37", "content": "afternoon", "notes": ["135"]}
-{"id": "38", "content": "if you need anything, ask me"}
-{"id": "39", "content": "if", "notes": ["142", "143"]}
-{"id": "40", "content": "need", "notes": ["150", "151"]}
-{"id": "41", "content": "need (to)", "notes": ["152", "153"]}
-{"id": "42", "content": "anything", "notes": ["156"]}
-{"id": "43", "content": "ask", "notes": ["164", "165"]}
-{"id": "44", "content": "question", "notes": ["166"]}
-{"id": "45", "content": "me", "notes": ["171"]}
+{"id": "1", "content": "I need to (do some) marketing for my shop"}
+{"id": "2", "content": "need", "notes": ["8", "9"]}
+{"id": "3", "content": "need (to)", "notes": ["10", "11"]}
+{"id": "4", "content": "market", "notes": ["18"]}
+{"id": "5", "content": "advertise", "notes": ["19"]}
+{"id": "6", "content": "advocate", "notes": ["20"]}
+{"id": "7", "content": "shop", "notes": ["25"]}
+{"id": "8", "content": "store", "notes": ["26", "27"]}
+{"id": "9", "content": "belonging (to)", "notes": ["34"]}
+{"id": "10", "content": "belong (to)", "notes": ["35", "36"]}
+{"id": "11", "content": "me", "notes": ["41"]}
+{"id": "12", "content": "what is your weight?"}
+{"id": "13", "content": "weight", "notes": ["48"]}
+{"id": "14", "content": "your", "notes": ["55"]}
+{"id": "15", "content": "(to what) extent", "notes": ["58"]}
+{"id": "16", "content": "how much", "notes": ["59", "60"]}
+{"id": "17", "content": "Ahmed had a fight with Mohammed because he teased him a lot"}
+{"id": "18", "content": "fight (with)", "notes": ["73"]}
+{"id": "19", "content": "(have a) fight (with)", "notes": ["74"]}
+{"id": "20", "content": "for", "notes": ["87", "88"]}
+{"id": "21", "content": "because", "notes": ["89"]}
+{"id": "22", "content": "cos", "notes": ["90", "91"]}
+{"id": "23", "content": "he", "notes": ["94"]}
+{"id": "24", "content": "tease", "notes": ["103"]}
+{"id": "25", "content": "him", "notes": ["106"]}
+{"id": "26", "content": "very", "notes": ["111"]}
+{"id": "27", "content": "bloody", "notes": ["112", "113"]}
+{"id": "28", "content": "really", "notes": ["114", "115"]}
+{"id": "29", "content": "very much", "notes": ["116"]}
+{"id": "30", "content": "so (very)", "notes": ["117"]}
+{"id": "31", "content": "I wrote a shopping list for you"}
+{"id": "32", "content": "I", "notes": ["121"]}
+{"id": "33", "content": "type", "notes": ["130"]}
+{"id": "34", "content": "write", "notes": ["131"]}
+{"id": "35", "content": "you", "notes": ["142", "143"]}
+{"id": "36", "content": "shopping list", "notes": ["148"]}
+{"id": "37", "content": "her voice is very high"}
+{"id": "38", "content": "voice", "notes": ["160"]}
+{"id": "39", "content": "her", "notes": ["163", "164"]}
+{"id": "40", "content": "thin", "notes": ["173"]}
