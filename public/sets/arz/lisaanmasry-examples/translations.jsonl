@@ -1,46 +1,45 @@
-{"id": "1", "content": "step on the brakes otherwise you will hit the car in front of you"}
-{"id": "2", "content": "step (on)"}
-{"id": "3", "content": "trample (on)"}
-{"id": "4", "content": "brake"}
-{"id": "5", "content": "or else"}
-{"id": "6", "content": "(you had) better.. or..."}
-{"id": "7", "content": "otherwise", "notes": ["12"]}
-{"id": "8", "content": "hit", "notes": ["16"]}
-{"id": "9", "content": "bump"}
-{"id": "10", "content": "car"}
-{"id": "11", "content": "that", "notes": ["20"]}
-{"id": "12", "content": "which", "notes": ["21"]}
-{"id": "13", "content": "whatever"}
-{"id": "14", "content": "what"}
-{"id": "15", "content": "(the one) that"}
-{"id": "16", "content": "in front (of)"}
-{"id": "17", "content": "you", "notes": ["26"]}
-{"id": "18", "content": "I can't find my passport"}
-{"id": "19", "content": "cannot"}
-{"id": "20", "content": "find", "notes": ["32"]}
-{"id": "21", "content": "passport"}
-{"id": "22", "content": "belonging (to)"}
-{"id": "23", "content": "belong (to)", "notes": ["38"]}
-{"id": "24", "content": "me"}
-{"id": "25", "content": "she is sick, she has a cold"}
-{"id": "26", "content": "she"}
-{"id": "27", "content": "ill", "notes": ["46"]}
-{"id": "28", "content": "sick", "notes": ["47"]}
-{"id": "29", "content": "have", "notes": ["49"]}
-{"id": "30", "content": "her", "notes": ["53"]}
-{"id": "31", "content": "its", "notes": ["54"]}
-{"id": "32", "content": "cold", "notes": ["56"]}
-{"id": "33", "content": "they will study practically in college"}
-{"id": "34", "content": "learn"}
-{"id": "35", "content": "study"}
-{"id": "36", "content": "practically", "notes": ["63"]}
-{"id": "37", "content": "in practice"}
-{"id": "38", "content": "in"}
-{"id": "39", "content": "college"}
-{"id": "40", "content": "what were you thinking of, then?"}
-{"id": "41", "content": "then", "notes": ["69"]}
-{"id": "42", "content": "be"}
-{"id": "43", "content": "exist"}
-{"id": "44", "content": "was"}
-{"id": "45", "content": "will"}
-{"id": "46", "content": "think (of)"}
+{"id": "1", "content": "the vegetables are rotten because of the humidity"}
+{"id": "2", "content": "greens", "notes": ["6", "7"]}
+{"id": "3", "content": "vegetable", "notes": ["8"]}
+{"id": "4", "content": "rotten", "notes": ["15"]}
+{"id": "5", "content": "because of", "notes": ["18"]}
+{"id": "6", "content": "by", "notes": ["19", "20"]}
+{"id": "7", "content": "through", "notes": ["21", "22"]}
+{"id": "8", "content": "humidity", "notes": ["25"]}
+{"id": "9", "content": "moisture", "notes": ["26"]}
+{"id": "10", "content": "just move because the time of your flight is approaching"}
+{"id": "11", "content": "barely", "notes": ["32"]}
+{"id": "12", "content": "just", "notes": ["33", "34"]}
+{"id": "13", "content": "move", "notes": ["43", "44"]}
+{"id": "14", "content": "for", "notes": ["49", "50"]}
+{"id": "15", "content": "because", "notes": ["51"]}
+{"id": "16", "content": "cos", "notes": ["52", "53"]}
+{"id": "17", "content": "time", "notes": ["60", "61"]}
+{"id": "18", "content": "flight", "notes": ["64", "65"]}
+{"id": "19", "content": "approach", "notes": ["72"]}
+{"id": "20", "content": "draw near (to)", "notes": ["73"]}
+{"id": "21", "content": "(get) close (to)", "notes": ["74"]}
+{"id": "22", "content": "the water tap is broken"}
+{"id": "23", "content": "tap", "notes": ["80"]}
+{"id": "24", "content": "faucet", "notes": ["81"]}
+{"id": "25", "content": "water", "notes": ["84"]}
+{"id": "26", "content": "break", "notes": ["91"]}
+{"id": "27", "content": "this shop opens from morning till afternoon"}
+{"id": "28", "content": "shop", "notes": ["97"]}
+{"id": "29", "content": "store", "notes": ["98", "99"]}
+{"id": "30", "content": "this", "notes": ["106", "107"]}
+{"id": "31", "content": "these", "notes": ["108"]}
+{"id": "32", "content": "that", "notes": ["109", "110"]}
+{"id": "33", "content": "open", "notes": ["119"]}
+{"id": "34", "content": "from", "notes": ["122", "123"]}
+{"id": "35", "content": "morning", "notes": ["128", "129"]}
+{"id": "36", "content": "till", "notes": ["132"]}
+{"id": "37", "content": "afternoon", "notes": ["135"]}
+{"id": "38", "content": "if you need anything, ask me"}
+{"id": "39", "content": "if", "notes": ["142", "143"]}
+{"id": "40", "content": "need", "notes": ["150", "151"]}
+{"id": "41", "content": "need (to)", "notes": ["152", "153"]}
+{"id": "42", "content": "anything", "notes": ["156"]}
+{"id": "43", "content": "ask", "notes": ["164", "165"]}
+{"id": "44", "content": "question", "notes": ["166"]}
+{"id": "45", "content": "me", "notes": ["171"]}

@@ -279,6 +279,11 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type):
                 if form_transliteration:
                     pronunciation_note_id = create_note(form_transliteration, "pronunciation")
                     notes.append(pronunciation_note_id)
+                
+                # Add linguistic type note
+                if word_base_type:
+                    linguistic_type_note_id = create_note(word_base_type, "linguistic type", True)
+                    notes.append(linguistic_type_note_id)
 
                 # Create link for this word form
                 # Generate word URL based on the old scraper pattern
@@ -335,6 +340,11 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type):
                 if form_note:
                     note_id = create_note(form_note)
                     notes.append(note_id)
+                
+                # Add linguistic type note from form_type
+                if form_type:
+                    linguistic_type_note_id = create_note(form_type, "linguistic type", True)
+                    notes.append(linguistic_type_note_id)
 
                 # Create translation entry
                 translation_id = create_translation(form_en, notes if notes else None)
