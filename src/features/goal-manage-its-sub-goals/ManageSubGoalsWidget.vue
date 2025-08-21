@@ -77,7 +77,7 @@ async function addSubGoal() {
   
   const newSubGoal = await goalRepo.create({
     title: newSubGoalTitle.value.trim(),
-    parentGoal: props.goal.uid,
+    language: props.goal.language,
     subGoals: [],
     vocab: [],
     notes: [],

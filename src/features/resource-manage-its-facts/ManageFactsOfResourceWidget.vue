@@ -12,7 +12,7 @@
 import { ref, inject, onMounted } from 'vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import FactCardGroupForm from '@/entities/factCards/FactCardGroupForm.vue';
+import FactCardGroupForm from '@/entities/fact-cards/FactCardGroupForm.vue';
 
 const props = defineProps<{
   resourceUid: string;

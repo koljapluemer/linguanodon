@@ -107,6 +107,7 @@ async function downloadVocabSet(name: string) {
           // Create new translation with note UIDs
           const translationData: Omit<TranslationData, 'uid' | 'origins'> = {
             content: remoteTranslation.content,
+            priority: 1,
             notes: translationNoteUids
           };
           

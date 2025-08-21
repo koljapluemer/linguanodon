@@ -2,7 +2,7 @@ import { VocabRepo } from '@/entities/vocab/VocabRepo';
 import { TranslationRepo } from '@/entities/translations/TranslationRepo';
 import { GoalRepo } from '@/entities/goals/GoalRepo';
 import { NoteRepo } from '@/entities/notes/NoteRepo';
-import { FactCardRepo } from '@/entities/factCards/FactCardRepo';
+import { FactCardRepo } from '@/entities/fact-cards/FactCardRepo';
 import { ResourceRepo } from '@/entities/resources/ResourceRepo';
 import { ImmersionContentRepo } from '@/entities/immersion-content/ImmersionContentRepo';
 import { TaskRepo } from '@/entities/tasks/TaskRepo';

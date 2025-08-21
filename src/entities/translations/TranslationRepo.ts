@@ -29,6 +29,7 @@ export class TranslationRepo implements TranslationRepoContract {
     const translationToSave: TranslationData = {
       uid: crypto.randomUUID(),
       content: translation.content,
+      priority: translation.priority,
       notes: translation.notes,
       origins: []
     };

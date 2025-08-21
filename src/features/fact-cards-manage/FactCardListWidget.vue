@@ -116,8 +116,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, inject } from 'vue';
-import type { FactCardRepoContract } from '@/entities/factCards/FactCardRepoContract';
-import type { FactCardData } from '@/entities/factCards/FactCardData';
+import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
 import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
 

@@ -9,4 +9,5 @@ export interface GoalRepoContract {
   getIncompleteGoals(): Promise<GoalData[]>;
   getSubGoals(parentId: string): Promise<GoalData[]>;
   getRootGoals(): Promise<GoalData[]>; // goals without parent
+  getParentGoal(goalId: string): Promise<GoalData | undefined>;
 }

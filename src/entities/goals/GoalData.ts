@@ -1,5 +1,6 @@
 export interface GoalData {
   uid: string;
+  language: string;
   title: string;
   doNotPractice?: boolean;
   subGoals: string[]; // array of uids of other goals
@@ -9,7 +10,6 @@ export interface GoalData {
   notes: string[]; // uids of NoteData
 
   prio?: number;
-  parentGoal?: string; // uid of parent goal (legacy field - to be removed)
 
   lastShownAt?: Date;
 

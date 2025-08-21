@@ -3,6 +3,16 @@
     <h2 class="text-lg font-semibold">Goal Details</h2>
     
     <div class="flex flex-col space-y-1">
+      <label class="text-sm font-medium">Language</label>
+      <LanguageSelect
+        v-model="selectedLanguage"
+        class="select select-bordered w-full"
+        required
+        @update:modelValue="saveGoal"
+      />
+    </div>
+
+    <div class="flex flex-col space-y-1">
       <label class="text-sm font-medium">Goal Title</label>
       <div class="flex items-center gap-2">
         <span class="text-sm text-gray-600">I want to be able to</span>
@@ -27,6 +37,7 @@
 import { ref, inject, watch } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
+import LanguageSelect from '@/entities/languages/LanguageSelect.vue';
 
 const props = defineProps<{
   goal: GoalData;
@@ -39,10 +50,12 @@ const emit = defineEmits<{
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 
 const goalTitle = ref(props.goal.title);
+const selectedLanguage = ref(props.goal.language);
 const saving = ref(false);
 
 watch(() => props.goal, (newGoal) => {
   goalTitle.value = newGoal.title;
+  selectedLanguage.value = newGoal.language;
 }, { immediate: true });
 
 async function saveGoal() {
@@ -56,12 +69,14 @@ async function saveGoal() {
     if (props.goal.uid) {
       // Update existing goal
       updatedGoal = await goalRepo.update(props.goal.uid, {
-        title: goalTitle.value.trim()
+        title: goalTitle.value.trim(),
+        language: selectedLanguage.value
       });
     } else {
       // Create new goal
       updatedGoal = await goalRepo.create({
         title: goalTitle.value.trim(),
+        language: selectedLanguage.value,
         subGoals: [],
         vocab: [],
         notes: [],

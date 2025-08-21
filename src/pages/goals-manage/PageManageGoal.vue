@@ -90,6 +90,7 @@ async function loadGoal() {
     goal.value = {
       uid: '',
       title: '',
+      language: '',
       subGoals: [],
       tasks: [],
       vocab: [],

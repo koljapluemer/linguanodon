@@ -32,22 +32,6 @@ export class GoalRepo implements GoalRepoContract {
   }
 
   async delete(id: string): Promise<void> {
-    // Also remove this goal from any parent's subGoals array
-    const goal = await this.getById(id);
-    if (goal?.parentGoal) {
-      const parent = await this.getById(goal.parentGoal);
-      if (parent) {
-        const updatedSubGoals = parent.subGoals.filter(subId => subId !== id);
-        await this.update(goal.parentGoal, { subGoals: updatedSubGoals });
-      }
-    }
-
-    // Remove parent reference from all sub-goals
-    const subGoals = await this.getSubGoals(id);
-    for (const subGoal of subGoals) {
-      await this.update(subGoal.uid, { parentGoal: undefined });
-    }
-
     await goalStorage.goals.delete(id);
   }
 
@@ -57,14 +41,26 @@ export class GoalRepo implements GoalRepoContract {
   }
 
   async getSubGoals(parentId: string): Promise<GoalData[]> {
-    return await goalStorage.goals
-      .where('parentGoal')
-      .equals(parentId)
-      .toArray();
+    const parentGoal = await this.getById(parentId);
+    if (!parentGoal) return [];
+    
+    const subGoalPromises = parentGoal.subGoals.map(id => this.getById(id));
+    const subGoals = await Promise.all(subGoalPromises);
+    
+    return subGoals.filter((goal): goal is GoalData => goal !== undefined);
   }
 
   async getRootGoals(): Promise<GoalData[]> {
-    const allGoals = await goalStorage.goals.toArray();
-    return allGoals.filter(goal => goal.parentGoal === undefined);
+    return await goalStorage.goals
+      .where('subGoals')
+      .equals([])
+      .toArray();
+  }
+
+  async getParentGoal(goalId: string): Promise<GoalData | undefined> {
+    return await goalStorage.goals
+      .where('subGoals')
+      .anyOf([goalId])
+      .first();
   }
 }

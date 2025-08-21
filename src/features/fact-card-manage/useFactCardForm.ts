@@ -1,7 +1,7 @@
 import { ref, computed, inject, watch } from 'vue';
-import type { FactCardRepoContract } from '@/entities/factCards/FactCardRepoContract';
+import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { FactCardData } from '@/entities/factCards/FactCardData';
+import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { FactCardFormState, FactCardFormData } from './types';
 import { factCardDataToFormData, formDataToFactCardData } from './types';

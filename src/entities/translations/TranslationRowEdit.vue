@@ -55,6 +55,7 @@ function save() {
   
   const translationToSave: Omit<TranslationData, 'uid' | 'origins'> = {
     content: editTranslation.value.content.trim(),
+    priority: 1,
     notes: editTranslation.value.notes || []
   };
   

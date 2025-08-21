@@ -1,4 +1,4 @@
-import type { FactCardData } from '@/entities/factCards/FactCardData';
+import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { NoteData } from '@/entities/notes/NoteData';
 
 export interface FactCardFormData {
