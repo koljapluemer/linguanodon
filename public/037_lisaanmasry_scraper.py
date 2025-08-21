@@ -126,7 +126,13 @@ def create_note(content, note_type=None, show_before_exercise=None):
     return note_entry["id"]
 
 def create_translation(content, notes=None):
-    """Create a translation entry and return its ID"""
+    """Create a translation entry and return its ID, or return existing ID if duplicate content"""
+    # Check if translation with this content already exists
+    for existing in translation_data:
+        if existing["content"] == content:
+            return existing["id"]
+    
+    # Create new translation
     translation_entry = {
         "id": get_next_translation_id(),
         "content": content
@@ -138,7 +144,42 @@ def create_translation(content, notes=None):
     return translation_entry["id"]
 
 def create_vocab(language, content, notes=None, translations=None, links=None, related_vocab=None):
-    """Create a vocab entry and return its ID"""
+    """Create a vocab entry and return its ID, or return existing ID if duplicate content+language"""
+    # Check if vocab with this content+language already exists
+    for existing in vocab_data:
+        if existing["content"] == content and existing["language"] == language:
+            # Update existing entry with new relationships
+            if translations:
+                if "translations" not in existing:
+                    existing["translations"] = []
+                for trans_id in translations:
+                    if trans_id not in existing["translations"]:
+                        existing["translations"].append(trans_id)
+            
+            if links:
+                if "links" not in existing:
+                    existing["links"] = []
+                for link_id in links:
+                    if link_id not in existing["links"]:
+                        existing["links"].append(link_id)
+            
+            if related_vocab:
+                if "relatedVocab" not in existing:
+                    existing["relatedVocab"] = []
+                for vocab_id in related_vocab:
+                    if vocab_id not in existing["relatedVocab"]:
+                        existing["relatedVocab"].append(vocab_id)
+            
+            if notes:
+                if "notes" not in existing:
+                    existing["notes"] = []
+                for note_id in notes:
+                    if note_id not in existing["notes"]:
+                        existing["notes"].append(note_id)
+            
+            return existing["id"]
+    
+    # Create new vocab entry
     vocab_entry = {
         "id": get_next_vocab_id(),
         "language": language,
@@ -307,16 +348,15 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type):
                     "Non-Commercial, Credit Required"
                 )
 
-                # Create vocab entry for this meaning
-                vocab_id = create_vocab(
-                    language="en",
-                    content=form_en,
-                    notes=notes if notes else None,
-                    translations=form_vocab_ids,  # Link to all forms
-                    links=[link_id],
-                    related_vocab=meaning_vocab_ids  # Will be updated after all meanings are processed
-                )
-                meaning_vocab_ids.append(vocab_id)
+                # English meanings are translations, not vocab entries
+                # Update the Arabic forms to reference this translation
+                for form_vocab_id in form_vocab_ids:
+                    for vocab_entry in vocab_data:
+                        if vocab_entry["id"] == form_vocab_id:
+                            if "translations" not in vocab_entry:
+                                vocab_entry["translations"] = []
+                            vocab_entry["translations"].append(translation_id)
+                            break
                 
             except (NoSuchElementException, StaleElementReferenceException) as e:
                 print(f'Error processing meaning row: {e}')
@@ -325,16 +365,7 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type):
     except (NoSuchElementException, TimeoutException) as e:
         print(f'No meanings table found: {e}')
 
-    # Update related vocab for meaning entries (synonyms)
-    for i, meaning_id in enumerate(meaning_vocab_ids):
-        other_meanings = [mid for j, mid in enumerate(meaning_vocab_ids) if i != j]
-        # Find the vocab entry and update it
-        for vocab_entry in vocab_data:
-            if vocab_entry["id"] == meaning_id:
-                vocab_entry["relatedVocab"] = other_meanings
-                break
-
-    return form_vocab_ids, meaning_vocab_ids
+    return form_vocab_ids, []  # No meaning vocab IDs since English meanings are translations
 
 def process_individual_words(driver, arz_p, sentence_vocab_id):
     """Process individual words in the sentence"""
@@ -371,11 +402,10 @@ def process_individual_words(driver, arz_p, sentence_vocab_id):
                 continue
 
             # Process forms and meanings for this word
-            form_vocab_ids, meaning_vocab_ids = process_word_forms_and_meanings(driver, word_lang, word_base_type)
+            form_vocab_ids, _ = process_word_forms_and_meanings(driver, word_lang, word_base_type)
             
-            # Add all form and meaning vocab IDs to the word list
+            # Add only form vocab IDs to the word list (meanings are translations)
             word_vocab_ids.extend(form_vocab_ids)
-            word_vocab_ids.extend(meaning_vocab_ids)
                 
         except Exception as e:
             print(f'Error processing word {i+1}: {e}')
@@ -432,12 +462,7 @@ def scrape_sentence(driver, url):
             links=[sentence_link_id]
         )
 
-        # Create vocab entry for English sentence
-        en_sentence_vocab_id = create_vocab(
-            language="en", 
-            content=sentence_data['sentence_en'],
-            links=[sentence_link_id]
-        )
+        # English sentence is already created as a translation above, not as a vocab entry
 
         # Process individual words
         word_vocab_ids = process_individual_words(driver, sentence_data['arz_p'], sentence_vocab_id)

@@ -1,110 +1,58 @@
-{"id": "1", "language": "arz", "content": "نـَتا َئـِج ا ِلإنتـِخا َبا َت تـِذا َع عـَلى ا ِلهـَوا َء مـُبا َشـَر ِةً", "notes": ["1"], "translations": ["1"], "links": ["1"], "relatedVocab": ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26"]}
-{"id": "2", "language": "en", "content": "the election results were announced on air live [immediately]", "links": ["1"]}
-{"id": "3", "language": "arb", "content": "نـَتيجـَة", "notes": ["2"], "links": ["2"]}
-{"id": "4", "language": "arb", "content": "نـِتا َيـِج", "notes": ["3"], "links": ["3"]}
-{"id": "5", "language": "en", "content": "outcome", "translations": ["3", "4"], "links": ["4"], "relatedVocab": ["6"]}
-{"id": "6", "language": "en", "content": "result", "translations": ["3", "4"], "links": ["5"], "relatedVocab": ["5"]}
-{"id": "7", "language": "arb", "content": "إنتـِخا َب", "notes": ["4"], "links": ["6"]}
-{"id": "8", "language": "arb", "content": "إنتـِخا َبا َت", "notes": ["5"], "links": ["7"]}
-{"id": "9", "language": "en", "content": "election", "translations": ["7", "8"], "links": ["8"], "relatedVocab": []}
-{"id": "10", "language": "arz", "content": "ذا َع", "notes": ["6"], "links": ["9"]}
-{"id": "11", "language": "arz", "content": "يـِذيع", "notes": ["7"], "links": ["10"]}
-{"id": "12", "language": "arz", "content": "ذا َيـِع", "notes": ["8"], "links": ["11"]}
-{"id": "13", "language": "arz", "content": "مـِتذا َع", "notes": ["9"], "links": ["12"]}
-{"id": "14", "language": "en", "content": "announce", "notes": ["10"], "translations": ["10", "11", "12", "13"], "links": ["13"], "relatedVocab": ["15", "16"]}
-{"id": "15", "language": "en", "content": "publish", "translations": ["10", "11", "12", "13"], "links": ["14"], "relatedVocab": ["14", "16"]}
-{"id": "16", "language": "en", "content": "broadcast", "translations": ["10", "11", "12", "13"], "links": ["15"], "relatedVocab": ["14", "15"]}
-{"id": "17", "language": "arb", "content": "عـَلى", "notes": ["11"], "links": ["16"]}
-{"id": "18", "language": "en", "content": "on", "notes": ["12"], "translations": ["17"], "links": ["17"], "relatedVocab": ["19"]}
-{"id": "19", "language": "en", "content": "onto", "translations": ["17"], "links": ["18"], "relatedVocab": ["18"]}
-{"id": "20", "language": "arb", "content": "هـَوا َء", "notes": ["13"], "links": ["19"]}
-{"id": "21", "language": "arb", "content": "هـَوى", "notes": ["14"], "links": ["20"]}
-{"id": "22", "language": "en", "content": "air", "translations": ["20", "21"], "links": ["21"], "relatedVocab": ["23"]}
-{"id": "23", "language": "en", "content": "wind", "translations": ["20", "21"], "links": ["22"], "relatedVocab": ["22"]}
-{"id": "24", "language": "arb", "content": "مـُبا َشر َةً", "notes": ["15"], "links": ["23"]}
-{"id": "25", "language": "en", "content": "immediately", "translations": ["24"], "links": ["24"], "relatedVocab": ["26"]}
-{"id": "26", "language": "en", "content": "directly", "notes": ["16"], "translations": ["24"], "links": ["25"], "relatedVocab": ["25"]}
-{"id": "27", "language": "arz", "content": "هـَدّي نـَفسـَك", "notes": ["17"], "translations": ["14"], "links": ["26"], "relatedVocab": ["29", "30", "31", "32", "33", "34", "35", "36"]}
-{"id": "28", "language": "en", "content": "calm yourself down!", "links": ["26"]}
-{"id": "29", "language": "arz", "content": "هـَدّى", "notes": ["18"], "links": ["27"]}
-{"id": "30", "language": "arz", "content": "يـِهـَدّي", "notes": ["19"], "links": ["28"]}
-{"id": "31", "language": "en", "content": "calm (so.) down", "translations": ["29", "30"], "links": ["29"], "relatedVocab": []}
-{"id": "32", "language": "arb", "content": "نـَفس َك", "notes": ["20"], "links": ["30"]}
-{"id": "33", "language": "arb", "content": "نـَفس ِك", "notes": ["21"], "links": ["31"]}
-{"id": "34", "language": "arb", "content": "نـَفس ُكوا", "notes": ["22"], "links": ["32"]}
-{"id": "35", "language": "en", "content": "yourself", "translations": ["32", "33", "34"], "links": ["33"], "relatedVocab": ["36"]}
-{"id": "36", "language": "en", "content": "nafs", "translations": ["32", "33", "34"], "links": ["34"], "relatedVocab": ["35"]}
-{"id": "37", "language": "arz", "content": "جـَوا َز ا ِلمـَصر ِيين و َ ا ِلأجا َنـِب بـِيبقى ر َسمي عـَن طـَريق ا ِلمـَحكـَمـَة", "notes": ["23"], "translations": ["18"], "links": ["35"], "relatedVocab": ["39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71"]}
-{"id": "38", "language": "en", "content": "marriage of Egyptians and foreigners becomes official (only) through the court", "links": ["35"]}
-{"id": "39", "language": "arz", "content": "جـَوا َز", "notes": ["24"], "links": ["36"]}
-{"id": "40", "language": "en", "content": "marriage", "translations": ["39"], "links": ["37"], "relatedVocab": ["41"]}
-{"id": "41", "language": "en", "content": "wedding", "translations": ["39"], "links": ["38"], "relatedVocab": ["40"]}
-{"id": "42", "language": "arb", "content": "مـَصري", "notes": ["25"], "links": ["39"]}
-{"id": "43", "language": "arb", "content": "مـَصر ِييـَة", "notes": ["26"], "links": ["40"]}
-{"id": "44", "language": "arb", "content": "مـَصر ِيين", "notes": ["27"], "links": ["41"]}
-{"id": "45", "language": "en", "content": "Egyptian", "translations": ["42", "43", "44"], "links": ["42"], "relatedVocab": []}
-{"id": "46", "language": "arb", "content": "وَ", "notes": ["28"], "links": ["43"]}
-{"id": "47", "language": "en", "content": "and", "notes": ["29"], "translations": ["46"], "links": ["44"], "relatedVocab": []}
-{"id": "48", "language": "arb", "content": "أجنـَبي", "notes": ["30"], "links": ["45"]}
-{"id": "49", "language": "arb", "content": "أجا َنـِب", "notes": ["31"], "links": ["46"]}
-{"id": "50", "language": "en", "content": "foreigner", "translations": ["48", "49"], "links": ["47"], "relatedVocab": []}
-{"id": "51", "language": "arz", "content": "بـَقى", "notes": ["32"], "links": ["48"]}
-{"id": "52", "language": "arz", "content": "يـِبقى", "notes": ["33"], "links": ["49"]}
-{"id": "53", "language": "en", "content": "become", "translations": ["51", "52"], "links": ["50"], "relatedVocab": ["54", "55", "56", "57"]}
-{"id": "54", "language": "en", "content": "turn (into)", "notes": ["34"], "translations": ["51", "52"], "links": ["51"], "relatedVocab": ["53", "55", "56", "57"]}
-{"id": "55", "language": "en", "content": "start (to)", "translations": ["51", "52"], "links": ["52"], "relatedVocab": ["53", "54", "56", "57"]}
-{"id": "56", "language": "en", "content": "turn out", "notes": ["35"], "translations": ["51", "52"], "links": ["53"], "relatedVocab": ["53", "54", "55", "57"]}
-{"id": "57", "language": "en", "content": "get", "notes": ["36"], "translations": ["51", "52"], "links": ["54"], "relatedVocab": ["53", "54", "55", "56"]}
-{"id": "58", "language": "arb", "content": "ر َسمي", "notes": ["37"], "links": ["55"]}
-{"id": "59", "language": "arb", "content": "ر َسمـِييـَة", "notes": ["38"], "links": ["56"]}
-{"id": "60", "language": "arb", "content": "ر َسمـِيين", "notes": ["39"], "links": ["57"]}
-{"id": "61", "language": "en", "content": "official", "translations": ["58", "59", "60"], "links": ["58"], "relatedVocab": []}
-{"id": "62", "language": "arb", "content": "عـَن طـَريق", "notes": ["40"], "links": ["59"]}
-{"id": "63", "language": "en", "content": "through", "translations": ["62"], "links": ["60"], "relatedVocab": ["64"]}
-{"id": "64", "language": "en", "content": "via", "translations": ["62"], "links": ["61"], "relatedVocab": ["63"]}
-{"id": "65", "language": "arb", "content": "عـَن طـَريق", "notes": ["41"], "links": ["62"]}
-{"id": "66", "language": "en", "content": "through", "translations": ["65"], "links": ["63"], "relatedVocab": ["67"]}
-{"id": "67", "language": "en", "content": "via", "translations": ["65"], "links": ["64"], "relatedVocab": ["66"]}
-{"id": "68", "language": "arb", "content": "مـَحكـَمـَة", "notes": ["42"], "links": ["65"]}
-{"id": "69", "language": "arb", "content": "مـَحا َكـِم", "notes": ["43"], "links": ["66"]}
-{"id": "70", "language": "en", "content": "court", "notes": ["44"], "translations": ["68", "69"], "links": ["67"], "relatedVocab": ["71"]}
-{"id": "71", "language": "en", "content": "tribunal", "translations": ["68", "69"], "links": ["68"], "relatedVocab": ["70"]}
-{"id": "72", "language": "arz", "content": "هـُوّ َ نـِضـِف بـَعد ما َ إستـِحـَمّا", "notes": ["45", "46"], "translations": ["36"], "links": ["69"], "relatedVocab": ["74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89"]}
-{"id": "73", "language": "en", "content": "he became clean after he showered", "links": ["69"]}
-{"id": "74", "language": "arb", "content": "هـُوَّ", "notes": ["47"], "links": ["70"]}
-{"id": "75", "language": "en", "content": "he", "translations": ["74"], "links": ["71"], "relatedVocab": []}
-{"id": "76", "language": "arz", "content": "نـِضـِف", "notes": ["48"], "links": ["72"]}
-{"id": "77", "language": "arz", "content": "يـِنضـَف", "notes": ["49"], "links": ["73"]}
-{"id": "78", "language": "en", "content": "(become) clean", "translations": ["76", "77"], "links": ["74"], "relatedVocab": []}
-{"id": "79", "language": "arb", "content": "بـَعد ما", "notes": ["50"], "links": ["75"]}
-{"id": "80", "language": "en", "content": "after", "translations": ["79"], "links": ["76"], "relatedVocab": ["81", "82"]}
-{"id": "81", "language": "en", "content": "once", "notes": ["51"], "translations": ["79"], "links": ["77"], "relatedVocab": ["80", "82"]}
-{"id": "82", "language": "en", "content": "when", "notes": ["52"], "translations": ["79"], "links": ["78"], "relatedVocab": ["80", "81"]}
-{"id": "83", "language": "arb", "content": "بـَعد ما", "notes": ["53"], "links": ["79"]}
-{"id": "84", "language": "en", "content": "after", "translations": ["83"], "links": ["80"], "relatedVocab": ["85", "86"]}
-{"id": "85", "language": "en", "content": "once", "notes": ["54"], "translations": ["83"], "links": ["81"], "relatedVocab": ["84", "86"]}
-{"id": "86", "language": "en", "content": "when", "notes": ["55"], "translations": ["83"], "links": ["82"], "relatedVocab": ["84", "85"]}
-{"id": "87", "language": "arb", "content": "إستـَحـَمّا", "notes": ["56"], "links": ["83"]}
-{"id": "88", "language": "arb", "content": "يـِستـَحـَمّا", "notes": ["57"], "links": ["84"]}
-{"id": "89", "language": "en", "content": "bathe", "translations": ["87", "88"], "links": ["85"], "relatedVocab": []}
-{"id": "90", "language": "arz", "content": "لـَو مـِشيت ب ِخـَطّ مـُستسقيم هـَتـِوصـَل أسر َع", "notes": ["58"], "translations": ["46"], "links": ["86"], "relatedVocab": ["92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110"]}
-{"id": "91", "language": "en", "content": "if you walk straight you will arrive faster", "links": ["86"]}
-{"id": "92", "language": "arb", "content": "لـَو", "notes": ["59"], "links": ["87"]}
-{"id": "93", "language": "en", "content": "if", "notes": ["60"], "translations": ["92"], "links": ["88"], "relatedVocab": []}
-{"id": "94", "language": "arz", "content": "مـِشي", "notes": ["61"], "links": ["89"]}
-{"id": "95", "language": "arz", "content": "يـِمشي", "notes": ["62"], "links": ["90"]}
-{"id": "96", "language": "arz", "content": "ما َشي", "notes": ["63"], "links": ["91"]}
-{"id": "97", "language": "arz", "content": "مـَمشي", "notes": ["64"], "links": ["92"]}
-{"id": "98", "language": "en", "content": "walk", "translations": ["94", "95", "96", "97"], "links": ["93"], "relatedVocab": ["99"]}
-{"id": "99", "language": "en", "content": "step", "translations": ["94", "95", "96", "97"], "links": ["94"], "relatedVocab": ["98"]}
-{"id": "100", "language": "arb", "content": "ب ِخـَطّ مـُستـَقيم", "notes": ["65"], "links": ["95"]}
-{"id": "101", "language": "en", "content": "straight", "notes": ["66"], "translations": ["100"], "links": ["96"], "relatedVocab": []}
-{"id": "102", "language": "arb", "content": "ب ِخـَطّ مـُستـَقيم", "notes": ["67"], "links": ["97"]}
-{"id": "103", "language": "en", "content": "straight", "notes": ["68"], "translations": ["102"], "links": ["98"], "relatedVocab": []}
-{"id": "104", "language": "arb", "content": "و َصـَل", "notes": ["69"], "links": ["99"]}
-{"id": "105", "language": "arb", "content": "يـِوصـَل", "notes": ["70"], "links": ["100"]}
-{"id": "106", "language": "arb", "content": "وا َصـِل", "notes": ["71"], "links": ["101"]}
-{"id": "107", "language": "en", "content": "arrive", "translations": ["104", "105", "106"], "links": ["102"], "relatedVocab": ["108"]}
-{"id": "108", "language": "en", "content": "reach", "translations": ["104", "105", "106"], "links": ["103"], "relatedVocab": ["107"]}
-{"id": "109", "language": "arb", "content": "أسر َع", "notes": ["72"], "links": ["104"]}
-{"id": "110", "language": "en", "content": "faster", "translations": ["109"], "links": ["105"], "relatedVocab": []}
+{"id": "1", "language": "arz", "content": "دوس عـَلى ا ِلفـَرا َمـِل لـَحسـَن تـُخبـَط ا ِلعـَر َبـِييـَة ا ِلـلي قـُدا َمـ ـــَك", "notes": ["1"], "translations": ["1"], "links": ["1"], "relatedVocab": ["2", "3", "4", "5", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"]}
+{"id": "2", "language": "arb", "content": "دا َس عـَلى", "notes": ["2", "6"], "links": ["2", "8"], "translations": ["2", "3", "2", "3"]}
+{"id": "3", "language": "arb", "content": "يـِدوس عـَلى", "notes": ["3", "7"], "links": ["3", "9"], "translations": ["2", "3", "2", "3"]}
+{"id": "4", "language": "arb", "content": "دا َيـِس", "notes": ["4", "8"], "links": ["4", "10"], "translations": ["2", "3", "2", "3"]}
+{"id": "5", "language": "arb", "content": "مـِتدا َس", "notes": ["5", "9"], "links": ["5", "11"], "translations": ["2", "3", "2", "3"]}
+{"id": "6", "language": "arb", "content": "فـَرا َمـِل", "notes": ["10"], "links": ["14"], "translations": ["4"]}
+{"id": "7", "language": "arz", "content": "لـَحسـَن", "notes": ["11"], "links": ["16"], "translations": ["5", "6", "7"]}
+{"id": "8", "language": "arz", "content": "خـَبـَط", "notes": ["13"], "links": ["20"], "translations": ["8", "9"]}
+{"id": "9", "language": "arz", "content": "يـِخبـَط", "notes": ["14"], "links": ["21"], "translations": ["8", "9"]}
+{"id": "10", "language": "arz", "content": "مـَخبوط", "notes": ["15"], "links": ["22"], "translations": ["8", "9"]}
+{"id": "11", "language": "arz", "content": "عـَر َبـِيـَة", "notes": ["17"], "links": ["25"], "translations": ["10"]}
+{"id": "12", "language": "arz", "content": "عـَر َبـِيا َت", "notes": ["18"], "links": ["26"], "translations": ["10"]}
+{"id": "13", "language": "arz", "content": "ا ِلـلي", "notes": ["19"], "links": ["28"], "translations": ["11", "12", "13", "14", "15"]}
+{"id": "14", "language": "arz", "content": "قـُدّا َم", "notes": ["22"], "links": ["34"], "translations": ["16"]}
+{"id": "15", "language": "arb", "content": "ــَك", "notes": ["23"], "links": ["36"], "translations": ["17"]}
+{"id": "16", "language": "arb", "content": "ــِك", "notes": ["24"], "links": ["37"], "translations": ["17"]}
+{"id": "17", "language": "arb", "content": "ـكـُم", "notes": ["25"], "links": ["38"], "translations": ["17"]}
+{"id": "18", "language": "arz", "content": "مـِش لا َقي ا ِلبـَسبور بـِتا َعـ ــي", "notes": ["27"], "translations": ["18"], "links": ["40"], "relatedVocab": ["19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"]}
+{"id": "19", "language": "arz", "content": "مـِش", "notes": ["28"], "links": ["41"], "translations": ["19"]}
+{"id": "20", "language": "arz", "content": "لـِقي", "notes": ["29"], "links": ["43"], "translations": ["20"]}
+{"id": "21", "language": "arz", "content": "يـِلقى", "notes": ["30"], "links": ["44"], "translations": ["20"]}
+{"id": "22", "language": "arz", "content": "لا َقي", "notes": ["31"], "links": ["45"], "translations": ["20"]}
+{"id": "23", "language": "arz", "content": "بـَسبور", "notes": ["33"], "links": ["47"], "translations": ["21"]}
+{"id": "24", "language": "arz", "content": "بـَسبورا َت", "notes": ["34"], "links": ["48"], "translations": ["21"]}
+{"id": "25", "language": "arz", "content": "بـِتا َع", "notes": ["35"], "links": ["50"], "translations": ["22", "23"]}
+{"id": "26", "language": "arz", "content": "بـِتا َعـِة", "notes": ["36"], "links": ["51"], "translations": ["22", "23"]}
+{"id": "27", "language": "arz", "content": "بـِتوع", "notes": ["37"], "links": ["52"], "translations": ["22", "23"]}
+{"id": "28", "language": "arz", "content": "ـي", "notes": ["39"], "links": ["55"], "translations": ["24"]}
+{"id": "29", "language": "arz", "content": "ـني", "notes": ["40"], "links": ["56"], "translations": ["24"]}
+{"id": "30", "language": "arz", "content": "هـِيي َ عـَيا َنـَة، عـَند َها َ بـَرد", "notes": ["41"], "translations": ["25"], "links": ["58"], "relatedVocab": ["31", "32", "33", "34", "35", "36", "37", "38"]}
+{"id": "31", "language": "arb", "content": "هـِييَ", "notes": ["42"], "links": ["59"], "translations": ["26"]}
+{"id": "32", "language": "arz", "content": "عـِييا َن", "notes": ["43"], "links": ["61"], "translations": ["27", "28"]}
+{"id": "33", "language": "arz", "content": "عـِييا َنـَة", "notes": ["44"], "links": ["62"], "translations": ["27", "28"]}
+{"id": "34", "language": "arz", "content": "عـِييا َنين", "notes": ["45"], "links": ["63"], "translations": ["27", "28"]}
+{"id": "35", "language": "arb", "content": "عـَند", "notes": ["48"], "links": ["66"], "translations": ["29", "29"]}
+{"id": "36", "language": "arz", "content": "ـها", "notes": ["51"], "links": ["69"], "translations": ["30", "31"]}
+{"id": "37", "language": "arz", "content": "ــَها", "notes": ["52"], "links": ["70"], "translations": ["30", "31"]}
+{"id": "38", "language": "arb", "content": "بـَرد", "notes": ["55"], "links": ["73"], "translations": ["32"]}
+{"id": "39", "language": "arz", "content": "هـَيـِدر ِسوا عـَمـَلـِيياً َ في ا ِلكـُلّـِييـَة", "notes": ["57"], "translations": ["33"], "links": ["75"], "relatedVocab": ["40", "41", "42", "43", "44", "45", "46", "47"]}
+{"id": "40", "language": "arb", "content": "د َر َس", "notes": ["58"], "links": ["76"], "translations": ["34", "35"]}
+{"id": "41", "language": "arb", "content": "يـِدر ِس", "notes": ["59"], "links": ["77"], "translations": ["34", "35"]}
+{"id": "42", "language": "arb", "content": "دا َر ِس", "notes": ["60"], "links": ["78"], "translations": ["34", "35"]}
+{"id": "43", "language": "arb", "content": "مـَدروس", "notes": ["61"], "links": ["79"], "translations": ["34", "35"]}
+{"id": "44", "language": "arb", "content": "عـَمـَلـِيياً َ", "notes": ["62"], "links": ["82"], "translations": ["36", "37"]}
+{"id": "45", "language": "arb", "content": "في", "notes": ["64"], "links": ["85"], "translations": ["38"]}
+{"id": "46", "language": "arb", "content": "كـُلّـِييـَة", "notes": ["65"], "links": ["87"], "translations": ["39"]}
+{"id": "47", "language": "arb", "content": "كـُلّـِيا َت", "notes": ["66"], "links": ["88"], "translations": ["39"]}
+{"id": "48", "language": "arz", "content": "أ ُمّا َل إنت َ كـُنت فا َكـِر إيه", "notes": ["67"], "translations": ["40"], "links": ["90"], "relatedVocab": ["49", "50", "51", "52", "53", "54", "55", "56", "57", "58"]}
+{"id": "49", "language": "arz", "content": "أ ُمّا َل", "notes": ["68"], "links": ["91"], "translations": ["41"]}
+{"id": "50", "language": "arb", "content": "إنتَ", "notes": ["70"], "links": ["93"], "translations": ["17"]}
+{"id": "51", "language": "arb", "content": "إنتِ", "notes": ["71"], "links": ["94"], "translations": ["17"]}
+{"id": "52", "language": "arb", "content": "إنتوا", "notes": ["72"], "links": ["95"], "translations": ["17"]}
+{"id": "53", "language": "arb", "content": "كا َن", "notes": ["74"], "links": ["97"], "translations": ["42", "43", "44", "45", "29"]}
+{"id": "54", "language": "arb", "content": "يـِكون", "notes": ["75"], "links": ["98"], "translations": ["42", "43", "44", "45", "29"]}
+{"id": "55", "language": "arz", "content": "فا َكـِر", "notes": ["77"], "links": ["104"], "translations": ["46"]}
+{"id": "56", "language": "arz", "content": "فا َكر َة", "notes": ["78"], "links": ["105"], "translations": ["46"]}
+{"id": "57", "language": "arz", "content": "فا َكرين", "notes": ["79"], "links": ["106"], "translations": ["46"]}
+{"id": "58", "language": "arz", "content": "إيه", "notes": ["80"], "links": ["108"], "translations": ["14"]}

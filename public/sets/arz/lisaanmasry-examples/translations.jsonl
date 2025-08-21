@@ -1,54 +1,46 @@
-{"id": "1", "content": "the election results were announced on air live [immediately]"}
-{"id": "2", "content": "outcome"}
-{"id": "3", "content": "result"}
-{"id": "4", "content": "election"}
-{"id": "5", "content": "announce", "notes": ["10"]}
-{"id": "6", "content": "publish"}
-{"id": "7", "content": "broadcast"}
-{"id": "8", "content": "on", "notes": ["12"]}
-{"id": "9", "content": "onto"}
-{"id": "10", "content": "air"}
-{"id": "11", "content": "wind"}
-{"id": "12", "content": "immediately"}
-{"id": "13", "content": "directly", "notes": ["16"]}
-{"id": "14", "content": "calm yourself down!"}
-{"id": "15", "content": "calm (so.) down"}
-{"id": "16", "content": "yourself"}
-{"id": "17", "content": "nafs"}
-{"id": "18", "content": "marriage of Egyptians and foreigners becomes official (only) through the court"}
-{"id": "19", "content": "marriage"}
-{"id": "20", "content": "wedding"}
-{"id": "21", "content": "Egyptian"}
-{"id": "22", "content": "and", "notes": ["29"]}
-{"id": "23", "content": "foreigner"}
-{"id": "24", "content": "become"}
-{"id": "25", "content": "turn (into)", "notes": ["34"]}
-{"id": "26", "content": "start (to)"}
-{"id": "27", "content": "turn out", "notes": ["35"]}
-{"id": "28", "content": "get", "notes": ["36"]}
-{"id": "29", "content": "official"}
-{"id": "30", "content": "through"}
-{"id": "31", "content": "via"}
-{"id": "32", "content": "through"}
-{"id": "33", "content": "via"}
-{"id": "34", "content": "court", "notes": ["44"]}
-{"id": "35", "content": "tribunal"}
-{"id": "36", "content": "he became clean after he showered"}
-{"id": "37", "content": "he"}
-{"id": "38", "content": "(become) clean"}
-{"id": "39", "content": "after"}
-{"id": "40", "content": "once", "notes": ["51"]}
-{"id": "41", "content": "when", "notes": ["52"]}
-{"id": "42", "content": "after"}
-{"id": "43", "content": "once", "notes": ["54"]}
-{"id": "44", "content": "when", "notes": ["55"]}
-{"id": "45", "content": "bathe"}
-{"id": "46", "content": "if you walk straight you will arrive faster"}
-{"id": "47", "content": "if", "notes": ["60"]}
-{"id": "48", "content": "walk"}
-{"id": "49", "content": "step"}
-{"id": "50", "content": "straight", "notes": ["66"]}
-{"id": "51", "content": "straight", "notes": ["68"]}
-{"id": "52", "content": "arrive"}
-{"id": "53", "content": "reach"}
-{"id": "54", "content": "faster"}
+{"id": "1", "content": "step on the brakes otherwise you will hit the car in front of you"}
+{"id": "2", "content": "step (on)"}
+{"id": "3", "content": "trample (on)"}
+{"id": "4", "content": "brake"}
+{"id": "5", "content": "or else"}
+{"id": "6", "content": "(you had) better.. or..."}
+{"id": "7", "content": "otherwise", "notes": ["12"]}
+{"id": "8", "content": "hit", "notes": ["16"]}
+{"id": "9", "content": "bump"}
+{"id": "10", "content": "car"}
+{"id": "11", "content": "that", "notes": ["20"]}
+{"id": "12", "content": "which", "notes": ["21"]}
+{"id": "13", "content": "whatever"}
+{"id": "14", "content": "what"}
+{"id": "15", "content": "(the one) that"}
+{"id": "16", "content": "in front (of)"}
+{"id": "17", "content": "you", "notes": ["26"]}
+{"id": "18", "content": "I can't find my passport"}
+{"id": "19", "content": "cannot"}
+{"id": "20", "content": "find", "notes": ["32"]}
+{"id": "21", "content": "passport"}
+{"id": "22", "content": "belonging (to)"}
+{"id": "23", "content": "belong (to)", "notes": ["38"]}
+{"id": "24", "content": "me"}
+{"id": "25", "content": "she is sick, she has a cold"}
+{"id": "26", "content": "she"}
+{"id": "27", "content": "ill", "notes": ["46"]}
+{"id": "28", "content": "sick", "notes": ["47"]}
+{"id": "29", "content": "have", "notes": ["49"]}
+{"id": "30", "content": "her", "notes": ["53"]}
+{"id": "31", "content": "its", "notes": ["54"]}
+{"id": "32", "content": "cold", "notes": ["56"]}
+{"id": "33", "content": "they will study practically in college"}
+{"id": "34", "content": "learn"}
+{"id": "35", "content": "study"}
+{"id": "36", "content": "practically", "notes": ["63"]}
+{"id": "37", "content": "in practice"}
+{"id": "38", "content": "in"}
+{"id": "39", "content": "college"}
+{"id": "40", "content": "what were you thinking of, then?"}
+{"id": "41", "content": "then", "notes": ["69"]}
+{"id": "42", "content": "be"}
+{"id": "43", "content": "exist"}
+{"id": "44", "content": "was"}
+{"id": "45", "content": "will"}
+{"id": "46", "content": "think (of)"}
