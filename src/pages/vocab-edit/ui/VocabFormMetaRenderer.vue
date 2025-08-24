@@ -51,11 +51,13 @@ import { ref, watch } from 'vue';
 import VocabFormCoreRenderer from './VocabFormCoreRenderer.vue';
 import VocabFormAdvancedPropsRenderer from './VocabFormAdvancedPropsRenderer.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
+import { Length } from '@/shared/Length';
 
 interface VocabFormData {
   id?: string;
   language: string;
   content: string;
+  length: keyof typeof Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;
