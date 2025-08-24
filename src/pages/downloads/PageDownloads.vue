@@ -93,6 +93,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 
 const selectedLanguage = ref('');
 const availableLanguages = ref<LanguageData[]>([]);
@@ -110,6 +111,7 @@ const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo')!;
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo')!;
+const taskRepo = inject<TaskRepoContract>('taskRepo')!;
 
 const remoteSetService = new UnifiedRemoteSetService(
   localSetRepo,
@@ -119,7 +121,8 @@ const remoteSetService = new UnifiedRemoteSetService(
   resourceRepo,
   immersionContentRepo,
   goalRepo,
-  factCardRepo
+  factCardRepo,
+  taskRepo
 );
 
 async function loadLanguages() {

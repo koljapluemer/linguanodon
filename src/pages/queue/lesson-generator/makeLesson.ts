@@ -56,13 +56,15 @@ export async function makeLesson(
     
     // Try each strategy until we get tasks or exhaust all options
     for (const strategy of shuffledStrategies) {
+      console.log(`Trying strategy: ${strategy.constructor.name}`);
       try {
         const tasks = await strategy.generateLesson(languageCodes);
+        console.log(`${strategy.constructor.name} returned ${tasks.length} tasks`);
         if (tasks.length > 0) {
           return tasks;
         }
       } catch (error) {
-        console.warn('Error with lesson strategy:', error);
+        console.error(`Error with lesson strategy ${strategy.constructor.name}:`, error);
         // Continue to next strategy
       }
     }

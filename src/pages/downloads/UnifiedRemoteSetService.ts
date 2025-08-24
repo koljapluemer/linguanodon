@@ -7,6 +7,11 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+
+import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
+import { UpdateResourceTasksController } from '@/features/resource-update-tasks/UpdateResourceTasksController';
+import { UpdateGoalTasksController } from '@/features/goal-update-tasks/UpdateGoalTasksController';
 
 import { vocabSchema } from '@/entities/remote-sets/validation/vocabSchema';
 import { translationSchema } from '@/entities/remote-sets/validation/translationSchema';
@@ -48,7 +53,8 @@ export class UnifiedRemoteSetService {
     private resourceRepo: ResourceRepoContract,
     private immersionContentRepo: ImmersionContentRepoContract,
     private goalRepo: GoalRepoContract,
-    private factCardRepo: FactCardRepoContract
+    private factCardRepo: FactCardRepoContract,
+    private taskRepo: TaskRepoContract
   ) {}
 
   async getAvailableLanguages(): Promise<string[]> {
@@ -97,6 +103,11 @@ export class UnifiedRemoteSetService {
     const immersionContentMap = new Map<string, string>(); // remote ID -> local UID
     const goalMap = new Map<string, string>(); // remote ID -> local UID
     const factCardMap = new Map<string, string>(); // remote ID -> local UID
+
+    // Track newly created entities for task generation
+    const newVocabUids: string[] = [];
+    const newResourceUids: string[] = [];
+    const newGoalUids: string[] = [];
 
     // Process links first (they're embedded, not stored as entities)
     if (setFiles.links) {
@@ -244,6 +255,7 @@ export class UnifiedRemoteSetService {
           };
           
           const savedVocab = await this.vocabRepo.saveVocab(localVocab);
+          newVocabUids.push(savedVocab.uid);
           if (vocabData.id) {
             vocabMap.set(vocabData.id, savedVocab.uid);
           }
@@ -270,6 +282,13 @@ export class UnifiedRemoteSetService {
           }
         }
       }
+    }
+
+    // Generate tasks for imported vocab
+    if (newVocabUids.length > 0) {
+      console.log(`Generating tasks for ${newVocabUids.length} newly imported vocab items...`);
+      const updateVocabTasksController = new UpdateVocabTasksController(this.vocabRepo, this.translationRepo, this.taskRepo, this.noteRepo);
+      await updateVocabTasksController.updateTasksForMultipleVocab(newVocabUids);
     }
 
     // Process fact cards
@@ -367,11 +386,19 @@ export class UnifiedRemoteSetService {
           };
           
           const savedResource = await this.resourceRepo.saveResource(localResource);
+          newResourceUids.push(savedResource.uid);
           if (resourceData.id) {
             resourceMap.set(resourceData.id, savedResource.uid);
           }
         }
       }
+    }
+
+    // Generate tasks for imported resources
+    if (newResourceUids.length > 0) {
+      console.log(`Generating tasks for ${newResourceUids.length} newly imported resources...`);
+      const updateResourceTasksController = new UpdateResourceTasksController(this.resourceRepo, this.taskRepo);
+      await updateResourceTasksController.createTasksForMultipleResources(newResourceUids);
     }
 
     // Process immersion content
@@ -477,11 +504,19 @@ export class UnifiedRemoteSetService {
           };
           
           const savedGoal = await this.goalRepo.create(localGoal);
+          newGoalUids.push(savedGoal.uid);
           if (goalData.id) {
             goalMap.set(goalData.id, savedGoal.uid);
           }
         }
       }
+    }
+
+    // Generate tasks for imported goals
+    if (newGoalUids.length > 0) {
+      console.log(`Generating tasks for ${newGoalUids.length} newly imported goals...`);
+      const updateGoalTasksController = new UpdateGoalTasksController(this.goalRepo, this.taskRepo);
+      await updateGoalTasksController.updateTasksForMultipleGoals(newGoalUids);
     }
   }
 
