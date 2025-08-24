@@ -7,6 +7,7 @@ import type { ImmersionContentRepoContract } from '@/entities/immersion-content/
 import { shuffleArray } from '@/shared/arrayUtils';
 import { DueVocabStrategy } from './flavors/makeLessonAroundDueVocab';
 import { NewVocabStrategy } from './flavors/makeLessonAroundNewVocab';
+import { RelatedVocabStrategy } from './flavors/makeLessonAroundRelatedVocab';
 import { ResourceExtractionStrategy } from './flavors/makeLessonAroundResourceExtraction';
 import { RandomImmersionContentStrategy } from './flavors/makeLessonAroundRandomImmersionContent';
 import { LowMasteryImmersionContentStrategy } from './flavors/makeLessonAroundLowMasteryImmersionContent';
@@ -43,6 +44,7 @@ export async function makeLesson(
     const allStrategies = [
       new DueVocabStrategy(dependencies),
       new NewVocabStrategy(dependencies),
+      new RelatedVocabStrategy(dependencies),
       new ResourceExtractionStrategy(dependencies),
       new RandomImmersionContentStrategy(dependencies),
       new LowMasteryImmersionContentStrategy(dependencies),
