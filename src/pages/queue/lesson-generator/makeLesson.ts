@@ -55,16 +55,19 @@ export async function makeLesson(
     const shuffledStrategies = shuffleArray([...allStrategies]);
     
     // Try each strategy until we get tasks or exhaust all options
+    console.log(`[LessonGenerator] Shuffled strategy order:`, shuffledStrategies.map(s => s.constructor.name));
+    
     for (const strategy of shuffledStrategies) {
-      console.log(`Trying strategy: ${strategy.constructor.name}`);
+      console.log(`[LessonGenerator] Trying strategy: ${strategy.constructor.name}`);
       try {
         const tasks = await strategy.generateLesson(languageCodes);
-        console.log(`${strategy.constructor.name} returned ${tasks.length} tasks`);
+        console.log(`[LessonGenerator] ${strategy.constructor.name} returned ${tasks.length} tasks`);
         if (tasks.length > 0) {
+          console.log(`[LessonGenerator] Selected strategy: ${strategy.constructor.name} - Generated task types:`, tasks.map(t => t.taskType));
           return tasks;
         }
       } catch (error) {
-        console.error(`Error with lesson strategy ${strategy.constructor.name}:`, error);
+        console.error(`[LessonGenerator] Error with lesson strategy ${strategy.constructor.name}:`, error);
         // Continue to next strategy
       }
     }
