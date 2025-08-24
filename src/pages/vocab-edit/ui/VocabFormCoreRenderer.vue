@@ -41,11 +41,13 @@ import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 import { formatLanguageDisplay } from '@/entities/languages';
+import { Length } from '@/shared/Length';
 
 interface VocabFormData {
   id?: string;
   language: string;
   content: string;
+  length: keyof typeof Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

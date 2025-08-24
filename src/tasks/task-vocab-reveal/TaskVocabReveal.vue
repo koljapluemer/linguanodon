@@ -24,6 +24,10 @@ const isRevealed = ref(false);
 
 const isNativeToTarget = computed(() => props.task.taskType === 'vocab-reveal-native-to-target');
 
+const isSentence = computed(() => {
+  return vocab.value?.length === 'single-sentence' || vocab.value?.length === 'multiple-sentences';
+});
+
 const frontContent = computed(() => {
   if (!vocab.value || translations.value.length === 0) return '';
   
@@ -69,11 +73,11 @@ onMounted(loadVocab);
   <div v-if="vocab" class="space-y-4">
     <div class="card bg-base-100 shadow-sm">
       <div class="card-body text-center">
-        <div class="text-3xl font-bold mb-4">{{ frontContent }}</div>
+        <div :class="isSentence ? 'text-3xl' : 'text-6xl'" class="font-bold mb-4">{{ frontContent }}</div>
         
         <div v-if="isRevealed">
           <div class="divider">Answer</div>
-          <div class="text-xl text-gray-600">{{ solution }}</div>
+          <div :class="isSentence ? 'text-xl' : 'text-3xl'" class="text-gray-600">{{ solution }}</div>
         </div>
         
         <div v-else class="mt-6">

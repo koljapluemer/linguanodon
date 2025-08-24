@@ -303,7 +303,7 @@ onMounted(loadVocabData);
     <!-- Cloze Display for Single Sentences -->
     <div v-if="isSingleSentence && clozeData" class="mb-8">
       <!-- Primary cloze text -->
-      <div class="card-title text-6xl mb-4" :class="{ 'rtl': isRTL }">
+      <div class="card-title text-3xl mb-4" :class="{ 'rtl': isRTL }">
         <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
         <span class="inline-block bg-gray-300 dark:bg-gray-600 text-transparent rounded px-2 py-1 mx-1 select-none" 
               :style="{ width: Math.max(clozeData.hiddenWord.length * 0.6, 3) + 'em' }">
@@ -318,7 +318,7 @@ onMounted(loadVocabData);
     </div>
     
     <!-- Regular Display for Other Content Types -->
-    <div v-else class="card-title text-6xl mb-8">{{ displayContent }}
+    <div v-else :class="isSingleSentence ? 'text-3xl' : 'text-6xl'" class="card-title mb-8">{{ displayContent }}
     </div>
 
     <!-- Answer Options - only show when not answered -->
@@ -335,7 +335,7 @@ onMounted(loadVocabData);
       <!-- Show complete sentence for cloze -->
       <div v-if="isSingleSentence && clozeData">
         <!-- Primary text with revealed answer -->
-        <div class="text-6xl mt-4 mb-4" :class="{ 'rtl': isRTL }">
+        <div class="text-3xl mt-4 mb-4" :class="{ 'rtl': isRTL }">
           <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
           <span class="text-green-600 font-bold mx-1">{{ clozeData.hiddenWord }}</span>
           <span v-if="clozeData.afterWord" class="ml-2">{{ clozeData.afterWord }}</span>
@@ -346,7 +346,7 @@ onMounted(loadVocabData);
         </div>
       </div>
       <!-- Show answer for regular content -->
-      <div v-else class="text-6xl mt-4">
+      <div v-else :class="isSingleSentence ? 'text-3xl' : 'text-6xl'" class="mt-4">
         {{ answerOptions.find(opt => opt.isCorrect)?.content }}
       </div>
     </div>
