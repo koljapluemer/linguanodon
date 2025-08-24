@@ -44,39 +44,20 @@ export class UpdateResourceTasksController {
     const tasks: TaskData[] = [];
     const baseUid = `resource-task-${resource.uid}-${Date.now()}`;
 
-    const taskTypes: Array<{
-      type: 'add-vocab-to-resource' | 'add-fact-cards-to-resource';
-      title: string;
-      prompt: string;
-    }> = [
-      {
-        type: 'add-vocab-to-resource',
-        title: `Extract vocabulary from "${resource.title}"`,
-        prompt: 'Go through the resource and identify important vocabulary words. Add them with translations and context.'
-      },
-      {
-        type: 'add-fact-cards-to-resource',
-        title: `Create fact cards for "${resource.title}"`,
-        prompt: 'Extract important facts, cultural information, or key concepts from the resource into fact cards.'
-      }
-    ];
+    // Create unified knowledge extraction task
+    const taskUid = `${baseUid}-extract-knowledge`;
 
-    for (let i = 0; i < taskTypes.length; i++) {
-      const taskType = taskTypes[i];
-      const taskUid = `${baseUid}-${i}`;
-
-      tasks.push({
-        uid: taskUid,
-        taskType: taskType.type,
-        prompt: taskType.prompt,
-        evaluateDifficultyAfterDoing: true,
-        decideWhetherToDoAgainAfterDoing: true,
-        isOneTime: false,
-        isActive: true,
-        taskSize: 'medium',
-        associatedResources: [resource.uid]
-      });
-    }
+    tasks.push({
+      uid: taskUid,
+      taskType: 'extract-knowledge-from-resource',
+      prompt: `Extract knowledge from "${resource.title}". Use the tabs to add vocabulary and create fact cards from this resource.`,
+      evaluateDifficultyAfterDoing: true,
+      decideWhetherToDoAgainAfterDoing: true,
+      isOneTime: false,
+      isActive: true,
+      taskSize: 'medium',
+      associatedResources: [resource.uid]
+    });
 
     return tasks;
   }

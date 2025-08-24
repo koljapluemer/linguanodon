@@ -3,6 +3,7 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { randomBetween, pickRandom, shuffleArray } from '@/shared/arrayUtils';
 import { getRandomActiveTaskForVocab } from './utils/getRandomActiveTaskForVocab';
 import { useSetTracking, type EntityWithOrigins } from './utils/useSetTracking';
@@ -15,6 +16,7 @@ export interface LessonStrategyDependencies {
   taskRepo: TaskRepoContract;
   resourceRepo: ResourceRepoContract;
   immersionContentRepo: ImmersionContentRepoContract;
+  goalRepo: GoalRepoContract;
 }
 
 export abstract class BaseLessonStrategy {
@@ -22,6 +24,7 @@ export abstract class BaseLessonStrategy {
   protected readonly taskRepo: TaskRepoContract;
   protected readonly resourceRepo: ResourceRepoContract;
   protected readonly immersionContentRepo: ImmersionContentRepoContract;
+  protected readonly goalRepo: GoalRepoContract;
   protected readonly setTracking = useSetTracking();
   
   constructor(dependencies: LessonStrategyDependencies) {
@@ -29,6 +32,7 @@ export abstract class BaseLessonStrategy {
     this.taskRepo = dependencies.taskRepo;
     this.resourceRepo = dependencies.resourceRepo;
     this.immersionContentRepo = dependencies.immersionContentRepo;
+    this.goalRepo = dependencies.goalRepo;
   }
 
   public async generateLesson(languages: string[]): Promise<TaskData[]> {

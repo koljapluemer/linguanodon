@@ -8,6 +8,8 @@ import { ImmersionContentRepo } from '@/entities/immersion-content/ImmersionCont
 import { TaskRepo } from '@/entities/tasks/TaskRepo';
 import { LanguageRepo } from '@/entities/languages/LanguageRepo';
 import { LocalSetRepo } from '@/entities/local-sets/LocalSetRepo';
+import { initializeUpdateGoalTasksService } from '@/features/goal-update-tasks/updateGoalTasksService';
+import { initializeUpdateResourceTasksService } from '@/features/resource-update-tasks/updateResourceTasksService';
 
 export function setupRepositories() {
   // Create repository instances
@@ -49,6 +51,10 @@ export function provideRepositories(app: { provide: (key: string | symbol, value
   app.provide('taskRepo', taskRepo);
   app.provide('languageRepo', languageRepo);
   app.provide('localSetRepo', localSetRepo);
+  
+  // Initialize services that depend on repositories
+  initializeUpdateGoalTasksService(goalRepo, taskRepo);
+  initializeUpdateResourceTasksService(resourceRepo, taskRepo);
   
   return { vocabRepo, translationRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo };
 }

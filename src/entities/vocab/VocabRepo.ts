@@ -498,4 +498,26 @@ export class VocabRepo implements VocabRepoContract {
     
     return wrongAnswers;
   }
+
+  async getUnseenVocabByIds(vocabIds: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('uid')
+      .anyOf(vocabIds)
+      .toArray();
+    
+    return vocab
+      .map(v => this.ensureVocabFields(v))
+      .filter(v => isUnseen(v));
+  }
+
+  async getDueVocabByIds(vocabIds: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('uid')
+      .anyOf(vocabIds)
+      .toArray();
+    
+    return vocab
+      .map(v => this.ensureVocabFields(v))
+      .filter(v => isSeen(v) && v.progress.due && v.progress.due <= new Date());
+  }
 }

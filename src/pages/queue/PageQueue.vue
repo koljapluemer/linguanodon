@@ -90,7 +90,7 @@ async function loadTaskBatch() {
   
   try {
     batchLoadingPromise = (async () => {
-      const lesson = await makeLesson(vocabRepo!, resourceRepo!, taskRepo!, languageRepo!, immersionContentRepo!);
+      const lesson = await makeLesson(vocabRepo!, resourceRepo!, taskRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
       
       if (lesson.length === 0) {
         console.warn('Generated lesson is empty');
@@ -156,7 +156,7 @@ function consumeNextTask(): { task: TaskData; batchId: string } | null {
 // Force load next task
 async function forceLoadNextTask(): Promise<{ task: TaskData; batchId: string } | null> {
   try {
-    const lesson = await makeLesson(vocabRepo!, resourceRepo!, taskRepo!, languageRepo!, immersionContentRepo!);
+    const lesson = await makeLesson(vocabRepo!, resourceRepo!, taskRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
     const shuffledLesson = shuffleArray(lesson);
     if (shuffledLesson.length > 0) {
       const batchId = crypto.randomUUID();

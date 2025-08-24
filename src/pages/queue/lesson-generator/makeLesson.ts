@@ -4,6 +4,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { shuffleArray } from '@/shared/arrayUtils';
 import { DueVocabStrategy } from './flavors/makeLessonAroundDueVocab';
 import { NewVocabStrategy } from './flavors/makeLessonAroundNewVocab';
@@ -12,13 +13,15 @@ import { ResourceExtractionStrategy } from './flavors/makeLessonAroundResourceEx
 import { RandomImmersionContentStrategy } from './flavors/makeLessonAroundRandomImmersionContent';
 import { LowMasteryImmersionContentStrategy } from './flavors/makeLessonAroundLowMasteryImmersionContent';
 import { HighMasteryImmersionContentStrategy } from './flavors/makeLessonAroundHighMasteryImmersionContent';
+import { GoalBasedStrategy } from './flavors/makeLessonAroundGoals';
 
 export async function makeLesson(
   vocabRepo: VocabRepoContract,
   resourceRepo: ResourceRepoContract,
   taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,
-  immersionContentRepo: ImmersionContentRepoContract
+  immersionContentRepo: ImmersionContentRepoContract,
+  goalRepo: GoalRepoContract
 ): Promise<TaskData[]> {
   
   try {
@@ -37,7 +40,8 @@ export async function makeLesson(
       vocabRepo,
       taskRepo,
       resourceRepo,
-      immersionContentRepo
+      immersionContentRepo,
+      goalRepo
     };
 
     // Define available lesson strategies
@@ -48,7 +52,8 @@ export async function makeLesson(
       new ResourceExtractionStrategy(dependencies),
       new RandomImmersionContentStrategy(dependencies),
       new LowMasteryImmersionContentStrategy(dependencies),
-      new HighMasteryImmersionContentStrategy(dependencies)
+      new HighMasteryImmersionContentStrategy(dependencies),
+      new GoalBasedStrategy(dependencies)
     ];
     
     // Shuffle strategies to try them in random order

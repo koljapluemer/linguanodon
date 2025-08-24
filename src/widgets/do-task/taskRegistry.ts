@@ -2,8 +2,7 @@ import type { Component } from "vue";
 
 // Import all task widgets
 import RenderTaskForAddingPronunciation from "@/tasks/task-vocab-add-pronunciation/RenderTaskForAddingPronunciation.vue";
-import RenderAddVocabToResource from "@/tasks/task-resource-add-vocab/RenderAddVocabToResource.vue";
-import RenderAddFactCardsToResource from "@/tasks/task-resource-add-fact-cards/RenderAddFactCardsToResource.vue";
+import RenderExtractKnowledgeFromResource from "@/tasks/task-resource-extract-knowledge/RenderExtractKnowledgeFromResource.vue";
 import TaskAddSubGoals from "@/tasks/task-goal-add-sub-goals/TaskAddSubGoals.vue";
 import TaskAddVocabToGoal from "@/tasks/task-goal-add-vocab/TaskAddVocabToGoal.vue";
 import TaskVocabTryToRemember from "@/tasks/task-vocab-try-to-remember/TaskVocabTryToRemember.vue";
@@ -13,8 +12,7 @@ import type { TaskName } from "@/entities/tasks/TaskData";
 
 export const taskRegistry: Record<TaskName, Component> = {
   "add-pronunciation": RenderTaskForAddingPronunciation,
-  "add-vocab-to-resource": RenderAddVocabToResource,
-  "add-fact-cards-to-resource": RenderAddFactCardsToResource,
+  "extract-knowledge-from-resource": RenderExtractKnowledgeFromResource,
   "add-sub-goals": TaskAddSubGoals,
   "add-vocab-to-goal": TaskAddVocabToGoal,
   "vocab-try-to-remember": TaskVocabTryToRemember,

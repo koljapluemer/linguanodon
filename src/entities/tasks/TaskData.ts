@@ -20,8 +20,7 @@ export interface TaskData {
 
 export type TaskName = |
   'add-pronunciation' |
-  'add-vocab-to-resource' |
-  'add-fact-cards-to-resource' |
+  'extract-knowledge-from-resource' |
   'add-sub-goals' |
   'add-vocab-to-goal' |
   'vocab-try-to-remember' |

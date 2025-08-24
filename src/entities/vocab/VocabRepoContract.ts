@@ -49,4 +49,8 @@ export interface VocabRepoContract {
   
   // Distractor generation operations
   generateWrongVocabs(targetLanguage: string, correctVocabContent: string, count: number): Promise<string[]>;
+  
+  // Goal-based vocab operations
+  getUnseenVocabByIds(vocabIds: string[]): Promise<VocabData[]>;
+  getDueVocabByIds(vocabIds: string[]): Promise<VocabData[]>;
 }
