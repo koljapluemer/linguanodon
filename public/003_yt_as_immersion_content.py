@@ -16,6 +16,109 @@ from dotenv import load_dotenv
 from collections import Counter, defaultdict
 import re
 
+# Data storage
+immersion_content_data = []
+vocab_data = []
+translation_data = []
+note_data = []
+
+# ID counters
+immersion_content_id = 0
+vocab_id = 0
+translation_id = 0
+note_id = 0
+
+def get_next_immersion_content_id():
+    global immersion_content_id
+    immersion_content_id += 1
+    return str(immersion_content_id)
+
+def get_next_vocab_id():
+    global vocab_id
+    vocab_id += 1
+    return str(vocab_id)
+
+def get_next_translation_id():
+    global translation_id
+    translation_id += 1
+    return str(translation_id)
+
+def get_next_note_id():
+    global note_id
+    note_id += 1
+    return str(note_id)
+
+def create_note(content, note_type=None, show_before_exercise=None):
+    """Create a note entry and return its ID"""
+    if not content:
+        return None
+    
+    note_entry = {
+        "id": get_next_note_id(),
+        "content": content
+    }
+    if note_type:
+        note_entry["noteType"] = note_type
+    if show_before_exercise is not None:
+        note_entry["showBeforeExercice"] = show_before_exercise
+    
+    note_data.append(note_entry)
+    return note_entry["id"]
+
+def create_translation(content, notes=None):
+    """Create a translation entry and return its ID"""
+    if not content:
+        return None
+        
+    translation_entry = {
+        "id": get_next_translation_id(),
+        "content": content
+    }
+    if notes:
+        translation_entry["notes"] = notes
+    
+    translation_data.append(translation_entry)
+    return translation_entry["id"]
+
+def create_vocab(language, content, length="single-word", notes=None, translations=None, priority=None):
+    """Create a vocab entry and return its ID"""
+    vocab_entry = {
+        "id": get_next_vocab_id(),
+        "language": language,
+        "content": content,
+        "length": length
+    }
+    if priority is not None:
+        vocab_entry["priority"] = priority
+    if notes:
+        vocab_entry["notes"] = notes
+    if translations:
+        vocab_entry["translations"] = translations
+    
+    vocab_data.append(vocab_entry)
+    return vocab_entry["id"]
+
+def create_immersion_content(language, title, content=None, priority=None, link_id=None, needed_vocab=None, notes=None):
+    """Create an immersion content entry and return its ID"""
+    content_entry = {
+        "id": get_next_immersion_content_id(),
+        "language": language,
+        "title": title
+    }
+    if content:
+        content_entry["content"] = content
+    if priority is not None:
+        content_entry["priority"] = priority
+    if link_id:
+        content_entry["link"] = link_id
+    if needed_vocab:
+        content_entry["neededVocab"] = needed_vocab
+    if notes:
+        content_entry["notes"] = notes
+    
+    immersion_content_data.append(content_entry)
+    return content_entry["id"]
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -89,18 +192,23 @@ def extract_vocab_from_line(line: str, source_language_code: str, client: OpenAI
         print(f"Response content: {content if 'content' in locals() else 'No content'}")
         return []
 
-def convert_to_remote_vocab(vocab_obj: VocabObject, target_lang_code: str) -> Dict:
-    """Convert VocabObject to RemoteVocab format"""
-    return {
-        "language": target_lang_code,
-        "priority": 1,
-        "content": vocab_obj.original,
-        "translations": [{
-            "content": vocab_obj.translation
-        }]
-    }
+def convert_to_vocab_entry(vocab_obj: VocabObject, target_lang_code: str) -> str:
+    """Convert VocabObject to vocab entry and return vocab ID"""
+    # Create translation
+    translation_id = create_translation(vocab_obj.translation)
+    
+    # Create vocab entry
+    vocab_id = create_vocab(
+        language=target_lang_code,
+        content=vocab_obj.original,
+        length="single-word",
+        translations=[translation_id] if translation_id else None,
+        priority=1
+    )
+    
+    return vocab_id
 
-def process_video(video_id: str, target_lang_code: str, subtitle_lang_code: str, client: OpenAI) -> Dict:
+def process_video(video_id: str, target_lang_code: str, subtitle_lang_code: str, client: OpenAI) -> str:
     print(f"Processing YouTube video: {video_id}")
     
     # Download subtitles
@@ -127,60 +235,58 @@ def process_video(video_id: str, target_lang_code: str, subtitle_lang_code: str,
         if key not in unique_vocab:
             unique_vocab[key] = vocab_obj
     
-    # Convert to RemoteVocab format
-    needed_vocab = [convert_to_remote_vocab(vocab_obj, target_lang_code) 
-                   for vocab_obj in unique_vocab.values()]
+    # Convert to vocab entries and get IDs
+    needed_vocab_ids = [convert_to_vocab_entry(vocab_obj, target_lang_code) 
+                       for vocab_obj in unique_vocab.values()]
     
-    # Create immersion content item in RemoteImmersionContent format
-    immersion_content = {
-        "language": target_lang_code,
-        "priority": 1,
-        "title": f"YouTube Video - {video_id}",
-        "content": f"Watch this video: https://www.youtube.com/watch?v={video_id}",
-        "neededVocab": needed_vocab if needed_vocab else None,
-        "notes": [{
-            "content": f"YouTube Video ID: {video_id}\nSubtitle language: {subtitle_lang_code_actual}",
-            "showBeforeExercise": False
-        }]
-    }
+    # Create note for video info
+    note_id = create_note(f"YouTube Video ID: {video_id}\nSubtitle language: {subtitle_lang_code_actual}")
     
-    # Remove None values to keep JSON clean
-    if immersion_content.get("neededVocab") is None:
-        del immersion_content["neededVocab"]
+    # Create immersion content entry
+    immersion_content_id = create_immersion_content(
+        language=target_lang_code,
+        title=f"YouTube Video - {video_id}",
+        content=f"Watch this video: https://www.youtube.com/watch?v={video_id}",
+        priority=1,
+        needed_vocab=needed_vocab_ids if needed_vocab_ids else None,
+        notes=[note_id] if note_id else None
+    )
     
-    return immersion_content
+    return immersion_content_id
 
-def ensure_directory_exists(directory):
-    """Create directory if it doesn't exist"""
-    if not os.path.exists(directory):
-        os.makedirs(directory, exist_ok=True)
-        print(f"Created directory: {directory}")
-
-def update_index_file(directory, filename_without_extension):
-    """Create or update index.json file in the directory"""
-    index_file = os.path.join(directory, "index.json")
+def save_jsonl_files(target_lang_code: str, subtitle_lang_code: str):
+    """Save all collected data to JSONL files"""
+    # Create directory structure
+    output_dir = Path(f"sets/{target_lang_code}/youtube-{target_lang_code}-{subtitle_lang_code}")
+    output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Load existing index or create new one
-    if os.path.exists(index_file):
-        with open(index_file, 'r', encoding='utf-8') as f:
-            index_data = json.load(f)
-    else:
-        index_data = []
+    # Save immersion_content.jsonl
+    with open(output_dir / "immersion_content.jsonl", "w", encoding="utf-8") as f:
+        for entry in immersion_content_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
-    # Add new file if not already present
-    if filename_without_extension not in index_data:
-        index_data.append(filename_without_extension)
-        
-        # Write updated index
-        with open(index_file, 'w', encoding='utf-8') as f:
-            json.dump(index_data, f, ensure_ascii=False, indent=2)
-        
-        print(f"Updated index file: {index_file}")
-    else:
-        print(f"File already in index: {filename_without_extension}")
+    # Save vocab.jsonl
+    with open(output_dir / "vocab.jsonl", "w", encoding="utf-8") as f:
+        for entry in vocab_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    # Save translations.jsonl
+    with open(output_dir / "translations.jsonl", "w", encoding="utf-8") as f:
+        for entry in translation_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    # Save notes.jsonl
+    with open(output_dir / "notes.jsonl", "w", encoding="utf-8") as f:
+        for entry in note_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    print(f"Saved {len(immersion_content_data)} immersion content entries")
+    print(f"Saved {len(vocab_data)} vocab entries")
+    print(f"Saved {len(translation_data)} translation entries")
+    print(f"Saved {len(note_data)} note entries")
 
 def main():
-    print("Converting YouTube videos to RemoteImmersionContentSet format...")
+    print("Converting YouTube videos to JSONL format...")
     
     try:
         # Read video codes from file
@@ -189,9 +295,6 @@ def main():
         
         print(f"Loaded {len(video_ids)} video IDs from {VIDEO_LIST_TXT}")
         
-        # Initialize output data structure
-        all_immersion_content = []
-        
         # Get OpenAI client
         client = get_openai_client()
         
@@ -199,11 +302,9 @@ def main():
         for idx, video_id in enumerate(video_ids):
             print(f"\n[{idx+1}/{len(video_ids)}] Processing video: {video_id}")
             try:
-                immersion_content = process_video(
+                process_video(
                     video_id, TARGET_LANG_CODE, VIDEO_SUBTITLE_LANGUAGE, client
                 )
-                
-                all_immersion_content.append(immersion_content)
                 
             except Exception as e:
                 print(f"Error processing video {video_id}: {e}\nSKIPPING this video.")
@@ -214,30 +315,10 @@ def main():
                 print(f"\nDEBUG: Returning after processing 2 videos as requested.")
                 break
         
-        # Create RemoteImmersionContentSet format
-        immersion_content_set = {
-            "name": f"YouTube Videos ({TARGET_LANG_CODE})",
-            "immersionContent": all_immersion_content
-        }
+        # Save all data to JSONL files
+        save_jsonl_files(TARGET_LANG_CODE, VIDEO_SUBTITLE_LANGUAGE)
         
-        print(f"Converted to {len(immersion_content_set['immersionContent'])} immersion content items")
-        
-        # Ensure output directory exists
-        output_dir = f"immersion_content_sets/{TARGET_LANG_CODE}"
-        ensure_directory_exists(output_dir)
-        
-        # Write output file
-        output_filename = f"youtube_{TARGET_LANG_CODE}_{VIDEO_SUBTITLE_LANGUAGE}"
-        output_file = os.path.join(output_dir, f"{output_filename}.json")
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(immersion_content_set, f, ensure_ascii=False, indent=2)
-        
-        print(f"Successfully wrote: {output_file}")
-        print(f"Total immersion content items: {len(immersion_content_set['immersionContent'])}")
-        
-        # Update index file
-        update_index_file(output_dir, output_filename)
+        print(f"Processing completed! Created immersion content set with {len(immersion_content_data)} entries")
         
         return 0
         
