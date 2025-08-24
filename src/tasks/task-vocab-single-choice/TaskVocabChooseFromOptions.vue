@@ -186,10 +186,6 @@ async function generateOptions() {
       options.push({ content: wrong, isCorrect: false });
     });
 
-    // Fill remaining slots if needed
-    while (options.length < optionCount.value) {
-      options.push({ content: correctAnswer, isCorrect: true });
-    }
   } else {
     // Original logic for non-sentence content
     if (isReverse.value) {
@@ -209,10 +205,6 @@ async function generateOptions() {
         options.push({ content: wrong, isCorrect: false });
       });
 
-      // Fill remaining slots if needed
-      while (options.length < optionCount.value) {
-        options.push({ content: correctAnswer, isCorrect: true });
-      }
     } else {
       // Vocab-to-translation: correct answer is random translation
       const correctAnswer = translations.value[Math.floor(Math.random() * translations.value.length)].content;
@@ -229,10 +221,6 @@ async function generateOptions() {
         options.push({ content: wrong, isCorrect: false });
       });
 
-      // Fill remaining slots if needed
-      while (options.length < optionCount.value) {
-        options.push({ content: correctAnswer, isCorrect: true });
-      }
     }
   }
 

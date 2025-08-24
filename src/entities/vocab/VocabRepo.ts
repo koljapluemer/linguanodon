@@ -457,9 +457,12 @@ export class VocabRepo implements VocabRepoContract {
   }
 
   private async getFallbackWrongVocab(targetLanguage: string, correctVocabContent: string): Promise<string | null> {
-    const dueVocab = await this.getDueVocabInLanguage(targetLanguage);
+    const allVocab = await vocabDb.vocab
+      .where('language')
+      .equals(targetLanguage)
+      .toArray();
     
-    const candidates = dueVocab.filter(vocab => 
+    const candidates = allVocab.filter(vocab => 
       vocab.content && vocab.content !== correctVocabContent
     );
     
