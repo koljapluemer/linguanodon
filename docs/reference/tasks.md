@@ -18,7 +18,7 @@ prompt: "Research the pronunciation and add it". In the task itself, show the vo
 
 ### vocab-try-to-remember
 
-For vocab with level -1 only. `isOneTime`. do not rate difficulty, do not ask whether to do again. Prompt: "Try to remember the meaning of this word". Can be considered done immmediately.
+`isOneTime`. do not rate difficulty, do not ask whether to do again. Prompt: "Try to remember the meaning of this word". Can be considered done immmediately.
 
 ### vocab-reveal-target-to-native
 
@@ -26,28 +26,81 @@ Small task. Evaluate difficulty. Do not ask whether to do again. Has an internal
 
 `VocabData` must have >0 translations and content must be set.
 
-For vocab with level 3 or above
-
 ### vocab-reveal-native-to-target
 
-Same as above, for vocab with level 4 or above
+Same as above.
 
 ### vocab-choose-from-two-target-to-native
 
-Same as above, for vocab with level 0 or 1
+Same as above.
 
 ### vocab-choose-from-two-native-to-target
 
-Same as above, for vocab with level 1 or 2
+Same as above.
 
 ### vocab-choose-from-four-target-to-native
 
-Same as above, for vocab with level 1 or 2
-
+Same as above.
 
 ### vocab-choose-from-four-native-to-target
 
-Same as above, for vocab with level 2 or 3
+Same as above.
+
+### Task Generation by Vocab Level and Length
+
+#### not-specified
+
+- **Level -1**: vocab-try-to-remember
+- **Level 0**: vocab-choose-from-two-target-to-native
+- **Level 1**: vocab-choose-from-two-target-to-native, vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native
+- **Level 2**: vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native, vocab-choose-from-four-native-to-target
+- **Level 3**: vocab-choose-from-four-native-to-target, vocab-reveal-target-to-native
+- **Level 4+**: vocab-reveal-target-to-native, vocab-reveal-native-to-target
+
+#### shorter-than-word
+
+- **Level -1**: vocab-try-to-remember
+- **Level 0**: vocab-choose-from-two-target-to-native
+- **Level 1**: vocab-choose-from-two-target-to-native, vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native
+- **Level 2**: vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native, vocab-choose-from-four-native-to-target
+- **Level 3**: vocab-choose-from-four-native-to-target, vocab-reveal-target-to-native
+- **Level 4+**: vocab-reveal-target-to-native, vocab-reveal-native-to-target
+
+#### single-word
+
+- **Level -1**: vocab-try-to-remember
+- **Level 0**: vocab-choose-from-two-target-to-native
+- **Level 1**: vocab-choose-from-two-target-to-native, vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native
+- **Level 2**: vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native, vocab-choose-from-four-native-to-target
+- **Level 3**: vocab-choose-from-four-native-to-target, vocab-reveal-target-to-native
+- **Level 4+**: vocab-reveal-target-to-native, vocab-reveal-native-to-target
+
+#### multi-word-expression
+
+- **Level -1**: vocab-try-to-remember
+- **Level 0**: vocab-choose-from-two-target-to-native
+- **Level 1**: vocab-choose-from-two-target-to-native, vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native
+- **Level 2**: vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native, vocab-choose-from-four-native-to-target
+- **Level 3**: vocab-choose-from-four-native-to-target, vocab-reveal-target-to-native
+- **Level 4+**: vocab-reveal-target-to-native, vocab-reveal-native-to-target
+
+#### single-sentence
+
+- **Level -1**: vocab-try-to-remember
+- **Level 0**: vocab-choose-from-two-target-to-native
+- **Level 1**: vocab-choose-from-two-target-to-native, vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native
+- **Level 2**: vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native, vocab-choose-from-four-native-to-target
+- **Level 3**: vocab-choose-from-four-native-to-target, vocab-reveal-target-to-native
+- **Level 4+**: vocab-reveal-target-to-native, vocab-reveal-native-to-target
+
+#### multiple-sentences
+
+- **Level -1**: vocab-try-to-remember
+- **Level 0**: vocab-choose-from-two-target-to-native
+- **Level 1**: vocab-choose-from-two-target-to-native, vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native
+- **Level 2**: vocab-choose-from-two-native-to-target, vocab-choose-from-four-target-to-native, vocab-choose-from-four-native-to-target
+- **Level 3**: vocab-choose-from-four-native-to-target, vocab-reveal-target-to-native
+- **Level 4+**: vocab-reveal-target-to-native, vocab-reveal-native-to-target
 
 
 ## Resource-Based
