@@ -29,7 +29,7 @@
                 </div>
               </div>
               <div class="flex gap-2">
-                <router-link :to="`/vocab/${vocab.uid}`" class="btn btn-sm btn-primary">
+                <router-link :to="`/vocab/${vocab.uid}/edit`" class="btn btn-sm btn-primary">
                   Edit
                 </router-link>
                 <button @click="deleteVocab(index)" class="btn btn-sm btn-error">
