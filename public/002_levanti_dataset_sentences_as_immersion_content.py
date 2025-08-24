@@ -2,6 +2,110 @@
 
 import json
 import os
+from pathlib import Path
+
+# Data storage
+immersion_content_data = []
+vocab_data = []
+translation_data = []
+note_data = []
+
+# ID counters
+immersion_content_id = 0
+vocab_id = 0
+translation_id = 0
+note_id = 0
+
+def get_next_immersion_content_id():
+    global immersion_content_id
+    immersion_content_id += 1
+    return str(immersion_content_id)
+
+def get_next_vocab_id():
+    global vocab_id
+    vocab_id += 1
+    return str(vocab_id)
+
+def get_next_translation_id():
+    global translation_id
+    translation_id += 1
+    return str(translation_id)
+
+def get_next_note_id():
+    global note_id
+    note_id += 1
+    return str(note_id)
+
+def create_note(content, note_type=None, show_before_exercise=None):
+    """Create a note entry and return its ID"""
+    if not content:
+        return None
+    
+    note_entry = {
+        "id": get_next_note_id(),
+        "content": content
+    }
+    if note_type:
+        note_entry["noteType"] = note_type
+    if show_before_exercise is not None:
+        note_entry["showBeforeExercice"] = show_before_exercise
+    
+    note_data.append(note_entry)
+    return note_entry["id"]
+
+def create_translation(content, notes=None):
+    """Create a translation entry and return its ID"""
+    if not content:
+        return None
+        
+    translation_entry = {
+        "id": get_next_translation_id(),
+        "content": content
+    }
+    if notes:
+        translation_entry["notes"] = notes
+    
+    translation_data.append(translation_entry)
+    return translation_entry["id"]
+
+def create_vocab(language, content, length="single-word", notes=None, translations=None, priority=None):
+    """Create a vocab entry and return its ID"""
+    vocab_entry = {
+        "id": get_next_vocab_id(),
+        "language": language,
+        "content": content,
+        "length": length
+    }
+    if priority is not None:
+        vocab_entry["priority"] = priority
+    if notes:
+        vocab_entry["notes"] = notes
+    if translations:
+        vocab_entry["translations"] = translations
+    
+    vocab_data.append(vocab_entry)
+    return vocab_entry["id"]
+
+def create_immersion_content(language, title, content=None, priority=None, link_id=None, needed_vocab=None, notes=None):
+    """Create an immersion content entry and return its ID"""
+    content_entry = {
+        "id": get_next_immersion_content_id(),
+        "language": language,
+        "title": title
+    }
+    if content:
+        content_entry["content"] = content
+    if priority is not None:
+        content_entry["priority"] = priority
+    if link_id:
+        content_entry["link"] = link_id
+    if needed_vocab:
+        content_entry["neededVocab"] = needed_vocab
+    if notes:
+        content_entry["notes"] = notes
+    
+    immersion_content_data.append(content_entry)
+    return content_entry["id"]
 
 def load_sentences_data():
     """Load the usable sentences data from JSON file"""
@@ -13,113 +117,105 @@ def load_sentences_data():
     with open(input_file, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def convert_to_remote_vocab(vocab_item):
-    """Convert vocab item to RemoteVocab format"""
-    return {
-        "language": "apc",
-        "priority": 1,
-        "content": vocab_item["apc"],
-        "translations": [{
-            "content": vocab_item["eng"]
-        }]
-    }
+def process_vocab_item(vocab_item):
+    """Process vocab item and return vocab ID"""
+    apc_content = vocab_item["apc"]
+    eng_content = vocab_item["eng"]
+    
+    # Create translation for English content
+    translation_id = create_translation(eng_content)
+    
+    # Create vocab entry
+    vocab_id = create_vocab(
+        language="apc",
+        content=apc_content,
+        length="single-word",
+        translations=[translation_id] if translation_id else None,
+        priority=1
+    )
+    
+    return vocab_id
 
-def convert_to_remote_immersion_content(sentence_data, index):
-    """Convert sentence data to RemoteImmersionContent format"""
+def process_sentence(sentence_data, index):
+    """Process sentence data and create immersion content"""
     apc_sentence = sentence_data["apc"]
     eng_sentence = sentence_data["eng"]
     vocab_items = sentence_data.get("vocab", [])
     
-    # Convert vocab items to RemoteVocab format
-    needed_vocab = [convert_to_remote_vocab(vocab) for vocab in vocab_items]
+    # Process vocabulary items and get their IDs
+    needed_vocab_ids = []
+    for vocab_item in vocab_items:
+        vocab_id = process_vocab_item(vocab_item)
+        if vocab_id:
+            needed_vocab_ids.append(vocab_id)
     
-    # Create the immersion content item
-    return {
-        "language": "apc",
-        "priority": 1,
-        "title": f"Levanti Sentence {index + 1}",
-        "content": apc_sentence,
-        "neededVocab": needed_vocab if needed_vocab else None,
-        "notes": [{
-            "content": f"Translation: {eng_sentence}",
-            "showBeforeExercise": False
-        }]
-    }
+    # Create translation note for the sentence
+    translation_note_id = create_note(f"Translation: {eng_sentence}")
+    
+    # Create immersion content entry
+    content_id = create_immersion_content(
+        language="apc",
+        title=f"Levanti Sentence {index + 1}",
+        content=apc_sentence,
+        priority=index + 1,
+        needed_vocab=needed_vocab_ids if needed_vocab_ids else None,
+        notes=[translation_note_id] if translation_note_id else None
+    )
+    
+    return content_id
 
-def create_immersion_content_set(sentences_data):
-    """Create RemoteImmersionContentSet from sentences data"""
-    immersion_content = []
-    
+def process_sentences(sentences_data):
+    """Process all sentences and create entities"""
     for i, sentence_data in enumerate(sentences_data):
-        content_item = convert_to_remote_immersion_content(sentence_data, i)
-        # Remove None values to keep JSON clean
-        if content_item.get("neededVocab") is None:
-            del content_item["neededVocab"]
-        immersion_content.append(content_item)
-    
-    return {
-        "name": "Levanti Dataset Sentences",
-        "immersionContent": immersion_content
-    }
+        process_sentence(sentence_data, i)
 
-def ensure_directory_exists(directory):
-    """Create directory if it doesn't exist"""
-    if not os.path.exists(directory):
-        os.makedirs(directory, exist_ok=True)
-        print(f"Created directory: {directory}")
-
-def update_index_file(directory, filename_without_extension):
-    """Create or update index.json file in the directory"""
-    index_file = os.path.join(directory, "index.json")
+def save_jsonl_files():
+    """Save all collected data to JSONL files"""
+    # Create directory structure
+    output_dir = Path("sets/apc/levanti-sentences")
+    output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Load existing index or create new one
-    if os.path.exists(index_file):
-        with open(index_file, 'r', encoding='utf-8') as f:
-            index_data = json.load(f)
-    else:
-        index_data = []
+    # Save immersion_content.jsonl
+    with open(output_dir / "immersion_content.jsonl", "w", encoding="utf-8") as f:
+        for entry in immersion_content_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
-    # Add new file if not already present
-    if filename_without_extension not in index_data:
-        index_data.append(filename_without_extension)
-        
-        # Write updated index
-        with open(index_file, 'w', encoding='utf-8') as f:
-            json.dump(index_data, f, ensure_ascii=False, indent=2)
-        
-        print(f"Updated index file: {index_file}")
-    else:
-        print(f"File already in index: {filename_without_extension}")
+    # Save vocab.jsonl
+    with open(output_dir / "vocab.jsonl", "w", encoding="utf-8") as f:
+        for entry in vocab_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    # Save translations.jsonl
+    with open(output_dir / "translations.jsonl", "w", encoding="utf-8") as f:
+        for entry in translation_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    # Save notes.jsonl
+    with open(output_dir / "notes.jsonl", "w", encoding="utf-8") as f:
+        for entry in note_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    print(f"Saved {len(immersion_content_data)} immersion content entries")
+    print(f"Saved {len(vocab_data)} vocab entries")
+    print(f"Saved {len(translation_data)} translation entries")
+    print(f"Saved {len(note_data)} note entries")
 
 def main():
-    """Main function to convert Levanti dataset to immersion content format"""
-    print("Converting Levanti dataset to RemoteImmersionContentSet format...")
+    """Main function to convert Levanti dataset to JSONL format"""
+    print("Converting Levanti dataset to JSONL format...")
     
     try:
         # Load input data
         sentences_data = load_sentences_data()
         print(f"Loaded {len(sentences_data)} sentences from dataset")
         
-        # Convert to RemoteImmersionContentSet format
-        immersion_content_set = create_immersion_content_set(sentences_data)
-        print(f"Converted to {len(immersion_content_set['immersionContent'])} immersion content items")
+        # Process all sentences
+        process_sentences(sentences_data)
         
-        # Ensure output directory exists
-        output_dir = "immersion_content_sets/apc"
-        ensure_directory_exists(output_dir)
+        # Save all data to JSONL files
+        save_jsonl_files()
         
-        # Write output file
-        output_filename = "levanti_sentences"
-        output_file = os.path.join(output_dir, f"{output_filename}.json")
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(immersion_content_set, f, ensure_ascii=False, indent=2)
-        
-        print(f"Successfully wrote: {output_file}")
-        print(f"Total immersion content items: {len(immersion_content_set['immersionContent'])}")
-        
-        # Update index file
-        update_index_file(output_dir, output_filename)
+        print(f"Processing completed! Created immersion content set with {len(immersion_content_data)} entries")
         
         return 0
         
