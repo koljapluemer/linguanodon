@@ -4,6 +4,32 @@ import json
 import re
 from bs4 import BeautifulSoup
 import os
+from pathlib import Path
+
+# Data storage
+vocab_data = []
+translation_data = []
+note_data = []
+
+# ID counters
+vocab_id = 0
+translation_id = 0
+note_id = 0
+
+def get_next_vocab_id():
+    global vocab_id
+    vocab_id += 1
+    return str(vocab_id)
+
+def get_next_translation_id():
+    global translation_id
+    translation_id += 1
+    return str(translation_id)
+
+def get_next_note_id():
+    global note_id
+    note_id += 1
+    return str(note_id)
 
 def clean_text(text):
     """Clean text by stripping whitespace and handling empty strings"""
@@ -51,6 +77,56 @@ def extract_pronunciation(pronunciation_text):
     pronunciation = re.sub(r'<[^>]+>', '', pronunciation_text).strip()
     return pronunciation
 
+def create_note(content, note_type=None, show_before_exercise=None):
+    """Create a note entry and return its ID"""
+    if not content:
+        return None
+    
+    note_entry = {
+        "id": get_next_note_id(),
+        "content": content
+    }
+    if note_type:
+        note_entry["noteType"] = note_type
+    if show_before_exercise is not None:
+        note_entry["showBeforeExercice"] = show_before_exercise
+    
+    note_data.append(note_entry)
+    return note_entry["id"]
+
+def create_translation(content, notes=None):
+    """Create a translation entry and return its ID"""
+    if not content:
+        return None
+        
+    translation_entry = {
+        "id": get_next_translation_id(),
+        "content": content
+    }
+    if notes:
+        translation_entry["notes"] = notes
+    
+    translation_data.append(translation_entry)
+    return translation_entry["id"]
+
+def create_vocab(language, content, length="single-word", notes=None, translations=None, priority=None):
+    """Create a vocab entry and return its ID"""
+    vocab_entry = {
+        "id": get_next_vocab_id(),
+        "language": language,
+        "content": content,
+        "length": length
+    }
+    if priority is not None:
+        vocab_entry["priority"] = priority
+    if notes:
+        vocab_entry["notes"] = notes
+    if translations:
+        vocab_entry["translations"] = translations
+    
+    vocab_data.append(vocab_entry)
+    return vocab_entry["id"]
+
 def parse_html_table():
     """Parse the HTML table and extract vocabulary data"""
     html_file = "data_in/1000_common_levantine.html"
@@ -68,9 +144,7 @@ def parse_html_table():
     # Find all data rows (skip header)
     rows = table.find('tbody').find_all('tr')
     
-    vocabs = []
-    
-    for row in rows:
+    for priority, row in enumerate(rows, 1):
         cells = row.find_all('td')
         if len(cells) != 3:
             continue
@@ -92,60 +166,69 @@ def parse_html_table():
         if not english_processed or not arabic_processed:
             continue
         
-        # Build the vocab object according to RemoteVocabData.ts interface
-        vocab = {
-            "language": "apc",
-            "priority": 1,
-            "content": arabic_processed,
-            "translations": [{
-                "content": english_processed,
-                "notes": [{"content": english_note, "showBeforeExercise": True}] if english_note else None
-            }],
-            "notes": [{"content": pronunciation_processed, "showBeforeExercise": False}] if pronunciation_processed else None
-        }
+        # Create notes
+        notes = []
+        translation_notes = []
         
-        # Clean up None values
-        if vocab["translations"][0]["notes"] is None:
-            del vocab["translations"][0]["notes"]
-        if vocab["notes"] is None:
-            del vocab["notes"]
+        if pronunciation_processed:
+            pronunciation_note_id = create_note(pronunciation_processed, "pronunciation")
+            if pronunciation_note_id:
+                notes.append(pronunciation_note_id)
         
-        vocabs.append(vocab)
+        if english_note:
+            english_note_id = create_note(english_note, None, True)
+            if english_note_id:
+                translation_notes.append(english_note_id)
+        
+        # Create translation
+        translation_id = create_translation(english_processed, translation_notes if translation_notes else None)
+        
+        # Create vocab entry
+        create_vocab(
+            language="apc",
+            content=arabic_processed,
+            length="single-word",
+            notes=notes if notes else None,
+            translations=[translation_id] if translation_id else None,
+            priority=priority
+        )
+
+def save_jsonl_files():
+    """Save all collected data to JSONL files"""
+    # Create directory structure
+    output_dir = Path("sets/apc/1000-common-levantine")
+    output_dir.mkdir(parents=True, exist_ok=True)
     
-    return vocabs
+    # Save vocab.jsonl
+    with open(output_dir / "vocab.jsonl", "w", encoding="utf-8") as f:
+        for entry in vocab_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    # Save translations.jsonl
+    with open(output_dir / "translations.jsonl", "w", encoding="utf-8") as f:
+        for entry in translation_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    # Save notes.jsonl
+    with open(output_dir / "notes.jsonl", "w", encoding="utf-8") as f:
+        for entry in note_data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    print(f"Saved {len(vocab_data)} vocab entries")
+    print(f"Saved {len(translation_data)} translation entries")
+    print(f"Saved {len(note_data)} note entries")
 
 def main():
     """Main function to parse HTML and create JSON output"""
     print("Parsing HTML table...")
     
     try:
-        vocabs = parse_html_table()
-        print(f"Extracted {len(vocabs)} vocabulary items")
+        parse_html_table()
         
-        # Create the vocab set according to RemoteVocabData.ts interface
-        vocab_set = {
-            "name": "1000 Common Levantine Words",
-            "vocabs": vocabs
-        }
+        # Save all data to JSONL files
+        save_jsonl_files()
         
-        # Ensure output directory exists
-        os.makedirs("vocab_sets/apc", exist_ok=True)
-        
-        # Write to JSON file
-        output_file = "vocab_sets/apc/1000_common_levantine.json"
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(vocab_set, f, ensure_ascii=False, indent=2)
-        
-        print(f"Successfully wrote {output_file}")
-        print(f"Total vocabulary items: {len(vocabs)}")
-        
-        # Create index.json for the language
-        index_file = "vocab_sets/apc/index.json"
-        index_data = ["1000_common_levantine"]
-        with open(index_file, 'w', encoding='utf-8') as f:
-            json.dump(index_data, f, ensure_ascii=False, indent=2)
-        
-        print(f"Successfully wrote {index_file}")
+        print(f"Processing completed! Created vocab set with {len(vocab_data)} entries")
         
     except Exception as e:
         print(f"Error: {e}")
