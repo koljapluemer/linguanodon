@@ -153,7 +153,7 @@ def create_translation(content, notes=None):
     translation_data.append(translation_entry)
     return translation_entry["id"]
 
-def create_vocab(language, content, notes=None, translations=None, links=None, related_vocab=None):
+def create_vocab(language, content, length, notes=None, translations=None, links=None, related_vocab=None):
     """Create a vocab entry and return its ID, or return existing ID if duplicate content+language"""
     # Check if vocab with this content+language already exists
     for existing in vocab_data:
@@ -193,7 +193,8 @@ def create_vocab(language, content, notes=None, translations=None, links=None, r
     vocab_entry = {
         "id": get_next_vocab_id(),
         "language": language,
-        "content": content
+        "content": content,
+        "length": length
     }
     if notes:
         vocab_entry["notes"] = notes
@@ -303,6 +304,7 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_li
                 vocab_id = create_vocab(
                     language=word_lang,
                     content=form_arabic,
+                    length="single-word",
                     notes=notes,
                     links=[link_id]
                 )
@@ -478,6 +480,7 @@ def scrape_sentence(driver, url):
         sentence_vocab_id = create_vocab(
             language="arz",
             content=sentence_data['sentence_arz'],
+            length="single-sentence",
             notes=sentence_notes if sentence_notes else None,
             translations=[sentence_translation_id],
             links=[shared_link_id]

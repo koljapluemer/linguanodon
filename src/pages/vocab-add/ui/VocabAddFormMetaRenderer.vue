@@ -45,10 +45,12 @@ import VocabAddFormCorePropsRenderer from './VocabAddFormCorePropsRenderer.vue';
 import VocabAddFormAdvancedPropsRenderer from './VocabAddFormAdvancedPropsRenderer.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
+import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
   language: string;
   content: string;
+  length: keyof typeof Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

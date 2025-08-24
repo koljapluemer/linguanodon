@@ -1,7 +1,27 @@
 <template>
   <div class="mt-8 space-y-8">
-    <!-- Priority and Exclude from Practice -->
+    <!-- Length, Priority and Exclude from Practice -->
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
+      <!-- Length -->
+      <div class="py-4">
+        <label class="label">
+          <span class="label-text font-medium">Length</span>
+        </label>
+        <select
+          v-model="formData.length"
+          @change="$emit('field-change')"
+          class="select select-bordered w-full"
+        >
+          <option
+            v-for="(value, key) in Length"
+            :key="key"
+            :value="key"
+          >
+            {{ value }}
+          </option>
+        </select>
+      </div>
+      
       <!-- Priority -->
       <div class="py-4">
         <label class="label">
@@ -119,10 +139,12 @@ import { Plus, X } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
+import { Length } from '@/shared/Length';
 
 interface VocabFormData {
   language: string;
   content: string;
+  length: keyof typeof Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

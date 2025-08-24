@@ -33,6 +33,7 @@ export class VocabRepo implements VocabRepoContract {
     return {
       ...vocab,
       content: vocab.content || '',
+      length: vocab.length || 'not-specified',
       notes: vocab.notes || [],
       links: vocab.links || [],
       translations: vocab.translations || [],
@@ -281,6 +282,7 @@ export class VocabRepo implements VocabRepoContract {
       uid: crypto.randomUUID(),
       language: vocab.language,
       content: vocab.content,
+      length: vocab.length,
       priority: vocab.priority,
       doNotPractice: vocab.doNotPractice,
       notes: vocab.notes,

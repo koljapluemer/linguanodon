@@ -1,36 +1,46 @@
-{"id": "1", "content": "I work during the day"}
-{"id": "2", "content": "I", "notes": ["4", "67", "119"]}
-{"id": "3", "content": "work", "notes": ["9", "10", "85"]}
-{"id": "4", "content": "in", "notes": ["13", "14"]}
-{"id": "5", "content": "during", "notes": ["15"]}
-{"id": "6", "content": "daytime", "notes": ["18"]}
-{"id": "7", "content": "day", "notes": ["19", "20"]}
-{"id": "8", "content": "the weather is hot and the sun is burning people"}
-{"id": "9", "content": "atmosphere", "notes": ["24", "25"]}
-{"id": "10", "content": "weather", "notes": ["26"]}
-{"id": "11", "content": "climate", "notes": ["27", "28"]}
-{"id": "12", "content": "hot", "notes": ["33", "34"]}
-{"id": "13", "content": "and", "notes": ["37", "38"]}
-{"id": "14", "content": "sun", "notes": ["43"]}
-{"id": "15", "content": "burn", "notes": ["50", "51"]}
-{"id": "16", "content": "at", "notes": ["54", "55", "79", "80"]}
-{"id": "17", "content": "people", "notes": ["60", "61"]}
-{"id": "18", "content": "folk", "notes": ["62", "63"]}
-{"id": "19", "content": "I feel comfortable at work"}
-{"id": "20", "content": "comfortable", "notes": ["74", "75"]}
-{"id": "21", "content": "relaxed", "notes": ["76"]}
-{"id": "22", "content": "job", "notes": ["86"]}
-{"id": "23", "content": "I like to sleep on the sofa"}
-{"id": "24", "content": "like", "notes": ["96", "97"]}
-{"id": "25", "content": "sleep", "notes": ["104"]}
-{"id": "26", "content": "on", "notes": ["107", "108"]}
-{"id": "27", "content": "onto", "notes": ["109"]}
-{"id": "28", "content": "couch", "notes": ["114"]}
-{"id": "29", "content": "sofa", "notes": ["115"]}
-{"id": "30", "content": "I made a delicious meal today"}
-{"id": "31", "content": "make", "notes": ["128"]}
-{"id": "32", "content": "cooked meal", "notes": ["133"]}
-{"id": "33", "content": "meal", "notes": ["134", "135"]}
-{"id": "34", "content": "delicious", "notes": ["142"]}
-{"id": "35", "content": "tasty", "notes": ["143"]}
-{"id": "36", "content": "today", "notes": ["146"]}
+{"id": "1", "content": "some stuff of mine was lost when I moved out"}
+{"id": "2", "content": "there is", "notes": ["4"]}
+{"id": "3", "content": "stuff", "notes": ["7", "8"]}
+{"id": "4", "content": "belonging (to)", "notes": ["15"]}
+{"id": "5", "content": "belong (to)", "notes": ["16", "17"]}
+{"id": "6", "content": "me", "notes": ["22"]}
+{"id": "7", "content": "(be) lost", "notes": ["29", "30"]}
+{"id": "8", "content": "(go) missing", "notes": ["31"]}
+{"id": "9", "content": "while", "notes": ["34"]}
+{"id": "10", "content": "when", "notes": ["35", "36"]}
+{"id": "11", "content": "I", "notes": ["39"]}
+{"id": "12", "content": "move out", "notes": ["48"]}
+{"id": "13", "content": "He opened the door by force"}
+{"id": "14", "content": "open", "notes": ["58"]}
+{"id": "15", "content": "door", "notes": ["65"]}
+{"id": "16", "content": "(by) force", "notes": ["68"]}
+{"id": "17", "content": "apparently it will rain tomorrow"}
+{"id": "18", "content": "(it) seems (that)", "notes": ["72", "76"]}
+{"id": "19", "content": "apparently", "notes": ["73", "77"]}
+{"id": "20", "content": "it", "notes": ["80", "81", "93", "94", "129", "130"]}
+{"id": "21", "content": "rain", "notes": ["86", "135"]}
+{"id": "22", "content": "tomorrow", "notes": ["89"]}
+{"id": "23", "content": "it is very hot but fortunately it is raining"}
+{"id": "24", "content": "hot", "notes": ["99", "100"]}
+{"id": "25", "content": "extremely", "notes": ["103", "104"]}
+{"id": "26", "content": "quite", "notes": ["105"]}
+{"id": "27", "content": "so (very)", "notes": ["106"]}
+{"id": "28", "content": "pretty", "notes": ["107", "108"]}
+{"id": "29", "content": "highly", "notes": ["109"]}
+{"id": "30", "content": "very", "notes": ["110"]}
+{"id": "31", "content": "too", "notes": ["111", "112"]}
+{"id": "32", "content": "considerably", "notes": ["113"]}
+{"id": "33", "content": "bloody", "notes": ["114", "115"]}
+{"id": "34", "content": "absolutely", "notes": ["116"]}
+{"id": "35", "content": "(a) lot", "notes": ["117"]}
+{"id": "36", "content": "but", "notes": ["120"]}
+{"id": "37", "content": "fortunately", "notes": ["123", "126"]}
+{"id": "38", "content": "the weather got cold these days"}
+{"id": "39", "content": "atmosphere", "notes": ["139", "140"]}
+{"id": "40", "content": "weather", "notes": ["141"]}
+{"id": "41", "content": "climate", "notes": ["142", "143"]}
+{"id": "42", "content": "(get) cold", "notes": ["150"]}
+{"id": "43", "content": "day", "notes": ["157", "158"]}
+{"id": "44", "content": "this", "notes": ["165", "166"]}
+{"id": "45", "content": "these", "notes": ["167"]}
+{"id": "46", "content": "that", "notes": ["168", "169"]}

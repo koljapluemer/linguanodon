@@ -26,10 +26,12 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
   language: string;
   content: string;
+  length: keyof typeof Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;
@@ -52,6 +54,7 @@ function formDataToVocabData(formData: VocabFormData): Omit<VocabData, 'progress
     uid: crypto.randomUUID(),
     language: formData.language,
     content: formData.content,
+    length: formData.length,
     translations: formData.translations.map(translation => translation.uid),
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
@@ -84,6 +87,7 @@ const state = ref<VocabFormState>({
   formData: {
     language: '',
     content: '',
+    length: 'not-specified',
     translations: [],
     priority: undefined,
     doNotPractice: undefined,

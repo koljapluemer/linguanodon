@@ -1,4 +1,5 @@
 import type { LearningProgress } from "@/shared/LearningProgress";
+import type { Length } from "@/shared/Length";
 import type { Link } from "@/shared/Link";
 
 
@@ -6,6 +7,7 @@ export interface VocabData {
   uid: string;
   language: string;
   content?: string;
+  length: keyof typeof Length;
   priority?: number;
   doNotPractice?: boolean;
   notes: string[]; // ids of NoteData repo

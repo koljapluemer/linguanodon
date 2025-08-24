@@ -147,6 +147,7 @@ async function addVocab() {
   const vocab = await vocabRepo.saveVocab({
     language: newVocab.value.language.trim(),
     content: newVocab.value.content.trim() || undefined,
+    length: 'not-specified',
     translations: [], // Empty for now
     notes: [],
     links: [],
