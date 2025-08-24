@@ -20,7 +20,7 @@ class VocabDatabase extends Dexie {
   constructor() {
     super('VocabDatabase');
     this.version(1).stores({
-      vocab: 'uid, language, content, *origins'
+      vocab: 'uid, language, content, *origins, [language+content]'
     });
   }
 }

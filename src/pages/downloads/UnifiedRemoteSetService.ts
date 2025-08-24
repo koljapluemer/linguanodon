@@ -536,6 +536,13 @@ export class UnifiedRemoteSetService {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
+        // Check content type - should be text/plain or application/json for JSONL
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('text/html')) {
+          console.log(`${fileName}.jsonl returned HTML content type, skipping (file doesn't exist)`);
+          continue;
+        }
+        
         if (response.ok) {
           const text = await response.text();
           const lines = text.trim().split('\n').filter(line => line.trim());
