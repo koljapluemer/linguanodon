@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, ref, reactive } from 'vue';
+import { inject, onMounted, onUnmounted, ref, reactive } from 'vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
@@ -49,6 +49,10 @@ const PRELOAD_CONFIG = {
 // State
 const state = ref<QueueState>({ status: 'initializing' });
 
+// UI state for smooth transitions
+const showLoadingUI = ref(false);
+let loadingTimeout: NodeJS.Timeout | null = null;
+
 // Preloaded content
 const taskBatches = reactive<TaskBatch[]>([]);
 const preloadStatus = reactive({
@@ -58,6 +62,24 @@ const preloadStatus = reactive({
 });
 
 let batchLoadingPromise: Promise<void> | null = null;
+
+// Loading UI helpers
+function startDelayedLoading() {
+  if (loadingTimeout) {
+    clearTimeout(loadingTimeout);
+  }
+  loadingTimeout = setTimeout(() => {
+    showLoadingUI.value = true;
+  }, 500);
+}
+
+function clearDelayedLoading() {
+  if (loadingTimeout) {
+    clearTimeout(loadingTimeout);
+    loadingTimeout = null;
+  }
+  showLoadingUI.value = false;
+}
 
 // Generate a lesson batch
 async function loadTaskBatch() {
@@ -152,11 +174,13 @@ async function tryTransitionToTask(): Promise<boolean> {
   
   const taskWithBatch = consumeNextTask();
   if (taskWithBatch) {
+    clearDelayedLoading();
     state.value = { status: 'task', task: taskWithBatch.task, batchId: taskWithBatch.batchId };
     return true;
   }
 
   state.value = { status: 'loading', message: 'Preparing next task...' };
+  startDelayedLoading();
   
   try {
     const forcedTaskWithBatch = await Promise.race([
@@ -166,11 +190,13 @@ async function tryTransitionToTask(): Promise<boolean> {
       )
     ]);
     if (forcedTaskWithBatch) {
+      clearDelayedLoading();
       state.value = { status: 'task', task: forcedTaskWithBatch.task, batchId: forcedTaskWithBatch.batchId };
       return true;
     }
   } catch (error) {
     console.error('Force loading task failed:', error);
+    clearDelayedLoading();
     state.value = { 
       status: 'empty', 
       message: 'Unable to load more tasks. Please try refreshing.' 
@@ -183,12 +209,14 @@ async function tryTransitionToTask(): Promise<boolean> {
 // Initialize queue
 async function initializeQueue() {
   state.value = { status: 'loading', message: 'Loading your learning queue...' };
+  showLoadingUI.value = true; // Show loading immediately for initial load
   
   try {
     await initializePreloader();
     
     const success = await tryTransitionToTask();
     if (!success) {
+      clearDelayedLoading();
       state.value = { 
         status: 'empty', 
         message: 'No tasks are currently available for practice.' 
@@ -196,6 +224,7 @@ async function initializeQueue() {
     }
   } catch (error) {
     console.error('Initialization failed:', error);
+    clearDelayedLoading();
     state.value = { 
       status: 'error', 
       message: 'Failed to initialize learning queue. Please try again.' 
@@ -231,6 +260,10 @@ onMounted(async () => {
   await initializeQueue();
 });
 
+onUnmounted(() => {
+  clearDelayedLoading();
+});
+
 /**
  * Handle task completion
  */
@@ -242,54 +275,92 @@ const handleTaskFinished = async () => {
 <template>
   <div class="min-h-screen bg-base-200 p-4">
     <div class="max-w-4xl mx-auto">
-      <!-- Loading State -->
-      <div v-if="state.status === 'initializing' || state.status === 'loading'" class="flex justify-center items-center min-h-96">
-        <div class="text-center">
-          <span class="loading loading-spinner loading-lg"></span>
-          <p class="mt-4 text-lg">
-            {{ state.status === 'loading' && state.message ? state.message : 'Loading your learning queue...' }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="state.status === 'error'" class="alert alert-error">
-        <span>{{ state.message }}</span>
-        <button class="btn btn-sm" @click="retry">
-          Retry
-        </button>
-      </div>
-
-      <!-- No Content Available -->
-      <div v-else-if="state.status === 'empty'" class="hero min-h-96">
-        <div class="hero-content text-center">
-          <div class="max-w-md">
-            <h1 class="text-5xl font-bold">All Done!</h1>
-            <p class="py-6">{{ state.message }}</p>
-            <button class="btn btn-primary" @click="initializeQueue">
-              Check Again
-            </button>
+      <!-- Loading State (only show when showLoadingUI is true or initializing) -->
+      <Transition
+        enter-active-class="transition-opacity duration-[50ms]"
+        leave-active-class="transition-opacity duration-[50ms]"
+        enter-from-class="opacity-0"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="state.status === 'initializing' || showLoadingUI" class="flex justify-center items-center min-h-96">
+          <div class="text-center">
+            <span class="loading loading-spinner loading-lg"></span>
+            <p class="mt-4 text-lg">
+              {{ state.status === 'loading' && state.message ? state.message : 'Loading your learning queue...' }}
+            </p>
           </div>
         </div>
-      </div>
+      </Transition>
+
+      <!-- Error State -->
+      <Transition
+        enter-active-class="transition-opacity duration-[50ms]"
+        leave-active-class="transition-opacity duration-[50ms]"
+        enter-from-class="opacity-0"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="state.status === 'error'" class="alert alert-error">
+          <span>{{ state.message }}</span>
+          <button class="btn btn-sm" @click="retry">
+            Retry
+          </button>
+        </div>
+      </Transition>
+
+      <!-- No Content Available -->
+      <Transition
+        enter-active-class="transition-opacity duration-[50ms]"
+        leave-active-class="transition-opacity duration-[50ms]"
+        enter-from-class="opacity-0"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="state.status === 'empty'" class="hero min-h-96">
+          <div class="hero-content text-center">
+            <div class="max-w-md">
+              <h1 class="text-5xl font-bold">All Done!</h1>
+              <p class="py-6">{{ state.message }}</p>
+              <button class="btn btn-primary" @click="initializeQueue">
+                Check Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
 
 
       <!-- Task -->
-      <div v-else-if="state.status === 'task'">
-        <TaskRenderer 
-          :key="`${state.task.uid}-${state.batchId}`"
-          :task="state.task"
-          @finished="handleTaskFinished"
-        />
+      <div v-if="state.status === 'task' && !showLoadingUI">
+        <Transition
+          mode="out-in"
+          enter-active-class="transition-opacity duration-[50ms] ease-out"
+          leave-active-class="transition-opacity duration-[50ms] ease-in"
+          enter-from-class="opacity-0"
+          enter-to-class="opacity-100"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
+        >
+          <TaskRenderer 
+            :key="`${state.task.uid}-${state.batchId}`"
+            :task="state.task"
+            @finished="handleTaskFinished"
+          />
+        </Transition>
       </div>
 
       <!-- Fallback (should never happen with state machine) -->
-      <div v-else class="alert alert-warning">
-        <span>Unknown queue state. Please refresh.</span>
-        <button class="btn btn-sm" @click="initializeQueue">
-          Refresh
-        </button>
-      </div>
+      <Transition
+        enter-active-class="transition-opacity duration-[50ms]"
+        leave-active-class="transition-opacity duration-[50ms]"
+        enter-from-class="opacity-0"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="!['initializing', 'loading', 'task', 'empty', 'error'].includes(state.status)" class="alert alert-warning">
+          <span>Unknown queue state. Please refresh.</span>
+          <button class="btn btn-sm" @click="initializeQueue">
+            Refresh
+          </button>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
