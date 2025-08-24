@@ -122,11 +122,8 @@ async function generateOptions() {
     // Generate wrong translation options
     const wrongCount = optionCount.value - 1;
     const wrongAnswers = await translationRepo.generateWrongTranslations(
-      vocab.value,
-      translations.value,
       correctAnswer,
-      wrongCount,
-      vocabRepo
+      wrongCount
     );
 
     wrongAnswers.forEach(wrong => {

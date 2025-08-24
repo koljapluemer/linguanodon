@@ -418,12 +418,19 @@ export class VocabRepo implements VocabRepoContract {
     }
   }
 
-  async findVocabByTranslationContent(translationContent: string): Promise<VocabData[]> {
-    // This method needs translation context to work properly
-    // For now, return empty array as this functionality should be in a feature
-    console.warn('findVocabByTranslationContent called on VocabRepo - this needs translation context');
-    void translationContent;
-    return [];
+  async findVocabByTranslationUids(language: string, translationUids: string[]): Promise<VocabData | undefined> {
+    if (translationUids.length === 0) return undefined;
+    
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .equals(language)
+      .filter(vocab => {
+        // Check if ALL translation UIDs are present in this vocab's translations
+        return translationUids.every(uid => vocab.translations.includes(uid));
+      })
+      .first();
+      
+    return vocab ? this.ensureVocabFields(vocab) : undefined;
   }
 
   private async findIdealWrongVocab(targetLanguage: string, correctVocabContent: string): Promise<string | null> {

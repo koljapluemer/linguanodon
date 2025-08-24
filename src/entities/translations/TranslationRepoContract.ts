@@ -1,6 +1,4 @@
 import type { TranslationData } from './TranslationData';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 
 export interface TranslationRepoContract {
   // Basic CRUD operations
@@ -11,9 +9,8 @@ export interface TranslationRepoContract {
   deleteTranslations(ids: string[]): Promise<void>;
   
   // Query operations
-  getAllTranslationsInLanguage(language: string): Promise<TranslationData[]>;
   findTranslationsByContent(content: string): Promise<TranslationData[]>;
   
   // Distractor generation operations
-  generateWrongTranslations(targetVocab: VocabData, correctTranslations: TranslationData[], correctAnswer: string, count: number, vocabRepo: VocabRepoContract): Promise<string[]>;
+  generateWrongTranslations(correctTranslationContent: string, count: number): Promise<string[]>;
 }

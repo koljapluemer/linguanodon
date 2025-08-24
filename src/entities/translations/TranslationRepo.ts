@@ -1,8 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { TranslationRepoContract } from './TranslationRepoContract';
 import type { TranslationData } from './TranslationData';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import { levenshteinDistance, isLengthWithinRange } from '@/shared/stringUtils';
 import { shuffleArray } from '@/shared/arrayUtils';
 
@@ -50,44 +48,21 @@ export class TranslationRepo implements TranslationRepoContract {
     await translationDb.translations.where('uid').anyOf(ids).delete();
   }
 
-  async getAllTranslationsInLanguage(_language: string): Promise<TranslationData[]> {
-    // This method would need vocab context to work properly
-    // For now, return empty array as this functionality should be in a feature
-    console.warn('getAllTranslationsInLanguage called on TranslationRepo - this needs vocab context');
-    return [];
-  }
-
   async findTranslationsByContent(content: string): Promise<TranslationData[]> {
     return await translationDb.translations.where('content').equals(content).toArray();
   }
 
-  private async findIdealWrongTranslation(
-    targetVocab: VocabData,
-    correctTranslations: TranslationData[],
-    correctAnswer: string,
-    vocabRepo: VocabRepoContract
-  ): Promise<string | null> {
-    const dueVocab = await vocabRepo.getDueVocabInLanguage(targetVocab.language);
+  private async findIdealWrongTranslation(correctTranslationContent: string): Promise<string | null> {
+    const allTranslations = await translationDb.translations.toArray();
     
-    const candidateTranslations: TranslationData[] = [];
-    
-    for (const vocab of dueVocab) {
-      if (vocab.uid === targetVocab.uid) continue;
+    const idealCandidates = allTranslations.filter(translation => {
+      if (translation.content === correctTranslationContent) return false;
       
-      const vocabTranslations = await this.getTranslationsByIds(vocab.translations);
-      candidateTranslations.push(...vocabTranslations);
-    }
-    
-    const idealCandidates = candidateTranslations.filter(translation => {
-      if (!isLengthWithinRange(translation.content, correctAnswer.length, 3)) {
+      if (!isLengthWithinRange(translation.content, correctTranslationContent.length, 3)) {
         return false;
       }
       
-      const minDistance = Math.min(
-        ...correctTranslations.map(ct => levenshteinDistance(translation.content, ct.content))
-      );
-      
-      return minDistance > 2;
+      return levenshteinDistance(translation.content, correctTranslationContent) > 2;
     });
     
     if (idealCandidates.length > 0) {
@@ -98,14 +73,12 @@ export class TranslationRepo implements TranslationRepoContract {
     return null;
   }
 
-  private async getFallbackWrongTranslation(
-    targetVocab: VocabData,
-    correctTranslations: TranslationData[]
-  ): Promise<string | null> {
-    const allTranslations = await this.getAllTranslationsInLanguage(targetVocab.language);
-    const correctContents = new Set(correctTranslations.map(t => t.content));
+  private async getFallbackWrongTranslation(correctTranslationContent: string): Promise<string | null> {
+    const allTranslations = await translationDb.translations.toArray();
     
-    const candidates = allTranslations.filter(t => !correctContents.has(t.content));
+    const candidates = allTranslations.filter(translation => 
+      translation.content !== correctTranslationContent
+    );
     
     if (candidates.length > 0) {
       const shuffled = shuffleArray(candidates);
@@ -115,23 +88,12 @@ export class TranslationRepo implements TranslationRepoContract {
     return null;
   }
 
-  async generateWrongTranslations(
-    targetVocab: VocabData,
-    correctTranslations: TranslationData[],
-    correctAnswer: string,
-    count: number,
-    vocabRepo: VocabRepoContract
-  ): Promise<string[]> {
+  async generateWrongTranslations(correctTranslationContent: string, count: number): Promise<string[]> {
     const wrongAnswers: string[] = [];
-    const usedAnswers = new Set([correctAnswer]);
+    const usedAnswers = new Set([correctTranslationContent]);
     
     for (let i = 0; i < count; i++) {
-      const idealWrong = await this.findIdealWrongTranslation(
-        targetVocab, 
-        correctTranslations, 
-        correctAnswer, 
-        vocabRepo
-      );
+      const idealWrong = await this.findIdealWrongTranslation(correctTranslationContent);
       if (idealWrong && !usedAnswers.has(idealWrong)) {
         wrongAnswers.push(idealWrong);
         usedAnswers.add(idealWrong);
@@ -139,7 +101,7 @@ export class TranslationRepo implements TranslationRepoContract {
     }
     
     while (wrongAnswers.length < count) {
-      const fallbackWrong = await this.getFallbackWrongTranslation(targetVocab, correctTranslations);
+      const fallbackWrong = await this.getFallbackWrongTranslation(correctTranslationContent);
       if (fallbackWrong && !usedAnswers.has(fallbackWrong)) {
         wrongAnswers.push(fallbackWrong);
         usedAnswers.add(fallbackWrong);

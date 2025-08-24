@@ -26,15 +26,17 @@ import type { GoalData } from '@/entities/goals/GoalData';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { Link } from '@/shared/Link';
 
+import { z } from 'zod';
+
 interface RemoteSetFiles {
-  vocab?: any[];
-  translations?: any[];
-  notes?: any[];
-  links?: any[];
-  resources?: any[];
-  immersionContent?: any[];
-  goals?: any[];
-  factCards?: any[];
+  vocab?: z.infer<typeof vocabSchema>[];
+  translations?: z.infer<typeof translationSchema>[];
+  notes?: z.infer<typeof noteSchema>[];
+  links?: z.infer<typeof linkSchema>[];
+  resources?: z.infer<typeof resourceSchema>[];
+  immersionContent?: z.infer<typeof immersionContentSchema>[];
+  goals?: z.infer<typeof goalSchema>[];
+  factCards?: z.infer<typeof factCardSchema>[];
 }
 
 export class UnifiedRemoteSetService {
@@ -99,13 +101,15 @@ export class UnifiedRemoteSetService {
     // Process links first (they're embedded, not stored as entities)
     if (setFiles.links) {
       for (const linkData of setFiles.links) {
-        linkMap.set(linkData.id, {
-          label: linkData.label,
-          url: linkData.url,
-          owner: linkData.owner,
-          ownerLink: linkData.ownerLink,
-          license: linkData.license
-        });
+        if (linkData.id) {
+          linkMap.set(linkData.id, {
+            label: linkData.label,
+            url: linkData.url,
+            owner: linkData.owner,
+            ownerLink: linkData.ownerLink,
+            license: linkData.license
+          });
+        }
       }
     }
 
@@ -119,14 +123,17 @@ export class UnifiedRemoteSetService {
           noteType: noteData.noteType || 'general'
         };
         const savedNote = await this.noteRepo.saveNote(localNote);
-        noteMap.set(noteData.id, savedNote.uid);
+        if (noteData.id) {
+          noteMap.set(noteData.id, savedNote.uid);
+        }
       }
     }
 
     // Process translations
     if (setFiles.translations) {
       for (const translationData of setFiles.translations) {
-        let existingTranslation = await this.translationRepo.getTranslationByContent(translationData.content);
+        if (!translationData.content) continue;
+        const existingTranslation = await this.translationRepo.getTranslationByContent(translationData.content);
         
         if (existingTranslation) {
           // Add new origin if not already present
@@ -146,7 +153,9 @@ export class UnifiedRemoteSetService {
             priority: shouldIncrementPriority ? (existingTranslation.priority ?? 0) + (translationData.priority || 1) : existingTranslation.priority
           });
           
-          translationMap.set(translationData.id, existingTranslation.uid);
+          if (translationData.id) {
+            translationMap.set(translationData.id, existingTranslation.uid);
+          }
         } else {
           const noteUids = this.resolveReferences(translationData.notes || [], noteMap);
           const localTranslation: Omit<TranslationData, 'uid' | 'origins'> = {
@@ -156,7 +165,9 @@ export class UnifiedRemoteSetService {
           };
           
           const savedTranslation = await this.translationRepo.saveTranslation(localTranslation);
-          translationMap.set(translationData.id, savedTranslation.uid);
+          if (translationData.id) {
+            translationMap.set(translationData.id, savedTranslation.uid);
+          }
         }
       }
     }
@@ -164,10 +175,26 @@ export class UnifiedRemoteSetService {
     // Process vocab
     if (setFiles.vocab) {
       for (const vocabData of setFiles.vocab) {
-        let existingVocab = await this.vocabRepo.getVocabByLanguageAndContent(
-          vocabData.language,
-          vocabData.content
-        );
+        if (!vocabData.language) continue;
+        
+        let existingVocab: VocabData | undefined;
+        
+        if (vocabData.content) {
+          // Match by content + language
+          existingVocab = await this.vocabRepo.getVocabByLanguageAndContent(
+            vocabData.language,
+            vocabData.content
+          );
+        } else {
+          // Match by checking if all remote translations are present in local vocab
+          const translationUids = this.resolveReferences(vocabData.translations || [], translationMap);
+          if (translationUids.length > 0) {
+            existingVocab = await this.vocabRepo.findVocabByTranslationUids(
+              vocabData.language,
+              translationUids
+            );
+          }
+        }
 
         if (existingVocab) {
           // Merge with existing vocab
@@ -194,7 +221,9 @@ export class UnifiedRemoteSetService {
             priority: shouldIncrementPriority ? (existingVocab.priority ?? 0) + (vocabData.priority || 1) : existingVocab.priority
           });
           
-          vocabMap.set(vocabData.id, existingVocab.uid);
+          if (vocabData.id) {
+            vocabMap.set(vocabData.id, existingVocab.uid);
+          }
         } else {
           // Create new vocab
           const noteUids = this.resolveReferences(vocabData.notes || [], noteMap);
@@ -205,7 +234,7 @@ export class UnifiedRemoteSetService {
             language: vocabData.language,
             content: vocabData.content,
             priority: vocabData.priority || 1,
-            doNotPractice: vocabData.doNotPractice || false,
+            doNotPractice: false, // Default value since remote schema doesn't have this
             notes: noteUids,
             translations: translationUids,
             links: links,
@@ -215,12 +244,15 @@ export class UnifiedRemoteSetService {
           };
           
           const savedVocab = await this.vocabRepo.saveVocab(localVocab);
-          vocabMap.set(vocabData.id, savedVocab.uid);
+          if (vocabData.id) {
+            vocabMap.set(vocabData.id, savedVocab.uid);
+          }
         }
       }
       
       // Second pass to resolve vocab-to-vocab relationships
       for (const vocabData of setFiles.vocab) {
+        if (!vocabData.id) continue;
         const vocabUid = vocabMap.get(vocabData.id);
         if (vocabUid) {
           const relatedVocabUids = this.resolveReferences(vocabData.relatedVocab || [], vocabMap);
@@ -245,7 +277,7 @@ export class UnifiedRemoteSetService {
       for (const factCardData of setFiles.factCards) {
         // Check if fact card already exists by front+back+language
         const allFactCards = await this.factCardRepo.getAllFactCards();
-        let existingFactCard = allFactCards.find(fc => 
+        const existingFactCard = allFactCards.find(fc => 
           fc.front === factCardData.front && 
           fc.back === factCardData.back && 
           fc.language === factCardData.language
@@ -267,7 +299,9 @@ export class UnifiedRemoteSetService {
             priority: shouldIncrementPriority ? (existingFactCard.priority ?? 0) + (factCardData.priority || 1) : existingFactCard.priority
           });
           
-          factCardMap.set(factCardData.id, existingFactCard.uid);
+          if (factCardData.id) {
+            factCardMap.set(factCardData.id, existingFactCard.uid);
+          }
         } else {
           const noteUids = this.resolveReferences(factCardData.notes || [], noteMap);
           
@@ -282,7 +316,9 @@ export class UnifiedRemoteSetService {
           };
           
           const savedFactCard = await this.factCardRepo.saveFactCard(localFactCard);
-          factCardMap.set(factCardData.id, savedFactCard.uid);
+          if (factCardData.id) {
+            factCardMap.set(factCardData.id, savedFactCard.uid);
+          }
         }
       }
     }
@@ -290,7 +326,7 @@ export class UnifiedRemoteSetService {
     // Process resources
     if (setFiles.resources) {
       for (const resourceData of setFiles.resources) {
-        let existingResource = await this.resourceRepo.getResourceByTitleAndLanguage(
+        const existingResource = await this.resourceRepo.getResourceByTitleAndLanguage(
           resourceData.title,
           resourceData.language
         );
@@ -311,7 +347,9 @@ export class UnifiedRemoteSetService {
             priority: shouldIncrementPriority ? (existingResource.priority ?? 0) + (resourceData.priority || 1) : existingResource.priority
           });
           
-          resourceMap.set(resourceData.id, existingResource.uid);
+          if (resourceData.id) {
+            resourceMap.set(resourceData.id, existingResource.uid);
+          }
         } else {
           const noteUids = this.resolveReferences(resourceData.notes || [], noteMap);
           const link = resourceData.link ? linkMap.get(resourceData.link) : undefined;
@@ -329,7 +367,9 @@ export class UnifiedRemoteSetService {
           };
           
           const savedResource = await this.resourceRepo.saveResource(localResource);
-          resourceMap.set(resourceData.id, savedResource.uid);
+          if (resourceData.id) {
+            resourceMap.set(resourceData.id, savedResource.uid);
+          }
         }
       }
     }
@@ -337,7 +377,7 @@ export class UnifiedRemoteSetService {
     // Process immersion content
     if (setFiles.immersionContent) {
       for (const immersionData of setFiles.immersionContent) {
-        let existingImmersion = await this.immersionContentRepo.getImmersionContentByTitleAndLanguage(
+        const existingImmersion = await this.immersionContentRepo.getImmersionContentByTitleAndLanguage(
           immersionData.title,
           immersionData.language
         );
@@ -360,7 +400,9 @@ export class UnifiedRemoteSetService {
             priority: shouldIncrementPriority ? (existingImmersion.priority ?? 0) + (immersionData.priority || 1) : existingImmersion.priority
           });
           
-          immersionContentMap.set(immersionData.id, existingImmersion.uid);
+          if (immersionData.id) {
+            immersionContentMap.set(immersionData.id, existingImmersion.uid);
+          }
         } else {
           const noteUids = this.resolveReferences(immersionData.notes || [], noteMap);
           const neededVocabUids = this.resolveReferences(immersionData.neededVocab || [], vocabMap);
@@ -380,7 +422,9 @@ export class UnifiedRemoteSetService {
           };
           
           const savedImmersion = await this.immersionContentRepo.saveImmersionContent(localImmersion);
-          immersionContentMap.set(immersionData.id, savedImmersion.uid);
+          if (immersionData.id) {
+            immersionContentMap.set(immersionData.id, savedImmersion.uid);
+          }
         }
       }
     }
@@ -390,7 +434,7 @@ export class UnifiedRemoteSetService {
       for (const goalData of setFiles.goals) {
         // Check if goal already exists by title+language
         const allGoals = await this.goalRepo.getAll();
-        let existingGoal = allGoals.find(g => 
+        const existingGoal = allGoals.find(g => 
           g.title === goalData.title && 
           g.language === goalData.language
         );
@@ -413,7 +457,9 @@ export class UnifiedRemoteSetService {
             origins: [...existingOrigins]
           });
           
-          goalMap.set(goalData.id, existingGoal.uid);
+          if (goalData.id) {
+            goalMap.set(goalData.id, existingGoal.uid);
+          }
         } else {
           const noteUids = this.resolveReferences(goalData.notes || [], noteMap);
           const vocabUids = this.resolveReferences(goalData.vocab || [], vocabMap);
@@ -431,7 +477,9 @@ export class UnifiedRemoteSetService {
           };
           
           const savedGoal = await this.goalRepo.create(localGoal);
-          goalMap.set(goalData.id, savedGoal.uid);
+          if (goalData.id) {
+            goalMap.set(goalData.id, savedGoal.uid);
+          }
         }
       }
     }
@@ -461,28 +509,31 @@ export class UnifiedRemoteSetService {
             continue;
           }
           
+          // Get the appropriate schema for validation
+          const schema = this.getSchemaForFile(fileName);
+          if (!schema) {
+            console.warn(`No schema found for ${fileName}.jsonl`);
+            continue;
+          }
+
           const data = lines.map(line => {
             try {
-              return JSON.parse(line);
-            } catch (error) {
-              console.warn(`Failed to parse line in ${fileName}.jsonl:`, line);
+              const parsed: unknown = JSON.parse(line);
+              const result = schema.safeParse(parsed);
+              if (result.success) {
+                return result.data;
+              } else {
+                console.warn(`Validation failed for line in ${fileName}.jsonl:`, result.error);
+                return null;
+              }
+            } catch {
+              console.warn(`Failed to parse JSON line in ${fileName}.jsonl:`, line);
               return null;
             }
           }).filter(item => item !== null);
           
-          // Validate each line against appropriate schema
-          const schema = this.getSchemaForFile(fileName);
-          if (schema) {
-            for (const item of data) {
-              const result = schema.safeParse(item);
-              if (!result.success) {
-                console.error(`Validation failed for ${fileName} item:`, result.error);
-                return null;
-              }
-            }
-          }
-          
-          setFiles[fileName as keyof RemoteSetFiles] = data;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setFiles[fileName as keyof RemoteSetFiles] = data as any;
         }
       } catch (error) {
         console.error(`Failed to load ${fileName}.jsonl:`, error);
