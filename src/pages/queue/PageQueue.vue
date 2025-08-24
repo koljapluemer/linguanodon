@@ -30,9 +30,15 @@ if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !taskRepo ||
 type QueueState = 
   | { status: 'initializing' }
   | { status: 'loading', message?: string }
-  | { status: 'task', task: TaskData }
+  | { status: 'task', task: TaskData, batchId: string }
   | { status: 'empty', message: string }
   | { status: 'error', message: string };
+
+// Task batch interface
+interface TaskBatch {
+  id: string;
+  tasks: TaskData[];
+}
 
 // Preloader config
 const PRELOAD_CONFIG = {
@@ -44,7 +50,7 @@ const PRELOAD_CONFIG = {
 const state = ref<QueueState>({ status: 'initializing' });
 
 // Preloaded content
-const taskBatches = reactive<TaskData[][]>([]);
+const taskBatches = reactive<TaskBatch[]>([]);
 const preloadStatus = reactive({
   taskBatchesReady: 0,
   isLoadingBatch: false,
@@ -71,7 +77,11 @@ async function loadTaskBatch() {
       }
       
       const shuffledLesson = shuffleArray(lesson);
-      taskBatches.push(shuffledLesson);
+      const batchId = crypto.randomUUID();
+      taskBatches.push({
+        id: batchId,
+        tasks: shuffledLesson
+      });
       preloadStatus.taskBatchesReady = taskBatches.length;
     })();
     
@@ -100,13 +110,13 @@ async function initializePreloader() {
 }
 
 // Consume next task
-function consumeNextTask(): TaskData | null {
+function consumeNextTask(): { task: TaskData; batchId: string } | null {
   for (let i = 0; i < taskBatches.length; i++) {
     const batch = taskBatches[i];
-    if (batch.length > 0) {
-      const task = batch.shift();
+    if (batch.tasks.length > 0) {
+      const task = batch.tasks.shift();
       
-      if (batch.length === 0) {
+      if (batch.tasks.length === 0) {
         taskBatches.splice(i, 1);
         preloadStatus.taskBatchesReady = taskBatches.length;
         
@@ -115,18 +125,22 @@ function consumeNextTask(): TaskData | null {
         }
       }
       
-      return task || null;
+      return task ? { task, batchId: batch.id } : null;
     }
   }
   return null;
 }
 
 // Force load next task
-async function forceLoadNextTask(): Promise<TaskData | null> {
+async function forceLoadNextTask(): Promise<{ task: TaskData; batchId: string } | null> {
   try {
     const lesson = await makeLesson(vocabRepo!, resourceRepo!, taskRepo!, languageRepo!, immersionContentRepo!);
     const shuffledLesson = shuffleArray(lesson);
-    return shuffledLesson.length > 0 ? shuffledLesson[0] : null;
+    if (shuffledLesson.length > 0) {
+      const batchId = crypto.randomUUID();
+      return { task: shuffledLesson[0], batchId };
+    }
+    return null;
   } catch (error) {
     console.error('Error force loading task:', error);
     return null;
@@ -136,23 +150,23 @@ async function forceLoadNextTask(): Promise<TaskData | null> {
 // Try to transition to task state
 async function tryTransitionToTask(): Promise<boolean> {
   
-  const task = consumeNextTask();
-  if (task) {
-    state.value = { status: 'task', task };
+  const taskWithBatch = consumeNextTask();
+  if (taskWithBatch) {
+    state.value = { status: 'task', task: taskWithBatch.task, batchId: taskWithBatch.batchId };
     return true;
   }
 
   state.value = { status: 'loading', message: 'Preparing next task...' };
   
   try {
-    const forcedTask = await Promise.race([
+    const forcedTaskWithBatch = await Promise.race([
       forceLoadNextTask(),
       new Promise<null>((_, reject) => 
         setTimeout(() => reject(new Error('Force load timeout')), 5000)
       )
     ]);
-    if (forcedTask) {
-      state.value = { status: 'task', task: forcedTask };
+    if (forcedTaskWithBatch) {
+      state.value = { status: 'task', task: forcedTaskWithBatch.task, batchId: forcedTaskWithBatch.batchId };
       return true;
     }
   } catch (error) {
@@ -263,7 +277,7 @@ const handleTaskFinished = async () => {
       <!-- Task -->
       <div v-else-if="state.status === 'task'">
         <TaskRenderer 
-          :key="state.task.uid"
+          :key="`${state.task.uid}-${state.batchId}`"
           :task="state.task"
           @finished="handleTaskFinished"
         />
