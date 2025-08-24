@@ -2,7 +2,8 @@ import Dexie, { type Table } from 'dexie';
 import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
 import type { VocabData } from './vocab/VocabData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
-import { pickRandom } from '@/shared/arrayUtils';
+import { pickRandom, shuffleArray } from '@/shared/arrayUtils';
+import { levenshteinDistance, isLengthWithinRange } from '@/shared/stringUtils';
 
 // Utility functions
 function isUnseen(vocab: VocabData): boolean {
@@ -423,5 +424,66 @@ export class VocabRepo implements VocabRepoContract {
     console.warn('findVocabByTranslationContent called on VocabRepo - this needs translation context');
     void translationContent;
     return [];
+  }
+
+  private async findIdealWrongVocab(targetLanguage: string, correctVocabContent: string): Promise<string | null> {
+    const dueVocab = await this.getDueVocabInLanguage(targetLanguage);
+    
+    const idealCandidates = dueVocab.filter(vocab => {
+      if (!vocab.content || vocab.content === correctVocabContent) return false;
+      
+      if (!isLengthWithinRange(vocab.content, correctVocabContent.length, 3)) {
+        return false;
+      }
+      
+      return levenshteinDistance(vocab.content, correctVocabContent) > 2;
+    });
+    
+    if (idealCandidates.length > 0) {
+      const shuffled = shuffleArray(idealCandidates);
+      return shuffled[0].content!;
+    }
+    
+    return null;
+  }
+
+  private async getFallbackWrongVocab(targetLanguage: string, correctVocabContent: string): Promise<string | null> {
+    const dueVocab = await this.getDueVocabInLanguage(targetLanguage);
+    
+    const candidates = dueVocab.filter(vocab => 
+      vocab.content && vocab.content !== correctVocabContent
+    );
+    
+    if (candidates.length > 0) {
+      const shuffled = shuffleArray(candidates);
+      return shuffled[0].content!;
+    }
+    
+    return null;
+  }
+
+  async generateWrongVocabs(targetLanguage: string, correctVocabContent: string, count: number): Promise<string[]> {
+    const wrongAnswers: string[] = [];
+    const usedAnswers = new Set([correctVocabContent]);
+    
+    for (let i = 0; i < count; i++) {
+      const idealWrong = await this.findIdealWrongVocab(targetLanguage, correctVocabContent);
+      if (idealWrong && !usedAnswers.has(idealWrong)) {
+        wrongAnswers.push(idealWrong);
+        usedAnswers.add(idealWrong);
+      }
+    }
+    
+    while (wrongAnswers.length < count) {
+      const fallbackWrong = await this.getFallbackWrongVocab(targetLanguage, correctVocabContent);
+      if (fallbackWrong && !usedAnswers.has(fallbackWrong)) {
+        wrongAnswers.push(fallbackWrong);
+        usedAnswers.add(fallbackWrong);
+      } else {
+        break;
+      }
+    }
+    
+    return wrongAnswers;
   }
 }

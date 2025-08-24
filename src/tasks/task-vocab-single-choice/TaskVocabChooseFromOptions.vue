@@ -5,7 +5,6 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
-import { DistractorGenerator } from '@/pages/queue/lesson-generator/utils/DistractorGenerator';
 import { shuffleArray } from '@/shared/arrayUtils';
 
 interface AnswerOption {
@@ -92,7 +91,6 @@ async function loadVocabData() {
 async function generateOptions() {
   if (!vocab.value || translations.value.length === 0) return;
 
-  const distractorGen = new DistractorGenerator(vocabRepo, translationRepo);
   const options: AnswerOption[] = [];
 
   if (isReverse.value) {
@@ -102,7 +100,7 @@ async function generateOptions() {
 
     // Generate wrong vocab options
     const wrongCount = optionCount.value - 1;
-    const wrongAnswers = await distractorGen.generateWrongVocabs(
+    const wrongAnswers = await vocabRepo.generateWrongVocabs(
       vocab.value.language,
       correctAnswer,
       wrongCount
@@ -123,11 +121,12 @@ async function generateOptions() {
 
     // Generate wrong translation options
     const wrongCount = optionCount.value - 1;
-    const wrongAnswers = await distractorGen.generateWrongTranslations(
+    const wrongAnswers = await translationRepo.generateWrongTranslations(
       vocab.value,
       translations.value,
       correctAnswer,
-      wrongCount
+      wrongCount,
+      vocabRepo
     );
 
     wrongAnswers.forEach(wrong => {

@@ -46,4 +46,7 @@ export interface VocabRepoContract {
   getDueVocabInLanguages(languages: string[], setsToAvoid?: string[]): Promise<VocabData[]>;
   getRandomUnseenVocabInLanguages(languages: string[], count: number, setsToAvoid?: string[]): Promise<VocabData[]>;
   findVocabByTranslationContent(translationContent: string): Promise<VocabData[]>;
+  
+  // Distractor generation operations
+  generateWrongVocabs(targetLanguage: string, correctVocabContent: string, count: number): Promise<string[]>;
 }
