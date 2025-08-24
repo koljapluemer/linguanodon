@@ -134,13 +134,16 @@ async function loadLanguages() {
     availableLanguages.value = allLanguages.filter(lang => languageCodes.includes(lang.code));
     console.log('Filtered available languages:', availableLanguages.value);
     
-    // If no match, create minimal language objects for remote codes
-    if (availableLanguages.value.length === 0 && languageCodes.length > 0) {
-      availableLanguages.value = languageCodes.map(code => ({
-        code,
-        name: code.toUpperCase(),
-        emoji: ''
-      }));
+    // For missing codes, create proper LanguageData objects using the language repo
+    const missingCodes = languageCodes.filter(code => 
+      !availableLanguages.value.some(lang => lang.code === code)
+    );
+    
+    if (missingCodes.length > 0) {
+      const missingLanguages = await Promise.all(
+        missingCodes.map(code => languageRepo.createLanguageFromCode(code))
+      );
+      availableLanguages.value.push(...missingLanguages);
     }
   } catch (error) {
     console.error('Failed to load languages:', error);

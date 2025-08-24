@@ -19,4 +19,7 @@ export interface LanguageRepoContract {
   
   // Count
   getCount(): Promise<number>;
+  
+  // Language creation from codes
+  createLanguageFromCode(code: string): Promise<LanguageData>;
 }

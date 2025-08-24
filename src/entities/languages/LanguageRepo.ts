@@ -56,4 +56,16 @@ export class LanguageRepo implements LanguageRepoContract {
     const all = await this.getAll();
     return all.length;
   }
+
+  async createLanguageFromCode(code: string): Promise<LanguageData> {
+    const isoLang = (isoLangs as { code: string; name: string; emoji?: string }[])
+      .find(l => l.code === code);
+    
+    return {
+      code,
+      name: isoLang?.name || code.toUpperCase(),
+      emoji: isoLang?.emoji,
+      isActive: true
+    };
+  }
 }
