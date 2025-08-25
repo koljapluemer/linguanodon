@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="flex justify-between items-center mb-3">
-      <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">
         Links
-      </div>
+      </h3>
       <button
         type="button"
         @click="addNewLink"
