@@ -40,10 +40,6 @@
     </div>
 
     <!-- Notes -->
-    <div>
-      <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-        Notes
-      </div>
       <NoteList
         :notes="formData.notes"
         :show-before-exercise-option="true"
@@ -51,7 +47,6 @@
         @update="$emit('update-note', $event)"
         @delete="$emit('remove-note', $event)"
       />
-    </div>
 
     <!-- Links -->
     <LinksForm
