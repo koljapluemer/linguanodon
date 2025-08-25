@@ -1,7 +1,5 @@
 <template>
-  <div class="max-w-6xl mx-auto mt-8 p-4">
-    <ResourceListWidget />
-  </div>
+  <ResourceListWidget />
 </template>
 
 <script setup lang="ts">

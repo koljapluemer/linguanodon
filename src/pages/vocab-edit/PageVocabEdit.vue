@@ -1,47 +1,34 @@
 <template>
-  <div class="max-w-4xl mx-auto mt-8 p-4">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold">
-        {{ isEditing ? 'Edit Vocab' : 'Add New Vocab' }}
-      </h1>
-      <router-link to="/vocab" class="btn btn-outline">
-        Back to Vocab List
-      </router-link>
-    </div>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">
+      {{ isEditing ? 'Edit Vocab' : 'Add New Vocab' }}
+    </h1>
+    <router-link to="/vocab" class="btn btn-outline">
+      Back to Vocab List
+    </router-link>
+  </div>
 
-    <!-- Vocab Form -->
-    <div class="max-w-2xl mx-auto">
-      <VocabEditFormController
-        :vocab-id="route.params.id as string"
-        @vocab-saved="handleVocabSaved"
-      />
-    </div>
+  <VocabEditFormController :vocab-id="route.params.id as string" @vocab-saved="handleVocabSaved" />
 
-    <div v-if="isEditing && currentVocabTaskIds.length > 0" class="mt-8">
-      <h2 class="text-xl font-semibold mb-4">Associated Tasks</h2>
-      <TaskModalTriggerList :task-ids="currentVocabTaskIds" />
-    </div>
+  <div v-if="isEditing && currentVocabTaskIds.length > 0" class="mt-8">
+    <h2 class="text-xl font-semibold mb-4">Associated Tasks</h2>
+    <TaskModalTriggerList :task-ids="currentVocabTaskIds" />
+  </div>
 
-    <!-- Vocab Mastery Progress -->
-    <div v-if="isEditing && currentVocab" class="mt-8">
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="text-xl font-semibold mb-4">Mastery Progress</h2>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-sm font-medium">Current Mastery</span>
-              <span class="text-sm font-bold">{{ vocabMastery }}%</span>
-            </div>
-            <progress 
-              class="progress progress-primary w-full" 
-              :value="vocabMastery" 
-              max="100"
-            ></progress>
+  <!-- Vocab Mastery Progress -->
+  <div v-if="isEditing && currentVocab" class="mt-8">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="text-xl font-semibold mb-4">Mastery Progress</h2>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium">Current Mastery</span>
+            <span class="text-sm font-bold">{{ vocabMastery }}%</span>
           </div>
+          <progress class="progress progress-primary w-full" :value="vocabMastery" max="100"></progress>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -99,7 +86,7 @@ async function handleVocabSaved(vocabId: string) {
     console.warn('Repos not available for task update');
     return;
   }
-  
+
   try {
     if (!noteRepo) {
       console.error('NoteRepo not available');
@@ -107,7 +94,7 @@ async function handleVocabSaved(vocabId: string) {
     }
     const taskController = new UpdateVocabTasksController(vocabRepo, translationRepo, taskRepo, noteRepo);
     await taskController.updateTasksForVocab(vocabId);
-    
+
     // Reload task IDs and vocab data for this vocab
     const vocab = await vocabRepo.getVocabByUID(vocabId);
     currentVocabTaskIds.value = vocab?.tasks || [];

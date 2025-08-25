@@ -1,55 +1,44 @@
 <template>
-  <div class="max-w-4xl mx-auto mt-8 p-4">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold">
-        {{ isEditing ? 'Edit Goal' : 'Add New Goal' }}
-      </h1>
-      <router-link to="/goals" class="btn btn-outline">
-        Back to Goals List
-      </router-link>
-    </div>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">
+      {{ isEditing ? 'Edit Goal' : 'Add New Goal' }}
+    </h1>
+    <router-link to="/goals" class="btn btn-outline">
+      Back to Goals List
+    </router-link>
+  </div>
 
-    <div v-if="loading" class="flex justify-center py-12">
-      <span class="loading loading-spinner loading-lg"></span>
-    </div>
-    
-    <div v-else-if="goal" class="space-y-8">
-      <!-- Edit Goal Section -->
-      <section class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Goal Details</h2>
-          <EditGoalWidget 
-            :goal="goal"
-            @goal-updated="handleGoalUpdate"
-          />
-        </div>
-      </section>
+  <div v-if="loading" class="flex justify-center py-12">
+    <span class="loading loading-spinner loading-lg"></span>
+  </div>
+
+  <div v-else-if="goal" class="space-y-8">
+    <!-- Edit Goal Section -->
+    <section class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Goal Details</h2>
+        <EditGoalWidget :goal="goal" @goal-updated="handleGoalUpdate" />
+      </div>
+    </section>
 
 
-      <!-- Sub-goals Section -->
-      <section class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Sub-Goals</h2>
-          <ManageSubGoalsWidget 
-            :goal="goal"
-            @goal-updated="handleGoalUpdate"
-          />
-        </div>
-      </section>
+    <!-- Sub-goals Section -->
+    <section class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Sub-Goals</h2>
+        <ManageSubGoalsWidget :goal="goal" @goal-updated="handleGoalUpdate" />
+      </div>
+    </section>
 
-      <!-- Vocabulary Section -->
-      <section class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Vocabulary</h2>
-          <ManageVocabOfGoalWidget 
-            :goal="goal"
-            @goal-updated="handleGoalUpdate"
-          />
-        </div>
-      </section>
+    <!-- Vocabulary Section -->
+    <section class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Vocabulary</h2>
+        <ManageVocabOfGoalWidget :goal="goal" @goal-updated="handleGoalUpdate" />
+      </div>
+    </section>
 
 
-    </div>
   </div>
 </template>
 
@@ -76,7 +65,7 @@ const isEditing = computed(() => {
 
 async function loadGoal() {
   loading.value = true;
-  
+
   if (isEditing.value) {
     const goalId = route.params.id as string;
     const loadedGoal = await goalRepo.getById(goalId);
@@ -99,13 +88,13 @@ async function loadGoal() {
       origins: ['user-added']
     };
   }
-  
+
   loading.value = false;
 }
 
 async function handleGoalUpdate(updatedGoal: GoalData) {
   goal.value = updatedGoal;
-  
+
   // Generate tasks for this goal (on creation or update)
   if (updatedGoal.uid) {
     try {
@@ -114,7 +103,7 @@ async function handleGoalUpdate(updatedGoal: GoalData) {
       console.error('Failed to update goal tasks:', error);
     }
   }
-  
+
   // If this was a new goal creation, redirect to edit mode
   if (!isEditing.value && updatedGoal.uid) {
     router.push(`/goals/${updatedGoal.uid}`);
