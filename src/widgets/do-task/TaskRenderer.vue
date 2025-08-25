@@ -1,10 +1,9 @@
 <template>
-  <div class="flex items-center justify-between mb-2">
+  <div class="space-y-2">
     <LanguageDisplay v-if="languageData" :language="languageData" variant="short" />
     <TaskPrompt :prompt="props.task.prompt" />
+    <component :is="getTaskComponent(props.task.taskType)" :task="props.task" @finished="handleTaskFinished" />
   </div>
-  <component :is="getTaskComponent(props.task.taskType)" :task="props.task" @finished="handleTaskFinished" />
-  
 </template>
 
 <script setup lang="ts">
