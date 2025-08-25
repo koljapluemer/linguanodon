@@ -7,14 +7,27 @@
 
     <!-- Form -->
     <div>
+      <!-- Toggle for Basic/All Data -->
+      <div class="flex items-center justify-end mb-6">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <span class="text-sm">Show all data</span>
+          <input
+            v-model="showAllData"
+            type="checkbox"
+            class="toggle toggle-sm"
+          />
+        </label>
+      </div>
+
       <!-- Core Data Form -->
       <VocabAddFormCorePropsRenderer
         :form-data="formData"
         @field-change="$emit('field-change')"
       />
 
-      <!-- Advanced Props Form -->
+      <!-- Advanced Props Form (only when showing all data) -->
       <VocabAddFormAdvancedPropsRenderer
+        v-if="showAllData"
         :form-data="formData"
         @field-change="$emit('field-change')"
         @add-note="$emit('add-note', $event)"
@@ -41,6 +54,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import VocabAddFormCorePropsRenderer from './VocabAddFormCorePropsRenderer.vue';
 import VocabAddFormAdvancedPropsRenderer from './VocabAddFormAdvancedPropsRenderer.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
@@ -78,4 +92,14 @@ defineEmits<{
   'remove-link': [index: number];
   'save': [];
 }>();
+
+// Persistent toggle state in localStorage
+const showAllData = ref<boolean>(
+  localStorage.getItem('vocab-add-show-all-data') === 'true'
+);
+
+// Watch for changes and persist to localStorage
+watch(showAllData, (newValue) => {
+  localStorage.setItem('vocab-add-show-all-data', String(newValue));
+});
 </script>

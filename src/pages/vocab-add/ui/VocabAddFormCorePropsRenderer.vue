@@ -1,5 +1,4 @@
 <template>
-  <div class="divide-y divide-gray-200 dark:divide-gray-700">
     <!-- Language -->
     <div class="py-4">
       <label class="label">
@@ -80,7 +79,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
