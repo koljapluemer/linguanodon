@@ -29,9 +29,9 @@
       <VocabFormCoreRenderer
         :form-data="formData"
         @field-change="$emit('field-change')"
-        @add-translation="(translation) => { console.log('[VocabFormMetaRenderer] Received add-translation, re-emitting:', translation); $emit('add-translation', translation); }"
-        @update-translation="(translation) => { console.log('[VocabFormMetaRenderer] Received update-translation, re-emitting:', translation); $emit('update-translation', translation); }"
-        @remove-translation="(uid) => { console.log('[VocabFormMetaRenderer] Received remove-translation, re-emitting:', uid); $emit('remove-translation', uid); }"
+        @add-translation="$emit('add-translation', $event)"
+        @update-translation="$emit('update-translation', $event)"
+        @remove-translation="$emit('remove-translation', $event)"
       />
 
       <!-- Advanced Props Form (only when showing all data) -->

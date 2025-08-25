@@ -217,7 +217,6 @@ function saveNewTranslation() {
     uid: crypto.randomUUID()
   };
   
-  console.log('[VocabFormCoreRenderer] Emitting add-translation:', newTranslation);
   emit('add-translation', newTranslation);
   isCreatingNew.value = false;
 }
@@ -233,7 +232,6 @@ function saveEdit() {
     content: tempTranslation.value.content.trim()
   };
   
-  console.log('[VocabFormCoreRenderer] Emitting update-translation:', translationToSave);
   emit('update-translation', translationToSave);
   editingIndex.value = null;
 }
@@ -244,7 +242,6 @@ function cancelEdit() {
 }
 
 function deleteTranslation(uid: string) {
-  console.log('[VocabFormCoreRenderer] Emitting remove-translation:', uid);
   emit('remove-translation', uid);
 }
 </script>
