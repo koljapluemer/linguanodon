@@ -14,6 +14,9 @@
       @add-link="addLink"
       @update-link="updateLink"
       @remove-link="removeLink"
+      @add-translation="addTranslation"
+      @update-translation="updateTranslation"
+      @remove-translation="removeTranslation"
     />
   </div>
 </template>
@@ -285,7 +288,9 @@ async function save(): Promise<boolean> {
 }
 
 async function handleFieldChange() {
+  console.log('[VocabEditFormController] handleFieldChange called, isEditing:', state.value.isEditing);
   if (state.value.isEditing) {
+    console.log('[VocabEditFormController] Triggering auto-save...');
     await save();
   }
 }
@@ -323,6 +328,37 @@ function updateLink(index: number, link: Link) {
 async function removeLink(index: number) {
   state.value.formData.links.splice(index, 1);
   await handleFieldChange();
+}
+
+function addTranslation(translation: TranslationData) {
+  console.log('[VocabEditFormController] Received add-translation:', translation);
+  state.value.formData.translations.push(translation);
+  console.log('[VocabEditFormController] Form translations now:', state.value.formData.translations);
+  handleFieldChange();
+}
+
+function updateTranslation(updatedTranslation: TranslationData) {
+  console.log('[VocabEditFormController] Received update-translation:', updatedTranslation);
+  const index = state.value.formData.translations.findIndex(t => t.uid === updatedTranslation.uid);
+  if (index >= 0) {
+    state.value.formData.translations[index] = updatedTranslation;
+    console.log('[VocabEditFormController] Form translations now:', state.value.formData.translations);
+    handleFieldChange();
+  } else {
+    console.warn('[VocabEditFormController] Translation not found for update:', updatedTranslation.uid);
+  }
+}
+
+async function removeTranslation(uid: string) {
+  console.log('[VocabEditFormController] Received remove-translation:', uid);
+  const index = state.value.formData.translations.findIndex(t => t.uid === uid);
+  if (index >= 0) {
+    state.value.formData.translations.splice(index, 1);
+    console.log('[VocabEditFormController] Form translations now:', state.value.formData.translations);
+    await handleFieldChange();
+  } else {
+    console.warn('[VocabEditFormController] Translation not found for removal:', uid);
+  }
 }
 
 onMounted(() => {

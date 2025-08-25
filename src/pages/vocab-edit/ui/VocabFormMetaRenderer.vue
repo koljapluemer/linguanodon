@@ -29,6 +29,9 @@
       <VocabFormCoreRenderer
         :form-data="formData"
         @field-change="$emit('field-change')"
+        @add-translation="(translation) => { console.log('[VocabFormMetaRenderer] Received add-translation, re-emitting:', translation); $emit('add-translation', translation); }"
+        @update-translation="(translation) => { console.log('[VocabFormMetaRenderer] Received update-translation, re-emitting:', translation); $emit('update-translation', translation); }"
+        @remove-translation="(uid) => { console.log('[VocabFormMetaRenderer] Received remove-translation, re-emitting:', uid); $emit('remove-translation', uid); }"
       />
 
       <!-- Advanced Props Form (only when showing all data) -->
@@ -36,10 +39,10 @@
         v-if="showAllData"
         :form-data="formData"
         @field-change="$emit('field-change')"
-        @add-note="$emit('add-note')"
+        @add-note="$emit('add-note', $event)"
         @update-note="$emit('update-note', $event)"
         @remove-note="$emit('remove-note', $event)"
-        @add-link="$emit('add-link')"
+        @add-link="$emit('add-link', $event)"
         @update-link="(index, link) => $emit('update-link', index, link)"
         @remove-link="$emit('remove-link', $event)"
       />
@@ -83,12 +86,15 @@ defineProps<{
 
 defineEmits<{
   'field-change': [];
-  'add-note': [];
+  'add-note': [note: NoteData];
   'update-note': [note: NoteData];
   'remove-note': [uid: string];
-  'add-link': [];
+  'add-link': [link: Link];
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
+  'add-translation': [translation: TranslationData];
+  'update-translation': [translation: TranslationData];
+  'remove-translation': [uid: string];
 }>();
 
 // Persistent toggle state in localStorage

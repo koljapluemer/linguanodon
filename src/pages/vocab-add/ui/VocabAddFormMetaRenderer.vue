@@ -17,10 +17,10 @@
       <VocabAddFormAdvancedPropsRenderer
         :form-data="formData"
         @field-change="$emit('field-change')"
-        @add-note="$emit('add-note')"
+        @add-note="$emit('add-note', $event)"
         @update-note="$emit('update-note', $event)"
         @remove-note="$emit('remove-note', $event)"
-        @add-link="$emit('add-link')"
+        @add-link="$emit('add-link', $event)"
         @remove-link="$emit('remove-link', $event)"
       />
 
@@ -45,6 +45,7 @@ import VocabAddFormCorePropsRenderer from './VocabAddFormCorePropsRenderer.vue';
 import VocabAddFormAdvancedPropsRenderer from './VocabAddFormAdvancedPropsRenderer.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
+import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
@@ -70,10 +71,10 @@ defineProps<{
 
 defineEmits<{
   'field-change': [];
-  'add-note': [];
+  'add-note': [note: NoteData];
   'update-note': [note: NoteData];
   'remove-note': [uid: string];
-  'add-link': [];
+  'add-link': [link: Link];
   'remove-link': [index: number];
   'save': [];
 }>();

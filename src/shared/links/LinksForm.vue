@@ -55,7 +55,7 @@
     <!-- New link creation form -->
     <div v-if="isCreatingNew">
       <LinkEdit
-        :link="{ label: '', url: '', licenseType: undefined, licenseSource: undefined, licenseName: undefined }"
+        :link="{ label: '', url: '', owner: undefined, ownerLink: undefined, license: undefined }"
         @update:link="(newLink) => { $emit('add-link', newLink); isCreatingNew = false; }"
         @field-change="$emit('field-change')"
         @close="isCreatingNew = false"

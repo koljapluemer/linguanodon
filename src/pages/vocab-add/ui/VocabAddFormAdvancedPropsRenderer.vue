@@ -60,7 +60,7 @@
       <NoteList
         :notes="formData.notes"
         :show-before-exercise-option="true"
-        @add="$emit('add-note')"
+        @add="$emit('add-note', $event)"
         @update="$emit('update-note', $event)"
         @delete="$emit('remove-note', $event)"
       />
@@ -69,7 +69,7 @@
     <!-- Links -->
     <LinksForm
       :links="formData.links"
-      @add-link="$emit('add-link')"
+      @add-link="$emit('add-link', $event)"
       @update-link="(index, link) => $emit('update-link', index, link)"
       @remove-link="$emit('remove-link', $event)"
       @field-change="$emit('field-change')"
@@ -102,10 +102,10 @@ defineProps<{
 
 defineEmits<{
   'field-change': [];
-  'add-note': [];
+  'add-note': [note: NoteData];
   'update-note': [note: NoteData];
   'remove-note': [uid: string];
-  'add-link': [];
+  'add-link': [link: Link];
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
 }>();
