@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
-import { toRaw } from 'vue';
 import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
@@ -52,7 +51,7 @@ const handleSkip = async () => {
         due: new Date(Date.now() + 10 * 60 * 1000)
       }
     };
-    await vocabRepo.updateVocab(toRaw(updatedVocab));
+    await vocabRepo.updateVocab(JSON.parse(JSON.stringify(updatedVocab)));
     
     emit('finished');
   } catch (error) {
@@ -70,7 +69,7 @@ const handleSkipAndDisable = async () => {
       ...vocab.value,
       notInterestedInPronunciation: true
     };
-    await vocabRepo.updateVocab(toRaw(updatedVocab));
+    await vocabRepo.updateVocab(JSON.parse(JSON.stringify(updatedVocab)));
     
     emit('finished');
   } catch (error) {

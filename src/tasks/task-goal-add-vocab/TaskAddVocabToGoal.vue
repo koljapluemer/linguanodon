@@ -90,7 +90,7 @@ const handleSkipAndDisable = async () => {
   try {
     // Set finishedAddingKnowledge to true
     const updatedGoal = {
-      ...goal.value,
+      ...JSON.parse(JSON.stringify(goal.value)),
       finishedAddingKnowledge: true,
       lastShownAt: new Date()
     };
@@ -112,7 +112,7 @@ const handleFinishDecision = async (wantToDoAgain: boolean) => {
   
   try {
     const updatedGoal = {
-      ...goal.value,
+      ...JSON.parse(JSON.stringify(goal.value)),
       finishedAddingKnowledge: !wantToDoAgain,
       lastShownAt: new Date()
     };

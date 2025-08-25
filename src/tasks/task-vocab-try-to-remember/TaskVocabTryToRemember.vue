@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, inject, onMounted } from 'vue';
-import { toRaw } from 'vue';
 import { createEmptyCard } from 'ts-fsrs';
 import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
@@ -50,7 +49,7 @@ const handleDone = async () => {
         card: createEmptyCard()
       }
     };
-    await vocabRepo.updateVocab(toRaw(updatedVocab));
+    await vocabRepo.updateVocab(JSON.parse(JSON.stringify(updatedVocab)));
     
     emit('finished');
   } catch (error) {

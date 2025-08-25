@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, inject, onMounted } from 'vue';
-import { toRaw } from 'vue';
 import type { Task } from '@/entities/tasks/Task';
 import ManageVocabOfResourceWidget from '@/features/resource-manage-its-vocab/ManageVocabOfResourceWidget.vue';
 import ManageFactsOfResourceWidget from '@/features/resource-manage-its-facts/ManageFactsOfResourceWidget.vue';
@@ -60,7 +59,7 @@ const handleSkip = async () => {
       ...resource.value,
       lastShownAt: new Date()
     };
-    await resourceRepo.updateResource(toRaw(updatedResource));
+    await resourceRepo.updateResource(JSON.parse(JSON.stringify(updatedResource)));
     
     emit('finished');
   } catch (error) {
@@ -79,7 +78,7 @@ const handleSkipAndDisable = async () => {
       finishedExtracting: true,
       lastShownAt: new Date()
     };
-    await resourceRepo.updateResource(toRaw(updatedResource));
+    await resourceRepo.updateResource(JSON.parse(JSON.stringify(updatedResource)));
     
     emit('finished');
   } catch (error) {
@@ -101,7 +100,7 @@ const handleFinishDecision = async (wantToDoAgain: boolean) => {
       finishedExtracting: !wantToDoAgain,
       lastShownAt: new Date()
     };
-    await resourceRepo.updateResource(toRaw(updatedResource));
+    await resourceRepo.updateResource(JSON.parse(JSON.stringify(updatedResource)));
     
     emit('finished');
   } catch (error) {

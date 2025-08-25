@@ -84,7 +84,7 @@ const handleSkipAndDisable = async () => {
   try {
     // Set finishedAddingSubGoals to true
     const updatedGoal = {
-      ...goal.value,
+      ...JSON.parse(JSON.stringify(goal.value)),
       finishedAddingSubGoals: true,
       lastShownAt: new Date()
     };
@@ -106,7 +106,7 @@ const handleFinishDecision = async (wantToDoAgain: boolean) => {
   
   try {
     const updatedGoal = {
-      ...goal.value,
+      ...JSON.parse(JSON.stringify(goal.value)),
       finishedAddingSubGoals: !wantToDoAgain,
       lastShownAt: new Date()
     };

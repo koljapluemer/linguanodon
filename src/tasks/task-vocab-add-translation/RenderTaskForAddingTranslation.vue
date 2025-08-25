@@ -58,7 +58,8 @@ async function handleDone() {
 
   // Persist translations, then update vocab to link them
   const savedUids: string[] = [];
-  for (const t of translations.value) {
+  const plainTranslations = JSON.parse(JSON.stringify(translations.value));
+  for (const t of plainTranslations) {
     const saved = await translationRepo.saveTranslation({
       content: t.content,
       priority: t.priority,
@@ -68,7 +69,7 @@ async function handleDone() {
   }
 
   const updatedVocab: VocabData = {
-    ...vocab.value,
+    ...JSON.parse(JSON.stringify(vocab.value)),
     translations: [...vocab.value.translations, ...savedUids]
   };
   await vocabRepo.updateVocab(updatedVocab);
