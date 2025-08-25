@@ -22,7 +22,7 @@
 import { ref, inject } from 'vue';
 import { toRaw } from 'vue';
 import { taskRegistry } from './taskRegistry';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';

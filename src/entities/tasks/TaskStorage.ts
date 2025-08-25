@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { TaskData } from './TaskData';
+import type { TaskData } from './Task';
 
 class TaskDatabase extends Dexie {
   tasks!: Table<TaskData>;

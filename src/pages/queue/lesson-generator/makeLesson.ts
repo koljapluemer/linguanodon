@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';

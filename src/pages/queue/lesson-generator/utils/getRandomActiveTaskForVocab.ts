@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import { randomFromArray } from '@/shared/arrayUtils';
 

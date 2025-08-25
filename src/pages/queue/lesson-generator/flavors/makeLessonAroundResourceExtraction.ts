@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomFromArray } from '@/shared/arrayUtils';
 import { addTasksForVocabList } from '../utils/addTasksForVocabList';

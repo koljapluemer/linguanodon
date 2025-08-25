@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, inject, onMounted } from 'vue';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';

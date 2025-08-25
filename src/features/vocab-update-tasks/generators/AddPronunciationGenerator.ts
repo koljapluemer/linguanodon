@@ -1,6 +1,6 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { NoteData } from '@/entities/notes/NoteData';
 import { VocabTaskGeneratorBase } from './VocabTaskGeneratorBase';
 

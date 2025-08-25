@@ -9,6 +9,7 @@ export interface ResourceData {
   // either content of link should exist
   content?: string;
   link?: Link
+  finishedExtracting: boolean;
 
   priority: number;
   vocab: string[]; // ids of VocabData

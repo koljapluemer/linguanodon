@@ -15,4 +15,8 @@ export interface GoalData {
 
   origins: string[] // uid of set, or the string "user-added"
 
+  finishedAddingSubGoals: boolean;
+  finishedAddingMilestones: boolean;
+  finishedAddingKnowledge: boolean;
+  milestones: Record<string, boolean>;
 }

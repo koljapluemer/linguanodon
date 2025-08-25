@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomBetween, pickRandom } from '@/shared/arrayUtils';

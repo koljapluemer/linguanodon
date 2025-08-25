@@ -7,7 +7,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { makeLesson } from './lesson-generator/makeLesson';

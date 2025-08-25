@@ -1,6 +1,6 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import { VocabTaskGeneratorBase } from './VocabTaskGeneratorBase';
 
 export class VocabRevealTargetToNativeGenerator extends VocabTaskGeneratorBase {

@@ -1,5 +1,5 @@
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import { toRaw } from 'vue';

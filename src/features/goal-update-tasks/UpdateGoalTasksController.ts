@@ -1,5 +1,5 @@
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import { toRaw } from 'vue';

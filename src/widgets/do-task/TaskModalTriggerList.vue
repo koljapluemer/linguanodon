@@ -30,7 +30,7 @@ import { ref, inject, onMounted } from 'vue';
 import TaskInfo from '@/entities/tasks/TaskInfo.vue';
 import TaskModal from './TaskModal.vue';
 import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 
 interface Props {
   taskIds: string[];

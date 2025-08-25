@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { Play } from 'lucide-vue-next';
-import type { TaskData } from './TaskData';
+import type { TaskData } from './Task';
 
 interface Props {
   task: TaskData;

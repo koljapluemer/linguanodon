@@ -16,6 +16,8 @@ export interface ImmersionContentData {
 
   extractedVocab: string[]; // ids of VocabData
   extractedFactCards: string[]; // ids of FactCardData
+
+  finishedExtracting: boolean;
   
   tasks: string[] // ids of TaskData
 

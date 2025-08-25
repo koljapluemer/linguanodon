@@ -1,5 +1,5 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import { VocabTaskGeneratorBase } from './VocabTaskGeneratorBase';
 
 export class VocabTryToRememberGenerator extends VocabTaskGeneratorBase {

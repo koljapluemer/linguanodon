@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, inject, onMounted } from 'vue';
-import type { TaskData } from '@/entities/tasks/TaskData';
+import type { TaskData } from '@/entities/tasks/Task';
 import ManageVocabOfResourceWidget from '@/features/resource-manage-its-vocab/ManageVocabOfResourceWidget.vue';
 import ManageFactsOfResourceWidget from '@/features/resource-manage-its-facts/ManageFactsOfResourceWidget.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';

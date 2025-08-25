@@ -1,4 +1,4 @@
-import type { TaskData } from './TaskData';
+import type { TaskData } from './Task';
 
 export interface TaskRepoContract {
   getTaskById(uid: string): Promise<TaskData | null>;

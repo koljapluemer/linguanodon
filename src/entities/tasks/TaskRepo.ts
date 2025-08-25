@@ -1,5 +1,5 @@
 import type { TaskRepoContract } from './TaskRepoContract';
-import type { TaskData } from './TaskData';
+import type { TaskData } from './Task';
 import { TaskStorage } from './TaskStorage';
 
 export class TaskRepo implements TaskRepoContract {

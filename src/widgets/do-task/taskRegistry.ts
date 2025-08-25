@@ -8,7 +8,7 @@ import TaskAddVocabToGoal from "@/tasks/task-goal-add-vocab/TaskAddVocabToGoal.v
 import TaskVocabTryToRemember from "@/tasks/task-vocab-try-to-remember/TaskVocabTryToRemember.vue";
 import TaskVocabReveal from "@/tasks/task-vocab-reveal/TaskVocabReveal.vue";
 import TaskVocabChooseFromOptions from "@/tasks/task-vocab-single-choice/TaskVocabChooseFromOptions.vue";
-import type { TaskName } from "@/entities/tasks/TaskData";
+import type { TaskName } from "@/entities/tasks/Task";
 
 export const taskRegistry: Record<TaskName, Component> = {
   "add-pronunciation": RenderTaskForAddingPronunciation,
