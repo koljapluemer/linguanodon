@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col gap-2">
     <!-- Error State -->
     <div v-if="error" class="alert alert-error mb-6">
       <span>{{ error }}</span>

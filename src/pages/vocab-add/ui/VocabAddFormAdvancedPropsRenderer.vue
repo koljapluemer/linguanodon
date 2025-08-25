@@ -27,12 +27,16 @@
     </label>
   </div>
 
-  <NoteList :notes="formData.notes" :show-before-exercise-option="true" @add="$emit('add-note', $event)"
-    @update="$emit('update-note', $event)" @delete="$emit('remove-note', $event)" />
+  <div class="py-4">
+    <NoteList :notes="formData.notes" :show-before-exercise-option="true" @add="$emit('add-note', $event)"
+      @update="$emit('update-note', $event)" @delete="$emit('remove-note', $event)" />
+  </div>
 
-  <LinksForm :links="formData.links" @add-link="$emit('add-link', $event)"
-    @update-link="(index, link) => $emit('update-link', index, link)" @remove-link="$emit('remove-link', $event)"
-    @field-change="$emit('field-change')" />
+  <div class="py-4">
+    <LinksForm :links="formData.links" @add-link="$emit('add-link', $event)"
+      @update-link="(index, link) => $emit('update-link', index, link)" @remove-link="$emit('remove-link', $event)"
+      @field-change="$emit('field-change')" />
+  </div>
 </template>
 
 <script setup lang="ts">
