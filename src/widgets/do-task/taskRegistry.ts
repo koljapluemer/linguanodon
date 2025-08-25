@@ -18,11 +18,11 @@ export interface TaskInfo {
 }
 
 export const taskRegistry: Record<TaskName, TaskInfo> = {
-  "add-pronunciation": { component: RenderTaskForAddingPronunciation, size: 'small' },
-  "add-translation": { component: RenderTaskForAddingTranslation, size: 'small' },
-  "extract-knowledge-from-resource": { component: RenderExtractKnowledgeFromResource, size: 'small' },
-  "add-sub-goals": { component: TaskAddSubGoals, size: 'small' },
-  "add-vocab-to-goal": { component: TaskAddVocabToGoal, size: 'small' },
+  "add-pronunciation": { component: RenderTaskForAddingPronunciation, size: 'big' },
+  "add-translation": { component: RenderTaskForAddingTranslation, size: 'medium' },
+  "extract-knowledge-from-resource": { component: RenderExtractKnowledgeFromResource, size: 'big' },
+  "add-sub-goals": { component: TaskAddSubGoals, size: 'medium' },
+  "add-vocab-to-goal": { component: TaskAddVocabToGoal, size: 'medium' },
   "vocab-try-to-remember": { component: TaskVocabTryToRemember, size: 'small' },
   "vocab-reveal-target-to-native": { component: TaskVocabReveal, size: 'small' },
   "vocab-reveal-native-to-target": { component: TaskVocabReveal, size: 'small' },

@@ -1,4 +1,4 @@
-import type { Task } from '@/entities/tasks/Task';
+import type { Task, TaskName } from '@/entities/tasks/Task';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
@@ -16,6 +16,7 @@ import { getRandomVocabChoiceTask } from './utils/getRandomVocabChoiceTask';
 import { getRandomClozeChoiceTask } from './utils/getRandomClozeChoiceTask';
 import { getRandomClozeRevealTask } from './utils/getRandomClozeRevealTask';
 import { getRandomAddTranslationTask } from './utils/getRandomAddTranslationTask';
+import { useTaskSizeTracker } from './utils/useTaskSizeTracker';
 
 type TaskGenerator = () => Promise<Task | null>;
 
@@ -38,30 +39,59 @@ export async function makeTask(
     }
     
     const languageCodes = activeLanguages.map(lang => lang.code);
+    const { getPreferredTaskSize, getTasksOfSize, trackTask } = useTaskSizeTracker();
     
-    // Define all available task generators
-    const allGenerators: TaskGenerator[] = [
-      () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes),
-      () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes),
-      () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes),
-      () => getRandomAddSubGoalsTask(goalRepo, languageCodes),
-      () => getRandomAddVocabToGoalTask(goalRepo, languageCodes),
-      () => getRandomVocabTryToRememberTask(vocabRepo, languageCodes),
-      () => getRandomVocabRevealTask(vocabRepo, translationRepo, languageCodes),
-      () => getRandomVocabChoiceTask(vocabRepo, translationRepo, languageCodes),
-      () => getRandomClozeChoiceTask(vocabRepo, translationRepo, languageCodes),
-      () => getRandomClozeRevealTask(vocabRepo, translationRepo, languageCodes)
+    // Define all available task generators with their task names
+    const allGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
+      { generator: () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes), taskName: 'add-pronunciation' },
+      { generator: () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes), taskName: 'add-translation' },
+      { generator: () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes), taskName: 'extract-knowledge-from-resource' },
+      { generator: () => getRandomAddSubGoalsTask(goalRepo, languageCodes), taskName: 'add-sub-goals' },
+      { generator: () => getRandomAddVocabToGoalTask(goalRepo, languageCodes), taskName: 'add-vocab-to-goal' },
+      { generator: () => getRandomVocabTryToRememberTask(vocabRepo, languageCodes), taskName: 'vocab-try-to-remember' },
+      { generator: () => getRandomVocabRevealTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-reveal-target-to-native' },
+      { generator: () => getRandomVocabChoiceTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-choose-from-two-target-to-native' },
+      { generator: () => getRandomClozeChoiceTask(vocabRepo, translationRepo, languageCodes), taskName: 'cloze-choose-from-two' },
+      { generator: () => getRandomClozeRevealTask(vocabRepo, translationRepo, languageCodes), taskName: 'cloze-reveal' }
     ];
     
-    // Shuffle generators to try them in random order
+    // Get preferred task size based on recent distribution
+    const preferredSize = getPreferredTaskSize();
+    const preferredTaskNames = getTasksOfSize(preferredSize);
+    
+    // Filter generators for preferred size
+    const preferredGenerators = allGenerators.filter(g => 
+      preferredTaskNames.includes(g.taskName)
+    );
+    
+    // Try preferred size generators first
+    if (preferredGenerators.length > 0) {
+      const shuffledPreferred = [...preferredGenerators].sort(() => Math.random() - 0.5);
+      
+      for (const { generator, taskName } of shuffledPreferred) {
+        try {
+          const task = await generator();
+          if (task) {
+            console.log(`[TaskGenerator] Generated preferred task: ${task.taskType} (${preferredSize})`);
+            trackTask(taskName);
+            return task;
+          }
+        } catch (error) {
+          console.error(`[TaskGenerator] Error with preferred task generator:`, error);
+          // Continue to next generator
+        }
+      }
+    }
+    
+    // Fallback: try all generators in random order
     const shuffledGenerators = [...allGenerators].sort(() => Math.random() - 0.5);
     
-    // Try each generator until we get a task or exhaust all options
-    for (const generator of shuffledGenerators) {
+    for (const { generator, taskName } of shuffledGenerators) {
       try {
         const task = await generator();
         if (task) {
-          console.log(`[TaskGenerator] Generated task: ${task.taskType}`);
+          console.log(`[TaskGenerator] Generated fallback task: ${task.taskType}`);
+          trackTask(taskName);
           return task;
         }
       } catch (error) {
