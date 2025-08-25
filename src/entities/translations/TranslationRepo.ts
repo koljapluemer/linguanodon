@@ -40,6 +40,26 @@ export class TranslationRepo implements TranslationRepoContract {
     return translationToSave;
   }
 
+  async saveOrGetExistingTranslation(translation: Omit<TranslationData, 'uid' | 'origins'>): Promise<TranslationData> {
+    // Check if a translation with this content already exists
+    const existing = await this.getTranslationByContent(translation.content);
+    
+    if (existing) {
+      // Update the existing translation with new data if needed
+      const updated: TranslationData = {
+        ...existing,
+        priority: translation.priority,
+        notes: translation.notes
+      };
+      
+      await this.updateTranslation(updated);
+      return updated;
+    } else {
+      // Create new translation
+      return await this.saveTranslation(translation);
+    }
+  }
+
   async updateTranslation(translation: TranslationData): Promise<void> {
     await translationDb.translations.put(translation);
   }

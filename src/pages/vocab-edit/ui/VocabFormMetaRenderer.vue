@@ -97,13 +97,13 @@ defineEmits<{
   'remove-translation': [uid: string];
 }>();
 
-// Persistent toggle state in localStorage
+// Persistent toggle state in localStorage (shared between add and edit forms)
 const showAllData = ref<boolean>(
-  localStorage.getItem('vocab-edit-show-all-data') === 'true'
+  localStorage.getItem('show-all-vocab-data') === 'true'
 );
 
 // Watch for changes and persist to localStorage
 watch(showAllData, (newValue) => {
-  localStorage.setItem('vocab-edit-show-all-data', String(newValue));
+  localStorage.setItem('show-all-vocab-data', String(newValue));
 });
 </script>
