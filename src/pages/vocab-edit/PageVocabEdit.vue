@@ -10,10 +10,6 @@
 
   <VocabEditFormController :vocab-id="route.params.id as string" @vocab-saved="handleVocabSaved" />
 
-  <div v-if="isEditing && currentVocabTaskIds.length > 0" class="mt-8">
-    <h2 class="text-xl font-semibold mb-4">Associated Tasks</h2>
-    <TaskModalTriggerList :task-ids="currentVocabTaskIds" />
-  </div>
 
   <!-- Vocab Mastery Progress -->
   <div v-if="isEditing && currentVocab" class="mt-8">
@@ -36,23 +32,14 @@
 import { computed, inject, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import VocabEditFormController from './ui/VocabEditFormController.vue';
-import TaskModalTriggerList from '@/widgets/do-task/TaskModalTriggerList.vue';
-import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
-import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { calculateVocabMastery } from '@/entities/vocab/vocabMastery';
 
 const route = useRoute();
-const currentVocabTaskIds = ref<string[]>([]);
 const currentVocab = ref<VocabData | null>(null);
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
-const translationRepo = inject<TranslationRepoContract>('translationRepo');
-const taskRepo = inject<TaskRepoContract>('taskRepo');
-const noteRepo = inject<NoteRepoContract>('noteRepo');
 
 const isEditing = computed(() => {
   return route.params.id && route.params.id !== 'new';
@@ -68,39 +55,28 @@ watch(() => route.params.id, async (vocabId) => {
   if (vocabId && vocabId !== 'new' && vocabRepo) {
     try {
       const vocab = await vocabRepo.getVocabByUID(vocabId as string);
-      currentVocabTaskIds.value = vocab?.tasks || [];
       currentVocab.value = vocab || null;
     } catch (error) {
       console.error('Failed to load vocab data:', error);
-      currentVocabTaskIds.value = [];
       currentVocab.value = null;
     }
   } else {
-    currentVocabTaskIds.value = [];
     currentVocab.value = null;
   }
 }, { immediate: true });
 
 async function handleVocabSaved(vocabId: string) {
-  if (!vocabRepo || !taskRepo || !translationRepo) {
-    console.warn('Repos not available for task update');
+  if (!vocabRepo) {
+    console.warn('VocabRepo not available');
     return;
   }
 
   try {
-    if (!noteRepo) {
-      console.error('NoteRepo not available');
-      return;
-    }
-    const taskController = new UpdateVocabTasksController(vocabRepo, translationRepo, taskRepo, noteRepo);
-    await taskController.updateTasksForVocab(vocabId);
-
-    // Reload task IDs and vocab data for this vocab
+    // Reload vocab data
     const vocab = await vocabRepo.getVocabByUID(vocabId);
-    currentVocabTaskIds.value = vocab?.tasks || [];
     currentVocab.value = vocab || null;
   } catch (error) {
-    console.error('Failed to update vocab tasks:', error);
+    console.error('Failed to reload vocab data:', error);
   }
 }
 </script>

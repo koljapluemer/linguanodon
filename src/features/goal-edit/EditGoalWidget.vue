@@ -81,7 +81,11 @@ async function saveGoal() {
         vocab: [],
         notes: [],
         factCards: [],
-        origins: ['user-added']
+        origins: ['user-added'],
+        finishedAddingSubGoals: false,
+        finishedAddingMilestones: false,
+        finishedAddingKnowledge: false,
+        milestones: {}
       });
     }
     

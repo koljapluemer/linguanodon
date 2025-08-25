@@ -1,11 +1,10 @@
 import type { TaskData } from '@/entities/tasks/Task';
-import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
+import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { pickRandom } from '@/shared/arrayUtils';
-import { getRandomActiveTaskForVocab } from './getRandomActiveTaskForVocab';
+import { getRandomGeneratedTaskForVocab } from './getRandomGeneratedTaskForVocab';
 
 export async function addTasksForVocabList(
-  taskRepo: TaskRepoContract,
-  vocabList: Array<{ uid: string }>,
+  vocabList: VocabData[],
   targetCount: number,
   usedVocabIds: Set<string>,
   tasks: TaskData[]
@@ -16,7 +15,7 @@ export async function addTasksForVocabList(
   for (const vocab of selectedVocab) {
     if (tasks.length >= targetCount) break;
     
-    const task = await getRandomActiveTaskForVocab(taskRepo, vocab.uid);
+    const task = await getRandomGeneratedTaskForVocab(vocab);
     if (task) {
       tasks.push(task);
       usedVocabIds.add(vocab.uid);

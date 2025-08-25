@@ -1,11 +1,10 @@
 import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import { randomBetween, pickRandom, shuffleArray } from '@/shared/arrayUtils';
-import { getRandomActiveTaskForVocab } from './utils/getRandomActiveTaskForVocab';
+import { getRandomGeneratedTaskForVocab } from './utils/getRandomGeneratedTaskForVocab';
 import { useSetTracking, type EntityWithOrigins } from './utils/useSetTracking';
 
 const MIN_TASK_COUNT = 5;
@@ -13,7 +12,6 @@ const MAX_TASK_COUNT = 20;
 
 export interface LessonStrategyDependencies {
   vocabRepo: VocabRepoContract;
-  taskRepo: TaskRepoContract;
   resourceRepo: ResourceRepoContract;
   immersionContentRepo: ImmersionContentRepoContract;
   goalRepo: GoalRepoContract;
@@ -21,7 +19,6 @@ export interface LessonStrategyDependencies {
 
 export abstract class BaseLessonStrategy {
   protected readonly vocabRepo: VocabRepoContract;
-  protected readonly taskRepo: TaskRepoContract;
   protected readonly resourceRepo: ResourceRepoContract;
   protected readonly immersionContentRepo: ImmersionContentRepoContract;
   protected readonly goalRepo: GoalRepoContract;
@@ -29,7 +26,6 @@ export abstract class BaseLessonStrategy {
   
   constructor(dependencies: LessonStrategyDependencies) {
     this.vocabRepo = dependencies.vocabRepo;
-    this.taskRepo = dependencies.taskRepo;
     this.resourceRepo = dependencies.resourceRepo;
     this.immersionContentRepo = dependencies.immersionContentRepo;
     this.goalRepo = dependencies.goalRepo;
@@ -92,7 +88,7 @@ export abstract class BaseLessonStrategy {
       for (const vocab of selectedVocab) {
         if (tasks.length >= count) break;
         
-        const task = await getRandomActiveTaskForVocab(this.taskRepo, vocab.uid);
+        const task = await getRandomGeneratedTaskForVocab(vocab);
         if (task) {
           console.log(`[${this.constructor.name}] Generated task ${task.taskType} for vocab: ${vocab.content}`);
           tasks.push(task);

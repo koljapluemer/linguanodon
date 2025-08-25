@@ -1,7 +1,7 @@
 import type { TaskData } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomBetween } from '@/shared/arrayUtils';
-import { getRandomActiveTaskForVocab } from '../utils/getRandomActiveTaskForVocab';
+import { getRandomGeneratedTaskForVocab } from '../utils/getRandomGeneratedTaskForVocab';
 
 const MIN_NEW_VOCAB_COUNT = 3;
 const MAX_NEW_VOCAB_COUNT = 5;
@@ -30,7 +30,7 @@ export class NewVocabStrategy extends BaseLessonStrategy {
     for (const vocab of newVocab) {
       if (tasks.length >= newVocabCount || usedVocabIds.has(vocab.uid)) continue;
       
-      const task = await getRandomActiveTaskForVocab(this.taskRepo, vocab.uid);
+      const task = await getRandomGeneratedTaskForVocab(vocab);
       if (task) {
         console.log(`[NewVocabStrategy] Generated task ${task.taskType} for new vocab: ${vocab.content}`);
         tasks.push(task);

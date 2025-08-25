@@ -7,11 +7,6 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
-import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
-
-import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
-import { UpdateResourceTasksController } from '@/features/resource-update-tasks/UpdateResourceTasksController';
-import { UpdateGoalTasksController } from '@/features/goal-update-tasks/UpdateGoalTasksController';
 
 import { vocabSchema } from '@/entities/remote-sets/validation/vocabSchema';
 import { translationSchema } from '@/entities/remote-sets/validation/translationSchema';
@@ -53,8 +48,7 @@ export class UnifiedRemoteSetService {
     private resourceRepo: ResourceRepoContract,
     private immersionContentRepo: ImmersionContentRepoContract,
     private goalRepo: GoalRepoContract,
-    private factCardRepo: FactCardRepoContract,
-    private taskRepo: TaskRepoContract
+    private factCardRepo: FactCardRepoContract
   ) {}
 
   async getAvailableLanguages(): Promise<string[]> {
@@ -285,12 +279,7 @@ export class UnifiedRemoteSetService {
       }
     }
 
-    // Generate tasks for imported vocab
-    if (newVocabUids.length > 0) {
-      console.log(`Generating tasks for ${newVocabUids.length} newly imported vocab items...`);
-      const updateVocabTasksController = new UpdateVocabTasksController(this.vocabRepo, this.translationRepo, this.taskRepo, this.noteRepo);
-      await updateVocabTasksController.updateTasksForMultipleVocab(newVocabUids);
-    }
+    // Task generation is now handled ad-hoc during lessons
 
     // Process fact cards
     if (setFiles.factCards) {
@@ -374,7 +363,7 @@ export class UnifiedRemoteSetService {
           const noteUids = this.resolveReferences(resourceData.notes || [], noteMap);
           const link = resourceData.link ? linkMap.get(resourceData.link) : undefined;
           
-          const localResource: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'> = {
+          const localResource: Omit<ResourceData, 'uid' | 'lastShownAt'> = {
             language: resourceData.language,
             title: resourceData.title,
             content: resourceData.content,
@@ -383,7 +372,8 @@ export class UnifiedRemoteSetService {
             notes: noteUids,
             vocab: [],
             factCards: [],
-            origins: [localSet.uid]
+            origins: [localSet.uid],
+            finishedExtracting: false
           };
           
           const savedResource = await this.resourceRepo.saveResource(localResource);
@@ -395,12 +385,7 @@ export class UnifiedRemoteSetService {
       }
     }
 
-    // Generate tasks for imported resources
-    if (newResourceUids.length > 0) {
-      console.log(`Generating tasks for ${newResourceUids.length} newly imported resources...`);
-      const updateResourceTasksController = new UpdateResourceTasksController(this.resourceRepo, this.taskRepo);
-      await updateResourceTasksController.createTasksForMultipleResources(newResourceUids);
-    }
+    // Task generation is now handled ad-hoc during lessons
 
     // Process immersion content
     if (setFiles.immersionContent) {
@@ -436,7 +421,7 @@ export class UnifiedRemoteSetService {
           const neededVocabUids = this.resolveReferences(immersionData.neededVocab || [], vocabMap);
           const link = immersionData.link ? linkMap.get(immersionData.link) : undefined;
           
-          const localImmersion: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'> = {
+          const localImmersion: Omit<ImmersionContentData, 'uid' | 'lastShownAt'> = {
             language: immersionData.language,
             title: immersionData.title,
             content: immersionData.content,
@@ -446,7 +431,8 @@ export class UnifiedRemoteSetService {
             neededVocab: neededVocabUids,
             extractedVocab: [],
             extractedFactCards: [],
-            origins: [localSet.uid]
+            origins: [localSet.uid],
+            finishedExtracting: false
           };
           
           const savedImmersion = await this.immersionContentRepo.saveImmersionContent(localImmersion);
@@ -494,14 +480,18 @@ export class UnifiedRemoteSetService {
           const factCardUids = this.resolveReferences(goalData.factCards || [], factCardMap);
           const subGoalUids = this.resolveReferences(goalData.subGoals || [], goalMap);
           
-          const localGoal: Omit<GoalData, 'uid' | 'tasks'> = {
+          const localGoal: Omit<GoalData, 'uid'> = {
             language: goalData.language,
             title: goalData.title,
             notes: noteUids,
             vocab: vocabUids,
             factCards: factCardUids,
             subGoals: subGoalUids,
-            origins: [localSet.uid]
+            origins: [localSet.uid],
+            finishedAddingSubGoals: false,
+            finishedAddingMilestones: false,
+            finishedAddingKnowledge: false,
+            milestones: {}
           };
           
           const savedGoal = await this.goalRepo.create(localGoal);
@@ -513,12 +503,7 @@ export class UnifiedRemoteSetService {
       }
     }
 
-    // Generate tasks for imported goals
-    if (newGoalUids.length > 0) {
-      console.log(`Generating tasks for ${newGoalUids.length} newly imported goals...`);
-      const updateGoalTasksController = new UpdateGoalTasksController(this.goalRepo, this.taskRepo);
-      await updateGoalTasksController.updateTasksForMultipleGoals(newGoalUids);
-    }
+    // Task generation is now handled ad-hoc during lessons
   }
 
   private async loadAndValidateSetFiles(languageCode: string, setName: string): Promise<RemoteSetFiles | null> {

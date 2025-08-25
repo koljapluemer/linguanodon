@@ -13,7 +13,6 @@ export interface VocabData {
   notes: string[]; // ids of NoteData repo
   translations: string[]; // ids of Translation repo
   links: Link[]
-  tasks: string[] // ids of TaskData
   progress: LearningProgress // warning: this contain a Date. Make sure to hydrate correctly when persisting. warning: ts-fsrs Card must be created with createEmptyCard()
 
   origins: string[] // uid of set, or the string "user-added"

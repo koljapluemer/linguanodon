@@ -1,7 +1,6 @@
 import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
@@ -18,7 +17,6 @@ import { GoalBasedStrategy } from './flavors/makeLessonAroundGoals';
 export async function makeLesson(
   vocabRepo: VocabRepoContract,
   resourceRepo: ResourceRepoContract,
-  taskRepo: TaskRepoContract,
   languageRepo: LanguageRepoContract,
   immersionContentRepo: ImmersionContentRepoContract,
   goalRepo: GoalRepoContract
@@ -38,7 +36,6 @@ export async function makeLesson(
     // Create shared dependencies for all strategies
     const dependencies = {
       vocabRepo,
-      taskRepo,
       resourceRepo,
       immersionContentRepo,
       goalRepo

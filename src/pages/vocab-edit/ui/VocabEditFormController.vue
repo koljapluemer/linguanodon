@@ -87,11 +87,10 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     notRelatedVocab: existingVocab?.notRelatedVocab || []
   };
 
-  // For updates, include existing progress and tasks
+  // For updates, include existing progress
   if (existingVocab) {
     return {
       ...baseData,
-      tasks: existingVocab.tasks,
       progress: existingVocab.progress
     };
   }

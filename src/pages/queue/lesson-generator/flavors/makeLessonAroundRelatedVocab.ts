@@ -2,7 +2,7 @@ import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomBetween, pickRandom } from '@/shared/arrayUtils';
-import { getRandomActiveTaskForVocab } from '../utils/getRandomActiveTaskForVocab';
+import { getRandomGeneratedTaskForVocab } from '../utils/getRandomGeneratedTaskForVocab';
 
 const MIN_RELATED_VOCAB_COUNT = 3;
 const MAX_RELATED_VOCAB_COUNT = 8;
@@ -31,7 +31,7 @@ export class RelatedVocabStrategy extends BaseLessonStrategy {
     console.log(`[RelatedVocabStrategy] Selected base vocab: ${baseVocab.content} (${baseVocab.uid.slice(0, 8)}) with ${baseVocab.relatedVocab?.length || 0} related items`);
     
     // Add task for the base vocab
-    const baseTask = await getRandomActiveTaskForVocab(this.taskRepo, baseVocab.uid);
+    const baseTask = await getRandomGeneratedTaskForVocab(baseVocab);
     if (baseTask) {
       console.log(`[RelatedVocabStrategy] Generated task ${baseTask.taskType} for base vocab: ${baseVocab.content}`);
       tasks.push(baseTask);
@@ -56,7 +56,7 @@ export class RelatedVocabStrategy extends BaseLessonStrategy {
     for (const vocab of selectedRelatedVocab) {
       if (usedVocabIds.has(vocab.uid)) continue;
       
-      const task = await getRandomActiveTaskForVocab(this.taskRepo, vocab.uid);
+      const task = await getRandomGeneratedTaskForVocab(vocab);
       if (task) {
         console.log(`[RelatedVocabStrategy] Generated task ${task.taskType} for related vocab: ${vocab.content}`);
         tasks.push(task);

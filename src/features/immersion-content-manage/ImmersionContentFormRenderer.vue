@@ -172,7 +172,7 @@ async function handleSave() {
   try {
     if (isNew.value) {
       // Create new immersion content
-      const contentData: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'> = {
+      const contentData: Omit<ImmersionContentData, 'uid' | 'lastShownAt'> = {
         title: formData.value.title.trim(),
         language: formData.value.language.trim(),
         priority: formData.value.priority,
@@ -181,7 +181,8 @@ async function handleSave() {
         notes: [],
         extractedVocab: [],
         extractedFactCards: [],
-        origins: ['user-added']
+        origins: ['user-added'],
+        finishedExtracting: false
       };
 
       // Add link if URL is provided

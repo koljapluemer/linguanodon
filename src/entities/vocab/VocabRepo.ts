@@ -37,7 +37,6 @@ export class VocabRepo implements VocabRepoContract {
       notes: vocab.notes || [],
       links: vocab.links || [],
       translations: vocab.translations || [],
-      tasks: vocab.tasks || [],
       relatedVocab: vocab.relatedVocab || [],
       notRelatedVocab: vocab.notRelatedVocab || []
     };
@@ -277,7 +276,7 @@ export class VocabRepo implements VocabRepoContract {
     return filteredVocab.length;
   }
 
-  async saveVocab(vocab: Omit<VocabData, 'uid' | 'progress' | 'tasks'>): Promise<VocabData> {
+  async saveVocab(vocab: Omit<VocabData, 'uid' | 'progress'>): Promise<VocabData> {
     const newVocab: VocabData = {
       uid: crypto.randomUUID(),
       language: vocab.language,
@@ -291,7 +290,6 @@ export class VocabRepo implements VocabRepoContract {
       origins: vocab.origins,
       relatedVocab: vocab.relatedVocab || [],
       notRelatedVocab: vocab.notRelatedVocab || [],
-      tasks: [],
       progress: {
         ...createEmptyCard(),
         streak: 0,

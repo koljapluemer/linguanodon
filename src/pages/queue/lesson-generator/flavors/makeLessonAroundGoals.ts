@@ -1,7 +1,9 @@
 import type { TaskData } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomFromArray } from '@/shared/arrayUtils';
-import { getRandomActiveTaskForVocab } from '../utils/getRandomActiveTaskForVocab';
+import { getRandomGeneratedTaskForVocab } from '../utils/getRandomGeneratedTaskForVocab';
+import { generateAddSubGoals, canGenerateAddSubGoals } from '../task-generator/generateAddSubGoals';
+import { generateAddVocabToGoal, canGenerateAddVocabToGoal } from '../task-generator/generateAddVocabToGoal';
 
 const MAX_NEW_VOCAB_FROM_GOAL = 3;
 
@@ -23,23 +25,13 @@ export class GoalBasedStrategy extends BaseLessonStrategy {
       const incompleteGoals = await this.goalRepo.getIncompleteGoals();
       console.log(`[GoalBasedStrategy] Found ${incompleteGoals.length} incomplete goals`);
       
-      // Filter goals that have vocab in active languages and at least one active task
-      const eligibleGoals = [];
-      for (const goal of incompleteGoals) {
-        if (languages.includes(goal.language) && goal.vocab.length > 0 && goal.tasks.length > 0) {
-          // Check if goal has at least one active task
-          const goalTasks = await Promise.all(
-            goal.tasks.map(taskId => this.taskRepo.getTaskById(taskId))
-          );
-          const activeTasks = goalTasks.filter(task => task && task.isActive);
-          
-          if (activeTasks.length > 0) {
-            eligibleGoals.push(goal);
-          }
-        }
-      }
+      // Filter goals that can generate tasks and have vocab in active languages
+      const eligibleGoals = incompleteGoals.filter(goal =>
+        languages.includes(goal.language) &&
+        (canGenerateAddSubGoals(goal) || canGenerateAddVocabToGoal(goal) || goal.vocab.length > 0)
+      );
       
-      console.log(`[GoalBasedStrategy] Found ${eligibleGoals.length} eligible goals with active tasks`);
+      console.log(`[GoalBasedStrategy] Found ${eligibleGoals.length} eligible goals that can generate tasks`);
       
       if (eligibleGoals.length === 0) {
         return tasks;
@@ -53,20 +45,26 @@ export class GoalBasedStrategy extends BaseLessonStrategy {
       
       console.log(`[GoalBasedStrategy] Selected goal: ${selectedGoal.title} (${selectedGoal.uid})`);
       
-      // Pick a random task from the goal
-      const goalTasks = await Promise.all(
-        selectedGoal.tasks.map(taskId => this.taskRepo.getTaskById(taskId))
-      );
-      const activeTasks = goalTasks.filter(task => task && task.isActive);
-      const randomTask = randomFromArray(activeTasks);
+      // Generate appropriate task for the goal
+      const availableGenerators = [];
+      if (canGenerateAddSubGoals(selectedGoal)) {
+        availableGenerators.push(() => generateAddSubGoals(selectedGoal));
+      }
+      if (canGenerateAddVocabToGoal(selectedGoal)) {
+        availableGenerators.push(() => generateAddVocabToGoal(selectedGoal));
+      }
       
-      if (randomTask) {
-        console.log(`[GoalBasedStrategy] Adding random task from goal: ${randomTask.taskType}`);
-        tasks.push(randomTask);
-        
-        // Mark associated vocab as used
-        if (randomTask.associatedVocab) {
-          randomTask.associatedVocab.forEach(vocabUid => usedVocabIds.add(vocabUid));
+      if (availableGenerators.length > 0) {
+        const randomGenerator = randomFromArray(availableGenerators);
+        if (randomGenerator) {
+          const generatedTask = randomGenerator();
+          console.log(`[GoalBasedStrategy] Generated task for goal: ${generatedTask.taskType}`);
+          tasks.push(generatedTask);
+          
+          // Mark associated vocab as used
+          if (generatedTask.associatedVocab) {
+            generatedTask.associatedVocab.forEach(vocabUid => usedVocabIds.add(vocabUid));
+          }
         }
       }
       
@@ -78,7 +76,7 @@ export class GoalBasedStrategy extends BaseLessonStrategy {
       
       const selectedNewVocab = newVocab.slice(0, MAX_NEW_VOCAB_FROM_GOAL);
       for (const vocab of selectedNewVocab) {
-        const task = await getRandomActiveTaskForVocab(this.taskRepo, vocab.uid);
+        const task = await getRandomGeneratedTaskForVocab(vocab);
         if (task) {
           console.log(`[GoalBasedStrategy] Generated task ${task.taskType} for new vocab: ${vocab.content}`);
           tasks.push(task);
@@ -93,7 +91,7 @@ export class GoalBasedStrategy extends BaseLessonStrategy {
       console.log(`[GoalBasedStrategy] Found ${dueVocab.length} due vocab in goal`);
       
       for (const vocab of dueVocab) {
-        const task = await getRandomActiveTaskForVocab(this.taskRepo, vocab.uid);
+        const task = await getRandomGeneratedTaskForVocab(vocab);
         if (task) {
           console.log(`[GoalBasedStrategy] Generated task ${task.taskType} for due vocab: ${vocab.content}`);
           tasks.push(task);

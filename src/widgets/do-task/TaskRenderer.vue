@@ -23,14 +23,10 @@ import { ref, inject } from 'vue';
 import { toRaw } from 'vue';
 import { taskRegistry } from './taskRegistry';
 import type { TaskData } from '@/entities/tasks/Task';
-import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
-import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import { UpdateVocabTasksController } from '@/features/vocab-update-tasks/UpdateVocabTasksController';
 import type { Rating } from 'ts-fsrs';
 import TaskButtonsDisableSkipDone from './ui/TaskButtonsDisableSkipDone.vue';
 import TaskEvaluateDifficulty from './ui/TaskEvaluateDifficulty.vue';
@@ -48,17 +44,11 @@ const emit = defineEmits<{
 }>();
 
 // Injected repositories
-const taskRepo = inject<TaskRepoContract>('taskRepo');
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
-const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
-const noteRepo = inject<NoteRepoContract>('noteRepo');
 
-if (!taskRepo) {
-  throw new Error('TaskRepo not provided');
-}
 
 // Task state
 const isDone = ref(false);
@@ -91,17 +81,7 @@ function handleTaskFinished() {
 function handleDone() {
   isDone.value = true;
 
-  // Check if we need to show difficulty rating
-  if (props.task.evaluateDifficultyAfterDoing) {
-    showDifficultyRating.value = true;
-    return;
-  }
-
-  // Check if we need to show do-again decision
-  if (props.task.decideWhetherToDoAgainAfterDoing) {
-    showDecisionComponent.value = true;
-    return;
-  }
+  // Task completion simplified - no difficulty rating or do-again decisions
 
   // Neither rating nor decision needed, finish immediately
   finishTask();
@@ -122,10 +102,7 @@ function handleDifficultyRating(rating: Rating) {
   showDifficultyRating.value = false;
 
   // Check if we need to show do-again decision
-  if (props.task.decideWhetherToDoAgainAfterDoing) {
-    showDecisionComponent.value = true;
-    return;
-  }
+  // Simplified - no decision component needed with ad-hoc tasks
 
   // No decision needed, finish
   finishTask();
@@ -140,16 +117,7 @@ function handleDoAgainDecision(wantToDoAgain: boolean) {
 // Task completion logic
 async function finishTask() {
   try {
-    // Update task data
-    const updatedTask: TaskData = {
-      ...toRaw(props.task),
-      lastShownAt: new Date(),
-      ...(difficultyRating.value && { lastDifficultyRating: difficultyRating.value }),
-      ...(props.task.isOneTime && { isActive: false }),
-      ...(doAgainDecision.value !== null && { isActive: doAgainDecision.value })
-    };
-
-    await taskRepo!.saveTask(toRaw(updatedTask));
+    // Tasks are ad-hoc, no need to update task data
 
     // Update associated entities
     await updateAssociatedEntities();
@@ -168,13 +136,7 @@ async function finishTask() {
 
 async function updateTaskAsSkipped() {
   try {
-    const updatedTask: TaskData = {
-      ...toRaw(props.task),
-      lastShownAt: new Date(),
-      isActive: false
-    };
-
-    await taskRepo!.saveTask(toRaw(updatedTask));
+    // Ad-hoc tasks don't need persistence, just emit finished
     emit('finished');
   } catch (error) {
     if (error && typeof error === 'object' && 'name' in error && error.name === 'QuotaExceededError') {
@@ -191,30 +153,24 @@ async function updateAssociatedEntities() {
   // Update associated vocab
   if (props.task.associatedVocab?.length && vocabRepo) {
     for (const vocabUid of props.task.associatedVocab) {
-      if (props.task.isOneTime) {
-        // Just update last review time
-        await vocabRepo.updateLastReview(vocabUid);
-      } else if (difficultyRating.value) {
-        // Score the vocab
+      // Update last review time (simplified since isOneTime is removed)
+      await vocabRepo.updateLastReview(vocabUid);
+      if (difficultyRating.value) {
+        // Score the vocab if rating was provided
         await vocabRepo.scoreVocab(vocabUid, difficultyRating.value);
       }
 
-      // Update vocab tasks after scoring/reviewing
-      if (taskRepo && noteRepo && translationRepo) {
-        const updateVocabTasksController = new UpdateVocabTasksController(vocabRepo, translationRepo, taskRepo, noteRepo);
-        await updateVocabTasksController.updateTasksForVocab(vocabUid);
-      }
+      // Task updates are no longer needed with ad-hoc generation
     }
   }
 
   // Update associated fact cards
   if (props.task.associatedFactCards?.length && factCardRepo) {
     for (const factCardUid of props.task.associatedFactCards) {
-      if (props.task.isOneTime) {
-        // Just update last review time
-        await factCardRepo.updateLastReview(factCardUid);
-      } else if (difficultyRating.value) {
-        // Score the fact card
+      // Update last review time (simplified since isOneTime is removed)
+      await factCardRepo.updateLastReview(factCardUid);
+      if (difficultyRating.value) {
+        // Score the fact card if rating was provided
         await factCardRepo.scoreFactCard(factCardUid, difficultyRating.value);
       }
     }

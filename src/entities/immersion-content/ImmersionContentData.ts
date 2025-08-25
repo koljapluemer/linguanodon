@@ -19,8 +19,6 @@ export interface ImmersionContentData {
 
   finishedExtracting: boolean;
   
-  tasks: string[] // ids of TaskData
-
   lastShownAt?: Date;
   origins: string[] // uid of set, or the string "user-added"
 

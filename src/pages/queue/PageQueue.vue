@@ -4,7 +4,6 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import type { TaskRepoContract } from '@/entities/tasks/TaskRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { TaskData } from '@/entities/tasks/Task';
@@ -18,11 +17,10 @@ const vocabRepo = inject<VocabRepoContract>('vocabRepo');
 const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
-const taskRepo = inject<TaskRepoContract>('taskRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
 
-if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !taskRepo || !languageRepo || !immersionContentRepo) {
+if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRepo || !immersionContentRepo) {
   throw new Error('Repositories not available');
 }
 
@@ -90,7 +88,7 @@ async function loadTaskBatch() {
 
   try {
     batchLoadingPromise = (async () => {
-      const lesson = await makeLesson(vocabRepo!, resourceRepo!, taskRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
+      const lesson = await makeLesson(vocabRepo!, resourceRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
 
       if (lesson.length === 0) {
         console.warn('Generated lesson is empty');
@@ -156,7 +154,7 @@ function consumeNextTask(): { task: TaskData; batchId: string } | null {
 // Force load next task
 async function forceLoadNextTask(): Promise<{ task: TaskData; batchId: string } | null> {
   try {
-    const lesson = await makeLesson(vocabRepo!, resourceRepo!, taskRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
+    const lesson = await makeLesson(vocabRepo!, resourceRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
     const shuffledLesson = shuffleArray(lesson);
     if (shuffledLesson.length > 0) {
       const batchId = crypto.randomUUID();

@@ -1,7 +1,7 @@
 import type { TaskData } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
-import { randomFromArray } from '@/shared/arrayUtils';
 import { addTasksForVocabList } from '../utils/addTasksForVocabList';
+import { generateExtractKnowledgeFromResource, canGenerateExtractKnowledgeFromResource } from '../task-generator/generateExtractKnowledgeFromResource';
 
 export class ResourceExtractionStrategy extends BaseLessonStrategy {
   constructor(dependencies: LessonStrategyDependencies) {
@@ -26,22 +26,13 @@ export class ResourceExtractionStrategy extends BaseLessonStrategy {
     
     console.log(`[ResourceExtractionStrategy] Selected resource: ${resource.title} (${resource.uid.slice(0, 8)}) with ${resource.vocab.length} vocab items`);
     
-    // Add one of the resource's active tasks
-    try {
-      console.log(`[ResourceExtractionStrategy] Calling taskRepo.getTasksByResourceId(${resource.uid.slice(0, 8)})`);
-      const resourceTasks = await this.taskRepo.getTasksByResourceId(resource.uid);
-      const activeResourceTasks = resourceTasks.filter(task => task.isActive);
-      console.log(`[ResourceExtractionStrategy] Found ${resourceTasks.length} total resource tasks, ${activeResourceTasks.length} active`);
-      
-      if (activeResourceTasks.length > 0) {
-        const randomResourceTask = randomFromArray(activeResourceTasks);
-        if (randomResourceTask) {
-          console.log(`[ResourceExtractionStrategy] Added resource task: ${randomResourceTask.taskType}`);
-          tasks.push(randomResourceTask);
-        }
-      }
-    } catch (error) {
-      console.warn('Error loading resource tasks:', error);
+    // Generate extraction task if available
+    if (canGenerateExtractKnowledgeFromResource(resource)) {
+      const extractionTask = generateExtractKnowledgeFromResource(resource);
+      console.log(`[ResourceExtractionStrategy] Generated extraction task: ${extractionTask.taskType}`);
+      tasks.push(extractionTask);
+    } else {
+      console.log(`[ResourceExtractionStrategy] Resource has finished extracting, skipping extraction task`);
     }
     
     // Fill up with active tasks of vocab attached to the resource
@@ -54,7 +45,7 @@ export class ResourceExtractionStrategy extends BaseLessonStrategy {
     
     const remainingTaskCount = targetTaskCount - tasks.length;
     console.log(`[ResourceExtractionStrategy] Adding tasks for ${remainingTaskCount} remaining slots from ${validResourceVocab.length} resource vocab`);
-    await addTasksForVocabList(this.taskRepo, validResourceVocab, remainingTaskCount, usedVocabIds, tasks);
+    await addTasksForVocabList(validResourceVocab, remainingTaskCount, usedVocabIds, tasks);
     
     console.log(`[ResourceExtractionStrategy] Total core tasks generated: ${tasks.length}`);
     return tasks;

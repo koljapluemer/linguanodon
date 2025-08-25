@@ -11,18 +11,21 @@ export class GoalRepo implements GoalRepoContract {
     return await goalStorage.goals.get(id);
   }
 
-  async create(goalData: Omit<GoalData, 'uid' | 'tasks'>): Promise<GoalData> {
+  async create(goalData: Omit<GoalData, 'uid'>): Promise<GoalData> {
     const goal: GoalData = {
       ...goalData,
       uid: crypto.randomUUID(),
-      tasks: [] // Tasks will be created by a feature layer
+      finishedAddingSubGoals: goalData.finishedAddingSubGoals ?? false,
+      finishedAddingMilestones: goalData.finishedAddingMilestones ?? false,
+      finishedAddingKnowledge: goalData.finishedAddingKnowledge ?? false,
+      milestones: goalData.milestones ?? {}
     };
 
     await goalStorage.goals.add(goal);
     return goal;
   }
 
-  async update(id: string, updates: Omit<Partial<GoalData>, 'uid' | 'tasks'>): Promise<GoalData> {
+  async update(id: string, updates: Omit<Partial<GoalData>, 'uid'>): Promise<GoalData> {
     await goalStorage.goals.update(id, updates);
     const updated = await this.getById(id);
     if (!updated) {

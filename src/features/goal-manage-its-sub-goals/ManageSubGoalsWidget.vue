@@ -82,7 +82,11 @@ async function addSubGoal() {
     vocab: [],
     notes: [],
     factCards: [],
-    origins: ['user-added']
+    origins: ['user-added'],
+    finishedAddingSubGoals: false,
+    finishedAddingMilestones: false,
+    finishedAddingKnowledge: false,
+    milestones: {}
   });
   
   // Update parent goal to include this sub-goal

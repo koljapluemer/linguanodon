@@ -44,7 +44,7 @@ export class ResourceRepo implements ResourceRepoContract {
     return filteredResources[randomIndex];
   }
 
-  async saveResource(resource: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'>): Promise<ResourceData> {
+  async saveResource(resource: Omit<ResourceData, 'uid' | 'lastShownAt'>): Promise<ResourceData> {
     const resourceData: ResourceData = {
       uid: crypto.randomUUID(),
       language: resource.language,
@@ -56,7 +56,7 @@ export class ResourceRepo implements ResourceRepoContract {
       factCards: resource.factCards,
       notes: resource.notes,
       origins: resource.origins,
-      tasks: []
+      finishedExtracting: resource.finishedExtracting ?? false
     };
 
     

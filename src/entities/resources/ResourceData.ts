@@ -16,8 +16,6 @@ export interface ResourceData {
   factCards: string[]; // ids of FactCardData
   notes: string[]; // uids of notes
   
-  tasks: string[] // ids of TaskData
-
   lastShownAt?: Date;
   origins: string[] // uid of set, or the string "user-added"
 

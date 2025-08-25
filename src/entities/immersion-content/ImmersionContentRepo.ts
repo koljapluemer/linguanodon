@@ -41,7 +41,7 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
     return allImmersionContent[randomIndex];
   }
 
-  async saveImmersionContent(immersionContent: Omit<ImmersionContentData, 'uid' | 'tasks' | 'lastShownAt'>): Promise<ImmersionContentData> {
+  async saveImmersionContent(immersionContent: Omit<ImmersionContentData, 'uid' | 'lastShownAt'>): Promise<ImmersionContentData> {
     const immersionContentData: ImmersionContentData = {
       uid: crypto.randomUUID(),
       language: immersionContent.language,
@@ -54,7 +54,7 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       extractedVocab: immersionContent.extractedVocab,
       extractedFactCards: immersionContent.extractedFactCards,
       origins: immersionContent.origins,
-      tasks: []
+      finishedExtracting: immersionContent.finishedExtracting ?? false
     };
 
     

@@ -172,7 +172,7 @@ async function handleSave() {
   try {
     if (isNew.value) {
       // Create new resource
-      const resourceData: Omit<ResourceData, 'uid' | 'tasks' | 'lastShownAt'> = {
+      const resourceData: Omit<ResourceData, 'uid' | 'lastShownAt'> = {
         title: formData.value.title.trim(),
         language: formData.value.language.trim(),
         priority: formData.value.priority,
@@ -180,7 +180,8 @@ async function handleSave() {
         vocab: [],
         factCards: [],
         notes: [],
-        origins: ['user-added']
+        origins: ['user-added'],
+        finishedExtracting: false
       };
 
       // Add link if URL is provided

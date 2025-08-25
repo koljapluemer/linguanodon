@@ -2,7 +2,7 @@ import type { TaskData } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomBetween, randomFromArray } from '@/shared/arrayUtils';
 import { calculateVocabMastery } from '@/entities/vocab/vocabMastery';
-import { getRandomActiveTaskForVocab } from '../utils/getRandomActiveTaskForVocab';
+import { getRandomGeneratedTaskForVocab } from '../utils/getRandomGeneratedTaskForVocab';
 
 const MIN_UNSEEN_VOCAB = 1;
 const MAX_UNSEEN_VOCAB = 3;
@@ -24,7 +24,7 @@ export class LowMasteryImmersionContentStrategy extends BaseLessonStrategy {
     const eligibleContent = [];
     
     for (const content of allImmersionContent) {
-      if (!languages.includes(content.language) || content.tasks.length > 0 || content.neededVocab.length === 0) {
+      if (!languages.includes(content.language) || content.neededVocab.length === 0) {
         continue;
       }
       
@@ -74,7 +74,7 @@ export class LowMasteryImmersionContentStrategy extends BaseLessonStrategy {
       for (const vocab of unseenVocab) {
         if (tasks.length >= unseenCount || usedVocabIds.has(vocab.uid)) continue;
         
-        const task = await getRandomActiveTaskForVocab(this.taskRepo, vocab.uid);
+        const task = await getRandomGeneratedTaskForVocab(vocab);
         if (task) {
           tasks.push(task);
           usedVocabIds.add(vocab.uid);
@@ -87,7 +87,7 @@ export class LowMasteryImmersionContentStrategy extends BaseLessonStrategy {
       for (const vocab of seenVocab) {
         if (tasks.length >= targetTaskCount || usedVocabIds.has(vocab.uid)) continue;
         
-        const task = await getRandomActiveTaskForVocab(this.taskRepo, vocab.uid);
+        const task = await getRandomGeneratedTaskForVocab(vocab);
         if (task) {
           tasks.push(task);
           usedVocabIds.add(vocab.uid);

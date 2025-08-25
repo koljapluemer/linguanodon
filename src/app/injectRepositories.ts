@@ -5,11 +5,8 @@ import { NoteRepo } from '@/entities/notes/NoteRepo';
 import { FactCardRepo } from '@/entities/fact-cards/FactCardRepo';
 import { ResourceRepo } from '@/entities/resources/ResourceRepo';
 import { ImmersionContentRepo } from '@/entities/immersion-content/ImmersionContentRepo';
-import { TaskRepo } from '@/entities/tasks/TaskRepo';
 import { LanguageRepo } from '@/entities/languages/LanguageRepo';
 import { LocalSetRepo } from '@/entities/local-sets/LocalSetRepo';
-import { initializeUpdateGoalTasksService } from '@/features/goal-update-tasks/updateGoalTasksService';
-import { initializeUpdateResourceTasksService } from '@/features/resource-update-tasks/updateResourceTasksService';
 
 export function setupRepositories() {
   // Create repository instances
@@ -20,7 +17,6 @@ export function setupRepositories() {
   const factCardRepo = new FactCardRepo();
   const resourceRepo = new ResourceRepo();
   const immersionContentRepo = new ImmersionContentRepo();
-  const taskRepo = new TaskRepo();
   const languageRepo = new LanguageRepo();
   const localSetRepo = new LocalSetRepo();
   
@@ -32,14 +28,13 @@ export function setupRepositories() {
     factCardRepo,
     resourceRepo,
     immersionContentRepo,
-    taskRepo,
     languageRepo,
     localSetRepo
   };
 }
 
 export function provideRepositories(app: { provide: (key: string | symbol, value: unknown) => void }) {
-  const { vocabRepo, translationRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo } = setupRepositories();
+  const { vocabRepo, translationRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, languageRepo, localSetRepo } = setupRepositories();
   
   app.provide('vocabRepo', vocabRepo);
   app.provide('translationRepo', translationRepo);
@@ -48,13 +43,8 @@ export function provideRepositories(app: { provide: (key: string | symbol, value
   app.provide('factCardRepo', factCardRepo);
   app.provide('resourceRepo', resourceRepo);
   app.provide('immersionContentRepo', immersionContentRepo);
-  app.provide('taskRepo', taskRepo);
   app.provide('languageRepo', languageRepo);
   app.provide('localSetRepo', localSetRepo);
   
-  // Initialize services that depend on repositories
-  initializeUpdateGoalTasksService(goalRepo, taskRepo);
-  initializeUpdateResourceTasksService(resourceRepo, taskRepo);
-  
-  return { vocabRepo, translationRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, taskRepo, languageRepo, localSetRepo };
+  return { vocabRepo, translationRepo, goalRepo, noteRepo, factCardRepo, resourceRepo, immersionContentRepo, languageRepo, localSetRepo };
 }
