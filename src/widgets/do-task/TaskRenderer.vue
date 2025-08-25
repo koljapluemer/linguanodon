@@ -1,11 +1,18 @@
 <template>
-  <TaskPrompt :prompt="props.task.prompt" />
+  <div class="flex items-center justify-between mb-2">
+    <LanguageDisplay v-if="languageData" :language="languageData" variant="short" />
+    <TaskPrompt :prompt="props.task.prompt" />
+  </div>
   <component :is="getTaskComponent(props.task.taskType)" :task="props.task" @finished="handleTaskFinished" />
+  
 </template>
 
 <script setup lang="ts">
 import { taskRegistry } from './taskRegistry';
 import type { Task } from '@/entities/tasks/Task';
+import { inject, onMounted, ref } from 'vue';
+import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
 import TaskPrompt from './ui/TaskPrompt.vue';
 
 interface Props {
@@ -13,6 +20,13 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+const languageData = ref<LanguageData | null>(null);
+
+onMounted(async () => {
+  const lang = await languageRepo.getByCode(props.task.language);
+  if (lang) languageData.value = lang;
+});
 
 const emit = defineEmits<{
   finished: [];

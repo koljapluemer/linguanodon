@@ -12,7 +12,7 @@
       >
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-1">
-            <LanguageDisplay :language-code="vocab.language" compact />
+            <LanguageDisplay v-if="languageMap.get(vocab.language)" :language="languageMap.get(vocab.language)!" variant="short" />
             <span class="font-medium">{{ vocab.content || 'No content' }}</span>
           </div>
           <div class="flex gap-1">
@@ -93,7 +93,8 @@ import type { TranslationRepoContract } from '@/entities/translations/Translatio
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
+import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
+import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 
 const props = defineProps<{
   goal: GoalData;
@@ -109,6 +110,7 @@ const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 
 const vocabItems = ref<VocabData[]>([]);
 const translations = ref<Map<string, TranslationData>>(new Map());
+const languageMap = ref<Map<string, LanguageData>>(new Map());
 const newVocab = ref({
   language: '',
   content: '',
@@ -180,5 +182,14 @@ async function removeVocab(vocabId: string) {
   emit('goal-updated', updatedGoal);
 }
 
-onMounted(loadVocab);
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+
+onMounted(async () => {
+  await loadVocab();
+  const codes = Array.from(new Set(vocabItems.value.map(v => v.language)));
+  const langs = await Promise.all(codes.map(c => languageRepo.getByCode(c)));
+  const map = new Map<string, LanguageData>();
+  langs.forEach(l => { if (l) map.set(l.code, l); });
+  languageMap.value = map;
+});
 </script>

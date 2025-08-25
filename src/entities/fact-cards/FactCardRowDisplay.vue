@@ -30,10 +30,12 @@
 
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
+import { inject, onMounted, ref } from 'vue';
 import type { FactCardData } from './FactCardData';
-import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
+import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
+import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 
-defineProps<{
+const props = defineProps<{
   factCard: FactCardData;
 }>();
 
@@ -41,4 +43,12 @@ defineEmits<{
   edit: [];
   delete: [];
 }>();
+
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+const language = ref<LanguageData | null>(null);
+
+onMounted(async () => {
+  const lang = await languageRepo.getByCode(props.factCard.language);
+  if (lang) language.value = lang;
+});
 </script>

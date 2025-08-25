@@ -44,7 +44,7 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
-                <LanguageDisplay :language-code="resource.language" compact />
+                <LanguageDisplay v-if="languageMap.get(resource.language)" :language="languageMap.get(resource.language)!" variant="short" />
                 <span v-if="resource.priority" class="badge badge-secondary">P{{ resource.priority }}</span>
               </div>
               
@@ -93,7 +93,8 @@
 import { ref, onMounted, inject } from 'vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
+import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
+import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {
@@ -101,6 +102,7 @@ if (!resourceRepo) {
 }
 
 const resources = ref<ResourceData[]>([]);
+const languageMap = ref<Map<string, LanguageData>>(new Map());
 const loading = ref(false);
 const deleting = ref(false);
 const error = ref<string | null>(null);
@@ -138,7 +140,14 @@ async function deleteResource(uid: string) {
   }
 }
 
-onMounted(() => {
-  loadResources();
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+
+onMounted(async () => {
+  await loadResources();
+  const codes = Array.from(new Set(resources.value.map(r => r.language)));
+  const langs = await Promise.all(codes.map(c => languageRepo.getByCode(c)));
+  const map = new Map<string, LanguageData>();
+  langs.forEach(l => { if (l) map.set(l.code, l); });
+  languageMap.value = map;
 });
 </script>

@@ -44,7 +44,7 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
-                <LanguageDisplay :language-code="content.language" compact />
+                <LanguageDisplay v-if="languageMap.get(content.language)" :language="languageMap.get(content.language)!" variant="short" />
                 <span v-if="content.priority" class="badge badge-secondary">P{{ content.priority }}</span>
               </div>
               
@@ -96,7 +96,8 @@
 import { ref, onMounted, inject } from 'vue';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
-import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
+import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
+import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
 if (!immersionContentRepo) {
@@ -104,6 +105,7 @@ if (!immersionContentRepo) {
 }
 
 const immersionContent = ref<ImmersionContentData[]>([]);
+const languageMap = ref<Map<string, LanguageData>>(new Map());
 const loading = ref(false);
 const deleting = ref(false);
 const error = ref<string | null>(null);
@@ -141,7 +143,14 @@ async function deleteImmersionContent(uid: string) {
   }
 }
 
-onMounted(() => {
-  loadImmersionContent();
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+
+onMounted(async () => {
+  await loadImmersionContent();
+  const codes = Array.from(new Set(immersionContent.value.map(c => c.language)));
+  const langs = await Promise.all(codes.map(c => languageRepo.getByCode(c)));
+  const map = new Map<string, LanguageData>();
+  langs.forEach(l => { if (l) map.set(l.code, l); });
+  languageMap.value = map;
 });
 </script>

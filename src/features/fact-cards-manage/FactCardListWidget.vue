@@ -59,7 +59,7 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
-                <LanguageDisplay :language-code="factCard.language" compact />
+                <LanguageDisplay v-if="languageMap.get(factCard.language)" :language="languageMap.get(factCard.language)!" variant="short" />
                 <span v-if="factCard.origins && factCard.origins.length > 0 && !factCard.origins.includes('user-added')" class="badge badge-info">External</span>
                 <span v-if="factCard.doNotPractice" class="badge badge-warning">Excluded</span>
                 <span v-if="factCard.priority" class="badge badge-secondary">P{{ factCard.priority }}</span>
@@ -119,7 +119,8 @@ import { ref, computed, onMounted, inject } from 'vue';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
-import LanguageDisplay from '@/shared/ui/LanguageDisplay.vue';
+import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
+import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 if (!factCardRepo) {
@@ -127,6 +128,7 @@ if (!factCardRepo) {
 }
 
 const factCards = ref<FactCardData[]>([]);
+const languageMap = ref<Map<string, LanguageData>>(new Map());
 const loading = ref(false);
 const deleting = ref(false);
 const error = ref<string | null>(null);
@@ -176,7 +178,14 @@ async function deleteFactCard(uid: string) {
   }
 }
 
-onMounted(() => {
-  loadFactCards();
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+
+onMounted(async () => {
+  await loadFactCards();
+  const codes = Array.from(new Set(factCards.value.map(fc => fc.language)));
+  const langs = await Promise.all(codes.map(c => languageRepo.getByCode(c)));
+  const map = new Map<string, LanguageData>();
+  langs.forEach(l => { if (l) map.set(l.code, l); });
+  languageMap.value = map;
 });
 </script>

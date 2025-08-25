@@ -3,6 +3,7 @@ import type { TranslationRepoContract } from '@/entities/translations/Translatio
 import type { Task } from '@/entities/tasks/Task';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import { generateAddPronunciation, canGenerateAddPronunciation } from '../task-generator/generateAddPronunciation';
+import type { NoteData } from '@/entities/notes/NoteData';
 
 export async function getRandomAddPronunciationTask(
   vocabRepo: VocabRepoContract,
@@ -16,7 +17,7 @@ export async function getRandomAddPronunciationTask(
     
     if (vocabWithMissingPronunciation && languageCodes.includes(vocabWithMissingPronunciation.language)) {
       const translations = await translationRepo.getTranslationsByIds(vocabWithMissingPronunciation.translations);
-      const notes: any[] = []; // Empty since getRandomVocabWithMissingPronunciation already filters
+      const notes: NoteData[] = [];
       
       if (canGenerateAddPronunciation(vocabWithMissingPronunciation, translations, notes)) {
         return generateAddPronunciation(vocabWithMissingPronunciation);
