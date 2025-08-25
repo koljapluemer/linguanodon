@@ -13,6 +13,7 @@ export interface Task {
 
 export type TaskName = |
   'add-pronunciation' |
+  'add-translation' |
   'extract-knowledge-from-resource' |
   'add-sub-goals' |
   'add-vocab-to-goal' |

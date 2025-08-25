@@ -13,6 +13,7 @@ import { getRandomAddVocabToGoalTask } from './utils/getRandomAddVocabToGoalTask
 import { getRandomVocabTryToRememberTask } from './utils/getRandomVocabTryToRememberTask';
 import { getRandomVocabRevealTask } from './utils/getRandomVocabRevealTask';
 import { getRandomVocabChoiceTask } from './utils/getRandomVocabChoiceTask';
+import { getRandomAddTranslationTask } from './utils/getRandomAddTranslationTask';
 
 type TaskGenerator = () => Promise<Task | null>;
 
@@ -39,6 +40,7 @@ export async function makeTask(
     // Define all available task generators
     const allGenerators: TaskGenerator[] = [
       () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes),
+      () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes),
       () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes),
       () => getRandomAddSubGoalsTask(goalRepo, languageCodes),
       () => getRandomAddVocabToGoalTask(goalRepo, languageCodes),

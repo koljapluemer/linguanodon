@@ -518,4 +518,16 @@ export class VocabRepo implements VocabRepoContract {
       .map(v => this.ensureVocabFields(v))
       .filter(v => isSeen(v) && v.progress.due && v.progress.due <= new Date());
   }
+
+  async getRandomVocabWithNoTranslationsInLanguages(languages: string[]): Promise<VocabData | null> {
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(v => !v.doNotPractice && (!!v.content && (v.translations?.length ?? 0) === 0))
+      .toArray();
+    if (vocab.length === 0) return null;
+    const ensured = vocab.map(v => this.ensureVocabFields(v));
+    const shuffled = ensured.sort(() => Math.random() - 0.5);
+    return shuffled[0];
+  }
 }
