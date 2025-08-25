@@ -74,12 +74,10 @@ const emit = defineEmits<{
 }>();
 
 const isEditing = ref(false);
-const originalValue = ref<boolean | undefined>();
 const tempValue = ref<boolean>(false);
 const checkboxRef = ref<HTMLInputElement>();
 
 async function startEditing() {
-  originalValue.value = props.modelValue;
   tempValue.value = props.modelValue || false;
   isEditing.value = true;
   await nextTick();
@@ -92,7 +90,7 @@ function saveEdit() {
 }
 
 function cancelEdit() {
-  tempValue.value = originalValue.value || false;
+  tempValue.value = props.modelValue || false;
   isEditing.value = false;
 }
 </script>

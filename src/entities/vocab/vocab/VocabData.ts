@@ -1,6 +1,6 @@
 import type { LearningProgress } from "@/shared/LearningProgress";
 import type { Length } from "@/shared/Length";
-import type { Link } from "@/shared/Link";
+import type { Link } from "@/shared/links/Link";
 
 
 export interface VocabData {

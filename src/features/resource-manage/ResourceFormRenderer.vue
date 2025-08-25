@@ -85,10 +85,10 @@
 import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import LinkEdit from '@/shared/ui/LinkEdit.vue';
+import LinkEdit from '@/shared/links/LinkEdit.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import type { Link } from '@/shared/Link';
+import type { Link } from '@/shared/links/Link';
 
 const props = defineProps<{
   resourceUid?: string;

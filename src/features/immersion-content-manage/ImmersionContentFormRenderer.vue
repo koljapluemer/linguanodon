@@ -85,10 +85,10 @@
 import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
-import LinkEdit from '@/shared/ui/LinkEdit.vue';
+import LinkEdit from '@/shared/links/LinkEdit.vue';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
-import type { Link } from '@/shared/Link';
+import type { Link } from '@/shared/links/Link';
 
 const props = defineProps<{
   immersionContentUid?: string;

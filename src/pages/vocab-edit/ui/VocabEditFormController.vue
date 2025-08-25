@@ -12,6 +12,7 @@
       @update-note="updateNote"
       @remove-note="removeNote"
       @add-link="addLink"
+      @update-link="updateLink"
       @remove-link="removeLink"
     />
   </div>
@@ -27,6 +28,7 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
@@ -318,8 +320,13 @@ function addLink() {
   });
 }
 
-function removeLink(index: number) {
+function updateLink(index: number, link: Link) {
+  state.value.formData.links[index] = link;
+}
+
+async function removeLink(index: number) {
   state.value.formData.links.splice(index, 1);
+  await handleFieldChange();
 }
 
 onMounted(() => {

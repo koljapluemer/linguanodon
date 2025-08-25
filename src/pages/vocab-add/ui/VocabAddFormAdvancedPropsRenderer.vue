@@ -67,78 +67,22 @@
     </div>
 
     <!-- Links -->
-    <div>
-      <div class="flex justify-between items-center mb-3">
-        <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Links
-        </div>
-        <button
-          type="button"
-          @click="$emit('add-link')"
-          class="btn btn-sm btn-outline"
-        >
-          <Plus class="w-4 h-4 mr-1" />
-          Add Link
-        </button>
-      </div>
-      
-      <div v-if="formData.links.length === 0" class="text-gray-500 text-center py-4">
-        No links yet. Click "Add Link" to add external resources.
-      </div>
-      
-      <div v-else class="space-y-4">
-        <div
-          v-for="(link, index) in formData.links"
-          :key="index"
-          class="divide-y divide-gray-200 dark:divide-gray-700"
-        >
-          <!-- Link Label -->
-          <div class="py-2">
-            <label class="label">
-              <span class="label-text font-medium">Link label</span>
-            </label>
-            <input
-              v-model="link.label"
-              @input="$emit('field-change')"
-              type="text"
-              placeholder="Link label"
-              class="input input-bordered w-full"
-            />
-          </div>
-          
-          <!-- Link URL and Remove Button -->
-          <div class="flex items-end pt-2 gap-4">
-            <div class="flex-1">
-              <label class="label">
-                <span class="label-text font-medium">URL</span>
-              </label>
-              <input
-                v-model="link.url"
-                @input="$emit('field-change')"
-                type="url"
-                placeholder="https://..."
-                class="input input-bordered w-full"
-              />
-            </div>
-            <button
-              type="button"
-              @click="$emit('remove-link', index)"
-              class="btn btn-ghost btn-circle text-error flex-shrink-0"
-            >
-              <X class="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <LinksForm
+      :links="formData.links"
+      @add-link="$emit('add-link')"
+      @update-link="(index, link) => $emit('update-link', index, link)"
+      @remove-link="$emit('remove-link', $event)"
+      @field-change="$emit('field-change')"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Plus, X } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
+import LinksForm from '@/shared/links/LinksForm.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
+import type { Link } from '@/shared/links/Link';
 import { Length } from '@/shared/Length';
 
 interface VocabFormData {
@@ -149,10 +93,7 @@ interface VocabFormData {
   priority?: number;
   doNotPractice?: boolean;
   notes: NoteData[];
-  links: Array<{
-    label: string;
-    url: string;
-  }>;
+  links: Link[];
 }
 
 defineProps<{
@@ -165,6 +106,7 @@ defineEmits<{
   'update-note': [note: NoteData];
   'remove-note': [uid: string];
   'add-link': [];
+  'update-link': [index: number, link: Link];
   'remove-link': [index: number];
 }>();
 </script>

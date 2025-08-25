@@ -5,7 +5,7 @@ import ManageVocabOfResourceWidget from '@/features/resource-manage-its-vocab/Ma
 import ManageFactsOfResourceWidget from '@/features/resource-manage-its-facts/ManageFactsOfResourceWidget.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import LinkDisplayAsButton from '@/shared/ui/LinkDisplayAsButton.vue';
+import LinkDisplayAsButton from '@/shared/links/LinkDisplayAsButton.vue';
 
 interface Props {
   task: TaskData;

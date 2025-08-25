@@ -29,7 +29,7 @@ import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
-import type { Link } from '@/shared/Link';
+import type { Link } from '@/shared/links/Link';
 
 import { z } from 'zod';
 

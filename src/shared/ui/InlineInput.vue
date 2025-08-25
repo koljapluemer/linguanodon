@@ -22,8 +22,8 @@
       <div v-else class="mt-1 flex items-center gap-2">
         <input
           ref="inputRef"
-          :value="modelValue"
-          @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+          :value="tempValue"
+          @input="tempValue = ($event.target as HTMLInputElement).value"
           @keydown.enter="saveEdit"
           @keydown.escape="cancelEdit"
           :type="type"
@@ -81,7 +81,7 @@ const emit = defineEmits<{
 }>();
 
 const isEditing = ref(false);
-const originalValue = ref<string | number | undefined>();
+const tempValue = ref<string | number | undefined>();
 const inputRef = ref<HTMLInputElement>();
 
 const displayValue = computed(() => {
@@ -114,19 +114,19 @@ const inputClasses = computed(() => {
 });
 
 async function startEditing() {
-  originalValue.value = props.modelValue;
+  tempValue.value = props.modelValue;
   isEditing.value = true;
   await nextTick();
   inputRef.value?.focus();
-  inputRef.value?.select();
 }
 
 function saveEdit() {
+  emit('update:modelValue', tempValue.value);
   isEditing.value = false;
 }
 
 function cancelEdit() {
-  emit('update:modelValue', originalValue.value);
+  tempValue.value = props.modelValue;
   isEditing.value = false;
 }
 </script>

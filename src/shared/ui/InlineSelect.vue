@@ -22,8 +22,8 @@
       <div v-else class="mt-1 flex items-center gap-2">
         <select
           ref="selectRef"
-          :value="modelValue"
-          @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
+          :value="tempValue"
+          @change="tempValue = ($event.target as HTMLSelectElement).value"
           @keydown.enter="saveEdit"
           @keydown.escape="cancelEdit"
           :required="required"
@@ -81,7 +81,7 @@ const emit = defineEmits<{
 }>();
 
 const isEditing = ref(false);
-const originalValue = ref<string | undefined>();
+const tempValue = ref<string | undefined>();
 const selectRef = ref<HTMLSelectElement>();
 
 const displayValue = computed(() => {
@@ -125,18 +125,19 @@ function getOptionLabel(option: string | { value: string; label: string }): stri
 }
 
 async function startEditing() {
-  originalValue.value = props.modelValue;
+  tempValue.value = props.modelValue;
   isEditing.value = true;
   await nextTick();
   selectRef.value?.focus();
 }
 
 function saveEdit() {
+  emit('update:modelValue', tempValue.value);
   isEditing.value = false;
 }
 
 function cancelEdit() {
-  emit('update:modelValue', originalValue.value);
+  tempValue.value = props.modelValue;
   isEditing.value = false;
 }
 </script>

@@ -40,6 +40,7 @@
         @update-note="$emit('update-note', $event)"
         @remove-note="$emit('remove-note', $event)"
         @add-link="$emit('add-link')"
+        @update-link="(index, link) => $emit('update-link', index, link)"
         @remove-link="$emit('remove-link', $event)"
       />
     </div>
@@ -51,6 +52,7 @@ import { ref, watch } from 'vue';
 import VocabFormCoreRenderer from './VocabFormCoreRenderer.vue';
 import VocabFormAdvancedPropsRenderer from './VocabFormAdvancedPropsRenderer.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { Link } from '@/shared/links/Link';
 import { Length } from '@/shared/Length';
 
 interface VocabFormData {
@@ -85,6 +87,7 @@ defineEmits<{
   'update-note': [note: NoteData];
   'remove-note': [uid: string];
   'add-link': [];
+  'update-link': [index: number, link: Link];
   'remove-link': [index: number];
 }>();
 

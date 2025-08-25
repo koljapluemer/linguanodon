@@ -22,8 +22,8 @@
       <div v-else class="mt-1 flex flex-col gap-2">
         <textarea
           ref="textareaRef"
-          :value="modelValue"
-          @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
+          :value="tempValue"
+          @input="tempValue = ($event.target as HTMLTextAreaElement).value"
           @keydown.ctrl.enter="saveEdit"
           @keydown.escape="cancelEdit"
           :placeholder="placeholder"
@@ -80,7 +80,7 @@ const emit = defineEmits<{
 }>();
 
 const isEditing = ref(false);
-const originalValue = ref<string | undefined>();
+const tempValue = ref<string | undefined>();
 const textareaRef = ref<HTMLTextAreaElement>();
 
 const displayValue = computed(() => {
@@ -113,19 +113,19 @@ const textareaClasses = computed(() => {
 });
 
 async function startEditing() {
-  originalValue.value = props.modelValue;
+  tempValue.value = props.modelValue;
   isEditing.value = true;
   await nextTick();
   textareaRef.value?.focus();
-  textareaRef.value?.select();
 }
 
 function saveEdit() {
+  emit('update:modelValue', tempValue.value);
   isEditing.value = false;
 }
 
 function cancelEdit() {
-  emit('update:modelValue', originalValue.value);
+  tempValue.value = props.modelValue;
   isEditing.value = false;
 }
 </script>

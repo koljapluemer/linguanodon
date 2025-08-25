@@ -1,4 +1,4 @@
-import type { Link } from "@/shared/Link";
+import type { Link } from "@/shared/links/Link";
 
 export interface ResourceData {
   uid: string;
