@@ -14,6 +14,14 @@ export function generateAddSubGoals(goal: GoalData): Task {
 }
 
 export function canGenerateAddSubGoals(goal: GoalData): boolean {
-  // Can generate if goal hasn't finished adding sub-goals OR if goal has no sub-goals
-  return !goal.finishedAddingSubGoals || goal.subGoals.length === 0;
+  // Can generate if goal hasn't finished adding sub-goals AND hasn't been shown recently
+  if (goal.finishedAddingSubGoals) return false;
+  
+  // Check if shown recently (within 10 minutes)
+  if (goal.lastShownAt) {
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    if (goal.lastShownAt > tenMinutesAgo) return false;
+  }
+  
+  return true;
 }

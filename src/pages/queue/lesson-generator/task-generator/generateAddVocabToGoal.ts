@@ -14,6 +14,14 @@ export function generateAddVocabToGoal(goal: GoalData): Task {
 }
 
 export function canGenerateAddVocabToGoal(goal: GoalData): boolean {
-  // Can generate if goal hasn't finished adding knowledge OR if goal has few vocab items
-  return !goal.finishedAddingKnowledge || goal.vocab.length < 10;
+  // Can generate if goal hasn't finished adding knowledge AND hasn't been shown recently
+  if (goal.finishedAddingKnowledge) return false;
+  
+  // Check if shown recently (within 10 minutes)
+  if (goal.lastShownAt) {
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    if (goal.lastShownAt > tenMinutesAgo) return false;
+  }
+  
+  return true;
 }

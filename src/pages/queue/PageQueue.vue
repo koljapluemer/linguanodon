@@ -40,8 +40,7 @@ const state = ref<QueueState>({ status: 'initializing' });
 const showLoadingUI = ref(false);
 let loadingTimeout: NodeJS.Timeout | null = null;
 
-// Background task generation
-let nextTaskPromise: Promise<Task | null> | null = null;
+
 
 // Loading UI helpers
 function startDelayedLoading() {
@@ -79,21 +78,7 @@ async function generateNextTask(): Promise<Task | null> {
   }
 }
 
-// Start background generation of next task
-function startGeneratingNextTask() {
-  if (nextTaskPromise) return; // Already generating
-  nextTaskPromise = generateNextTask();
-}
 
-// Get the next task (from background generation or generate new one)
-async function getNextTask(): Promise<Task | null> {
-  if (nextTaskPromise) {
-    const task = await nextTaskPromise;
-    nextTaskPromise = null;
-    return task;
-  }
-  return await generateNextTask();
-}
 
 
 // Try to transition to task state
@@ -102,22 +87,11 @@ async function tryTransitionToTask(): Promise<boolean> {
   startDelayedLoading();
 
   try {
-    const currentTask = await Promise.race([
-      getNextTask(),
-      new Promise<null>((_, reject) =>
-        setTimeout(() => reject(new Error('Task generation timeout')), 5000)
-      )
-    ]);
+    const currentTask = await generateNextTask();
     
     if (currentTask) {
-      // Start generating next task in background
-      startGeneratingNextTask();
-      
-      // Try to get next task immediately (might be null)
-      const nextTask = nextTaskPromise ? await Promise.race([
-        nextTaskPromise,
-        new Promise<null>(resolve => setTimeout(() => resolve(null), 100))
-      ]) : null;
+      // Generate next task for preloading
+      const nextTask = await generateNextTask();
       
       clearDelayedLoading();
       state.value = { 
@@ -174,23 +148,21 @@ async function completeCurrentTask() {
   
   // If we have a next task ready, use it
   if (currentState.nextTask) {
-    // Start generating the task after next in background
-    startGeneratingNextTask();
-    
+    // Show the preloaded next task
     state.value = {
       status: 'task',
       currentTask: currentState.nextTask,
       nextTask: null
     };
     
-    // Try to get the next task for preloading
-    const nextTask = nextTaskPromise ? await Promise.race([
-      nextTaskPromise,
-      new Promise<null>(resolve => setTimeout(() => resolve(null), 100))
-    ]) : null;
-    
-    if (nextTask && state.value.status === 'task') {
-      state.value.nextTask = nextTask;
+    // Generate new next task for preloading
+    try {
+      const newNextTask = await generateNextTask();
+      if (newNextTask && state.value.status === 'task') {
+        state.value.nextTask = newNextTask;
+      }
+    } catch (error) {
+      console.error('Error generating next task:', error);
     }
   } else {
     // No next task ready, need to generate one

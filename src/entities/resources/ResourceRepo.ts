@@ -28,6 +28,15 @@ export class ResourceRepo implements ResourceRepoContract {
       ? allResources.filter(resource => languages.includes(resource.language))
       : allResources;
     
+    // Filter out resources that are finished extracting
+    filteredResources = filteredResources.filter(resource => !resource.finishedExtracting);
+    
+    // Filter out resources shown recently (within 10 minutes)
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    filteredResources = filteredResources.filter(resource => 
+      !resource.lastShownAt || resource.lastShownAt < tenMinutesAgo
+    );
+    
     // Deterministically filter out resources from avoided sets if specified
     if (setsToAvoid && setsToAvoid.length > 0) {
       filteredResources = filteredResources.filter(resource =>
