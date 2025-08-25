@@ -9,7 +9,8 @@ export class NoteRepo implements NoteRepoContract {
     return {
       ...note,
       content: note.content || '',
-      showBeforeExercise: note.showBeforeExercise ?? false
+      showBeforeExercise: note.showBeforeExercise ?? false,
+      noteType: note.noteType
     };
   }
 
@@ -27,7 +28,8 @@ export class NoteRepo implements NoteRepoContract {
     const newNote: NoteData = {
       uid: crypto.randomUUID(),
       content: note.content,
-      showBeforeExercise: note.showBeforeExercise ?? false
+      showBeforeExercise: note.showBeforeExercise ?? false,
+      noteType: note.noteType
     };
 
     await this.storage.add(newNote);
@@ -46,13 +48,14 @@ export class NoteRepo implements NoteRepoContract {
     await this.storage.deleteMultiple(uids);
   }
 
-  async createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean }[]): Promise<string[]> {
+  async createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean; noteType?: string }[]): Promise<string[]> {
     const noteUids: string[] = [];
     
     for (const remoteNote of remoteNotes) {
       const noteData: Omit<NoteData, 'uid'> = {
         content: remoteNote.content,
-        showBeforeExercise: remoteNote.showBeforeExercise
+        showBeforeExercise: remoteNote.showBeforeExercise,
+        noteType: remoteNote.noteType
       };
       const savedNote = await this.saveNote(noteData);
       noteUids.push(savedNote.uid);

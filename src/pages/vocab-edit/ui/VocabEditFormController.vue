@@ -305,6 +305,7 @@ function updateNote(updatedNote: NoteData) {
   const index = state.value.formData.notes.findIndex(n => n.uid === updatedNote.uid);
   if (index >= 0) {
     state.value.formData.notes[index] = updatedNote;
+    handleFieldChange();
   }
 }
 

@@ -19,6 +19,6 @@ import VocabAddFormController from './ui/VocabAddFormController.vue';
 const router = useRouter();
 
 function handleVocabSaved(vocabId: string) {
-  router.push(`/vocab/edit/${vocabId}`);
+  router.push(`/vocab/${vocabId}/edit`);
 }
 </script>

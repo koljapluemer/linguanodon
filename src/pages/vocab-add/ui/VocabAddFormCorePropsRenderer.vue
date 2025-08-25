@@ -42,19 +42,50 @@
       <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
         Translations
       </div>
-      <TranslationGroupForm
-        v-model="formData.translations"
-        :allow-edit-on-click="false"
-        :show-delete-button="true"
-        :allow-adding-new="true"
-      />
+      
+      <div class="space-y-3">
+        <!-- Existing translations -->
+        <div
+          v-for="(translation, index) in formData.translations"
+          :key="translation.uid"
+          class="flex items-center gap-2"
+        >
+          <input
+            v-model="translation.content"
+            @input="$emit('field-change')"
+            type="text"
+            placeholder="Enter translation..."
+            class="input input-bordered input-lg flex-1"
+          />
+          <button
+            type="button"
+            @click="removeTranslation(index)"
+            class="btn btn-ghost btn-circle text-error flex-shrink-0"
+          >
+            <X class="w-4 h-4" />
+          </button>
+        </div>
+        
+        <!-- Always-visible add new translation input -->
+        <div class="flex items-center gap-2">
+          <input
+            v-model="newTranslationContent"
+            @blur="addTranslationIfNeeded"
+            @keydown.enter="focusNewTranslation"
+            type="text"
+            placeholder="Add new translation..."
+            class="input input-bordered input-lg flex-1"
+          />
+          <div class="w-10 flex-shrink-0"></div> <!-- Spacer for alignment -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue';
-import TranslationGroupForm from '@/entities/translations/TranslationGroupForm.vue';
+import { ref, computed, inject, onMounted, nextTick } from 'vue';
+import { X } from 'lucide-vue-next';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
@@ -73,11 +104,11 @@ interface VocabFormData {
   }>;
 }
 
-defineProps<{
+const props = defineProps<{
   formData: VocabFormData;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'field-change': [];
 }>();
 
@@ -98,4 +129,35 @@ const languageOptions = computed(() => {
     label: language.emoji ? `${language.emoji} ${formatLanguageDisplay(language, false)}` : formatLanguageDisplay(language, false)
   }));
 });
+
+// Translation management
+
+const newTranslationContent = ref('');
+
+function addTranslationIfNeeded() {
+  if (newTranslationContent.value.trim()) {
+    const newTranslation: TranslationData = {
+      uid: crypto.randomUUID(),
+      content: newTranslationContent.value.trim(),
+      priority: 1,
+      notes: [],
+      origins: []
+    };
+    
+    props.formData.translations.push(newTranslation);
+    newTranslationContent.value = '';
+    emit('field-change');
+  }
+}
+
+function removeTranslation(index: number) {
+  props.formData.translations.splice(index, 1);
+  emit('field-change');
+}
+
+async function focusNewTranslation() {
+  addTranslationIfNeeded();
+  await nextTick();
+  // Focus stays on the same input after adding
+}
 </script>
