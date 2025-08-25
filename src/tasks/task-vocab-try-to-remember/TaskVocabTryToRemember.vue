@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, inject, onMounted } from 'vue';
+import { toRaw } from 'vue';
+import { createEmptyCard } from 'ts-fsrs';
 import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
@@ -9,12 +11,10 @@ interface Props {
   task: TaskData;
 }
 
-interface Emits {
-  (e: 'taskNowMayBeConsideredDone'): void;
-}
-
 const props = defineProps<Props>();
-const emit = defineEmits<Emits>();
+const emit = defineEmits<{
+  finished: [];
+}>();
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
@@ -35,28 +35,49 @@ const loadVocab = async () => {
     const translationData = await translationRepo.getTranslationsByIds(vocabData.translations);
     translations.value = translationData.map(t => t.content);
   }
+};
 
-  // Can be considered done immediately
-  emit('taskNowMayBeConsideredDone');
+const handleDone = async () => {
+  if (!vocab.value) return;
+  
+  try {
+    // Initialize learning card for unseen vocab
+    const updatedVocab = {
+      ...vocab.value,
+      progress: {
+        ...vocab.value.progress,
+        level: 0,
+        card: createEmptyCard()
+      }
+    };
+    await vocabRepo.updateVocab(toRaw(updatedVocab));
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error initializing vocab:', error);
+    emit('finished');
+  }
 };
 
 onMounted(loadVocab);
 </script>
 
 <template>
-  <div class="card bg-base-100 shadow-sm" v-if="vocab">
-    <div class="card-body text-center flex flex-col gap-4">
-      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold">{{ vocab.content }}</div>
-
-      <div class="divider"></div>
-
-      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold">
+  <div v-if="vocab">
+    <div class="text-center mb-8">
+      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold mb-6">{{ vocab.content }}</div>
+      <div class="divider mb-6"></div>
+      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold text-base-content/70">
         {{ translations.join(', ') }}
       </div>
     </div>
+    
+    <div class="flex justify-center">
+      <button @click="handleDone" class="btn btn-primary">Done</button>
+    </div>
   </div>
 
-  <div v-else class="flex justify-center py-8">
+  <div v-else>
     <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>

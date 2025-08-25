@@ -1,30 +1,28 @@
 <template>
-  <div class="space-y-6">
-    <div v-if="goal">
-      
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <ManageVocabOfGoalWidget 
-            :goal="goal"
-            @goal-updated="handleGoalUpdate"
-          />
-        </div>
-      </div>
-      
-      <div class="flex gap-2 mt-4">
-        <button class="btn btn-primary" @click="emit('finished')">
-          Done
-        </button>
-        <button class="btn btn-ghost" @click="emit('finished')">
-          Skip
-        </button>
-      </div>
+  <div v-if="goal">
+    <h2 class="text-2xl font-bold mb-6">{{ goal.title }}</h2>
+
+    <ManageVocabOfGoalWidget 
+      :goal="goal"
+      @goal-updated="handleGoalUpdate"
+    />
+
+    <div v-if="!showDoneSection" class="flex gap-2 mt-6">
+      <button @click="handleSkip" class="btn btn-outline">Skip</button>
+      <button @click="handleSkipAndDisable" class="btn btn-outline">Skip & Disable</button>
+      <button @click="handleDone" :disabled="!hasChanges" class="btn btn-primary">Done</button>
     </div>
 
-    <div v-else class="text-center py-8">
-      <span class="loading loading-spinner loading-lg"></span>
-      <p class="mt-2 text-gray-500">Loading goal...</p>
+    <div v-if="showDoneSection" class="mt-6">
+      <TaskDecideWhetherToDoAgain 
+        question="Do you want to add more vocabulary in the future?"
+        @decision="handleFinishDecision" 
+      />
     </div>
+  </div>
+
+  <div v-else>
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>
 
@@ -34,22 +32,23 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { TaskData } from '@/entities/tasks/Task';
 import ManageVocabOfGoalWidget from '@/features/goal-manage-its-vocab/ManageVocabOfGoalWidget.vue';
+import TaskDecideWhetherToDoAgain from '@/shared/TaskDecideWhetherToDoAgain.vue';
 
 interface Props {
   task: TaskData;
 }
 
 const props = defineProps<Props>();
-
 const emit = defineEmits<{
   finished: [];
 }>();
 
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const goal = ref<GoalData | null>(null);
+const hasChanges = ref(false);
+const showDoneSection = ref(false);
 
 async function loadGoal() {
-  // Extract goal ID from task's associated goals
   const goalUid = props.task.associatedGoals?.[0];
   if (!goalUid) {
     console.error('No goal association found in task');
@@ -66,7 +65,65 @@ async function loadGoal() {
 
 function handleGoalUpdate(updatedGoal: GoalData) {
   goal.value = updatedGoal;
+  hasChanges.value = true;
 }
+
+const handleSkip = async () => {
+  if (!goal.value) return;
+  
+  try {
+    // Just update lastShownAt - no other changes
+    await goalRepo.update(goal.value.uid, {
+      lastShownAt: new Date()
+    });
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error skipping goal:', error);
+    emit('finished');
+  }
+};
+
+const handleSkipAndDisable = async () => {
+  if (!goal.value) return;
+  
+  try {
+    // Set finishedAddingKnowledge to true
+    const updatedGoal = {
+      ...goal.value,
+      finishedAddingKnowledge: true,
+      lastShownAt: new Date()
+    };
+    await goalRepo.update(goal.value.uid, updatedGoal);
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error disabling goal:', error);
+    emit('finished');
+  }
+};
+
+const handleDone = () => {
+  showDoneSection.value = true;
+};
+
+const handleFinishDecision = async (wantToDoAgain: boolean) => {
+  if (!goal.value) return;
+  
+  try {
+    const updatedGoal = {
+      ...goal.value,
+      finishedAddingKnowledge: !wantToDoAgain,
+      lastShownAt: new Date()
+    };
+    await goalRepo.update(goal.value.uid, updatedGoal);
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error finishing goal:', error);
+    emit('finished');
+  }
+};
 
 onMounted(loadGoal);
 </script>

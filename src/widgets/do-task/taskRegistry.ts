@@ -1,6 +1,5 @@
 import type { Component } from "vue";
 
-// Import all task widgets
 import RenderTaskForAddingPronunciation from "@/tasks/task-vocab-add-pronunciation/RenderTaskForAddingPronunciation.vue";
 import RenderExtractKnowledgeFromResource from "@/tasks/task-resource-extract-knowledge/RenderExtractKnowledgeFromResource.vue";
 import TaskAddSubGoals from "@/tasks/task-goal-add-sub-goals/TaskAddSubGoals.vue";
@@ -13,7 +12,7 @@ import type { TaskName } from "@/entities/tasks/Task";
 export interface TaskInfo {
   component: Component
   size: 'small' | 'medium' | 'big'
-} 
+}
 
 export const taskRegistry: Record<TaskName, TaskInfo> = {
   "add-pronunciation": { component: RenderTaskForAddingPronunciation, size: 'small' },

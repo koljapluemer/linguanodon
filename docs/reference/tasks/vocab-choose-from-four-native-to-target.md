@@ -1,0 +1,3 @@
+- `VocabData` must have >0 translations and content must be set.
+- `VocabData` must be seen, and due, and level 2-3 (this should be mostly covered by entity functions)
+- Has internal state. Cannot be skipped. First, show reveal button at the bottom, when clicked, show the back in addition to the front as well as the standard SR rating buttons. When any button is clicked, its immediately done and vocabdata should be correctly scored.

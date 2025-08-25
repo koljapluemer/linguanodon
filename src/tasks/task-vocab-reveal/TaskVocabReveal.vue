@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, inject, onMounted, watch } from 'vue';
+import { ref, computed, inject, onMounted } from 'vue';
 import type { TaskData } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { Rating } from 'ts-fsrs';
+import SpacedRepetitionRating from '@/shared/SpacedRepetitionRating.vue';
 
 interface Props {
   task: TaskData;
 }
 
-interface Emits {
-  (e: 'taskNowMayBeConsideredDone'): void;
-}
-
 const props = defineProps<Props>();
-const emit = defineEmits<Emits>();
+const emit = defineEmits<{
+  finished: [];
+}>();
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
@@ -60,39 +60,43 @@ const loadVocab = async () => {
   }
 };
 
-watch(isRevealed, (revealed) => {
-  if (revealed) {
-    emit('taskNowMayBeConsideredDone');
+const handleRating = async (rating: Rating) => {
+  if (!vocab.value) return;
+  
+  try {
+    // Score vocab and update last review
+    await vocabRepo.scoreVocab(vocab.value.uid, rating);
+    await vocabRepo.updateLastReview(vocab.value.uid);
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error scoring vocab:', error);
+    emit('finished');
   }
-});
+};
 
 onMounted(loadVocab);
 </script>
 
 <template>
-  <div v-if="vocab" class="space-y-4">
-    <div class="card bg-base-100 shadow-sm">
-      <div class="card-body text-center">
-        <div :class="isSentence ? 'text-3xl' : 'text-6xl'" class="font-bold mb-4">{{ frontContent }}</div>
+  <div v-if="vocab">
+    <div class="text-center mb-8">
+      <div :class="isSentence ? 'text-3xl' : 'text-6xl'" class="font-bold mb-6">{{ frontContent }}</div>
+      
+      <div v-if="isRevealed">
+        <div class="divider mb-6">Answer</div>
+        <div :class="isSentence ? 'text-xl' : 'text-3xl'" class="text-base-content/70 mb-6">{{ solution }}</div>
         
-        <div v-if="isRevealed">
-          <div class="divider">Answer</div>
-          <div :class="isSentence ? 'text-xl' : 'text-3xl'" class="text-gray-600">{{ solution }}</div>
-        </div>
-        
-        <div v-else class="mt-6">
-          <button 
-            class="btn btn-primary"
-            @click="isRevealed = true"
-          >
-            Reveal
-          </button>
-        </div>
+        <SpacedRepetitionRating @rating="handleRating" />
+      </div>
+      
+      <div v-else>
+        <button @click="isRevealed = true" class="btn btn-primary">Reveal</button>
       </div>
     </div>
   </div>
   
-  <div v-else class="flex justify-center py-8">
+  <div v-else>
     <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>

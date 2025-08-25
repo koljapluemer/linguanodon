@@ -19,6 +19,7 @@ export interface VocabData {
 
   relatedVocab: string[]; // uids of other vocab
   notRelatedVocab: string[]; // uids of other vocab
+  notInterestedInPronunciation?: boolean
 
 }
 

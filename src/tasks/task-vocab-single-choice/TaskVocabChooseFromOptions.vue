@@ -5,7 +5,9 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { Rating } from 'ts-fsrs';
 import { shuffleArray } from '@/shared/arrayUtils';
+import SpacedRepetitionRating from '@/shared/SpacedRepetitionRating.vue';
 
 interface AnswerOption {
   content: string;
@@ -23,12 +25,11 @@ interface Props {
   task: TaskData;
 }
 
-interface Emits {
-  (e: 'finished'): void;
-}
+const emit = defineEmits<{
+  finished: [];
+}>();
 
 const props = defineProps<Props>();
-const emit = defineEmits<Emits>();
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
@@ -39,6 +40,7 @@ const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 const selectedIndex = ref<number | null>(null);
 const isAnswered = ref(false);
 const firstAttemptWrong = ref(false);
+const showRating = ref(false);
 const answerOptions = ref<AnswerOption[]>([]);
 const vocab = ref<VocabData | null>(null);
 const translations = ref<TranslationData[]>([]);
@@ -235,7 +237,7 @@ function selectOption(index: number) {
 
   if (isCorrect) {
     isAnswered.value = true;
-    emit('finished')
+    showRating.value = true;
   } else {
     // Wrong answer: mark first attempt as wrong, disable button
     firstAttemptWrong.value = true;
@@ -275,23 +277,35 @@ function isButtonDisabled(index: number): boolean {
   return false;
 }
 
+const handleRating = async (rating: Rating) => {
+  if (!vocab.value) return;
+  
+  try {
+    // Score vocab and update last review
+    await vocabRepo.scoreVocab(vocab.value.uid, rating);
+    await vocabRepo.updateLastReview(vocab.value.uid);
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error scoring vocab:', error);
+    emit('finished');
+  }
+};
+
 onMounted(loadVocabData);
 </script>
 
 <template>
-
   <!-- Loading State -->
-  <div v-if="loading" class="text-center py-8">
+  <div v-if="loading">
     <span class="loading loading-spinner loading-lg"></span>
-    <p class="mt-2 text-gray-500">Loading exercise...</p>
   </div>
 
   <!-- Exercise Content -->
-  <div v-else-if="vocab && answerOptions.length > 0" class="card-body text-center items-center">
+  <div v-else-if="vocab && answerOptions.length > 0" class="text-center">
     <!-- Cloze Display for Single Sentences -->
     <div v-if="isSingleSentence && clozeData" class="mb-8">
-      <!-- Primary cloze text -->
-      <div class="card-title text-3xl mb-4" :class="{ 'rtl': isRTL }">
+      <div class="text-3xl mb-4" :class="{ 'rtl': isRTL }">
         <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
         <span class="inline-block bg-gray-300 dark:bg-gray-600 text-transparent rounded px-2 py-1 mx-1 select-none" 
               :style="{ width: Math.max(clozeData.hiddenWord.length * 0.6, 3) + 'em' }">
@@ -299,50 +313,49 @@ onMounted(loadVocabData);
         </span>
         <span v-if="clozeData.afterWord" class="ml-2">{{ clozeData.afterWord }}</span>
       </div>
-      <!-- Secondary text (smaller) -->
-      <div v-if="secondaryContent" class="text-2xl text-gray-600 dark:text-gray-400" :class="{ 'rtl': isRTL }">
+      <div v-if="secondaryContent" class="text-2xl text-base-content/70" :class="{ 'rtl': isRTL }">
         {{ secondaryContent }}
       </div>
     </div>
     
     <!-- Regular Display for Other Content Types -->
-    <div v-else :class="isSingleSentence ? 'text-3xl' : 'text-6xl'" class="card-title mb-8">{{ displayContent }}
-    </div>
+    <div v-else :class="isSingleSentence ? 'text-3xl' : 'text-6xl'" class="font-bold mb-8">{{ displayContent }}</div>
 
-    <!-- Answer Options - only show when not answered -->
-    <div v-if="!isAnswered" class="card-actions">
+    <!-- Answer Options - only show when not answered and not showing rating -->
+    <div v-if="!isAnswered && !showRating" class="grid grid-cols-1 gap-2 mb-6">
       <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
         :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg">
         {{ option.content }}
       </button>
     </div>
 
-    <!-- Correct Answer Display - show when answered -->
-    <div v-if="isAnswered" class="w-full">
-      <div class="divider"></div>
+    <!-- Correct Answer Display and Rating - show when answered -->
+    <div v-if="isAnswered">
+      <div class="divider mb-6">Answer</div>
+      
       <!-- Show complete sentence for cloze -->
-      <div v-if="isSingleSentence && clozeData">
-        <!-- Primary text with revealed answer -->
-        <div class="text-3xl mt-4 mb-4" :class="{ 'rtl': isRTL }">
+      <div v-if="isSingleSentence && clozeData" class="mb-6">
+        <div class="text-3xl mb-4" :class="{ 'rtl': isRTL }">
           <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
           <span class="text-green-600 font-bold mx-1">{{ clozeData.hiddenWord }}</span>
           <span v-if="clozeData.afterWord" class="ml-2">{{ clozeData.afterWord }}</span>
         </div>
-        <!-- Secondary text -->
-        <div v-if="secondaryContent" class="text-2xl text-gray-600 dark:text-gray-400" :class="{ 'rtl': isRTL }">
+        <div v-if="secondaryContent" class="text-2xl text-base-content/70" :class="{ 'rtl': isRTL }">
           {{ secondaryContent }}
         </div>
       </div>
+      
       <!-- Show answer for regular content -->
-      <div v-else :class="isSingleSentence ? 'text-3xl' : 'text-6xl'" class="mt-4">
+      <div v-else :class="isSingleSentence ? 'text-3xl' : 'text-6xl'" class="font-bold text-base-content/70 mb-6">
         {{ answerOptions.find(opt => opt.isCorrect)?.content }}
       </div>
+      
+      <SpacedRepetitionRating @rating="handleRating" />
     </div>
   </div>
 
   <!-- Error State -->
-  <div v-else class="alert alert-error">
+  <div v-else>
     <span>Failed to load exercise data</span>
-
   </div>
 </template>

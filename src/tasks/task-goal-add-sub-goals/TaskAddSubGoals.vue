@@ -1,41 +1,57 @@
 <template>
-  <div v-if="goal" class="card-body">
-    <div class="card-title">{{ goal.title }}</div>
+  <div v-if="goal">
+    <h2 class="text-2xl font-bold mb-6">{{ goal.title }}</h2>
 
+    <ManageSubGoalsWidget :goal="goal" @goal-updated="handleGoalUpdate" />
 
-    <div class="divider">Sub-Goals</div>
+    <div v-if="!showDoneSection" class="flex gap-2 mt-6">
+      <button @click="handleSkip" class="btn btn-outline">Skip</button>
+      <button @click="handleSkipAndDisable" class="btn btn-outline">Skip & Disable</button>
+      <button @click="handleDone" :disabled="!hasChanges" class="btn btn-primary">Done</button>
+    </div>
 
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body">
-        <ManageSubGoalsWidget :goal="goal" @goal-updated="handleGoalUpdate" />
-      </div>
+    <div v-if="showDoneSection" class="mt-6">
+      <TaskDecideWhetherToDoAgain 
+        question="Do you want to add more sub-goals in the future?"
+        @decision="handleFinishDecision" 
+      />
     </div>
   </div>
 
-  <div v-else class="text-center py-8">
+  <div v-else>
     <span class="loading loading-spinner loading-lg"></span>
-    <p class="mt-2 text-gray-500">Loading goal...</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
+import type { TaskData } from '@/entities/tasks/Task';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import ManageSubGoalsWidget from '@/features/goal-manage-its-sub-goals/ManageSubGoalsWidget.vue';
+import TaskDecideWhetherToDoAgain from '@/shared/TaskDecideWhetherToDoAgain.vue';
 
-const props = defineProps<{
-  goalId: string;
+interface Props {
+  task: TaskData;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits<{
+  finished: [];
 }>();
-
 
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const goal = ref<GoalData | null>(null);
+const hasChanges = ref(false);
+const showDoneSection = ref(false);
 
 async function loadGoal() {
-  const loadedGoal = await goalRepo.getById(props.goalId);
+  const goalUid = props.task.associatedGoals?.[0];
+  if (!goalUid) return;
+  
+  const loadedGoal = await goalRepo.getById(goalUid);
   if (!loadedGoal) {
-    console.error(`Goal with id ${props.goalId} not found`);
+    console.error(`Goal with id ${goalUid} not found`);
     return;
   }
   goal.value = loadedGoal;
@@ -43,8 +59,65 @@ async function loadGoal() {
 
 function handleGoalUpdate(updatedGoal: GoalData) {
   goal.value = updatedGoal;
+  hasChanges.value = true;
 }
 
+const handleSkip = async () => {
+  if (!goal.value) return;
+  
+  try {
+    // Just update lastShownAt - no other changes
+    await goalRepo.update(goal.value.uid, {
+      lastShownAt: new Date()
+    });
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error skipping goal:', error);
+    emit('finished');
+  }
+};
+
+const handleSkipAndDisable = async () => {
+  if (!goal.value) return;
+  
+  try {
+    // Set finishedAddingSubGoals to true
+    const updatedGoal = {
+      ...goal.value,
+      finishedAddingSubGoals: true,
+      lastShownAt: new Date()
+    };
+    await goalRepo.update(goal.value.uid, updatedGoal);
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error disabling goal:', error);
+    emit('finished');
+  }
+};
+
+const handleDone = () => {
+  showDoneSection.value = true;
+};
+
+const handleFinishDecision = async (wantToDoAgain: boolean) => {
+  if (!goal.value) return;
+  
+  try {
+    const updatedGoal = {
+      ...goal.value,
+      finishedAddingSubGoals: !wantToDoAgain,
+      lastShownAt: new Date()
+    };
+    await goalRepo.update(goal.value.uid, updatedGoal);
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error finishing goal:', error);
+    emit('finished');
+  }
+};
 
 onMounted(loadGoal);
 </script>

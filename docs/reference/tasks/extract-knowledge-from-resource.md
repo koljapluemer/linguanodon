@@ -1,0 +1,9 @@
+- `big` task
+- can be generated based on `ResourceData` where `finishedExtracting` is false and `lastShownAt` is either non-existing or at least 10 minutes in the past
+- should have a skip button, updating the last shown at
+- can be skipped and disabled, in which case `finishedExtracting` is set to true
+- should have a `Done` button on the bottom, disabled until something in either the fact card list or the vocab list changes.
+  - when clicked, hide the skip and skip-disable button
+  - ask the user yes/no whether they want to extract more knowledge in the future, update accordingly
+- Show skip, skip-and-disable and Done in one row on the bottom
+- when done, update `lastShownAt` of `ResourceData`

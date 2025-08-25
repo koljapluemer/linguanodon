@@ -7,7 +7,7 @@ import { generateAddPronunciation, canGenerateAddPronunciation } from '../task-g
 export async function getRandomAddPronunciationTask(
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
-  noteRepo: NoteRepoContract,
+  _noteRepo: NoteRepoContract,
   languageCodes: string[]
 ): Promise<TaskData | null> {
   try {
@@ -16,7 +16,7 @@ export async function getRandomAddPronunciationTask(
     
     if (vocabWithMissingPronunciation && languageCodes.includes(vocabWithMissingPronunciation.language)) {
       const translations = await translationRepo.getTranslationsByIds(vocabWithMissingPronunciation.translations);
-      const notes = await noteRepo.getNotesByUIDs(vocabWithMissingPronunciation.notes);
+      const notes: any[] = []; // Empty since getRandomVocabWithMissingPronunciation already filters
       
       if (canGenerateAddPronunciation(vocabWithMissingPronunciation, translations, notes)) {
         return generateAddPronunciation(vocabWithMissingPronunciation);

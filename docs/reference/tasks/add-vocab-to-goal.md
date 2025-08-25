@@ -1,0 +1,1 @@
+- Works like [add-sub-goals](docs/reference/tasks/add-sub-goals.md), just with vocab.
