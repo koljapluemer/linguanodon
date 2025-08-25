@@ -17,10 +17,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import TaskRenderer from './TaskRenderer.vue';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 
 interface Props {
-  task?: TaskData;
+  task?: Task;
 }
 
 defineProps<Props>();

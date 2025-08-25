@@ -1,7 +1,7 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { pickRandom } from '@/shared/arrayUtils';
 
 // Import all task generators
@@ -16,7 +16,7 @@ import { generateVocabChoiceFromFourNativeToTarget, canGenerateVocabChoiceFromFo
 
 type VocabTaskGenerator = {
   canGenerate: (vocab: VocabData, translations: TranslationData[], notes: NoteData[]) => boolean;
-  generate: (vocab: VocabData, translations?: TranslationData[], notes?: NoteData[]) => TaskData;
+  generate: (vocab: VocabData, translations?: TranslationData[], notes?: NoteData[]) => Task;
 };
 
 const vocabTaskGenerators: VocabTaskGenerator[] = [
@@ -58,7 +58,7 @@ export async function getRandomGeneratedTaskForVocab(
   vocab: VocabData,
   translations: TranslationData[] = [],
   notes: NoteData[] = []
-): Promise<TaskData | null> {
+): Promise<Task | null> {
   // Find all generators that can generate tasks for this vocab
   const availableGenerators = vocabTaskGenerators.filter(generator =>
     generator.canGenerate(vocab, translations, notes)

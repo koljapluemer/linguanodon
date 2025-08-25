@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomBetween, pickRandom } from '@/shared/arrayUtils';
@@ -16,8 +16,8 @@ export class RelatedVocabStrategy extends BaseLessonStrategy {
     languages: string[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _targetTaskCount: number
-  ): Promise<TaskData[]> {
-    const tasks: TaskData[] = [];
+  ): Promise<Task[]> {
+    const tasks: Task[] = [];
     const usedVocabIds = new Set<string>();
     
     // Get a due vocab that has related vocabulary items

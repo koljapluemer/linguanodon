@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 
 export class DueVocabStrategy extends BaseLessonStrategy {
@@ -10,7 +10,7 @@ export class DueVocabStrategy extends BaseLessonStrategy {
     _languages: string[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _targetTaskCount: number
-  ): Promise<TaskData[]> {
+  ): Promise<Task[]> {
     // For due vocab strategy, core tasks are just due vocab - same as fillup
     return [];
   }

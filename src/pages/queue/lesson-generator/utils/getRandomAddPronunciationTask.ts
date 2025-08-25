@@ -1,6 +1,6 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import { generateAddPronunciation, canGenerateAddPronunciation } from '../task-generator/generateAddPronunciation';
 
@@ -9,7 +9,7 @@ export async function getRandomAddPronunciationTask(
   translationRepo: TranslationRepoContract,
   _noteRepo: NoteRepoContract,
   languageCodes: string[]
-): Promise<TaskData | null> {
+): Promise<Task | null> {
   try {
     // Try to get a vocab item that needs pronunciation directly
     const vocabWithMissingPronunciation = await vocabRepo.getRandomVocabWithMissingPronunciation();

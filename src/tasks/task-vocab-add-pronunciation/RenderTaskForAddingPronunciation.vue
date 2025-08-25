@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
 import { toRaw } from 'vue';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 
 interface Props {
-  task: TaskData;
+  task: Task;
 }
 
 const props = defineProps<Props>();

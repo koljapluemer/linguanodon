@@ -1,6 +1,7 @@
 
-export interface TaskData {
+export interface Task {
   uid: string;
+  language: string; // code of LanguageData
   taskType: TaskName;
   prompt: string;
 

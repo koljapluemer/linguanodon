@@ -1,12 +1,13 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 
-export function generateVocabChoiceFromTwoNativeToTarget(vocab: VocabData): TaskData {
+export function generateVocabChoiceFromTwoNativeToTarget(vocab: VocabData): Task {
   const uid = `vocab-choose-from-two-native-to-target-${vocab.uid}-${Date.now()}`;
   
   return {
     uid,
+    language: vocab.language,
     taskType: 'vocab-choose-from-two-native-to-target',
     prompt: 'Choose the correct vocab',
     associatedVocab: [vocab.uid]

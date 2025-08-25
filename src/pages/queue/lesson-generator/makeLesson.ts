@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
@@ -20,7 +20,7 @@ export async function makeLesson(
   languageRepo: LanguageRepoContract,
   immersionContentRepo: ImmersionContentRepoContract,
   goalRepo: GoalRepoContract
-): Promise<TaskData[]> {
+): Promise<Task[]> {
   
   try {
     // Get all active target languages

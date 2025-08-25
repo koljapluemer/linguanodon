@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomBetween } from '@/shared/arrayUtils';
 import { getRandomGeneratedTaskForVocab } from '../utils/getRandomGeneratedTaskForVocab';
@@ -15,8 +15,8 @@ export class NewVocabStrategy extends BaseLessonStrategy {
     languages: string[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _targetTaskCount: number
-  ): Promise<TaskData[]> {
-    const tasks: TaskData[] = [];
+  ): Promise<Task[]> {
+    const tasks: Task[] = [];
     const usedVocabIds = new Set<string>();
     
     // Get new (unseen) vocab

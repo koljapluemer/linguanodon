@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
@@ -31,11 +31,11 @@ export abstract class BaseLessonStrategy {
     this.goalRepo = dependencies.goalRepo;
   }
 
-  public async generateLesson(languages: string[]): Promise<TaskData[]> {
+  public async generateLesson(languages: string[]): Promise<Task[]> {
     try {
       const targetTaskCount = randomBetween(MIN_TASK_COUNT, MAX_TASK_COUNT);
       console.log(`[${this.constructor.name}] Target task count: ${targetTaskCount}, Languages: ${languages.join(', ')}`);
-      let tasks: TaskData[] = [];
+      let tasks: Task[] = [];
 
       tasks = await this.generateCoreTasks(languages, targetTaskCount);
       console.log(`[${this.constructor.name}] Core tasks generated: ${tasks.length}`);
@@ -65,14 +65,14 @@ export abstract class BaseLessonStrategy {
   protected abstract generateCoreTasks(
     languages: string[], 
     targetTaskCount: number
-  ): Promise<TaskData[]>;
+  ): Promise<Task[]>;
 
   protected async fillWithDueVocab(
     languages: string[], 
     count: number, 
     usedVocabIds: Set<string>
-  ): Promise<TaskData[]> {
-    const tasks: TaskData[] = [];
+  ): Promise<Task[]> {
+    const tasks: Task[] = [];
     
     try {
       console.log(`[${this.constructor.name}] Calling vocabRepo.getDueVocabInLanguages(${languages.join(', ')})`);
@@ -105,7 +105,7 @@ export abstract class BaseLessonStrategy {
   /**
    * Records the sets used in the current lesson based on the tasks generated
    */
-  private async recordLessonSets(tasks: TaskData[]): Promise<void> {
+  private async recordLessonSets(tasks: Task[]): Promise<void> {
     const entitiesWithOrigins: EntityWithOrigins[] = [];
     
     // Collect all associated entities from tasks

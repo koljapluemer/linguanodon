@@ -25,14 +25,14 @@
 
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import ManageSubGoalsWidget from '@/features/goal-manage-its-sub-goals/ManageSubGoalsWidget.vue';
 import TaskDecideWhetherToDoAgain from '@/shared/TaskDecideWhetherToDoAgain.vue';
 
 interface Props {
-  task: TaskData;
+  task: Task;
 }
 
 const props = defineProps<Props>();

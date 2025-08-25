@@ -1,11 +1,11 @@
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { generateAddVocabToGoal, canGenerateAddVocabToGoal } from '../task-generator/generateAddVocabToGoal';
 
 export async function getRandomAddVocabToGoalTask(
   goalRepo: GoalRepoContract,
   languageCodes: string[]
-): Promise<TaskData | null> {
+): Promise<Task | null> {
   try {
     // Get incomplete goals (more efficient than all goals)
     const goals = await goalRepo.getIncompleteGoals();

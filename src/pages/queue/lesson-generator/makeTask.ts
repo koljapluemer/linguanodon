@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
@@ -14,7 +14,7 @@ import { getRandomVocabTryToRememberTask } from './utils/getRandomVocabTryToReme
 import { getRandomVocabRevealTask } from './utils/getRandomVocabRevealTask';
 import { getRandomVocabChoiceTask } from './utils/getRandomVocabChoiceTask';
 
-type TaskGenerator = () => Promise<TaskData | null>;
+type TaskGenerator = () => Promise<Task | null>;
 
 export async function makeTask(
   vocabRepo: VocabRepoContract,
@@ -24,7 +24,7 @@ export async function makeTask(
   _immersionContentRepo: ImmersionContentRepoContract,
   goalRepo: GoalRepoContract,
   noteRepo: NoteRepoContract
-): Promise<TaskData | null> {
+): Promise<Task | null> {
   try {
     // Get all active target languages
     const activeLanguages = await languageRepo.getActiveTargetLanguages();

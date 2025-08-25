@@ -1,6 +1,6 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { generateVocabRevealTargetToNative, canGenerateVocabRevealTargetToNative } from '../task-generator/generateVocabRevealTargetToNative';
 import { generateVocabRevealNativeToTarget, canGenerateVocabRevealNativeToTarget } from '../task-generator/generateVocabRevealNativeToTarget';
 
@@ -8,7 +8,7 @@ export async function getRandomVocabRevealTask(
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
   languageCodes: string[]
-): Promise<TaskData | null> {
+): Promise<Task | null> {
   try {
     // Get due vocab (level 3+ for reveals) which is what we need for this task  
     const vocabItems = await vocabRepo.getDueVocabInLanguages(languageCodes);

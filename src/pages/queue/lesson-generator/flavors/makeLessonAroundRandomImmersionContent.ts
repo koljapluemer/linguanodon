@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { randomBetween, randomFromArray } from '@/shared/arrayUtils';
 import { getRandomGeneratedTaskForVocab } from '../utils/getRandomGeneratedTaskForVocab';
@@ -14,8 +14,8 @@ export class RandomImmersionContentStrategy extends BaseLessonStrategy {
   protected async generateCoreTasks(
     languages: string[], 
     targetTaskCount: number
-  ): Promise<TaskData[]> {
-    const tasks: TaskData[] = [];
+  ): Promise<Task[]> {
+    const tasks: Task[] = [];
     const usedVocabIds = new Set<string>();
     
     // Find random immersion content where no tasks are attached

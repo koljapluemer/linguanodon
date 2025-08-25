@@ -1,6 +1,6 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { generateVocabChoiceFromTwoTargetToNative, canGenerateVocabChoiceFromTwoTargetToNative } from '../task-generator/generateVocabChoiceFromTwoTargetToNative';
 import { generateVocabChoiceFromTwoNativeToTarget, canGenerateVocabChoiceFromTwoNativeToTarget } from '../task-generator/generateVocabChoiceFromTwoNativeToTarget';
 import { generateVocabChoiceFromFourTargetToNative, canGenerateVocabChoiceFromFourTargetToNative } from '../task-generator/generateVocabChoiceFromFourTargetToNative';
@@ -10,7 +10,7 @@ export async function getRandomVocabChoiceTask(
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
   languageCodes: string[]
-): Promise<TaskData | null> {
+): Promise<Task | null> {
   try {
     // Get due vocab for choice tasks (levels 0-2)
     const vocabItems = await vocabRepo.getDueVocabInLanguages(languageCodes);

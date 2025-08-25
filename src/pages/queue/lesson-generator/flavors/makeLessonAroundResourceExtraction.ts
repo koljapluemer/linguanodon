@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import { BaseLessonStrategy, type LessonStrategyDependencies } from '../BaseLessonStrategy';
 import { addTasksForVocabList } from '../utils/addTasksForVocabList';
 import { generateExtractKnowledgeFromResource, canGenerateExtractKnowledgeFromResource } from '../task-generator/generateExtractKnowledgeFromResource';
@@ -11,8 +11,8 @@ export class ResourceExtractionStrategy extends BaseLessonStrategy {
   protected async generateCoreTasks(
     languages: string[], 
     targetTaskCount: number
-  ): Promise<TaskData[]> {
-    const tasks: TaskData[] = [];
+  ): Promise<Task[]> {
+    const tasks: Task[] = [];
     const usedVocabIds = new Set<string>();
     
     // Find an active resource

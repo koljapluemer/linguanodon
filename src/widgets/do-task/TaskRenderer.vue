@@ -5,11 +5,11 @@
 
 <script setup lang="ts">
 import { taskRegistry } from './taskRegistry';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import TaskPrompt from './ui/TaskPrompt.vue';
 
 interface Props {
-  task: TaskData;
+  task: Task;
 }
 
 const props = defineProps<Props>();

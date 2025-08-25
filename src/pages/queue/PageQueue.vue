@@ -7,7 +7,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { makeTask } from './lesson-generator/makeTask';
@@ -29,7 +29,7 @@ if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRep
 type QueueState =
   | { status: 'initializing' }
   | { status: 'loading', message?: string }
-  | { status: 'task', currentTask: TaskData, nextTask: TaskData | null }
+  | { status: 'task', currentTask: Task, nextTask: Task | null }
   | { status: 'empty', message: string }
   | { status: 'error', message: string };
 
@@ -41,7 +41,7 @@ const showLoadingUI = ref(false);
 let loadingTimeout: NodeJS.Timeout | null = null;
 
 // Background task generation
-let nextTaskPromise: Promise<TaskData | null> | null = null;
+let nextTaskPromise: Promise<Task | null> | null = null;
 
 // Loading UI helpers
 function startDelayedLoading() {
@@ -62,7 +62,7 @@ function clearDelayedLoading() {
 }
 
 // Generate a single task
-async function generateNextTask(): Promise<TaskData | null> {
+async function generateNextTask(): Promise<Task | null> {
   try {
     return await makeTask(
       vocabRepo!,
@@ -86,7 +86,7 @@ function startGeneratingNextTask() {
 }
 
 // Get the next task (from background generation or generate new one)
-async function getNextTask(): Promise<TaskData | null> {
+async function getNextTask(): Promise<Task | null> {
   if (nextTaskPromise) {
     const task = await nextTaskPromise;
     nextTaskPromise = null;

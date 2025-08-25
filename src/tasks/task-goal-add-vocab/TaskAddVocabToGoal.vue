@@ -30,12 +30,12 @@
 import { ref, inject, onMounted } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import ManageVocabOfGoalWidget from '@/features/goal-manage-its-vocab/ManageVocabOfGoalWidget.vue';
 import TaskDecideWhetherToDoAgain from '@/shared/TaskDecideWhetherToDoAgain.vue';
 
 interface Props {
-  task: TaskData;
+  task: Task;
 }
 
 const props = defineProps<Props>();

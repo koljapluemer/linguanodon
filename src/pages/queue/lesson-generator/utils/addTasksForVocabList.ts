@@ -1,4 +1,4 @@
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { pickRandom } from '@/shared/arrayUtils';
 import { getRandomGeneratedTaskForVocab } from './getRandomGeneratedTaskForVocab';
@@ -7,7 +7,7 @@ export async function addTasksForVocabList(
   vocabList: VocabData[],
   targetCount: number,
   usedVocabIds: Set<string>,
-  tasks: TaskData[]
+  tasks: Task[]
 ): Promise<void> {
   const availableVocab = vocabList.filter(vocab => !usedVocabIds.has(vocab.uid));
   const selectedVocab = pickRandom(availableVocab, Math.min(targetCount, availableVocab.length));

@@ -2,13 +2,13 @@
 import { ref, computed, inject, onMounted } from 'vue';
 import { toRaw } from 'vue';
 import { createEmptyCard } from 'ts-fsrs';
-import type { TaskData } from '@/entities/tasks/Task';
+import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 
 interface Props {
-  task: TaskData;
+  task: Task;
 }
 
 const props = defineProps<Props>();
