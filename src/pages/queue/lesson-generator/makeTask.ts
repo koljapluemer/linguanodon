@@ -13,6 +13,8 @@ import { getRandomAddVocabToGoalTask } from './utils/getRandomAddVocabToGoalTask
 import { getRandomVocabTryToRememberTask } from './utils/getRandomVocabTryToRememberTask';
 import { getRandomVocabRevealTask } from './utils/getRandomVocabRevealTask';
 import { getRandomVocabChoiceTask } from './utils/getRandomVocabChoiceTask';
+import { getRandomClozeChoiceTask } from './utils/getRandomClozeChoiceTask';
+import { getRandomClozeRevealTask } from './utils/getRandomClozeRevealTask';
 import { getRandomAddTranslationTask } from './utils/getRandomAddTranslationTask';
 
 type TaskGenerator = () => Promise<Task | null>;
@@ -46,7 +48,9 @@ export async function makeTask(
       () => getRandomAddVocabToGoalTask(goalRepo, languageCodes),
       () => getRandomVocabTryToRememberTask(vocabRepo, languageCodes),
       () => getRandomVocabRevealTask(vocabRepo, translationRepo, languageCodes),
-      () => getRandomVocabChoiceTask(vocabRepo, translationRepo, languageCodes)
+      () => getRandomVocabChoiceTask(vocabRepo, translationRepo, languageCodes),
+      () => getRandomClozeChoiceTask(vocabRepo, translationRepo, languageCodes),
+      () => getRandomClozeRevealTask(vocabRepo, translationRepo, languageCodes)
     ];
     
     // Shuffle generators to try them in random order

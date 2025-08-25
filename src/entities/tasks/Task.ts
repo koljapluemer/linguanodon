@@ -23,5 +23,8 @@ export type TaskName = |
   'vocab-choose-from-two-target-to-native' |
   'vocab-choose-from-two-native-to-target' |
   'vocab-choose-from-four-target-to-native' | 
-  'vocab-choose-from-four-native-to-target' 
+  'vocab-choose-from-four-native-to-target' |
+  'cloze-choose-from-two' |
+  'cloze-choose-from-four' |
+  'cloze-reveal' 
 

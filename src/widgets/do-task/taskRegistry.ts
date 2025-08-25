@@ -8,6 +8,8 @@ import TaskAddVocabToGoal from "@/tasks/task-goal-add-vocab/TaskAddVocabToGoal.v
 import TaskVocabTryToRemember from "@/tasks/task-vocab-try-to-remember/TaskVocabTryToRemember.vue";
 import TaskVocabReveal from "@/tasks/task-vocab-reveal/TaskVocabReveal.vue";
 import TaskVocabChooseFromOptions from "@/tasks/task-vocab-single-choice/TaskVocabChooseFromOptions.vue";
+import TaskClozeChooseFromOptions from "@/tasks/task-cloze-choice/TaskClozeChooseFromOptions.vue";
+import TaskClozeReveal from "@/tasks/task-cloze-reveal/TaskClozeReveal.vue";
 import type { TaskName } from "@/entities/tasks/Task";
 
 export interface TaskInfo {
@@ -28,6 +30,9 @@ export const taskRegistry: Record<TaskName, TaskInfo> = {
   "vocab-choose-from-two-native-to-target": { component: TaskVocabChooseFromOptions, size: 'small' },
   "vocab-choose-from-four-target-to-native": { component: TaskVocabChooseFromOptions, size: 'small' },
   "vocab-choose-from-four-native-to-target": { component: TaskVocabChooseFromOptions, size: 'small' },
+  "cloze-choose-from-two": { component: TaskClozeChooseFromOptions, size: 'small' },
+  "cloze-choose-from-four": { component: TaskClozeChooseFromOptions, size: 'small' },
+  "cloze-reveal": { component: TaskClozeReveal, size: 'small' },
 };
 
 export const TASK_REGISTRY_INJECTION_KEY = Symbol("taskRegistry");

@@ -13,6 +13,12 @@ interface AnswerOption {
   isCorrect: boolean;
 }
 
+interface ClozeData {
+  beforeWord: string;
+  hiddenWord: string;
+  afterWord: string;
+  hiddenWordIndex: number;
+}
 
 interface Props {
   task: Task;
@@ -27,9 +33,6 @@ const props = defineProps<Props>();
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 
-// Use the task state composable
-
-// Exercise state
 const selectedIndex = ref<number | null>(null);
 const isAnswered = ref(false);
 const firstAttemptWrong = ref(false);
@@ -37,14 +40,19 @@ const answerOptions = ref<AnswerOption[]>([]);
 const vocab = ref<VocabData | null>(null);
 const translations = ref<TranslationData[]>([]);
 const loading = ref(true);
+const clozeData = ref<ClozeData | null>(null);
 
-// Get the vocab ID from associated vocab
 const vocabUid = computed(() => {
   return props.task.associatedVocab?.[0];
 });
 
-// Extract task type info from task type
+
 const isReverse = computed(() => {
+  // Sentence/phrase cloze only goes content→translation
+  if (vocab.value?.length === 'single-sentence' || vocab.value?.length === 'multi-word-expression') {
+    return false;
+  }
+  // Vocab-based cloze can go both ways
   return props.task.taskType.includes('native-to-target');
 });
 
@@ -52,21 +60,25 @@ const optionCount = computed(() => {
   return props.task.taskType.includes('four') ? 4 : 2;
 });
 
-
-
-const displayContent = computed(() => {
-  if (!vocab.value) return '';
-
-  if (isReverse.value) {
-    // For translation-to-vocab, show random translation
-    const randomTranslation = translations.value[Math.floor(Math.random() * translations.value.length)];
-    return randomTranslation?.content || '';
-  } else {
-    // For vocab-to-translation, show vocab
-    return vocab.value.content || '';
-  }
+const isRTL = computed(() => {
+  if (!vocab.value?.content) return false;
+  // Check if text contains RTL characters using Unicode ranges
+  const rtlChars = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/;
+  return rtlChars.test(vocab.value.content);
 });
 
+const secondaryContent = computed(() => {
+  if (!vocab.value || translations.value.length === 0) return '';
+
+  if (isReverse.value) {
+    // Show vocab content as secondary when translation is primary (cloze)
+    return vocab.value.content || '';
+  } else {
+    // Show translation as secondary when vocab is primary (cloze)
+    const randomTranslation = translations.value[Math.floor(Math.random() * translations.value.length)];
+    return randomTranslation?.content || '';
+  }
+});
 
 async function loadVocabData() {
   if (!vocabUid.value) {
@@ -84,7 +96,7 @@ async function loadVocabData() {
     vocab.value = vocabData;
     translations.value = await translationRepo.getTranslationsByIds(vocabData.translations);
 
-    await generateOptions();
+    await generateClozeOptions();
   } catch (error) {
     console.error('Failed to load vocab data:', error);
   } finally {
@@ -92,44 +104,61 @@ async function loadVocabData() {
   }
 }
 
-async function generateOptions() {
+function splitTextIntoWords(text: string): string[] {
+  return text.trim().split(/\s+/).filter(word => word.length > 0);
+}
+
+function generateClozeFromText(text: string): ClozeData {
+  const words = splitTextIntoWords(text);
+  
+  if (words.length < 2) {
+    return {
+      beforeWord: '',
+      hiddenWord: text,
+      afterWord: '',
+      hiddenWordIndex: 0
+    };
+  }
+
+  const availableIndices = words.length > 3 
+    ? Array.from({length: words.length - 2}, (_, i) => i + 1)
+    : Array.from({length: words.length}, (_, i) => i);
+  
+  const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+  const hiddenWord = words[randomIndex];
+  
+  const beforeWords = words.slice(0, randomIndex);
+  const afterWords = words.slice(randomIndex + 1);
+  
+  return {
+    beforeWord: beforeWords.join(' '),
+    hiddenWord: hiddenWord,
+    afterWord: afterWords.join(' '),
+    hiddenWordIndex: randomIndex
+  };
+}
+
+async function generateClozeOptions() {
   if (!vocab.value || translations.value.length === 0) return;
 
+  const sourceText = isReverse.value 
+    ? translations.value[Math.floor(Math.random() * translations.value.length)].content
+    : vocab.value.content || '';
+  
+  clozeData.value = generateClozeFromText(sourceText);
+  const correctAnswer = clozeData.value.hiddenWord;
+  
   const options: AnswerOption[] = [];
+  options.push({ content: correctAnswer, isCorrect: true });
+  
+  const wrongCount = optionCount.value - 1;
+  const wrongAnswers = isReverse.value
+    ? await translationRepo.generateWrongTranslations(correctAnswer, wrongCount)
+    : await vocabRepo.generateWrongVocabs(vocab.value.language, correctAnswer, wrongCount);
 
-  if (isReverse.value) {
-    // Translation-to-vocab: correct answer is vocab content
-    const correctAnswer = vocab.value.content || '';
-    options.push({ content: correctAnswer, isCorrect: true });
-
-    // Generate wrong vocab options
-    const wrongCount = optionCount.value - 1;
-    const wrongAnswers = await vocabRepo.generateWrongVocabs(
-      vocab.value.language,
-      correctAnswer,
-      wrongCount
-    );
-
-    wrongAnswers.forEach(wrong => {
-      options.push({ content: wrong, isCorrect: false });
-    });
-
-  } else {
-    // Vocab-to-translation: correct answer is random translation
-    const correctAnswer = translations.value[Math.floor(Math.random() * translations.value.length)].content;
-    options.push({ content: correctAnswer, isCorrect: true });
-
-    // Generate wrong translation options
-    const wrongCount = optionCount.value - 1;
-    const wrongAnswers = await translationRepo.generateWrongTranslations(
-      correctAnswer,
-      wrongCount
-    );
-
-    wrongAnswers.forEach(wrong => {
-      options.push({ content: wrong, isCorrect: false });
-    });
-  }
+  wrongAnswers.forEach(wrong => {
+    options.push({ content: wrong, isCorrect: false });
+  });
 
   answerOptions.value = shuffleArray(options);
 }
@@ -144,7 +173,6 @@ async function selectOption(index: number) {
     isAnswered.value = true;
     await handleCompletion();
   } else {
-    // Wrong answer: mark first attempt as wrong, disable button
     firstAttemptWrong.value = true;
   }
 }
@@ -201,17 +229,25 @@ onMounted(loadVocabData);
 </script>
 
 <template>
-  <!-- Loading State -->
   <div v-if="loading">
     <span class="loading loading-spinner loading-lg"></span>
   </div>
 
-  <!-- Exercise Content -->
-  <div v-else-if="vocab && answerOptions.length > 0" class="text-center">
-    <!-- Display Content -->
-    <div class="text-6xl font-bold mb-8">{{ displayContent }}</div>
-
-    <!-- Answer Options - only show when not answered -->
+  <div v-else-if="vocab && answerOptions.length > 0 && clozeData" class="text-center">
+    <div class="mb-8">
+      <div class="text-3xl mb-4" :class="{ 'rtl': isRTL }">
+        <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
+        <span class="inline-block bg-gray-300 dark:bg-gray-600 text-transparent rounded px-2 py-1 mx-1 select-none" 
+              :style="{ width: Math.max(clozeData.hiddenWord.length * 0.6, 3) + 'em' }">
+          {{ clozeData.hiddenWord }}
+        </span>
+        <span v-if="clozeData.afterWord" class="ml-2">{{ clozeData.afterWord }}</span>
+      </div>
+      <div v-if="secondaryContent" class="text-2xl text-base-content/70" :class="{ 'rtl': isRTL }">
+        {{ secondaryContent }}
+      </div>
+    </div>
+    
     <div v-if="!isAnswered" class="grid grid-cols-1 gap-2 mb-6">
       <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
         :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg">
@@ -219,16 +255,18 @@ onMounted(loadVocabData);
       </button>
     </div>
 
-    <!-- Show answer when completed -->
     <div v-if="isAnswered" class="mb-6">
-      <!-- Show answer for regular content -->
-      <div class="text-6xl font-bold text-base-content/70 mb-6">
-        {{ answerOptions.find(opt => opt.isCorrect)?.content }}
+      <div class="text-3xl mb-4" :class="{ 'rtl': isRTL }">
+        <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
+        <span class="text-green-600 font-bold mx-1">{{ clozeData.hiddenWord }}</span>
+        <span v-if="clozeData.afterWord" class="ml-2">{{ clozeData.afterWord }}</span>
+      </div>
+      <div v-if="secondaryContent" class="text-2xl text-base-content/70" :class="{ 'rtl': isRTL }">
+        {{ secondaryContent }}
       </div>
     </div>
   </div>
 
-  <!-- Error State -->
   <div v-else>
     <span>Failed to load exercise data</span>
   </div>
