@@ -2,25 +2,12 @@
   <div class="mt-8 space-y-8">
     <!-- Length, Priority and Exclude from Practice -->
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
-      <!-- Length -->
-      <div class="py-4">
-        <label class="label">
-          <span class="label-text font-medium">Length</span>
-        </label>
-        <select
-          v-model="formData.length"
-          @change="$emit('field-change')"
-          class="select select-bordered w-full"
-        >
-          <option
-            v-for="(value, key) in Length"
-            :key="key"
-            :value="key"
-          >
-            {{ value }}
-          </option>
-        </select>
-      </div>
+      <InlineSelect
+        v-model="formData.length"
+        label="Length"
+        :options="lengthOptions"
+        @update:modelValue="$emit('field-change')"
+      />
 
       <InlineInput
         v-model="formData.priority"
@@ -60,7 +47,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import InlineInput from '@/shared/ui/InlineInput.vue';
+import InlineSelect from '@/shared/ui/InlineSelect.vue';
 import InlineToggle from '@/shared/ui/InlineToggle.vue';
 import NoteList from '@/entities/notes/NoteList.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
@@ -94,4 +83,11 @@ defineEmits<{
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
 }>();
+
+const lengthOptions = computed(() => {
+  return Object.entries(Length).map(([key, value]) => ({
+    value: key,
+    label: value
+  }));
+});
 </script>
