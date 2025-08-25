@@ -1,0 +1,22 @@
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { TaskData } from '@/entities/tasks/Task';
+import { generateExtractKnowledgeFromResource, canGenerateExtractKnowledgeFromResource } from '../task-generator/generateExtractKnowledgeFromResource';
+
+export async function getRandomExtractKnowledgeTask(
+  resourceRepo: ResourceRepoContract,
+  languageCodes: string[]
+): Promise<TaskData | null> {
+  try {
+    // Use the targeted method to get a due resource that needs extraction
+    const resource = await resourceRepo.getRandomDueResource(languageCodes);
+    
+    if (resource && canGenerateExtractKnowledgeFromResource(resource)) {
+      return generateExtractKnowledgeFromResource(resource);
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error generating extract knowledge task:', error);
+    return null;
+  }
+}

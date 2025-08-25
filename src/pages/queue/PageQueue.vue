@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted, ref, reactive } from 'vue';
+import { inject, onMounted, onUnmounted, ref } from 'vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { TaskData } from '@/entities/tasks/Task';
 import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
-import { makeLesson } from './lesson-generator/makeLesson';
-import { shuffleArray } from '@/shared/arrayUtils';
+import { makeTask } from './lesson-generator/makeTask';
 
 // Inject repositories
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
@@ -19,8 +19,9 @@ const goalRepo = inject<GoalRepoContract>('goalRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
+const noteRepo = inject<NoteRepoContract>('noteRepo');
 
-if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRepo || !immersionContentRepo) {
+if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRepo || !immersionContentRepo || !noteRepo) {
   throw new Error('Repositories not available');
 }
 
@@ -28,21 +29,9 @@ if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRep
 type QueueState =
   | { status: 'initializing' }
   | { status: 'loading', message?: string }
-  | { status: 'task', task: TaskData, batchId: string }
+  | { status: 'task', currentTask: TaskData, nextTask: TaskData | null }
   | { status: 'empty', message: string }
   | { status: 'error', message: string };
-
-// Task batch interface
-interface TaskBatch {
-  id: string;
-  tasks: TaskData[];
-}
-
-// Preloader config
-const PRELOAD_CONFIG = {
-  minTaskBatchBuffer: 2,
-  aggressiveThreshold: 1
-};
 
 // State
 const state = ref<QueueState>({ status: 'initializing' });
@@ -51,15 +40,8 @@ const state = ref<QueueState>({ status: 'initializing' });
 const showLoadingUI = ref(false);
 let loadingTimeout: NodeJS.Timeout | null = null;
 
-// Preloaded content
-const taskBatches = reactive<TaskBatch[]>([]);
-const preloadStatus = reactive({
-  taskBatchesReady: 0,
-  isLoadingBatch: false,
-  lastError: null as string | null
-});
-
-let batchLoadingPromise: Promise<void> | null = null;
+// Background task generation
+let nextTaskPromise: Promise<TaskData | null> | null = null;
 
 // Loading UI helpers
 function startDelayedLoading() {
@@ -79,128 +61,81 @@ function clearDelayedLoading() {
   showLoadingUI.value = false;
 }
 
-// Generate a lesson batch
-async function loadTaskBatch() {
-  if (preloadStatus.isLoadingBatch || batchLoadingPromise) return;
-
-  preloadStatus.isLoadingBatch = true;
-  preloadStatus.lastError = null;
-
+// Generate a single task
+async function generateNextTask(): Promise<TaskData | null> {
   try {
-    batchLoadingPromise = (async () => {
-      const lesson = await makeLesson(vocabRepo!, resourceRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
-
-      if (lesson.length === 0) {
-        console.warn('Generated lesson is empty');
-        preloadStatus.lastError = 'No tasks generated for lesson';
-        return;
-      }
-
-      const shuffledLesson = shuffleArray(lesson);
-      const batchId = crypto.randomUUID();
-      taskBatches.push({
-        id: batchId,
-        tasks: shuffledLesson
-      });
-      preloadStatus.taskBatchesReady = taskBatches.length;
-    })();
-
-    await batchLoadingPromise;
+    return await makeTask(
+      vocabRepo!,
+      translationRepo!,
+      resourceRepo!,
+      languageRepo!,
+      immersionContentRepo!,
+      goalRepo!,
+      noteRepo!
+    );
   } catch (error) {
-    console.error('Error loading task batch:', error);
-    preloadStatus.lastError = 'Failed to load task batch';
-  } finally {
-    preloadStatus.isLoadingBatch = false;
-    batchLoadingPromise = null;
-
-    // Only retry if we haven't hit an error and still need more batches
-    if (taskBatches.length < PRELOAD_CONFIG.minTaskBatchBuffer && !preloadStatus.lastError) {
-      setTimeout(() => loadTaskBatch(), 100);
-    }
-  }
-}
-
-// Initialize preloader
-async function initializePreloader() {
-  const promises = [];
-  for (let i = 0; i < PRELOAD_CONFIG.minTaskBatchBuffer; i++) {
-    promises.push(loadTaskBatch());
-  }
-  await Promise.all(promises);
-}
-
-// Consume next task
-function consumeNextTask(): { task: TaskData; batchId: string } | null {
-  for (let i = 0; i < taskBatches.length; i++) {
-    const batch = taskBatches[i];
-    if (batch.tasks.length > 0) {
-      const task = batch.tasks.shift();
-
-      if (batch.tasks.length === 0) {
-        taskBatches.splice(i, 1);
-        preloadStatus.taskBatchesReady = taskBatches.length;
-
-        if (taskBatches.length <= PRELOAD_CONFIG.aggressiveThreshold) {
-          loadTaskBatch();
-        }
-      }
-
-      return task ? { task, batchId: batch.id } : null;
-    }
-  }
-  return null;
-}
-
-// Force load next task
-async function forceLoadNextTask(): Promise<{ task: TaskData; batchId: string } | null> {
-  try {
-    const lesson = await makeLesson(vocabRepo!, resourceRepo!, languageRepo!, immersionContentRepo!, goalRepo!);
-    const shuffledLesson = shuffleArray(lesson);
-    if (shuffledLesson.length > 0) {
-      const batchId = crypto.randomUUID();
-      return { task: shuffledLesson[0], batchId };
-    }
-    return null;
-  } catch (error) {
-    console.error('Error force loading task:', error);
+    console.error('Error generating task:', error);
     return null;
   }
 }
+
+// Start background generation of next task
+function startGeneratingNextTask() {
+  if (nextTaskPromise) return; // Already generating
+  nextTaskPromise = generateNextTask();
+}
+
+// Get the next task (from background generation or generate new one)
+async function getNextTask(): Promise<TaskData | null> {
+  if (nextTaskPromise) {
+    const task = await nextTaskPromise;
+    nextTaskPromise = null;
+    return task;
+  }
+  return await generateNextTask();
+}
+
 
 // Try to transition to task state
 async function tryTransitionToTask(): Promise<boolean> {
-
-  const taskWithBatch = consumeNextTask();
-  if (taskWithBatch) {
-    clearDelayedLoading();
-    state.value = { status: 'task', task: taskWithBatch.task, batchId: taskWithBatch.batchId };
-    return true;
-  }
-
   state.value = { status: 'loading', message: 'Preparing next task...' };
   startDelayedLoading();
 
   try {
-    const forcedTaskWithBatch = await Promise.race([
-      forceLoadNextTask(),
+    const currentTask = await Promise.race([
+      getNextTask(),
       new Promise<null>((_, reject) =>
-        setTimeout(() => reject(new Error('Force load timeout')), 5000)
+        setTimeout(() => reject(new Error('Task generation timeout')), 5000)
       )
     ]);
-    if (forcedTaskWithBatch) {
+    
+    if (currentTask) {
+      // Start generating next task in background
+      startGeneratingNextTask();
+      
+      // Try to get next task immediately (might be null)
+      const nextTask = nextTaskPromise ? await Promise.race([
+        nextTaskPromise,
+        new Promise<null>(resolve => setTimeout(() => resolve(null), 100))
+      ]) : null;
+      
       clearDelayedLoading();
-      state.value = { status: 'task', task: forcedTaskWithBatch.task, batchId: forcedTaskWithBatch.batchId };
+      state.value = { 
+        status: 'task', 
+        currentTask, 
+        nextTask 
+      };
       return true;
     }
   } catch (error) {
-    console.error('Force loading task failed:', error);
-    clearDelayedLoading();
-    state.value = {
-      status: 'empty',
-      message: 'Unable to load more tasks. Please try refreshing.'
-    };
+    console.error('Task generation failed:', error);
   }
-
+  
+  clearDelayedLoading();
+  state.value = {
+    status: 'empty',
+    message: 'Unable to load more tasks. Please try refreshing.'
+  };
   return false;
 }
 
@@ -210,8 +145,6 @@ async function initializeQueue() {
   showLoadingUI.value = true; // Show loading immediately for initial load
 
   try {
-    await initializePreloader();
-
     const success = await tryTransitionToTask();
     if (!success) {
       clearDelayedLoading();
@@ -237,12 +170,37 @@ async function completeCurrentTask() {
     return;
   }
 
-  const success = await tryTransitionToTask();
-  if (!success) {
+  const currentState = state.value;
+  
+  // If we have a next task ready, use it
+  if (currentState.nextTask) {
+    // Start generating the task after next in background
+    startGeneratingNextTask();
+    
     state.value = {
-      status: 'empty',
-      message: 'Excellent work! No more tasks are currently available.'
+      status: 'task',
+      currentTask: currentState.nextTask,
+      nextTask: null
     };
+    
+    // Try to get the next task for preloading
+    const nextTask = nextTaskPromise ? await Promise.race([
+      nextTaskPromise,
+      new Promise<null>(resolve => setTimeout(() => resolve(null), 100))
+    ]) : null;
+    
+    if (nextTask && state.value.status === 'task') {
+      state.value.nextTask = nextTask;
+    }
+  } else {
+    // No next task ready, need to generate one
+    const success = await tryTransitionToTask();
+    if (!success) {
+      state.value = {
+        status: 'empty',
+        message: 'Excellent work! No more tasks are currently available.'
+      };
+    }
   }
 }
 
@@ -317,7 +275,7 @@ const handleTaskFinished = async () => {
     <Transition mode="out-in" enter-active-class="transition-opacity duration-[50ms] ease-out"
       leave-active-class="transition-opacity duration-[50ms] ease-in" enter-from-class="opacity-0"
       enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
-      <TaskRenderer :key="`${state.task.uid}-${state.batchId}`" :task="state.task" @finished="handleTaskFinished" />
+      <TaskRenderer :key="state.currentTask.uid" :task="state.currentTask" @finished="handleTaskFinished" />
     </Transition>
   </div>
 
