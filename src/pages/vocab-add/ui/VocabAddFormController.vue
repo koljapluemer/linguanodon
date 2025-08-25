@@ -26,6 +26,7 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
@@ -159,11 +160,10 @@ function handleFieldChange() {
   // For add form, we don't auto-save on field changes
 }
 
-function addNote() {
+function addNote(note: NoteData) {
   const newNote: NoteData = {
-    uid: crypto.randomUUID(),
-    content: '',
-    showBeforeExercise: false
+    ...note,
+    uid: crypto.randomUUID()
   };
   state.value.formData.notes.push(newNote);
 }
@@ -182,11 +182,8 @@ function removeNote(uid: string) {
   }
 }
 
-function addLink() {
-  state.value.formData.links.push({
-    label: '',
-    url: ''
-  });
+function addLink(link: Link) {
+  state.value.formData.links.push(link);
 }
 
 function removeLink(index: number) {

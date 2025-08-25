@@ -51,11 +51,21 @@
         </div>
       </div>
     </div>
+    
+    <!-- New link creation form -->
+    <div v-if="isCreatingNew">
+      <LinkEdit
+        :link="{ label: '', url: '', licenseType: undefined, licenseSource: undefined, licenseName: undefined }"
+        @update:link="(newLink) => { $emit('add-link', newLink); isCreatingNew = false; }"
+        @field-change="$emit('field-change')"
+        @close="isCreatingNew = false"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue';
+import { ref } from 'vue';
 import { Plus, X, Edit } from 'lucide-vue-next';
 import LinkEdit from './LinkEdit.vue';
 import LinkDisplayAsButton from './LinkDisplayAsButton.vue';
@@ -65,21 +75,18 @@ interface Props {
   links: Link[];
 }
 
-const props = defineProps<Props>();
-const emit = defineEmits<{
-  'add-link': [];
+defineProps<Props>();
+defineEmits<{
+  'add-link': [link: Link];
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
   'field-change': [];
 }>();
 
 const editingIndex = ref<number | null>(null);
+const isCreatingNew = ref(false);
 
-async function addNewLink() {
-  const newIndex = props.links.length;
-  emit('add-link');
-  // Wait for the link to be added to the array, then set edit mode
-  await nextTick();
-  editingIndex.value = newIndex;
+function addNewLink() {
+  isCreatingNew.value = true;
 }
 </script>

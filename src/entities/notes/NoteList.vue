@@ -51,34 +51,42 @@
         </div>
       </div>
     </div>
+    
+    <!-- New note creation form -->
+    <div v-if="isCreatingNew">
+      <NoteEdit
+        :note="{ uid: '', content: '', noteType: undefined, showBeforeExercise: false }"
+        :show-before-exercise-option="showBeforeExerciseOption"
+        @update:note="(newNote) => { $emit('add', newNote); isCreatingNew = false; }"
+        @close="isCreatingNew = false"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue';
+import { ref } from 'vue';
 import { Plus, Edit, X } from 'lucide-vue-next';
 import NoteEdit from './NoteEdit.vue';
 import NoteDisplay from './NoteDisplay.vue';
 import type { NoteData } from './NoteData';
 
-const props = defineProps<{
+defineProps<{
   notes: NoteData[];
   showBeforeExerciseOption?: boolean;
 }>();
 
 const emit = defineEmits<{
-  add: [];
+  add: [note: NoteData];
   update: [note: NoteData];
   delete: [uid: string];
 }>();
 
 const editingIndex = ref<number | null>(null);
+const isCreatingNew = ref(false);
 
-async function addNewNote() {
-  const newIndex = props.notes.length;
-  emit('add');
-  await nextTick();
-  editingIndex.value = newIndex;
+function addNewNote() {
+  isCreatingNew.value = true;
 }
 
 function updateNote(note: NoteData) {

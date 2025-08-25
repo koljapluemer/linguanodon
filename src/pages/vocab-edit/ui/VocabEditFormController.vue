@@ -290,11 +290,10 @@ async function handleFieldChange() {
   }
 }
 
-function addNote() {
+function addNote(note: NoteData) {
   const newNote: NoteData = {
-    uid: crypto.randomUUID(),
-    content: '',
-    showBeforeExercise: false
+    ...note,
+    uid: crypto.randomUUID()
   };
   state.value.formData.notes.push(newNote);
 }
@@ -313,11 +312,8 @@ function removeNote(uid: string) {
   }
 }
 
-function addLink() {
-  state.value.formData.links.push({
-    label: '',
-    url: ''
-  });
+function addLink(link: Link) {
+  state.value.formData.links.push(link);
 }
 
 function updateLink(index: number, link: Link) {
