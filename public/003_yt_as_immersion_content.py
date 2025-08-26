@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Script to download YouTube subtitles and extract vocabulary using OpenAI.
-Creates RemoteImmersionContentSet for language learning data.
+Creates RemoteResourceSet with isImmersionContent=true for language learning data.
 """
 
 import os
@@ -17,21 +17,21 @@ from collections import Counter, defaultdict
 import re
 
 # Data storage
-immersion_content_data = []
+resource_data = []
 vocab_data = []
 translation_data = []
 note_data = []
 
 # ID counters
-immersion_content_id = 0
+resource_id = 0
 vocab_id = 0
 translation_id = 0
 note_id = 0
 
-def get_next_immersion_content_id():
-    global immersion_content_id
-    immersion_content_id += 1
-    return str(immersion_content_id)
+def get_next_resource_id():
+    global resource_id
+    resource_id += 1
+    return str(resource_id)
 
 def get_next_vocab_id():
     global vocab_id
@@ -98,26 +98,29 @@ def create_vocab(language, content, length="single-word", notes=None, translatio
     vocab_data.append(vocab_entry)
     return vocab_entry["id"]
 
-def create_immersion_content(language, title, content=None, priority=None, link_id=None, needed_vocab=None, notes=None):
-    """Create an immersion content entry and return its ID"""
-    content_entry = {
-        "id": get_next_immersion_content_id(),
+def create_resource(language, title, content=None, priority=None, link=None, vocab=None, notes=None, fact_cards=None):
+    """Create a resource entry with isImmersionContent=true and return its ID"""
+    resource_entry = {
+        "id": get_next_resource_id(),
+        "isImmersionContent": True,
         "language": language,
         "title": title
     }
     if content:
-        content_entry["content"] = content
+        resource_entry["content"] = content
     if priority is not None:
-        content_entry["priority"] = priority
-    if link_id:
-        content_entry["link"] = link_id
-    if needed_vocab:
-        content_entry["neededVocab"] = needed_vocab
+        resource_entry["priority"] = priority
+    if link:
+        resource_entry["link"] = link
+    if vocab:
+        resource_entry["vocab"] = vocab
     if notes:
-        content_entry["notes"] = notes
+        resource_entry["notes"] = notes
+    if fact_cards:
+        resource_entry["factCards"] = fact_cards
     
-    immersion_content_data.append(content_entry)
-    return content_entry["id"]
+    resource_data.append(resource_entry)
+    return resource_entry["id"]
 
 # Load environment variables from .env file
 load_dotenv()
@@ -126,7 +129,7 @@ load_dotenv()
 VIDEO_LIST_TXT = "data_in/apc_ar.txt"  # Change as needed
 
 # Debug option - set to True to process only first 2 videos for testing
-RETURN_AFTER_TWO_VIDEOS = False
+RETURN_AFTER_TWO_VIDEOS = True
 
 # Parse language codes from filename
 filename = Path(VIDEO_LIST_TXT).stem  # e.g., 'apc_ar'
@@ -242,17 +245,17 @@ def process_video(video_id: str, target_lang_code: str, subtitle_lang_code: str,
     # Create note for video info
     note_id = create_note(f"YouTube Video ID: {video_id}\nSubtitle language: {subtitle_lang_code_actual}")
     
-    # Create immersion content entry
-    immersion_content_id = create_immersion_content(
+    # Create resource entry (immersion content)
+    resource_id = create_resource(
         language=target_lang_code,
         title=f"YouTube Video - {video_id}",
         content=f"Watch this video: https://www.youtube.com/watch?v={video_id}",
         priority=1,
-        needed_vocab=needed_vocab_ids if needed_vocab_ids else None,
+        vocab=needed_vocab_ids if needed_vocab_ids else None,
         notes=[note_id] if note_id else None
     )
     
-    return immersion_content_id
+    return resource_id
 
 def save_jsonl_files(target_lang_code: str, subtitle_lang_code: str):
     """Save all collected data to JSONL files"""
@@ -260,9 +263,9 @@ def save_jsonl_files(target_lang_code: str, subtitle_lang_code: str):
     output_dir = Path(f"sets/{target_lang_code}/youtube-{target_lang_code}-{subtitle_lang_code}")
     output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Save immersion_content.jsonl
-    with open(output_dir / "immersion_content.jsonl", "w", encoding="utf-8") as f:
-        for entry in immersion_content_data:
+    # Save resources.jsonl (immersion content as resources)
+    with open(output_dir / "resources.jsonl", "w", encoding="utf-8") as f:
+        for entry in resource_data:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
     # Save vocab.jsonl
@@ -280,7 +283,7 @@ def save_jsonl_files(target_lang_code: str, subtitle_lang_code: str):
         for entry in note_data:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
-    print(f"Saved {len(immersion_content_data)} immersion content entries")
+    print(f"Saved {len(resource_data)} resource entries (immersion content)")
     print(f"Saved {len(vocab_data)} vocab entries")
     print(f"Saved {len(translation_data)} translation entries")
     print(f"Saved {len(note_data)} note entries")
@@ -318,7 +321,7 @@ def main():
         # Save all data to JSONL files
         save_jsonl_files(TARGET_LANG_CODE, VIDEO_SUBTITLE_LANGUAGE)
         
-        print(f"Processing completed! Created immersion content set with {len(immersion_content_data)} entries")
+        print(f"Processing completed! Created resource set with {len(resource_data)} immersion content entries")
         
         return 0
         
