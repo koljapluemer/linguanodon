@@ -6,11 +6,13 @@ import { generateVocabFormSingleSentence, canGenerateVocabFormSingleSentence } f
 
 export async function getBackupTask(
   vocabRepo: VocabRepoContract,
-  translationRepo: TranslationRepoContract
+  translationRepo: TranslationRepoContract,
+  languageCodes: string[],
+  vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
     // Get the 1-2 vocab with the lowest due date
-    const vocabWithLowestDue = await vocabRepo.getVocabWithLowestDueDate(2);
+    const vocabWithLowestDue = await vocabRepo.getVocabWithLowestDueDate(2, languageCodes, vocabBlockList);
     
     if (vocabWithLowestDue.length === 0) {
       return null;

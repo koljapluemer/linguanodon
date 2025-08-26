@@ -1,0 +1,5 @@
+Let's improve the experience of [queue](src/pages/queue/PageQueue.vue) by improving [make task](src/pages/queue/lesson-generator/makeTask.ts).
+
+Add a composable in [utils](src/pages/queue/lesson-generator/utils) called `useTrackUsedVocab`. It should track an ongoing list of used vocab (via its UID) in the current queue session. Tracking which vocab is used should mostly work via files in [this folder](src/pages/queue/lesson-generator/task-generator), but check if in utils anywhere we are also actually using vocab to actually generate a task.
+
+Then, the point being, whenever we pick vocab for task generation (again, that's a lot of places in the utils!!) we *strictly exclude* any vocab that was used in the *last three tasks*. To achieve this effectively, you will probably want to extend several [repo functions](src/entities/vocab/VocabRepo.ts) with an optional `vocabBlockList: string[]` parameter.

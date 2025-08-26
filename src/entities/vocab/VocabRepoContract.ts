@@ -13,8 +13,8 @@ export interface VocabRepoContract {
   getVocabByUID(uid: string): Promise<VocabData | undefined>;
   getVocabByUIDs(uids: string[]): Promise<VocabData[]>;
   getVocabByLanguageAndContent(language: string, content: string): Promise<VocabData | undefined>;
-  getRandomAlreadySeenDueVocab(count: number): Promise<VocabData[]>;
-  getRandomUnseenVocab(count: number): Promise<VocabData[]>;
+  getRandomAlreadySeenDueVocab(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
+  getRandomUnseenVocab(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   getDueOrUnseenVocabFromIds(uids: string[]): Promise<VocabData[]>;
   
   // Pagination operations
@@ -33,7 +33,7 @@ export interface VocabRepoContract {
   // Pronunciation operations
   addPronunciationToVocab(uid: string, pronunciation: string): Promise<void>;
   hasPronunciation(uid: string): Promise<boolean>;
-  getRandomVocabWithMissingPronunciation(): Promise<VocabData | null>;
+  getRandomVocabWithMissingPronunciation(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
   
   // Related vocab operations
   addRelatedVocab(uid: string, relatedVocabUid: string): Promise<void>;
@@ -42,11 +42,11 @@ export interface VocabRepoContract {
   removeNotRelatedVocab(uid: string, notRelatedVocabUid: string): Promise<void>;
   
   // Query operations for distractor generation
-  getDueVocabInLanguage(language: string): Promise<VocabData[]>;
-  getDueVocabInLanguages(languages: string[], setsToAvoid?: string[]): Promise<VocabData[]>;
-  getRandomUnseenVocabInLanguages(languages: string[], count: number, setsToAvoid?: string[]): Promise<VocabData[]>;
+  getDueVocabInLanguage(language: string, vocabBlockList?: string[]): Promise<VocabData[]>;
+  getDueVocabInLanguages(languages: string[], setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
+  getRandomUnseenVocabInLanguages(languages: string[], count: number, setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   findVocabByTranslationUids(language: string, translationUids: string[]): Promise<VocabData | undefined>;
-  getRandomVocabWithNoTranslationsInLanguages(languages: string[]): Promise<VocabData | null>;
+  getRandomVocabWithNoTranslationsInLanguages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
   
   // Distractor generation operations
   generateWrongVocabs(targetLanguage: string, correctVocabContent: string, count: number): Promise<string[]>;
@@ -56,6 +56,6 @@ export interface VocabRepoContract {
   getDueVocabByIds(vocabIds: string[]): Promise<VocabData[]>;
   
   // Backup task operations
-  getVocabWithLowestDueDate(count: number): Promise<VocabData[]>;
+  getVocabWithLowestDueDate(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   updateVocabLastSeenAndDueDate(vocabIds: string[], dueDate: Date): Promise<void>;
 }

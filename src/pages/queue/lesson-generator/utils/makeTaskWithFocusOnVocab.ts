@@ -12,7 +12,8 @@ export async function makeTaskWithFocusOnVocab(
   focusVocabUid: string,
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
-  noteRepo: NoteRepoContract
+  noteRepo: NoteRepoContract,
+  vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
     const { isFirstTask } = useTrackTaskNumber();
@@ -42,6 +43,9 @@ export async function makeTaskWithFocusOnVocab(
     for (const vocab of allPotentialVocab) {
       // Skip if vocab is marked as do not practice
       if (vocab.doNotPractice) continue;
+      
+      // Skip if vocab is in the block list
+      if (vocabBlockList && vocabBlockList.includes(vocab.uid)) continue;
       
       const vocabIsDue = isDue(vocab);
       const vocabIsUnseen = isUnseen(vocab);

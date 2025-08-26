@@ -6,10 +6,11 @@ import { generateAddTranslation, canGenerateAddTranslation } from '../task-gener
 export async function getRandomAddTranslationTask(
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
-  languageCodes: string[]
+  languageCodes: string[],
+  vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
-    const vocab = await vocabRepo.getRandomVocabWithNoTranslationsInLanguages(languageCodes);
+    const vocab = await vocabRepo.getRandomVocabWithNoTranslationsInLanguages(languageCodes, vocabBlockList);
     if (!vocab) return null;
     const translations = await translationRepo.getTranslationsByIds(vocab.translations);
     if (canGenerateAddTranslation(vocab, translations)) {

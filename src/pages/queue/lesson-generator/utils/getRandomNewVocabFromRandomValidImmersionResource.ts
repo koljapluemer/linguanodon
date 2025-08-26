@@ -7,13 +7,14 @@ import { getRandomNewVocabFromImmersionResource } from './getRandomVocabBasedOnI
 export async function getRandomNewVocabFromRandomValidImmersionResource(
   resourceRepo: ResourceRepoContract,
   vocabRepo: VocabRepoContract,
-  languageCodes: string[]
+  languageCodes: string[],
+  vocabBlockList?: string[]
 ): Promise<VocabData | null> {
   try {
     const resource = await getValidImmersionResource(resourceRepo, languageCodes);
     if (!resource) return null;
 
-    return await getRandomNewVocabFromImmersionResource(resourceRepo, vocabRepo, resource.uid);
+    return await getRandomNewVocabFromImmersionResource(resourceRepo, vocabRepo, resource.uid, vocabBlockList);
   } catch (error) {
     console.error('Error getting random new vocab from random valid immersion resource:', error);
     return null;

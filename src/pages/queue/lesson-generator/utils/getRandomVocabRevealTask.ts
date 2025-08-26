@@ -32,13 +32,14 @@ export async function getRandomVocabRevealTask(
   vocabRepo: VocabRepoContract,
   resourceRepo: ResourceRepoContract,
   translationRepo: TranslationRepoContract,
-  languageCodes: string[]
+  languageCodes: string[],
+  vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
     // 25% chance to try immersion resource first
     if (Math.random() < 0.25) {
       const immersionVocab = await getRandomDueVocabFromRandomValidImmersionResource(
-        resourceRepo, vocabRepo, languageCodes
+        resourceRepo, vocabRepo, languageCodes, vocabBlockList
       );
       if (immersionVocab) {
         const task = await tryGenerateFromVocab(immersionVocab, translationRepo);
@@ -47,7 +48,7 @@ export async function getRandomVocabRevealTask(
     }
 
     // Fallback to usual flow
-    const vocabItems = await vocabRepo.getDueVocabInLanguages(languageCodes);
+    const vocabItems = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
     
     if (vocabItems.length === 0) return null;
     

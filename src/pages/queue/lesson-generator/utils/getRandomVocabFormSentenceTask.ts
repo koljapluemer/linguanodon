@@ -7,7 +7,8 @@ import { randomFromArray, pickRandom } from '@/shared/arrayUtils';
 export async function getRandomVocabFormSentenceTask(
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
-  languageCodes: string[]
+  languageCodes: string[],
+  vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
     // Randomly select a single language to focus on
@@ -15,7 +16,7 @@ export async function getRandomVocabFormSentenceTask(
     if (!selectedLanguage) return null;
     
     // Get due vocab for the selected language only
-    const vocabItems = await vocabRepo.getDueVocabInLanguage(selectedLanguage);
+    const vocabItems = await vocabRepo.getDueVocabInLanguage(selectedLanguage, vocabBlockList);
     
     if (vocabItems.length < 2) return null;
     

@@ -25,6 +25,7 @@ import { makeTaskWithFocusOnVocab } from './utils/makeTaskWithFocusOnVocab';
 import { chooseTaskBasedOnDesiredTaskSize } from './utils/chooseTaskBasedOnDesiredTaskSize';
 import { chooseRareTask } from './utils/chooseRareTask';
 import { getBackupTask } from './utils/getBackupTask';
+import { useTrackUsedVocab } from './utils/useTrackUsedVocab';
 import { pickWeightedRandom } from '@/shared/arrayUtils';
 
 type TaskGenerator = () => Promise<Task | null>;
@@ -52,6 +53,10 @@ export async function makeTask(
     const { canGeneratePronunciationTask, trackTask: trackTaskType } = useTaskTypeTracker();
     const { canGenerateNewVocabTask, trackTask: trackNewVocabTask, isNewVocabTask } = useNewVocabTracker();
     const { incrementTaskCount } = useTrackTaskNumber();
+    const { getRecentlyUsedVocab, trackVocabUsed } = useTrackUsedVocab();
+    
+    // Get recently used vocab to exclude from selection
+    const vocabBlockList = getRecentlyUsedVocab();
     
     // Check if we should use focused vocab task generation
     if (focusOnVocab && Math.random() < 0.8) { // 80% chance to use focused vocab
@@ -59,7 +64,8 @@ export async function makeTask(
         focusOnVocab,
         vocabRepo,
         translationRepo,
-        noteRepo
+        noteRepo,
+        vocabBlockList
       );
       
       if (focusedTask) {
@@ -67,6 +73,12 @@ export async function makeTask(
         trackTask(focusedTask.taskType as TaskName);
         trackTaskType(focusedTask.taskType as TaskName);
         trackNewVocabTask(focusedTask.taskType as TaskName);
+        
+        // Track vocab used in this focused task
+        if (focusedTask.associatedVocab && focusedTask.associatedVocab.length > 0) {
+          trackVocabUsed(focusedTask.associatedVocab);
+        }
+        
         console.log(`[TaskGenerator] Generated focused task: ${focusedTask.taskType}`);
         return focusedTask;
       }
@@ -75,17 +87,17 @@ export async function makeTask(
     
     // Define all available task generators with their task names
     const baseGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
-      { generator: () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes), taskName: 'add-pronunciation' },
-      { generator: () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes), taskName: 'add-translation' },
+      { generator: () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes, vocabBlockList), taskName: 'add-pronunciation' },
+      { generator: () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'add-translation' },
       { generator: () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes), taskName: 'extract-knowledge-from-resource' },
       { generator: () => getRandomAddSubGoalsTask(goalRepo, languageCodes), taskName: 'add-sub-goals' },
       { generator: () => getRandomAddVocabToGoalTask(goalRepo, languageCodes), taskName: 'add-vocab-to-goal' },
-      { generator: () => getRandomVocabTryToRememberTask(vocabRepo, resourceRepo, languageCodes), taskName: 'vocab-try-to-remember' },
-      { generator: () => getRandomVocabRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'vocab-reveal-target-to-native' },
-      { generator: () => getRandomVocabChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'vocab-choose-from-two-target-to-native' },
-      { generator: () => getRandomClozeChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'cloze-choose-from-two' },
-      { generator: () => getRandomClozeRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'cloze-reveal' },
-      { generator: () => getRandomVocabFormSentenceTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-form-sentence' }
+      { generator: () => getRandomVocabTryToRememberTask(vocabRepo, resourceRepo, languageCodes, vocabBlockList), taskName: 'vocab-try-to-remember' },
+      { generator: () => getRandomVocabRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'vocab-reveal-target-to-native' },
+      { generator: () => getRandomVocabChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'vocab-choose-from-two-target-to-native' },
+      { generator: () => getRandomClozeChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'cloze-choose-from-two' },
+      { generator: () => getRandomClozeRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'cloze-reveal' },
+      { generator: () => getRandomVocabFormSentenceTask(vocabRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'vocab-form-sentence' }
     ];
     
     // Filter out tasks based on limits
@@ -128,12 +140,18 @@ export async function makeTask(
       trackTask(taskName);
       trackTaskType(taskName);
       trackNewVocabTask(taskName);
+      
+      // Track vocab used in this task
+      if (task.associatedVocab && task.associatedVocab.length > 0) {
+        trackVocabUsed(task.associatedVocab);
+      }
+      
       return task;
     }
     
     // All generators tried and no task generated, try backup task
     console.log('[TaskGenerator] All task generators exhausted, trying backup task');
-    const backupTask = await getBackupTask(vocabRepo, translationRepo);
+    const backupTask = await getBackupTask(vocabRepo, translationRepo, languageCodes, vocabBlockList);
     
     if (backupTask) {
       console.log(`[TaskGenerator] Generated backup task: ${backupTask.taskType}`);
@@ -141,6 +159,12 @@ export async function makeTask(
       trackTask(backupTask.taskType as TaskName);
       trackTaskType(backupTask.taskType as TaskName);
       trackNewVocabTask(backupTask.taskType as TaskName);
+      
+      // Track vocab used in this backup task
+      if (backupTask.associatedVocab && backupTask.associatedVocab.length > 0) {
+        trackVocabUsed(backupTask.associatedVocab);
+      }
+      
       return backupTask;
     }
     

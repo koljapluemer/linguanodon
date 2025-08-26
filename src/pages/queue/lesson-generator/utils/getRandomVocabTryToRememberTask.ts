@@ -7,13 +7,14 @@ import { getRandomNewVocabFromRandomValidImmersionResource } from './getRandomNe
 export async function getRandomVocabTryToRememberTask(
   vocabRepo: VocabRepoContract,
   resourceRepo: ResourceRepoContract,
-  languageCodes: string[]
+  languageCodes: string[],
+  vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
     // 25% chance to try immersion resource first
     if (Math.random() < 0.25) {
       const immersionVocab = await getRandomNewVocabFromRandomValidImmersionResource(
-        resourceRepo, vocabRepo, languageCodes
+        resourceRepo, vocabRepo, languageCodes, vocabBlockList
       );
       if (immersionVocab && canGenerateVocabTryToRemember(immersionVocab)) {
         return generateVocabTryToRemember(immersionVocab);
@@ -21,7 +22,7 @@ export async function getRandomVocabTryToRememberTask(
     }
 
     // Fallback to usual flow
-    const vocabItems = await vocabRepo.getRandomUnseenVocabInLanguages(languageCodes, 10);
+    const vocabItems = await vocabRepo.getRandomUnseenVocabInLanguages(languageCodes, 10, undefined, vocabBlockList);
     
     if (vocabItems.length === 0) return null;
     

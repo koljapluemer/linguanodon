@@ -9,13 +9,14 @@ export async function getRandomAddPronunciationTask(
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
   _noteRepo: NoteRepoContract,
-  languageCodes: string[]
+  languageCodes: string[],
+  vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
     // Try to get a vocab item that needs pronunciation directly
-    const vocabWithMissingPronunciation = await vocabRepo.getRandomVocabWithMissingPronunciation();
+    const vocabWithMissingPronunciation = await vocabRepo.getRandomVocabWithMissingPronunciation(languageCodes, vocabBlockList);
     
-    if (vocabWithMissingPronunciation && languageCodes.includes(vocabWithMissingPronunciation.language)) {
+    if (vocabWithMissingPronunciation) {
       const translations = await translationRepo.getTranslationsByIds(vocabWithMissingPronunciation.translations);
       const notes: NoteData[] = [];
       

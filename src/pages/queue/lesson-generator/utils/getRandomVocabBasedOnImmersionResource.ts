@@ -7,7 +7,8 @@ import { randomFromArray } from '@/shared/arrayUtils';
 async function getVocabFromImmersionResource(
   resourceRepo: ResourceRepoContract,
   vocabRepo: VocabRepoContract,
-  resourceUid: string
+  resourceUid: string,
+  vocabBlockList?: string[]
 ): Promise<VocabData[] | null> {
   const resource = await resourceRepo.getResourceById(resourceUid);
   if (!resource?.isImmersionContent || resource.vocab.length === 0) {
@@ -15,16 +16,23 @@ async function getVocabFromImmersionResource(
   }
 
   const vocabItems = await vocabRepo.getVocabByUIDs(resource.vocab);
-  return vocabItems.length > 0 ? vocabItems : null;
+  
+  // Filter out blocked vocab
+  const filteredVocab = vocabBlockList 
+    ? vocabItems.filter(v => !vocabBlockList.includes(v.uid))
+    : vocabItems;
+    
+  return filteredVocab.length > 0 ? filteredVocab : null;
 }
 
 export async function getRandomVocabBasedOnImmersionResource(
   resourceRepo: ResourceRepoContract,
   vocabRepo: VocabRepoContract,
-  resourceUid: string
+  resourceUid: string,
+  vocabBlockList?: string[]
 ): Promise<VocabData | null> {
   try {
-    const vocabItems = await getVocabFromImmersionResource(resourceRepo, vocabRepo, resourceUid);
+    const vocabItems = await getVocabFromImmersionResource(resourceRepo, vocabRepo, resourceUid, vocabBlockList);
     if (!vocabItems) return null;
 
     const newVocab = vocabItems.filter(v => v.progress.level === -1);
@@ -47,10 +55,11 @@ export async function getRandomVocabBasedOnImmersionResource(
 export async function getRandomNewVocabFromImmersionResource(
   resourceRepo: ResourceRepoContract,
   vocabRepo: VocabRepoContract,
-  resourceUid: string
+  resourceUid: string,
+  vocabBlockList?: string[]
 ): Promise<VocabData | null> {
   try {
-    const vocabItems = await getVocabFromImmersionResource(resourceRepo, vocabRepo, resourceUid);
+    const vocabItems = await getVocabFromImmersionResource(resourceRepo, vocabRepo, resourceUid, vocabBlockList);
     if (!vocabItems) return null;
 
     const newVocab = vocabItems.filter(v => v.progress.level === -1);
@@ -64,10 +73,11 @@ export async function getRandomNewVocabFromImmersionResource(
 export async function getRandomSeenVocabFromImmersionResource(
   resourceRepo: ResourceRepoContract,
   vocabRepo: VocabRepoContract,
-  resourceUid: string
+  resourceUid: string,
+  vocabBlockList?: string[]
 ): Promise<VocabData | null> {
   try {
-    const vocabItems = await getVocabFromImmersionResource(resourceRepo, vocabRepo, resourceUid);
+    const vocabItems = await getVocabFromImmersionResource(resourceRepo, vocabRepo, resourceUid, vocabBlockList);
     if (!vocabItems) return null;
 
     const seenVocab = vocabItems.filter(v => v.progress.level >= 0);
