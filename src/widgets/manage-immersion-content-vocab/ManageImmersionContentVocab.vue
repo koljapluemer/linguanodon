@@ -27,12 +27,12 @@
 <script setup lang="ts">
 import { ref, inject, onMounted, computed } from 'vue';
 import ManageVocabList from '@/features/manage-vocab-list/ManageVocabList.vue';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
-import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 
 const props = defineProps<{
-  immersionContentUid: string;
+  resourceUid: string;
   showDeleteButton?: boolean;
   showDisconnectButton?: boolean;
   allowJumpingToVocabPage?: boolean;
@@ -46,9 +46,9 @@ const emit = defineEmits<{
   'update:needed-vocab-ids': [string[]];
 }>();
 
-const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
-if (!immersionContentRepo) {
-  throw new Error('ImmersionContentRepo not provided');
+const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
+if (!resourceRepo) {
+  throw new Error('ResourceRepo not provided');
 }
 
 const vocabIds = ref<string[]>([]);
@@ -66,28 +66,28 @@ const vocabListConfig = computed(() => ({
   allowDelete: props.showDeleteButton ?? false
 }));
 
-async function loadImmersionContent() {
+async function loadResource() {
   loading.value = true;
   error.value = null;
   
   try {
-    if (!immersionContentRepo) return;
-    const content = await immersionContentRepo.getImmersionContentById(props.immersionContentUid);
-    if (content) {
-      vocabIds.value = [...content.vocab];
-      initialVocabIds.value = [...content.vocab];
-      language.value = content.language;
+    if (!resourceRepo) return;
+    const resource = await resourceRepo.getResourceById(props.resourceUid);
+    if (resource) {
+      vocabIds.value = [...resource.vocab];
+      initialVocabIds.value = [...resource.vocab];
+      language.value = resource.language;
       emit('update:needed-vocab-ids', vocabIds.value);
     }
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to load immersion content';
+    error.value = err instanceof Error ? err.message : 'Failed to load resource';
   } finally {
     loading.value = false;
   }
 }
 
 async function handleVocabUpdate(newVocabIds: string[]) {
-  if (!immersionContentRepo) return;
+  if (!resourceRepo) return;
 
   // Check if vocab list has changed from initial state
   const vocabListChanged = JSON.stringify(newVocabIds.sort()) !== JSON.stringify(initialVocabIds.value.sort());
@@ -97,14 +97,14 @@ async function handleVocabUpdate(newVocabIds: string[]) {
     emit('taskMayNowBeConsideredDone');
   }
 
-  // Auto-save - update the immersion content with new vocab IDs
-  const content = await immersionContentRepo.getImmersionContentById(props.immersionContentUid);
-  if (content) {
-    const updatedContent: ImmersionContentData = {
-      ...content,
+  // Auto-save - update the resource with new vocab IDs
+  const resource = await resourceRepo.getResourceById(props.resourceUid);
+  if (resource) {
+    const updatedResource: ResourceData = {
+      ...resource,
       vocab: newVocabIds
     };
-    await immersionContentRepo.updateImmersionContent(updatedContent);
+    await resourceRepo.updateResource(updatedResource);
     vocabIds.value = newVocabIds;
     emit('update:needed-vocab-ids', vocabIds.value);
   }
@@ -126,12 +126,22 @@ async function handleVocabRemoved(vocabId: string) {
 }
 
 async function handleVocabDisconnected(vocabId: string) {
-  if (!immersionContentRepo) return;
+  if (!resourceRepo) return;
   
   try {
-    await immersionContentRepo.disconnectNeededVocabFromImmersionContent(props.immersionContentUid, vocabId);
+    // Get current resource and remove the vocab ID
+    const resource = await resourceRepo.getResourceById(props.resourceUid);
+    if (resource) {
+      const updatedVocabIds = resource.vocab.filter(id => id !== vocabId);
+      const updatedResource: ResourceData = {
+        ...resource,
+        vocab: updatedVocabIds
+      };
+      await resourceRepo.updateResource(updatedResource);
+    }
+    
     // Refresh the vocab list
-    await loadImmersionContent();
+    await loadResource();
 
     // Check if vocab list has changed after disconnect
     const vocabListChanged = JSON.stringify(vocabIds.value.sort()) !== JSON.stringify(initialVocabIds.value.sort());
@@ -148,6 +158,6 @@ async function handleVocabDisconnected(vocabId: string) {
 }
 
 onMounted(() => {
-  loadImmersionContent();
+  loadResource();
 });
 </script>

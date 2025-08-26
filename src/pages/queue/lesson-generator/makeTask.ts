@@ -3,7 +3,7 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
+
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import { getRandomAddPronunciationTask } from './utils/getRandomAddPronunciationTask';
@@ -31,7 +31,6 @@ export async function makeTask(
   translationRepo: TranslationRepoContract,
   resourceRepo: ResourceRepoContract,
   languageRepo: LanguageRepoContract,
-  _immersionContentRepo: ImmersionContentRepoContract,
   goalRepo: GoalRepoContract,
   noteRepo: NoteRepoContract
 ): Promise<Task | null> {

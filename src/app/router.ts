@@ -8,8 +8,6 @@ import PageManageFactCard from '@/pages/fact-cards-manage/PageManageFactCard.vue
 import PageListResources from '@/pages/resources-list/PageListResources.vue';
 import PageResourceAdd from '@/pages/resource-add/PageResourceAdd.vue';
 import PageResourceEdit from '@/pages/resource-edit/PageResourceEdit.vue';
-import PageListImmersionContent from '@/pages/immersion-content-list/PageListImmersionContent.vue';
-import PageManageImmersionContent from '@/pages/immersion-content-manage/PageManageImmersionContent.vue';
 import PageListGoals from '@/pages/goals-list/PageListGoals.vue';
 import PageGoalAdd from '@/pages/goal-add/PageGoalAdd.vue';
 import PageGoalEdit from '@/pages/goal-edit/PageGoalEdit.vue';
@@ -79,21 +77,6 @@ const router = createRouter({
       path: '/resources/:uid/edit',
       name: 'resources-edit',
       component: PageResourceEdit
-    },
-    {
-      path: '/immersion-content',
-      name: 'immersion-content-list',
-      component: PageListImmersionContent
-    },
-    {
-      path: '/immersion-content/new',
-      name: 'immersion-content-new',
-      component: PageManageImmersionContent
-    },
-    {
-      path: '/immersion-content/:uid/edit',
-      name: 'immersion-content-edit',
-      component: PageManageImmersionContent
     },
     {
       path: '/goals',

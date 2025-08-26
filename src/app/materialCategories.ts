@@ -37,13 +37,7 @@ export const materialCategories: MaterialCategory[] = [
     route: { name: 'resources-list' },
     color: 'text-orange-600'
   },
-  {
-    name: 'Immersion Content',
-    description: 'Native content for language immersion',
-    icon: Waves,
-    route: { name: 'immersion-content-list' },
-    color: 'text-teal-600'
-  },
+
   {
     name: 'Goals',
     description: 'Learning objectives and milestones',

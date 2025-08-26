@@ -15,5 +15,5 @@ export function generateExtractKnowledgeFromResource(resource: ResourceData): Ta
 
 export function canGenerateExtractKnowledgeFromResource(resource: ResourceData): boolean {
   // Can only generate if resource hasn't finished extracting
-  return !resource.finishedExtracting;
+  return !resource.finishedExtracting && !resource.isImmersionContent;
 }

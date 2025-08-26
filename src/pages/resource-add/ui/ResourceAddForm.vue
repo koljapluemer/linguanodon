@@ -34,6 +34,22 @@
         </div>
       </div>
 
+      <!-- Is Immersion Content -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium">Is Immersion Content *</span>
+        </label>
+        <input
+          v-model="formData.isImmersionContent"
+          type="checkbox"
+          class="toggle toggle-primary"
+          required
+        />
+        <div class="label">
+          <span class="label-text-alt">Check if this is immersion content (videos, podcasts, articles for immersion)</span>
+        </div>
+      </div>
+
       <!-- Content -->
       <div class="form-control">
         <label class="label">
@@ -114,6 +130,7 @@ const error = ref<string | null>(null);
 const formData = ref({
   title: '',
   language: '',
+  isImmersionContent: false,
   content: '',
   links: [] as Link[]
 });
@@ -165,6 +182,7 @@ async function saveResource(): Promise<ResourceData | null> {
     const resourceData: Omit<ResourceData, 'uid' | 'lastShownAt'> = {
       title: formData.value.title.trim(),
       language: formData.value.language.trim(),
+      isImmersionContent: formData.value.isImmersionContent,
       priority: 1,
       content: formData.value.content.trim() || undefined,
       vocab: [],
@@ -210,6 +228,7 @@ async function handleSaveAndAddAnother() {
     formData.value = {
       title: '',
       language: formData.value.language, // Keep language selected
+      isImmersionContent: false,
       content: '',
       links: []
     };

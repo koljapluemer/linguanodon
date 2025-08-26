@@ -76,7 +76,6 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 
@@ -93,7 +92,6 @@ const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
-const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo')!;
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo')!;
 
@@ -103,7 +101,6 @@ const remoteSetService = new UnifiedRemoteSetService(
   translationRepo,
   noteRepo,
   resourceRepo,
-  immersionContentRepo,
   goalRepo,
   factCardRepo
 );

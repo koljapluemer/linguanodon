@@ -4,7 +4,6 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 
@@ -13,7 +12,6 @@ import { translationSchema } from '@/entities/remote-sets/validation/translation
 import { noteSchema } from '@/entities/remote-sets/validation/noteSchema';
 import { linkSchema } from '@/entities/remote-sets/validation/linkSchema';
 import { resourceSchema } from '@/entities/remote-sets/validation/resourceSchema';
-import { immersionContentSchema } from '@/entities/remote-sets/validation/immersionContentSchema';
 import { goalSchema } from '@/entities/remote-sets/validation/goalSchema';
 import { factCardSchema } from '@/entities/remote-sets/validation/factCardSchema';
 
@@ -21,7 +19,6 @@ import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { Link } from '@/shared/links/Link';
@@ -34,7 +31,6 @@ interface RemoteSetFiles {
   notes?: z.infer<typeof noteSchema>[];
   links?: z.infer<typeof linkSchema>[];
   resources?: z.infer<typeof resourceSchema>[];
-  immersionContent?: z.infer<typeof immersionContentSchema>[];
   goals?: z.infer<typeof goalSchema>[];
   factCards?: z.infer<typeof factCardSchema>[];
 }
@@ -46,7 +42,6 @@ export class UnifiedRemoteSetService {
     private translationRepo: TranslationRepoContract,
     private noteRepo: NoteRepoContract,
     private resourceRepo: ResourceRepoContract,
-    private immersionContentRepo: ImmersionContentRepoContract,
     private goalRepo: GoalRepoContract,
     private factCardRepo: FactCardRepoContract
   ) {}
@@ -94,7 +89,6 @@ export class UnifiedRemoteSetService {
     const translationMap = new Map<string, string>(); // remote ID -> local UID
     const vocabMap = new Map<string, string>(); // remote ID -> local UID
     const resourceMap = new Map<string, string>(); // remote ID -> local UID
-    const immersionContentMap = new Map<string, string>(); // remote ID -> local UID
     const goalMap = new Map<string, string>(); // remote ID -> local UID
     const factCardMap = new Map<string, string>(); // remote ID -> local UID
 
@@ -348,10 +342,14 @@ export class UnifiedRemoteSetService {
           existingOrigins.add(localSet.uid);
           
           const noteUids = this.resolveReferences(resourceData.notes || [], noteMap);
+          const vocabUids = this.resolveReferences(resourceData.vocab || [], vocabMap);
+          const factCardUids = this.resolveReferences(resourceData.factCards || [], factCardMap);
           
           await this.resourceRepo.updateResource({
             ...existingResource,
             notes: [...new Set([...existingResource.notes, ...noteUids])],
+            vocab: [...new Set([...existingResource.vocab, ...vocabUids])],
+            factCards: [...new Set([...existingResource.factCards, ...factCardUids])],
             origins: [...existingOrigins],
             priority: shouldIncrementPriority ? (existingResource.priority ?? 0) + (resourceData.priority || 1) : existingResource.priority
           });
@@ -361,17 +359,20 @@ export class UnifiedRemoteSetService {
           }
         } else {
           const noteUids = this.resolveReferences(resourceData.notes || [], noteMap);
+          const vocabUids = this.resolveReferences(resourceData.vocab || [], vocabMap);
+          const factCardUids = this.resolveReferences(resourceData.factCards || [], factCardMap);
           const link = resourceData.link ? linkMap.get(resourceData.link) : undefined;
           
           const localResource: Omit<ResourceData, 'uid' | 'lastShownAt'> = {
             language: resourceData.language,
+            isImmersionContent: resourceData.isImmersionContent,
             title: resourceData.title,
             content: resourceData.content,
             priority: resourceData.priority || 1,
             link: link,
             notes: noteUids,
-            vocab: [],
-            factCards: [],
+            vocab: vocabUids,
+            factCards: factCardUids,
             origins: [localSet.uid],
             finishedExtracting: false
           };
@@ -386,61 +387,6 @@ export class UnifiedRemoteSetService {
     }
 
     // Task generation is now handled ad-hoc during lessons
-
-    // Process immersion content
-    if (setFiles.immersionContent) {
-      for (const immersionData of setFiles.immersionContent) {
-        const existingImmersion = await this.immersionContentRepo.getImmersionContentByTitleAndLanguage(
-          immersionData.title,
-          immersionData.language
-        );
-
-        if (existingImmersion) {
-          // Merge with existing immersion content
-          const existingOrigins = new Set(existingImmersion.origins || []);
-          const shouldIncrementPriority = !existingOrigins.has(localSet.uid);
-          
-          existingOrigins.add(localSet.uid);
-          
-          const noteUids = this.resolveReferences(immersionData.notes || [], noteMap);
-          const neededVocabUids = this.resolveReferences(immersionData.neededVocab || [], vocabMap);
-          
-          await this.immersionContentRepo.updateImmersionContent({
-            ...existingImmersion,
-            notes: [...new Set([...existingImmersion.notes, ...noteUids])],
-            vocab: [...new Set([...existingImmersion.vocab, ...neededVocabUids])],
-            origins: [...existingOrigins],
-            priority: shouldIncrementPriority ? (existingImmersion.priority ?? 0) + (immersionData.priority || 1) : existingImmersion.priority
-          });
-          
-          if (immersionData.id) {
-            immersionContentMap.set(immersionData.id, existingImmersion.uid);
-          }
-        } else {
-          const noteUids = this.resolveReferences(immersionData.notes || [], noteMap);
-          const neededVocabUids = this.resolveReferences(immersionData.neededVocab || [], vocabMap);
-          const link = immersionData.link ? linkMap.get(immersionData.link) : undefined;
-          
-          const localImmersion: Omit<ImmersionContentData, 'uid' | 'lastShownAt'> = {
-            language: immersionData.language,
-            title: immersionData.title,
-            content: immersionData.content,
-            priority: immersionData.priority || 1,
-            link: link,
-            notes: noteUids,
-            vocab: neededVocabUids,
-            factCards: [],
-            origins: [localSet.uid],
-            finishedExtracting: false
-          };
-          
-          const savedImmersion = await this.immersionContentRepo.saveImmersionContent(localImmersion);
-          if (immersionData.id) {
-            immersionContentMap.set(immersionData.id, savedImmersion.uid);
-          }
-        }
-      }
-    }
 
     // Process goals
     if (setFiles.goals) {
@@ -507,7 +453,7 @@ export class UnifiedRemoteSetService {
   }
 
   private async loadAndValidateSetFiles(languageCode: string, setName: string): Promise<RemoteSetFiles | null> {
-    const possibleFiles = ['vocab', 'translations', 'notes', 'links', 'resources', 'immersionContent', 'goals', 'factCards'];
+    const possibleFiles = ['vocab', 'translations', 'notes', 'links', 'resources', 'goals', 'factCards'];
     const setFiles: RemoteSetFiles = {};
 
     for (const fileName of possibleFiles) {
@@ -579,7 +525,6 @@ export class UnifiedRemoteSetService {
       notes: noteSchema,
       links: linkSchema,
       resources: resourceSchema,
-      immersionContent: immersionContentSchema,
       goals: goalSchema,
       factCards: factCardSchema
     };

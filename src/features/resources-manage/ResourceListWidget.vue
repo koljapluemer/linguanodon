@@ -3,15 +3,10 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-bold">Resources</h1>
-      <div class="flex gap-2">
-        <button @click="loadResources" class="btn btn-ghost btn-sm" :disabled="loading">
-          <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-          <span v-else>Refresh</span>
-        </button>
-        <router-link to="/resources/new" class="btn btn-primary">
-          Add New Resource
-        </router-link>
-      </div>
+
+      <router-link to="/resources/new" class="btn btn-primary">
+        Add New Resource
+      </router-link>
     </div>
 
     <!-- Loading State -->
@@ -35,21 +30,19 @@
 
     <!-- Resources List -->
     <div v-else class="grid gap-4">
-      <div 
-        v-for="resource in resources" 
-        :key="resource.uid"
-        class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow"
-      >
+      <div v-for="resource in resources" :key="resource.uid"
+        class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
         <div class="card-body">
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
-                <LanguageDisplay v-if="languageMap.get(resource.language)" :language="languageMap.get(resource.language)!" variant="short" />
+                <LanguageDisplay v-if="languageMap.get(resource.language)"
+                  :language="languageMap.get(resource.language)!" variant="short" />
                 <span v-if="resource.priority" class="badge badge-secondary">P{{ resource.priority }}</span>
               </div>
-              
+
               <h3 class="card-title">{{ resource.title }}</h3>
-              
+
               <div v-if="resource.content" class="text-base-content/70 mb-3">
                 {{ resource.content.substring(0, 150) }}{{ resource.content.length > 150 ? '...' : '' }}
               </div>
@@ -64,20 +57,14 @@
                 </span>
               </div>
             </div>
-            
+
             <!-- Actions -->
             <div class="flex gap-2 ml-4">
-              <router-link
-                :to="`/resources/${resource.uid}/edit`"
-                class="btn btn-sm btn-outline"
-              >
+              <router-link :to="`/resources/${resource.uid}/edit`" class="btn btn-sm btn-outline">
                 Edit
               </router-link>
-              <button
-                @click="deleteResource(resource.uid)"
-                class="btn btn-sm btn-outline btn-error"
-                :disabled="deleting"
-              >
+              <button @click="deleteResource(resource.uid)" class="btn btn-sm btn-outline btn-error"
+                :disabled="deleting">
                 <span v-if="deleting" class="loading loading-spinner loading-sm"></span>
                 <span v-else>Delete</span>
               </button>
@@ -110,10 +97,10 @@ const error = ref<string | null>(null);
 
 async function loadResources() {
   if (!resourceRepo) return;
-  
+
   loading.value = true;
   error.value = null;
-  
+
   try {
     resources.value = await resourceRepo.getAllResources();
   } catch (err) {
@@ -128,7 +115,7 @@ async function deleteResource(uid: string) {
   if (!confirm('Are you sure you want to delete this resource?') || !resourceRepo) {
     return;
   }
-  
+
   deleting.value = true;
   try {
     await resourceRepo.deleteResource(uid);

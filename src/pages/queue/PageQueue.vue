@@ -5,7 +5,6 @@ import type { TranslationRepoContract } from '@/entities/translations/Translatio
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
-import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
@@ -18,10 +17,10 @@ const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
-const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
+
 const noteRepo = inject<NoteRepoContract>('noteRepo');
 
-if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRepo || !immersionContentRepo || !noteRepo) {
+if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRepo || !noteRepo) {
   throw new Error('Repositories not available');
 }
 
@@ -68,7 +67,6 @@ async function generateNextTask(): Promise<Task | null> {
       translationRepo!,
       resourceRepo!,
       languageRepo!,
-      immersionContentRepo!,
       goalRepo!,
       noteRepo!
     );
