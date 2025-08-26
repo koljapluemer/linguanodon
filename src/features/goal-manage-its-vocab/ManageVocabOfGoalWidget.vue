@@ -1,98 +1,230 @@
 <template>
-  <div class="space-y-4">
-    <div v-if="vocabItems.length === 0" class="text-center py-8 text-gray-500">
-      No vocabulary attached yet. Add some below to practice specific words for this goal.
+  <div class="py-4">
+    <div class="mb-3">
+      <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        Vocabulary
+      </div>
     </div>
     
-    <div v-else class="space-y-2">
+    <div v-if="vocabItems.length === 0" class="text-gray-500 text-center py-4">
+      No vocabulary yet. Use the form below to add some.
+    </div>
+    
+    <div v-else class="space-y-4">
       <div
-        v-for="vocab in vocabItems"
+        v-for="(vocab, index) in vocabItems"
         :key="vocab.uid"
-        class="flex items-center gap-3 p-3 border border-base-200 rounded-lg"
       >
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <LanguageDisplay v-if="languageMap.get(vocab.language)" :language="languageMap.get(vocab.language)!" variant="short" />
-            <span class="font-medium">{{ vocab.content || 'No content' }}</span>
-          </div>
-          <div class="flex gap-1">
-            <span
-              v-for="translationId in vocab.translations"
-              :key="translationId"
-              class="badge badge-secondary badge-sm"
+        <!-- Vocabulary Item -->
+        <div class="space-y-4">
+          <!-- Content as InlineInput -->
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <InlineInput
+                :model-value="vocab.content"
+                label="Content"
+                placeholder="Enter vocabulary content..."
+                @update:model-value="updateVocabContent(vocab, $event)"
+              />
+            </div>
+            <button
+              type="button"
+              @click="removeVocab(vocab.uid)"
+              class="btn btn-ghost btn-circle text-error flex-shrink-0 ml-4"
             >
-              {{ getTranslationText(translationId) }}
-            </span>
+              <X class="w-4 h-4" />
+            </button>
+          </div>
+
+          <!-- Translations Management - exactly like VocabFormCoreRenderer -->
+          <div class="pl-4 border-l-2 border-base-300">
+            <div class="flex justify-between items-center mb-3">
+              <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Translations
+              </div>
+              <button
+                type="button"
+                @click="addNewTranslation(index)"
+                class="btn btn-sm btn-outline"
+              >
+                <Plus class="w-4 h-4 mr-1" />
+                Add Translation
+              </button>
+            </div>
+            
+            <div v-if="vocab.translations.length === 0" class="text-gray-500 text-center py-4">
+              No translations yet. Click "Add Translation" to get started.
+            </div>
+            
+            <div v-else class="space-y-4">
+              <div
+                v-for="(translationId, tIndex) in vocab.translations"
+                :key="translationId"
+              >
+                <!-- Edit mode -->
+                <div v-if="editingTranslationKey === `${index}-${tIndex}`" class="space-y-4">
+                  <div class="flex flex-col space-y-1">
+                    <label class="text-sm font-medium">Translation Content</label>
+                    <input
+                      v-model="tempTranslation.content"
+                      type="text"
+                      placeholder="Enter translation content..."
+                      class="input input-bordered input-lg w-full"
+                    />
+                  </div>
+                  
+                  <div class="flex gap-2 justify-end">
+                    <button
+                      @click="cancelTranslationEdit"
+                      class="btn btn-sm btn-ghost"
+                    >
+                      <X class="w-4 h-4" />
+                      Cancel
+                    </button>
+                    <button
+                      @click="saveTranslationEdit(vocab, translationId)"
+                      class="btn btn-sm btn-success"
+                    >
+                      <Check class="w-4 h-4" />
+                      Save
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- Display mode -->
+                <div v-else class="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+                  <div class="flex-1">
+                    <div class="text-lg">{{ getTranslationText(translationId) || '(Empty translation)' }}</div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button
+                      type="button"
+                      @click="startTranslationEdit(index, tIndex, translationId)"
+                      class="btn btn-sm btn-ghost"
+                    >
+                      <Edit class="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      @click="deleteTranslation(vocab, translationId)"
+                      class="btn btn-ghost btn-circle text-error flex-shrink-0"
+                    >
+                      <X class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- New translation creation form -->
+            <div v-if="creatingTranslationForVocab === index" class="space-y-4 mt-4">
+              <div class="flex flex-col space-y-1">
+                <label class="text-sm font-medium">Translation Content</label>
+                <input
+                  v-model="tempTranslation.content"
+                  type="text"
+                  placeholder="Enter translation content..."
+                  class="input input-bordered input-lg w-full"
+                />
+              </div>
+              
+              <div class="flex gap-2 justify-end">
+                <button
+                  @click="creatingTranslationForVocab = null"
+                  class="btn btn-sm btn-ghost"
+                >
+                  <X class="w-4 h-4" />
+                  Cancel
+                </button>
+                <button
+                  @click="saveNewTranslation(vocab)"
+                  class="btn btn-sm btn-success"
+                  :disabled="!tempTranslation.content?.trim()"
+                >
+                  <Check class="w-4 h-4" />
+                  Save
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-        <button
-          @click="removeVocab(vocab.uid)"
-          class="btn btn-sm btn-error btn-outline"
-        >
-          Remove
-        </button>
       </div>
     </div>
+    
+    <!-- Always-visible vocabulary creation form -->
+    <div class="mt-6 p-4 border border-base-300 rounded-lg bg-base-50">
+      <div class="space-y-4">
+        <!-- 3-way toggle -->
+        <div class="flex gap-2">
+          <button
+            @click="creationMode = 'translation-only'"
+            :class="creationMode === 'translation-only' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline'"
+          >
+            Add Translation
+          </button>
+          <button
+            @click="creationMode = 'vocab-only'"
+            :class="creationMode === 'vocab-only' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline'"
+          >
+            Add Untranslated Vocab
+          </button>
+          <button
+            @click="creationMode = 'vocab-and-translation'"
+            :class="creationMode === 'vocab-and-translation' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline'"
+          >
+            Add Vocab + Translation
+          </button>
+        </div>
 
-    <div class="divider">Add New Vocabulary</div>
+        <!-- Input fields based on mode -->
+        <div class="space-y-3">
+          <div v-if="creationMode === 'vocab-only' || creationMode === 'vocab-and-translation'" class="flex flex-col space-y-1">
+            <label class="text-sm font-medium">Vocabulary Content</label>
+            <input
+              v-model="newVocabContent"
+              type="text"
+              placeholder="Enter vocabulary content..."
+              class="input input-bordered w-full"
+            />
+          </div>
+          
+          <div v-if="creationMode === 'translation-only' || creationMode === 'vocab-and-translation'" class="flex flex-col space-y-1">
+            <label class="text-sm font-medium">Translation</label>
+            <input
+              v-model="newTranslationContent"
+              type="text"
+              placeholder="Enter translation..."
+              class="input input-bordered w-full"
+            />
+          </div>
+        </div>
 
-    <div class="space-y-4">
-      <h3 class="text-md font-semibold">New Vocabulary Entry</h3>
-      <div class="flex flex-wrap gap-4">
-      <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">Language</label>
-        <LanguageDropdown
-          v-model="newVocab.language"
-          placeholder="Select target language"
-          required
-          size="sm"
-        />
+        <!-- Save button -->
+        <div class="flex justify-end">
+          <button
+            @click="createNewVocab"
+            class="btn btn-success btn-sm"
+            :disabled="!canCreateVocab"
+          >
+            <Plus class="w-4 h-4 mr-1" />
+            Add
+          </button>
+        </div>
       </div>
-      
-      <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">Content (Optional)</label>
-        <input
-          v-model="newVocab.content"
-          type="text"
-          placeholder="e.g., hola"
-          class="input input-bordered input-sm w-full"
-        />
-      </div>
-      
-      <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">Translation (Optional)</label>
-        <input
-          v-model="newVocab.translation"
-          type="text"
-          placeholder="e.g., hello"
-          class="input input-bordered input-sm w-full"
-          @keydown.enter="addVocab"
-        />
-      </div>
-      </div>
-    </div>
-
-    <div class="flex justify-end">
-      <button
-        @click="addVocab"
-        :disabled="!canAddVocab"
-        class="btn btn-primary btn-sm"
-      >
-        Add Vocabulary
-      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted, computed } from 'vue';
+import { ref, inject, onMounted, computed, toRaw } from 'vue';
+import { Plus, Edit, X, Check } from 'lucide-vue-next';
+import InlineInput from '@/shared/ui/InlineInput.vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 
@@ -111,15 +243,32 @@ const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 const vocabItems = ref<VocabData[]>([]);
 const translations = ref<Map<string, TranslationData>>(new Map());
 const languageMap = ref<Map<string, LanguageData>>(new Map());
-const newVocab = ref({
-  language: '',
-  content: '',
-  translation: ''
+
+// Translation management state - exactly like VocabFormCoreRenderer
+const editingTranslationKey = ref<string | null>(null); // Format: "vocabIndex-translationIndex"
+const creatingTranslationForVocab = ref<number | null>(null);
+const tempTranslation = ref<{
+  content: string;
+}>({
+  content: ''
 });
 
-const canAddVocab = computed(() => {
-  return newVocab.value.language.trim() && 
-         (newVocab.value.content.trim() || newVocab.value.translation.trim());
+// New creation form state
+const creationMode = ref<'translation-only' | 'vocab-only' | 'vocab-and-translation'>('vocab-only');
+const newVocabContent = ref('');
+const newTranslationContent = ref('');
+
+const canCreateVocab = computed(() => {
+  switch (creationMode.value) {
+    case 'translation-only':
+      return newTranslationContent.value.trim() !== '';
+    case 'vocab-only':
+      return newVocabContent.value.trim() !== '';
+    case 'vocab-and-translation':
+      return newVocabContent.value.trim() !== '' && newTranslationContent.value.trim() !== '';
+    default:
+      return false;
+  }
 });
 
 async function loadVocab() {
@@ -141,32 +290,177 @@ function getTranslationText(translationId: string): string {
   return translations.value.get(translationId)?.content || 'Unknown';
 }
 
-async function addVocab() {
-  if (!canAddVocab.value) return;
+// Update vocabulary content via InlineInput
+async function updateVocabContent(vocab: VocabData, newContent: string) {
+  const updatedVocab = toRaw({
+    ...toRaw(vocab),
+    content: newContent.trim() || undefined
+  });
   
-  // For now, create vocab without translation since the repo doesn't support translation creation
-  // This will be a limitation until we extend the repo contract
-  const vocab = await vocabRepo.saveVocab({
-    language: newVocab.value.language.trim(),
-    content: newVocab.value.content.trim() || undefined,
+  await vocabRepo.updateVocab(updatedVocab);
+  
+  // Update local state
+  const index = vocabItems.value.findIndex(v => v.uid === vocab.uid);
+  if (index !== -1) {
+    vocabItems.value[index] = updatedVocab;
+  }
+}
+
+// Translation management functions - exactly like VocabFormCoreRenderer
+function addNewTranslation(vocabIndex: number) {
+  tempTranslation.value = {
+    content: ''
+  };
+  creatingTranslationForVocab.value = vocabIndex;
+}
+
+async function saveNewTranslation(vocab: VocabData) {
+  if (!tempTranslation.value.content?.trim()) return;
+  
+  // Save translation to repo
+  const newTranslation = await translationRepo.saveTranslation(toRaw({
+    content: tempTranslation.value.content.trim(),
+    priority: 1,
+    notes: []
+  }));
+  
+  // Update vocab with new translation ID - make sure vocab is not reactive
+  const updatedVocab = toRaw({
+    ...toRaw(vocab),
+    translations: [...toRaw(vocab).translations, newTranslation.uid]
+  });
+  
+  await vocabRepo.updateVocab(updatedVocab);
+  
+  // Update local state
+  const index = vocabItems.value.findIndex(v => v.uid === vocab.uid);
+  if (index !== -1) {
+    vocabItems.value[index] = updatedVocab;
+  }
+  
+  // Add to translations map
+  translations.value.set(newTranslation.uid, newTranslation);
+  
+  // Clear form
+  creatingTranslationForVocab.value = null;
+  tempTranslation.value.content = '';
+}
+
+function startTranslationEdit(vocabIndex: number, translationIndex: number, translationId: string) {
+  const translation = translations.value.get(translationId);
+  if (translation) {
+    tempTranslation.value = {
+      content: translation.content
+    };
+    editingTranslationKey.value = `${vocabIndex}-${translationIndex}`;
+  }
+}
+
+async function saveTranslationEdit(vocab: VocabData, translationId: string) {
+  if (!tempTranslation.value.content?.trim()) {
+    alert('Translation content is required');
+    return;
+  }
+  
+  const translation = translations.value.get(translationId);
+  if (!translation) return;
+  
+  const updatedTranslation = toRaw({
+    ...translation,
+    content: tempTranslation.value.content.trim()
+  });
+  
+  await translationRepo.updateTranslation(updatedTranslation);
+  
+  // Update local translations map
+  translations.value.set(translationId, updatedTranslation);
+  
+  editingTranslationKey.value = null;
+}
+
+function cancelTranslationEdit() {
+  editingTranslationKey.value = null;
+  tempTranslation.value.content = '';
+}
+
+async function deleteTranslation(vocab: VocabData, translationId: string) {
+  if (!confirm('Are you sure you want to delete this translation?')) return;
+  
+  // Remove from translation repo
+  await translationRepo.deleteTranslations([translationId]);
+  
+  // Update vocab to remove translation ID - make sure vocab is not reactive
+  const updatedVocab = toRaw({
+    ...toRaw(vocab),
+    translations: toRaw(vocab).translations.filter(id => id !== translationId)
+  });
+  
+  await vocabRepo.updateVocab(updatedVocab);
+  
+  // Update local state
+  const index = vocabItems.value.findIndex(v => v.uid === vocab.uid);
+  if (index !== -1) {
+    vocabItems.value[index] = updatedVocab;
+  }
+  
+  // Remove from translations map
+  translations.value.delete(translationId);
+}
+
+async function createNewVocab() {
+  if (!canCreateVocab.value) return;
+
+  let vocab: VocabData;
+  let translationIds: string[] = [];
+
+  // Create translation if needed
+  if (creationMode.value === 'translation-only' || creationMode.value === 'vocab-and-translation') {
+    const translation = await translationRepo.saveTranslation(toRaw({
+      content: newTranslationContent.value.trim(),
+      priority: 1,
+      notes: []
+    }));
+    translationIds.push(translation.uid);
+  }
+
+  // Create vocabulary
+  vocab = await vocabRepo.saveVocab(toRaw({
+    language: props.goal.language,
+    content: creationMode.value === 'translation-only' ? undefined : newVocabContent.value.trim(),
     length: 'not-specified',
-    translations: [], // Empty for now
+    translations: translationIds,
     notes: [],
     links: [],
     origins: ['user-added'],
     relatedVocab: [],
     notRelatedVocab: []
-  });
-  
+  }));
+
   // Update goal to include this vocab
   const updatedGoal = await goalRepo.update(props.goal.uid, {
     vocab: [...props.goal.vocab, vocab.uid]
   });
-  
+
+  // Add the new vocab to the local state immediately
   vocabItems.value.push(vocab);
-  newVocab.value = { language: '', content: '', translation: '' };
+  
+  // Add translation to translations map if it exists
+  if (translationIds.length > 0 && creationMode.value !== 'vocab-only') {
+    // We need to load the translation we just created
+    const newTranslations = await translationRepo.getTranslationsByIds(translationIds);
+    newTranslations.forEach(t => {
+      translations.value.set(t.uid, t);
+    });
+  }
+
+  // Clear form
+  newVocabContent.value = '';
+  newTranslationContent.value = '';
+  
   emit('goal-updated', updatedGoal);
 }
+
+
 
 async function removeVocab(vocabId: string) {
   if (!confirm('Are you sure you want to remove this vocabulary from the goal?')) return;
