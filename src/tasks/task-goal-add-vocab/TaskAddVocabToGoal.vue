@@ -2,7 +2,7 @@
   <div v-if="goal">
     <h2 class="text-2xl font-bold mb-6">{{ goal.title }}</h2>
 
-    <ManageVocabOfGoalWidget 
+    <ManageGoalVocab 
       :goal="goal"
       @goal-updated="handleGoalUpdate"
     />
@@ -31,7 +31,7 @@ import { ref, inject, onMounted } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { Task } from '@/entities/tasks/Task';
-import ManageVocabOfGoalWidget from '@/features/goal-manage-its-vocab/ManageVocabOfGoalWidget.vue';
+import ManageGoalVocab from '@/widgets/manage-goal-vocab/ManageGoalVocab.vue';
 import TaskDecideWhetherToDoAgain from '@/shared/TaskDecideWhetherToDoAgain.vue';
 
 interface Props {

@@ -85,14 +85,14 @@
 
           <!-- Bottom row: Action buttons -->
           <div class="flex justify-end gap-2 mt-4 pt-3 border-t border-base-300">
-            <button type="button" @click="removeVocab(vocab.uid)" class="btn btn-sm btn-ghost"
-              title="Disconnect vocab from goal">
+            <button v-if="config.allowDisconnect" type="button" @click="disconnectVocab(vocab.uid)" class="btn btn-sm btn-ghost"
+              title="Disconnect vocab from parent">
               <Unlink class="w-4 h-4" />
             </button>
-            <button type="button" @click="goToVocab(vocab.uid)" class="btn btn-sm btn-ghost" title="Go to vocab">
+            <button v-if="config.allowNavigate" type="button" @click="goToVocab(vocab.uid)" class="btn btn-sm btn-ghost" title="Go to vocab">
               <ExternalLink class="w-4 h-4" />
             </button>
-            <button type="button" @click="deleteVocab(vocab.uid)" class="btn btn-sm btn-ghost text-error"
+            <button v-if="config.allowDelete" type="button" @click="deleteVocab(vocab.uid)" class="btn btn-sm btn-ghost text-error"
               title="Delete vocab permanently">
               <Trash2 class="w-4 h-4" />
             </button>
@@ -102,7 +102,7 @@
     </div>
 
     <!-- Always-visible vocabulary creation form -->
-    <div class="mt-6 p-4 border border-base-300 rounded-lg bg-base-50">
+    <div v-if="config.allowAdd" class="mt-6 p-4 border border-base-300 rounded-lg bg-base-50">
       <div class="space-y-4">
         <!-- 3-way toggle -->
         <div class="flex gap-2">
@@ -150,41 +150,49 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted, computed, toRaw } from 'vue';
+import { ref, inject, onMounted, computed, toRaw, watch } from 'vue';
 import { Plus, Edit, X, Check, Unlink, ExternalLink, Trash2 } from 'lucide-vue-next';
 import InlineInput from '@/shared/ui/InlineInput.vue';
-import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
-import type { GoalData } from '@/entities/goals/GoalData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
 
+interface VocabListConfig {
+  allowAdd: boolean;
+  allowEdit: boolean;
+  allowDisconnect: boolean;
+  allowNavigate: boolean;
+  allowDelete: boolean;
+}
+
 const props = defineProps<{
-  goal: GoalData;
+  vocabIds: string[];
+  language: string;
+  config: VocabListConfig;
 }>();
 
 const emit = defineEmits<{
-  'goal-updated': [GoalData];
+  'update:vocab-ids': [string[]];
+  'vocab-added': [VocabData];
+  'vocab-updated': [VocabData];
+  'vocab-removed': [string];
+  'vocab-disconnected': [string];
 }>();
 
-const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 
 const vocabItems = ref<VocabData[]>([]);
 const translations = ref<Map<string, TranslationData>>(new Map());
 const languageMap = ref<Map<string, LanguageData>>(new Map());
 
-// Translation management state - exactly like VocabFormCoreRenderer
-const editingTranslationKey = ref<string | null>(null); // Format: "vocabIndex-translationIndex"
+// Translation management state
+const editingTranslationKey = ref<string | null>(null);
 const creatingTranslationForVocab = ref<number | null>(null);
-const tempTranslation = ref<{
-  content: string;
-}>({
-  content: ''
-});
+const tempTranslation = ref<{ content: string }>({ content: '' });
 
 // New creation form state
 const creationMode = ref<'translation-only' | 'vocab-only' | 'vocab-and-translation'>('vocab-only');
@@ -204,8 +212,13 @@ const canCreateVocab = computed(() => {
   }
 });
 
+// Watch for changes in vocabIds prop
+watch(() => props.vocabIds, async () => {
+  await loadVocab();
+}, { immediate: true });
+
 async function loadVocab() {
-  const vocabPromises = props.goal.vocab.map(id => vocabRepo.getVocabByUID(id));
+  const vocabPromises = props.vocabIds.map(id => vocabRepo.getVocabByUID(id));
   const vocabResults = await Promise.all(vocabPromises);
   vocabItems.value = vocabResults.filter((v): v is VocabData => v !== undefined);
 
@@ -228,7 +241,6 @@ function getLanguageName(languageCode: string): string {
 }
 
 async function startContentEdit(vocab: VocabData) {
-  // Give the vocab some content so the InlineInput appears
   await updateVocabContent(vocab, '');
 }
 
@@ -247,13 +259,13 @@ async function updateVocabContent(vocab: VocabData, newContent: string | number 
   if (index !== -1) {
     vocabItems.value[index] = updatedVocab;
   }
+
+  emit('vocab-updated', updatedVocab);
 }
 
-// Translation management functions - exactly like VocabFormCoreRenderer
+// Translation management functions
 function addNewTranslation(vocabIndex: number) {
-  tempTranslation.value = {
-    content: ''
-  };
+  tempTranslation.value = { content: '' };
   creatingTranslationForVocab.value = vocabIndex;
 }
 
@@ -267,7 +279,7 @@ async function saveNewTranslation(vocab: VocabData) {
     notes: []
   }));
 
-  // Update vocab with new translation ID - make sure vocab is not reactive
+  // Update vocab with new translation ID
   const updatedVocab = toRaw({
     ...toRaw(vocab),
     translations: [...toRaw(vocab).translations, newTranslation.uid]
@@ -287,14 +299,14 @@ async function saveNewTranslation(vocab: VocabData) {
   // Clear form
   creatingTranslationForVocab.value = null;
   tempTranslation.value.content = '';
+
+  emit('vocab-updated', updatedVocab);
 }
 
 function startTranslationEdit(vocabIndex: number, translationIndex: number, translationId: string) {
   const translation = translations.value.get(translationId);
   if (translation) {
-    tempTranslation.value = {
-      content: translation.content
-    };
+    tempTranslation.value = { content: translation.content };
     editingTranslationKey.value = `${vocabIndex}-${translationIndex}`;
   }
 }
@@ -332,7 +344,7 @@ async function deleteTranslation(vocab: VocabData, translationId: string) {
   // Remove from translation repo
   await translationRepo.deleteTranslations([translationId]);
 
-  // Update vocab to remove translation ID - make sure vocab is not reactive
+  // Update vocab to remove translation ID
   const updatedVocab = toRaw({
     ...toRaw(vocab),
     translations: toRaw(vocab).translations.filter(id => id !== translationId)
@@ -348,6 +360,8 @@ async function deleteTranslation(vocab: VocabData, translationId: string) {
 
   // Remove from translations map
   translations.value.delete(translationId);
+
+  emit('vocab-updated', updatedVocab);
 }
 
 async function createNewVocab() {
@@ -368,7 +382,7 @@ async function createNewVocab() {
 
   // Create vocabulary
   vocab = await vocabRepo.saveVocab(toRaw({
-    language: props.goal.language,
+    language: props.language,
     content: creationMode.value === 'translation-only' ? undefined : newVocabContent.value.trim(),
     length: 'not-specified',
     translations: translationIds,
@@ -379,17 +393,11 @@ async function createNewVocab() {
     notRelatedVocab: []
   }));
 
-  // Update goal to include this vocab
-  const updatedGoal = await goalRepo.update(props.goal.uid, {
-    vocab: [...props.goal.vocab, vocab.uid]
-  });
-
-  // Add the new vocab to the local state immediately
+  // Add the new vocab to the local state
   vocabItems.value.push(vocab);
-
+  
   // Add translation to translations map if it exists
   if (translationIds.length > 0 && creationMode.value !== 'vocab-only') {
-    // We need to load the translation we just created
     const newTranslations = await translationRepo.getTranslationsByIds(translationIds);
     newTranslations.forEach(t => {
       translations.value.set(t.uid, t);
@@ -399,28 +407,26 @@ async function createNewVocab() {
   // Clear form
   newVocabContent.value = '';
   newTranslationContent.value = '';
-
-  emit('goal-updated', updatedGoal);
+  
+  // Emit events
+  const updatedVocabIds = [...props.vocabIds, vocab.uid];
+  emit('update:vocab-ids', updatedVocabIds);
+  emit('vocab-added', vocab);
 }
 
-
-
-async function removeVocab(vocabId: string) {
-  if (!confirm('Are you sure you want to disconnect this vocabulary from the goal?')) return;
-
-  // Remove from goal's vocab array
-  const updatedVocab = props.goal.vocab.filter(id => id !== vocabId);
-  const updatedGoal = await goalRepo.update(props.goal.uid, {
-    vocab: updatedVocab
-  });
-
+function disconnectVocab(vocabId: string) {
+  if (!confirm('Are you sure you want to disconnect this vocabulary?')) return;
+  
   // Update local state
   vocabItems.value = vocabItems.value.filter(v => v.uid !== vocabId);
-  emit('goal-updated', updatedGoal);
+  
+  // Emit events
+  const updatedVocabIds = props.vocabIds.filter(id => id !== vocabId);
+  emit('update:vocab-ids', updatedVocabIds);
+  emit('vocab-disconnected', vocabId);
 }
 
 function goToVocab(vocabId: string) {
-  // Navigate to vocab edit page
   window.open(`/vocab/${vocabId}/edit`, '_blank');
 }
 
@@ -438,18 +444,14 @@ async function deleteVocab(vocabId: string) {
   // Delete the vocab itself
   await vocabRepo.deleteVocab(vocabId);
 
-  // Remove from goal's vocab array
-  const updatedVocab = props.goal.vocab.filter(id => id !== vocabId);
-  const updatedGoal = await goalRepo.update(props.goal.uid, {
-    vocab: updatedVocab
-  });
-
   // Update local state
   vocabItems.value = vocabItems.value.filter(v => v.uid !== vocabId);
-  emit('goal-updated', updatedGoal);
+  
+  // Emit events
+  const updatedVocabIds = props.vocabIds.filter(id => id !== vocabId);
+  emit('update:vocab-ids', updatedVocabIds);
+  emit('vocab-removed', vocabId);
 }
-
-const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 
 onMounted(async () => {
   await loadVocab();

@@ -177,10 +177,9 @@ async function handleSave() {
         language: formData.value.language.trim(),
         priority: formData.value.priority,
         content: formData.value.content.trim() || undefined,
-        neededVocab: [],
+        vocab: [],
+        factCards: [],
         notes: [],
-        extractedVocab: [],
-        extractedFactCards: [],
         origins: ['user-added'],
         finishedExtracting: false
       };

@@ -49,10 +49,9 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       content: immersionContent.content,
       link: immersionContent.link,
       priority: immersionContent.priority,
-      neededVocab: immersionContent.neededVocab,
+      vocab: immersionContent.vocab || [],
+      factCards: immersionContent.factCards || [],
       notes: immersionContent.notes,
-      extractedVocab: immersionContent.extractedVocab,
-      extractedFactCards: immersionContent.extractedFactCards,
       origins: immersionContent.origins,
       finishedExtracting: immersionContent.finishedExtracting ?? false
     };
@@ -81,10 +80,10 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       throw new Error('Immersion content not found');
     }
 
-    // Remove the vocab UID from the neededVocab array
+    // Remove the vocab UID from the vocab array
     const updatedImmersionContent: ImmersionContentData = {
       ...immersionContent,
-      neededVocab: immersionContent.neededVocab.filter(id => id !== vocabUid)
+      vocab: immersionContent.vocab.filter((id: string) => id !== vocabUid)
     };
 
     await this.storage.update(updatedImmersionContent);
@@ -96,10 +95,10 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       throw new Error('Immersion content not found');
     }
 
-    // Remove the vocab UID from the extractedVocab array
+    // Remove the vocab UID from the factCards array  
     const updatedImmersionContent: ImmersionContentData = {
       ...immersionContent,
-      extractedVocab: immersionContent.extractedVocab.filter(id => id !== vocabUid)
+      factCards: immersionContent.factCards.filter((id: string) => id !== vocabUid)
     };
 
     await this.storage.update(updatedImmersionContent);

@@ -56,14 +56,11 @@
 
               <!-- Vocab counts -->
               <div class="flex gap-4 text-sm text-base-content/60">
-                <span v-if="content.neededVocab.length > 0">
-                  {{ content.neededVocab.length }} needed vocab
+                <span v-if="content.vocab.length > 0">
+                  {{ content.vocab.length }} vocab
                 </span>
-                <span v-if="content.extractedVocab.length > 0">
-                  {{ content.extractedVocab.length }} extracted vocab
-                </span>
-                <span v-if="content.extractedFactCards.length > 0">
-                  {{ content.extractedFactCards.length }} facts
+                <span v-if="content.factCards.length > 0">
+                  {{ content.factCards.length }} facts
                 </span>
               </div>
             </div>

@@ -11,11 +11,10 @@ export interface ImmersionContentData {
   link?: Link
 
   priority: number;
-  neededVocab: string[]; // ids of VocabData
-  notes: string[]; // uids of notes
+  vocab: string[]; // ids of VocabData
+  factCards: string[]; // ids of FactCardData
 
-  extractedVocab: string[]; // ids of VocabData
-  extractedFactCards: string[]; // ids of FactCardData
+  notes: string[]; // uids of notes
 
   finishedExtracting: boolean;
   

@@ -39,7 +39,7 @@
     <!-- Knowledge Section -->
     <section>
       <h2 class="text-xl font-semibold mb-4">Knowledge & Vocabulary</h2>
-      <ManageVocabOfGoalWidget :goal="goal" @goal-updated="handleGoalUpdate" />
+      <ManageGoalVocab :goal="goal" @goal-updated="handleGoalUpdate" />
       <div class="mt-4">
         <InlineCheckbox
           :model-value="goal.finishedAddingKnowledge"
@@ -58,7 +58,7 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import GoalEditFormRenderer from './ui/GoalEditFormRenderer.vue';
 import ManageSubGoalsWidget from '@/features/goal-manage-its-sub-goals/ManageSubGoalsWidget.vue';
-import ManageVocabOfGoalWidget from '@/features/goal-manage-its-vocab/ManageVocabOfGoalWidget.vue';
+import ManageGoalVocab from '@/widgets/manage-goal-vocab/ManageGoalVocab.vue';
 import ManageMilestonesWidget from '@/features/goal-manage-its-milestones/ManageMilestonesWidget.vue';
 import InlineCheckbox from '@/shared/ui/InlineCheckbox.vue';
 

@@ -408,7 +408,7 @@ export class UnifiedRemoteSetService {
           await this.immersionContentRepo.updateImmersionContent({
             ...existingImmersion,
             notes: [...new Set([...existingImmersion.notes, ...noteUids])],
-            neededVocab: [...new Set([...existingImmersion.neededVocab, ...neededVocabUids])],
+            vocab: [...new Set([...existingImmersion.vocab, ...neededVocabUids])],
             origins: [...existingOrigins],
             priority: shouldIncrementPriority ? (existingImmersion.priority ?? 0) + (immersionData.priority || 1) : existingImmersion.priority
           });
@@ -428,9 +428,8 @@ export class UnifiedRemoteSetService {
             priority: immersionData.priority || 1,
             link: link,
             notes: noteUids,
-            neededVocab: neededVocabUids,
-            extractedVocab: [],
-            extractedFactCards: [],
+            vocab: neededVocabUids,
+            factCards: [],
             origins: [localSet.uid],
             finishedExtracting: false
           };
