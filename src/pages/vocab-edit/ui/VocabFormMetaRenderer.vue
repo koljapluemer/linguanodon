@@ -45,6 +45,7 @@
         @add-link="$emit('add-link', $event)"
         @update-link="(index, link) => $emit('update-link', index, link)"
         @remove-link="$emit('remove-link', $event)"
+        @update-related-vocab="$emit('update-related-vocab', $event)"
       />
     </div>
   </div>
@@ -71,6 +72,7 @@ interface VocabFormData {
     label: string;
     url: string;
   }>;
+  relatedVocab?: string[];
 }
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
@@ -95,6 +97,7 @@ defineEmits<{
   'add-translation': [translation: TranslationData];
   'update-translation': [translation: TranslationData];
   'remove-translation': [uid: string];
+  'update-related-vocab': [vocabIds: string[]];
 }>();
 
 // Persistent toggle state in localStorage (shared between add and edit forms)

@@ -43,6 +43,25 @@
       @remove-link="$emit('remove-link', $event)"
       @field-change="$emit('field-change')"
     />
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">See Also / Related Vocabulary</h3>
+      <ManageVocabList
+        :vocab-ids="formData.relatedVocab || []"
+        :language="formData.language"
+        :config="{
+          allowAdd: true,
+          allowEdit: true,
+          allowDisconnect: true,
+          allowNavigate: true,
+          allowDelete: false
+        }"
+        @update:vocab-ids="updateRelatedVocab"
+        @vocab-added="handleRelatedVocabAdded"
+        @vocab-updated="handleRelatedVocabUpdated"
+        @vocab-disconnected="handleRelatedVocabDisconnected"
+      />
+    </div>
   </div>
 </template>
 
@@ -53,6 +72,7 @@ import InlineSelect from '@/shared/ui/InlineSelect.vue';
 import InlineToggle from '@/shared/ui/InlineToggle.vue';
 import NoteList from '@/entities/notes/NoteList.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
+import ManageVocabList from '@/features/manage-vocab-list/ManageVocabList.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
@@ -68,13 +88,14 @@ interface VocabFormData {
   doNotPractice?: boolean;
   notes: NoteData[];
   links: Link[];
+  relatedVocab?: string[];
 }
 
 defineProps<{
   formData: VocabFormData;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'field-change': [];
   'add-note': [note: NoteData];
   'update-note': [note: NoteData];
@@ -82,6 +103,7 @@ defineEmits<{
   'add-link': [link: Link];
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
+  'update-related-vocab': [vocabIds: string[]];
 }>();
 
 const lengthOptions = computed(() => {
@@ -90,4 +112,22 @@ const lengthOptions = computed(() => {
     label: value
   }));
 });
+
+// Related vocabulary event handlers
+function updateRelatedVocab(vocabIds: string[]) {
+  emit('update-related-vocab', vocabIds);
+  emit('field-change');
+}
+
+function handleRelatedVocabAdded() {
+  emit('field-change');
+}
+
+function handleRelatedVocabUpdated() {
+  emit('field-change');
+}
+
+function handleRelatedVocabDisconnected() {
+  emit('field-change');
+}
 </script>

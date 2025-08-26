@@ -17,6 +17,7 @@
       @add-translation="addTranslation"
       @update-translation="updateTranslation"
       @remove-translation="removeTranslation"
+      @update-related-vocab="updateRelatedVocab"
     />
   </div>
 </template>
@@ -47,6 +48,7 @@ interface VocabFormData {
     label: string;
     url: string;
   }>;
+  relatedVocab?: string[];
 }
 
 interface VocabFormState {
@@ -67,7 +69,8 @@ function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = [], translati
     priority: vocab.priority,
     doNotPractice: vocab.doNotPractice,
     notes: notes,
-    links: vocab.links ? [...vocab.links] : []
+    links: vocab.links ? [...vocab.links] : [],
+    relatedVocab: vocab.relatedVocab ? [...vocab.relatedVocab] : []
   };
 }
 
@@ -83,7 +86,7 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     notes: formData.notes.map(note => note.uid),
     links: formData.links,
     origins: existingVocab?.origins || ['user-added'],
-    relatedVocab: existingVocab?.relatedVocab || [],
+    relatedVocab: formData.relatedVocab || [],
     notRelatedVocab: existingVocab?.notRelatedVocab || []
   };
 
@@ -128,7 +131,8 @@ const state = ref<VocabFormState>({
     priority: undefined,
     doNotPractice: undefined,
     notes: [],
-    links: []
+    links: [],
+    relatedVocab: []
   },
   loading: false,
   saving: false,
@@ -347,6 +351,11 @@ async function removeTranslation(uid: string) {
     state.value.formData.translations.splice(index, 1);
     await handleFieldChange();
   }
+}
+
+async function updateRelatedVocab(vocabIds: string[]) {
+  state.value.formData.relatedVocab = vocabIds;
+  await handleFieldChange();
 }
 
 onMounted(() => {
