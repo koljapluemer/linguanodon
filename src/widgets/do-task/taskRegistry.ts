@@ -6,6 +6,7 @@ import RenderExtractKnowledgeFromResource from "@/tasks/task-resource-extract-kn
 import TaskAddSubGoals from "@/tasks/task-goal-add-sub-goals/TaskAddSubGoals.vue";
 import TaskAddVocabToGoal from "@/tasks/task-goal-add-vocab/TaskAddVocabToGoal.vue";
 import TaskVocabTryToRemember from "@/tasks/task-vocab-try-to-remember/TaskVocabTryToRemember.vue";
+import TaskGuessWhatSentenceMeans from "@/tasks/task-guess-what-sentence-means/TaskGuessWhatSentenceMeans.vue";
 import TaskVocabReveal from "@/tasks/task-vocab-reveal/TaskVocabReveal.vue";
 import TaskVocabChooseFromOptions from "@/tasks/task-vocab-single-choice/TaskVocabChooseFromOptions.vue";
 import TaskClozeChooseFromOptions from "@/tasks/task-cloze-choice/TaskClozeChooseFromOptions.vue";
@@ -24,6 +25,7 @@ export const taskRegistry: Record<string, TaskInfo> = {
   "add-sub-goals": { component: TaskAddSubGoals, size: 'medium' },
   "add-vocab-to-goal": { component: TaskAddVocabToGoal, size: 'medium' },
   "vocab-try-to-remember": { component: TaskVocabTryToRemember, size: 'small' },
+  "guess-what-sentence-means": { component: TaskGuessWhatSentenceMeans, size: 'medium' },
   "vocab-reveal-target-to-native": { component: TaskVocabReveal, size: 'small' },
   "vocab-reveal-native-to-target": { component: TaskVocabReveal, size: 'small' },
   "vocab-choose-from-two-target-to-native": { component: TaskVocabChooseFromOptions, size: 'small' },

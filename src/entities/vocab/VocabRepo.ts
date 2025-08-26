@@ -96,6 +96,32 @@ export class VocabRepo implements VocabRepoContract {
     return pickRandom(vocab, count).map(v => this.ensureVocabFields(v));
   }
 
+  async getRandomUnseenSentenceVocab(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => {
+        // Must be sentence type
+        if (vocab.length !== 'sentence') {
+          return false;
+        }
+        
+        // Must have content and at least one translation
+        if (!vocab.content || !vocab.translations || vocab.translations.length === 0) {
+          return false;
+        }
+
+        if (!vocab.progress) {
+          console.warn('Found vocab with null/undefined progress:', vocab.uid);
+          return !vocab.doNotPractice && (!vocabBlockList || !vocabBlockList.includes(vocab.uid));
+        }
+        return isUnseen(vocab) && !vocab.doNotPractice && (!vocabBlockList || !vocabBlockList.includes(vocab.uid));
+      })
+      .toArray();
+
+    return pickRandom(vocab, count).map(v => this.ensureVocabFields(v));
+  }
+
   async getDueOrUnseenVocabFromIds(uids: string[]): Promise<VocabData[]> {
     const vocabList = await this.getVocabByUIDs(uids);
 

@@ -4,6 +4,12 @@ As a first step, I have changed the allowed [lengths](src/shared/Length.ts) to a
 
 Run linter and build and see what breaks; add all affected files to the bottom of this file with a one-sentence explanation of how vocab length is used in that context
 
+## Improvements
+
+As a first step, let's make an alternative task for new (unseen) vocab of type `sentence`. such vocab must also have content and at least one translation and honor language list and vocab block list (probably make your own [entity fn](src/entities/vocab/VocabRepoContract.ts), orienting yourself on similar functions). Should have its own UI in src/tasks, own [random gen](src/pages/queue/lesson-generator/utils), own [task generator](src/pages/queue/lesson-generator/task-generator)). It should be called guess-what-sentence means. Show the vocab's content and a lg textarea where the user can input what they think the sentence means. As soon as they have written at least 1 char in the textarea they can "Reveal" and see the translation. They can then simply click done, at which point a new progress object is created and all that, just like new vocab is usually initialized.
+
+*In turn*, *disable* [try-to-remember](docs/reference/tasks/vocab-try-to-remember.md) for vocab of type sentence (only allow for unspecified and word length)
+
 ## Context
 
 **src/entities/remote-sets/validation/vocabSchema.ts** - Uses Length as a Zod enum for validating vocabulary length field in remote dataset schemas.

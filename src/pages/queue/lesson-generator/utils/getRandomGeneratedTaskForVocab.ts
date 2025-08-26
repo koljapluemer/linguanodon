@@ -7,6 +7,7 @@ import { pickRandom } from '@/shared/arrayUtils';
 // Import all task generators
 import { generateAddPronunciation, canGenerateAddPronunciation } from '../task-generator/generateAddPronunciation';
 import { generateVocabTryToRemember, canGenerateVocabTryToRemember } from '../task-generator/generateVocabTryToRemember';
+import { generateGuessWhatSentenceMeans, canGenerateGuessWhatSentenceMeans } from '../task-generator/generateGuessWhatSentenceMeans';
 import { generateVocabRevealTargetToNative, canGenerateVocabRevealTargetToNative } from '../task-generator/generateVocabRevealTargetToNative';
 import { generateVocabRevealNativeToTarget, canGenerateVocabRevealNativeToTarget } from '../task-generator/generateVocabRevealNativeToTarget';
 import { generateVocabChoiceFromTwoTargetToNative, canGenerateVocabChoiceFromTwoTargetToNative } from '../task-generator/generateVocabChoiceFromTwoTargetToNative';
@@ -27,6 +28,10 @@ const vocabTaskGenerators: VocabTaskGenerator[] = [
   {
     canGenerate: canGenerateVocabTryToRemember,
     generate: (vocab) => generateVocabTryToRemember(vocab)
+  },
+  {
+    canGenerate: canGenerateGuessWhatSentenceMeans,
+    generate: (vocab) => generateGuessWhatSentenceMeans(vocab)
   },
   {
     canGenerate: canGenerateVocabRevealTargetToNative,

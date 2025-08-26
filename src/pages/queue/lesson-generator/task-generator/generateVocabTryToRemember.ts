@@ -14,5 +14,15 @@ export function generateVocabTryToRemember(vocab: VocabData): Task {
 }
 
 export function canGenerateVocabTryToRemember(vocab: VocabData): boolean {
-  return vocab.progress.level === -1;
+  // Must be unseen vocab
+  if (vocab.progress.level !== -1) {
+    return false;
+  }
+  
+  // Only allow for unspecified and word length (disable for sentence)
+  if (vocab.length === 'sentence') {
+    return false;
+  }
+  
+  return true;
 }

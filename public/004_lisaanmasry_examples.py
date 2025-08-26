@@ -303,7 +303,7 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_li
                 vocab_id = create_vocab(
                     language=word_lang,
                     content=form_arabic,
-                    length="single-word",
+                    length="word",
                     notes=notes,
                     links=[link_id],
                     priority=1
@@ -480,7 +480,7 @@ def scrape_sentence(driver, url):
         sentence_vocab_id = create_vocab(
             language="arz",
             content=sentence_data['sentence_arz'],
-            length="single-sentence",
+            length="sentence",
             notes=sentence_notes if sentence_notes else None,
             translations=[sentence_translation_id],
             links=[shared_link_id],
