@@ -10,14 +10,14 @@ import TaskVocabReveal from "@/tasks/task-vocab-reveal/TaskVocabReveal.vue";
 import TaskVocabChooseFromOptions from "@/tasks/task-vocab-single-choice/TaskVocabChooseFromOptions.vue";
 import TaskClozeChooseFromOptions from "@/tasks/task-cloze-choice/TaskClozeChooseFromOptions.vue";
 import TaskClozeReveal from "@/tasks/task-cloze-reveal/TaskClozeReveal.vue";
-import type { TaskName } from "@/entities/tasks/Task";
+import TaskVocabFormSentence from "@/tasks/task-vocab-form-sentence/TaskVocabFormSentence.vue";
 
 export interface TaskInfo {
   component: Component
   size: 'small' | 'medium' | 'big'
 }
 
-export const taskRegistry: Record<TaskName, TaskInfo> = {
+export const taskRegistry: Record<string, TaskInfo> = {
   "add-pronunciation": { component: RenderTaskForAddingPronunciation, size: 'big' },
   "add-translation": { component: RenderTaskForAddingTranslation, size: 'medium' },
   "extract-knowledge-from-resource": { component: RenderExtractKnowledgeFromResource, size: 'big' },
@@ -33,6 +33,7 @@ export const taskRegistry: Record<TaskName, TaskInfo> = {
   "cloze-choose-from-two": { component: TaskClozeChooseFromOptions, size: 'small' },
   "cloze-choose-from-four": { component: TaskClozeChooseFromOptions, size: 'small' },
   "cloze-reveal": { component: TaskClozeReveal, size: 'small' },
+  "vocab-form-sentence": { component: TaskVocabFormSentence, size: 'medium' },
 };
 
 export const TASK_REGISTRY_INJECTION_KEY = Symbol("taskRegistry");

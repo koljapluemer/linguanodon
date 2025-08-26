@@ -1,3 +1,4 @@
+import type { taskRegistry } from "@/widgets/do-task/taskRegistry";
 
 export interface Task {
   uid: string;
@@ -9,22 +10,6 @@ export interface Task {
   associatedResources?: string[] // uids of resourcee data
   associatedFactCards?: string[] // uids of fact card data
   associatedGoals?: string[] // uids of goal data
-} 
+}
 
-export type TaskName = |
-  'add-pronunciation' |
-  'add-translation' |
-  'extract-knowledge-from-resource' |
-  'add-sub-goals' |
-  'add-vocab-to-goal' |
-  'vocab-try-to-remember' |
-  'vocab-reveal-target-to-native' |
-  'vocab-reveal-native-to-target' |
-  'vocab-choose-from-two-target-to-native' |
-  'vocab-choose-from-two-native-to-target' |
-  'vocab-choose-from-four-target-to-native' | 
-  'vocab-choose-from-four-native-to-target' |
-  'cloze-choose-from-two' |
-  'cloze-choose-from-four' |
-  'cloze-reveal' 
-
+export type TaskName = keyof typeof taskRegistry; 
