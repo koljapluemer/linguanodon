@@ -1,13 +1,26 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { Task } from '@/entities/tasks/Task';
 import { generateVocabTryToRemember, canGenerateVocabTryToRemember } from '../task-generator/generateVocabTryToRemember';
+import { getRandomNewVocabFromRandomValidImmersionResource } from './getRandomNewVocabFromRandomValidImmersionResource';
 
 export async function getRandomVocabTryToRememberTask(
   vocabRepo: VocabRepoContract,
+  resourceRepo: ResourceRepoContract,
   languageCodes: string[]
 ): Promise<Task | null> {
   try {
-    // Get unseen vocab (level -1) which is what we need for this task
+    // 25% chance to try immersion resource first
+    if (Math.random() < 0.25) {
+      const immersionVocab = await getRandomNewVocabFromRandomValidImmersionResource(
+        resourceRepo, vocabRepo, languageCodes
+      );
+      if (immersionVocab && canGenerateVocabTryToRemember(immersionVocab)) {
+        return generateVocabTryToRemember(immersionVocab);
+      }
+    }
+
+    // Fallback to usual flow
     const vocabItems = await vocabRepo.getRandomUnseenVocabInLanguages(languageCodes, 10);
     
     if (vocabItems.length === 0) return null;

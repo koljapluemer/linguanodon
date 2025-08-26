@@ -2,8 +2,7 @@ import {
   BookOpen, 
   FileText, 
   Archive, 
-  Target,
-  Waves
+  Target
 } from 'lucide-vue-next';
 import type { Component } from 'vue';
 

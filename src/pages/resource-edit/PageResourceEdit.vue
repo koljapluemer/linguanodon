@@ -76,7 +76,7 @@ async function loadVocabItems() {
   }
 
   try {
-    vocabItems.value = await vocabRepo.getVocabByIds(resource.value.vocab);
+    vocabItems.value = await vocabRepo.getVocabByUIDs(resource.value.vocab);
   } catch (error) {
     console.error('Error loading vocab items:', error);
     vocabItems.value = [];

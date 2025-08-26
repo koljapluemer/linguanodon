@@ -55,11 +55,11 @@ export async function makeTask(
       { generator: () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes), taskName: 'extract-knowledge-from-resource' },
       { generator: () => getRandomAddSubGoalsTask(goalRepo, languageCodes), taskName: 'add-sub-goals' },
       { generator: () => getRandomAddVocabToGoalTask(goalRepo, languageCodes), taskName: 'add-vocab-to-goal' },
-      { generator: () => getRandomVocabTryToRememberTask(vocabRepo, languageCodes), taskName: 'vocab-try-to-remember' },
-      { generator: () => getRandomVocabRevealTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-reveal-target-to-native' },
-      { generator: () => getRandomVocabChoiceTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-choose-from-two-target-to-native' },
-      { generator: () => getRandomClozeChoiceTask(vocabRepo, translationRepo, languageCodes), taskName: 'cloze-choose-from-two' },
-      { generator: () => getRandomClozeRevealTask(vocabRepo, translationRepo, languageCodes), taskName: 'cloze-reveal' },
+      { generator: () => getRandomVocabTryToRememberTask(vocabRepo, resourceRepo, languageCodes), taskName: 'vocab-try-to-remember' },
+      { generator: () => getRandomVocabRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'vocab-reveal-target-to-native' },
+      { generator: () => getRandomVocabChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'vocab-choose-from-two-target-to-native' },
+      { generator: () => getRandomClozeChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'cloze-choose-from-two' },
+      { generator: () => getRandomClozeRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes), taskName: 'cloze-reveal' },
       { generator: () => getRandomVocabFormSentenceTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-form-sentence' }
     ];
     
