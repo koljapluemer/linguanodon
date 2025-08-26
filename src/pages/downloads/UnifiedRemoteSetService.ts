@@ -232,7 +232,7 @@ export class UnifiedRemoteSetService {
           const localVocab: Omit<VocabData, 'uid' | 'progress' | 'tasks'> = {
             language: vocabData.language,
             content: vocabData.content,
-            length: vocabData.length || 'not-specified',
+            length: vocabData.length || 'unspecified',
             priority: vocabData.priority || 1,
             doNotPractice: false, // Default value since remote schema doesn't have this
             notes: noteUids,

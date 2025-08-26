@@ -65,7 +65,7 @@ import type { Length } from '@/shared/Length';
 interface VocabFormData {
   language: string;
   content: string;
-  length: keyof typeof Length;
+  length: Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

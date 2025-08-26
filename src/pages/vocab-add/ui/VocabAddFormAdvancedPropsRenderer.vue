@@ -4,7 +4,7 @@
       <span class="label-text font-medium">Length</span>
     </label>
     <select v-model="formData.length" @change="$emit('field-change')" class="select select-bordered w-full">
-      <option v-for="(value, key) in Length" :key="key" :value="key">
+      <option v-for="value in (['sentence', 'word', 'unspecified'] as Length[])" :key="value" :value="value">
         {{ value }}
       </option>
     </select>
@@ -45,12 +45,12 @@ import LinksForm from '@/shared/links/LinksForm.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
-import { Length } from '@/shared/Length';
+import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
   language: string;
   content: string;
-  length: keyof typeof Length;
+  length: Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

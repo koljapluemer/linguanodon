@@ -39,7 +39,7 @@ interface VocabFormData {
   id?: string;
   language: string;
   content: string;
-  length: keyof typeof Length;
+  length: Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;
@@ -126,7 +126,7 @@ const state = ref<VocabFormState>({
   formData: {
     language: '',
     content: '',
-    length: 'not-specified',
+    length: 'unspecified',
     translations: [],
     priority: undefined,
     doNotPractice: undefined,

@@ -76,13 +76,13 @@ import ManageVocabList from '@/features/manage-vocab-list/ManageVocabList.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
-import { Length } from '@/shared/Length';
+import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
   id?: string;
   language: string;
   content: string;
-  length: keyof typeof Length;
+  length: Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;
@@ -107,8 +107,8 @@ const emit = defineEmits<{
 }>();
 
 const lengthOptions = computed(() => {
-  return Object.entries(Length).map(([key, value]) => ({
-    value: key,
+  return (['sentence', 'word', 'unspecified'] as Length[]).map(value => ({
+    value: value,
     label: value
   }));
 });

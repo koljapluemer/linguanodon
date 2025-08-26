@@ -21,7 +21,7 @@ const vocab = ref<VocabData | null>(null);
 const translations = ref<string[]>([]);
 
 const isSentence = computed(() => {
-  return vocab.value?.length === 'single-sentence' || vocab.value?.length === 'multiple-sentences';
+  return vocab.value?.length === 'sentence';
 });
 
 const loadVocab = async () => {

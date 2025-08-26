@@ -57,13 +57,13 @@ import VocabFormCoreRenderer from './VocabFormCoreRenderer.vue';
 import VocabFormAdvancedPropsRenderer from './VocabFormAdvancedPropsRenderer.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
-import { Length } from '@/shared/Length';
+import type { Length } from '@/shared/Length';
 
 interface VocabFormData {
   id?: string;
   language: string;
   content: string;
-  length: keyof typeof Length;
+  length: Length;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

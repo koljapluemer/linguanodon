@@ -8,8 +8,8 @@ import { generateClozeChoiceFromFour, canGenerateClozeChoiceFromFour } from '../
 import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
 
 async function tryGenerateFromVocab(vocab: VocabData, translationRepo: TranslationRepoContract) {
-  // Filter to only multi-word-expression or single-sentence vocab
-  if (vocab.length !== 'multi-word-expression' && vocab.length !== 'single-sentence') {
+  // Filter to only word or sentence vocab
+  if (vocab.length !== 'word' && vocab.length !== 'sentence') {
     return null;
   }
 
@@ -57,9 +57,9 @@ export async function getRandomClozeChoiceTask(
     
     if (vocabItems.length === 0) return null;
     
-    // Filter to only multi-word-expression or single-sentence vocab
+    // Filter to only word or sentence vocab
     const clozeEligible = vocabItems.filter(vocab => 
-      vocab.length === 'multi-word-expression' || vocab.length === 'single-sentence'
+      vocab.length === 'word' || vocab.length === 'sentence'
     );
     
     if (clozeEligible.length === 0) return null;

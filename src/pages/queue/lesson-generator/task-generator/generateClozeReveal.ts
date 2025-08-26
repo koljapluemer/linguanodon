@@ -18,8 +18,8 @@ export function canGenerateClozeReveal(vocab: VocabData, translations: Translati
   // Level 2 or higher
   if (vocab.progress.level < 2) return false;
   
-  // Must be multi-word-expression or single-sentence
-  if (vocab.length !== 'multi-word-expression' && vocab.length !== 'single-sentence') return false;
+  // Must be word or sentence
+  if (vocab.length !== 'word' && vocab.length !== 'sentence') return false;
   
   // Must have content and translations
   return translations.length > 0 && !!vocab.content;

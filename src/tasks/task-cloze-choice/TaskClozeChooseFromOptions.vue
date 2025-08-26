@@ -49,7 +49,7 @@ const vocabUid = computed(() => {
 
 const isReverse = computed(() => {
   // Sentence/phrase cloze only goes content→translation
-  if (vocab.value?.length === 'single-sentence' || vocab.value?.length === 'multi-word-expression') {
+  if (vocab.value?.length === 'sentence' || vocab.value?.length === 'word') {
     return false;
   }
   // Vocab-based cloze can go both ways

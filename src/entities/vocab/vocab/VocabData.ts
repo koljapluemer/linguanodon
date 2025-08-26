@@ -7,7 +7,7 @@ export interface VocabData {
   uid: string;
   language: string;
   content?: string;
-  length: keyof typeof Length;
+  length: Length;
   priority?: number;
   doNotPractice?: boolean;
   notes: string[]; // ids of NoteData repo

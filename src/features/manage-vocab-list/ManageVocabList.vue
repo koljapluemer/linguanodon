@@ -385,7 +385,7 @@ async function createNewVocab() {
   vocab = await vocabRepo.saveVocab(toRaw({
     language: props.language,
     content: creationMode.value === 'translation-only' ? undefined : newVocabContent.value.trim(),
-    length: 'not-specified',
+    length: 'unspecified',
     translations: translationIds,
     notes: [],
     links: [],
