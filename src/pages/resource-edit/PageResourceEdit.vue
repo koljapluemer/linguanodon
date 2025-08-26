@@ -21,7 +21,7 @@
       <h2 class="text-xl font-semibold mb-4">Vocabulary</h2>
 
       <!-- Vocab Mastery Progress -->
-      <div v-if="resource.vocab.length > 0" class="mb-6">
+      <div v-if="resource.vocab.length > 0 && resource.isImmersionContent" class="mb-6">
         <div class="flex justify-between items-center mb-2">
           <span class="text-sm font-medium">Average Vocab Mastery</span>
           <span class="text-sm font-bold">{{ avgVocabMastery }}%</span>
