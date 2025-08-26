@@ -58,6 +58,24 @@ const handleDone = async () => {
   }
 };
 
+const handleSkip = async () => {
+  if (!vocab.value) return;
+  
+  try {
+    // Mark vocab as do not practice
+    const updatedVocab = {
+      ...vocab.value,
+      doNotPractice: true
+    };
+    await vocabRepo.updateVocab(JSON.parse(JSON.stringify(updatedVocab)));
+    
+    emit('finished');
+  } catch (error) {
+    console.error('Error updating vocab:', error);
+    emit('finished');
+  }
+};
+
 onMounted(loadVocab);
 </script>
 
@@ -71,7 +89,8 @@ onMounted(loadVocab);
       </div>
     </div>
     
-    <div class="flex justify-center">
+    <div class="flex justify-center gap-4">
+      <button @click="handleSkip" class="btn btn-ghost">Do not learn this</button>
       <button @click="handleDone" class="btn btn-primary">Done</button>
     </div>
   </div>
