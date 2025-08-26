@@ -4,10 +4,8 @@
     
     <div class="flex flex-col space-y-1">
       <label class="text-sm font-medium">Language</label>
-      <LanguageSelect
+      <LanguageDropdown
         v-model="selectedLanguage"
-        class="select select-bordered w-full"
-        required
         @update:modelValue="saveGoal"
       />
     </div>
@@ -37,7 +35,7 @@
 import { ref, inject, watch } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import LanguageSelect from '@/entities/languages/LanguageSelect.vue';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 
 const props = defineProps<{
   goal: GoalData;

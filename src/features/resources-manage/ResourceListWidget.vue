@@ -94,7 +94,8 @@ import { ref, onMounted, inject } from 'vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { LanguageData } from '@/entities/languages/LanguageData';
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 if (!resourceRepo) {

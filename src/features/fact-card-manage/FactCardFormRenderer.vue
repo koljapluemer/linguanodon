@@ -114,7 +114,7 @@ import { Check } from 'lucide-vue-next';
 import NoteList from '@/entities/notes/NoteList.vue';
 import type { FactCardFormData } from './types';
 import type { NoteData } from '@/entities/notes/NoteData';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 
 defineProps<{
   formData: FactCardFormData;

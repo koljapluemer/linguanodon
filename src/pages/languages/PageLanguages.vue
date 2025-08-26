@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, inject } from 'vue';
 import { Languages, X } from 'lucide-vue-next';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { LanguageData } from '@/entities/languages/LanguageData';
 import isoLangs from '@/entities/languages/isoLangs.json';
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;

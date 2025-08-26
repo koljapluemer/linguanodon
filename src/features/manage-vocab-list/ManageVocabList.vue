@@ -157,7 +157,8 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { LanguageData } from '@/entities/languages/LanguageData';
 
 interface VocabListConfig {
   allowAdd: boolean;

@@ -120,7 +120,8 @@ import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoCon
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { LanguageData } from '@/entities/languages/LanguageData';
 
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 if (!factCardRepo) {

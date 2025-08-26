@@ -4,21 +4,11 @@
       <label class="label">
         <span class="label-text font-medium">Language *</span>
       </label>
-      <select
+      <LanguageDropdown
         v-model="formData.language"
-        @change="$emit('field-change')"
-        class="select select-bordered w-full"
-        required
-      >
-        <option value="">Select target language</option>
-        <option
-          v-for="option in languageOptions"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ option.label }}
-        </option>
-      </select>
+        @update:model-value="$emit('field-change')"
+        placeholder="Select target language"
+      />
     </div>
 
     <!-- Content -->
@@ -82,12 +72,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted, nextTick } from 'vue';
+import { ref, nextTick } from 'vue';
 import { X } from 'lucide-vue-next';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
-import { formatLanguageDisplay } from '@/entities/languages';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 
 interface VocabFormData {
   language: string;
@@ -109,24 +98,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   'field-change': [];
 }>();
-
-const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
-const availableLanguages = ref<LanguageData[]>([]);
-
-onMounted(async () => {
-  try {
-    availableLanguages.value = await languageRepo.getActiveTargetLanguages();
-  } catch (error) {
-    console.error('Failed to load languages:', error);
-  }
-});
-
-const languageOptions = computed(() => {
-  return availableLanguages.value.map(language => ({
-    value: language.code,
-    label: language.emoji ? `${language.emoji} ${formatLanguageDisplay(language, false)}` : formatLanguageDisplay(language, false)
-  }));
-});
 
 // Translation management
 

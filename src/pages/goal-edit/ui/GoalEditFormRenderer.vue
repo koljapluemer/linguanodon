@@ -46,8 +46,9 @@
 import { ref, computed, inject, onMounted } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
-import { formatLanguageDisplay } from '@/entities/languages';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { LanguageData } from '@/entities/languages/LanguageData';
+import { renderLanguage } from '@/entities/languages/renderLanguage';
 import InlineInput from '@/shared/ui/InlineInput.vue';
 import InlineSelect from '@/shared/ui/InlineSelect.vue';
 import InlineCheckbox from '@/shared/ui/InlineCheckbox.vue';
@@ -74,7 +75,7 @@ onMounted(async () => {
 const languageOptions = computed(() => {
   return availableLanguages.value.map(language => ({
     value: language.code,
-    label: language.emoji ? `${language.emoji} ${formatLanguageDisplay(language, false)}` : formatLanguageDisplay(language, false)
+    label: renderLanguage(language)
   }));
 });
 

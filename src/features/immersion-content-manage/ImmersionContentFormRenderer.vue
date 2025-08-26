@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 import LinkEdit from '@/shared/links/LinkEdit.vue';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';

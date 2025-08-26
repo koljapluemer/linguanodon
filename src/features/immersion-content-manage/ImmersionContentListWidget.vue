@@ -94,7 +94,8 @@ import { ref, onMounted, inject } from 'vue';
 import type { ImmersionContentRepoContract } from '@/entities/immersion-content/ImmersionContentRepoContract';
 import type { ImmersionContentData } from '@/entities/immersion-content/ImmersionContentData';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { LanguageData } from '@/entities/languages/LanguageData';
 
 const immersionContentRepo = inject<ImmersionContentRepoContract>('immersionContentRepo');
 if (!immersionContentRepo) {

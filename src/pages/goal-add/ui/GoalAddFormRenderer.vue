@@ -4,21 +4,10 @@
       <label class="label">
         <span class="label-text font-medium">Language *</span>
       </label>
-      <select
+      <LanguageDropdown
         v-model="formData.language"
-        class="select select-bordered w-full"
-        required
-        @change="$emit('field-change')"
-      >
-        <option value="" disabled>Select target language</option>
-        <option
-          v-for="language in availableLanguages"
-          :key="language.code"
-          :value="language.code"
-        >
-          {{ language.emoji ? `${language.emoji} ` : '' }}{{ formatLanguageDisplay(language, false) }}
-        </option>
-      </select>
+        @update:model-value="$emit('field-change')"
+      />
     </div>
 
     <div class="form-control">
@@ -43,9 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, inject } from 'vue';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
-import { formatLanguageDisplay } from '@/entities/languages';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 
 interface GoalFormData {
   language: string;
@@ -61,14 +48,4 @@ defineEmits<{
   'field-change': [];
 }>();
 
-const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
-const availableLanguages = ref<LanguageData[]>([]);
-
-onMounted(async () => {
-  try {
-    availableLanguages.value = await languageRepo.getActiveTargetLanguages();
-  } catch (error) {
-    console.error('Failed to load languages:', error);
-  }
-});
 </script>

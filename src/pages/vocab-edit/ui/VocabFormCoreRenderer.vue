@@ -1,12 +1,12 @@
 <template>
   <div class="divide-y divide-gray-200 dark:divide-gray-700">
-    <InlineSelect
+    <LanguageDropdown
       v-model="formData.language"
       label="Language"
       placeholder="Select target language"
       required
-      :options="languageOptions"
-      @update:modelValue="$emit('field-change')"
+      inline
+      @update:model-value="$emit('field-change')"
     />
 
     <InlineInput
@@ -132,14 +132,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref } from 'vue';
 import { Plus, Edit, X, Check } from 'lucide-vue-next';
 import InlineInput from '@/shared/ui/InlineInput.vue';
-import InlineSelect from '@/shared/ui/InlineSelect.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
-import { formatLanguageDisplay } from '@/entities/languages';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 import { Length } from '@/shared/Length';
 
 interface VocabFormData {
@@ -167,24 +165,6 @@ const emit = defineEmits<{
   'update-translation': [translation: TranslationData];
   'remove-translation': [uid: string];
 }>();
-
-const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
-const availableLanguages = ref<LanguageData[]>([]);
-
-onMounted(async () => {
-  try {
-    availableLanguages.value = await languageRepo.getActiveTargetLanguages();
-  } catch (error) {
-    console.error('Failed to load languages:', error);
-  }
-});
-
-const languageOptions = computed(() => {
-  return availableLanguages.value.map(language => ({
-    value: language.code,
-    label: language.emoji ? `${language.emoji} ${formatLanguageDisplay(language, false)}` : formatLanguageDisplay(language, false)
-  }));
-});
 
 // Translation management state
 const editingIndex = ref<number | null>(null);

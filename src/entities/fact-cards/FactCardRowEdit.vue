@@ -9,9 +9,6 @@
             <label class="text-sm font-medium">Language *</label>
             <LanguageDropdown
               v-model="localFactCard.language"
-              placeholder="Select target language"
-              required
-              size="sm"
               :default-language="defaultLanguage"
             />
           </div>
@@ -93,7 +90,7 @@
 import { ref, computed, watch } from 'vue';
 import type { FactCardData } from './FactCardData';
 import { createEmptyCard } from 'ts-fsrs';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 
 const props = defineProps<{
   factCard: Omit<FactCardData, 'uid' | 'progress'> | FactCardData;
@@ -145,5 +142,5 @@ function handleSave() {
   };
 
   emit('save', factCardData);
-}
+};
 </script>

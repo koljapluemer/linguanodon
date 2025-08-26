@@ -1,22 +1,33 @@
-import { LanguageStorage } from './LanguageStorage';
+import Dexie, { type Table } from 'dexie';
 import type { LanguageRepoContract } from './LanguageRepoContract';
 import type { LanguageData } from './LanguageData';
 import isoLangs from './isoLangs.json';
 
+class LanguageDatabase extends Dexie {
+  languages!: Table<LanguageData>;
+
+  constructor() {
+    super('LanguageStorage');
+    this.version(1).stores({
+      languages: 'code, name, isActive'
+    });
+  }
+}
+
 export class LanguageRepo implements LanguageRepoContract {
-  private storage = new LanguageStorage();
+  private db = new LanguageDatabase();
 
   async getAll(): Promise<LanguageData[]> {
-    return await this.storage.getAll();
+    return await this.db.languages.toArray();
   }
 
   async getActiveTargetLanguages(): Promise<LanguageData[]> {
-    const all = await this.storage.getAll();
+    const all = await this.db.languages.toArray();
     return all.filter(lang => lang.isActive);
   }
 
   async getByCode(code: string): Promise<LanguageData | undefined> {
-    return await this.storage.getById(code);
+    return await this.db.languages.get(code);
   }
 
   async add(language: LanguageData): Promise<void> {
@@ -29,15 +40,15 @@ export class LanguageRepo implements LanguageRepoContract {
       emoji: isoLang?.emoji || language.emoji
     };
 
-    await this.storage.add(languageWithEmoji);
+    await this.db.languages.put(languageWithEmoji);
   }
 
   async update(language: LanguageData): Promise<void> {
-    await this.storage.update(language);
+    await this.db.languages.put(language);
   }
 
   async delete(code: string): Promise<void> {
-    await this.storage.deleteLanguage(code);
+    await this.db.languages.delete(code);
   }
 
   async setActive(code: string, isActive: boolean): Promise<void> {

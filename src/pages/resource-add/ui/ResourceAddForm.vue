@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue';
-import LanguageDropdown from '@/shared/ui/LanguageDropdown.vue';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';

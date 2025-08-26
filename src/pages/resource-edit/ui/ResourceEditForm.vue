@@ -3,7 +3,7 @@
     <InlineInput :model-value="resource.title" label="Title" placeholder="Resource title"
       @update:model-value="updateField('title', $event)" />
 
-    <InlineSelect :model-value="resource.language" label="Language" :options="languageOptions"
+    <LanguageDropdown :model-value="resource.language" label="Language" inline
       @update:model-value="updateField('language', $event)" />
 
     <InlineInput :model-value="resource.priority" label="Priority" type="number" placeholder="0"
@@ -25,16 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted, toRaw } from 'vue';
+import { ref, inject, onMounted, toRaw } from 'vue';
 import InlineInput from '@/shared/ui/InlineInput.vue';
-import InlineSelect from '@/shared/ui/InlineSelect.vue';
 import InlineCheckbox from '@/shared/ui/InlineCheckbox.vue';
 import InlineTextarea from '@/shared/ui/InlineTextarea.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
 import NoteList from '@/entities/notes/NoteList.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
@@ -48,15 +47,9 @@ const emit = defineEmits<{
 }>();
 
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
-const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 
-const languages = ref<LanguageData[]>([]);
 const notes = ref<NoteData[]>([]);
-
-const languageOptions = computed(() =>
-  languages.value.map(lang => ({ value: lang.code, label: lang.name }))
-);
 
 async function updateField(field: keyof ResourceData, value: string | number | boolean | undefined) {
   const updatedResource = toRaw({
@@ -119,7 +112,6 @@ async function loadNotes() {
 }
 
 onMounted(async () => {
-  languages.value = await languageRepo.getAll();
   await loadNotes();
 });
 </script>

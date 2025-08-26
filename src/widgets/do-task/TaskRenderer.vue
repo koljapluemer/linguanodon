@@ -10,7 +10,8 @@
 import { taskRegistry } from './taskRegistry';
 import type { Task } from '@/entities/tasks/Task';
 import { inject, onMounted, ref } from 'vue';
-import type { LanguageRepoContract, LanguageData } from '@/entities/languages';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { LanguageData } from '@/entities/languages/LanguageData';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
 import TaskPrompt from './ui/TaskPrompt.vue';
 
