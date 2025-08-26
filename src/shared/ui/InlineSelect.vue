@@ -12,10 +12,10 @@
         </span>
         <button
           @click="startEditing"
-          class="ml-2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          class="ml-2 btn btn-ghost"
           :aria-label="`Edit ${label}`"
         >
-          <Edit2 class="w-4 h-4" />
+          <Edit class="w-4 h-4" />
         </button>
       </div>
       
@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { ref, computed, nextTick } from 'vue';
-import { Edit2, Check, X } from 'lucide-vue-next';
+import { Edit, Check, X } from 'lucide-vue-next';
 
 interface Props {
   modelValue: string | undefined;

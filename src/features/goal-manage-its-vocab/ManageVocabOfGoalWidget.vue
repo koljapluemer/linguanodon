@@ -12,7 +12,8 @@
             <div class="flex-1 pr-4">
               <InlineInput v-if="vocab.content" :model-value="vocab.content" label="Content"
                 placeholder="Enter vocabulary content..." @update:model-value="updateVocabContent(vocab, $event)" />
-              <button v-else @click="startContentEdit(vocab)" class="btn btn-outline w-full">
+              <button v-else @click="startContentEdit(vocab)" class="btn btn-outline">
+                <Plus class="w-4 h-4 mr-1" />
                 Add meaning in {{ getLanguageName(vocab.language) }}
               </button>
             </div>
