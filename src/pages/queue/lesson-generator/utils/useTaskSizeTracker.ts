@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { TaskName } from '@/entities/tasks/Task';
 import { taskRegistry } from '@/widgets/do-task/taskRegistry';
-import { pickRandomFromSortedList } from '@/shared/pickRandomFromSortedList';
+import { pickRandomFromSortedList } from '@/shared/arrayUtils';
 
 type TaskSize = 'small' | 'medium' | 'big';
 

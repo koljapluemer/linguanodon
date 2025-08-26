@@ -18,9 +18,11 @@ import { getRandomClozeRevealTask } from './utils/getRandomClozeRevealTask';
 import { getRandomAddTranslationTask } from './utils/getRandomAddTranslationTask';
 import { getRandomVocabFormSentenceTask } from './utils/getRandomVocabFormSentenceTask';
 import { useTaskSizeTracker } from './utils/useTaskSizeTracker';
-import { usePronunciationTaskTracker } from './utils/usePronunciationTaskTracker';
+import { useTaskTypeTracker } from './utils/useTaskTypeTracker';
 import { useNewVocabTracker } from './utils/useNewVocabTracker';
 import { chooseTaskBasedOnDesiredTaskSize } from './utils/chooseTaskBasedOnDesiredTaskSize';
+import { chooseRareTask } from './utils/chooseRareTask';
+import { pickWeightedRandom } from '@/shared/arrayUtils';
 
 type TaskGenerator = () => Promise<Task | null>;
 
@@ -44,7 +46,7 @@ export async function makeTask(
     
     const languageCodes = activeLanguages.map(lang => lang.code);
     const { trackTask } = useTaskSizeTracker();
-    const { canGeneratePronunciationTask, trackTask: trackPronunciationTask } = usePronunciationTaskTracker();
+    const { canGeneratePronunciationTask, trackTask: trackTaskType } = useTaskTypeTracker();
     const { canGenerateNewVocabTask, trackTask: trackNewVocabTask, isNewVocabTask } = useNewVocabTracker();
     
     // Define all available task generators with their task names
@@ -75,18 +77,31 @@ export async function makeTask(
       allGenerators = allGenerators.filter(g => !isNewVocabTask(g.taskName));
     }
     
-    // Choose task based on desired size with fallback
-    const result = await chooseTaskBasedOnDesiredTaskSize(allGenerators);
+    // Choose task selection method: 2/3 weighted by size, 1/3 rare task picker
+    const selectionMethods = ['weighted-size', 'rare-task'];
+    const selectionWeights = [2, 1];
+    const selectedMethod = pickWeightedRandom(selectionMethods, selectionWeights);
+    
+    let result: { task: Task; taskName: TaskName; isPreferred?: boolean } | null = null;
+    
+    if (selectedMethod === 'weighted-size') {
+      result = await chooseTaskBasedOnDesiredTaskSize(allGenerators);
+    } else {
+      const rareResult = await chooseRareTask(allGenerators);
+      if (rareResult) {
+        result = { ...rareResult, isPreferred: false };
+      }
+    }
     
     if (result) {
       const { task, taskName, isPreferred } = result;
-      const logMessage = isPreferred 
-        ? `[TaskGenerator] Generated preferred task: ${task.taskType}`
-        : `[TaskGenerator] Generated fallback task: ${task.taskType}`;
+      const methodUsed = selectedMethod === 'weighted-size' ? 'size-weighted' : 'rare-task';
+      const preferenceLabel = isPreferred ? 'preferred' : 'fallback';
+      const logMessage = `[TaskGenerator] Generated ${methodUsed} ${preferenceLabel} task: ${task.taskType}`;
       
       console.log(logMessage);
       trackTask(taskName);
-      trackPronunciationTask(taskName);
+      trackTaskType(taskName);
       trackNewVocabTask(taskName);
       return task;
     }
