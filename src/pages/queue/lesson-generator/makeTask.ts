@@ -19,6 +19,7 @@ import { getRandomAddTranslationTask } from './utils/getRandomAddTranslationTask
 import { getRandomVocabFormSentenceTask } from './utils/getRandomVocabFormSentenceTask';
 import { useTaskSizeTracker } from './utils/useTaskSizeTracker';
 import { usePronunciationTaskTracker } from './utils/usePronunciationTaskTracker';
+import { useNewVocabTracker } from './utils/useNewVocabTracker';
 
 type TaskGenerator = () => Promise<Task | null>;
 
@@ -43,6 +44,7 @@ export async function makeTask(
     const languageCodes = activeLanguages.map(lang => lang.code);
     const { getPreferredTaskSize, getTasksOfSize, trackTask } = useTaskSizeTracker();
     const { canGeneratePronunciationTask, trackTask: trackPronunciationTask } = usePronunciationTaskTracker();
+    const { canGenerateNewVocabTask, trackTask: trackNewVocabTask, isNewVocabTask } = useNewVocabTracker();
     
     // Define all available task generators with their task names
     const baseGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
@@ -59,10 +61,18 @@ export async function makeTask(
       { generator: () => getRandomVocabFormSentenceTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-form-sentence' }
     ];
     
+    // Filter out tasks based on limits
+    let allGenerators = baseGenerators;
+    
     // Filter out add-pronunciation if it's been picked too many times recently
-    const allGenerators = canGeneratePronunciationTask() 
-      ? baseGenerators 
-      : baseGenerators.filter(g => g.taskName !== 'add-pronunciation');
+    if (!canGeneratePronunciationTask()) {
+      allGenerators = allGenerators.filter(g => g.taskName !== 'add-pronunciation');
+    }
+    
+    // Filter out new vocab tasks if limits exceeded
+    if (!canGenerateNewVocabTask()) {
+      allGenerators = allGenerators.filter(g => !isNewVocabTask(g.taskName));
+    }
     
     // Get preferred task size based on recent distribution
     const preferredSize = getPreferredTaskSize();
@@ -84,6 +94,7 @@ export async function makeTask(
             console.log(`[TaskGenerator] Generated preferred task: ${task.taskType} (${preferredSize})`);
             trackTask(taskName);
             trackPronunciationTask(taskName);
+            trackNewVocabTask(taskName);
             return task;
           }
         } catch (error) {
@@ -103,6 +114,7 @@ export async function makeTask(
           console.log(`[TaskGenerator] Generated fallback task: ${task.taskType}`);
           trackTask(taskName);
           trackPronunciationTask(taskName);
+          trackNewVocabTask(taskName);
           return task;
         }
       } catch (error) {
