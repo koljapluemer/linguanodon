@@ -20,6 +20,7 @@ import { getRandomVocabFormSentenceTask } from './utils/getRandomVocabFormSenten
 import { useTaskSizeTracker } from './utils/useTaskSizeTracker';
 import { usePronunciationTaskTracker } from './utils/usePronunciationTaskTracker';
 import { useNewVocabTracker } from './utils/useNewVocabTracker';
+import { chooseTaskBasedOnDesiredTaskSize } from './utils/chooseTaskBasedOnDesiredTaskSize';
 
 type TaskGenerator = () => Promise<Task | null>;
 
@@ -42,7 +43,7 @@ export async function makeTask(
     }
     
     const languageCodes = activeLanguages.map(lang => lang.code);
-    const { getPreferredTaskSize, getTasksOfSize, trackTask } = useTaskSizeTracker();
+    const { trackTask } = useTaskSizeTracker();
     const { canGeneratePronunciationTask, trackTask: trackPronunciationTask } = usePronunciationTaskTracker();
     const { canGenerateNewVocabTask, trackTask: trackNewVocabTask, isNewVocabTask } = useNewVocabTracker();
     
@@ -74,53 +75,20 @@ export async function makeTask(
       allGenerators = allGenerators.filter(g => !isNewVocabTask(g.taskName));
     }
     
-    // Get preferred task size based on recent distribution
-    const preferredSize = getPreferredTaskSize();
-    const preferredTaskNames = getTasksOfSize(preferredSize);
+    // Choose task based on desired size with fallback
+    const result = await chooseTaskBasedOnDesiredTaskSize(allGenerators);
     
-    // Filter generators for preferred size
-    const preferredGenerators = allGenerators.filter(g => 
-      preferredTaskNames.includes(g.taskName)
-    );
-    
-    // Try preferred size generators first
-    if (preferredGenerators.length > 0) {
-      const shuffledPreferred = [...preferredGenerators].sort(() => Math.random() - 0.5);
+    if (result) {
+      const { task, taskName, isPreferred } = result;
+      const logMessage = isPreferred 
+        ? `[TaskGenerator] Generated preferred task: ${task.taskType}`
+        : `[TaskGenerator] Generated fallback task: ${task.taskType}`;
       
-      for (const { generator, taskName } of shuffledPreferred) {
-        try {
-          const task = await generator();
-          if (task) {
-            console.log(`[TaskGenerator] Generated preferred task: ${task.taskType} (${preferredSize})`);
-            trackTask(taskName);
-            trackPronunciationTask(taskName);
-            trackNewVocabTask(taskName);
-            return task;
-          }
-        } catch (error) {
-          console.error(`[TaskGenerator] Error with preferred task generator:`, error);
-          // Continue to next generator
-        }
-      }
-    }
-    
-    // Fallback: try all generators in random order
-    const shuffledGenerators = [...allGenerators].sort(() => Math.random() - 0.5);
-    
-    for (const { generator, taskName } of shuffledGenerators) {
-      try {
-        const task = await generator();
-        if (task) {
-          console.log(`[TaskGenerator] Generated fallback task: ${task.taskType}`);
-          trackTask(taskName);
-          trackPronunciationTask(taskName);
-          trackNewVocabTask(taskName);
-          return task;
-        }
-      } catch (error) {
-        console.error(`[TaskGenerator] Error with task generator:`, error);
-        // Continue to next generator
-      }
+      console.log(logMessage);
+      trackTask(taskName);
+      trackPronunciationTask(taskName);
+      trackNewVocabTask(taskName);
+      return task;
     }
     
     // All generators tried and no task generated
