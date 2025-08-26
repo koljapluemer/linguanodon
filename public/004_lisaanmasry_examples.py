@@ -12,7 +12,7 @@ import os
 from pathlib import Path
 
 # Configuration
-MAX_SENTENCES = 3
+MAX_SENTENCES = 10
 SLEEP_TIME = 1  # Sleep time between requests in seconds
 WORD_CLICK_WAIT = 0.3  # Wait time after clicking a word
 

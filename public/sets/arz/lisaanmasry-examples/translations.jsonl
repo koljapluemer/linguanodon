@@ -1,29 +1,79 @@
-{"id": "1", "content": "this gold is fake"}
-{"id": "2", "content": "gold", "notes": ["4"]}
-{"id": "3", "content": "this", "notes": ["11", "12", "106", "107"]}
-{"id": "4", "content": "these", "notes": ["13", "105"]}
-{"id": "5", "content": "that", "notes": ["14", "15", "76", "77", "103", "104"]}
-{"id": "6", "content": "fake", "notes": ["18"]}
-{"id": "7", "content": "Shaimaa has a lot of dogs"}
-{"id": "8", "content": "have", "notes": ["22", "23", "24", "25"]}
-{"id": "9", "content": "her", "notes": ["30", "31"]}
-{"id": "10", "content": "its", "notes": ["32", "33"]}
-{"id": "11", "content": "dog", "notes": ["38"]}
-{"id": "12", "content": "many", "notes": ["45"]}
-{"id": "13", "content": "numerous", "notes": ["46"]}
-{"id": "14", "content": "(a) lot (of)", "notes": ["47"]}
-{"id": "15", "content": "lots (of)", "notes": ["48"]}
-{"id": "16", "content": "are you(m) satisfied with what you are doing?"}
-{"id": "17", "content": "you", "notes": ["57", "58"]}
-{"id": "18", "content": "content", "notes": ["65"]}
-{"id": "19", "content": "satisfied", "notes": ["66"]}
-{"id": "20", "content": "about", "notes": ["69", "70"]}
-{"id": "21", "content": "concerning", "notes": ["71"]}
-{"id": "22", "content": "with", "notes": ["72", "73"]}
-{"id": "23", "content": "which", "notes": ["78", "79"]}
-{"id": "24", "content": "whatever", "notes": ["80"]}
-{"id": "25", "content": "what", "notes": ["81"]}
-{"id": "26", "content": "(the one) that", "notes": ["82"]}
-{"id": "27", "content": "do", "notes": ["87", "88"]}
-{"id": "28", "content": "it", "notes": ["91", "92"]}
-{"id": "29", "content": "those", "notes": ["108"]}
+{"id": "1", "content": "I went to the bank and it was closed"}
+{"id": "2", "content": "go (to)", "notes": ["10", "11", "265", "266"]}
+{"id": "3", "content": "bank", "notes": ["16"]}
+{"id": "4", "content": "and", "notes": ["19", "20", "116", "117"]}
+{"id": "5", "content": "be", "notes": ["25"]}
+{"id": "6", "content": "exist", "notes": ["26"]}
+{"id": "7", "content": "was", "notes": ["27"]}
+{"id": "8", "content": "will", "notes": ["28"]}
+{"id": "9", "content": "have", "notes": ["29", "30"]}
+{"id": "10", "content": "closed", "notes": ["39"]}
+{"id": "11", "content": "shut", "notes": ["40"]}
+{"id": "12", "content": "he behaves as if he has not done anything wrong"}
+{"id": "13", "content": "act", "notes": ["46", "47", "309", "310"]}
+{"id": "14", "content": "as if", "notes": ["52", "315"]}
+{"id": "15", "content": "he", "notes": ["55", "86", "318"]}
+{"id": "16", "content": "not", "notes": ["58", "69", "321", "332"]}
+{"id": "17", "content": "is not", "notes": ["59", "70", "322", "333"]}
+{"id": "18", "content": "will not", "notes": ["60", "71", "323", "334"]}
+{"id": "19", "content": "do", "notes": ["65", "66", "328", "329"]}
+{"id": "20", "content": "anything", "notes": ["74", "77", "337", "340"]}
+{"id": "21", "content": "wrong", "notes": ["80", "81", "343", "344"]}
+{"id": "22", "content": "false", "notes": ["82", "345"]}
+{"id": "23", "content": "he asked me to move in and live with him in his flat"}
+{"id": "24", "content": "ask (for)", "notes": ["93"]}
+{"id": "25", "content": "demand", "notes": ["94"]}
+{"id": "26", "content": "order", "notes": ["95", "96"]}
+{"id": "27", "content": "that", "notes": ["99", "100"]}
+{"id": "28", "content": "I", "notes": ["103", "196", "350"]}
+{"id": "29", "content": "move in (to)", "notes": ["110", "111"]}
+{"id": "30", "content": "(and) then", "notes": ["114"]}
+{"id": "31", "content": "and then", "notes": ["115"]}
+{"id": "32", "content": "live", "notes": ["124", "125"]}
+{"id": "33", "content": "with", "notes": ["128", "129", "269", "270", "363", "364"]}
+{"id": "34", "content": "him", "notes": ["132", "273"]}
+{"id": "35", "content": "in", "notes": ["135", "188"]}
+{"id": "36", "content": "apartment", "notes": ["140"]}
+{"id": "37", "content": "flat", "notes": ["141", "142"]}
+{"id": "38", "content": "his", "notes": ["145"]}
+{"id": "39", "content": "get ready to leave"}
+{"id": "40", "content": "(get) ready", "notes": ["154"]}
+{"id": "41", "content": "in order to", "notes": ["159"]}
+{"id": "42", "content": "so that", "notes": ["160"]}
+{"id": "43", "content": "to", "notes": ["161", "162", "209", "210", "250", "251"]}
+{"id": "44", "content": "move", "notes": ["171", "172"]}
+{"id": "45", "content": "dissolve the powder in the water"}
+{"id": "46", "content": "dissolve", "notes": ["182"]}
+{"id": "47", "content": "powder", "notes": ["185"]}
+{"id": "48", "content": "water", "notes": ["191"]}
+{"id": "49", "content": "I received a complaint about you(m) today"}
+{"id": "50", "content": "receive", "notes": ["203", "204"]}
+{"id": "51", "content": "get", "notes": ["205", "206"]}
+{"id": "52", "content": "me", "notes": ["215", "256"]}
+{"id": "53", "content": "complaint", "notes": ["220"]}
+{"id": "54", "content": "accusation", "notes": ["221"]}
+{"id": "55", "content": "because of", "notes": ["224"]}
+{"id": "56", "content": "by", "notes": ["225", "226"]}
+{"id": "57", "content": "through", "notes": ["227", "228"]}
+{"id": "58", "content": "you", "notes": ["235", "236", "371", "372"]}
+{"id": "59", "content": "today", "notes": ["239"]}
+{"id": "60", "content": "He nagged me to go with him"}
+{"id": "61", "content": "nag", "notes": ["245"]}
+{"id": "62", "content": "pester", "notes": ["246"]}
+{"id": "63", "content": "whine", "notes": ["247"]}
+{"id": "64", "content": "did the noon prayers pass, or not yet"}
+{"id": "65", "content": "prayers", "notes": ["277", "278", "281", "282"]}
+{"id": "66", "content": "go past", "notes": ["289"]}
+{"id": "67", "content": "pass by", "notes": ["290"]}
+{"id": "68", "content": "else", "notes": ["293"]}
+{"id": "69", "content": "otherwise", "notes": ["294", "295"]}
+{"id": "70", "content": "or", "notes": ["296", "297"]}
+{"id": "71", "content": "not yet", "notes": ["302"]}
+{"id": "72", "content": "yet", "notes": ["303"]}
+{"id": "73", "content": "I always have a different opinion to yours"}
+{"id": "74", "content": "always", "notes": ["353"]}
+{"id": "75", "content": "differ", "notes": ["360"]}
+{"id": "76", "content": "about", "notes": ["375", "376"]}
+{"id": "77", "content": "on", "notes": ["377", "378"]}
+{"id": "78", "content": "opinion", "notes": ["383"]}
+{"id": "79", "content": "my", "notes": ["388", "389"]}
