@@ -81,8 +81,8 @@ const handleTaskCompletion = async () => {
       (props.task.taskType === 'vocab-form-sentence' && vocabItems.value.length <= 2)) {
     const vocabUids = props.task.associatedVocab || [];
     if (vocabUids.length > 0) {
-      // Set due date to 5 minutes in the future
-      const fiveMinutesFromNow = new Date(Date.now() + 5 * 60 * 1000);
+      // Set due date to 60 minutes in the future
+      const fiveMinutesFromNow = new Date(Date.now() + 60 * 60 * 1000);
       await vocabRepo.updateVocabLastSeenAndDueDate(vocabUids, fiveMinutesFromNow);
     }
   }
