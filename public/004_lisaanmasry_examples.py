@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options as FFOptions
 from selenium.webdriver.firefox.service import Service
@@ -14,8 +12,7 @@ import os
 from pathlib import Path
 
 # Configuration
-DEBUG_MODE = True  # Set to True to process only first 5 sentences
-MAX_SENTENCES = 5 if DEBUG_MODE else 25
+MAX_SENTENCES = 3
 SLEEP_TIME = 1  # Sleep time between requests in seconds
 WORD_CLICK_WAIT = 0.3  # Wait time after clicking a word
 
@@ -153,7 +150,7 @@ def create_translation(content, notes=None):
     translation_data.append(translation_entry)
     return translation_entry["id"]
 
-def create_vocab(language, content, length, notes=None, translations=None, links=None, related_vocab=None):
+def create_vocab(language, content, length, notes=None, translations=None, links=None, related_vocab=None, priority=None):
     """Create a vocab entry and return its ID, or return existing ID if duplicate content+language"""
     # Check if vocab with this content+language already exists
     for existing in vocab_data:
@@ -204,6 +201,8 @@ def create_vocab(language, content, length, notes=None, translations=None, links
         vocab_entry["links"] = links
     if related_vocab:
         vocab_entry["relatedVocab"] = related_vocab
+    if priority is not None:
+        vocab_entry["priority"] = priority
     
     vocab_data.append(vocab_entry)
     return vocab_entry["id"]
@@ -306,7 +305,8 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_li
                     content=form_arabic,
                     length="single-word",
                     notes=notes,
-                    links=[link_id]
+                    links=[link_id],
+                    priority=1
                 )
                 form_vocab_ids.append(vocab_id)
                 
@@ -483,7 +483,8 @@ def scrape_sentence(driver, url):
             length="single-sentence",
             notes=sentence_notes if sentence_notes else None,
             translations=[sentence_translation_id],
-            links=[shared_link_id]
+            links=[shared_link_id],
+            priority=2
         )
 
         # English sentence is already created as a translation above, not as a vocab entry
@@ -530,7 +531,6 @@ def save_jsonl_files():
     print(f"Saved {len(link_data)} link entries")
 
 def main():
-    print(f"Starting Lisaan Masry scraper (DEBUG_MODE: {DEBUG_MODE})")
     print(f"Will process up to {MAX_SENTENCES} sentences")
     
     base_url = "https://eu.lisaanmasry.org/online/example.php"
