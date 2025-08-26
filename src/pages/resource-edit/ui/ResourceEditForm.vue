@@ -9,6 +9,9 @@
     <InlineInput :model-value="resource.priority" label="Priority" type="number" placeholder="0"
       @update:model-value="updateField('priority', Number($event))" />
 
+    <InlineToggle :model-value="resource.isImmersionContent" label="Is Immersion Content"
+      @update:model-value="updateField('isImmersionContent', $event)" />
+
     <InlineCheckbox :model-value="resource.finishedExtracting" label="Finished extracting knowledge"
       @update:model-value="updateField('finishedExtracting', $event)" />
 
@@ -28,6 +31,7 @@
 import { ref, inject, onMounted, toRaw } from 'vue';
 import InlineInput from '@/shared/ui/InlineInput.vue';
 import InlineCheckbox from '@/shared/ui/InlineCheckbox.vue';
+import InlineToggle from '@/shared/ui/InlineToggle.vue';
 import InlineTextarea from '@/shared/ui/InlineTextarea.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
 import NoteList from '@/entities/notes/NoteList.vue';

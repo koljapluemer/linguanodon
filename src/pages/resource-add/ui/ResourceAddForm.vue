@@ -37,16 +37,18 @@
       <!-- Is Immersion Content -->
       <div class="form-control">
         <label class="label">
-          <span class="label-text font-medium">Is Immersion Content *</span>
+          <span class="label-text font-medium">Is Immersion Content</span>
         </label>
-        <input
-          v-model="formData.isImmersionContent"
-          type="checkbox"
-          class="toggle toggle-primary"
-          required
-        />
+        <div class="flex items-center gap-3">
+          <input
+            v-model="formData.isImmersionContent"
+            type="checkbox"
+            class="toggle toggle-primary"
+          />
+          <span class="text-sm">{{ formData.isImmersionContent ? 'Yes' : 'No' }}</span>
+        </div>
         <div class="label">
-          <span class="label-text-alt">Check if this is immersion content (videos, podcasts, articles for immersion)</span>
+          <span class="label-text-alt">Toggle if this is immersion content (videos, podcasts, articles for immersion)</span>
         </div>
       </div>
 
