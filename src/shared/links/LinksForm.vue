@@ -2,25 +2,26 @@
   <div>
     <div class="flex justify-between items-center mb-3">
       <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">
-        Links
+        {{ props.singleLinkMode ? 'Link' : 'Links' }}
       </h3>
       <button
+        v-if="!props.singleLinkMode || props.links.length === 0"
         type="button"
         @click="addNewLink"
         class="btn btn-sm btn-outline"
       >
         <Plus class="w-4 h-4 mr-1" />
-        Add Link
+        {{ props.singleLinkMode ? 'Add Link' : 'Add Link' }}
       </button>
     </div>
     
-    <div v-if="links.length === 0" class="text-gray-500 text-center py-4">
-      No links yet. Click "Add Link" to add external resources.
+    <div v-if="props.links.length === 0" class="text-gray-500 text-center py-4">
+      {{ props.singleLinkMode ? 'No link set.' : 'No links yet. Click "Add Link" to add external resources.' }}
     </div>
     
     <div v-else class="space-y-4">
       <div
-        v-for="(link, index) in links"
+        v-for="(link, index) in props.links"
         :key="index"
       >
         <LinkEdit
@@ -73,9 +74,10 @@ import type { Link } from './Link';
 
 interface Props {
   links: Link[];
+  singleLinkMode?: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 defineEmits<{
   'add-link': [link: Link];
   'update-link': [index: number, link: Link];
@@ -87,6 +89,11 @@ const editingIndex = ref<number | null>(null);
 const isCreatingNew = ref(false);
 
 function addNewLink() {
-  isCreatingNew.value = true;
+  // In single link mode, replace existing link if any
+  if (props.singleLinkMode && props.links.length > 0) {
+    editingIndex.value = 0;
+  } else {
+    isCreatingNew.value = true;
+  }
 }
 </script>

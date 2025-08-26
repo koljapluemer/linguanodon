@@ -78,8 +78,13 @@ export class ResourceRepo implements ResourceRepoContract {
     }
   }
 
-  async updateResource(resource: ResourceData): Promise<void> {
+  async updateResource(resource: ResourceData): Promise<ResourceData> {
     await this.storage.update(resource);
+    const updated = await this.storage.getByUID(resource.uid);
+    if (!updated) {
+      throw new Error(`Resource with uid ${resource.uid} not found after update`);
+    }
+    return updated;
   }
 
   async deleteResource(uid: string): Promise<void> {

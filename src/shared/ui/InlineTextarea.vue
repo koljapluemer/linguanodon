@@ -7,9 +7,10 @@
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-start justify-between">
-        <div :class="displayValueClasses">
-          {{ displayValue || placeholder }}
+        <div :class="displayValueClasses" v-if="displayValue">
+          {{ displayValue }}
         </div>
+        <div class="text-sm italic" v-else>empty</div>
         <button
           @click="startEditing"
           class="ml-2 btn btn-ghost flex-shrink-0"

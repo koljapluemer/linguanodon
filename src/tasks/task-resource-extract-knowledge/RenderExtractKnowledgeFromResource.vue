@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, inject, onMounted } from 'vue';
 import type { Task } from '@/entities/tasks/Task';
-import ManageVocabOfResourceWidget from '@/features/resource-manage-its-vocab/ManageVocabOfResourceWidget.vue';
-import ManageFactsOfResourceWidget from '@/features/resource-manage-its-facts/ManageFactsOfResourceWidget.vue';
+import ManageResourceVocab from '@/widgets/manage-resource-vocab/ManageResourceVocab.vue';
+import ManageResourceFactCards from '@/widgets/manage-resource-fact-cards/ManageResourceFactCards.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import LinkDisplayAsButton from '@/shared/links/LinkDisplayAsButton.vue';
@@ -42,13 +42,11 @@ const loadResource = async () => {
   }
 };
 
-function handleVocabListChanged() {
+function handleResourceUpdate(updatedResource: ResourceData) {
+  resource.value = updatedResource;
   hasChanges.value = true;
 }
 
-function handleFactCardListChanged() {
-  hasChanges.value = true;
-}
 
 const handleSkip = async () => {
   if (!resource.value) return;
@@ -139,18 +137,18 @@ onMounted(() => {
     </div>
 
     <div v-if="activeTab === 'vocab'" class="mb-6">
-      <ManageVocabOfResourceWidget
-        v-if="resourceUid"
-        :resourceUid="resourceUid"
-        @vocabListChanged="handleVocabListChanged"
+      <ManageResourceVocab
+        v-if="resource"
+        :resource="resource"
+        @resource-updated="handleResourceUpdate"
       />
     </div>
 
     <div v-if="activeTab === 'facts'" class="mb-6">
-      <ManageFactsOfResourceWidget
-        v-if="resourceUid"
-        :resourceUid="resourceUid"
-        @factCardListChanged="handleFactCardListChanged"
+      <ManageResourceFactCards
+        v-if="resource"
+        :resource="resource"
+        @resource-updated="handleResourceUpdate"
       />
     </div>
 
