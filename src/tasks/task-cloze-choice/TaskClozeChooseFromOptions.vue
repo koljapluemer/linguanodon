@@ -218,7 +218,7 @@ const handleCompletion = async () => {
     await vocabRepo.scoreVocab(vocab.value.uid, rating);
     await vocabRepo.updateLastReview(vocab.value.uid);
     
-    setTimeout(() => emit('finished'), 1500);
+    setTimeout(() => emit('finished'), 750);
   } catch (error) {
     console.error('Error scoring vocab:', error);
     emit('finished');
