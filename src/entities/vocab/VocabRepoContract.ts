@@ -54,4 +54,8 @@ export interface VocabRepoContract {
   // Goal-based vocab operations
   getUnseenVocabByIds(vocabIds: string[]): Promise<VocabData[]>;
   getDueVocabByIds(vocabIds: string[]): Promise<VocabData[]>;
+  
+  // Backup task operations
+  getVocabWithLowestDueDate(count: number): Promise<VocabData[]>;
+  updateVocabLastSeenAndDueDate(vocabIds: string[], dueDate: Date): Promise<void>;
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, computed, inject, onMounted, toRaw } from 'vue';
 import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
@@ -27,10 +27,10 @@ const isDoneEnabled = computed(() => sentence.value.trim().length >= 3);
 
 const loadVocab = async () => {
   const vocabUids = props.task.associatedVocab || [];
-  if (vocabUids.length !== 2) return;
+  if (vocabUids.length === 0 || vocabUids.length > 2) return;
 
   const vocabData = await vocabRepo.getVocabByUIDs(vocabUids);
-  if (vocabData.length === 2) {
+  if (vocabData.length >= 1) {
     vocabItems.value = vocabData;
     
     for (const vocab of vocabData) {
@@ -40,12 +40,13 @@ const loadVocab = async () => {
   }
 };
 
-const handleSkip = () => {
+const handleSkip = async () => {
+  await handleTaskCompletion();
   emit('finished');
 };
 
 const handleDone = async () => {
-  if (!isDoneEnabled.value || vocabItems.value.length !== 2) return;
+  if (!isDoneEnabled.value || vocabItems.value.length === 0) return;
   
   try {
     // Create note with the sentence
@@ -62,13 +63,28 @@ const handleDone = async () => {
         ...vocab,
         notes: [...vocab.notes, savedNote.uid]
       };
-      await vocabRepo.updateVocab(JSON.parse(JSON.stringify(updatedVocab)));
+      await vocabRepo.updateVocab(toRaw(updatedVocab));
     }
     
+    await handleTaskCompletion();
     emit('finished');
   } catch (error) {
     console.error('Error saving sentence:', error);
+    await handleTaskCompletion();
     emit('finished');
+  }
+};
+
+const handleTaskCompletion = async () => {
+  // For backup tasks (single word or lowest due vocab), update lastSeenAt and due date
+  if (props.task.taskType === 'vocab-form-sentence-single' || 
+      (props.task.taskType === 'vocab-form-sentence' && vocabItems.value.length <= 2)) {
+    const vocabUids = props.task.associatedVocab || [];
+    if (vocabUids.length > 0) {
+      // Set due date to 5 minutes in the future
+      const fiveMinutesFromNow = new Date(Date.now() + 5 * 60 * 1000);
+      await vocabRepo.updateVocabLastSeenAndDueDate(vocabUids, fiveMinutesFromNow);
+    }
   }
 };
 
@@ -76,14 +92,16 @@ onMounted(loadVocab);
 </script>
 
 <template>
-  <div v-if="vocabItems.length === 2">
+  <div v-if="vocabItems.length >= 1">
     <div class="text-center mb-8">
       <div class="mb-6">
         <div class="text-4xl font-bold mb-2">{{ vocabItems[0].content }}</div>
         <div class="text-xl text-base-content/70 mb-4">{{ translations[vocabItems[0].uid]?.join(', ') }}</div>
         
-        <div class="text-4xl font-bold mb-2">{{ vocabItems[1].content }}</div>
-        <div class="text-xl text-base-content/70">{{ translations[vocabItems[1].uid]?.join(', ') }}</div>
+        <div v-if="vocabItems.length === 2">
+          <div class="text-4xl font-bold mb-2">{{ vocabItems[1].content }}</div>
+          <div class="text-xl text-base-content/70">{{ translations[vocabItems[1].uid]?.join(', ') }}</div>
+        </div>
       </div>
       
       <div class="divider mb-6"></div>
@@ -93,7 +111,7 @@ onMounted(loadVocab);
           v-model="sentence"
           class="textarea textarea-bordered w-full text-lg"
           rows="4"
-          placeholder="Form a sentence using both words..."
+          :placeholder="vocabItems.length === 1 ? 'Form a sentence using this word...' : 'Form a sentence using both words...'"
         ></textarea>
       </div>
     </div>

@@ -34,6 +34,7 @@ export const taskRegistry: Record<string, TaskInfo> = {
   "cloze-choose-from-four": { component: TaskClozeChooseFromOptions, size: 'small' },
   "cloze-reveal": { component: TaskClozeReveal, size: 'small' },
   "vocab-form-sentence": { component: TaskVocabFormSentence, size: 'medium' },
+  "vocab-form-sentence-single": { component: TaskVocabFormSentence, size: 'medium' },
 };
 
 export const TASK_REGISTRY_INJECTION_KEY = Symbol("taskRegistry");

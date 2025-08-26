@@ -24,6 +24,7 @@ import { useTrackTaskNumber } from './utils/useTrackTaskNumber';
 import { makeTaskWithFocusOnVocab } from './utils/makeTaskWithFocusOnVocab';
 import { chooseTaskBasedOnDesiredTaskSize } from './utils/chooseTaskBasedOnDesiredTaskSize';
 import { chooseRareTask } from './utils/chooseRareTask';
+import { getBackupTask } from './utils/getBackupTask';
 import { pickWeightedRandom } from '@/shared/arrayUtils';
 
 type TaskGenerator = () => Promise<Task | null>;
@@ -130,8 +131,20 @@ export async function makeTask(
       return task;
     }
     
-    // All generators tried and no task generated
-    console.warn('All task generators exhausted, no task generated');
+    // All generators tried and no task generated, try backup task
+    console.log('[TaskGenerator] All task generators exhausted, trying backup task');
+    const backupTask = await getBackupTask(vocabRepo, translationRepo);
+    
+    if (backupTask) {
+      console.log(`[TaskGenerator] Generated backup task: ${backupTask.taskType}`);
+      incrementTaskCount();
+      trackTask(backupTask.taskType as TaskName);
+      trackTaskType(backupTask.taskType as TaskName);
+      trackNewVocabTask(backupTask.taskType as TaskName);
+      return backupTask;
+    }
+    
+    console.warn('All task generators exhausted, including backup task');
     return null;
     
   } catch (error) {
