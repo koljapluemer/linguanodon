@@ -491,7 +491,8 @@ export class UnifiedRemoteSetService {
             finishedAddingSubGoals: false,
             finishedAddingMilestones: false,
             finishedAddingKnowledge: false,
-            milestones: {}
+            milestones: {},
+            isAchieved: false
           };
           
           const savedGoal = await this.goalRepo.create(localGoal);

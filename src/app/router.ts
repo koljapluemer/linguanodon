@@ -10,7 +10,8 @@ import PageManageResource from '@/pages/resources-manage/PageManageResource.vue'
 import PageListImmersionContent from '@/pages/immersion-content-list/PageListImmersionContent.vue';
 import PageManageImmersionContent from '@/pages/immersion-content-manage/PageManageImmersionContent.vue';
 import PageListGoals from '@/pages/goals-list/PageListGoals.vue';
-import PageManageGoal from '@/pages/goals-manage/PageManageGoal.vue';
+import PageGoalAdd from '@/pages/goal-add/PageGoalAdd.vue';
+import PageGoalEdit from '@/pages/goal-edit/PageGoalEdit.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
 import PageLanguages from '@/pages/languages/PageLanguages.vue';
 import PageTimeTracking from '@/pages/time-tracking/PageTimeTracking.vue';
@@ -99,14 +100,14 @@ const router = createRouter({
       component: PageListGoals
     },
     {
-      path: '/goals/new',
-      name: 'goals-new',
-      component: PageManageGoal
+      path: '/goals/add',
+      name: 'goals-add',
+      component: PageGoalAdd
     },
     {
-      path: '/goals/:id',
+      path: '/goals/:id/edit',
       name: 'goals-edit',
-      component: PageManageGoal
+      component: PageGoalEdit
     },
     {
       path: '/downloads',

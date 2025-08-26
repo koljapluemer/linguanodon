@@ -85,7 +85,8 @@ async function saveGoal() {
         finishedAddingSubGoals: false,
         finishedAddingMilestones: false,
         finishedAddingKnowledge: false,
-        milestones: {}
+        milestones: {},
+        isAchieved: false
       });
     }
     

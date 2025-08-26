@@ -18,4 +18,6 @@ export interface GoalData {
   finishedAddingMilestones: boolean;
   finishedAddingKnowledge: boolean;
   milestones: Record<string, boolean>;
+  
+  isAchieved: boolean;
 }

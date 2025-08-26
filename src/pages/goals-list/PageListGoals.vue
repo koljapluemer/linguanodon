@@ -1,14 +1,14 @@
 <template>
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold">Goals</h1>
-    <router-link to="/goals/new" class="btn btn-primary">
+    <router-link to="/goals/add" class="btn btn-primary">
       Add New Goal
     </router-link>
   </div>
 
   <div v-if="goals.length === 0" class="text-center py-12">
     <p class="text-gray-500 mb-4">No goals yet</p>
-    <router-link to="/goals/new" class="btn btn-primary">
+    <router-link to="/goals/add" class="btn btn-primary">
       Create Your First Goal
     </router-link>
   </div>
@@ -35,7 +35,7 @@
           </div>
 
           <div class="flex gap-2">
-            <router-link :to="`/goals/${goal.uid}`" class="btn btn-sm btn-outline">
+            <router-link :to="`/goals/${goal.uid}/edit`" class="btn btn-sm btn-outline">
               Edit
             </router-link>
             <button @click="deleteGoal(goal.uid)" class="btn btn-sm btn-error btn-outline">

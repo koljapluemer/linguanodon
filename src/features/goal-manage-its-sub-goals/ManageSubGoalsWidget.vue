@@ -17,6 +17,12 @@
           @blur="updateSubGoal(subGoal)"
           @keydown.enter="updateSubGoal(subGoal)"
         />
+        <router-link
+          :to="`/goals/${subGoal.uid}/edit`"
+          class="btn btn-sm btn-outline"
+        >
+          Edit
+        </router-link>
         <button
           @click="removeSubGoal(subGoal.uid)"
           class="btn btn-sm btn-error btn-outline"
@@ -86,7 +92,8 @@ async function addSubGoal() {
     finishedAddingSubGoals: false,
     finishedAddingMilestones: false,
     finishedAddingKnowledge: false,
-    milestones: {}
+    milestones: {},
+    isAchieved: false
   });
   
   // Update parent goal to include this sub-goal
