@@ -1,12 +1,23 @@
+import Dexie, { type Table } from 'dexie';
 import type { ImmersionContentRepoContract } from './ImmersionContentRepoContract';
 import type { ImmersionContentData } from './ImmersionContentData';
-import { ImmersionContentStorage } from './ImmersionContentStorage';
+
+class ImmersionContentDatabase extends Dexie {
+  immersionContent!: Table<ImmersionContentData>;
+
+  constructor() {
+    super('ImmersionContentDatabase');
+    this.version(1).stores({
+      immersionContent: 'uid, language'
+    });
+  }
+}
 
 export class ImmersionContentRepo implements ImmersionContentRepoContract {
-  private storage = new ImmersionContentStorage();
+  private db = new ImmersionContentDatabase();
 
   async getAllImmersionContent(setsToAvoid?: string[]): Promise<ImmersionContentData[]> {
-    const allContent = await this.storage.getAll();
+    const allContent = await this.db.immersionContent.toArray();
     
     // Deterministically filter out content from avoided sets if specified
     if (setsToAvoid && setsToAvoid.length > 0) {
@@ -19,18 +30,18 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
   }
 
   async getImmersionContentById(uid: string): Promise<ImmersionContentData | undefined> {
-    return await this.storage.getByUID(uid);
+    return await this.db.immersionContent.get(uid);
   }
 
   async getImmersionContentByTitleAndLanguage(title: string, language: string): Promise<ImmersionContentData | undefined> {
-    const allImmersionContent = await this.storage.getAll();
+    const allImmersionContent = await this.db.immersionContent.toArray();
     return allImmersionContent.find(content => 
       content.title === title && content.language === language
     );
   }
 
   async getRandomDueImmersionContent(): Promise<ImmersionContentData | null> {
-    const allImmersionContent = await this.storage.getAll();
+    const allImmersionContent = await this.db.immersionContent.toArray();
     
     if (allImmersionContent.length === 0) {
       return null;
@@ -58,7 +69,7 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
 
     
     try {
-      await this.storage.add(immersionContentData);
+      await this.db.immersionContent.add(immersionContentData);
       return immersionContentData;
     } catch (error) {
       console.error('ImmersionContentRepo: Failed to save immersion content:', error);
@@ -67,15 +78,15 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
   }
 
   async updateImmersionContent(immersionContent: ImmersionContentData): Promise<void> {
-    await this.storage.update(immersionContent);
+    await this.db.immersionContent.put(immersionContent);
   }
 
   async deleteImmersionContent(uid: string): Promise<void> {
-    await this.storage.delete(uid);
+    await this.db.immersionContent.delete(uid);
   }
 
   async disconnectNeededVocabFromImmersionContent(immersionContentUid: string, vocabUid: string): Promise<void> {
-    const immersionContent = await this.storage.getByUID(immersionContentUid);
+    const immersionContent = await this.db.immersionContent.get(immersionContentUid);
     if (!immersionContent) {
       throw new Error('Immersion content not found');
     }
@@ -86,11 +97,11 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       vocab: immersionContent.vocab.filter((id: string) => id !== vocabUid)
     };
 
-    await this.storage.update(updatedImmersionContent);
+    await this.db.immersionContent.put(updatedImmersionContent);
   }
 
   async disconnectExtractedVocabFromImmersionContent(immersionContentUid: string, vocabUid: string): Promise<void> {
-    const immersionContent = await this.storage.getByUID(immersionContentUid);
+    const immersionContent = await this.db.immersionContent.get(immersionContentUid);
     if (!immersionContent) {
       throw new Error('Immersion content not found');
     }
@@ -101,6 +112,6 @@ export class ImmersionContentRepo implements ImmersionContentRepoContract {
       factCards: immersionContent.factCards.filter((id: string) => id !== vocabUid)
     };
 
-    await this.storage.update(updatedImmersionContent);
+    await this.db.immersionContent.put(updatedImmersionContent);
   }
 }

@@ -1,14 +1,27 @@
-import { goalStorage } from './GoalStorage';
+import Dexie, { type Table } from 'dexie';
 import type { GoalData } from './GoalData';
 import type { GoalRepoContract } from './GoalRepoContract';
 
+class GoalDatabase extends Dexie {
+  goals!: Table<GoalData>;
+
+  constructor() {
+    super('GoalStorage');
+    this.version(1).stores({
+      goals: 'uid, taskType, title, isActive, parentGoal, lastShownAt, *subGoals, *vocab, *examples, *factCards, *notes'
+    });
+  }
+}
+
 export class GoalRepo implements GoalRepoContract {
+  private db = new GoalDatabase();
+
   async getAll(): Promise<GoalData[]> {
-    return await goalStorage.goals.toArray();
+    return await this.db.goals.toArray();
   }
 
   async getById(id: string): Promise<GoalData | undefined> {
-    return await goalStorage.goals.get(id);
+    return await this.db.goals.get(id);
   }
 
   async create(goalData: Omit<GoalData, 'uid'>): Promise<GoalData> {
@@ -21,12 +34,12 @@ export class GoalRepo implements GoalRepoContract {
       milestones: goalData.milestones ?? {}
     };
 
-    await goalStorage.goals.add(goal);
+    await this.db.goals.add(goal);
     return goal;
   }
 
   async update(id: string, updates: Omit<Partial<GoalData>, 'uid'>): Promise<GoalData> {
-    await goalStorage.goals.update(id, updates);
+    await this.db.goals.update(id, updates);
     const updated = await this.getById(id);
     if (!updated) {
       throw new Error(`Goal with id ${id} not found after update`);
@@ -35,11 +48,11 @@ export class GoalRepo implements GoalRepoContract {
   }
 
   async delete(id: string): Promise<void> {
-    await goalStorage.goals.delete(id);
+    await this.db.goals.delete(id);
   }
 
   async getIncompleteGoals(): Promise<GoalData[]> {
-    const allGoals = await goalStorage.goals.toArray();
+    const allGoals = await this.db.goals.toArray();
     return allGoals; // All goals are considered active since isActive was removed
   }
 
@@ -54,14 +67,14 @@ export class GoalRepo implements GoalRepoContract {
   }
 
   async getRootGoals(): Promise<GoalData[]> {
-    return await goalStorage.goals
+    return await this.db.goals
       .where('subGoals')
       .equals([])
       .toArray();
   }
 
   async getParentGoal(goalId: string): Promise<GoalData | undefined> {
-    return await goalStorage.goals
+    return await this.db.goals
       .where('subGoals')
       .anyOf([goalId])
       .first();

@@ -1,27 +1,38 @@
+import Dexie, { type Table } from 'dexie';
 import type { ResourceRepoContract } from './ResourceRepoContract';
 import type { ResourceData } from './ResourceData';
-import { ResourceStorage } from './ResourceStorage';
+
+class ResourceDatabase extends Dexie {
+  resources!: Table<ResourceData>;
+
+  constructor() {
+    super('ResourceDatabase');
+    this.version(1).stores({
+      resources: 'uid, language'
+    });
+  }
+}
 
 export class ResourceRepo implements ResourceRepoContract {
-  private storage = new ResourceStorage();
+  private db = new ResourceDatabase();
 
   async getAllResources(): Promise<ResourceData[]> {
-    return await this.storage.getAll();
+    return await this.db.resources.toArray();
   }
 
   async getResourceById(uid: string): Promise<ResourceData | undefined> {
-    return await this.storage.getByUID(uid);
+    return await this.db.resources.get(uid);
   }
 
   async getResourceByTitleAndLanguage(title: string, language: string): Promise<ResourceData | undefined> {
-    const allResources = await this.storage.getAll();
+    const allResources = await this.db.resources.toArray();
     return allResources.find(resource => 
       resource.title === title && resource.language === language
     );
   }
 
   async getRandomDueResource(languages?: string[], setsToAvoid?: string[]): Promise<ResourceData | null> {
-    const allResources = await this.storage.getAll();
+    const allResources = await this.db.resources.toArray();
     
     // Filter by languages if provided
     let filteredResources = languages 
@@ -70,7 +81,7 @@ export class ResourceRepo implements ResourceRepoContract {
 
     
     try {
-      await this.storage.add(resourceData);
+      await this.db.resources.add(resourceData);
       return resourceData;
     } catch (error) {
       console.error('ResourceRepo: Failed to save resource:', error);
@@ -79,8 +90,8 @@ export class ResourceRepo implements ResourceRepoContract {
   }
 
   async updateResource(resource: ResourceData): Promise<ResourceData> {
-    await this.storage.update(resource);
-    const updated = await this.storage.getByUID(resource.uid);
+    await this.db.resources.put(resource);
+    const updated = await this.db.resources.get(resource.uid);
     if (!updated) {
       throw new Error(`Resource with uid ${resource.uid} not found after update`);
     }
@@ -88,11 +99,11 @@ export class ResourceRepo implements ResourceRepoContract {
   }
 
   async deleteResource(uid: string): Promise<void> {
-    await this.storage.delete(uid);
+    await this.db.resources.delete(uid);
   }
 
   async disconnectVocabFromResource(resourceUid: string, vocabUid: string): Promise<void> {
-    const resource = await this.storage.getByUID(resourceUid);
+    const resource = await this.db.resources.get(resourceUid);
     if (!resource) {
       throw new Error('Resource not found');
     }
@@ -103,6 +114,6 @@ export class ResourceRepo implements ResourceRepoContract {
       vocab: resource.vocab.filter(id => id !== vocabUid)
     };
 
-    await this.storage.update(updatedResource);
+    await this.db.resources.put(updatedResource);
   }
 }

@@ -1,9 +1,20 @@
-import { NoteStorage } from './NoteStorage';
+import Dexie, { type Table } from 'dexie';
 import type { NoteRepoContract } from './NoteRepoContract';
 import type { NoteData } from './NoteData';
 
+class NoteDatabase extends Dexie {
+  notes!: Table<NoteData>;
+
+  constructor() {
+    super('NoteDatabase');
+    this.version(1).stores({
+      notes: 'uid'
+    });
+  }
+}
+
 export class NoteRepo implements NoteRepoContract {
-  private storage = new NoteStorage();
+  private db = new NoteDatabase();
 
   private ensureNoteFields(note: NoteData): NoteData {
     return {
@@ -15,12 +26,12 @@ export class NoteRepo implements NoteRepoContract {
   }
 
   async getNoteByUID(uid: string): Promise<NoteData | undefined> {
-    const note = await this.storage.getById(uid);
+    const note = await this.db.notes.get(uid);
     return note ? this.ensureNoteFields(note) : undefined;
   }
 
   async getNotesByUIDs(uids: string[]): Promise<NoteData[]> {
-    const notes = await this.storage.getByIds(uids);
+    const notes = await this.db.notes.where('uid').anyOf(uids).toArray();
     return notes.map(note => this.ensureNoteFields(note));
   }
 
@@ -32,20 +43,20 @@ export class NoteRepo implements NoteRepoContract {
       noteType: note.noteType
     };
 
-    await this.storage.add(newNote);
+    await this.db.notes.add(newNote);
     return newNote;
   }
 
   async updateNote(note: NoteData): Promise<void> {
-    await this.storage.update(note);
+    await this.db.notes.put(note);
   }
 
   async deleteNote(uid: string): Promise<void> {
-    await this.storage.delete(uid);
+    await this.db.notes.delete(uid);
   }
 
   async deleteNotes(uids: string[]): Promise<void> {
-    await this.storage.deleteMultiple(uids);
+    await this.db.notes.where('uid').anyOf(uids).delete();
   }
 
   async createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean; noteType?: string }[]): Promise<string[]> {
