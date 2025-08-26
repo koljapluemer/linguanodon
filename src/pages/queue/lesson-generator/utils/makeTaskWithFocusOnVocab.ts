@@ -31,11 +31,20 @@ export async function makeTaskWithFocusOnVocab(
       return null;
     }
     
-    // Get all related vocab uids
-    const allPotentialVocabUids = [focusVocabUid, ...focusVocab.relatedVocab];
+    // For sentence vocab, prioritize related vocab first, then the sentence itself
+    // For word/unspecified vocab, keep the original behavior (include focus vocab in candidates)
+    let potentialVocabUids: string[];
+    
+    if (focusVocab.length === 'sentence') {
+      // For sentences: try related vocab first, only use sentence if no related vocab available
+      potentialVocabUids = focusVocab.relatedVocab.length > 0 ? focusVocab.relatedVocab : [focusVocabUid];
+    } else {
+      // For word/unspecified: include focus vocab with related vocab (original behavior)
+      potentialVocabUids = [focusVocabUid, ...focusVocab.relatedVocab];
+    }
     
     // Get vocab data for all potential candidates
-    const allPotentialVocab = await vocabRepo.getVocabByUIDs(allPotentialVocabUids);
+    const allPotentialVocab = await vocabRepo.getVocabByUIDs(potentialVocabUids);
     
     // Filter to only due or new vocab that we're allowed to generate tasks for
     const candidateVocab = [];
@@ -56,6 +65,19 @@ export async function makeTaskWithFocusOnVocab(
       // Include vocab if it's due or new (and we're allowed)
       if (vocabIsDue || vocabIsUnseen) {
         candidateVocab.push(vocab);
+      }
+    }
+    
+    // For sentence vocab: if no related vocab candidates found, try the sentence itself
+    if (candidateVocab.length === 0 && focusVocab.length === 'sentence') {
+      const focusVocabIsDue = isDue(focusVocab);
+      const focusVocabIsUnseen = isUnseen(focusVocab);
+      
+      // Check if focus sentence vocab is valid
+      if (!focusVocab.doNotPractice && 
+          (!vocabBlockList || !vocabBlockList.includes(focusVocab.uid)) &&
+          (focusVocabIsDue || (focusVocabIsUnseen && canGenerateNewVocabTask()))) {
+        candidateVocab.push(focusVocab);
       }
     }
     

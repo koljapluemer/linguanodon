@@ -10,6 +10,8 @@ As a first step, let's make an alternative task for new (unseen) vocab of type `
 
 *In turn*, *disable* [try-to-remember](docs/reference/tasks/vocab-try-to-remember.md) for vocab of type sentence (only allow for unspecified and word length)
 
+Next improvement: In a [vocab-focussed task](src/pages/queue/lesson-generator/utils/makeTaskWithFocusOnVocab.ts) we are currently trying to get a task directly related to the focus vocab first thing. This is fine for `vocab` and `unspecified`, but let's turn that around for `sentence`: If it's a sentence, try to get *all related* vocab done and only use the `sentence` once the related stuff yields nothing
+
 ## Context
 
 **src/entities/remote-sets/validation/vocabSchema.ts** - Uses Length as a Zod enum for validating vocabulary length field in remote dataset schemas.
