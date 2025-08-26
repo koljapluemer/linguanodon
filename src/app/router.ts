@@ -26,7 +26,8 @@ const router = createRouter({
     {
       path: '/queue',
       name: 'queue',
-      component: PageQueue
+      component: PageQueue,
+      props: route => ({ focusOnVocab: route.query.focusOnVocab as string })
     },
     {
       path: '/my-material',

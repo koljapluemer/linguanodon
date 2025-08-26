@@ -3,9 +3,18 @@
     <h1 class="text-3xl font-bold">
       {{ isEditing ? 'Edit Vocab' : 'Add New Vocab' }}
     </h1>
-    <router-link to="/vocab" class="btn btn-outline">
-      Back to Vocab List
-    </router-link>
+    <div class="flex gap-2">
+      <router-link 
+        v-if="isEditing && currentVocab" 
+        :to="{ path: '/queue', query: { focusOnVocab: currentVocab.uid } }" 
+        class="btn btn-primary"
+      >
+        Practice this
+      </router-link>
+      <router-link to="/vocab" class="btn btn-outline">
+        Back to Vocab List
+      </router-link>
+    </div>
   </div>
 
   <VocabEditFormController :vocab-id="route.params.id as string" @vocab-saved="handleVocabSaved" />

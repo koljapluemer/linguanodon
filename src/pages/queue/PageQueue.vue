@@ -11,6 +11,11 @@ import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { makeTask } from './lesson-generator/makeTask';
 
+// Props
+const props = defineProps<{
+  focusOnVocab?: string;
+}>();
+
 // Inject repositories
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
 const translationRepo = inject<TranslationRepoContract>('translationRepo');
@@ -68,7 +73,8 @@ async function generateNextTask(): Promise<Task | null> {
       resourceRepo!,
       languageRepo!,
       goalRepo!,
-      noteRepo!
+      noteRepo!,
+      props.focusOnVocab
     );
   } catch (error) {
     console.error('Error generating task:', error);

@@ -20,6 +20,8 @@ import { getRandomVocabFormSentenceTask } from './utils/getRandomVocabFormSenten
 import { useTaskSizeTracker } from './utils/useTaskSizeTracker';
 import { useTaskTypeTracker } from './utils/useTaskTypeTracker';
 import { useNewVocabTracker } from './utils/useNewVocabTracker';
+import { useTrackTaskNumber } from './utils/useTrackTaskNumber';
+import { makeTaskWithFocusOnVocab } from './utils/makeTaskWithFocusOnVocab';
 import { chooseTaskBasedOnDesiredTaskSize } from './utils/chooseTaskBasedOnDesiredTaskSize';
 import { chooseRareTask } from './utils/chooseRareTask';
 import { pickWeightedRandom } from '@/shared/arrayUtils';
@@ -32,7 +34,8 @@ export async function makeTask(
   resourceRepo: ResourceRepoContract,
   languageRepo: LanguageRepoContract,
   goalRepo: GoalRepoContract,
-  noteRepo: NoteRepoContract
+  noteRepo: NoteRepoContract,
+  focusOnVocab?: string
 ): Promise<Task | null> {
   try {
     // Get all active target languages
@@ -47,6 +50,27 @@ export async function makeTask(
     const { trackTask } = useTaskSizeTracker();
     const { canGeneratePronunciationTask, trackTask: trackTaskType } = useTaskTypeTracker();
     const { canGenerateNewVocabTask, trackTask: trackNewVocabTask, isNewVocabTask } = useNewVocabTracker();
+    const { incrementTaskCount } = useTrackTaskNumber();
+    
+    // Check if we should use focused vocab task generation
+    if (focusOnVocab && Math.random() < 0.8) { // 80% chance to use focused vocab
+      const focusedTask = await makeTaskWithFocusOnVocab(
+        focusOnVocab,
+        vocabRepo,
+        translationRepo,
+        noteRepo
+      );
+      
+      if (focusedTask) {
+        incrementTaskCount();
+        trackTask(focusedTask.taskType as TaskName);
+        trackTaskType(focusedTask.taskType as TaskName);
+        trackNewVocabTask(focusedTask.taskType as TaskName);
+        console.log(`[TaskGenerator] Generated focused task: ${focusedTask.taskType}`);
+        return focusedTask;
+      }
+      // If focused task generation fails, fall back to standard generation
+    }
     
     // Define all available task generators with their task names
     const baseGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
@@ -99,6 +123,7 @@ export async function makeTask(
       const logMessage = `[TaskGenerator] Generated ${methodUsed} ${preferenceLabel} task: ${task.taskType}`;
       
       console.log(logMessage);
+      incrementTaskCount();
       trackTask(taskName);
       trackTaskType(taskName);
       trackNewVocabTask(taskName);
