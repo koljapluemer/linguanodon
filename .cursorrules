@@ -54,13 +54,6 @@ As a rule:
 
 - ALWAYS use `@/...` import syntax, except if the the imported thing is in the same directory. That's way more robust, and way more readable.
 
-### Documentation
-
-- Write conceptual stuff in `docs/` as a markdown guide
-- Code should mostly document itself, see chapter above
-- Use JsDoc style annotation, but ONLY!! to explain purpose or non-obvious decisions. Do NOT! JS-Doc annotate params or returns, that is *already done* by typescript. Keep it short. Explain how the code fits into the bigger picture.
-- Avoid! just reiterating the name of a function (or whatever), e.g. we do not want to see `downloadLatestLessons() // downloads the latest lessons`. That is wasteful. Focus on purpose and how it ties in!
-
 ### Testing
 
 - Write unit tests, component test and integration test when it's useful to improve our confidence
