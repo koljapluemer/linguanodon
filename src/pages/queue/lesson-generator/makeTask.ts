@@ -18,6 +18,7 @@ import { getRandomClozeRevealTask } from './utils/getRandomClozeRevealTask';
 import { getRandomAddTranslationTask } from './utils/getRandomAddTranslationTask';
 import { getRandomVocabFormSentenceTask } from './utils/getRandomVocabFormSentenceTask';
 import { useTaskSizeTracker } from './utils/useTaskSizeTracker';
+import { usePronunciationTaskTracker } from './utils/usePronunciationTaskTracker';
 
 type TaskGenerator = () => Promise<Task | null>;
 
@@ -41,9 +42,10 @@ export async function makeTask(
     
     const languageCodes = activeLanguages.map(lang => lang.code);
     const { getPreferredTaskSize, getTasksOfSize, trackTask } = useTaskSizeTracker();
+    const { canGeneratePronunciationTask, trackTask: trackPronunciationTask } = usePronunciationTaskTracker();
     
     // Define all available task generators with their task names
-    const allGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
+    const baseGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
       { generator: () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes), taskName: 'add-pronunciation' },
       { generator: () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes), taskName: 'add-translation' },
       { generator: () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes), taskName: 'extract-knowledge-from-resource' },
@@ -56,6 +58,11 @@ export async function makeTask(
       { generator: () => getRandomClozeRevealTask(vocabRepo, translationRepo, languageCodes), taskName: 'cloze-reveal' },
       { generator: () => getRandomVocabFormSentenceTask(vocabRepo, translationRepo, languageCodes), taskName: 'vocab-form-sentence' }
     ];
+    
+    // Filter out add-pronunciation if it's been picked too many times recently
+    const allGenerators = canGeneratePronunciationTask() 
+      ? baseGenerators 
+      : baseGenerators.filter(g => g.taskName !== 'add-pronunciation');
     
     // Get preferred task size based on recent distribution
     const preferredSize = getPreferredTaskSize();
@@ -76,6 +83,7 @@ export async function makeTask(
           if (task) {
             console.log(`[TaskGenerator] Generated preferred task: ${task.taskType} (${preferredSize})`);
             trackTask(taskName);
+            trackPronunciationTask(taskName);
             return task;
           }
         } catch (error) {
@@ -94,6 +102,7 @@ export async function makeTask(
         if (task) {
           console.log(`[TaskGenerator] Generated fallback task: ${task.taskType}`);
           trackTask(taskName);
+          trackPronunciationTask(taskName);
           return task;
         }
       } catch (error) {

@@ -1,0 +1,1 @@
+Similar to [this](src/pages/queue/lesson-generator/utils/useTaskSizeTracker.ts), implement a tracker counting how often [add-pronunciation](src/pages/queue/lesson-generator/utils/useTaskSizeTracker.ts) was picked in the last 50 tasks. If it's more than 2 times, do not allow to pick this task type when [making a task](src/pages/queue/lesson-generator/makeTask.ts)
