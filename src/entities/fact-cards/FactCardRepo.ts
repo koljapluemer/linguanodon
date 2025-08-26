@@ -1,10 +1,21 @@
-import { FactCardStorage } from './FactCardStorage';
+import Dexie, { type Table } from 'dexie';
 import type { FactCardRepoContract } from './FactCardRepoContract';
 import type { FactCardData } from './FactCardData';
 import { createEmptyCard, fsrs, type Rating } from 'ts-fsrs';
 
+class FactCardDatabase extends Dexie {
+  factCards!: Table<FactCardData>;
+
+  constructor() {
+    super('FactCardDatabase');
+    this.version(1).stores({
+      factCards: 'uid, language'
+    });
+  }
+}
+
 export class FactCardRepo implements FactCardRepoContract {
-  private storage = new FactCardStorage();
+  private db = new FactCardDatabase();
 
   private ensureFactCardFields(factCard: FactCardData): FactCardData {
     return {
@@ -18,12 +29,12 @@ export class FactCardRepo implements FactCardRepoContract {
   }
 
   async getAllFactCards(): Promise<FactCardData[]> {
-    const factCards = await this.storage.getAll();
+    const factCards = await this.db.factCards.toArray();
     return factCards.map(fc => this.ensureFactCardFields(fc));
   }
 
   async getFactCardByUID(uid: string): Promise<FactCardData | undefined> {
-    const factCard = await this.storage.getByUID(uid);
+    const factCard = await this.db.factCards.get(uid);
     return factCard ? this.ensureFactCardFields(factCard) : undefined;
   }
 
@@ -44,16 +55,16 @@ export class FactCardRepo implements FactCardRepoContract {
       origins: factCard.origins
     };
 
-    await this.storage.add(newFactCard);
+    await this.db.factCards.add(newFactCard);
     return newFactCard;
   }
 
   async updateFactCard(factCard: FactCardData): Promise<void> {
-    await this.storage.update(factCard);
+    await this.db.factCards.put(factCard);
   }
 
   async deleteFactCard(uid: string): Promise<void> {
-    await this.storage.delete(uid);
+    await this.db.factCards.delete(uid);
   }
 
   async scoreFactCard(factCardId: string, rating: Rating): Promise<void> {
