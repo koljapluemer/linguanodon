@@ -25,6 +25,9 @@ export function canGenerateAddPronunciation(vocab: VocabData, translations: Tran
   // Check has at least one translation
   if (translations.length === 0) return false;
   
+  // Check not a sentence (pronunciation tasks are for words only)
+  if (vocab.length === 'sentence') return false;
+  
   // Check no pronunciation note exists
   const hasPronunciationNote = notes.some(note => note.noteType === 'pronunciation');
   if (hasPronunciationNote) return false;

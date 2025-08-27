@@ -243,17 +243,19 @@ export class VocabRepo implements VocabRepoContract {
     const vocab = await vocabDb.vocab
       .where('language')
       .anyOf(languages)
+      .and(vocab => 
+        vocab.length !== 'sentence' &&
+        !vocab.doNotPractice &&
+        (vocab.priority ?? 1) >= 2
+      )
       .toArray();
 
     const withoutPronunciation = vocab.filter(vocab => {
       // Since pronunciation is now handled as notes, we'll check for pronunciation notes
       // For now, assume all vocab needs pronunciation (to be refined later)
       const hasNoPronunciation = true; // TODO: Check if vocab has pronunciation notes
-      const hasPriority = (vocab.priority ?? 1) >= 2;
-      const isNotExcluded = !vocab.doNotPractice;
       const isNotBlocked = !vocabBlockList || !vocabBlockList.includes(vocab.uid);
-
-      return hasNoPronunciation && hasPriority && isNotExcluded && isNotBlocked;
+      return hasNoPronunciation && isNotBlocked;
     });
 
     if (withoutPronunciation.length === 0) return null;
