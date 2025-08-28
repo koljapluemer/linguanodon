@@ -39,12 +39,11 @@ export async function getRandomClozeRevealTask(
       }
     }
 
-    // Get due sentence vocab directly using entity function
-    const dueSentenceVocab = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
-    const sentenceVocab = dueSentenceVocab.filter(vocab => vocab.length === 'sentence');
+    // Get due sentence vocab with level <= 6 directly from DB
+    const sentenceVocab = await vocabRepo.getDueSentenceVocabWithMaxLevel(languageCodes, 6, vocabBlockList);
     
     if (sentenceVocab.length === 0) {
-      // Fallback to unseen sentence vocab
+      // Fallback to unseen sentence vocab (level -1, so no level filtering needed)
       const unseenSentenceVocab = await vocabRepo.getRandomUnseenSentenceVocab(20, languageCodes, vocabBlockList);
       if (unseenSentenceVocab.length === 0) return null;
       

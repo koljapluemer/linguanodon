@@ -16,6 +16,7 @@ export interface VocabRepoContract {
   getRandomAlreadySeenDueVocab(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   getRandomUnseenVocab(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   getRandomUnseenSentenceVocab(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
+  getDueSentenceVocabWithMaxLevel(languages: string[], maxLevel: number, vocabBlockList?: string[]): Promise<VocabData[]>;
   getDueOrUnseenVocabFromIds(uids: string[]): Promise<VocabData[]>;
   
   // Pagination operations

@@ -10,9 +10,6 @@ function isUnseen(vocab: VocabData): boolean {
   return vocab.progress.level === -1;
 }
 
-function isSeen(vocab: VocabData): boolean {
-  return vocab.progress.level >= 0;
-}
 
 class VocabDatabase extends Dexie {
   vocab!: Table<VocabData>;
@@ -70,7 +67,7 @@ export class VocabRepo implements VocabRepoContract {
       .where('language')
       .anyOf(languages)
       .filter(vocab =>
-        isSeen(vocab) &&
+        vocab.progress.level >= 0 &&
         vocab.progress.due <= new Date() &&
         !vocab.doNotPractice &&
         (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
@@ -141,7 +138,7 @@ export class VocabRepo implements VocabRepoContract {
       const vocabIsUnseen = isUnseen(vocab);
 
       // Due: has been seen and is due now
-      const isDue = isSeen(vocab) && vocab.progress.due <= new Date();
+      const isDue = vocab.progress.level >= 0 && vocab.progress.due <= new Date();
 
       return vocabIsUnseen || isDue;
     });
@@ -351,7 +348,7 @@ export class VocabRepo implements VocabRepoContract {
       .where('language')
       .equals(language)
       .filter(vocab =>
-        isSeen(vocab) &&
+        vocab.progress.level >= 0 &&
         vocab.progress.due <= new Date() &&
         !vocab.doNotPractice &&
         (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
@@ -366,7 +363,7 @@ export class VocabRepo implements VocabRepoContract {
       .where('language')
       .anyOf(languages)
       .filter(vocab =>
-        isSeen(vocab) &&
+        vocab.progress.level >= 0 &&
         vocab.progress.due <= new Date() &&
         !vocab.doNotPractice &&
         (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
@@ -474,10 +471,17 @@ export class VocabRepo implements VocabRepoContract {
   }
 
   private async findIdealWrongVocab(targetLanguage: string, correctVocabContent: string): Promise<string | null> {
-    const dueVocab = await this.getDueVocabInLanguage(targetLanguage);
+    const now = new Date();
+    const dueVocab = await vocabDb.vocab
+      .where('language').equals(targetLanguage)
+      .and(vocab => vocab.length !== 'sentence')
+      .and(vocab => vocab.content !== correctVocabContent)
+      .and(vocab => vocab.progress && vocab.progress.level >= 0)
+      .and(vocab => vocab.progress.due && new Date(vocab.progress.due) <= now)
+      .toArray();
 
     const idealCandidates = dueVocab.filter(vocab => {
-      if (!vocab.content || vocab.content === correctVocabContent) return false;
+      if (!vocab.content) return false;
 
       if (!isLengthWithinRange(vocab.content, correctVocabContent.length, 3)) {
         return false;
@@ -495,14 +499,13 @@ export class VocabRepo implements VocabRepoContract {
   }
 
   private async getFallbackWrongVocab(targetLanguage: string, correctVocabContent: string): Promise<string | null> {
-    const allVocab = await vocabDb.vocab
-      .where('language')
-      .equals(targetLanguage)
+    // Query all vocab excluding sentences and the correct answer
+    const candidates = await vocabDb.vocab
+      .where('language').equals(targetLanguage)
+      .and(vocab => vocab.length !== 'sentence')
+      .and(vocab => vocab.content !== correctVocabContent)
+      .and(vocab => !!vocab.content)
       .toArray();
-
-    const candidates = allVocab.filter(vocab =>
-      vocab.content && vocab.content !== correctVocabContent
-    );
 
     if (candidates.length > 0) {
       const shuffled = shuffleArray(candidates);
@@ -556,7 +559,7 @@ export class VocabRepo implements VocabRepoContract {
 
     return vocab
       .map(v => this.ensureVocabFields(v))
-      .filter(v => isSeen(v) && v.progress.due && v.progress.due <= new Date());
+      .filter(v => v.progress.level >= 0 && v.progress.due && v.progress.due <= new Date());
   }
 
   async getRandomVocabWithNoTranslationsInLanguages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null> {
@@ -608,5 +611,22 @@ export class VocabRepo implements VocabRepoContract {
 
       await vocabDb.vocab.put(vocab);
     }
+  }
+
+  async getDueSentenceVocabWithMaxLevel(languages: string[], maxLevel: number, vocabBlockList?: string[]): Promise<VocabData[]> {
+    const now = new Date();
+    let query = vocabDb.vocab
+      .where('language').anyOf(languages)
+      .and(vocab => vocab.length === 'sentence')
+      .and(vocab => vocab.progress.level >= 0)
+      .and(vocab => vocab.progress.level <= maxLevel)
+      .and(vocab => vocab.progress.due && new Date(vocab.progress.due) <= now);
+
+    if (vocabBlockList && vocabBlockList.length > 0) {
+      query = query.and(vocab => !vocabBlockList.includes(vocab.uid));
+    }
+
+    const results = await query.toArray();
+    return results.map(vocab => this.ensureVocabFields(vocab));
   }
 }

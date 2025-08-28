@@ -6,7 +6,6 @@ import { getTaskBasedOnVocab } from './getTaskBasedOnVocab';
 import { useTrackTaskNumber } from './useTrackTaskNumber';
 import { useNewVocabTracker } from './useNewVocabTracker';
 import { pickRandom } from '@/shared/arrayUtils';
-import { isDue, isUnseen } from '@/entities/vocab/vocabUtils';
 
 export async function makeTaskWithFocusOnVocab(
   focusVocabUid: string,
@@ -56,8 +55,8 @@ export async function makeTaskWithFocusOnVocab(
       // Skip if vocab is in the block list
       if (vocabBlockList && vocabBlockList.includes(vocab.uid)) continue;
       
-      const vocabIsDue = isDue(vocab);
-      const vocabIsUnseen = isUnseen(vocab);
+      const vocabIsDue = vocab.progress.level >= 0 && vocab.progress.due && new Date(vocab.progress.due) <= new Date();
+      const vocabIsUnseen = vocab.progress.level === -1;
       
       // If it's new vocab, check if we're allowed to generate new vocab tasks
       if (vocabIsUnseen && !canGenerateNewVocabTask()) continue;
@@ -70,8 +69,8 @@ export async function makeTaskWithFocusOnVocab(
     
     // For sentence vocab: if no related vocab candidates found, try the sentence itself
     if (candidateVocab.length === 0 && focusVocab.length === 'sentence') {
-      const focusVocabIsDue = isDue(focusVocab);
-      const focusVocabIsUnseen = isUnseen(focusVocab);
+      const focusVocabIsDue = focusVocab.progress.level >= 0 && focusVocab.progress.due && new Date(focusVocab.progress.due) <= new Date();
+      const focusVocabIsUnseen = focusVocab.progress.level === -1;
       
       // Check if focus sentence vocab is valid
       if (!focusVocab.doNotPractice && 
