@@ -8,8 +8,8 @@ import { generateClozeChoiceFromFour, canGenerateClozeChoiceFromFour } from '../
 import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
 
 async function tryGenerateFromVocab(vocab: VocabData, translationRepo: TranslationRepoContract) {
-  // Filter to only word or sentence vocab
-  if (vocab.length !== 'word' && vocab.length !== 'sentence') {
+  // Filter to only sentence vocab (cloze tasks are now sentence-only)
+  if (vocab.length !== 'sentence') {
     return null;
   }
 
@@ -52,20 +52,24 @@ export async function getRandomClozeChoiceTask(
       }
     }
 
-    // Fallback to usual flow
-    const vocabItems = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
+    // Get due sentence vocab directly using entity function
+    const dueSentenceVocab = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
+    const sentenceVocab = dueSentenceVocab.filter(vocab => vocab.length === 'sentence');
     
-    if (vocabItems.length === 0) return null;
+    if (sentenceVocab.length === 0) {
+      // Fallback to unseen sentence vocab
+      const unseenSentenceVocab = await vocabRepo.getRandomUnseenSentenceVocab(20, languageCodes, vocabBlockList);
+      if (unseenSentenceVocab.length === 0) return null;
+      
+      for (const vocab of unseenSentenceVocab) {
+        const task = await tryGenerateFromVocab(vocab, translationRepo);
+        if (task) return task;
+      }
+      return null;
+    }
     
-    // Filter to only word or sentence vocab
-    const clozeEligible = vocabItems.filter(vocab => 
-      vocab.length === 'word' || vocab.length === 'sentence'
-    );
-    
-    if (clozeEligible.length === 0) return null;
-    
-    // Shuffle and try to find a valid vocab item
-    const shuffled = [...clozeEligible].sort(() => Math.random() - 0.5);
+    // Shuffle and try to find a valid vocab item from due sentence vocab
+    const shuffled = [...sentenceVocab].sort(() => Math.random() - 0.5);
     
     for (const vocab of shuffled) {
       const task = await tryGenerateFromVocab(vocab, translationRepo);

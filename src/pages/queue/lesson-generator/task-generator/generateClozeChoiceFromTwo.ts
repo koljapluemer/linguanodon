@@ -15,11 +15,11 @@ export function generateClozeChoiceFromTwo(vocab: VocabData): Task {
 }
 
 export function canGenerateClozeChoiceFromTwo(vocab: VocabData, translations: TranslationData[]): boolean {
-  // Level 1 only
-  if (vocab.progress.level !== 1) return false;
+  // Only for sentence length
+  if (vocab.length !== 'sentence') return false;
   
-  // Must be word or sentence
-  if (vocab.length !== 'word' && vocab.length !== 'sentence') return false;
+  // Don't generate for level > 6
+  if (vocab.progress.level > 6) return false;
   
   // Must have content and translations
   return translations.length > 0 && !!vocab.content;

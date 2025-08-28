@@ -47,13 +47,24 @@ export async function getRandomVocabRevealTask(
       }
     }
 
-    // Fallback to usual flow
-    const vocabItems = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
+    // Get due vocab and filter by reveal task requirements
+    const allDueVocab = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
     
-    if (vocabItems.length === 0) return null;
+    // Filter vocab based on reveal task level requirements
+    const eligibleVocab = allDueVocab.filter(vocab => {
+      if (vocab.length === 'sentence') {
+        // Sentences need level > 6 for reveal tasks
+        return vocab.progress.level > 6;
+      } else {
+        // Word/unspecified need level >= 3
+        return vocab.progress.level >= 3;
+      }
+    });
+    
+    if (eligibleVocab.length === 0) return null;
     
     // Shuffle and try to find a valid vocab item
-    const shuffled = [...vocabItems].sort(() => Math.random() - 0.5);
+    const shuffled = [...eligibleVocab].sort(() => Math.random() - 0.5);
     
     for (const vocab of shuffled) {
       const task = await tryGenerateFromVocab(vocab, translationRepo);

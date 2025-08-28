@@ -21,8 +21,9 @@ export async function getRandomVocabTryToRememberTask(
       }
     }
 
-    // Fallback to usual flow
-    const vocabItems = await vocabRepo.getRandomUnseenVocabInLanguages(languageCodes, 10, undefined, vocabBlockList);
+    // Get unseen vocab (excluding sentences for try-to-remember tasks)
+    const allUnseenVocab = await vocabRepo.getRandomUnseenVocabInLanguages(languageCodes, 10, undefined, vocabBlockList);
+    const vocabItems = allUnseenVocab.filter(vocab => vocab.length !== 'sentence');
     
     if (vocabItems.length === 0) return null;
     

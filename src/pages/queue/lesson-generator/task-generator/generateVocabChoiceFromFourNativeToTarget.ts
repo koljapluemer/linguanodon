@@ -18,6 +18,9 @@ export function canGenerateVocabChoiceFromFourNativeToTarget(vocab: VocabData, t
   // Level 2 or 3
   if (vocab.progress.level !== 2 && vocab.progress.level !== 3) return false;
   
+  // Only allow for 'word' or 'unspecified' length, not 'sentence'
+  if (vocab.length === 'sentence') return false;
+  
   // Must have >0 translations and content
   return translations.length > 0 && !!vocab.content;
 }

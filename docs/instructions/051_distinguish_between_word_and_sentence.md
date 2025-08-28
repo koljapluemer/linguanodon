@@ -12,44 +12,9 @@ As a first step, let's make an alternative task for new (unseen) vocab of type `
 
 Next improvement: In a [vocab-focussed task](src/pages/queue/lesson-generator/utils/makeTaskWithFocusOnVocab.ts) we are currently trying to get a task directly related to the focus vocab first thing. This is fine for `vocab` and `unspecified`, but let's turn that around for `sentence`: If it's a sentence, try to get *all related* vocab done and only use the `sentence` once the related stuff yields nothing
 
-## Context
 
-**src/entities/remote-sets/validation/vocabSchema.ts** - Uses Length as a Zod enum for validating vocabulary length field in remote dataset schemas.
+Now, let's do something bigger:
 
-**src/entities/vocab/vocab/VocabData.ts** - Uses Length type to define the length property in VocabData interface structure.
+- disable the current choose-from-x tasks for sentences ( [this](src/tasks/task-vocab-single-choice/TaskVocabChooseFromOptions.vue), but on generator/selection level), only allow it for length `word` or `unspecified`. Make sure that's reflected in all files that try to make such a task, you may also adapt entity functions to smarltly select vocab for this
 
-**src/pages/vocab-add/ui/VocabAddFormAdvancedPropsRenderer.vue** - Uses Length values to populate length dropdown options in the advanced vocabulary creation form.
-
-**src/pages/vocab-add/ui/VocabAddFormController.vue** - Uses Length values as default options for the length field in vocabulary creation forms.
-
-**src/pages/vocab-add/ui/VocabAddFormMetaRenderer.vue** - Uses Length values to generate dropdown options for vocabulary length selection during creation.
-
-**src/pages/vocab-edit/ui/VocabEditFormController.vue** - Uses Length values to populate length field options in vocabulary editing forms.
-
-**src/pages/vocab-edit/ui/VocabFormAdvancedPropsRenderer.vue** - Uses Length for creating dropdown options and type checking in advanced vocabulary edit form.
-
-**src/pages/vocab-edit/ui/VocabFormCoreRenderer.vue** - Uses Length values for length field options in the core vocabulary editing interface.
-
-**src/pages/vocab-edit/ui/VocabFormMetaRenderer.vue** - Uses Length to generate length dropdown options in the vocabulary metadata editing form.
-
-**src/features/manage-vocab-list/ManageVocabList.vue** - Uses hardcoded "not-specified" length value when creating vocab entries.
-
-**src/pages/downloads/UnifiedRemoteSetService.ts** - Maps external length values to internal Length type for imported vocabulary.
-
-**src/pages/queue/lesson-generator/task-generator/generateClozeChoiceFromFour.ts** - Checks vocab length against old values "multi-word-expression" and "single-sentence" to determine task eligibility.
-
-**src/pages/queue/lesson-generator/task-generator/generateClozeChoiceFromTwo.ts** - Checks vocab length against old values "multi-word-expression" and "single-sentence" to determine task eligibility.
-
-**src/pages/queue/lesson-generator/task-generator/generateClozeReveal.ts** - Checks vocab length against old values "multi-word-expression" and "single-sentence" to determine task eligibility.
-
-**src/pages/queue/lesson-generator/utils/getRandomClozeChoiceTask.ts** - Uses length comparisons with old values "multi-word-expression" and "single-sentence" for task filtering.
-
-**src/pages/queue/lesson-generator/utils/getRandomClozeRevealTask.ts** - Uses length comparisons with old values "multi-word-expression" and "single-sentence" for task filtering.
-
-**src/tasks/task-cloze-choice/TaskClozeChooseFromOptions.vue** - Compares vocab length against old values "single-sentence" and "multi-word-expression" for UI rendering.
-
-**src/tasks/task-cloze-reveal/TaskClozeReveal.vue** - Compares vocab length against old values "single-sentence" and "multi-word-expression" for UI rendering.
-
-**src/tasks/task-vocab-reveal/TaskVocabReveal.vue** - Compares vocab length against old values "single-sentence" and "multiple-sentences" for UI rendering.
-
-**src/tasks/task-vocab-try-to-remember/TaskVocabTryToRemember.vue** - Compares vocab length against old values "single-sentence" and "multiple-sentences" for UI rendering.
+- Adapt how [cloze](src/tasks/task-cloze-choice/TaskClozeChooseFromOptions.vue) works. First, it should only ever be generated for `sentence` (should already be implemented). Use the `progress.level` of the vocab data to determine which word of the sentence should be clozed (0 = first word, 1 = second word) and so on — if the vocab has less words than the level asks for, start again at the beginning but cloze two words. For example, level 3 on a vocab of type sentence with 4 words should mean the fourth word is clozed (0 index!), while on level 5 it should cloze word with index 1 together with word of index 2. If the level is above 6, do NOT generate cloze exercises for this vocab, instead, randomly generate either [this reveal](docs/reference/tasks/vocab-reveal-native-to-target.md) or [this reveal](docs/reference/tasks/vocab-reveal-target-to-native.md). Make sure that's reflected everywhere where its relevant, which may be a lot of places throughout task gen utils where vocab is used. You may adapt entity functions.
