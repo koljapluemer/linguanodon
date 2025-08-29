@@ -12,13 +12,3 @@ export function generateVocabFormSingleSentence(vocab: VocabData): Task {
     associatedVocab: [vocab.uid]
   };
 }
-
-// export function canGenerateVocabFormSingleSentence(
-//   vocab: VocabData,
-//   translations: TranslationData[]
-// ): boolean {
-//   // Vocab must be seen (level 0+) and have translations
-//   return vocab.progress.level >= 0 && 
-//          !!vocab.content &&
-//          translations.length > 0;
-// }

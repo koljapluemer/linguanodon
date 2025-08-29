@@ -8,18 +8,7 @@ export function generateVocabChoiceFromTwoNativeToTarget(vocab: VocabData): Task
     uid,
     language: vocab.language,
     taskType: 'vocab-choose-from-two-native-to-target',
-    prompt: 'Choose the correct vocab',
+    prompt: 'Choose the correct option',
     associatedVocab: [vocab.uid]
   };
 }
-
-// export function canGenerateVocabChoiceFromTwoNativeToTarget(vocab: VocabData, translations: TranslationData[]): boolean {
-//   // Level 1 or 2
-//   if (vocab.progress.level !== 1 && vocab.progress.level !== 2) return false;
-  
-//   // Only allow for 'word' or 'unspecified' length, not 'sentence'
-//   if (vocab.length === 'sentence') return false;
-  
-//   // Must have >0 translations and content
-//   return translations.length > 0 && !!vocab.content;
-// }

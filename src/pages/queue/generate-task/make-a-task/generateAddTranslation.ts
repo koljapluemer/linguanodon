@@ -12,11 +12,3 @@ export function generateAddTranslation(vocab: VocabData): Task {
     associatedVocab: [vocab.uid]
   };
 }
-
-// export function canGenerateAddTranslation(vocab: VocabData, translations: TranslationData[]): boolean {
-//   if (!vocab.content?.trim()) return false;
-//   if (translations.length > 0) return false;
-//   return true;
-// }
-
-

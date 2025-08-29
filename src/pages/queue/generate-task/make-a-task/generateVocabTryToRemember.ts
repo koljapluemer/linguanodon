@@ -8,21 +8,7 @@ export function generateVocabTryToRemember(vocab: VocabData): Task {
     uid,
     language: vocab.language,
     taskType: 'vocab-try-to-remember',
-    prompt: 'Try to remember the meaning of this word',
+    prompt: 'Try to memorize',
     associatedVocab: [vocab.uid]
   };
 }
-
-// export function canGenerateVocabTryToRemember(vocab: VocabData): boolean {
-//   // Must be unseen vocab
-//   if (vocab.progress.level !== -1) {
-//     return false;
-//   }
-  
-//   // Only allow for unspecified and word length (disable for sentence)
-//   if (vocab.length === 'sentence') {
-//     return false;
-//   }
-  
-//   return true;
-// }
