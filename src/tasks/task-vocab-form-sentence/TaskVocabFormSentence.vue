@@ -55,7 +55,7 @@ const handleDone = async () => {
       noteType: 'example sentence task',
       showBeforeExercise: false
     };
-    const savedNote = await noteRepo.saveNote(noteData);
+    const savedNote = await noteRepo.saveNote(toRaw(noteData));
     
     // Attach note to both vocab items
     for (const vocab of vocabItems.value) {
