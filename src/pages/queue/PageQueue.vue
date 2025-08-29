@@ -9,7 +9,7 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
-import { makeTask } from './lesson-generator/makeTask';
+import { makeTask } from './generate-task/makeTask';
 
 // Props
 const props = defineProps<{

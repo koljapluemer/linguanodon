@@ -1,0 +1,65 @@
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { Task } from '@/entities/tasks/Task';
+import { generateVocabRevealTargetToNative } from '../../../make-a-task/generateVocabRevealTargetToNative';
+import { generateVocabRevealNativeToTarget } from '../../../make-a-task/generateVocabRevealNativeToTarget';
+import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
+
+async function tryGenerateFromVocab(vocab: VocabData) {
+  // Randomly pick between the two generators
+  return Math.random() < 0.5
+    ? generateVocabRevealTargetToNative(vocab)
+    : generateVocabRevealNativeToTarget(vocab);
+}
+
+export async function getRandomVocabRevealTask(
+  vocabRepo: VocabRepoContract,
+  resourceRepo: ResourceRepoContract,
+  _translationRepo: TranslationRepoContract,
+  languageCodes: string[],
+  vocabBlockList?: string[]
+): Promise<Task | null> {
+  try {
+    // 25% chance to try immersion resource first
+    if (Math.random() < 0.25) {
+      const immersionVocab = await getRandomDueVocabFromRandomValidImmersionResource(
+        resourceRepo, vocabRepo, languageCodes, vocabBlockList
+      );
+      if (immersionVocab) {
+        const task = await tryGenerateFromVocab(immersionVocab);
+        if (task) return task;
+      }
+    }
+
+    // Get due vocab and filter by reveal task requirements
+    const allDueVocab = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
+    
+    // Filter vocab based on reveal task level requirements
+    const eligibleVocab = allDueVocab.filter(vocab => {
+      if (vocab.length === 'sentence') {
+        // Sentences need level > 6 for reveal tasks
+        return vocab.progress.level > 6;
+      } else {
+        // Word/unspecified need level >= 3
+        return vocab.progress.level >= 3;
+      }
+    });
+    
+    if (eligibleVocab.length === 0) return null;
+    
+    // Shuffle and try to find a valid vocab item
+    const shuffled = [...eligibleVocab].sort(() => Math.random() - 0.5);
+    
+    for (const vocab of shuffled) {
+      const task = await tryGenerateFromVocab(vocab);
+      if (task) return task;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error generating vocab reveal task:', error);
+    return null;
+  }
+}
