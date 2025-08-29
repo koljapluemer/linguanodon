@@ -7,18 +7,11 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import { shuffleArray } from '@/shared/arrayUtils';
 import { Rating } from 'ts-fsrs';
+import { generateClozeFromText, isRTLText, type ClozeData } from '@/tasks/utils/clozeUtils';
 
 interface AnswerOption {
   content: string;
   isCorrect: boolean;
-}
-
-interface ClozeData {
-  beforeWord: string;
-  hiddenWord: string;
-  afterWord: string;
-  hiddenWordIndex: number;
-  hiddenWords?: string[]; // For multiple word clozing
 }
 
 interface Props {
@@ -63,9 +56,7 @@ const optionCount = computed(() => {
 
 const isRTL = computed(() => {
   if (!vocab.value?.content) return false;
-  // Check if text contains RTL characters using Unicode ranges
-  const rtlChars = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/;
-  return rtlChars.test(vocab.value.content);
+  return isRTLText(vocab.value.content);
 });
 
 const secondaryContent = computed(() => {
@@ -105,69 +96,6 @@ async function loadVocabData() {
   }
 }
 
-function splitTextIntoWords(text: string): string[] {
-  return text.trim().split(/\s+/).filter(word => word.length > 0);
-}
-
-function generateClozeFromText(text: string, level: number): ClozeData {
-  const words = splitTextIntoWords(text);
-  
-  if (words.length < 1) {
-    return {
-      beforeWord: '',
-      hiddenWord: text,
-      afterWord: '',
-      hiddenWordIndex: 0
-    };
-  }
-
-  if (words.length === 1) {
-    return {
-      beforeWord: '',
-      hiddenWord: words[0],
-      afterWord: '',
-      hiddenWordIndex: 0
-    };
-  }
-
-  const wordCount = words.length;
-  let indicesToHide: number[] = [];
-  
-  if (level < wordCount) {
-    // Single word clozing based on level (0-indexed)
-    indicesToHide = [level];
-  } else {
-    // Multiple word clozing when level >= wordCount
-    // Start over but cloze two words
-    const baseIndex = level % wordCount;
-    const nextIndex = (baseIndex + 1) % wordCount;
-    indicesToHide = [baseIndex, nextIndex];
-  }
-  
-  // Sort indices to handle them properly
-  indicesToHide.sort((a, b) => a - b);
-  
-  const hiddenWords = indicesToHide.map(i => words[i]);
-  const hiddenWord = hiddenWords.join(' ');
-  
-  // Build the text with hidden words replaced by placeholder
-  let result = [...words];
-  // Replace from right to left to maintain correct indices
-  for (let i = indicesToHide.length - 1; i >= 0; i--) {
-    result[indicesToHide[i]] = '___HIDDEN___';
-  }
-  
-  const textWithPlaceholder = result.join(' ');
-  const parts = textWithPlaceholder.split('___HIDDEN___');
-  
-  return {
-    beforeWord: parts[0]?.trim() || '',
-    hiddenWord: hiddenWord,
-    afterWord: parts[parts.length - 1]?.trim() || '',
-    hiddenWordIndex: indicesToHide[0],
-    hiddenWords: hiddenWords
-  };
-}
 
 async function generateClozeOptions() {
   if (!vocab.value || translations.value.length === 0) return;
@@ -176,7 +104,7 @@ async function generateClozeOptions() {
     ? translations.value[Math.floor(Math.random() * translations.value.length)].content
     : vocab.value.content || '';
   
-  clozeData.value = generateClozeFromText(sourceText, vocab.value.progress.level);
+  clozeData.value = generateClozeFromText(sourceText, vocab.value.progress.level, isRTL.value);
   const correctAnswer = clozeData.value.hiddenWord;
   
   const options: AnswerOption[] = [];
@@ -266,15 +194,15 @@ onMounted(loadVocabData);
 
   <div v-else-if="vocab && answerOptions.length > 0 && clozeData" class="text-center">
     <div class="mb-8">
-      <div class="text-3xl mb-4" :class="{ 'rtl': isRTL }">
-        <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
+      <div class="text-3xl mb-4" :dir="isRTL ? 'rtl' : 'ltr'">
+        <span v-if="clozeData.beforeWord" class="me-2">{{ clozeData.beforeWord }}</span>
         <span class="inline-block bg-gray-300 dark:bg-gray-600 text-transparent rounded px-2 py-1 mx-1 select-none" 
               :style="{ width: Math.max(clozeData.hiddenWord.length * 0.6, 3) + 'em' }">
           {{ clozeData.hiddenWord }}
         </span>
-        <span v-if="clozeData.afterWord" class="ml-2">{{ clozeData.afterWord }}</span>
+        <span v-if="clozeData.afterWord" class="ms-2">{{ clozeData.afterWord }}</span>
       </div>
-      <div v-if="secondaryContent" class="text-2xl text-base-content/70" :class="{ 'rtl': isRTL }">
+      <div v-if="secondaryContent" class="text-2xl text-base-content/70" :dir="isRTL ? 'rtl' : 'ltr'">
         {{ secondaryContent }}
       </div>
     </div>
@@ -287,12 +215,12 @@ onMounted(loadVocabData);
     </div>
 
     <div v-if="isAnswered" class="mb-6">
-      <div class="text-3xl mb-4" :class="{ 'rtl': isRTL }">
-        <span v-if="clozeData.beforeWord" class="mr-2">{{ clozeData.beforeWord }}</span>
+      <div class="text-3xl mb-4" :dir="isRTL ? 'rtl' : 'ltr'">
+        <span v-if="clozeData.beforeWord" class="me-2">{{ clozeData.beforeWord }}</span>
         <span class="text-green-600 font-bold mx-1">{{ clozeData.hiddenWord }}</span>
-        <span v-if="clozeData.afterWord" class="ml-2">{{ clozeData.afterWord }}</span>
+        <span v-if="clozeData.afterWord" class="ms-2">{{ clozeData.afterWord }}</span>
       </div>
-      <div v-if="secondaryContent" class="text-2xl text-base-content/70" :class="{ 'rtl': isRTL }">
+      <div v-if="secondaryContent" class="text-2xl text-base-content/70" :dir="isRTL ? 'rtl' : 'ltr'">
         {{ secondaryContent }}
       </div>
     </div>
