@@ -15,7 +15,7 @@ export function isRTLText(text: string): boolean {
   return rtlChars.test(text);
 }
 
-export function generateClozeFromText(text: string, level: number, isRTL: boolean = false): ClozeData {
+export function generateClozeFromText(text: string, level: number): ClozeData {
   const words = splitTextIntoWords(text);
   
   if (words.length < 1) {
@@ -52,7 +52,7 @@ export function generateClozeFromText(text: string, level: number, isRTL: boolea
   const hiddenWords = indicesToHide.map(i => words[i]);
   const hiddenWord = hiddenWords.join(' ');
   
-  let result = [...words];
+  const result = [...words];
   for (let i = indicesToHide.length - 1; i >= 0; i--) {
     result[indicesToHide[i]] = '___HIDDEN___';
   }

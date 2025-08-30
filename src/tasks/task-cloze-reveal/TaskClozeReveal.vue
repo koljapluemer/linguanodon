@@ -90,7 +90,7 @@ function generateCloze() {
     ? translations.value[Math.floor(Math.random() * translations.value.length)].content
     : vocab.value.content || '';
   
-  clozeData.value = generateClozeFromText(text, vocab.value.progress.level, isRTL.value);
+  clozeData.value = generateClozeFromText(text, vocab.value.progress.level);
 }
 
 const handleRating = async (rating: Rating) => {

@@ -104,7 +104,7 @@ async function generateClozeOptions() {
     ? translations.value[Math.floor(Math.random() * translations.value.length)].content
     : vocab.value.content || '';
   
-  clozeData.value = generateClozeFromText(sourceText, vocab.value.progress.level, isRTL.value);
+  clozeData.value = generateClozeFromText(sourceText, vocab.value.progress.level);
   const correctAnswer = clozeData.value.hiddenWord;
   
   const options: AnswerOption[] = [];
