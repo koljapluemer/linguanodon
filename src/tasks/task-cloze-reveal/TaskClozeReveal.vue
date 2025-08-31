@@ -139,7 +139,7 @@ onMounted(loadVocabData);
           <span class="text-green-600 font-bold mx-1">{{ clozeData.hiddenWord }}</span>
           <span v-if="clozeData.afterWord" class="ms-2">{{ clozeData.afterWord }}</span>
         </div>
-        <div v-if="translationContent" class="text-2xl text-base-content/70" :dir="isRTL ? 'rtl' : 'ltr'">
+        <div v-if="translationContent" class="text-2xl text-base-content/70">
           {{ translationContent }}
         </div>
       </div>
