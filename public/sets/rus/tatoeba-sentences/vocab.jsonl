@@ -1,0 +1,17 @@
+{"id": "1", "language": "rus", "content": "Ищи.", "length": "sentence", "translations": ["1", "2"], "links": ["3", "1", "5"], "priority": 2}
+{"id": "2", "language": "rus", "content": "Удалить?", "length": "sentence", "translations": ["3"], "links": ["7", "1"], "priority": 2}
+{"id": "3", "language": "rus", "content": "Кусайте.", "length": "sentence", "translations": ["4"], "links": ["9", "1"], "priority": 2}
+{"id": "4", "language": "rus", "content": "Мышь!", "length": "sentence", "translations": ["5"], "links": ["11", "1"], "priority": 2}
+{"id": "5", "language": "rus", "content": "Хрю!", "length": "sentence", "translations": ["6"], "links": ["13", "1"], "priority": 2}
+{"id": "6", "language": "rus", "content": "Ня!", "length": "sentence", "translations": ["7", "8", "10"], "links": ["15", "1", "17", "21"], "priority": 2}
+{"id": "7", "language": "rus", "content": "Ку-ка-ре-ку!", "length": "sentence", "translations": ["9"], "links": ["19", "1"], "priority": 2}
+{"id": "8", "language": "rus", "content": "Жалко.", "length": "sentence", "translations": ["11"], "links": ["23", "1"], "priority": 2}
+{"id": "9", "language": "rus", "content": "Хорошо?", "length": "sentence", "translations": ["12"], "links": ["25", "1"], "priority": 2}
+{"id": "10", "language": "rus", "content": "Ух ты!", "length": "sentence", "translations": ["13"], "links": ["27", "1"], "priority": 2}
+{"id": "11", "language": "rus", "content": "Идёт?", "length": "sentence", "translations": ["14"], "links": ["29", "1"], "priority": 2}
+{"id": "12", "language": "rus", "content": "Успокойся.", "length": "sentence", "translations": ["15"], "links": ["31", "1"], "priority": 2}
+{"id": "13", "language": "rus", "content": "Хмм?", "length": "sentence", "translations": ["16"], "links": ["33", "1"], "priority": 2}
+{"id": "14", "language": "rus", "content": "Комбо!", "length": "sentence", "translations": ["17"], "links": ["35", "1"], "priority": 2}
+{"id": "15", "language": "rus", "content": "Ха-ха.", "length": "sentence", "translations": ["18"], "links": ["37", "1"], "priority": 2}
+{"id": "16", "language": "rus", "content": "Переведи.", "length": "sentence", "translations": ["19"], "links": ["39", "1"], "priority": 2}
+{"id": "17", "language": "rus", "content": "Быстрее.", "length": "sentence", "translations": ["20"], "links": ["41", "1"], "priority": 2}
