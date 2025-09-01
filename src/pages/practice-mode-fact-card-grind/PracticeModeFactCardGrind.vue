@@ -25,6 +25,7 @@ type QueueState =
 
 // State
 const state = ref<QueueState>({ status: 'initializing' });
+const lastUsedFactCardUid = ref<string | null>(null);
 
 // UI state for smooth transitions
 const showLoadingUI = ref(false);
@@ -58,7 +59,10 @@ async function generateNextTask(): Promise<Task | null> {
       return null;
     }
     
-    return await generateFactCard(factCardRepo!, languageCodes);
+    // Create block list with last used fact card
+    const blockList = lastUsedFactCardUid.value ? [lastUsedFactCardUid.value] : undefined;
+    
+    return await generateFactCard(factCardRepo!, languageCodes, blockList);
   } catch (error) {
     console.error('Error generating fact card task:', error);
     return null;
@@ -178,6 +182,15 @@ onUnmounted(() => {
 
 // Handle task completion
 const handleTaskFinished = async () => {
+  // Track the fact card UID before completing the task
+  if (state.value.status === 'task') {
+    const currentTask = state.value.currentTask;
+    const factCardUid = currentTask.associatedFactCards?.[0];
+    if (factCardUid) {
+      lastUsedFactCardUid.value = factCardUid;
+    }
+  }
+  
   await completeCurrentTask();
 };
 </script>

@@ -5,11 +5,12 @@ import { generateFactCardReveal } from '@/tasks/task-fact-card-reveal/generateFa
 
 export async function generateFactCard(
   factCardRepo: FactCardRepoContract,
-  languageCodes: string[]
+  languageCodes: string[],
+  factCardBlockList?: string[]
 ): Promise<Task | null> {
   try {
     // First, try to get unseen fact cards (level -1) - these get try-to-remember tasks
-    const unseenFactCards = await factCardRepo.getRandomUnseenFactCards(1, languageCodes);
+    const unseenFactCards = await factCardRepo.getRandomUnseenFactCards(1, languageCodes, factCardBlockList);
     
     if (unseenFactCards.length > 0) {
       const factCard = unseenFactCards[0];
@@ -17,7 +18,7 @@ export async function generateFactCard(
     }
 
     // If no unseen fact cards, get due fact cards (level >= 0) - these get reveal tasks
-    const dueFactCards = await factCardRepo.getRandomAlreadySeenDueFactCards(1, languageCodes);
+    const dueFactCards = await factCardRepo.getRandomAlreadySeenDueFactCards(1, languageCodes, factCardBlockList);
     
     if (dueFactCards.length > 0) {
       const factCard = dueFactCards[0];
