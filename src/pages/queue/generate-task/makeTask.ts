@@ -5,6 +5,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
+import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { TaskGeneratorContext } from './types/TaskGeneratorContext';
 import { getRandomExtractKnowledgeTask } from './flavors/by-task-type-balance/helpers/getRandomExtractKnowledgeTask';
 import { getRandomAddSubGoalsTask } from './flavors/by-task-type-balance/helpers/getRandomAddSubGoalsTask';
@@ -36,6 +37,7 @@ export async function makeTask(
   languageRepo: LanguageRepoContract,
   goalRepo: GoalRepoContract,
   noteRepo: NoteRepoContract,
+  factCardRepo: FactCardRepoContract,
   focusOnVocab?: string
 ): Promise<Task | null> {
   try {
@@ -120,6 +122,7 @@ export async function makeTask(
         languageRepo,
         goalRepo,
         noteRepo,
+        factCardRepo,
         languageCodes,
         vocabBlockList
       };

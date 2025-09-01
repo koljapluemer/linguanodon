@@ -10,6 +10,7 @@ import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/widgets/do-task/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { makeTask } from './generate-task/makeTask';
+import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 
 // Props
 const props = defineProps<{
@@ -22,10 +23,11 @@ const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const goalRepo = inject<GoalRepoContract>('goalRepo');
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
+const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 
 const noteRepo = inject<NoteRepoContract>('noteRepo');
 
-if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRepo || !noteRepo) {
+if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRepo || !factCardRepo || !noteRepo) {
   throw new Error('Repositories not available');
 }
 
@@ -74,6 +76,7 @@ async function generateNextTask(): Promise<Task | null> {
       languageRepo!,
       goalRepo!,
       noteRepo!,
+      factCardRepo!,
       props.focusOnVocab
     );
   } catch (error) {

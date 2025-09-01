@@ -11,6 +11,8 @@ import TaskVocabChooseFromOptions from "@/tasks/task-vocab-single-choice/TaskVoc
 import TaskClozeChooseFromOptions from "@/tasks/task-cloze-choice/TaskClozeChooseFromOptions.vue";
 import TaskClozeReveal from "@/tasks/task-cloze-reveal/TaskClozeReveal.vue";
 import TaskVocabFormSentence from "@/tasks/task-vocab-form-sentence/TaskVocabFormSentence.vue";
+import TaskFactCardTryToRemember from "@/tasks/task-fact-card-try-to-remember/TaskFactCardTryToRemember.vue";
+import TaskFactCardReveal from "@/tasks/task-fact-card-reveal/TaskFactCardReveal.vue";
 
 export interface TaskInfo {
   component: Component
@@ -35,6 +37,8 @@ export const taskRegistry: Record<string, TaskInfo> = {
   "cloze-reveal": { component: TaskClozeReveal, size: 'small' },
   "vocab-form-sentence": { component: TaskVocabFormSentence, size: 'medium' },
   "vocab-form-sentence-single": { component: TaskVocabFormSentence, size: 'medium' },
+  "fact-card-try-to-remember": { component: TaskFactCardTryToRemember, size: 'small' },
+  "fact-card-reveal": { component: TaskFactCardReveal, size: 'small' },
 };
 
 export const TASK_REGISTRY_INJECTION_KEY = Symbol("taskRegistry");

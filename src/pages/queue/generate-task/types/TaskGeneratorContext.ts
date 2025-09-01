@@ -4,6 +4,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
+import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 
 export interface TaskGeneratorContext {
   vocabRepo: VocabRepoContract;
@@ -12,6 +13,7 @@ export interface TaskGeneratorContext {
   languageRepo: LanguageRepoContract;
   goalRepo: GoalRepoContract;
   noteRepo: NoteRepoContract;
+  factCardRepo: FactCardRepoContract;
   languageCodes: string[];
   vocabBlockList: string[];
 }

@@ -12,4 +12,8 @@ export interface FactCardRepoContract {
   // Progress operations
   scoreFactCard(factCardId: string, rating: Rating): Promise<void>;
   updateLastReview(factCardId: string): Promise<void>;
+
+  // Task generation operations
+  getRandomUnseenFactCards(count: number, languages: string[], factCardBlockList?: string[]): Promise<FactCardData[]>;
+  getRandomAlreadySeenDueFactCards(count: number, languages: string[], factCardBlockList?: string[]): Promise<FactCardData[]>;
 }
