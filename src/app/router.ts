@@ -4,7 +4,8 @@ import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
 import PageListFactCards from '@/pages/fact-cards-list/PageListFactCards.vue';
-import PageManageFactCard from '@/pages/fact-cards-manage/PageManageFactCard.vue';
+import PageFactCardAdd from '@/pages/fact-cards-add/PageFactCardAdd.vue';
+import PageFactCardEdit from '@/pages/fact-cards-edit/PageFactCardEdit.vue';
 import PageListResources from '@/pages/resources-list/PageListResources.vue';
 import PageResourceAdd from '@/pages/resource-add/PageResourceAdd.vue';
 import PageResourceEdit from '@/pages/resource-edit/PageResourceEdit.vue';
@@ -57,12 +58,12 @@ const router = createRouter({
     {
       path: '/fact-cards/new',
       name: 'fact-cards-new',
-      component: PageManageFactCard
+      component: PageFactCardAdd
     },
     {
-      path: '/fact-cards/:uid/edit',
+      path: '/fact-cards/:id/edit',
       name: 'fact-cards-edit',
-      component: PageManageFactCard
+      component: PageFactCardEdit
     },
     {
       path: '/resources',

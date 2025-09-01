@@ -1,4 +1,5 @@
 import type { LearningProgress } from "@/shared/LearningProgress";
+import type { Link } from "@/shared/links/Link";
 
 export interface FactCardData {
     uid: string
@@ -6,6 +7,8 @@ export interface FactCardData {
     front: string
     back: string
     notes: string[] // array of NoteData uids
+    links: Link[]
+    
  
     priority: number;
     doNotPractice?: boolean;
