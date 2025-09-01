@@ -15,3 +15,41 @@
 {"id": "15", "language": "rus", "content": "Ха-ха.", "length": "sentence", "translations": ["18"], "links": ["37", "1"], "priority": 2}
 {"id": "16", "language": "rus", "content": "Переведи.", "length": "sentence", "translations": ["19"], "links": ["39", "1"], "priority": 2}
 {"id": "17", "language": "rus", "content": "Быстрее.", "length": "sentence", "translations": ["20"], "links": ["41", "1"], "priority": 2}
+{"id": "18", "language": "rus", "content": "Целуйтесь!", "length": "sentence", "translations": ["21"], "links": ["44", "42"], "priority": 2}
+{"id": "19", "language": "rus", "content": "Загрузить.", "length": "sentence", "translations": ["22"], "links": ["46", "42"], "priority": 2}
+{"id": "20", "language": "rus", "content": "Пожалуйста...", "length": "sentence", "translations": ["23"], "links": ["48", "42"], "priority": 2}
+{"id": "21", "language": "rus", "content": "Чао!", "length": "sentence", "translations": ["24"], "links": ["50", "42"], "priority": 2}
+{"id": "22", "language": "rus", "content": "Милота!", "length": "sentence", "translations": ["25"], "links": ["52", "42"], "priority": 2}
+{"id": "23", "language": "rus", "content": "Договорились.", "length": "sentence", "translations": ["26"], "links": ["54", "42"], "priority": 2}
+{"id": "24", "language": "rus", "content": "Сейчас!", "length": "sentence", "translations": ["27"], "links": ["56", "42"], "priority": 2}
+{"id": "25", "language": "rus", "content": "Гадость!", "length": "sentence", "translations": ["28", "29"], "links": ["58", "42", "60"], "priority": 2}
+{"id": "26", "language": "rus", "content": "Помоги.", "length": "sentence", "translations": ["30"], "links": ["62", "42"], "priority": 2}
+{"id": "27", "language": "rus", "content": "Подписывайтесь!", "length": "sentence", "translations": ["31"], "links": ["64", "42"], "priority": 2}
+{"id": "28", "language": "rus", "content": "Спасибо!", "length": "sentence", "translations": ["32"], "links": ["66", "42"], "priority": 2}
+{"id": "29", "language": "rus", "content": "Том?", "length": "sentence", "translations": ["33"], "links": ["68", "42"], "priority": 2}
+{"id": "30", "language": "rus", "content": "Слушай!", "length": "sentence", "translations": ["34"], "links": ["70", "42"], "priority": 2}
+{"id": "31", "language": "rus", "content": "Пчёлы.", "length": "sentence", "translations": ["35"], "links": ["72", "42"], "priority": 2}
+{"id": "32", "language": "rus", "content": "Пользователь.", "length": "sentence", "translations": ["36"], "links": ["74", "42"], "priority": 2}
+{"id": "33", "language": "rus", "content": "Правильно?", "length": "sentence", "translations": ["37"], "links": ["76", "42"], "priority": 2}
+{"id": "34", "language": "rus", "content": "Динозавр!", "length": "sentence", "translations": ["38", "39"], "links": ["78", "42", "80"], "priority": 2}
+{"id": "35", "language": "rus", "content": "До свидания!", "length": "sentence", "translations": ["40"], "links": ["82", "42"], "priority": 2}
+{"id": "36", "language": "rus", "content": "До свидания!", "length": "sentence", "translations": ["41"], "links": ["85", "83"], "priority": 2}
+{"id": "37", "language": "rus", "content": "Семь?", "length": "sentence", "translations": ["42"], "links": ["87", "83"], "priority": 2}
+{"id": "38", "language": "rus", "content": "Ничего страшного.", "length": "sentence", "translations": ["43"], "links": ["89", "83"], "priority": 2}
+{"id": "39", "language": "rus", "content": "Пошевеливайтесь!", "length": "sentence", "translations": ["44"], "links": ["91", "83"], "priority": 2}
+{"id": "40", "language": "rus", "content": "Кофе?", "length": "sentence", "translations": ["45"], "links": ["93", "83"], "priority": 2}
+{"id": "41", "language": "rus", "content": "Твоё?", "length": "sentence", "translations": ["46"], "links": ["95", "83"], "priority": 2}
+{"id": "42", "language": "rus", "content": "Представь!", "length": "sentence", "translations": ["47"], "links": ["97", "83"], "priority": 2}
+{"id": "43", "language": "rus", "content": "Приблизительно.", "length": "sentence", "translations": ["48"], "links": ["99", "83"], "priority": 2}
+{"id": "44", "language": "rus", "content": "Чур, я на переднем сиденье!", "length": "sentence", "translations": ["49"], "links": ["101", "83"], "priority": 2}
+{"id": "45", "language": "rus", "content": "Выход.", "length": "sentence", "translations": ["50"], "links": ["103", "83"], "priority": 2}
+{"id": "46", "language": "rus", "content": "Боже мой!", "length": "sentence", "translations": ["51"], "links": ["105", "83"], "priority": 2}
+{"id": "47", "language": "rus", "content": "Достаточно.", "length": "sentence", "translations": ["52"], "links": ["107", "83"], "priority": 2}
+{"id": "48", "language": "rus", "content": "Ерунда.", "length": "sentence", "translations": ["53"], "links": ["109", "83"], "priority": 2}
+{"id": "49", "language": "rus", "content": "Вставай.", "length": "sentence", "translations": ["54"], "links": ["111", "83"], "priority": 2}
+{"id": "50", "language": "rus", "content": "Иди наверх!", "length": "sentence", "translations": ["55"], "links": ["113", "83"], "priority": 2}
+{"id": "51", "language": "rus", "content": "Деритесь.", "length": "sentence", "translations": ["56"], "links": ["115", "83"], "priority": 2}
+{"id": "52", "language": "rus", "content": "Добавляй!", "length": "sentence", "translations": ["57"], "links": ["117", "83"], "priority": 2}
+{"id": "53", "language": "rus", "content": "Лох!", "length": "sentence", "translations": ["58"], "links": ["119", "83"], "priority": 2}
+{"id": "54", "language": "rus", "content": "Ух ты!", "length": "sentence", "translations": ["59"], "links": ["121", "83"], "priority": 2}
+{"id": "55", "language": "rus", "content": "Веди себя хорошо!", "length": "sentence", "translations": ["60"], "links": ["123", "83"], "priority": 2}

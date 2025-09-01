@@ -17,7 +17,8 @@ from pathlib import Path
 SOURCE_LANGUAGE = 'eng'  # English
 TARGET_LANGUAGE = 'rus'
 OUTPUT_DIR = f'sets/{TARGET_LANGUAGE}/tatoeba-sentences'
-DEBUG_ABORT_AFTER_FIRST_PAGE = True  # Set to True to abort after first API call for debugging
+MAX_SENTENCES = 20  # Maximum number of new sentences to download
+DEBUG_ABORT_AFTER_FIRST_PAGE = False  # Set to True to abort after first API call for debugging
 
 # Set up logging
 logging.basicConfig(
@@ -34,6 +35,9 @@ logger = logging.getLogger(__name__)
 vocab_data = []
 translation_data = []
 link_data = []
+
+# Existing content tracking
+existing_translations = set()
 
 # ID counters
 vocab_id = 0
@@ -92,6 +96,61 @@ def create_translation(content, priority=None):
     translation_data.append(translation_entry)
     return translation_entry["id"]
 
+def load_existing_data():
+    """Load existing data from files to avoid duplicates"""
+    global vocab_id, translation_id, link_id, existing_translations
+    
+    output_dir = Path(OUTPUT_DIR)
+    
+    # Load existing translations to check for duplicates
+    translations_file = output_dir / "translations.jsonl"
+    if translations_file.exists():
+        logger.info(f"Loading existing translations from {translations_file}")
+        with open(translations_file, "r", encoding="utf-8") as f:
+            for line_num, line in enumerate(f, 1):
+                try:
+                    entry = json.loads(line.strip())
+                    existing_translations.add(entry["content"])
+                    # Update ID counter to avoid conflicts
+                    if "id" in entry:
+                        translation_id = max(translation_id, int(entry["id"]))
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Invalid JSON on line {line_num} in translations.jsonl: {e}")
+                except (KeyError, ValueError) as e:
+                    logger.warning(f"Invalid entry on line {line_num} in translations.jsonl: {e}")
+        
+        logger.info(f"Found {len(existing_translations)} existing translations")
+    
+    # Load existing vocab to update ID counter
+    vocab_file = output_dir / "vocab.jsonl"
+    if vocab_file.exists():
+        logger.info(f"Updating vocab ID counter from {vocab_file}")
+        with open(vocab_file, "r", encoding="utf-8") as f:
+            for line_num, line in enumerate(f, 1):
+                try:
+                    entry = json.loads(line.strip())
+                    if "id" in entry:
+                        vocab_id = max(vocab_id, int(entry["id"]))
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Invalid JSON on line {line_num} in vocab.jsonl: {e}")
+                except (KeyError, ValueError) as e:
+                    logger.warning(f"Invalid entry on line {line_num} in vocab.jsonl: {e}")
+    
+    # Load existing links to update ID counter
+    links_file = output_dir / "links.jsonl"
+    if links_file.exists():
+        logger.info(f"Updating link ID counter from {links_file}")
+        with open(links_file, "r", encoding="utf-8") as f:
+            for line_num, line in enumerate(f, 1):
+                try:
+                    entry = json.loads(line.strip())
+                    if "id" in entry:
+                        link_id = max(link_id, int(entry["id"]))
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Invalid JSON on line {line_num} in links.jsonl: {e}")
+                except (KeyError, ValueError) as e:
+                    logger.warning(f"Invalid entry on line {line_num} in links.jsonl: {e}")
+
 def create_vocab(language, content, length, translations=None, links=None, related_vocab=None, priority=None):
     """Create a vocab entry and return its ID, or return existing ID if duplicate content+language"""
     # Check if vocab with this content+language already exists
@@ -143,10 +202,12 @@ def create_vocab(language, content, length, translations=None, links=None, relat
 def fetch_sentences_from_tatoeba():
     """
     Fetch sentences from Tatoeba API and return raw sentence data.
+    Stops when we have enough sentences to meet MAX_SENTENCES after filtering duplicates.
     """
     base_url = "https://api.tatoeba.org/unstable/sentences"
     all_sentences = []
     page_count = 0
+    new_sentences_found = 0
     params = {
         'lang': SOURCE_LANGUAGE,
         'trans:lang': TARGET_LANGUAGE,
@@ -155,9 +216,9 @@ def fetch_sentences_from_tatoeba():
     }
     after_value = None
     
-    logger.info("=== Starting Tatoeba API requests ===")
+    logger.info(f"=== Starting Tatoeba API requests (need {MAX_SENTENCES} new sentences) ===")
     
-    while True:
+    while new_sentences_found < MAX_SENTENCES:
         page_count += 1
         logger.info(f"Fetching page {page_count}...")
         
@@ -177,6 +238,16 @@ def fetch_sentences_from_tatoeba():
         
         sentences = data.get('data', [])
         logger.info(f"Page {page_count}: fetched {len(sentences)} sentences")
+        
+        # Count new sentences in this batch
+        new_in_batch = 0
+        for sentence in sentences:
+            source_text = sentence.get('text', '').strip()
+            if source_text and source_text not in existing_translations:
+                new_in_batch += 1
+        
+        logger.info(f"Page {page_count}: {new_in_batch} new sentences (not duplicates)")
+        new_sentences_found += new_in_batch
         all_sentences.extend(sentences)
         
         if DEBUG_ABORT_AFTER_FIRST_PAGE:
@@ -202,7 +273,7 @@ def fetch_sentences_from_tatoeba():
         logger.info("Sleeping 1 second before next page...")
         time.sleep(1)
     
-    logger.info(f"Successfully fetched {len(all_sentences)} sentence pairs total")
+    logger.info(f"Successfully fetched {len(all_sentences)} total sentences ({new_sentences_found} new)")
     return all_sentences
 
 def process_tatoeba_sentences(sentences):
@@ -230,6 +301,15 @@ def process_tatoeba_sentences(sentences):
             
             if not source_text:
                 continue
+            
+            # Skip if we already have this translation
+            if source_text in existing_translations:
+                continue
+            
+            # Stop if we've reached our limit of NEW sentences
+            if processed_count >= MAX_SENTENCES:
+                logger.info(f"Reached maximum of {MAX_SENTENCES} new sentences")
+                break
             
             # Create source sentence link
             source_link_id = create_link(
@@ -298,35 +378,41 @@ def process_tatoeba_sentences(sentences):
     logger.info(f"Successfully processed {processed_count} sentence pairs")
 
 def save_jsonl_files():
-    """Save all collected data to JSONL files"""
+    """Save all collected data to JSONL files (append mode)"""
     # Create directory structure
     output_dir = Path(OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Save vocab.jsonl
-    with open(output_dir / "vocab.jsonl", "w", encoding="utf-8") as f:
+    if not vocab_data and not translation_data and not link_data:
+        logger.info("No new data to save")
+        return
+    
+    # Save vocab.jsonl (append mode)
+    with open(output_dir / "vocab.jsonl", "a", encoding="utf-8") as f:
         for entry in vocab_data:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
-    # Save translations.jsonl
-    with open(output_dir / "translations.jsonl", "w", encoding="utf-8") as f:
+    # Save translations.jsonl (append mode)
+    with open(output_dir / "translations.jsonl", "a", encoding="utf-8") as f:
         for entry in translation_data:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
-    
-    # Save links.jsonl
-    with open(output_dir / "links.jsonl", "w", encoding="utf-8") as f:
+    # Save links.jsonl (append mode)
+    with open(output_dir / "links.jsonl", "a", encoding="utf-8") as f:
         for entry in link_data:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
-    logger.info(f"Saved {len(vocab_data)} vocab entries")
-    logger.info(f"Saved {len(translation_data)} translation entries")
-    logger.info(f"Saved {len(link_data)} link entries")
+    logger.info(f"Appended {len(vocab_data)} vocab entries")
+    logger.info(f"Appended {len(translation_data)} translation entries")
+    logger.info(f"Appended {len(link_data)} link entries")
     logger.info(f"Files saved to: {output_dir}")
 
 def main():
     """Main function to fetch data and generate JSONL files."""
     try:
+        # Load existing data to avoid duplicates
+        load_existing_data()
+        
         # Fetch sentences from Tatoeba API
         sentences = fetch_sentences_from_tatoeba()
         if not sentences:
