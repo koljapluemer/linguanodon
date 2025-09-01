@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Play, BookOpen, Target } from 'lucide-vue-next';
+import { Play, BookOpen, Target, RotateCcw } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -19,6 +19,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-goal-getter' },
     icon: Target,
     description: 'Work on your goals with targeted tasks'
+  },
+  {
+    name: 'Sisyphos',
+    route: { name: 'practice-mode-sisyphos' },
+    icon: RotateCcw,
+    description: 'Endless review of seen content - roll that boulder!'
   }
 ];
 </script>

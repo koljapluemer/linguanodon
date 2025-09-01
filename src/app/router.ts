@@ -3,6 +3,7 @@ import PracticeOverview from '@/pages/practice-overview/PracticeOverview.vue';
 import PracticeModeClassicQueue from '@/pages/practice-mode-classic-queue/PracticeModeClassicQueue.vue';
 import PracticeModeFactCardGrind from '@/pages/practice-mode-fact-card-grind/PracticeModeFactCardGrind.vue';
 import PracticeModeGoalGetter from '@/pages/practice-mode-goal-getter/PracticeModeGoalGetter.vue';
+import PracticeModeSisyphos from '@/pages/practice-mode-sisyphos/PracticeModeSisyphos.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -47,6 +48,11 @@ const router = createRouter({
       path: '/practice/goal-getter',
       name: 'practice-mode-goal-getter',
       component: PracticeModeGoalGetter
+    },
+    {
+      path: '/practice/sisyphos',
+      name: 'practice-mode-sisyphos',
+      component: PracticeModeSisyphos
     },
     {
       path: '/my-material',
