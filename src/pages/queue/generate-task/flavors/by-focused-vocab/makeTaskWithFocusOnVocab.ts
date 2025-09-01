@@ -1,6 +1,5 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
-import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/entities/tasks/Task';
 import { getRandomGeneratedTaskForVocab } from '../../by-entity/vocab/getRandomGeneratedTaskForVocab';
 import { useTrackTaskNumber } from '../../trackers/useTrackTaskNumber';
@@ -11,7 +10,6 @@ export async function makeTaskWithFocusOnVocab(
   focusVocabUid: string,
   vocabRepo: VocabRepoContract,
   translationRepo: TranslationRepoContract,
-  noteRepo: NoteRepoContract,
   vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
@@ -27,9 +25,8 @@ export async function makeTaskWithFocusOnVocab(
       }
       
       const translations = await translationRepo.getTranslationsByIds(focusVocab.translations);
-      const notes = await noteRepo.getNotesByUIDs(focusVocab.notes);
       
-      return await getRandomGeneratedTaskForVocab(focusVocab, translations, notes);
+      return await getRandomGeneratedTaskForVocab(focusVocab, translations);
     }
     
     // For subsequent tasks, get the focused vocab and its related vocab
@@ -100,9 +97,8 @@ export async function makeTaskWithFocusOnVocab(
     
     // Generate task based on selected vocab
     const translations = await translationRepo.getTranslationsByIds(selectedVocab.translations);
-    const notes = await noteRepo.getNotesByUIDs(selectedVocab.notes);
     
-    return await getRandomGeneratedTaskForVocab(selectedVocab, translations, notes);
+    return await getRandomGeneratedTaskForVocab(selectedVocab, translations);
     
   } catch (error) {
     console.error('Error in makeTaskWithFocusOnVocab:', error);

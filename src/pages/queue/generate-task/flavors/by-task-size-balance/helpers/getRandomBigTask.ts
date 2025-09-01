@@ -1,6 +1,5 @@
 import type { Task } from '@/entities/tasks/Task';
 import type { TaskGeneratorContext } from '../../../types/TaskGeneratorContext';
-import { getRandomAddPronunciationTask } from '../../by-task-type-balance/helpers/getRandomAddPronunciationTask';
 import { getRandomExtractKnowledgeTask } from '../../by-task-type-balance/helpers/getRandomExtractKnowledgeTask';
 import { shuffleArray } from '@/shared/arrayUtils';
 
@@ -9,10 +8,9 @@ type BigTaskGenerator = () => Promise<Task | null>;
 export async function getRandomBigTask(
   context: TaskGeneratorContext
 ): Promise<Task | null> {
-  const { vocabRepo, translationRepo, resourceRepo, noteRepo, languageCodes, vocabBlockList } = context;
+  const { resourceRepo, languageCodes } = context;
   
   const bigTaskGenerators: BigTaskGenerator[] = [
-    () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes, vocabBlockList),
     () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes)
   ];
 

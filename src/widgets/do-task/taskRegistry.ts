@@ -1,6 +1,5 @@
 import type { Component } from "vue";
 
-import RenderTaskForAddingPronunciation from "@/tasks/task-vocab-add-pronunciation/RenderTaskForAddingPronunciation.vue";
 import RenderTaskForAddingTranslation from "@/tasks/task-vocab-add-translation/RenderTaskForAddingTranslation.vue";
 import RenderExtractKnowledgeFromResource from "@/tasks/task-resource-extract-knowledge/RenderExtractKnowledgeFromResource.vue";
 import TaskAddSubGoals from "@/tasks/task-goal-add-sub-goals/TaskAddSubGoals.vue";
@@ -19,7 +18,6 @@ export interface TaskInfo {
 }
 
 export const taskRegistry: Record<string, TaskInfo> = {
-  "add-pronunciation": { component: RenderTaskForAddingPronunciation, size: 'big' },
   "add-translation": { component: RenderTaskForAddingTranslation, size: 'medium' },
   "extract-knowledge-from-resource": { component: RenderExtractKnowledgeFromResource, size: 'big' },
   "add-sub-goals": { component: TaskAddSubGoals, size: 'medium' },

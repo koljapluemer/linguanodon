@@ -3,7 +3,6 @@ import type { TaskName } from '@/entities/tasks/Task';
 import { pickRandomFromSortedList } from '@/shared/arrayUtils';
 
 const WINDOW_SIZE = 50;
-const MAX_PRONUNCIATION_TASKS = 2;
 
 const recentTasks = ref<TaskName[]>([]);
 
@@ -22,13 +21,6 @@ export function useTaskTypeTracker() {
     return recentTasks.value.filter(name => name === taskName).length;
   }
   
-  function getPronunciationTaskCount(): number {
-    return getTaskCount('add-pronunciation');
-  }
-  
-  function canGeneratePronunciationTask(): boolean {
-    return getPronunciationTaskCount() <= MAX_PRONUNCIATION_TASKS;
-  }
   
   function getTaskCounts(): Record<TaskName, number> {
     const counts: Record<string, number> = {};
@@ -61,8 +53,6 @@ export function useTaskTypeTracker() {
   return {
     trackTask,
     getTaskCount,
-    getPronunciationTaskCount,
-    canGeneratePronunciationTask,
     getTaskCounts,
     getRareTaskNames,
     recommendRareTask,

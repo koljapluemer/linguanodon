@@ -6,7 +6,6 @@ import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoCont
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { TaskGeneratorContext } from './types/TaskGeneratorContext';
-import { getRandomAddPronunciationTask } from './flavors/by-task-type-balance/helpers/getRandomAddPronunciationTask';
 import { getRandomExtractKnowledgeTask } from './flavors/by-task-type-balance/helpers/getRandomExtractKnowledgeTask';
 import { getRandomAddSubGoalsTask } from './flavors/by-task-type-balance/helpers/getRandomAddSubGoalsTask';
 import { getRandomAddVocabToGoalTask } from './flavors/by-task-type-balance/helpers/getRandomAddVocabToGoalTask';
@@ -50,7 +49,7 @@ export async function makeTask(
     
     const languageCodes = activeLanguages.map(lang => lang.code);
     const { trackTask } = useTaskSizeTracker();
-    const { canGeneratePronunciationTask, trackTask: trackTaskType } = useTaskTypeTracker();
+    const { trackTask: trackTaskType } = useTaskTypeTracker();
     const { canGenerateNewVocabTask, trackTask: trackNewVocabTask, isNewVocabTask } = useNewVocabTracker();
     const { incrementTaskCount } = useTrackTaskNumber();
     const { getRecentlyUsedVocab, trackVocabUsed } = useTrackUsedVocab();
@@ -64,7 +63,6 @@ export async function makeTask(
         focusOnVocab,
         vocabRepo,
         translationRepo,
-        noteRepo,
         vocabBlockList
       );
       
@@ -87,7 +85,6 @@ export async function makeTask(
     
     // Define all available task generators with their task names
     const baseGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
-      { generator: () => getRandomAddPronunciationTask(vocabRepo, translationRepo, noteRepo, languageCodes, vocabBlockList), taskName: 'add-pronunciation' },
       { generator: () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'add-translation' },
       { generator: () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes), taskName: 'extract-knowledge-from-resource' },
       { generator: () => getRandomAddSubGoalsTask(goalRepo, languageCodes), taskName: 'add-sub-goals' },
@@ -102,11 +99,6 @@ export async function makeTask(
     
     // Filter out tasks based on limits
     let allGenerators = baseGenerators;
-    
-    // Filter out add-pronunciation if it's been picked too many times recently
-    if (!canGeneratePronunciationTask()) {
-      allGenerators = allGenerators.filter(g => g.taskName !== 'add-pronunciation');
-    }
     
     // Filter out new vocab tasks if limits exceeded
     if (!canGenerateNewVocabTask()) {

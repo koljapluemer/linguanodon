@@ -1,11 +1,9 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { NoteData } from '@/entities/notes/NoteData';
 import type { Task } from '@/entities/tasks/Task';
 import { randomFromArray } from '@/shared/arrayUtils';
 
 // Import all task generators
-import { generateAddPronunciation } from '../../make-a-task/generateAddPronunciation';
 import { generateAddTranslation } from '../../make-a-task/generateAddTranslation';
 import { generateVocabTryToRemember } from '../../make-a-task/generateVocabTryToRemember';
 import { generateGuessWhatSentenceMeans } from '../../make-a-task/generateGuessWhatSentenceMeans';
@@ -23,16 +21,13 @@ type TaskGenerator = () => Task;
 
 export async function getRandomGeneratedTaskForVocab(
   vocab: VocabData,
-  translations: TranslationData[] = [],
-  notes: NoteData[] = []
+  translations: TranslationData[] = []
 ): Promise<Task | null> {
   const level = vocab.progress.level;
   const isWordOrUnspecified = vocab.length === 'word' || vocab.length === 'unspecified';
   const isSentence = vocab.length === 'sentence';
   const hasTranslations = translations.length > 0;
   const hasContent = !!vocab.content;
-  const priority = vocab.priority ?? 0;
-  const hasPronunciationNote = notes.some(note => note.noteType === 'pronunciation');
 
   const eligibleTasks: TaskGenerator[] = [];
 
@@ -82,9 +77,6 @@ export async function getRandomGeneratedTaskForVocab(
   // Content enhancement tasks
   if (hasContent && !hasTranslations) {
     eligibleTasks.push(() => generateAddTranslation(vocab));
-  }
-  if (isWordOrUnspecified && priority >= 2 && hasTranslations && !hasPronunciationNote) {
-    eligibleTasks.push(() => generateAddPronunciation(vocab));
   }
 
   if (eligibleTasks.length === 0) {
