@@ -17,7 +17,7 @@ from pathlib import Path
 SOURCE_LANGUAGE = 'eng'  # English
 TARGET_LANGUAGE = 'rus'
 OUTPUT_DIR = f'sets/{TARGET_LANGUAGE}/tatoeba-sentences'
-MAX_SENTENCES = 20  # Maximum number of new sentences to download
+MAX_SENTENCES = 250  # Maximum number of new sentences to download
 DEBUG_ABORT_AFTER_FIRST_PAGE = False  # Set to True to abort after first API call for debugging
 
 # Set up logging
@@ -208,7 +208,8 @@ def fetch_sentences_from_tatoeba():
         'lang': SOURCE_LANGUAGE,
         'trans:lang': TARGET_LANGUAGE,
         'sort': 'words',
-        'limit': 20
+        'limit': 20,
+        'word_count': '3-6'
     }
     after_value = None
     
@@ -223,7 +224,7 @@ def fetch_sentences_from_tatoeba():
             logger.debug(f"Request params: {params}")
             response = requests.get(base_url, params=params)
         else:
-            query = f"lang={SOURCE_LANGUAGE}&trans:lang={TARGET_LANGUAGE}&sort=words&limit=20&after={after_value}"
+            query = f"lang={SOURCE_LANGUAGE}&trans:lang={TARGET_LANGUAGE}&sort=words&limit=20&word_count=3-6&after={after_value}"
             full_url = f"{base_url}?{query}"
             logger.debug(f"Request URL: {full_url}")
             response = requests.get(full_url)

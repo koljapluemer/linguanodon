@@ -1,0 +1,260 @@
+{"id": "1", "language": "rus", "content": "В каком месте?", "length": "sentence", "translations": ["1"], "links": ["3", "1"]}
+{"id": "2", "language": "rus", "content": "Отправьте его домой.", "length": "sentence", "translations": ["2"], "links": ["5", "1"]}
+{"id": "3", "language": "rus", "content": "Сравните результаты.", "length": "sentence", "translations": ["3"], "links": ["7", "1"]}
+{"id": "4", "language": "rus", "content": "Что-то должно произойти.", "length": "sentence", "translations": ["4"], "links": ["9", "1"]}
+{"id": "5", "language": "rus", "content": "Можно мне отдохнуть?", "length": "sentence", "translations": ["5"], "links": ["11", "1"]}
+{"id": "6", "language": "rus", "content": "Компьютер завис.", "length": "sentence", "translations": ["6"], "links": ["13", "1"]}
+{"id": "7", "language": "rus", "content": "Защищай своего брата.", "length": "sentence", "translations": ["7"], "links": ["15", "1"]}
+{"id": "8", "language": "rus", "content": "Она здесь!", "length": "sentence", "translations": ["8"], "links": ["17", "1"]}
+{"id": "9", "language": "rus", "content": "Он здесь!", "length": "sentence", "translations": ["9"], "links": ["19", "1"]}
+{"id": "10", "language": "rus", "content": "Вечерело.", "length": "sentence", "translations": ["10"], "links": ["21", "1"]}
+{"id": "11", "language": "rus", "content": "Я человек?", "length": "sentence", "translations": ["11"], "links": ["23", "1"]}
+{"id": "12", "language": "rus", "content": "Я дома!", "length": "sentence", "translations": ["12"], "links": ["25", "1"]}
+{"id": "13", "language": "rus", "content": "Ад существует?", "length": "sentence", "translations": ["13"], "links": ["27", "1"]}
+{"id": "14", "language": "rus", "content": "Чистилище существует?", "length": "sentence", "translations": ["14"], "links": ["29", "1"]}
+{"id": "15", "language": "rus", "content": "Я не могу сражаться.", "length": "sentence", "translations": ["15"], "links": ["31", "1"]}
+{"id": "16", "language": "rus", "content": "Он ест?", "length": "sentence", "translations": ["16"], "links": ["33", "1"]}
+{"id": "17", "language": "rus", "content": "Она ест?", "length": "sentence", "translations": ["17"], "links": ["35", "1"]}
+{"id": "18", "language": "rus", "content": "Они едят?", "length": "sentence", "translations": ["18"], "links": ["37", "1"]}
+{"id": "19", "language": "rus", "content": "Она огромная.", "length": "sentence", "translations": ["19"], "links": ["39", "1"]}
+{"id": "20", "language": "rus", "content": "Бог создал людей.", "length": "sentence", "translations": ["20"], "links": ["41", "1"]}
+{"id": "21", "language": "rus", "content": "Люди создали Бога.", "length": "sentence", "translations": ["21", "22"], "links": ["44", "42", "46"]}
+{"id": "22", "language": "rus", "content": "Они едят колбасу.", "length": "sentence", "translations": ["23"], "links": ["48", "42"]}
+{"id": "23", "language": "rus", "content": "Они тебя видят.", "length": "sentence", "translations": ["24"], "links": ["50", "42"]}
+{"id": "24", "language": "rus", "content": "Он получал деньги.", "length": "sentence", "translations": ["25"], "links": ["52", "42"]}
+{"id": "25", "language": "rus", "content": "Улыбайся и учись!", "length": "sentence", "translations": ["26"], "links": ["54", "42"]}
+{"id": "26", "language": "rus", "content": "Я сам себя наказал.", "length": "sentence", "translations": ["27"], "links": ["56", "42"]}
+{"id": "27", "language": "rus", "content": "Составь план.", "length": "sentence", "translations": ["28"], "links": ["58", "42"]}
+{"id": "28", "language": "rus", "content": "Она меня убила.", "length": "sentence", "translations": ["29"], "links": ["60", "42"]}
+{"id": "29", "language": "rus", "content": "Он меня убил.", "length": "sentence", "translations": ["30"], "links": ["62", "42"]}
+{"id": "30", "language": "rus", "content": "Я хочу это!", "length": "sentence", "translations": ["31"], "links": ["64", "42"]}
+{"id": "31", "language": "rus", "content": "Я же знаю.", "length": "sentence", "translations": ["32", "33"], "links": ["66", "42", "68"]}
+{"id": "32", "language": "rus", "content": "Вы ведь работаете?", "length": "sentence", "translations": ["34"], "links": ["70", "42"]}
+{"id": "33", "language": "rus", "content": "Поднимайся сюда!", "length": "sentence", "translations": ["35"], "links": ["72", "42"]}
+{"id": "34", "language": "rus", "content": "Я пожелал спокойной ночи.", "length": "sentence", "translations": ["36"], "links": ["74", "42"]}
+{"id": "35", "language": "rus", "content": "Пожелайте им спокойной ночи.", "length": "sentence", "translations": ["37"], "links": ["76", "42"]}
+{"id": "36", "language": "rus", "content": "Они неграмотные.", "length": "sentence", "translations": ["38", "39"], "links": ["78", "42", "80"]}
+{"id": "37", "language": "rus", "content": "О, как красиво!", "length": "sentence", "translations": ["40"], "links": ["82", "42"]}
+{"id": "38", "language": "rus", "content": "Алгоритмы изменились.", "length": "sentence", "translations": ["41"], "links": ["84", "42"]}
+{"id": "39", "language": "rus", "content": "Бабочка умерла.", "length": "sentence", "translations": ["42"], "links": ["86", "42"]}
+{"id": "40", "language": "rus", "content": "Всё дорогое.", "length": "sentence", "translations": ["43"], "links": ["88", "42"]}
+{"id": "41", "language": "rus", "content": "Это бы сработало?", "length": "sentence", "translations": ["44"], "links": ["90", "42"]}
+{"id": "42", "language": "rus", "content": "Зло уничтожает само себя.", "length": "sentence", "translations": ["45"], "links": ["92", "42"]}
+{"id": "43", "language": "rus", "content": "Я его остановил.", "length": "sentence", "translations": ["46"], "links": ["94", "42"]}
+{"id": "44", "language": "rus", "content": "Он остался на улице.", "length": "sentence", "translations": ["47"], "links": ["96", "42"]}
+{"id": "45", "language": "rus", "content": "Спорт - это смерть.", "length": "sentence", "translations": ["48"], "links": ["98", "42"]}
+{"id": "46", "language": "rus", "content": "Ну ты же обещал!", "length": "sentence", "translations": ["49"], "links": ["100", "42"]}
+{"id": "47", "language": "rus", "content": "Кто на кого напал?", "length": "sentence", "translations": ["50"], "links": ["102", "42"]}
+{"id": "48", "language": "rus", "content": "Он устал.", "length": "sentence", "translations": ["51"], "links": ["104", "42"]}
+{"id": "49", "language": "rus", "content": "Том ей ответил.", "length": "sentence", "translations": ["52"], "links": ["106", "42"]}
+{"id": "50", "language": "rus", "content": "Они бессердечные.", "length": "sentence", "translations": ["53"], "links": ["108", "42"]}
+{"id": "51", "language": "rus", "content": "Он бессердечный!", "length": "sentence", "translations": ["54"], "links": ["110", "42"]}
+{"id": "52", "language": "rus", "content": "Всё проще.", "length": "sentence", "translations": ["55"], "links": ["112", "42"]}
+{"id": "53", "language": "rus", "content": "Люди боятся смеяться.", "length": "sentence", "translations": ["56"], "links": ["114", "42"]}
+{"id": "54", "language": "rus", "content": "Я пил молоко.", "length": "sentence", "translations": ["57"], "links": ["116", "42"]}
+{"id": "55", "language": "rus", "content": "Она его отвергла.", "length": "sentence", "translations": ["58"], "links": ["118", "42"]}
+{"id": "56", "language": "rus", "content": "Ты в порядке!", "length": "sentence", "translations": ["59"], "links": ["120", "42"]}
+{"id": "57", "language": "rus", "content": "Ты молодец!", "length": "sentence", "translations": ["60", "61"], "links": ["122", "42", "124"]}
+{"id": "58", "language": "rus", "content": "Мы турки.", "length": "sentence", "translations": ["62", "224"], "links": ["126", "42", "450"]}
+{"id": "59", "language": "rus", "content": "Спасибо, хорошо.", "length": "sentence", "translations": ["63"], "links": ["128", "42"]}
+{"id": "60", "language": "rus", "content": "Дай взглянуть!", "length": "sentence", "translations": ["64"], "links": ["130", "42"]}
+{"id": "61", "language": "rus", "content": "Это вода.", "length": "sentence", "translations": ["65"], "links": ["132", "42"]}
+{"id": "62", "language": "rus", "content": "Вода мокрая?", "length": "sentence", "translations": ["66"], "links": ["134", "42"]}
+{"id": "63", "language": "rus", "content": "Да, я понял.", "length": "sentence", "translations": ["67"], "links": ["136", "42"]}
+{"id": "64", "language": "rus", "content": "Купите масла.", "length": "sentence", "translations": ["68"], "links": ["138", "42"]}
+{"id": "65", "language": "rus", "content": "Ему очень нравятся необычные ощущения.", "length": "sentence", "translations": ["69"], "links": ["140", "42"]}
+{"id": "66", "language": "rus", "content": "Война — это плохо.", "length": "sentence", "translations": ["70"], "links": ["142", "42"]}
+{"id": "67", "language": "rus", "content": "Время лечит?", "length": "sentence", "translations": ["71"], "links": ["144", "42"]}
+{"id": "68", "language": "rus", "content": "Ты взрослая.", "length": "sentence", "translations": ["72"], "links": ["146", "42"]}
+{"id": "69", "language": "rus", "content": "Я их приготовил.", "length": "sentence", "translations": ["73"], "links": ["148", "42"]}
+{"id": "70", "language": "rus", "content": "Они плохо себя ведут.", "length": "sentence", "translations": ["74"], "links": ["150", "42"]}
+{"id": "71", "language": "rus", "content": "Он его спрятал.", "length": "sentence", "translations": ["75"], "links": ["152", "42"]}
+{"id": "72", "language": "rus", "content": "Вы их потеряли.", "length": "sentence", "translations": ["76"], "links": ["154", "42"]}
+{"id": "73", "language": "rus", "content": "Я их понял.", "length": "sentence", "translations": ["77"], "links": ["156", "42"]}
+{"id": "74", "language": "rus", "content": "Жизнь бесценна.", "length": "sentence", "translations": ["78"], "links": ["158", "42"]}
+{"id": "75", "language": "rus", "content": "Нет войне.", "length": "sentence", "translations": ["79"], "links": ["160", "42"]}
+{"id": "76", "language": "rus", "content": "Вы были пунктуальны.", "length": "sentence", "translations": ["80"], "links": ["162", "42"]}
+{"id": "77", "language": "rus", "content": "Покормите птиц!", "length": "sentence", "translations": ["81"], "links": ["164", "42"]}
+{"id": "78", "language": "rus", "content": "Лучше некуда!", "length": "sentence", "translations": ["82"], "links": ["166", "42"]}
+{"id": "79", "language": "rus", "content": "Нажми на газ.", "length": "sentence", "translations": ["83"], "links": ["168", "42"]}
+{"id": "80", "language": "rus", "content": "Нажми на тормоз.", "length": "sentence", "translations": ["84"], "links": ["170", "42"]}
+{"id": "81", "language": "rus", "content": "Нажми на сцепление.", "length": "sentence", "translations": ["85"], "links": ["172", "42"]}
+{"id": "82", "language": "rus", "content": "Я голодный.", "length": "sentence", "translations": ["86"], "links": ["174", "42"]}
+{"id": "83", "language": "rus", "content": "Он идёт шатаясь.", "length": "sentence", "translations": ["87"], "links": ["176", "42"]}
+{"id": "84", "language": "rus", "content": "Возьмите зонтик.", "length": "sentence", "translations": ["88"], "links": ["178", "42"]}
+{"id": "85", "language": "rus", "content": "Легенды никогда не умирают.", "length": "sentence", "translations": ["89"], "links": ["180", "42"]}
+{"id": "86", "language": "rus", "content": "Они сдают оружие.", "length": "sentence", "translations": ["90"], "links": ["182", "42"]}
+{"id": "87", "language": "rus", "content": "Я переводила.", "length": "sentence", "translations": ["91"], "links": ["184", "42"]}
+{"id": "88", "language": "rus", "content": "Им стыдно.", "length": "sentence", "translations": ["92"], "links": ["186", "42"]}
+{"id": "89", "language": "rus", "content": "Прочтите его внимательно.", "length": "sentence", "translations": ["93"], "links": ["188", "42"]}
+{"id": "90", "language": "rus", "content": "Осмелься мыслить.", "length": "sentence", "translations": ["94"], "links": ["190", "42"]}
+{"id": "91", "language": "rus", "content": "Сделай так, чтобы она поняла.", "length": "sentence", "translations": ["95"], "links": ["192", "42"]}
+{"id": "92", "language": "rus", "content": "Это спам.", "length": "sentence", "translations": ["96", "97"], "links": ["194", "42", "196"]}
+{"id": "93", "language": "rus", "content": "Он встал?", "length": "sentence", "translations": ["98"], "links": ["198", "42"]}
+{"id": "94", "language": "rus", "content": "Ты медленно ешь.", "length": "sentence", "translations": ["99"], "links": ["200", "42"]}
+{"id": "95", "language": "rus", "content": "Мы беременны.", "length": "sentence", "translations": ["100"], "links": ["202", "42"]}
+{"id": "96", "language": "rus", "content": "Репутация - это деньги.", "length": "sentence", "translations": ["101"], "links": ["204", "42"]}
+{"id": "97", "language": "rus", "content": "Они фермеры.", "length": "sentence", "translations": ["102"], "links": ["206", "42"]}
+{"id": "98", "language": "rus", "content": "В машину, Симона!", "length": "sentence", "translations": ["103", "104"], "links": ["208", "42", "210"]}
+{"id": "99", "language": "rus", "content": "Измени пароль.", "length": "sentence", "translations": ["105"], "links": ["212", "42"]}
+{"id": "100", "language": "rus", "content": "Добро пожаловать на борт!", "length": "sentence", "translations": ["106"], "links": ["214", "42"]}
+{"id": "101", "language": "rus", "content": "Прекратите её оскорблять!", "length": "sentence", "translations": ["107"], "links": ["216", "42"]}
+{"id": "102", "language": "rus", "content": "Они их убили.", "length": "sentence", "translations": ["108"], "links": ["218", "42"]}
+{"id": "103", "language": "rus", "content": "Пожалуйста, сядьте!", "length": "sentence", "translations": ["109"], "links": ["220", "42"]}
+{"id": "104", "language": "rus", "content": "Соглашайтесь!", "length": "sentence", "translations": ["110"], "links": ["222", "42"]}
+{"id": "105", "language": "rus", "content": "Я оджибве.", "length": "sentence", "translations": ["111"], "links": ["224", "42"]}
+{"id": "106", "language": "rus", "content": "Я говорю на оджибве.", "length": "sentence", "translations": ["112"], "links": ["226", "42"]}
+{"id": "107", "language": "rus", "content": "Кофе чёрный.", "length": "sentence", "translations": ["113"], "links": ["228", "42"]}
+{"id": "108", "language": "rus", "content": "Вино красное.", "length": "sentence", "translations": ["114"], "links": ["230", "42"]}
+{"id": "109", "language": "rus", "content": "Смотри! Буйвол.", "length": "sentence", "translations": ["115"], "links": ["232", "42"]}
+{"id": "110", "language": "rus", "content": "Мы воры.", "length": "sentence", "translations": ["116"], "links": ["234", "42"]}
+{"id": "111", "language": "rus", "content": "Вчера было тепло.", "length": "sentence", "translations": ["117"], "links": ["236", "42"]}
+{"id": "112", "language": "rus", "content": "Так что, давай?", "length": "sentence", "translations": ["118"], "links": ["238", "42"]}
+{"id": "113", "language": "rus", "content": "Мы остались друзьями.", "length": "sentence", "translations": ["119"], "links": ["240", "42"]}
+{"id": "114", "language": "rus", "content": "Это серьёзно.", "length": "sentence", "translations": ["120"], "links": ["242", "42"]}
+{"id": "115", "language": "rus", "content": "Рыба плывёт.", "length": "sentence", "translations": ["121"], "links": ["244", "42"]}
+{"id": "116", "language": "rus", "content": "Сердце бьётся.", "length": "sentence", "translations": ["122"], "links": ["246", "42"]}
+{"id": "117", "language": "rus", "content": "Это началось.", "length": "sentence", "translations": ["123", "124"], "links": ["248", "42", "250"]}
+{"id": "118", "language": "rus", "content": "Кринж — это свобода.", "length": "sentence", "translations": ["125"], "links": ["252", "42"]}
+{"id": "119", "language": "rus", "content": "Телеграм - это что?", "length": "sentence", "translations": ["126"], "links": ["254", "42"]}
+{"id": "120", "language": "rus", "content": "Она ведёт себя агрессивно.", "length": "sentence", "translations": ["127"], "links": ["256", "42"]}
+{"id": "121", "language": "rus", "content": "Кто мяукает?", "length": "sentence", "translations": ["128"], "links": ["258", "42"]}
+{"id": "122", "language": "rus", "content": "Она была красивая?", "length": "sentence", "translations": ["129"], "links": ["260", "42"]}
+{"id": "123", "language": "rus", "content": "Да плевать.", "length": "sentence", "translations": ["130"], "links": ["262", "42"]}
+{"id": "124", "language": "rus", "content": "Мы поели мяса.", "length": "sentence", "translations": ["131"], "links": ["264", "42"]}
+{"id": "125", "language": "rus", "content": "Моё отношение изменилось.", "length": "sentence", "translations": ["132"], "links": ["266", "42"]}
+{"id": "126", "language": "rus", "content": "Наша мама умерла.", "length": "sentence", "translations": ["133", "134", "135"], "links": ["268", "42", "270", "272"]}
+{"id": "127", "language": "rus", "content": "Прошло сорок минут.", "length": "sentence", "translations": ["136"], "links": ["274", "42"]}
+{"id": "128", "language": "rus", "content": "Поешьте спагетти.", "length": "sentence", "translations": ["137"], "links": ["276", "42"]}
+{"id": "129", "language": "rus", "content": "Он умер мгновенно.", "length": "sentence", "translations": ["138"], "links": ["278", "42"]}
+{"id": "130", "language": "rus", "content": "Они умерли мгновенно.", "length": "sentence", "translations": ["139"], "links": ["280", "42"]}
+{"id": "131", "language": "rus", "content": "Его никто не знает.", "length": "sentence", "translations": ["140"], "links": ["282", "42"]}
+{"id": "132", "language": "rus", "content": "Спасибо за игру!", "length": "sentence", "translations": ["141"], "links": ["284", "42"]}
+{"id": "133", "language": "rus", "content": "Купи банан.", "length": "sentence", "translations": ["142"], "links": ["286", "42"]}
+{"id": "134", "language": "rus", "content": "Мне это противно.", "length": "sentence", "translations": ["143"], "links": ["288", "42"]}
+{"id": "135", "language": "rus", "content": "Ей нравится шоколад.", "length": "sentence", "translations": ["144"], "links": ["290", "42"]}
+{"id": "136", "language": "rus", "content": "Есть ручка?", "length": "sentence", "translations": ["145"], "links": ["292", "42"]}
+{"id": "137", "language": "rus", "content": "Она приготовила обед.", "length": "sentence", "translations": ["146"], "links": ["294", "42"]}
+{"id": "138", "language": "rus", "content": "Проснитесь, братья!", "length": "sentence", "translations": ["147"], "links": ["296", "42"]}
+{"id": "139", "language": "rus", "content": "Тигры любят воду.", "length": "sentence", "translations": ["148"], "links": ["298", "42"]}
+{"id": "140", "language": "rus", "content": "Я следую за Калессом.", "length": "sentence", "translations": ["149"], "links": ["300", "42"]}
+{"id": "141", "language": "rus", "content": "Дуракам везёт.", "length": "sentence", "translations": ["150"], "links": ["302", "42"]}
+{"id": "142", "language": "rus", "content": "Они жестикулировали.", "length": "sentence", "translations": ["151"], "links": ["304", "42"]}
+{"id": "143", "language": "rus", "content": "Я люблю декабрь.", "length": "sentence", "translations": ["152", "153"], "links": ["306", "42", "308"]}
+{"id": "144", "language": "rus", "content": "Засмеялся – проиграл.", "length": "sentence", "translations": ["154"], "links": ["310", "42"]}
+{"id": "145", "language": "rus", "content": "Мэри хочет есть.", "length": "sentence", "translations": ["155"], "links": ["312", "42"]}
+{"id": "146", "language": "rus", "content": "Удали свой аккаунт.", "length": "sentence", "translations": ["156"], "links": ["314", "42"]}
+{"id": "147", "language": "rus", "content": "Том рассвирепел.", "length": "sentence", "translations": ["157"], "links": ["316", "42"]}
+{"id": "148", "language": "rus", "content": "Она высокая.", "length": "sentence", "translations": ["158"], "links": ["318", "42"]}
+{"id": "149", "language": "rus", "content": "Он высокий.", "length": "sentence", "translations": ["159"], "links": ["320", "42"]}
+{"id": "150", "language": "rus", "content": "Мы умные.", "length": "sentence", "translations": ["160", "161"], "links": ["322", "42", "324"]}
+{"id": "151", "language": "rus", "content": "Продолжай мечтать.", "length": "sentence", "translations": ["162"], "links": ["326", "42"]}
+{"id": "152", "language": "rus", "content": "С чего начать?", "length": "sentence", "translations": ["163"], "links": ["328", "42"]}
+{"id": "153", "language": "rus", "content": "Розы белые.", "length": "sentence", "translations": ["164"], "links": ["330", "42"]}
+{"id": "154", "language": "rus", "content": "Политики забывчивы.", "length": "sentence", "translations": ["165"], "links": ["332", "42"]}
+{"id": "155", "language": "rus", "content": "Она выглядела довольной.", "length": "sentence", "translations": ["166"], "links": ["334", "42"]}
+{"id": "156", "language": "rus", "content": "Ты всех ненавидишь.", "length": "sentence", "translations": ["167"], "links": ["336", "42"]}
+{"id": "157", "language": "rus", "content": "Стемнело.", "length": "sentence", "translations": ["168"], "links": ["338", "42"]}
+{"id": "158", "language": "rus", "content": "Всё ничего.", "length": "sentence", "translations": ["169"], "links": ["340", "42"]}
+{"id": "159", "language": "rus", "content": "Любовь двигает горы.", "length": "sentence", "translations": ["170"], "links": ["342", "42"]}
+{"id": "160", "language": "rus", "content": "У меня телефон сломался.", "length": "sentence", "translations": ["171"], "links": ["344", "42"]}
+{"id": "161", "language": "rus", "content": "Мэри похудела.", "length": "sentence", "translations": ["172"], "links": ["346", "42"]}
+{"id": "162", "language": "rus", "content": "Это сленг?", "length": "sentence", "translations": ["173"], "links": ["348", "42"]}
+{"id": "163", "language": "rus", "content": "У меня очки разбились.", "length": "sentence", "translations": ["174"], "links": ["350", "42"]}
+{"id": "164", "language": "rus", "content": "Цена снизилась.", "length": "sentence", "translations": ["175"], "links": ["352", "42"]}
+{"id": "165", "language": "rus", "content": "Зови меня Джек.", "length": "sentence", "translations": ["176"], "links": ["354", "42"]}
+{"id": "166", "language": "rus", "content": "Сделай это сейчас!", "length": "sentence", "translations": ["177"], "links": ["356", "42"]}
+{"id": "167", "language": "rus", "content": "Том - европеец.", "length": "sentence", "translations": ["178"], "links": ["358", "42"]}
+{"id": "168", "language": "rus", "content": "Я принимаю душ каждый день.", "length": "sentence", "translations": ["179"], "links": ["360", "42"]}
+{"id": "169", "language": "rus", "content": "Время лечит раны.", "length": "sentence", "translations": ["180"], "links": ["362", "42"]}
+{"id": "170", "language": "rus", "content": "Что за жидкость?", "length": "sentence", "translations": ["181"], "links": ["364", "42"]}
+{"id": "171", "language": "rus", "content": "Они белые.", "length": "sentence", "translations": ["182"], "links": ["366", "42"]}
+{"id": "172", "language": "rus", "content": "Ты американец.", "length": "sentence", "translations": ["183"], "links": ["368", "42"]}
+{"id": "173", "language": "rus", "content": "У неё всё есть.", "length": "sentence", "translations": ["184"], "links": ["370", "42"]}
+{"id": "174", "language": "rus", "content": "Родители работают.", "length": "sentence", "translations": ["185"], "links": ["372", "42"]}
+{"id": "175", "language": "rus", "content": "У неё есть дети.", "length": "sentence", "translations": ["186"], "links": ["374", "42"]}
+{"id": "176", "language": "rus", "content": "Я их съел.", "length": "sentence", "translations": ["187"], "links": ["376", "42"]}
+{"id": "177", "language": "rus", "content": "Цунами обрушилось на Японию.", "length": "sentence", "translations": ["188"], "links": ["378", "42"]}
+{"id": "178", "language": "rus", "content": "Пусть он поможет.", "length": "sentence", "translations": ["189"], "links": ["380", "42"]}
+{"id": "179", "language": "rus", "content": "Мы едим суп.", "length": "sentence", "translations": ["190"], "links": ["382", "42"]}
+{"id": "180", "language": "rus", "content": "Саламандры - это амфибии.", "length": "sentence", "translations": ["191"], "links": ["384", "42"]}
+{"id": "181", "language": "rus", "content": "Он обожает рисовать.", "length": "sentence", "translations": ["192", "193"], "links": ["386", "42", "388"]}
+{"id": "182", "language": "rus", "content": "Художник рисует картину.", "length": "sentence", "translations": ["194", "195", "196", "197"], "links": ["390", "42", "392", "394", "396"]}
+{"id": "183", "language": "rus", "content": "Привет, занят?", "length": "sentence", "translations": ["198"], "links": ["398", "42"]}
+{"id": "184", "language": "rus", "content": "Накрась губы.", "length": "sentence", "translations": ["199"], "links": ["400", "42"]}
+{"id": "185", "language": "rus", "content": "Математика - это скучно.", "length": "sentence", "translations": ["200", "206"], "links": ["402", "42", "414"]}
+{"id": "186", "language": "rus", "content": "Овощи - это полезно.", "length": "sentence", "translations": ["201"], "links": ["404", "42"]}
+{"id": "187", "language": "rus", "content": "Редис красный.", "length": "sentence", "translations": ["202"], "links": ["406", "42"]}
+{"id": "188", "language": "rus", "content": "Пожалуйста, доверься мне!", "length": "sentence", "translations": ["203"], "links": ["408", "42"]}
+{"id": "189", "language": "rus", "content": "Она её ненавидела.", "length": "sentence", "translations": ["204"], "links": ["410", "42"]}
+{"id": "190", "language": "rus", "content": "У нас есть лошади.", "length": "sentence", "translations": ["205"], "links": ["412", "42"]}
+{"id": "191", "language": "rus", "content": "Моё зрение улучшилось.", "length": "sentence", "translations": ["207"], "links": ["416", "42"]}
+{"id": "192", "language": "rus", "content": "Моё зрение ухудшилось.", "length": "sentence", "translations": ["208"], "links": ["418", "42"]}
+{"id": "193", "language": "rus", "content": "Всё или ничего!", "length": "sentence", "translations": ["209"], "links": ["420", "42"]}
+{"id": "194", "language": "rus", "content": "Том избегает людей.", "length": "sentence", "translations": ["210"], "links": ["422", "42"]}
+{"id": "195", "language": "rus", "content": "Мэри уволили.", "length": "sentence", "translations": ["211", "212"], "links": ["424", "42", "426"]}
+{"id": "196", "language": "rus", "content": "Полей цветы.", "length": "sentence", "translations": ["213"], "links": ["428", "42"]}
+{"id": "197", "language": "rus", "content": "Ничего и никогда не бывает.", "length": "sentence", "translations": ["214"], "links": ["430", "42"]}
+{"id": "198", "language": "rus", "content": "Платон рисовал.", "length": "sentence", "translations": ["215"], "links": ["432", "42"]}
+{"id": "199", "language": "rus", "content": "Он сократил налоги.", "length": "sentence", "translations": ["216"], "links": ["434", "42"]}
+{"id": "200", "language": "rus", "content": "Это круто?", "length": "sentence", "translations": ["217"], "links": ["436", "42"]}
+{"id": "201", "language": "rus", "content": "Кто-нибудь будет играть?", "length": "sentence", "translations": ["218"], "links": ["438", "42"]}
+{"id": "202", "language": "rus", "content": "Изменения шли полным ходом.", "length": "sentence", "translations": ["219"], "links": ["440", "42"]}
+{"id": "203", "language": "rus", "content": "Она любит петь.", "length": "sentence", "translations": ["220"], "links": ["442", "42"]}
+{"id": "204", "language": "rus", "content": "Она здесь жила.", "length": "sentence", "translations": ["221"], "links": ["444", "42"]}
+{"id": "205", "language": "rus", "content": "Он здесь жил.", "length": "sentence", "translations": ["222"], "links": ["446", "42"]}
+{"id": "206", "language": "rus", "content": "Вам надо выбрать.", "length": "sentence", "translations": ["223"], "links": ["448", "42"]}
+{"id": "207", "language": "rus", "content": "Тому не везёт.", "length": "sentence", "translations": ["225"], "links": ["452", "42"]}
+{"id": "208", "language": "rus", "content": "Ладно, забудь.", "length": "sentence", "translations": ["226"], "links": ["454", "42"]}
+{"id": "209", "language": "rus", "content": "Мы едим масло.", "length": "sentence", "translations": ["227"], "links": ["456", "42"]}
+{"id": "210", "language": "rus", "content": "Мэри раздевалась.", "length": "sentence", "translations": ["228"], "links": ["458", "42"]}
+{"id": "211", "language": "rus", "content": "Я начал запись.", "length": "sentence", "translations": ["229"], "links": ["460", "42"]}
+{"id": "212", "language": "rus", "content": "Мы одеты.", "length": "sentence", "translations": ["230"], "links": ["462", "42"]}
+{"id": "213", "language": "rus", "content": "Доверию нужно время.", "length": "sentence", "translations": ["231"], "links": ["464", "42"]}
+{"id": "214", "language": "rus", "content": "Он уладит проблему.", "length": "sentence", "translations": ["232"], "links": ["466", "42"]}
+{"id": "215", "language": "rus", "content": "Мы играли в бадминтон.", "length": "sentence", "translations": ["233"], "links": ["468", "42"]}
+{"id": "216", "language": "rus", "content": "Уважай моё личное пространство.", "length": "sentence", "translations": ["234"], "links": ["470", "42"]}
+{"id": "217", "language": "rus", "content": "Это официально?", "length": "sentence", "translations": ["235"], "links": ["472", "42"]}
+{"id": "218", "language": "rus", "content": "Она знает английский.", "length": "sentence", "translations": ["236"], "links": ["474", "42"]}
+{"id": "219", "language": "rus", "content": "Они всё съели.", "length": "sentence", "translations": ["237"], "links": ["476", "42"]}
+{"id": "220", "language": "rus", "content": "Один кофе, пожалуйста.", "length": "sentence", "translations": ["238"], "links": ["478", "42"]}
+{"id": "221", "language": "rus", "content": "Ты молишься?", "length": "sentence", "translations": ["239"], "links": ["480", "42"]}
+{"id": "222", "language": "rus", "content": "Вы молились?", "length": "sentence", "translations": ["240"], "links": ["482", "42"]}
+{"id": "223", "language": "rus", "content": "Она ненавидела ходить пешком.", "length": "sentence", "translations": ["241"], "links": ["484", "42"]}
+{"id": "224", "language": "rus", "content": "Больно! Перестань!", "length": "sentence", "translations": ["242"], "links": ["486", "42"]}
+{"id": "225", "language": "rus", "content": "Путин убил Навального.", "length": "sentence", "translations": ["243"], "links": ["488", "42"]}
+{"id": "226", "language": "rus", "content": "Ты канадец.", "length": "sentence", "translations": ["244"], "links": ["490", "42"]}
+{"id": "227", "language": "rus", "content": "Я Мэри.", "length": "sentence", "translations": ["245"], "links": ["492", "42"]}
+{"id": "228", "language": "rus", "content": "Немедленно свяжитесь со мной.", "length": "sentence", "translations": ["246"], "links": ["494", "42"]}
+{"id": "229", "language": "rus", "content": "Пожалуйста, представьтесь.", "length": "sentence", "translations": ["247"], "links": ["496", "42"]}
+{"id": "230", "language": "rus", "content": "Представьтесь, пожалуйста.", "length": "sentence", "translations": ["248"], "links": ["498", "42"]}
+{"id": "231", "language": "rus", "content": "Ты изучаешь музыку.", "length": "sentence", "translations": ["249"], "links": ["500", "42"]}
+{"id": "232", "language": "rus", "content": "Я знаю кто.", "length": "sentence", "translations": ["250"], "links": ["502", "42"]}
+{"id": "233", "language": "rus", "content": "Лают ли волки?", "length": "sentence", "translations": ["251"], "links": ["504", "42"]}
+{"id": "234", "language": "rus", "content": "Я знаю где.", "length": "sentence", "translations": ["252"], "links": ["506", "42"]}
+{"id": "235", "language": "rus", "content": "Мы писали письма.", "length": "sentence", "translations": ["253"], "links": ["508", "42"]}
+{"id": "236", "language": "rus", "content": "Это были цитаты.", "length": "sentence", "translations": ["254"], "links": ["510", "42"]}
+{"id": "237", "language": "rus", "content": "Кто ест?", "length": "sentence", "translations": ["255"], "links": ["512", "42"]}
+{"id": "238", "language": "rus", "content": "Это пластик?", "length": "sentence", "translations": ["256"], "links": ["514", "42"]}
+{"id": "239", "language": "rus", "content": "За погляд денег не берут.", "length": "sentence", "translations": ["257"], "links": ["516", "42"]}
+{"id": "240", "language": "rus", "content": "Это ноль.", "length": "sentence", "translations": ["258", "259"], "links": ["518", "42", "520"]}
+{"id": "241", "language": "rus", "content": "Счёт, пожалуйста!", "length": "sentence", "translations": ["260", "261"], "links": ["522", "42", "524"]}
+{"id": "242", "language": "rus", "content": "Ешьте больше яблок.", "length": "sentence", "translations": ["262"], "links": ["526", "42"]}
+{"id": "243", "language": "rus", "content": "Купите хлеба.", "length": "sentence", "translations": ["263"], "links": ["528", "42"]}
+{"id": "244", "language": "rus", "content": "Милота!", "length": "sentence", "translations": ["264"], "links": ["530", "42"]}
+{"id": "245", "language": "rus", "content": "Просто скажи что-нибудь!", "length": "sentence", "translations": ["265"], "links": ["532", "42"]}
+{"id": "246", "language": "rus", "content": "Повторно не использовать!", "length": "sentence", "translations": ["266"], "links": ["534", "42"]}
+{"id": "247", "language": "rus", "content": "Пожалуйста!", "length": "sentence", "translations": ["267"], "links": ["536", "42"]}
+{"id": "248", "language": "rus", "content": "Дай им войти.", "length": "sentence", "translations": ["268"], "links": ["538", "42"]}
+{"id": "249", "language": "rus", "content": "Пусть войдёт.", "length": "sentence", "translations": ["269"], "links": ["540", "42"]}
+{"id": "250", "language": "rus", "content": "Он киприот.", "length": "sentence", "translations": ["270"], "links": ["542", "42"]}
+{"id": "251", "language": "rus", "content": "Ёб твою мать!", "length": "sentence", "translations": ["271"], "links": ["544", "42"]}
+{"id": "252", "language": "rus", "content": "Я колумбийка.", "length": "sentence", "translations": ["272"], "links": ["546", "42"]}
+{"id": "253", "language": "rus", "content": "Завтра четверг?", "length": "sentence", "translations": ["273"], "links": ["548", "42"]}
+{"id": "254", "language": "rus", "content": "Кто выйдет?", "length": "sentence", "translations": ["274"], "links": ["550", "42"]}
+{"id": "255", "language": "rus", "content": "Он католик.", "length": "sentence", "translations": ["275"], "links": ["552", "42"]}
+{"id": "256", "language": "rus", "content": "А как же любовь?", "length": "sentence", "translations": ["276"], "links": ["554", "42"]}
+{"id": "257", "language": "rus", "content": "Они наёмники?", "length": "sentence", "translations": ["277"], "links": ["556", "42"]}
+{"id": "258", "language": "rus", "content": "Спасибо!", "length": "sentence", "translations": ["278"], "links": ["558", "42"]}
+{"id": "259", "language": "rus", "content": "Я должен идти?", "length": "sentence", "translations": ["279"], "links": ["560", "42"]}
+{"id": "260", "language": "rus", "content": "Курицу будешь?", "length": "sentence", "translations": ["280"], "links": ["562", "42"]}
