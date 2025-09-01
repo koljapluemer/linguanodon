@@ -9,17 +9,28 @@ export async function generateFactCard(
   factCardBlockList?: string[]
 ): Promise<Task | null> {
   try {
-    // First, try to get unseen fact cards (level -1) - these get try-to-remember tasks
-    const unseenFactCards = await factCardRepo.getRandomUnseenFactCards(1, languageCodes, factCardBlockList);
+    // Get both types of fact cards
+    const [dueFactCards, unseenFactCards] = await Promise.all([
+      factCardRepo.getRandomAlreadySeenDueFactCards(10, languageCodes, factCardBlockList),
+      factCardRepo.getRandomUnseenFactCards(10, languageCodes, factCardBlockList)
+    ]);
+
+    // 70% chance to prefer due cards (if available), 30% chance for unseen cards
+    const preferDueCards = Math.random() < 0.7;
+    
+    if (preferDueCards && dueFactCards.length > 0) {
+      // Pick a due fact card - these get reveal tasks
+      const factCard = dueFactCards[0];
+      return generateFactCardReveal(factCard);
+    }
     
     if (unseenFactCards.length > 0) {
+      // Pick an unseen fact card - these get try-to-remember tasks
       const factCard = unseenFactCards[0];
       return generateFactCardTryToRemember(factCard);
     }
-
-    // If no unseen fact cards, get due fact cards (level >= 0) - these get reveal tasks
-    const dueFactCards = await factCardRepo.getRandomAlreadySeenDueFactCards(1, languageCodes, factCardBlockList);
     
+    // Fallback: if we wanted unseen but none available, try due cards
     if (dueFactCards.length > 0) {
       const factCard = dueFactCards[0];
       return generateFactCardReveal(factCard);
