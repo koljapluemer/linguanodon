@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import PageQueue from '@/pages/queue/PageQueue.vue';
+import PracticeOverview from '@/pages/practice-overview/PracticeOverview.vue';
+import PracticeModeClassicQueue from '@/pages/practice-mode-classic-queue/PracticeModeClassicQueue.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -22,12 +23,17 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/queue'
+      redirect: '/practice'
     },
     {
-      path: '/queue',
-      name: 'queue',
-      component: PageQueue,
+      path: '/practice',
+      name: 'practice-overview',
+      component: PracticeOverview
+    },
+    {
+      path: '/practice/classic-queue',
+      name: 'practice-mode-classic-queue',
+      component: PracticeModeClassicQueue,
       props: route => ({ focusOnVocab: route.query.focusOnVocab as string })
     },
     {

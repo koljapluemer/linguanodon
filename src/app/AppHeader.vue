@@ -39,7 +39,7 @@ const toggleMaterialSubmenu = () => {
       
       <nav class="flex gap-2 justify-center">
         <!-- Practice -->
-        <router-link :to="{ name: 'queue' }" class="btn btn-ghost btn-sm">
+        <router-link :to="{ name: 'practice-overview' }" class="btn btn-ghost btn-sm">
           <Play :size="16" />
           <span class="hidden md:inline ml-2">Practice</span>
         </router-link>
