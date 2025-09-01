@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to fetch English sentences with Arabic translations from the Tatoeba API
+Script to fetch English sentences with target language translations from the Tatoeba API
 and generate JSONL files in the proper format for Linguanodon.
 """
 
@@ -78,7 +78,7 @@ def create_link(label, url, owner=None, owner_link=None, license=None):
     return link_entry["id"]
 
 
-def create_translation(content, priority=None):
+def create_translation(content):
     """Create a translation entry and return its ID, or return existing ID if duplicate content"""
     # Check if translation with this content already exists
     for existing in translation_data:
@@ -90,8 +90,6 @@ def create_translation(content, priority=None):
         "id": get_next_translation_id(),
         "content": content
     }
-    if priority is not None:
-        translation_entry["priority"] = priority
     
     translation_data.append(translation_entry)
     return translation_entry["id"]
@@ -151,7 +149,7 @@ def load_existing_data():
                 except (KeyError, ValueError) as e:
                     logger.warning(f"Invalid entry on line {line_num} in links.jsonl: {e}")
 
-def create_vocab(language, content, length, translations=None, links=None, related_vocab=None, priority=None):
+def create_vocab(language, content, length, translations=None, links=None, related_vocab=None):
     """Create a vocab entry and return its ID, or return existing ID if duplicate content+language"""
     # Check if vocab with this content+language already exists
     for existing in vocab_data:
@@ -193,8 +191,6 @@ def create_vocab(language, content, length, translations=None, links=None, relat
         vocab_entry["links"] = links
     if related_vocab:
         vocab_entry["relatedVocab"] = related_vocab
-    if priority is not None:
-        vocab_entry["priority"] = priority
     
     vocab_data.append(vocab_entry)
     return vocab_entry["id"]
@@ -239,16 +235,16 @@ def fetch_sentences_from_tatoeba():
         sentences = data.get('data', [])
         logger.info(f"Page {page_count}: fetched {len(sentences)} sentences")
         
-        # Count new sentences in this batch
-        new_in_batch = 0
+        # Only add new (non-duplicate) sentences
+        new_sentences_in_batch = []
         for sentence in sentences:
             source_text = sentence.get('text', '').strip()
             if source_text and source_text not in existing_translations:
-                new_in_batch += 1
+                new_sentences_in_batch.append(sentence)
         
-        logger.info(f"Page {page_count}: {new_in_batch} new sentences (not duplicates)")
-        new_sentences_found += new_in_batch
-        all_sentences.extend(sentences)
+        logger.info(f"Page {page_count}: {len(new_sentences_in_batch)} new sentences (not duplicates)")
+        new_sentences_found += len(new_sentences_in_batch)
+        all_sentences.extend(new_sentences_in_batch)
         
         if DEBUG_ABORT_AFTER_FIRST_PAGE:
             logger.info("DEBUG: Aborting after first API call as requested.")
@@ -273,7 +269,7 @@ def fetch_sentences_from_tatoeba():
         logger.info("Sleeping 1 second before next page...")
         time.sleep(1)
     
-    logger.info(f"Successfully fetched {len(all_sentences)} total sentences ({new_sentences_found} new)")
+    logger.info(f"Successfully fetched {len(all_sentences)} new sentences")
     return all_sentences
 
 def process_tatoeba_sentences(sentences):
@@ -302,25 +298,7 @@ def process_tatoeba_sentences(sentences):
             if not source_text:
                 continue
             
-            # Skip if we already have this translation
-            if source_text in existing_translations:
-                continue
-            
-            # Stop if we've reached our limit of NEW sentences
-            if processed_count >= MAX_SENTENCES:
-                logger.info(f"Reached maximum of {MAX_SENTENCES} new sentences")
-                break
-            
-            # Create source sentence link
-            source_link_id = create_link(
-                f"Tatoeba #{source_id}",
-                f"https://tatoeba.org/en/sentences/show/{source_id}" if source_id else "https://tatoeba.org",
-                source_owner,
-                f"https://tatoeba.org/en/user/profile/{source_owner}" if source_owner else None,
-                source_license
-            )
-            
-            # Find target language translation
+            # Find target language translation FIRST
             target_text = None
             target_owner = None
             target_license = None
@@ -342,6 +320,16 @@ def process_tatoeba_sentences(sentences):
                 logger.debug(f"No {TARGET_LANGUAGE} sentence found for English: {source_text}")
                 continue
             
+            # Only create links AFTER we know we have both sentences
+            # Create source sentence link
+            source_link_id = create_link(
+                f"Tatoeba #{source_id}",
+                f"https://tatoeba.org/en/sentences/show/{source_id}" if source_id else "https://tatoeba.org",
+                source_owner,
+                f"https://tatoeba.org/en/user/profile/{source_owner}" if source_owner else None,
+                source_license
+            )
+            
             # Create target sentence link
             target_link_id = create_link(
                 f"Tatoeba #{target_id}",
@@ -352,10 +340,7 @@ def process_tatoeba_sentences(sentences):
             )
             
             # Create translation entry for source language sentence
-            source_translation_id = create_translation(
-                source_text,
-                priority=1
-            )
+            source_translation_id = create_translation(source_text)
             
             # Create vocab entry ONLY for target language sentence
             target_vocab_id = create_vocab(
@@ -363,9 +348,11 @@ def process_tatoeba_sentences(sentences):
                 content=target_text,
                 length="sentence",
                 translations=[source_translation_id],
-                links=[target_link_id, tatoeba_link_id],
-                priority=2
+                links=[target_link_id, tatoeba_link_id]
             )
+            
+            # Add to existing translations so we don't fetch it again in future runs
+            existing_translations.add(source_text)
             
             processed_count += 1
             if processed_count % 50 == 0:
@@ -375,7 +362,7 @@ def process_tatoeba_sentences(sentences):
             logger.error(f"Error processing sentence: {e}")
             continue
     
-    logger.info(f"Successfully processed {processed_count} sentence pairs")
+    logger.info(f"Successfully processed {processed_count} new sentence pairs")
 
 def save_jsonl_files():
     """Save all collected data to JSONL files (append mode)"""
