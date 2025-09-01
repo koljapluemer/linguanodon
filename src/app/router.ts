@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PracticeOverview from '@/pages/practice-overview/PracticeOverview.vue';
 import PracticeModeClassicQueue from '@/pages/practice-mode-classic-queue/PracticeModeClassicQueue.vue';
+import PracticeModeFactCardGrind from '@/pages/practice-mode-fact-card-grind/PracticeModeFactCardGrind.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -35,6 +36,11 @@ const router = createRouter({
       name: 'practice-mode-classic-queue',
       component: PracticeModeClassicQueue,
       props: route => ({ focusOnVocab: route.query.focusOnVocab as string })
+    },
+    {
+      path: '/practice/fact-card-grind',
+      name: 'practice-mode-fact-card-grind',
+      component: PracticeModeFactCardGrind
     },
     {
       path: '/my-material',

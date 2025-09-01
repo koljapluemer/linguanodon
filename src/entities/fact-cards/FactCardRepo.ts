@@ -105,4 +105,70 @@ export class FactCardRepo implements FactCardRepoContract {
 
     await this.updateFactCard(updatedFactCard);
   }
+
+  async getRandomUnseenFactCards(count: number, languages: string[], factCardBlockList?: string[]): Promise<FactCardData[]> {
+    const factCards = await this.db.factCards
+      .where('language')
+      .anyOf(languages)
+      .filter(factCard => {
+        // Must be unseen (level -1)
+        if (factCard.progress.level !== -1) {
+          return false;
+        }
+        
+        // Must not be excluded from practice
+        if (factCard.doNotPractice) {
+          return false;
+        }
+        
+        // Must not be in block list
+        if (factCardBlockList && factCardBlockList.includes(factCard.uid)) {
+          return false;
+        }
+        
+        return true;
+      })
+      .toArray();
+
+    // Shuffle and return requested count
+    const shuffled = factCards.sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+    return selected.map(fc => this.ensureFactCardFields(fc));
+  }
+
+  async getRandomAlreadySeenDueFactCards(count: number, languages: string[], factCardBlockList?: string[]): Promise<FactCardData[]> {
+    const now = new Date();
+    const factCards = await this.db.factCards
+      .where('language')
+      .anyOf(languages)
+      .filter(factCard => {
+        // Must be already seen (level >= 0)
+        if (factCard.progress.level < 0) {
+          return false;
+        }
+        
+        // Must be due
+        if (!factCard.progress.due || factCard.progress.due > now) {
+          return false;
+        }
+        
+        // Must not be excluded from practice
+        if (factCard.doNotPractice) {
+          return false;
+        }
+        
+        // Must not be in block list
+        if (factCardBlockList && factCardBlockList.includes(factCard.uid)) {
+          return false;
+        }
+        
+        return true;
+      })
+      .toArray();
+
+    // Shuffle and return requested count
+    const shuffled = factCards.sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+    return selected.map(fc => this.ensureFactCardFields(fc));
+  }
 }

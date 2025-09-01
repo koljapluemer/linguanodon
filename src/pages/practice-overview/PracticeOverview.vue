@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Play } from 'lucide-vue-next';
+import { Play, BookOpen } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -7,6 +7,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-classic-queue' },
     icon: Play,
     description: 'Practice vocabulary and tasks in an infinite queue'
+  },
+  {
+    name: 'Fact Card Grind',
+    route: { name: 'practice-mode-fact-card-grind' },
+    icon: BookOpen,
+    description: 'Focus exclusively on practicing fact cards'
   }
 ];
 </script>

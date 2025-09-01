@@ -51,7 +51,7 @@ onMounted(loadFactCard);
 <template>
   <div v-if="factCard">
     <div class="text-center mb-8">
-      <div class="text-4xl font-bold mb-6">
+      <div class="text-4xl mb-6">
         <MarkdownRenderer :content="factCard.front" />
       </div>
       
