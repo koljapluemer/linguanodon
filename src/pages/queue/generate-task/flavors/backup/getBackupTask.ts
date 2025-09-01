@@ -1,8 +1,8 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabFormSentence } from '../../make-a-task/generateVocabFormSentence';
-import { generateVocabFormSingleSentence } from '../../make-a-task/generateVocabFormSingleSentence';
+import { generateVocabFormSentence } from '@/tasks/task-vocab-form-sentence/generateVocabFormSentence';
+import { generateVocabFormSingleSentence } from '@/tasks/task-vocab-form-sentence/generateVocabFormSingleSentence';
 
 export async function getBackupTask(
   vocabRepo: VocabRepoContract,

@@ -1,6 +1,6 @@
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateFactCardReveal } from '../../../make-a-task/generateFactCardReveal';
+import { generateFactCardReveal } from '@/tasks/task-fact-card-reveal/generateFactCardReveal';
 
 export async function getRandomFactCardRevealTask(
   factCardRepo: FactCardRepoContract,

@@ -1,7 +1,7 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabTryToRemember } from '../../../make-a-task/generateVocabTryToRemember';
+import { generateVocabTryToRemember } from '@/tasks/task-vocab-try-to-remember/generateVocabTryToRemember';
 import { getRandomNewVocabFromRandomValidImmersionResource } from './getRandomNewVocabFromRandomValidImmersionResource';
 
 export async function getRandomVocabTryToRememberTask(

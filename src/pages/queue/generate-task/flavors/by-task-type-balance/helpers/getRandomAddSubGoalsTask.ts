@@ -1,6 +1,6 @@
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateAddSubGoals } from '../../../make-a-task/generateAddSubGoals';
+import { generateAddSubGoals } from '@/tasks/task-goal-add-sub-goals/generateAddSubGoals';
 
 export async function getRandomAddSubGoalsTask(
   goalRepo: GoalRepoContract,

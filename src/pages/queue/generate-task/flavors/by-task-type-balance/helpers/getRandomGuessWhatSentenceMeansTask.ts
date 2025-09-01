@@ -1,6 +1,6 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateGuessWhatSentenceMeans } from '../../../make-a-task/generateGuessWhatSentenceMeans';
+import { generateGuessWhatSentenceMeans } from '@/tasks/task-guess-what-sentence-means/generateGuessWhatSentenceMeans';
 
 export async function getRandomGuessWhatSentenceMeansTask(
   vocabRepo: VocabRepoContract,

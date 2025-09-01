@@ -3,8 +3,8 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
-import { generateClozeChoiceFromTwo } from '../../../make-a-task/generateClozeChoiceFromTwo';
-import { generateClozeChoiceFromFour } from '../../../make-a-task/generateClozeChoiceFromFour';
+import { generateClozeChoiceFromTwo } from '@/tasks/task-cloze-choice/generateClozeChoiceFromTwo';
+import { generateClozeChoiceFromFour } from '@/tasks/task-cloze-choice/generateClozeChoiceFromFour';
 import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
 
 async function tryGenerateFromVocab(vocab: VocabData) {

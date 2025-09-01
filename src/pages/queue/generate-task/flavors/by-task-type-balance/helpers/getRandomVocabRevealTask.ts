@@ -3,8 +3,8 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabRevealTargetToNative } from '../../../make-a-task/generateVocabRevealTargetToNative';
-import { generateVocabRevealNativeToTarget } from '../../../make-a-task/generateVocabRevealNativeToTarget';
+import { generateVocabRevealTargetToNative } from '@/tasks/task-vocab-reveal/generateVocabRevealTargetToNative';
+import { generateVocabRevealNativeToTarget } from '@/tasks/task-vocab-reveal/generateVocabRevealNativeToTarget';
 import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
 
 async function tryGenerateFromVocab(vocab: VocabData) {

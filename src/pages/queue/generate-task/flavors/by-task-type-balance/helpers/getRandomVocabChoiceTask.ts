@@ -3,10 +3,10 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabChoiceFromTwoTargetToNative } from '../../../make-a-task/generateVocabChoiceFromTwoTargetToNative';
-import { generateVocabChoiceFromTwoNativeToTarget } from '../../../make-a-task/generateVocabChoiceFromTwoNativeToTarget';
-import { generateVocabChoiceFromFourTargetToNative } from '../../../make-a-task/generateVocabChoiceFromFourTargetToNative';
-import { generateVocabChoiceFromFourNativeToTarget } from '../../../make-a-task/generateVocabChoiceFromFourNativeToTarget';
+import { generateVocabChoiceFromTwoTargetToNative } from '@/tasks/task-vocab-single-choice/generateVocabChoiceFromTwoTargetToNative';
+import { generateVocabChoiceFromTwoNativeToTarget } from '@/tasks/task-vocab-single-choice/generateVocabChoiceFromTwoNativeToTarget';
+import { generateVocabChoiceFromFourTargetToNative } from '@/tasks/task-vocab-single-choice/generateVocabChoiceFromFourTargetToNative';
+import { generateVocabChoiceFromFourNativeToTarget } from '@/tasks/task-vocab-single-choice/generateVocabChoiceFromFourNativeToTarget';
 import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
 
 async function tryGenerateFromVocab(vocab: VocabData) {

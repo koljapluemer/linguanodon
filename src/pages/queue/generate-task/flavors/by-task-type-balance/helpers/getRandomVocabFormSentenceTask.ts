@@ -1,7 +1,7 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabFormSentence } from '../../../make-a-task/generateVocabFormSentence';
+import { generateVocabFormSentence } from '@/tasks/task-vocab-form-sentence/generateVocabFormSentence';
 import { randomFromArray, pickRandom } from '@/shared/arrayUtils';
 
 export async function getRandomVocabFormSentenceTask(

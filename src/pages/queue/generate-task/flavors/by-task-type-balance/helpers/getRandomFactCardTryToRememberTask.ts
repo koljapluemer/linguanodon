@@ -1,6 +1,6 @@
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateFactCardTryToRemember } from '../../../make-a-task/generateFactCardTryToRemember';
+import { generateFactCardTryToRemember } from '@/tasks/task-fact-card-try-to-remember/generateFactCardTryToRemember';
 
 export async function getRandomFactCardTryToRememberTask(
   factCardRepo: FactCardRepoContract,
