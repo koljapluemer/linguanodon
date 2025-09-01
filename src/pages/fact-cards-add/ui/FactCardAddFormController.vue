@@ -7,6 +7,7 @@
       :error="state.error"
       @field-change="handleFieldChange"
       @save="save"
+      @save-and-add-another="saveAndAddAnother"
     />
   </div>
 </template>
@@ -80,12 +81,12 @@ function serializeFormData(formData: FactCardFormData): FactCardFormData {
   return JSON.parse(JSON.stringify(formData));
 }
 
-async function saveInternal(): Promise<void> {
+async function saveInternal(): Promise<string> {
   if (!factCardRepo) throw new Error('FactCardRepo not available');
 
   const serializedFormData = serializeFormData(state.value.formData);
   const savedFactCard = await factCardRepo.saveFactCard(toRaw(formDataToFactCardData(serializedFormData)));
-  emit('fact-card-saved', savedFactCard.uid);
+  return savedFactCard.uid;
 }
 
 async function save(): Promise<boolean> {
@@ -98,7 +99,39 @@ async function save(): Promise<boolean> {
   state.value.error = null;
 
   try {
+    const factCardId = await saveInternal();
+    emit('fact-card-saved', factCardId);
+    return true;
+  } catch (error) {
+    state.value.error = error instanceof Error ? error.message : 'Failed to save fact card';
+    return false;
+  } finally {
+    state.value.saving = false;
+  }
+}
+
+async function saveAndAddAnother(): Promise<boolean> {
+  if (!isValid.value || !factCardRepo) {
+    state.value.error = 'Please fill in required fields';
+    return false;
+  }
+
+  state.value.saving = true;
+  state.value.error = null;
+
+  try {
     await saveInternal();
+    
+    // Save the current language to preserve it
+    const currentLanguage = state.value.formData.language;
+    
+    // Clear form data but keep the language
+    state.value.formData = {
+      language: currentLanguage,
+      front: '',
+      back: ''
+    };
+    
     return true;
   } catch (error) {
     state.value.error = error instanceof Error ? error.message : 'Failed to save fact card';

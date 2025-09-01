@@ -44,16 +44,25 @@
     ></textarea>
   </div>
 
-  <!-- Save Button -->
-  <div class="py-4">
+  <!-- Save Buttons -->
+  <div class="py-4 flex gap-4">
     <button
       type="button"
       @click="$emit('save')"
       :disabled="saving || !formData.language.trim() || !formData.front.trim() || !formData.back.trim()"
-      class="btn btn-primary w-full"
+      class="btn btn-primary flex-1"
     >
       <span v-if="saving" class="loading loading-spinner loading-sm mr-2"></span>
       {{ saving ? 'Saving...' : 'Save Fact Card' }}
+    </button>
+    <button
+      type="button"
+      @click="$emit('save-and-add-another')"
+      :disabled="saving || !formData.language.trim() || !formData.front.trim() || !formData.back.trim()"
+      class="btn btn-outline btn-primary flex-1"
+    >
+      <span v-if="saving" class="loading loading-spinner loading-sm mr-2"></span>
+      {{ saving ? 'Saving...' : 'Save & Add Another' }}
     </button>
   </div>
 </template>
@@ -77,5 +86,6 @@ defineProps<{
 defineEmits<{
   'field-change': [];
   'save': [];
+  'save-and-add-another': [];
 }>();
 </script>
