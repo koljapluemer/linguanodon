@@ -42,7 +42,7 @@
   <div class="py-4">
     <label class="label cursor-pointer">
       <span class="label-text font-medium">Can be visualized</span>
-      <input v-model="formData.isPicturable" @change="$emit('update-picturable', $event.target.checked)" type="checkbox" class="toggle" />
+      <input v-model="formData.isPicturable" @change="$emit('field-change')" type="checkbox" class="toggle" />
     </label>
   </div>
 
@@ -54,17 +54,26 @@
       @images-changed="(images) => $emit('update-images', images)"
     />
   </div>
+
+  <!-- Audio -->
+  <div class="py-4">
+    <VocabSoundManager
+      :sound="formData.sound"
+      @sound-changed="(sound) => $emit('update-sound', sound)"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import NoteList from '@/entities/notes/NoteList.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
 import VocabImageManager from '@/features/vocab-image-management/VocabImageManager.vue';
+import VocabSoundManager from '@/features/vocab-sound-management/VocabSoundManager.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
-import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
+import type { VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
 
 interface VocabFormData {
   language: string;
@@ -77,6 +86,7 @@ interface VocabFormData {
   links: Link[];
   isPicturable?: boolean;
   images?: VocabImage[];
+  sound?: VocabSound;
 }
 
 defineProps<{
@@ -91,7 +101,7 @@ defineEmits<{
   'add-link': [link: Link];
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
-  'update-picturable': [isPicturable: boolean];
   'update-images': [images: VocabImage[]];
+  'update-sound': [sound: VocabSound | undefined];
 }>();
 </script>

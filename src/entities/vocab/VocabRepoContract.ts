@@ -67,4 +67,9 @@ export interface VocabRepoContract {
   removeImageFromVocab(vocabId: string, imageId: string): Promise<void>;
   getVocabNeedingImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   markVocabNotPicturable(vocabId: string): Promise<void>;
+
+  // Sound operations
+  addSoundFromFile(vocabId: string, file: File): Promise<void>;
+  addSoundFromUrl(vocabId: string, url: string): Promise<void>;
+  removeSoundFromVocab(vocabId: string): Promise<void>;
 }

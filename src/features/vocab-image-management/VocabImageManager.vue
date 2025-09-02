@@ -43,8 +43,8 @@
       </div>
     </div>
 
-    <!-- Add Image Section (only if picturable and vocab exists) -->
-    <div v-if="isPicturable !== false && vocabId" class="card bg-base-200">
+    <!-- Add Image Section -->
+    <div v-if="isPicturable !== false" class="card bg-base-200">
       <div class="card-body p-4">
         <div class="tabs tabs-boxed tabs-sm mb-4">
           <button 
@@ -115,10 +115,6 @@
       </div>
     </div>
 
-    <!-- Message for new vocab -->
-    <div v-if="isPicturable !== false && !vocabId" class="alert alert-info">
-      <span>Save the vocabulary first to add images</span>
-    </div>
 
     <!-- Hidden file input for replace functionality -->
     <input 
@@ -132,13 +128,11 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watch, onUnmounted } from 'vue';
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import { ref, watch, onUnmounted } from 'vue';
 import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
-import { formatFileSize } from '@/shared/imageUtils';
+import { formatFileSize } from '@/shared/fileUtils';
 
 const props = defineProps<{
-  vocabId?: string;
   images?: VocabImage[];
   isPicturable?: boolean;
 }>();
@@ -146,8 +140,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   imagesChanged: [images: VocabImage[]];
 }>();
-
-const vocabRepo = inject<VocabRepoContract>('vocabRepo');
 
 // Local reactive state for images
 const localImages = ref<VocabImage[]>([]);
@@ -189,7 +181,7 @@ function getImageUrl(image: VocabImage): string {
 
 // Add image from URL
 async function addFromUrl() {
-  if (!imageUrl.value.trim() || !props.vocabId || !vocabRepo) return;
+  if (!imageUrl.value.trim()) return;
   
   loading.value = true;
   loadingMessage.value = 'Fetching image...';
@@ -206,14 +198,28 @@ async function addFromUrl() {
     progress.value = 40;
     loadingMessage.value = 'Compressing image...';
     
-    await vocabRepo.addImageFromUrl(props.vocabId, imageUrl.value);
+    // Fetch and compress the image locally
+    const { compressImageFromUrl } = await import('@/shared/imageUtils');
+    const compressedBlob = await compressImageFromUrl(imageUrl.value, {
+      maxWidth: 800,
+      maxHeight: 600,
+      quality: 0.8,
+      format: 'jpeg'
+    });
     
-    // Reload the vocab to get the new image and update local state
-    const updatedVocab = await vocabRepo.getVocabByUID(props.vocabId);
-    if (updatedVocab?.images) {
-      localImages.value = [...updatedVocab.images];
-      emit('imagesChanged', [...localImages.value]);
-    }
+    const vocabImage: VocabImage = {
+      uid: crypto.randomUUID(),
+      url: imageUrl.value,
+      blob: compressedBlob,
+      alt: undefined,
+      addedAt: new Date(),
+      fileSize: compressedBlob.size,
+      mimeType: compressedBlob.type,
+      compressed: true
+    };
+    
+    localImages.value = [...localImages.value, vocabImage];
+    emit('imagesChanged', [...localImages.value]);
     
     progress.value = 100;
     imageUrl.value = '';
@@ -226,70 +232,123 @@ async function addFromUrl() {
   }
 }
 
-// Handle file upload
+// Handle file upload  
 async function handleFileUpload(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file || !props.vocabId || !vocabRepo) return;
+  if (!file) return;
   
-  await processFileUpload(file, false);
+  loading.value = true;
+  loadingMessage.value = 'Processing image...';
+  progress.value = 10;
+  error.value = '';
+  
+  try {
+    // Validate file
+    if (!file.type.startsWith('image/')) {
+      throw new Error('Please select an image file');
+    }
+    
+    if (file.size > 50 * 1024 * 1024) { // 50MB limit
+      throw new Error('Image must be smaller than 50MB');
+    }
+    
+    progress.value = 30;
+    loadingMessage.value = 'Compressing image...';
+    
+    // Compress the image locally
+    const { compressImage } = await import('@/shared/imageUtils');
+    const compressedBlob = await compressImage(file, {
+      maxWidth: 800,
+      maxHeight: 600,
+      quality: 0.8,
+      format: 'jpeg'
+    });
+    
+    const vocabImage: VocabImage = {
+      uid: crypto.randomUUID(),
+      blob: compressedBlob,
+      alt: file.name,
+      addedAt: new Date(),
+      fileSize: compressedBlob.size,
+      mimeType: compressedBlob.type,
+      originalFileName: file.name,
+      compressed: true
+    };
+    
+    localImages.value = [...localImages.value, vocabImage];
+    emit('imagesChanged', [...localImages.value]);
+    
+    progress.value = 100;
+    
+    // Reset input
+    if (fileInput.value) fileInput.value.value = '';
+    
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to process image';
+  } finally {
+    loading.value = false;
+    progress.value = 0;
+  }
 }
 
 // Handle replace file
 async function handleReplaceFile(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file || !props.vocabId || !vocabRepo || !replacingImageId.value) return;
-  
-  // Remove old image first
-  await vocabRepo.removeImageFromVocab(props.vocabId, replacingImageId.value);
-  
-  // Add new image
-  await processFileUpload(file, true);
-  replacingImageId.value = null;
-}
-
-// Process file upload (shared logic)
-async function processFileUpload(file: File, isReplace: boolean) {
-  if (!props.vocabId || !vocabRepo) return;
+  if (!file || !replacingImageId.value) return;
   
   loading.value = true;
-  loadingMessage.value = isReplace ? 'Replacing image...' : 'Processing image...';
+  loadingMessage.value = 'Replacing image...';
   progress.value = 10;
   error.value = '';
   
-  // Validate file
-  if (!file.type.startsWith('image/')) {
-    error.value = 'Please select an image file';
-    loading.value = false;
-    return;
-  }
-  
-  if (file.size > 50 * 1024 * 1024) { // 50MB limit
-    error.value = 'Image must be smaller than 50MB';
-    loading.value = false;
-    return;
-  }
-  
   try {
+    // Validate file
+    if (!file.type.startsWith('image/')) {
+      throw new Error('Please select an image file');
+    }
+    
+    if (file.size > 50 * 1024 * 1024) { // 50MB limit
+      throw new Error('Image must be smaller than 50MB');
+    }
+    
     progress.value = 30;
     loadingMessage.value = 'Compressing image...';
     
-    await vocabRepo.addImageFromFile(props.vocabId, file);
+    // Compress the image locally
+    const { compressImage } = await import('@/shared/imageUtils');
+    const compressedBlob = await compressImage(file, {
+      maxWidth: 800,
+      maxHeight: 600,
+      quality: 0.8,
+      format: 'jpeg'
+    });
     
-    // Reload the vocab to get the new image and update local state
-    const updatedVocab = await vocabRepo.getVocabByUID(props.vocabId);
-    if (updatedVocab?.images) {
-      localImages.value = [...updatedVocab.images];
+    const newVocabImage: VocabImage = {
+      uid: crypto.randomUUID(),
+      blob: compressedBlob,
+      alt: file.name,
+      addedAt: new Date(),
+      fileSize: compressedBlob.size,
+      mimeType: compressedBlob.type,
+      originalFileName: file.name,
+      compressed: true
+    };
+    
+    // Replace the image in local state
+    const index = localImages.value.findIndex(img => img.uid === replacingImageId.value);
+    if (index >= 0) {
+      localImages.value[index] = newVocabImage;
       emit('imagesChanged', [...localImages.value]);
     }
     
     progress.value = 100;
+    replacingImageId.value = null;
     
-    // Reset inputs
-    if (fileInput.value) fileInput.value.value = '';
+    // Reset input
     if (replaceFileInput.value) replaceFileInput.value.value = '';
     
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to process image';
+    error.value = err instanceof Error ? err.message : 'Failed to replace image';
   } finally {
     loading.value = false;
     progress.value = 0;
@@ -303,22 +362,12 @@ function replaceImage(imageId: string) {
 }
 
 // Remove image
-async function removeImage(imageId: string) {
-  if (!props.vocabId || !vocabRepo) return;
+function removeImage(imageId: string) {
+  // Remove from local state
+  localImages.value = localImages.value.filter(img => img.uid !== imageId);
   
-  try {
-    // 1. Remove from database
-    await vocabRepo.removeImageFromVocab(props.vocabId, imageId);
-    
-    // 2. Update local state immediately
-    localImages.value = localImages.value.filter(img => img.uid !== imageId);
-    
-    // 3. Tell parent about the new image list
-    emit('imagesChanged', [...localImages.value]);
-    
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to remove image';
-  }
+  // Tell parent about the new image list
+  emit('imagesChanged', [...localImages.value]);
 }
 
 // Cleanup URLs when component unmounts

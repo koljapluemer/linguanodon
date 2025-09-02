@@ -1,10 +1,11 @@
 import Dexie, { type Table } from 'dexie';
 import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
-import type { VocabData, VocabImage } from './vocab/VocabData';
+import type { VocabData, VocabImage, VocabSound } from './vocab/VocabData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
 import { pickRandom, shuffleArray } from '@/shared/arrayUtils';
 import { levenshteinDistance, isLengthWithinRange } from '@/shared/stringUtils';
 import { compressImage, compressImageFromUrl } from '@/shared/imageUtils';
+import { validateAudioFile, getAudioDuration, fetchAudioAsBlob } from '@/shared/audioUtils';
 import { toRaw } from 'vue';
 
 // Utility functions
@@ -41,7 +42,8 @@ export class VocabRepo implements VocabRepoContract {
       translations: vocab.translations || [],
       relatedVocab: vocab.relatedVocab || [],
       notRelatedVocab: vocab.notRelatedVocab || [],
-      images: vocab.images || []
+      images: vocab.images || [],
+      sound: vocab.sound || undefined
     };
   }
 
@@ -752,6 +754,83 @@ export class VocabRepo implements VocabRepoContract {
     if (!vocab) return;
 
     vocab.isPicturable = false;
+    await vocabDb.vocab.put(toRaw(vocab));
+  }
+
+  // Sound operations
+  async addSoundFromFile(vocabId: string, file: File): Promise<void> {
+    // Validate the audio file
+    const validationError = validateAudioFile(file);
+    if (validationError) {
+      throw new Error(validationError);
+    }
+
+    const vocab = await vocabDb.vocab.get(vocabId);
+    if (!vocab) throw new Error('Vocab not found');
+
+    try {
+      // Get audio duration
+      const duration = await getAudioDuration(file);
+
+      const vocabSound: VocabSound = {
+        uid: crypto.randomUUID(),
+        blob: file, // Store the file as a blob directly
+        addedAt: new Date(),
+        fileSize: file.size,
+        mimeType: file.type,
+        duration: duration,
+        originalFileName: file.name
+      };
+
+      vocab.sound = vocabSound;
+      await vocabDb.vocab.put(toRaw(vocab));
+    } catch (error) {
+      console.error('Failed to add sound from file:', error);
+      throw error;
+    }
+  }
+
+  async addSoundFromUrl(vocabId: string, url: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(vocabId);
+    if (!vocab) throw new Error('Vocab not found');
+
+    try {
+      // Fetch audio as blob
+      const blob = await fetchAudioAsBlob(url);
+      
+      // Validate the fetched blob
+      const file = new File([blob], 'audio', { type: blob.type });
+      const validationError = validateAudioFile(file);
+      if (validationError) {
+        throw new Error(validationError);
+      }
+
+      // Get audio duration
+      const duration = await getAudioDuration(blob);
+
+      const vocabSound: VocabSound = {
+        uid: crypto.randomUUID(),
+        blob: blob,
+        addedAt: new Date(),
+        fileSize: blob.size,
+        mimeType: blob.type,
+        duration: duration,
+        originalFileName: undefined
+      };
+
+      vocab.sound = vocabSound;
+      await vocabDb.vocab.put(toRaw(vocab));
+    } catch (error) {
+      console.error('Failed to add sound from URL:', error);
+      throw error;
+    }
+  }
+
+  async removeSoundFromVocab(vocabId: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(vocabId);
+    if (!vocab) return;
+
+    vocab.sound = undefined;
     await vocabDb.vocab.put(toRaw(vocab));
   }
 }

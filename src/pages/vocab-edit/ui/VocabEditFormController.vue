@@ -20,6 +20,7 @@
       @update-related-vocab="updateRelatedVocab"
       @update-picturable="updatePicturable"
       @update-images="updateImages"
+      @update-sound="updateSound"
     />
   </div>
 </template>
@@ -31,7 +32,7 @@ import VocabFormMetaRenderer from './VocabFormMetaRenderer.vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { VocabData, VocabImage } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
@@ -53,6 +54,7 @@ interface VocabFormData {
   relatedVocab?: string[];
   isPicturable?: boolean;
   images?: VocabImage[];
+  sound?: VocabSound;
 }
 
 interface VocabFormState {
@@ -76,7 +78,8 @@ function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = [], translati
     links: vocab.links ? [...vocab.links] : [],
     relatedVocab: vocab.relatedVocab ? [...vocab.relatedVocab] : [],
     isPicturable: vocab.isPicturable,
-    images: vocab.images ? [...vocab.images] : []
+    images: vocab.images ? [...vocab.images] : [],
+    sound: vocab.sound
   };
 }
 
@@ -95,7 +98,8 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     relatedVocab: formData.relatedVocab || [],
     notRelatedVocab: existingVocab?.notRelatedVocab || [],
     isPicturable: formData.isPicturable,
-    images: formData.images || []
+    images: formData.images || [],
+    sound: formData.sound
   };
 
   // For updates, include existing progress
@@ -374,6 +378,11 @@ async function updatePicturable(isPicturable: boolean) {
 function updateImages(images: VocabImage[]) {
   state.value.formData.images = [...images];
   // No need to call handleFieldChange - the database is already updated
+}
+
+async function updateSound(sound: VocabSound | undefined) {
+  state.value.formData.sound = sound;
+  await handleFieldChange();
 }
 
 onMounted(() => {

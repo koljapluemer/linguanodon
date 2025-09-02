@@ -11,8 +11,8 @@
       @remove-note="removeNote"
       @add-link="addLink"
       @remove-link="removeLink"
-      @update-picturable="updatePicturable"
       @update-images="updateImages"
+      @update-sound="updateSound"
       @save="save"
     />
   </div>
@@ -25,7 +25,7 @@ import VocabAddFormMetaRenderer from './VocabAddFormMetaRenderer.vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { VocabData, VocabImage } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
@@ -45,6 +45,7 @@ interface VocabFormData {
   }>;
   isPicturable?: boolean;
   images?: VocabImage[];
+  sound?: VocabSound;
 }
 
 interface VocabFormState {
@@ -69,7 +70,8 @@ function formDataToVocabData(formData: VocabFormData): Omit<VocabData, 'progress
     relatedVocab: [],
     notRelatedVocab: [],
     isPicturable: formData.isPicturable,
-    images: formData.images || []
+    images: formData.images || [],
+    sound: formData.sound
   };
 }
 
@@ -101,7 +103,8 @@ const state = ref<VocabFormState>({
     notes: [],
     links: [],
     isPicturable: undefined,
-    images: []
+    images: [],
+    sound: undefined
   },
   loading: false,
   saving: false,
@@ -198,11 +201,11 @@ function removeLink(index: number) {
   state.value.formData.links.splice(index, 1);
 }
 
-function updatePicturable(isPicturable: boolean) {
-  state.value.formData.isPicturable = isPicturable;
-}
-
 function updateImages(images: VocabImage[]) {
   state.value.formData.images = [...images];
+}
+
+function updateSound(sound: VocabSound | undefined) {
+  state.value.formData.sound = sound;
 }
 </script>

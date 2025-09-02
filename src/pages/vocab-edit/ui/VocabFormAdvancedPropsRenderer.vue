@@ -28,7 +28,7 @@
       <InlineToggle
         v-model="formData.isPicturable"
         label="Can be visualized"
-        @update:modelValue="$emit('update-picturable', $event)"
+        @update:modelValue="$emit('field-change')"
       />
     </div>
 
@@ -53,10 +53,15 @@
     <!-- Images -->
     <VocabImageManager
       v-if="formData.isPicturable !== false"
-      :vocab-id="formData.id"
       :images="formData.images"
       :is-picturable="formData.isPicturable"
       @images-changed="(images) => emit('update-images', images)"
+    />
+
+    <!-- Audio -->
+    <VocabSoundManager
+      :sound="formData.sound"
+      @sound-changed="(sound) => emit('update-sound', sound)"
     />
 
     <div class="space-y-4">
@@ -89,11 +94,12 @@ import NoteList from '@/entities/notes/NoteList.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
 import ManageVocabList from '@/features/manage-vocab-list/ManageVocabList.vue';
 import VocabImageManager from '@/features/vocab-image-management/VocabImageManager.vue';
+import VocabSoundManager from '@/features/vocab-sound-management/VocabSoundManager.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
-import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
+import type { VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
 
 interface VocabFormData {
   id?: string;
@@ -108,6 +114,7 @@ interface VocabFormData {
   relatedVocab?: string[];
   isPicturable?: boolean;
   images?: VocabImage[];
+  sound?: VocabSound;
 }
 
 defineProps<{
@@ -123,8 +130,8 @@ const emit = defineEmits<{
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
   'update-related-vocab': [vocabIds: string[]];
-  'update-picturable': [isPicturable: boolean];
   'update-images': [images: VocabImage[]];
+  'update-sound': [sound: VocabSound | undefined];
 }>();
 
 const lengthOptions = computed(() => {

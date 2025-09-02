@@ -18,6 +18,16 @@ export interface VocabImage {
   originalDimensions?: { width: number; height: number };
 }
 
+export interface VocabSound {
+  uid: string;
+  blob: Blob;
+  addedAt: Date;
+  fileSize: number;
+  mimeType: string;
+  duration?: number; // in seconds
+  originalFileName?: string;
+}
+
 export interface VocabData {
   uid: string;
   language: string;
@@ -38,6 +48,8 @@ export interface VocabData {
 
   isPicturable?: boolean; // can this vocab be visualized with images?
   images?: VocabImage[]; // associated images for this vocab
+
+  sound?: VocabSound; // associated audio for this vocab
 
 }
 
