@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted, ref } from 'vue';
+import { inject, onMounted, onUnmounted } from 'vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
@@ -9,6 +9,7 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
+import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
 import { makeTask } from './generate-task/makeTask';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 
@@ -31,40 +32,18 @@ if (!vocabRepo || !translationRepo || !goalRepo || !resourceRepo || !languageRep
   throw new Error('Repositories not available');
 }
 
-// Queue state types
-type QueueState =
-  | { status: 'initializing' }
-  | { status: 'loading', message?: string }
-  | { status: 'task', currentTask: Task, nextTask: Task | null }
-  | { status: 'empty', message: string }
-  | { status: 'error', message: string };
-
-// State
-const state = ref<QueueState>({ status: 'initializing' });
-
-// UI state for smooth transitions
-const showLoadingUI = ref(false);
-let loadingTimeout: NodeJS.Timeout | null = null;
-
-
-
-// Loading UI helpers
-function startDelayedLoading() {
-  if (loadingTimeout) {
-    clearTimeout(loadingTimeout);
-  }
-  loadingTimeout = setTimeout(() => {
-    showLoadingUI.value = true;
-  }, 500);
-}
-
-function clearDelayedLoading() {
-  if (loadingTimeout) {
-    clearTimeout(loadingTimeout);
-    loadingTimeout = null;
-  }
-  showLoadingUI.value = false;
-}
+// Queue state
+const {
+  state,
+  showLoadingUI,
+  startDelayedLoading,
+  clearDelayedLoading,
+  setLoading,
+  setTask,
+  setEmpty,
+  setError,
+  cleanup
+} = useQueueState();
 
 // Generate a single task
 async function generateNextTask(): Promise<Task | null> {
@@ -90,7 +69,7 @@ async function generateNextTask(): Promise<Task | null> {
 
 // Try to transition to task state
 async function tryTransitionToTask(): Promise<boolean> {
-  state.value = { status: 'loading', message: 'Preparing next task...' };
+  setLoading('Preparing next task...');
   startDelayedLoading();
 
   try {
@@ -101,11 +80,7 @@ async function tryTransitionToTask(): Promise<boolean> {
       const nextTask = await generateNextTask();
       
       clearDelayedLoading();
-      state.value = { 
-        status: 'task', 
-        currentTask, 
-        nextTask 
-      };
+      setTask(currentTask, nextTask);
       return true;
     }
   } catch (error) {
@@ -113,34 +88,25 @@ async function tryTransitionToTask(): Promise<boolean> {
   }
   
   clearDelayedLoading();
-  state.value = {
-    status: 'empty',
-    message: 'Unable to load more tasks. Please try refreshing.'
-  };
+  setEmpty('Unable to load more tasks. Please try refreshing.');
   return false;
 }
 
 // Initialize queue
 async function initializeQueue() {
-  state.value = { status: 'loading', message: 'Loading your learning queue...' };
+  setLoading('Loading your learning queue...');
   showLoadingUI.value = true; // Show loading immediately for initial load
 
   try {
     const success = await tryTransitionToTask();
     if (!success) {
       clearDelayedLoading();
-      state.value = {
-        status: 'empty',
-        message: 'No tasks are currently available for practice.'
-      };
+      setEmpty('No tasks are currently available for practice.');
     }
   } catch (error) {
     console.error('Initialization failed:', error);
     clearDelayedLoading();
-    state.value = {
-      status: 'error',
-      message: 'Failed to initialize learning queue. Please try again.'
-    };
+    setError('Failed to initialize learning queue. Please try again.');
   }
 }
 
@@ -175,10 +141,7 @@ async function completeCurrentTask() {
     // No next task ready, need to generate one
     const success = await tryTransitionToTask();
     if (!success) {
-      state.value = {
-        status: 'empty',
-        message: 'Excellent work! No more tasks are currently available.'
-      };
+      setEmpty('Excellent work! No more tasks are currently available.');
     }
   }
 }
@@ -196,7 +159,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  clearDelayedLoading();
+  cleanup();
 });
 
 /**

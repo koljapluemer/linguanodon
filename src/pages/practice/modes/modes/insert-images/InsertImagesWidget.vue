@@ -5,6 +5,7 @@ import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoCont
 import type { Task } from '@/entities/tasks/Task';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
+import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
 import { generateInsertImagesTask } from './generateInsertImagesTask';
 
 // Inject repositories
@@ -15,39 +16,20 @@ if (!vocabRepo || !languageRepo) {
   throw new Error('Required repositories not available');
 }
 
-// Queue state types
-type QueueState =
-  | { status: 'initializing' }
-  | { status: 'loading', message?: string }
-  | { status: 'task', currentTask: Task, nextTask: Task | null }
-  | { status: 'empty', message: string }
-  | { status: 'error', message: string };
+// Queue state
+const {
+  state,
+  showLoadingUI,
+  startDelayedLoading,
+  clearDelayedLoading,
+  setLoading,
+  setTask,
+  setEmpty,
+  setError,
+  cleanup
+} = useQueueState();
 
-// State
-const state = ref<QueueState>({ status: 'initializing' });
 const lastUsedVocabUid = ref<string | null>(null);
-
-// UI state for smooth transitions
-const showLoadingUI = ref(false);
-let loadingTimeout: NodeJS.Timeout | null = null;
-
-// Loading UI helpers
-function startDelayedLoading() {
-  if (loadingTimeout) {
-    clearTimeout(loadingTimeout);
-  }
-  loadingTimeout = setTimeout(() => {
-    showLoadingUI.value = true;
-  }, 500);
-}
-
-function clearDelayedLoading() {
-  if (loadingTimeout) {
-    clearTimeout(loadingTimeout);
-    loadingTimeout = null;
-  }
-  showLoadingUI.value = false;
-}
 
 // Generate next task
 async function generateNextTask(): Promise<Task | null> {
@@ -71,7 +53,7 @@ async function generateNextTask(): Promise<Task | null> {
 
 // Try to transition to task state
 async function tryTransitionToTask(): Promise<boolean> {
-  state.value = { status: 'loading', message: 'Finding vocabulary that needs images...' };
+  setLoading('Finding vocabulary that needs images...');
   startDelayedLoading();
 
   try {
@@ -82,11 +64,7 @@ async function tryTransitionToTask(): Promise<boolean> {
       const nextTask = await generateNextTask();
       
       clearDelayedLoading();
-      state.value = { 
-        status: 'task', 
-        currentTask, 
-        nextTask 
-      };
+      setTask(currentTask, nextTask);
       return true;
     }
   } catch (error) {
@@ -94,34 +72,25 @@ async function tryTransitionToTask(): Promise<boolean> {
   }
   
   clearDelayedLoading();
-  state.value = {
-    status: 'empty',
-    message: 'Great work! All your vocabulary has images or has been marked as non-picturable.'
-  };
+  setEmpty('Great work! All your vocabulary has images or has been marked as non-picturable.');
   return false;
 }
 
 // Initialize queue
 async function initializeQueue() {
-  state.value = { status: 'loading', message: 'Preparing image insertion session...' };
+  setLoading('Preparing image insertion session...');
   showLoadingUI.value = true; // Show loading immediately for initial load
 
   try {
     const success = await tryTransitionToTask();
     if (!success) {
       clearDelayedLoading();
-      state.value = {
-        status: 'empty',
-        message: 'No vocabulary needs images right now. Check back later!'
-      };
+      setEmpty('No vocabulary needs images right now. Check back later!');
     }
   } catch (error) {
     console.error('Initialization failed:', error);
     clearDelayedLoading();
-    state.value = {
-      status: 'error',
-      message: 'Failed to initialize image insertion session. Please try again.'
-    };
+    setError('Failed to initialize image insertion session. Please try again.');
   }
 }
 
@@ -162,10 +131,7 @@ async function completeCurrentTask() {
     // No next task ready, need to generate one
     const success = await tryTransitionToTask();
     if (!success) {
-      state.value = {
-        status: 'empty',
-        message: 'Excellent work! All vocabulary has been processed.'
-      };
+      setEmpty('Excellent work! All vocabulary has been processed.');
     }
   }
 }
@@ -183,7 +149,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  clearDelayedLoading();
+  cleanup();
 });
 
 // Handle task completion
