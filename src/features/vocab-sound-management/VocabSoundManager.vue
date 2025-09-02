@@ -143,8 +143,8 @@
 <script setup lang="ts">
 import { ref, watch, onUnmounted } from 'vue';
 import type { VocabSound } from '@/entities/vocab/vocab/VocabData';
-import { formatAudioDuration } from '@/shared/audioUtils';
-import { formatFileSize } from '@/shared/fileUtils';
+import { formatAudioDuration } from '@/shared/utils/audioUtils';
+import { formatFileSize } from '@/shared/utils/fileUtils';
 
 const props = defineProps<{
   sound?: VocabSound;
@@ -243,7 +243,7 @@ async function addFromUrl() {
     loadingMessage.value = 'Processing audio...';
     
     // Fetch and process audio locally
-    const { fetchAudioAsBlob, validateAudioFile, getAudioDuration } = await import('@/shared/audioUtils');
+    const { fetchAudioAsBlob, validateAudioFile, getAudioDuration } = await import('@/shared/utils/audioUtils');
     const blob = await fetchAudioAsBlob(soundUrl.value);
     
     // Validate the fetched blob
@@ -292,7 +292,7 @@ async function handleFileUpload(event: Event) {
   
   try {
     // Validate the audio file
-    const { validateAudioFile, getAudioDuration } = await import('@/shared/audioUtils');
+    const { validateAudioFile, getAudioDuration } = await import('@/shared/utils/audioUtils');
     const validationError = validateAudioFile(file);
     if (validationError) {
       throw new Error(validationError);

@@ -2,10 +2,10 @@ import Dexie, { type Table } from 'dexie';
 import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
 import type { VocabData, VocabImage, VocabSound } from './vocab/VocabData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
-import { pickRandom, shuffleArray } from '@/shared/arrayUtils';
-import { levenshteinDistance, isLengthWithinRange } from '@/shared/stringUtils';
-import { compressImage, compressImageFromUrl } from '@/shared/imageUtils';
-import { validateAudioFile, getAudioDuration, fetchAudioAsBlob } from '@/shared/audioUtils';
+import { pickRandom, shuffleArray } from '@/shared/utils/arrayUtils';
+import { levenshteinDistance, isLengthWithinRange } from '@/shared/utils/stringUtils';
+import { compressImage, compressImageFromUrl } from '@/shared/utils/imageUtils';
+import { validateAudioFile, getAudioDuration, fetchAudioAsBlob } from '@/shared/utils/audioUtils';
 import { toRaw } from 'vue';
 
 // Utility functions

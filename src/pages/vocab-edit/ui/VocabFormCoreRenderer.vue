@@ -138,7 +138,7 @@ import InlineInput from '@/shared/ui/InlineInput.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import LanguageDropdown from '@/entities/languages/LanguageDropdown.vue';
-import type { Length } from '@/shared/Length';
+import type { Length } from '@/shared/types/Length';
 
 interface VocabFormData {
   id?: string;

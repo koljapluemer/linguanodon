@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import PracticeOverview from '@/pages/practice-overview/PracticeOverview.vue';
-import ClassicQueueWidget from '@/pages/practice-overview/widgets/classic-queue/ClassicQueueWidget.vue';
-import FactCardGrindWidget from '@/pages/practice-overview/widgets/fact-card-grind/FactCardGrindWidget.vue';
-import GoalGetterWidget from '@/pages/practice-overview/widgets/goal-getter/GoalGetterWidget.vue';
-import SisyphosWidget from '@/pages/practice-overview/widgets/sisyphos/SisyphosWidget.vue';
-import InsertImagesWidget from '@/pages/practice-overview/widgets/insert-images/InsertImagesWidget.vue';
+import PracticeOverview from '@/pages/practice/PracticeOverview.vue';
+import ClassicQueueWidget from '@/pages/practice/modes/modes/classic-queue/ClassicQueueWidget.vue';
+import FactCardGrindWidget from '@/pages/practice/modes/modes/fact-card-grind/FactCardGrindWidget.vue';
+import GoalGetterWidget from '@/pages/practice/modes/modes/goal-getter/GoalGetterWidget.vue';
+import SisyphosWidget from '@/pages/practice/modes/modes/sisyphos/SisyphosWidget.vue';
+import InsertImagesWidget from '@/pages/practice/modes/modes/insert-images/InsertImagesWidget.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';

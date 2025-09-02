@@ -36,7 +36,7 @@ import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/vocab/V
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
-import type { Length } from '@/shared/Length';
+import type { Length } from '@/shared/types/Length';
 
 interface VocabFormData {
   id?: string;

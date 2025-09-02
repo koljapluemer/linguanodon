@@ -1,5 +1,5 @@
-import type { LearningProgress } from "@/shared/LearningProgress";
-import type { Length } from "@/shared/Length";
+import type { LearningProgress } from "@/shared/types/LearningProgress";
+import type { Length } from "@/shared/types/Length";
 import type { Link } from "@/shared/links/Link";
 
 

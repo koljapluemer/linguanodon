@@ -130,7 +130,7 @@
 <script setup lang="ts">
 import { ref, watch, onUnmounted } from 'vue';
 import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
-import { formatFileSize } from '@/shared/fileUtils';
+import { formatFileSize } from '@/shared/utils/fileUtils';
 
 const props = defineProps<{
   images?: VocabImage[];
@@ -199,7 +199,7 @@ async function addFromUrl() {
     loadingMessage.value = 'Compressing image...';
     
     // Fetch and compress the image locally
-    const { compressImageFromUrl } = await import('@/shared/imageUtils');
+    const { compressImageFromUrl } = await import('@/shared/utils/imageUtils');
     const compressedBlob = await compressImageFromUrl(imageUrl.value, {
       maxWidth: 800,
       maxHeight: 600,
@@ -256,7 +256,7 @@ async function handleFileUpload(event: Event) {
     loadingMessage.value = 'Compressing image...';
     
     // Compress the image locally
-    const { compressImage } = await import('@/shared/imageUtils');
+    const { compressImage } = await import('@/shared/utils/imageUtils');
     const compressedBlob = await compressImage(file, {
       maxWidth: 800,
       maxHeight: 600,
@@ -315,7 +315,7 @@ async function handleReplaceFile(event: Event) {
     loadingMessage.value = 'Compressing image...';
     
     // Compress the image locally
-    const { compressImage } = await import('@/shared/imageUtils');
+    const { compressImage } = await import('@/shared/utils/imageUtils');
     const compressedBlob = await compressImage(file, {
       maxWidth: 800,
       maxHeight: 600,

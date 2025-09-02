@@ -1,4 +1,4 @@
-import type { LearningProgress } from "@/shared/LearningProgress";
+import type { LearningProgress } from "@/shared/types/LearningProgress";
 import type { Link } from "@/shared/links/Link";
 
 export interface FactCardData {

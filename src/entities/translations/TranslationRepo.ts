@@ -1,8 +1,8 @@
 import Dexie, { type Table } from 'dexie';
 import type { TranslationRepoContract } from './TranslationRepoContract';
 import type { TranslationData } from './TranslationData';
-import { levenshteinDistance, isLengthWithinRange } from '@/shared/stringUtils';
-import { shuffleArray } from '@/shared/arrayUtils';
+import { levenshteinDistance, isLengthWithinRange } from '@/shared/utils/stringUtils';
+import { shuffleArray } from '@/shared/utils/arrayUtils';
 
 class TranslationDatabase extends Dexie {
   translations!: Table<TranslationData>;
