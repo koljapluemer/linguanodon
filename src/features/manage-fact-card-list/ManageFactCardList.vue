@@ -228,6 +228,7 @@ async function createNewFactCard() {
     front: newFront.value.trim(),
     back: newBack.value.trim(),
     notes: [],
+    links: [],
     priority: 1,
     doNotPractice: false,
     progress: {

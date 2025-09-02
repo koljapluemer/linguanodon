@@ -4,6 +4,7 @@ import type { Task } from '@/entities/tasks/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import VocabImageManager from '@/features/vocab-image-management/VocabImageManager.vue';
 
 interface Props {
   task: Task;
@@ -19,12 +20,8 @@ const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 const vocab = ref<VocabData | null>(null);
 const translations = ref<string[]>([]);
 
-// Image upload state
-const mode = ref<'url' | 'upload'>('url');
-const imageUrl = ref('');
-const loading = ref(false);
-const error = ref('');
-const fileInput = ref<HTMLInputElement>();
+// Task state
+const hasChanges = ref(false);
 
 const isSentence = computed(() => {
   return vocab.value?.length === 'sentence';
@@ -42,62 +39,16 @@ const loadVocab = async () => {
   }
 };
 
-// Add image from URL
-const addFromUrl = async () => {
-  if (!imageUrl.value.trim() || !vocab.value) return;
-  
-  loading.value = true;
-  error.value = '';
-  
-  try {
-    const url = new URL(imageUrl.value);
-    if (!['http:', 'https:'].includes(url.protocol)) {
-      throw new Error('Please use HTTP or HTTPS URLs');
-    }
-    
-    await vocabRepo.addImageFromUrl(vocab.value.uid, imageUrl.value);
-    emit('finished');
-    
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to add image';
-    loading.value = false;
-  }
-};
-
-// Handle file upload
-const handleFileUpload = async (event: Event) => {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file || !vocab.value) return;
-  
-  loading.value = true;
-  error.value = '';
-  
-  if (!file.type.startsWith('image/')) {
-    error.value = 'Please select an image file';
-    loading.value = false;
-    return;
-  }
-  
-  if (file.size > 50 * 1024 * 1024) {
-    error.value = 'Image must be smaller than 50MB';
-    loading.value = false;
-    return;
-  }
-  
-  try {
-    await vocabRepo.addImageFromFile(vocab.value.uid, file);
-    emit('finished');
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to add image';
-    loading.value = false;
-  }
+// Handle image changes from VocabImageManager
+const handleImagesChanged = () => {
+  hasChanges.value = true;
 };
 
 const handleSkip = async () => {
   emit('finished');
 };
 
-const handleNotPicturable = async () => {
+const handleSkipAndDisable = async () => {
   if (!vocab.value) return;
   
   try {
@@ -107,6 +58,10 @@ const handleNotPicturable = async () => {
     console.error('Error marking vocab as not picturable:', err);
     emit('finished');
   }
+};
+
+const handleDone = () => {
+  emit('finished');
 };
 
 onMounted(loadVocab);
@@ -120,80 +75,23 @@ onMounted(loadVocab);
       <div :class="isSentence ? 'text-xl' : 'text-2xl'" class="text-base-content/70 mb-8">
         {{ translations.join(', ') }}
       </div>
-      
-      <!-- Upload Section -->
-      <div class="max-w-md mx-auto mb-6">
-        <div class="tabs tabs-boxed tabs-sm mb-4 justify-center">
-          <button 
-            class="tab tab-sm" 
-            :class="{ 'tab-active': mode === 'url' }"
-            @click="mode = 'url'"
-            :disabled="loading"
-          >
-            URL
-          </button>
-          <button 
-            class="tab tab-sm" 
-            :class="{ 'tab-active': mode === 'upload' }"
-            @click="mode = 'upload'"
-            :disabled="loading"
-          >
-            Upload
-          </button>
-        </div>
-
-        <!-- URL Input -->
-        <div v-if="mode === 'url'" class="flex gap-2 mb-4">
-          <input 
-            v-model="imageUrl"
-            @keyup.enter="addFromUrl"
-            placeholder="https://example.com/image.jpg"
-            class="input input-sm input-bordered flex-1"
-            :disabled="loading"
-          />
-          <button 
-            @click="addFromUrl"
-            :disabled="!imageUrl.trim() || loading"
-            class="btn btn-sm btn-primary"
-          >
-            <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-            <span v-else>Add</span>
-          </button>
-        </div>
-
-        <!-- File Upload -->
-        <div v-if="mode === 'upload'" class="mb-4">
-          <input 
-            ref="fileInput"
-            type="file" 
-            accept="image/*"
-            @change="handleFileUpload"
-            :disabled="loading"
-            class="file-input file-input-sm file-input-bordered w-full"
-          />
-          <div class="text-xs text-base-content/60 mt-1">
-            Images compressed to ~800×600px
-          </div>
-        </div>
-
-        <!-- Error Display -->
-        <div v-if="error" class="alert alert-error alert-sm mb-4">
-          <span class="text-xs">{{ error }}</span>
-          <button class="btn btn-xs btn-outline" @click="error = ''">
-            ×
-          </button>
-        </div>
-      </div>
+    </div>
+    
+    <!-- Image Management -->
+    <div class="max-w-2xl mx-auto mb-8">
+      <VocabImageManager
+        :vocab-id="vocab.uid"
+        :images="vocab.images"
+        :is-picturable="vocab.isPicturable"
+        @images-changed="handleImagesChanged"
+      />
     </div>
     
     <!-- Action Buttons -->
     <div class="flex justify-center gap-4">
-      <button @click="handleSkip" class="btn btn-ghost" :disabled="loading">
-        Skip for Now
-      </button>
-      <button @click="handleNotPicturable" class="btn btn-outline" :disabled="loading">
-        Cannot Be Visualized
-      </button>
+      <button @click="handleSkip" class="btn btn-outline">Skip</button>
+      <button @click="handleSkipAndDisable" class="btn btn-outline">Skip & Disable</button>
+      <button @click="handleDone" :disabled="!hasChanges" class="btn btn-primary">Done</button>
     </div>
   </div>
 

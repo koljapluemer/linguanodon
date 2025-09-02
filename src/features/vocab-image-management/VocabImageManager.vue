@@ -1,24 +1,6 @@
 <template>
   <div class="space-y-4">
-    <div class="flex items-center justify-between">
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Images</h3>
-      <div class="form-control">
-        <label class="label cursor-pointer gap-2">
-          <span class="label-text">Can be visualized</span>
-          <input 
-            type="checkbox" 
-            :checked="isPicturable !== false"
-            @change="updatePicturable"
-            class="toggle toggle-sm"
-          />
-        </label>
-      </div>
-    </div>
-    
-    <!-- Show why images are disabled -->
-    <div v-if="isPicturable === false" class="alert alert-info">
-      <span>This vocabulary is marked as non-picturable. Enable "Can be visualized" to add images.</span>
-    </div>
+    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Images</h3>
 
     <!-- Current Images -->
     <div v-if="localImages && localImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -150,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, computed, watch, onUnmounted } from 'vue';
+import { inject, ref, watch, onUnmounted } from 'vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
 import { formatFileSize } from '@/shared/imageUtils';
@@ -163,7 +145,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   imagesChanged: [images: VocabImage[]];
-  picturableChanged: [isPicturable: boolean];
 }>();
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
@@ -205,11 +186,6 @@ function getImageUrl(image: VocabImage): string {
   return image.url || '';
 }
 
-// Update picturable status
-function updatePicturable(event: Event) {
-  const checked = (event.target as HTMLInputElement).checked;
-  emit('picturableChanged', checked);
-}
 
 // Add image from URL
 async function addFromUrl() {

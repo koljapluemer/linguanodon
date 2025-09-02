@@ -315,6 +315,7 @@ export class UnifiedRemoteSetService {
             priority: factCardData.priority || 1,
             doNotPractice: false,
             notes: noteUids,
+            links: [],
             origins: [localSet.uid]
           };
           

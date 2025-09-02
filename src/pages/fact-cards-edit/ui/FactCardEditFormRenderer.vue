@@ -46,7 +46,7 @@
           </div>
           <button
             type="button"
-            @click="$emit('addNote')"
+            @click="$emit('add-note')"
             class="btn btn-sm btn-outline"
           >
             <Plus class="w-4 h-4 mr-1" />
@@ -70,7 +70,7 @@
             <div class="flex items-center gap-2">
               <button
                 type="button"
-                @click="$emit('removeNote', note.uid)"
+                @click="$emit('remove-note', note.uid)"
                 class="btn btn-ghost btn-circle text-error flex-shrink-0"
               >
                 <X class="w-4 h-4" />
@@ -113,7 +113,7 @@
             <div class="flex items-center gap-2">
               <button
                 type="button"
-                @click="$emit('removeLink', index)"
+                @click="$emit('remove-link', index)"
                 class="btn btn-ghost btn-circle text-error flex-shrink-0"
               >
                 <X class="w-4 h-4" />

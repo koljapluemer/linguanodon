@@ -45,6 +45,7 @@ export class FactCardRepo implements FactCardRepoContract {
       front: factCard.front,
       back: factCard.back,
       notes: factCard.notes,
+      links: factCard.links,
       priority: factCard.priority,
       doNotPractice: factCard.doNotPractice,
       progress: {

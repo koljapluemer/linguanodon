@@ -38,12 +38,19 @@
       @field-change="$emit('field-change')" />
   </div>
 
-  <!-- Images -->
+  <!-- Can be visualized toggle -->
   <div class="py-4">
+    <label class="label cursor-pointer">
+      <span class="label-text font-medium">Can be visualized</span>
+      <input v-model="formData.isPicturable" @change="$emit('update-picturable', $event.target.checked)" type="checkbox" class="toggle" />
+    </label>
+  </div>
+
+  <!-- Images -->
+  <div v-if="formData.isPicturable !== false" class="py-4">
     <VocabImageManager
       :images="formData.images"
       :is-picturable="formData.isPicturable"
-      @picturable-changed="(isPicturable) => $emit('update-picturable', isPicturable)"
       @images-changed="(images) => $emit('update-images', images)"
     />
   </div>

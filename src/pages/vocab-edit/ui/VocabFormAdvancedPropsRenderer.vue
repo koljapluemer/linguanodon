@@ -24,6 +24,12 @@
         label="Exclude from practice"
         @update:modelValue="$emit('field-change')"
       />
+
+      <InlineToggle
+        v-model="formData.isPicturable"
+        label="Can be visualized"
+        @update:modelValue="$emit('update-picturable', $event)"
+      />
     </div>
 
     <!-- Notes -->
@@ -46,10 +52,10 @@
 
     <!-- Images -->
     <VocabImageManager
+      v-if="formData.isPicturable !== false"
       :vocab-id="formData.id"
       :images="formData.images"
       :is-picturable="formData.isPicturable"
-      @picturable-changed="(isPicturable) => emit('update-picturable', isPicturable)"
       @images-changed="(images) => emit('update-images', images)"
     />
 

@@ -240,10 +240,11 @@ async function handleFieldChange() {
   }
 }
 
-function addNote(note: NoteData) {
+function addNote() {
   const newNote: NoteData = {
-    ...note,
-    uid: crypto.randomUUID()
+    uid: crypto.randomUUID(),
+    content: '',
+    showBeforeExercise: false
   };
   state.value.formData.notes.push(newNote);
 }
