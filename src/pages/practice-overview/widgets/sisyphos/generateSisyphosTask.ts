@@ -4,8 +4,8 @@ import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoCon
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { Task } from '@/entities/tasks/Task';
-import { getRandomGeneratedTaskForVocab } from '@/pages/practice-mode-classic-queue/generate-task/by-entity/vocab/getRandomGeneratedTaskForVocab';
-import { getRandomGeneratedTaskForFactCard } from '@/pages/practice-mode-classic-queue/generate-task/by-entity/fact-card/getRandomGeneratedTaskForFactCard';
+import { getRandomGeneratedTaskForVocab } from '@/pages/practice-overview/widgets/classic-queue/generate-task/by-entity/vocab/getRandomGeneratedTaskForVocab';
+import { getRandomGeneratedTaskForFactCard } from '@/pages/practice-overview/widgets/classic-queue/generate-task/by-entity/fact-card/getRandomGeneratedTaskForFactCard';
 import { randomFromArray } from '@/shared/arrayUtils';
 
 export async function generateSisyphosTask(

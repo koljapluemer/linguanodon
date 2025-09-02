@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PracticeOverview from '@/pages/practice-overview/PracticeOverview.vue';
-import PracticeModeClassicQueue from '@/pages/practice-mode-classic-queue/PracticeModeClassicQueue.vue';
-import PracticeModeFactCardGrind from '@/pages/practice-mode-fact-card-grind/PracticeModeFactCardGrind.vue';
-import PracticeModeGoalGetter from '@/pages/practice-mode-goal-getter/PracticeModeGoalGetter.vue';
-import PracticeModeSisyphos from '@/pages/practice-mode-sisyphos/PracticeModeSisyphos.vue';
-import PracticeModeInsertImages from '@/pages/practice-mode-insert-images/PracticeModeInsertImages.vue';
+import ClassicQueueWidget from '@/pages/practice-overview/widgets/classic-queue/ClassicQueueWidget.vue';
+import FactCardGrindWidget from '@/pages/practice-overview/widgets/fact-card-grind/FactCardGrindWidget.vue';
+import GoalGetterWidget from '@/pages/practice-overview/widgets/goal-getter/GoalGetterWidget.vue';
+import SisyphosWidget from '@/pages/practice-overview/widgets/sisyphos/SisyphosWidget.vue';
+import InsertImagesWidget from '@/pages/practice-overview/widgets/insert-images/InsertImagesWidget.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -32,33 +32,35 @@ const router = createRouter({
     {
       path: '/practice',
       name: 'practice-overview',
-      component: PracticeOverview
-    },
-    {
-      path: '/practice/classic-queue',
-      name: 'practice-mode-classic-queue',
-      component: PracticeModeClassicQueue,
-      props: route => ({ focusOnVocab: route.query.focusOnVocab as string })
-    },
-    {
-      path: '/practice/fact-card-grind',
-      name: 'practice-mode-fact-card-grind',
-      component: PracticeModeFactCardGrind
-    },
-    {
-      path: '/practice/goal-getter',
-      name: 'practice-mode-goal-getter',
-      component: PracticeModeGoalGetter
-    },
-    {
-      path: '/practice/sisyphos',
-      name: 'practice-mode-sisyphos',
-      component: PracticeModeSisyphos
-    },
-    {
-      path: '/practice/insert-images',
-      name: 'practice-mode-insert-images',
-      component: PracticeModeInsertImages
+      component: PracticeOverview,
+      children: [
+        {
+          path: 'classic-queue',
+          name: 'practice-mode-classic-queue',
+          component: ClassicQueueWidget,
+          props: route => ({ focusOnVocab: route.query.focusOnVocab as string })
+        },
+        {
+          path: 'fact-card-grind',
+          name: 'practice-mode-fact-card-grind',
+          component: FactCardGrindWidget
+        },
+        {
+          path: 'goal-getter',
+          name: 'practice-mode-goal-getter',
+          component: GoalGetterWidget
+        },
+        {
+          path: 'sisyphos',
+          name: 'practice-mode-sisyphos',
+          component: SisyphosWidget
+        },
+        {
+          path: 'insert-images',
+          name: 'practice-mode-insert-images',
+          component: InsertImagesWidget
+        }
+      ]
     },
     {
       path: '/my-material',
