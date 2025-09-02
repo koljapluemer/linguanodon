@@ -3,6 +3,21 @@ import type { Length } from "@/shared/Length";
 import type { Link } from "@/shared/links/Link";
 
 
+export interface VocabImage {
+  uid: string;
+  url?: string;
+  blob?: Blob;
+  alt?: string;
+  tags?: string[];
+  addedAt: Date;
+  fileSize?: number;
+  mimeType?: string;
+  compressed?: boolean;
+  originalFileName?: string;
+  dimensions?: { width: number; height: number };
+  originalDimensions?: { width: number; height: number };
+}
+
 export interface VocabData {
   uid: string;
   language: string;
@@ -20,6 +35,9 @@ export interface VocabData {
   relatedVocab: string[]; // uids of other vocab
   notRelatedVocab: string[]; // uids of other vocab
   notInterestedInPronunciation?: boolean
+
+  isPicturable?: boolean; // can this vocab be visualized with images?
+  images?: VocabImage[]; // associated images for this vocab
 
 }
 

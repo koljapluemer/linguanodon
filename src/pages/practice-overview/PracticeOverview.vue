@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Play, BookOpen, Target, RotateCcw } from 'lucide-vue-next';
+import { Play, BookOpen, Target, RotateCcw, ImagePlus } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -25,6 +25,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-sisyphos' },
     icon: RotateCcw,
     description: 'Endless review of seen content - roll that boulder!'
+  },
+  {
+    name: 'Insert Images',
+    route: { name: 'practice-mode-insert-images' },
+    icon: ImagePlus,
+    description: 'Add visual mnemonics to your vocabulary'
   }
 ];
 </script>

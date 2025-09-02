@@ -18,6 +18,8 @@
       @update-translation="updateTranslation"
       @remove-translation="removeTranslation"
       @update-related-vocab="updateRelatedVocab"
+      @update-picturable="updatePicturable"
+      @update-images="updateImages"
     />
   </div>
 </template>
@@ -29,7 +31,7 @@ import VocabFormMetaRenderer from './VocabFormMetaRenderer.vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData, VocabImage } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
@@ -49,6 +51,8 @@ interface VocabFormData {
     url: string;
   }>;
   relatedVocab?: string[];
+  isPicturable?: boolean;
+  images?: VocabImage[];
 }
 
 interface VocabFormState {
@@ -70,7 +74,9 @@ function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = [], translati
     doNotPractice: vocab.doNotPractice,
     notes: notes,
     links: vocab.links ? [...vocab.links] : [],
-    relatedVocab: vocab.relatedVocab ? [...vocab.relatedVocab] : []
+    relatedVocab: vocab.relatedVocab ? [...vocab.relatedVocab] : [],
+    isPicturable: vocab.isPicturable,
+    images: vocab.images ? [...vocab.images] : []
   };
 }
 
@@ -87,7 +93,9 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     links: formData.links,
     origins: existingVocab?.origins || ['user-added'],
     relatedVocab: formData.relatedVocab || [],
-    notRelatedVocab: existingVocab?.notRelatedVocab || []
+    notRelatedVocab: existingVocab?.notRelatedVocab || [],
+    isPicturable: formData.isPicturable,
+    images: formData.images || []
   };
 
   // For updates, include existing progress
@@ -356,6 +364,16 @@ async function removeTranslation(uid: string) {
 async function updateRelatedVocab(vocabIds: string[]) {
   state.value.formData.relatedVocab = vocabIds;
   await handleFieldChange();
+}
+
+async function updatePicturable(isPicturable: boolean) {
+  state.value.formData.isPicturable = isPicturable;
+  await handleFieldChange();
+}
+
+function updateImages(images: VocabImage[]) {
+  state.value.formData.images = [...images];
+  // No need to call handleFieldChange - the database is already updated
 }
 
 onMounted(() => {

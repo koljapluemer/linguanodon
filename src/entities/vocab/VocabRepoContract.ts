@@ -60,4 +60,11 @@ export interface VocabRepoContract {
   // Backup task operations
   getVocabWithLowestDueDate(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   updateVocabLastSeenAndDueDate(vocabIds: string[], dueDate: Date): Promise<void>;
+  
+  // Image operations
+  addImageFromUrl(vocabId: string, imageUrl: string, alt?: string): Promise<void>;
+  addImageFromFile(vocabId: string, file: File, alt?: string): Promise<void>;
+  removeImageFromVocab(vocabId: string, imageId: string): Promise<void>;
+  getVocabNeedingImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
+  markVocabNotPicturable(vocabId: string): Promise<void>;
 }

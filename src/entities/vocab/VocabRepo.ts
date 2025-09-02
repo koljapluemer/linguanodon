@@ -1,9 +1,11 @@
 import Dexie, { type Table } from 'dexie';
 import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
-import type { VocabData } from './vocab/VocabData';
+import type { VocabData, VocabImage } from './vocab/VocabData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
 import { pickRandom, shuffleArray } from '@/shared/arrayUtils';
 import { levenshteinDistance, isLengthWithinRange } from '@/shared/stringUtils';
+import { compressImage, compressImageFromUrl } from '@/shared/imageUtils';
+import { toRaw } from 'vue';
 
 // Utility functions
 function isUnseen(vocab: VocabData): boolean {
@@ -38,7 +40,8 @@ export class VocabRepo implements VocabRepoContract {
       links: vocab.links || [],
       translations: vocab.translations || [],
       relatedVocab: vocab.relatedVocab || [],
-      notRelatedVocab: vocab.notRelatedVocab || []
+      notRelatedVocab: vocab.notRelatedVocab || [],
+      images: vocab.images || []
     };
   }
 
@@ -628,5 +631,127 @@ export class VocabRepo implements VocabRepoContract {
 
     const results = await query.toArray();
     return results.map(vocab => this.ensureVocabFields(vocab));
+  }
+
+  // Image operations
+  async addImageFromUrl(vocabId: string, imageUrl: string, alt?: string): Promise<void> {
+    try {
+      // Fetch and compress the image
+      const compressedBlob = await compressImageFromUrl(imageUrl, {
+        maxWidth: 800,
+        maxHeight: 600,
+        quality: 0.8,
+        format: 'jpeg'
+      });
+
+      const vocab = await vocabDb.vocab.get(vocabId);
+      if (!vocab) throw new Error('Vocab not found');
+
+      const vocabImage: VocabImage = {
+        uid: crypto.randomUUID(),
+        url: imageUrl,
+        blob: compressedBlob,
+        alt: alt,
+        addedAt: new Date(),
+        fileSize: compressedBlob.size,
+        mimeType: compressedBlob.type,
+        compressed: true
+      };
+
+      vocab.images = vocab.images || [];
+      vocab.images.push(vocabImage);
+
+      await vocabDb.vocab.put(toRaw(vocab));
+    } catch (error) {
+      console.error('Failed to add image from URL:', error);
+      throw error;
+    }
+  }
+
+  async addImageFromFile(vocabId: string, file: File, alt?: string): Promise<void> {
+    try {
+      // Compress the uploaded file
+      const compressedBlob = await compressImage(file, {
+        maxWidth: 800,
+        maxHeight: 600,
+        quality: 0.8,
+        format: 'jpeg'
+      });
+
+      const vocab = await vocabDb.vocab.get(vocabId);
+      if (!vocab) throw new Error('Vocab not found');
+
+      const vocabImage: VocabImage = {
+        uid: crypto.randomUUID(),
+        blob: compressedBlob,
+        alt: alt || file.name,
+        addedAt: new Date(),
+        fileSize: compressedBlob.size,
+        mimeType: compressedBlob.type,
+        originalFileName: file.name,
+        compressed: true
+      };
+
+      vocab.images = vocab.images || [];
+      vocab.images.push(vocabImage);
+
+      await vocabDb.vocab.put(toRaw(vocab));
+    } catch (error) {
+      console.error('Failed to add image from file:', error);
+      throw error;
+    }
+  }
+
+  async removeImageFromVocab(vocabId: string, imageId: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(vocabId);
+    if (!vocab) return;
+
+    vocab.images = vocab.images?.filter(img => img.uid !== imageId) || [];
+    await vocabDb.vocab.put(toRaw(vocab));
+  }
+
+  async getVocabNeedingImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => {
+        // Must have content
+        if (!vocab.content || vocab.content.trim() === '') {
+          return false;
+        }
+        
+        // Must not be excluded from practice
+        if (vocab.doNotPractice) {
+          return false;
+        }
+        
+        // Must not be in block list
+        if (vocabBlockList && vocabBlockList.includes(vocab.uid)) {
+          return false;
+        }
+        
+        // Must be picturable (undefined means yes, false means no)
+        if (vocab.isPicturable === false) {
+          return false;
+        }
+        
+        // Must not already have images
+        if (vocab.images && vocab.images.length > 0) {
+          return false;
+        }
+        
+        return true;
+      })
+      .toArray();
+
+    return vocab.map(v => this.ensureVocabFields(v));
+  }
+
+  async markVocabNotPicturable(vocabId: string): Promise<void> {
+    const vocab = await vocabDb.vocab.get(vocabId);
+    if (!vocab) return;
+
+    vocab.isPicturable = false;
+    await vocabDb.vocab.put(toRaw(vocab));
   }
 }

@@ -13,6 +13,7 @@ import TaskClozeReveal from "@/tasks/task-cloze-reveal/TaskClozeReveal.vue";
 import TaskVocabFormSentence from "@/tasks/task-vocab-form-sentence/TaskVocabFormSentence.vue";
 import TaskFactCardTryToRemember from "@/tasks/task-fact-card-try-to-remember/TaskFactCardTryToRemember.vue";
 import TaskFactCardReveal from "@/tasks/task-fact-card-reveal/TaskFactCardReveal.vue";
+import TaskAddImageToVocab from "@/tasks/task-add-image-to-vocab/TaskAddImageToVocab.vue";
 
 export interface TaskInfo {
   component: Component
@@ -39,6 +40,7 @@ export const taskRegistry: Record<string, TaskInfo> = {
   "vocab-form-sentence-single": { component: TaskVocabFormSentence, size: 'medium' },
   "fact-card-try-to-remember": { component: TaskFactCardTryToRemember, size: 'small' },
   "fact-card-reveal": { component: TaskFactCardReveal, size: 'small' },
+  "add-image-to-vocab": { component: TaskAddImageToVocab, size: 'medium' },
 };
 
 export const TASK_REGISTRY_INJECTION_KEY = Symbol("taskRegistry");

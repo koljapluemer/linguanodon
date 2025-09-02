@@ -11,6 +11,8 @@
       @remove-note="removeNote"
       @add-link="addLink"
       @remove-link="removeLink"
+      @update-picturable="updatePicturable"
+      @update-images="updateImages"
       @save="save"
     />
   </div>
@@ -23,7 +25,7 @@ import VocabAddFormMetaRenderer from './VocabAddFormMetaRenderer.vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData, VocabImage } from '@/entities/vocab/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
@@ -41,6 +43,8 @@ interface VocabFormData {
     label: string;
     url: string;
   }>;
+  isPicturable?: boolean;
+  images?: VocabImage[];
 }
 
 interface VocabFormState {
@@ -63,7 +67,9 @@ function formDataToVocabData(formData: VocabFormData): Omit<VocabData, 'progress
     links: formData.links,
     origins: ['user-added'],
     relatedVocab: [],
-    notRelatedVocab: []
+    notRelatedVocab: [],
+    isPicturable: formData.isPicturable,
+    images: formData.images || []
   };
 }
 
@@ -93,7 +99,9 @@ const state = ref<VocabFormState>({
     priority: undefined,
     doNotPractice: undefined,
     notes: [],
-    links: []
+    links: [],
+    isPicturable: undefined,
+    images: []
   },
   loading: false,
   saving: false,
@@ -188,5 +196,13 @@ function addLink(link: Link) {
 
 function removeLink(index: number) {
   state.value.formData.links.splice(index, 1);
+}
+
+function updatePicturable(isPicturable: boolean) {
+  state.value.formData.isPicturable = isPicturable;
+}
+
+function updateImages(images: VocabImage[]) {
+  state.value.formData.images = [...images];
 }
 </script>

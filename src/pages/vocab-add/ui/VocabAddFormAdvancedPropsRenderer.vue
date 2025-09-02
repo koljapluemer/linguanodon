@@ -37,15 +37,27 @@
       @update-link="(index, link) => $emit('update-link', index, link)" @remove-link="$emit('remove-link', $event)"
       @field-change="$emit('field-change')" />
   </div>
+
+  <!-- Images -->
+  <div class="py-4">
+    <VocabImageManager
+      :images="formData.images"
+      :is-picturable="formData.isPicturable"
+      @picturable-changed="(isPicturable) => $emit('update-picturable', isPicturable)"
+      @images-changed="(images) => $emit('update-images', images)"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import NoteList from '@/entities/notes/NoteList.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
+import VocabImageManager from '@/features/vocab-image-management/VocabImageManager.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
+import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
 
 interface VocabFormData {
   language: string;
@@ -56,6 +68,8 @@ interface VocabFormData {
   doNotPractice?: boolean;
   notes: NoteData[];
   links: Link[];
+  isPicturable?: boolean;
+  images?: VocabImage[];
 }
 
 defineProps<{
@@ -70,5 +84,7 @@ defineEmits<{
   'add-link': [link: Link];
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
+  'update-picturable': [isPicturable: boolean];
+  'update-images': [images: VocabImage[]];
 }>();
 </script>

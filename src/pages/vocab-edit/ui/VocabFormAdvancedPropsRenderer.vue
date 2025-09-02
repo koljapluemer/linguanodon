@@ -44,6 +44,15 @@
       @field-change="$emit('field-change')"
     />
 
+    <!-- Images -->
+    <VocabImageManager
+      :vocab-id="formData.id"
+      :images="formData.images"
+      :is-picturable="formData.isPicturable"
+      @picturable-changed="(isPicturable) => emit('update-picturable', isPicturable)"
+      @images-changed="(images) => emit('update-images', images)"
+    />
+
     <div class="space-y-4">
       <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">See Also / Related Vocabulary</h3>
       <ManageVocabList
@@ -73,10 +82,12 @@ import InlineToggle from '@/shared/ui/InlineToggle.vue';
 import NoteList from '@/entities/notes/NoteList.vue';
 import LinksForm from '@/shared/links/LinksForm.vue';
 import ManageVocabList from '@/features/manage-vocab-list/ManageVocabList.vue';
+import VocabImageManager from '@/features/vocab-image-management/VocabImageManager.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
+import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
 
 interface VocabFormData {
   id?: string;
@@ -89,6 +100,8 @@ interface VocabFormData {
   notes: NoteData[];
   links: Link[];
   relatedVocab?: string[];
+  isPicturable?: boolean;
+  images?: VocabImage[];
 }
 
 defineProps<{
@@ -104,6 +117,8 @@ const emit = defineEmits<{
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
   'update-related-vocab': [vocabIds: string[]];
+  'update-picturable': [isPicturable: boolean];
+  'update-images': [images: VocabImage[]];
 }>();
 
 const lengthOptions = computed(() => {

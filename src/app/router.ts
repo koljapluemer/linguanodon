@@ -4,6 +4,7 @@ import PracticeModeClassicQueue from '@/pages/practice-mode-classic-queue/Practi
 import PracticeModeFactCardGrind from '@/pages/practice-mode-fact-card-grind/PracticeModeFactCardGrind.vue';
 import PracticeModeGoalGetter from '@/pages/practice-mode-goal-getter/PracticeModeGoalGetter.vue';
 import PracticeModeSisyphos from '@/pages/practice-mode-sisyphos/PracticeModeSisyphos.vue';
+import PracticeModeInsertImages from '@/pages/practice-mode-insert-images/PracticeModeInsertImages.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -53,6 +54,11 @@ const router = createRouter({
       path: '/practice/sisyphos',
       name: 'practice-mode-sisyphos',
       component: PracticeModeSisyphos
+    },
+    {
+      path: '/practice/insert-images',
+      name: 'practice-mode-insert-images',
+      component: PracticeModeInsertImages
     },
     {
       path: '/my-material',
