@@ -46,6 +46,8 @@
         @update-link="(index, link) => $emit('update-link', index, link)"
         @remove-link="$emit('remove-link', $event)"
         @update-related-vocab="$emit('update-related-vocab', $event)"
+        @update-images="$emit('update-images', $event)"
+        @update-sound="$emit('update-sound', $event)"
       />
     </div>
   </div>
@@ -58,6 +60,7 @@ import VocabFormAdvancedPropsRenderer from './VocabFormAdvancedPropsRenderer.vue
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
+import type { VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
 
 interface VocabFormData {
   id?: string;
@@ -98,6 +101,8 @@ defineEmits<{
   'update-translation': [translation: TranslationData];
   'remove-translation': [uid: string];
   'update-related-vocab': [vocabIds: string[]];
+  'update-images': [images: VocabImage[]];
+  'update-sound': [sound: VocabSound | undefined];
 }>();
 
 // Persistent toggle state in localStorage (shared between add and edit forms)

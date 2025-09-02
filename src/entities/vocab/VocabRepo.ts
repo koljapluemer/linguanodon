@@ -54,7 +54,16 @@ export class VocabRepo implements VocabRepoContract {
 
   async getVocabByUID(uid: string): Promise<VocabData | undefined> {
     const vocab = await vocabDb.vocab.get(uid);
-    return vocab ? this.ensureVocabFields(vocab) : undefined;
+    if (vocab) {
+      const ensured = this.ensureVocabFields(vocab);
+      console.log('🔧 REPO: getVocabByUID retrieved from Dexie:', {
+        uid: ensured.uid,
+        images: ensured.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
+        sound: ensured.sound ? { uid: ensured.sound.uid, hasBlob: !!ensured.sound.blob, blobType: ensured.sound.blob?.type, blobSize: ensured.sound.blob?.size } : 'none'
+      });
+      return ensured;
+    }
+    return undefined;
   }
 
   async getVocabByUIDs(uids: string[]): Promise<VocabData[]> {
@@ -316,6 +325,11 @@ export class VocabRepo implements VocabRepoContract {
   }
 
   async saveVocab(vocab: Omit<VocabData, 'uid' | 'progress'>): Promise<VocabData> {
+    console.log('🔧 REPO: saveVocab input:', {
+      images: vocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
+      sound: vocab.sound ? { uid: vocab.sound.uid, hasBlob: !!vocab.sound.blob, blobType: vocab.sound.blob?.type, blobSize: vocab.sound.blob?.size } : 'none'
+    });
+    
     const newVocab: VocabData = {
       uid: crypto.randomUUID(),
       language: vocab.language,
@@ -329,6 +343,9 @@ export class VocabRepo implements VocabRepoContract {
       origins: vocab.origins,
       relatedVocab: vocab.relatedVocab || [],
       notRelatedVocab: vocab.notRelatedVocab || [],
+      isPicturable: vocab.isPicturable,
+      images: vocab.images || [],
+      sound: vocab.sound,
       progress: {
         ...createEmptyCard(),
         streak: 0,
@@ -336,11 +353,23 @@ export class VocabRepo implements VocabRepoContract {
       }
     };
 
+    console.log('🔧 REPO: newVocab being stored in Dexie:', {
+      uid: newVocab.uid,
+      images: newVocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
+      sound: newVocab.sound ? { uid: newVocab.sound.uid, hasBlob: !!newVocab.sound.blob, blobType: newVocab.sound.blob?.type, blobSize: newVocab.sound.blob?.size } : 'none'
+    });
+
     await vocabDb.vocab.add(newVocab);
     return newVocab;
   }
 
   async updateVocab(vocab: VocabData): Promise<void> {
+    console.log('🔧 REPO: updateVocab input:', {
+      uid: vocab.uid,
+      images: vocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
+      sound: vocab.sound ? { uid: vocab.sound.uid, hasBlob: !!vocab.sound.blob, blobType: vocab.sound.blob?.type, blobSize: vocab.sound.blob?.size } : 'none'
+    });
+    
     await vocabDb.vocab.put(vocab);
   }
 

@@ -35,6 +35,8 @@
         @remove-note="$emit('remove-note', $event)"
         @add-link="$emit('add-link', $event)"
         @remove-link="$emit('remove-link', $event)"
+        @update-images="$emit('update-images', $event)"
+        @update-sound="$emit('update-sound', $event)"
       />
 
       <!-- Save Button -->
@@ -61,6 +63,7 @@ import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/Length';
+import type { VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
 
 interface VocabFormData {
   language: string;
@@ -90,6 +93,8 @@ defineEmits<{
   'remove-note': [uid: string];
   'add-link': [link: Link];
   'remove-link': [index: number];
+  'update-images': [images: VocabImage[]];
+  'update-sound': [sound: VocabSound | undefined];
   'save': [];
 }>();
 
