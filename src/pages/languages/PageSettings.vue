@@ -25,6 +25,7 @@ const showDropdown = ref(false);
 const detectingSounds = ref(false);
 const emptyAudioResults = ref<{ uid: string; content: string; reason: string }[]>([]);
 const analysisCompleted = ref(false);
+const deletingEmptyAudio = ref(false);
 
 
 async function loadLanguages() {
@@ -228,6 +229,34 @@ async function detectEmptySoundFiles() {
     detectingSounds.value = false;
   }
 }
+
+async function deleteEmptyAudio() {
+  if (emptyAudioResults.value.length === 0) return;
+  
+  const toast = useToast();
+  deletingEmptyAudio.value = true;
+  
+  try {
+    let deletedCount = 0;
+    
+    for (const result of emptyAudioResults.value) {
+      await vocabRepo.removeSoundFromVocab(result.uid);
+      deletedCount++;
+    }
+    
+    toast.success(`Deleted ${deletedCount} empty sound files.`);
+    
+    // Clear results after deletion
+    emptyAudioResults.value = [];
+    analysisCompleted.value = false;
+    
+  } catch (error) {
+    console.error('Error deleting empty sound files:', error);
+    toast.error('Error deleting empty sound files.');
+  } finally {
+    deletingEmptyAudio.value = false;
+  }
+}
 </script>
 
 <template>
@@ -328,14 +357,24 @@ async function detectEmptySoundFiles() {
               Detect empty or silent audio files in your vocabulary collection.
             </p>
             
-            <button 
-              @click="detectEmptySoundFiles" 
-              :disabled="detectingSounds"
-              class="btn btn-outline btn-sm w-fit">
-              <Search class="w-4 h-4 mr-2" />
-              <span v-if="detectingSounds" class="loading loading-spinner loading-xs mr-2"></span>
-              {{ detectingSounds ? 'Analyzing Audio Files...' : 'Detect Empty Sound Files' }}
-            </button>
+            <div class="flex gap-2">
+              <button 
+                @click="detectEmptySoundFiles" 
+                :disabled="detectingSounds"
+                class="btn btn-outline btn-sm w-fit">
+                <Search class="w-4 h-4 mr-2" />
+                <span v-if="detectingSounds" class="loading loading-spinner loading-xs mr-2"></span>
+                {{ detectingSounds ? 'Analyzing Audio Files...' : 'Detect Empty Sound Files' }}
+              </button>
+              
+              <button 
+                @click="deleteEmptyAudio" 
+                :disabled="!analysisCompleted || emptyAudioResults.length === 0 || deletingEmptyAudio"
+                class="btn btn-error btn-sm w-fit">
+                <span v-if="deletingEmptyAudio" class="loading loading-spinner loading-xs mr-2"></span>
+                {{ deletingEmptyAudio ? 'Deleting...' : `Delete ${emptyAudioResults.length} Empty Audio Files` }}
+              </button>
+            </div>
             
             <!-- Results Details -->
             <div v-if="analysisCompleted && emptyAudioResults.length > 0" class="mt-4">
