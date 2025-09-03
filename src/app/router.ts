@@ -19,9 +19,9 @@ import PageListGoals from '@/pages/goals-list/PageListGoals.vue';
 import PageGoalAdd from '@/pages/goal-add/PageGoalAdd.vue';
 import PageGoalEdit from '@/pages/goal-edit/PageGoalEdit.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
-import PageSettings from '@/pages/languages/PageSettings.vue';
 import PageTimeTracking from '@/pages/time-tracking/PageTimeTracking.vue';
 import PageMyMaterial from '@/pages/my-material/PageMyMaterial.vue';
+import PageSettings from '@/pages/settings/PageSettings.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -139,8 +139,8 @@ const router = createRouter({
       component: PageDownloads
     },
     {
-      path: '/languages',
-      name: 'languages',
+      path: '/settings',
+      name: 'settings',
       component: PageSettings
     },
     {

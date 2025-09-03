@@ -65,7 +65,7 @@ const toggleMaterialSubmenu = () => {
         </button>
         
         <!-- Settings -->
-        <router-link :to="{ name: 'languages' }" class="btn btn-ghost btn-sm">
+        <router-link :to="{ name: 'settings' }" class="btn btn-ghost btn-sm">
           <Settings :size="16" />
           <span class="hidden md:inline ml-2">Settings</span>
         </router-link>
