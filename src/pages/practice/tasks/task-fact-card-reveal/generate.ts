@@ -1,5 +1,5 @@
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 
 export function generateFactCardReveal(factCard: FactCardData): Task {
   const uid = `fact-card-reveal-${factCard.uid}-${Date.now()}`;

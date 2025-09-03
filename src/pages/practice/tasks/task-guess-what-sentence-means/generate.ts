@@ -1,5 +1,5 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 
 export function generateGuessWhatSentenceMeans(vocab: VocabData): Task {
   const uid = `guess-what-sentence-means-${vocab.uid}-${Date.now()}`;

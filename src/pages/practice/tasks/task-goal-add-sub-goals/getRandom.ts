@@ -1,5 +1,5 @@
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateAddSubGoals } from '@/pages/practice/tasks/task-goal-add-sub-goals/generate';
 
 export async function getRandomAddSubGoalsTask({

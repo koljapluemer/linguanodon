@@ -1,5 +1,5 @@
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateAddImageToVocab } from '@/pages/practice/tasks/task-add-image-to-vocab/generate';
 
 export async function getRandomAddImageToVocabTask({

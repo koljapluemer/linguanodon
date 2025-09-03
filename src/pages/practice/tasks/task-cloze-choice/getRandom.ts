@@ -1,6 +1,6 @@
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateClozeChoiceFromFour, generateClozeChoiceFromTwo } from '@/pages/practice/tasks/task-cloze-choice/generate';
 import { getRandomDueVocabFromRandomValidImmersionResource } from '../../modes/utils/getRandomDueVocabFromRandomValidImmersionResource';
 

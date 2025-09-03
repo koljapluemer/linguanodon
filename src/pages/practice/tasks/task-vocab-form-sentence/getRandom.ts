@@ -1,5 +1,5 @@
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateTaskFormSentenceFromTwoVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
 import { randomFromArray, pickRandom } from '@/shared/utils/arrayUtils';
 

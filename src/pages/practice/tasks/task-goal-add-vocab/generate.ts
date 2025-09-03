@@ -1,5 +1,5 @@
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 
 export function generateAddVocabToGoal(goal: GoalData): Task {
   const uid = `add-vocab-to-goal-${goal.uid}-${Date.now()}`;

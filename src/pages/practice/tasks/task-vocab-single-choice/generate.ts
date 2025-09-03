@@ -1,5 +1,5 @@
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 
 export function generateVocabChoiceFromFourNativeToTarget(vocab: VocabData): Task {
   const uid = `vocab-choose-from-four-native-to-target-${vocab.uid}-${Date.now()}`;

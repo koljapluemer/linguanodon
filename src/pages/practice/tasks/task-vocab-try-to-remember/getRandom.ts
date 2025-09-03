@@ -1,5 +1,5 @@
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateVocabTryToRemember } from '@/pages/practice/tasks/task-vocab-try-to-remember/generate';
 import { getRandomNewVocabFromRandomValidImmersionResource } from '../../modes/utils/getRandomNewVocabFromRandomValidImmersionResource';
 

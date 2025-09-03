@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, inject, onMounted } from 'vue';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import ManageResourceVocab from '@/widgets/manage-resource-vocab/ManageResourceVocab.vue';
 import ManageResourceFactCards from '@/widgets/manage-resource-fact-cards/ManageResourceFactCards.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';

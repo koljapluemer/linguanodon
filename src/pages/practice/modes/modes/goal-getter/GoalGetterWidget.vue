@@ -2,7 +2,7 @@
 import { inject, onMounted, onUnmounted } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';

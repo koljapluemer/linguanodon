@@ -1,5 +1,5 @@
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateFactCardReveal } from '@/pages/practice/tasks/task-fact-card-reveal/generate';
 
 export async function getRandomFactCardRevealTask({

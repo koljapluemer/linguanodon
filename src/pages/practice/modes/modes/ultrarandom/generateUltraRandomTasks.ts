@@ -4,7 +4,7 @@ import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoCon
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 

@@ -1,5 +1,5 @@
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateAddVocabToGoal } from '@/pages/practice/tasks/task-goal-add-vocab/generate';
 import { generateAddSubGoals } from '@/pages/practice/tasks/task-goal-add-sub-goals/generate';
 import { randomFromArray } from '@/shared/utils/arrayUtils';

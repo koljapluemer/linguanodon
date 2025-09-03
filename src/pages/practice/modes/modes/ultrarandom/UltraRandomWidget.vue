@@ -7,7 +7,7 @@ import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoCont
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';

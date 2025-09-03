@@ -30,7 +30,7 @@
 import { ref, inject, onMounted } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import ManageGoalVocab from '@/widgets/manage-goal-vocab/ManageGoalVocab.vue';
 import TaskDecideWhetherToDoAgain from '@/pages/practice/tasks/ui/TaskDecideWhetherToDoAgain.vue';
 

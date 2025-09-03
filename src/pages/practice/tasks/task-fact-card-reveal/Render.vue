@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { Rating } from 'ts-fsrs';

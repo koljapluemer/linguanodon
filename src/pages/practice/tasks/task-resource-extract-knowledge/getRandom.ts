@@ -1,5 +1,5 @@
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { generateExtractKnowledgeFromResource } from '@/pages/practice/tasks/task-resource-extract-knowledge/generate';
 
 export async function getRandomExtractKnowledgeTask({

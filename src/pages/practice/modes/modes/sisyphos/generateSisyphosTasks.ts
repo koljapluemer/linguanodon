@@ -3,7 +3,7 @@ import type { TranslationRepoContract } from '@/entities/translations/Translatio
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { getRandomGeneratedTaskForVocab } from '@/pages/practice/modes/utils/getRandomGeneratedTaskForVocab';
 import { getRandomGeneratedTaskForFactCard } from '@/pages/practice/modes/utils/getRandomGeneratedTaskForFactCard';
 import { randomFromArray } from '@/shared/utils/arrayUtils';

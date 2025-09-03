@@ -85,7 +85,7 @@
 
 <script setup lang="ts">
 import { ref, computed, inject, onMounted, onUnmounted } from 'vue';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import type { VocabData, VocabImage } from '@/entities/vocab/vocab/VocabData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';

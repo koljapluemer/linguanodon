@@ -1,5 +1,5 @@
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 
 export function generateAddSubGoals(goal: GoalData): Task {
   const uid = `add-sub-goals-${goal.uid}-${Date.now()}`;

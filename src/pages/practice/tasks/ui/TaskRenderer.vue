@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { taskRegistry } from './taskRegistry';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 import { inject, onMounted, ref } from 'vue';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';

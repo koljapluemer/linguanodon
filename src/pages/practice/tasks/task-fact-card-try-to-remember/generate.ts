@@ -1,5 +1,5 @@
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
-import type { Task } from '@/entities/tasks/Task';
+import type { Task } from '@/pages/practice/Task';
 
 export function generateFactCardTryToRemember(factCard: FactCardData): Task {
   const uid = `fact-card-try-to-remember-${factCard.uid}-${Date.now()}`;
