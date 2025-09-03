@@ -387,7 +387,7 @@ def process_word(english_word: str) -> bool:
         }
     
     # Determine word length
-    word_length = "sentence" if any(word in english_word.lower() for word in ["running", "walking", "jumping", "sitting", "standing", "sleeping", "eating", "drinking", "reading", "writing", "opening", "closing", "pushing", "pulling", "throwing", "catching", "climbing", "swimming", "driving", "riding", "singing", "dancing", "drawing", "painting", "cooking", "cleaning", "washing", "cutting", "building", "playing", "smiling", "crying", "laughing", "talking", "listening", "watching", "looking", "pointing", "waving", "carrying", "buying", "selling", "paying", "finding", "holding", "picking", "dropping", "helping", "sending", "calling", "digging", "planting", "watering", "feeding", "hunting", "fishing", "baking", "mixing", "fixing", "kicking", "hitting", "hugging", "kissing", "shaking", "turning", "stopping"]) else "word"
+    word_length = "word"
     
     # Create vocab entry
     vocab_id = create_vocab(
