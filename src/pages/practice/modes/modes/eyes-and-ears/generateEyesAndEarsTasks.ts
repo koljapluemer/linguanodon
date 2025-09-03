@@ -8,38 +8,42 @@ export async function generateEyesAndEars(
   vocabBlockList?: string[]
 ): Promise<Task | null> {
   try {
-    // Get both types of vocab with sound and images
-    const [dueVocab, unseenVocab] = await Promise.all([
-      vocabRepo.getRandomAlreadySeenDueVocab(10, languageCodes, vocabBlockList),
-      vocabRepo.getRandomUnseenVocab(10, languageCodes, vocabBlockList)
-    ]);
-
-    // Filter to only vocab that has both sound and images
-    const dueVocabWithMedia = dueVocab.filter(v => v.hasSound && v.hasImage);
-    const unseenVocabWithMedia = unseenVocab.filter(v => v.hasSound && v.hasImage);
-
+    console.log('🔍 DEBUG: generateEyesAndEars called with languages:', languageCodes, 'blockList:', vocabBlockList);
+    
     // 70% chance to prefer due vocab (if available), 30% chance for unseen vocab
     const preferDueVocab = Math.random() < 0.7;
+    console.log('🔍 DEBUG: preferDueVocab:', preferDueVocab);
     
-    if (preferDueVocab && dueVocabWithMedia.length > 0) {
-      // Pick a due vocab with sound and images
-      const vocab = dueVocabWithMedia[0];
-      return generateVocabChooseImageBySound(vocab);
+    if (preferDueVocab) {
+      console.log('🔍 DEBUG: Trying to get due vocab with sound and images...');
+      // Try to get a due vocab with sound and images
+      const dueVocab = await vocabRepo.getRandomDueVocabWithSoundAndImages(languageCodes, vocabBlockList);
+      console.log('🔍 DEBUG: dueVocab result:', dueVocab ? `Found vocab: ${dueVocab.uid} (${dueVocab.content})` : 'No due vocab found');
+      if (dueVocab) {
+        return generateVocabChooseImageBySound(dueVocab);
+      }
     }
     
-    if (unseenVocabWithMedia.length > 0) {
-      // Pick an unseen vocab with sound and images
-      const vocab = unseenVocabWithMedia[0];
-      return generateVocabChooseImageBySound(vocab);
+    console.log('🔍 DEBUG: Trying to get unseen vocab with sound and images...');
+    // Try to get an unseen vocab with sound and images
+    const unseenVocab = await vocabRepo.getRandomUnseenVocabWithSoundAndImages(languageCodes, vocabBlockList);
+    console.log('🔍 DEBUG: unseenVocab result:', unseenVocab ? `Found vocab: ${unseenVocab.uid} (${unseenVocab.content})` : 'No unseen vocab found');
+    if (unseenVocab) {
+      return generateVocabChooseImageBySound(unseenVocab);
     }
     
     // Fallback: if we wanted unseen but none available, try due vocab
-    if (dueVocabWithMedia.length > 0) {
-      const vocab = dueVocabWithMedia[0];
-      return generateVocabChooseImageBySound(vocab);
+    if (!preferDueVocab) {
+      console.log('🔍 DEBUG: Fallback - trying to get due vocab with sound and images...');
+      const dueVocab = await vocabRepo.getRandomDueVocabWithSoundAndImages(languageCodes, vocabBlockList);
+      console.log('🔍 DEBUG: fallback dueVocab result:', dueVocab ? `Found vocab: ${dueVocab.uid} (${dueVocab.content})` : 'No due vocab found');
+      if (dueVocab) {
+        return generateVocabChooseImageBySound(dueVocab);
+      }
     }
 
     // No vocab available with both sound and images
+    console.log('🔍 DEBUG: No vocab available with both sound and images');
     return null;
   } catch (error) {
     console.error('Error generating eyes and ears task:', error);

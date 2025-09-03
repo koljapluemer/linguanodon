@@ -35,12 +35,18 @@
       </div>
     </div>
   </div>
+
+  <!-- Debug Vocab Progress -->
+  <div v-if="isEditing && currentVocab" class="mt-8">
+    <DebugVocabProgress :vocab-data="currentVocab" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import VocabEditFormController from './ui/VocabEditFormController.vue';
+import DebugVocabProgress from '@/shared/ui/DebugVocabProgress.vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import { calculateVocabMastery } from '@/entities/vocab/vocabMastery';

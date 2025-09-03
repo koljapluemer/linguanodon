@@ -348,7 +348,9 @@ export class VocabRepo implements VocabRepoContract {
       notRelatedVocab: vocab.notRelatedVocab || [],
       isPicturable: vocab.isPicturable,
       images: vocab.images || [],
+      hasImage: (vocab.images && vocab.images.length > 0) || false,
       sound: vocab.sound,
+      hasSound: !!vocab.sound,
       progress: {
         ...createEmptyCard(),
         streak: 0,
@@ -372,6 +374,10 @@ export class VocabRepo implements VocabRepoContract {
       images: vocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
       sound: vocab.sound ? { uid: vocab.sound.uid, hasBlob: !!vocab.sound.blob, blobType: vocab.sound.blob?.type, blobSize: vocab.sound.blob?.size } : 'none'
     });
+    
+    // Set hasImage and hasSound based on actual data
+    vocab.hasImage = vocab.images && vocab.images.length > 0;
+    vocab.hasSound = !!vocab.sound;
     
     await vocabDb.vocab.put(vocab);
   }
@@ -873,19 +879,64 @@ export class VocabRepo implements VocabRepoContract {
   }
 
   // Eyes and Ears operations
-  async getRandomVocabWithSoundAndImages(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
+  async getRandomUnseenVocabWithSoundAndImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null> {
+    console.log('🔍 DEBUG: getRandomUnseenVocabWithSoundAndImages called with languages:', languages);
+    
+    // First, let's see what vocab we have in total for these languages
+    const allVocabInLanguages = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .toArray();
+    
+    console.log('🔍 DEBUG: Total vocab in languages:', allVocabInLanguages.length);
+    
+    // Check how many have sound/image
+    const withSound = allVocabInLanguages.filter(v => v.hasSound === true);
+    const withImage = allVocabInLanguages.filter(v => v.hasImage === true);
+    const withBoth = allVocabInLanguages.filter(v => v.hasSound === true && v.hasImage === true);
+    
+    console.log('🔍 DEBUG: Vocab with sound:', withSound.length, 'with image:', withImage.length, 'with both:', withBoth.length);
+    
     const vocab = await vocabDb.vocab
       .where('language')
       .anyOf(languages)
       .filter(vocab => 
         vocab.hasSound === true &&
         vocab.hasImage === true &&
+        vocab.progress.level === -1 &&
         !vocab.doNotPractice &&
         (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
       )
       .toArray();
 
-    return pickRandom(vocab, count).map(v => this.ensureVocabFields(v));
+    console.log('🔍 DEBUG: Found', vocab.length, 'unseen vocab with sound and images');
+    
+    if (vocab.length === 0) return null;
+    const ensured = vocab.map(v => this.ensureVocabFields(v));
+    return pickRandom(ensured, 1)[0];
+  }
+
+  async getRandomDueVocabWithSoundAndImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null> {
+    console.log('🔍 DEBUG: getRandomDueVocabWithSoundAndImages called with languages:', languages);
+    
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => 
+        vocab.hasSound === true &&
+        vocab.hasImage === true &&
+        vocab.progress.level >= 0 &&
+        vocab.progress.due <= new Date() &&
+        !vocab.doNotPractice &&
+        (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
+      )
+      .toArray();
+
+    console.log('🔍 DEBUG: Found', vocab.length, 'due vocab with sound and images');
+    
+    if (vocab.length === 0) return null;
+    const ensured = vocab.map(v => this.ensureVocabFields(v));
+    return pickRandom(ensured, 1)[0];
   }
 
   async getRandomVocabWithImages(language: string, excludeVocabUid: string, vocabBlockList?: string[]): Promise<VocabData | null> {
