@@ -7,7 +7,6 @@ import InsertImagesWidget from '@/pages/practice/modes/modes/insert-images/Inser
 import EyesAndEarsWidget from '@/pages/practice/modes/modes/eyes-and-ears/EyesAndEarsWidget.vue';
 import UltraRandomWidget from '@/pages/practice/modes/modes/ultrarandom/UltraRandomWidget.vue';
 import IllegalImmersionWidget from '@/pages/practice/modes/modes/illegal-immersion/IllegalImmersionWidget.vue';
-import Debug from '@/pages/practice/tasks/Debug.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -71,11 +70,6 @@ const router = createRouter({
           path: 'illegal-immersion',
           name: 'practice-mode-illegal-immersion',
           component: IllegalImmersionWidget
-        },
-        {
-          path: 'debug-tasks',
-          name: 'debug-tasks',
-          component: Debug
         }
       ]
     },

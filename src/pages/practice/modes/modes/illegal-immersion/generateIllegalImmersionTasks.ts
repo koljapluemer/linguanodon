@@ -72,7 +72,7 @@ export async function generateIllegalImmersionTask(
     
     // Phase 1: Initial round - go through all vocab and fact cards at least once
     if (immersionState.phase === 'initial-round') {
-      const task = await getNextInitialRoundTask(vocabRepo, translationRepo, factCardRepo);
+      const task = await getNextInitialRoundTask(vocabRepo, translationRepo);
       if (task) {
         return task;
       }
@@ -84,7 +84,7 @@ export async function generateIllegalImmersionTask(
     
     // Phase 2: Due round - only due content
     if (immersionState.phase === 'due-round') {
-      const task = await getNextDueRoundTask(vocabRepo, translationRepo, factCardRepo);
+      const task = await getNextDueRoundTask(vocabRepo, translationRepo);
       if (task) {
         return task;
       }
@@ -134,8 +134,7 @@ async function initializeQueuesForResource(
 
 async function getNextInitialRoundTask(
   vocabRepo: VocabRepoContract,
-  translationRepo: TranslationRepoContract,
-  _factCardRepo: FactCardRepoContract
+  translationRepo: TranslationRepoContract
 ): Promise<Task | null> {
   // Check if we have any content left in initial queues
   if (immersionState.vocabQueue.length === 0 && immersionState.factCardQueue.length === 0) {
@@ -188,8 +187,7 @@ async function refreshDueQueues(
 
 async function getNextDueRoundTask(
   vocabRepo: VocabRepoContract,
-  translationRepo: TranslationRepoContract,
-  _factCardRepo: FactCardRepoContract
+  translationRepo: TranslationRepoContract
 ): Promise<Task | null> {
   // Check if we have any due content left
   if (immersionState.dueVocabQueue.length === 0 && immersionState.dueFactCardQueue.length === 0) {
