@@ -12,7 +12,10 @@ dependencies = [
     "openai (==1.100.2)",
     "dotenv (==0.9.9)",
     "selenium (>=4.35.0,<5.0.0)",
-    "beautifulsoup4 (>=4.13.4,<5.0.0)"
+    "beautifulsoup4 (>=4.13.4,<5.0.0)",
+    "deepl (>=1.22.0,<2.0.0)",
+    "pexels-api (>=1.0.1,<2.0.0)",
+    "pexels-api-py (>=0.0.5,<0.0.6)"
 ]
 
 

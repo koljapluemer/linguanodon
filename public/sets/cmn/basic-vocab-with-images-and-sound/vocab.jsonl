@@ -1,0 +1,2 @@
+{"id": "1", "language": "cmn", "content": "苹果", "length": "word", "translations": ["1"], "links": ["1"], "images": [{"filename": "apple.jpg", "alt": "Image of apple"}], "sound": {"filename": "苹果.opus"}, "isPicturable": true}
+{"id": "2", "language": "cmn", "content": "香蕉", "length": "word", "translations": ["2"], "links": ["1"], "images": [{"filename": "banana.jpg", "alt": "Image of banana"}], "sound": {"filename": "香蕉.opus"}, "isPicturable": true}

@@ -271,6 +271,24 @@ files = [
 ]
 
 [[package]]
+name = "deepl"
+version = "1.22.0"
+description = "Python library for the DeepL API."
+optional = false
+python-versions = "<4,>=3.6.2"
+groups = ["main"]
+files = [
+    {file = "deepl-1.22.0-py3-none-any.whl", hash = "sha256:df1ed8f4cd4cc6bb9078f3aa0a0b045cd9e3b813a6d3bce4d33b51aa836fddf1"},
+    {file = "deepl-1.22.0.tar.gz", hash = "sha256:eb09568e5996dff6a2c318d40a22bd67d3fcf04f2ec2b1af985b8d4b6cf096b6"},
+]
+
+[package.dependencies]
+requests = ">=2,<3"
+
+[package.extras]
+keyring = ["keyring (>=23.4.1,<24.0.0) ; python_version >= \"3.6\" and python_version < \"4\""]
+
+[[package]]
 name = "defusedxml"
 version = "0.7.1"
 description = "XML bomb protection for Python stdlib modules"
@@ -511,6 +529,35 @@ files = [
 
 [package.dependencies]
 attrs = ">=19.2.0"
+
+[[package]]
+name = "pexels-api"
+version = "1.0.1"
+description = "Use Pexels API v1 with Python"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "pexels-api-1.0.1.tar.gz", hash = "sha256:89934dbe0e37481234c5659883be0958de0f809740b9874b9d2caaa974f9d0bf"},
+    {file = "pexels_api-1.0.1-py3-none-any.whl", hash = "sha256:3923eab214e6469a9b9fc6bc5a2d692e206a5c45f9f82b4ce1a685508057037e"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
+name = "pexels-api-py"
+version = "0.0.5"
+description = "Python API package for Pexels.com V1."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "pexels-api-py-0.0.5.tar.gz", hash = "sha256:b46dadc89e09412d6fceafe30629c8eafaf6fee4b224ca0fa6d3123cf3e783d8"},
+]
+
+[package.dependencies]
+requests = "*"
 
 [[package]]
 name = "pycparser"
@@ -923,4 +970,4 @@ requests = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.14"
-content-hash = "9fceb530f96a9c521bba1032496917e7fbec674608de4bd9a97346ff20ab45e4"
+content-hash = "bc37f23924387d7822f567657e1b70b788fa1b5f1bd8d399338ef165c7cecf09"
