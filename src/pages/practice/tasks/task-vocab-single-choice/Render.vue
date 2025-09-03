@@ -212,9 +212,9 @@ onMounted(loadVocabData);
     <div class="text-6xl font-bold mb-8">{{ displayContent }}</div>
 
     <!-- Answer Options - only show when not answered -->
-    <div v-if="!isAnswered" class="grid grid-cols-1 gap-2 mb-6">
+    <div v-if="!isAnswered" class="flex flex-col md:flex-row gap-2 mb-6">
       <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
-        :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg">
+        :disabled="isButtonDisabled(index)" @click="selectOption(index)" class="btn btn-lg flex-1">
         {{ option.content }}
       </button>
     </div>
