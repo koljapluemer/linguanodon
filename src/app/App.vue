@@ -2,6 +2,7 @@
 import { getCurrentInstance } from 'vue';
 import { provideRepositories } from './injectRepositories';
 import AppHeader from './AppHeader.vue';
+import ToastContainer from '@/shared/toasts/ToastContainer.vue';
 
 // Setup and provide repositories
 const app = getCurrentInstance()?.appContext.app;
@@ -19,6 +20,9 @@ if (app) {
     <footer class="p-4 bg-base-200 text-center text-sm flex flex-col gap-2 items-center">
       <!-- link  to debug stuff if needed -->
     </footer>
+    
+    <!-- Toast Container -->
+    <ToastContainer />
   </div>
 </template>
 

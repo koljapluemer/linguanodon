@@ -4,6 +4,7 @@ import { Settings, Languages, X, Search } from 'lucide-vue-next';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import { useToast } from '@/shared/toasts';
 import isoLangs from '@/entities/languages/isoLangs.json';
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
@@ -22,6 +23,8 @@ const showDropdown = ref(false);
 
 // Empty sound detection state
 const detectingSounds = ref(false);
+const emptyAudioResults = ref<{ uid: string; content: string; reason: string }[]>([]);
+const analysisCompleted = ref(false);
 
 
 async function loadLanguages() {
@@ -170,7 +173,11 @@ async function detectEmptyAudio(audioBlob: Blob): Promise<{ isEmpty: boolean; re
 }
 
 async function detectEmptySoundFiles() {
+  const toast = useToast();
+  
   detectingSounds.value = true;
+  analysisCompleted.value = false;
+  emptyAudioResults.value = [];
   
   try {
     // Get all vocab with sound
@@ -178,6 +185,7 @@ async function detectEmptySoundFiles() {
     const vocabWithSound = allVocab.filter(v => v.hasSound && v.sound?.blob);
     
     console.log(`Analyzing ${vocabWithSound.length} audio files...`);
+    toast.info(`Analyzing ${vocabWithSound.length} audio files...`, { duration: 2000 });
     
     let emptyCount = 0;
     const results: { uid: string; content: string; reason: string }[] = [];
@@ -189,7 +197,7 @@ async function detectEmptySoundFiles() {
           emptyCount++;
           results.push({
             uid: vocab.uid,
-            content: vocab.content || 'Unknown',
+            content: vocab.content || '...',
             reason: detection.reason || 'unknown'
           });
         }
@@ -201,8 +209,21 @@ async function detectEmptySoundFiles() {
       console.table(results);
     }
     
+    // Store results for display
+    emptyAudioResults.value = results;
+    analysisCompleted.value = true;
+    
+    // Show toast with results
+    if (emptyCount === 0) {
+      toast.success(`No empty sound files found! All ${vocabWithSound.length} audio files are valid.`);
+    } else {
+      toast.warning(`Found ${emptyCount} empty sound files out of ${vocabWithSound.length} total.`, 
+        { duration: 6000 });
+    }
+    
   } catch (error) {
     console.error('Error detecting empty sound files:', error);
+    toast.error('Error analyzing sound files.');
   } finally {
     detectingSounds.value = false;
   }
@@ -316,8 +337,26 @@ async function detectEmptySoundFiles() {
               {{ detectingSounds ? 'Analyzing Audio Files...' : 'Detect Empty Sound Files' }}
             </button>
             
-            <div v-if="detectingSounds" class="text-xs text-base-content/60 mt-2">
-              Check the console for detailed results
+            <!-- Results Details -->
+            <div v-if="analysisCompleted && emptyAudioResults.length > 0" class="mt-4">
+              <details class="collapse collapse-plus bg-base-200">
+                <summary class="collapse-title text-sm font-medium">
+                  View {{ emptyAudioResults.length }} vocabulary items with broken audio
+                </summary>
+                <div class="collapse-content">
+                  <ul class="list-disc list-inside space-y-1 text-sm mt-2">
+                    <li v-for="result in emptyAudioResults" :key="result.uid">
+                      <router-link 
+                        :to="{ name: 'vocab-list', query: { search: result.content !== '...' ? result.content : result.uid } }"
+                        class="link link-primary hover:link-hover"
+                      >
+                        {{ result.content }}
+                      </router-link>
+                      <span class="text-base-content/60 ml-2 text-xs">({{ result.reason.replace('_', ' ') }})</span>
+                    </li>
+                  </ul>
+                </div>
+              </details>
             </div>
           </div>
         </div>
