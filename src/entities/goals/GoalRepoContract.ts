@@ -7,6 +7,8 @@ export interface GoalRepoContract {
   update(id: string, updates: Omit<Partial<GoalData>, 'uid' | 'tasks'>): Promise<GoalData>;
   delete(id: string): Promise<void>;
   getIncompleteGoals(): Promise<GoalData[]>;
+  getGoalsNeedingVocab(languages: string[]): Promise<GoalData[]>;
+  getGoalsNeedingSubGoals(languages: string[]): Promise<GoalData[]>;
   getSubGoals(parentId: string): Promise<GoalData[]>;
   getRootGoals(): Promise<GoalData[]>; // goals without parent
   getParentGoal(goalId: string): Promise<GoalData | undefined>;

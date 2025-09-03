@@ -56,6 +56,26 @@ export class GoalRepo implements GoalRepoContract {
     return allGoals; // All goals are considered active since isActive was removed
   }
 
+  async getGoalsNeedingVocab(languages: string[]): Promise<GoalData[]> {
+    const allGoals = await this.db.goals.toArray();
+    return allGoals.filter(goal => 
+      languages.includes(goal.language) &&
+      !goal.isAchieved &&
+      !goal.doNotPractice &&
+      !goal.finishedAddingKnowledge
+    );
+  }
+
+  async getGoalsNeedingSubGoals(languages: string[]): Promise<GoalData[]> {
+    const allGoals = await this.db.goals.toArray();
+    return allGoals.filter(goal => 
+      languages.includes(goal.language) &&
+      !goal.isAchieved &&
+      !goal.doNotPractice &&
+      !goal.finishedAddingSubGoals
+    );
+  }
+
   async getSubGoals(parentId: string): Promise<GoalData[]> {
     const parentGoal = await this.getById(parentId);
     if (!parentGoal) return [];

@@ -106,6 +106,32 @@ export class GoalRepoMock implements GoalRepoContract {
     ];
   }
 
+  async getGoalsNeedingVocab(languages: string[]): Promise<GoalData[]> {
+    console.info(`GoalRepoMock: getGoalsNeedingVocab([${languages.join(', ')}]) - returning goals needing vocab`);
+    return [
+      this.createSampleGoal({
+        title: 'Goal Needing Vocab',
+        language: languages[0] || 'en',
+        vocab: ['existing-vocab-1'],
+        isAchieved: false,
+        finishedAddingKnowledge: false
+      })
+    ];
+  }
+
+  async getGoalsNeedingSubGoals(languages: string[]): Promise<GoalData[]> {
+    console.info(`GoalRepoMock: getGoalsNeedingSubGoals([${languages.join(', ')}]) - returning goals needing sub-goals`);
+    return [
+      this.createSampleGoal({
+        title: 'Goal Needing Sub-Goals',
+        language: languages[0] || 'en',
+        subGoals: ['existing-subgoal-1'],
+        isAchieved: false,
+        finishedAddingSubGoals: false
+      })
+    ];
+  }
+
   async getSubGoals(parentId: string): Promise<GoalData[]> {
     console.info(`GoalRepoMock: getSubGoals(${parentId}) - returning 2 sub-goals`);
     return [

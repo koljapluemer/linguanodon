@@ -8,20 +8,14 @@ export async function getRandomAddSubGoalsTask({
 }: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
   if (!goalRepo) return null;
   try {
-    // Get incomplete goals (more efficient than all goals)
-    const goals = await goalRepo.getIncompleteGoals();
-    const filteredGoals = goals.filter(goal => languageCodes.includes(goal.language));
+    // Get goals that need sub-goals (already filtered at repo level)
+    const goals = await goalRepo.getGoalsNeedingSubGoals(languageCodes);
     
-    if (filteredGoals.length === 0) return null;
+    if (goals.length === 0) return null;
     
-    // Shuffle and try to find a valid goal
-    const shuffled = [...filteredGoals].sort(() => Math.random() - 0.5);
-    
-    for (const goal of shuffled) {
-      return generateAddSubGoals(goal);
-    }
-    
-    return null;
+    // Shuffle and return first valid goal
+    const shuffled = [...goals].sort(() => Math.random() - 0.5);
+    return generateAddSubGoals(shuffled[0]);
   } catch (error) {
     console.error('Error generating add sub goals task:', error);
     return null;
