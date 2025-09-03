@@ -1,11 +1,6 @@
 <template>
-  <!-- Skip button -->
-  <div class="mb-4 text-center">
-    <button @click="skipTask" class="btn btn-sm btn-ghost">Skip</button>
-  </div>
-
   <!-- Loading State -->
-  <div v-if="loading">
+  <div v-if="loading" class="text-center">
     <span class="loading loading-spinner loading-lg"></span>
   </div>
 
@@ -13,44 +8,47 @@
   <div v-else-if="vocab && imageOptions.length === 2" class="text-center">
     <!-- Sound Player -->
     <div class="mb-8">
-      <div class="flex justify-center items-center gap-4">
-        <button 
-          @click="playSound" 
-          :disabled="!audioUrl || isPlaying"
-          class="btn btn-circle btn-lg btn-primary"
-        >
-          <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.348a1.125 1.125 0 01-1.667-.985V5.653z" />
-          </svg>
-          <span v-else class="loading loading-spinner loading-md"></span>
-        </button>
-        
-        <div class="flex flex-col items-center gap-2">
-          <input 
-            type="range" 
-            min="0" 
-            max="1" 
-            step="0.1" 
-            v-model="volume"
-            @input="updateVolume"
-            class="range range-sm w-20"
-          />
-          <div class="text-xs text-base-content/60">Volume</div>
+      <div class="card bg-base-200 inline-block p-6">
+        <div class="flex flex-col items-center gap-4">
+          <button 
+            @click="playSound" 
+            :disabled="!audioUrl || isPlaying"
+            class="btn btn-circle btn-xl btn-primary"
+          >
+            <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.348a1.125 1.125 0 01-1.667-.985V5.653z" />
+            </svg>
+            <span v-else class="loading loading-spinner loading-lg"></span>
+          </button>
+          
+          <div class="flex flex-col items-center gap-2">
+            <div class="text-sm font-medium">Volume</div>
+            <input 
+              type="range" 
+              min="0" 
+              max="1" 
+              step="0.1" 
+              v-model="volume"
+              @input="updateVolume"
+              class="range range-primary w-32"
+            />
+            <div class="text-xs text-base-content/60">{{ Math.round(volume * 100) }}%</div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Image Options -->
     <div class="grid grid-cols-2 gap-6 max-w-md mx-auto mb-8">
-      <button 
+      <div 
         v-for="(option, index) in imageOptions" 
         :key="index"
         @click="selectOption(index)"
-        :disabled="isAnswered"
-        :class="getButtonClass(index)"
+        :class="getImageContainerClass(index)"
+        class="cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95"
       >
         <VocabImageDisplay :image="option.image" />
-      </button>
+      </div>
     </div>
 
     <!-- Show result when completed -->
@@ -59,11 +57,21 @@
         {{ vocab.content }}
       </div>
     </div>
+
+    <!-- Skip button -->
+    <div class="flex justify-end">
+      <button @click="skipTask" class="btn btn-outline btn-sm">Skip Exercise</button>
+    </div>
   </div>
 
   <!-- Error State -->
-  <div v-else>
-    <span>Failed to load exercise data</span>
+  <div v-else class="text-center">
+    <div class="alert alert-error max-w-md mx-auto">
+      <span>Failed to load exercise data</span>
+    </div>
+    <div class="mt-4">
+      <button @click="skipTask" class="btn btn-outline">Skip Exercise</button>
+    </div>
   </div>
 
   <!-- Hidden audio element -->
@@ -227,27 +235,27 @@ async function selectOption(index: number) {
   }
 }
 
-function getButtonClass(index: number): string {
+function getImageContainerClass(index: number): string {
   const isCorrect = imageOptions.value[index].isCorrect;
   const isSelected = index === selectedIndex.value;
 
   if (isCorrect && isSelected) {
-    return 'btn-success';
+    return 'ring-4 ring-success ring-offset-2';
   }
 
   if (!isCorrect && isSelected) {
-    return 'btn-error';
+    return 'ring-4 ring-error ring-offset-2';
   }
 
   if (isAnswered.value && isCorrect) {
-    return 'btn-success';
+    return 'ring-4 ring-success ring-offset-2';
   }
 
   if (isAnswered.value && !isCorrect) {
-    return 'btn-outline opacity-50';
+    return 'opacity-50 grayscale';
   }
 
-  return 'btn-outline';
+  return 'ring-2 ring-base-300 hover:ring-primary';
 }
 
 function skipTask() {
