@@ -6,7 +6,7 @@ import type { Task } from '@/entities/tasks/Task';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
-import { generateInsertImagesTask } from './generateInsertImagesTask';
+import { generateInsertImagesTask } from './generateInsertImagesTasks';
 
 // Inject repositories
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');

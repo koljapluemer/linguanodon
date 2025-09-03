@@ -48,8 +48,10 @@ export interface VocabData {
 
   isPicturable?: boolean; // can this vocab be visualized with images?
   images?: VocabImage[]; // associated images for this vocab
+  hasImage?: boolean
 
   sound?: VocabSound; // associated audio for this vocab
+  hasSound?: boolean
 
 }
 

@@ -14,6 +14,7 @@ import TaskVocabFormSentence from "@/pages/practice/tasks/task-vocab-form-senten
 import TaskFactCardTryToRemember from "@/pages/practice/tasks/task-fact-card-try-to-remember/TaskFactCardTryToRemember.vue";
 import TaskFactCardReveal from "@/pages/practice/tasks/task-fact-card-reveal/TaskFactCardReveal.vue";
 import TaskAddImageToVocab from "@/pages/practice/tasks/task-add-image-to-vocab/TaskAddImageToVocab.vue";
+import TaskVocabChooseImageBySound from "@/pages/practice/tasks/task-vocab-choose-image-by-sound/TaskVocabChooseImageBySound.vue";
 
 export interface TaskInfo {
   component: Component
@@ -41,6 +42,7 @@ export const taskRegistry: Record<string, TaskInfo> = {
   "fact-card-try-to-remember": { component: TaskFactCardTryToRemember, size: 'small' },
   "fact-card-reveal": { component: TaskFactCardReveal, size: 'small' },
   "add-image-to-vocab": { component: TaskAddImageToVocab, size: 'medium' },
+  "vocab-choose-image-by-sound": { component: TaskVocabChooseImageBySound, size: 'medium' },
 };
 
 export const TASK_REGISTRY_INJECTION_KEY = Symbol("taskRegistry");

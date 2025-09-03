@@ -6,7 +6,7 @@ import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
-import { generateFactCard } from './generateFactCard';
+import { generateFactCard } from './generateFactCardGrindTasks';
 
 // Inject repositories
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');

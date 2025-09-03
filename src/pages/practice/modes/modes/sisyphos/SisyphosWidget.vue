@@ -8,7 +8,7 @@ import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
-import { generateSisyphosTask } from './generateSisyphosTask';
+import { generateSisyphosTask } from './generateSisyphosTasks';
 
 // Inject repositories
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');

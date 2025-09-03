@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Play, BookOpen, Target, RotateCcw, ImagePlus } from 'lucide-vue-next';
+import { Play, BookOpen, Target, RotateCcw, ImagePlus, Eye } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -31,6 +31,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-insert-images' },
     icon: ImagePlus,
     description: 'Add visual mnemonics to your vocabulary'
+  },
+  {
+    name: 'Eyes and Ears',
+    route: { name: 'practice-mode-eyes-and-ears' },
+    icon: Eye,
+    description: 'Match sounds to images for vocab with audio and visuals'
   }
 ];
 </script>

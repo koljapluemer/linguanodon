@@ -5,6 +5,7 @@ import FactCardGrindWidget from '@/pages/practice/modes/modes/fact-card-grind/Fa
 import GoalGetterWidget from '@/pages/practice/modes/modes/goal-getter/GoalGetterWidget.vue';
 import SisyphosWidget from '@/pages/practice/modes/modes/sisyphos/SisyphosWidget.vue';
 import InsertImagesWidget from '@/pages/practice/modes/modes/insert-images/InsertImagesWidget.vue';
+import EyesAndEarsWidget from '@/pages/practice/modes/modes/eyes-and-ears/EyesAndEarsWidget.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -59,6 +60,11 @@ const router = createRouter({
           path: 'insert-images',
           name: 'practice-mode-insert-images',
           component: InsertImagesWidget
+        },
+        {
+          path: 'eyes-and-ears',
+          name: 'practice-mode-eyes-and-ears',
+          component: EyesAndEarsWidget
         }
       ]
     },

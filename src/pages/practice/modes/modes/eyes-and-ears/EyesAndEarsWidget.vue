@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted } from 'vue';
-import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import { inject, onMounted, onUnmounted, ref } from 'vue';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { Task } from '@/entities/tasks/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
-import { generateGoalTask } from './generateGoalGetterTasks';
+import { generateEyesAndEars } from './generateEyesAndEarsTasks';
 
 // Inject repositories
-const goalRepo = inject<GoalRepoContract>('goalRepo');
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
 
-if (!goalRepo || !languageRepo) {
+if (!vocabRepo || !languageRepo) {
   throw new Error('Required repositories not available');
 }
 
@@ -29,7 +29,9 @@ const {
   cleanup
 } = useQueueState();
 
-// Generate a single goal task
+const lastUsedVocabUid = ref<string | null>(null);
+
+// Generate a single eyes and ears task
 async function generateNextTask(): Promise<Task | null> {
   try {
     const languages = await languageRepo!.getActiveTargetLanguages();
@@ -39,16 +41,19 @@ async function generateNextTask(): Promise<Task | null> {
       return null;
     }
     
-    return await generateGoalTask(goalRepo!, languageCodes);
+    // Create block list with last used vocab
+    const blockList = lastUsedVocabUid.value ? [lastUsedVocabUid.value] : undefined;
+    
+    return await generateEyesAndEars(vocabRepo!, languageCodes, blockList);
   } catch (error) {
-    console.error('Error generating goal task:', error);
+    console.error('Error generating eyes and ears task:', error);
     return null;
   }
 }
 
 // Try to transition to task state
 async function tryTransitionToTask(): Promise<boolean> {
-  setLoading('Preparing next goal task...');
+  setLoading('Preparing next exercise...');
   startDelayedLoading();
 
   try {
@@ -67,25 +72,25 @@ async function tryTransitionToTask(): Promise<boolean> {
   }
   
   clearDelayedLoading();
-  setEmpty('Unable to load more goal tasks. Please try refreshing.');
+  setEmpty('Unable to load more exercises. Please try refreshing.');
   return false;
 }
 
 // Initialize queue
 async function initializeQueue() {
-  setLoading('Loading goal tasks...');
+  setLoading('Loading Eyes and Ears exercises...');
   showLoadingUI.value = true; // Show loading immediately for initial load
 
   try {
     const success = await tryTransitionToTask();
     if (!success) {
       clearDelayedLoading();
-      setEmpty('No goal tasks are currently available for practice.');
+      setEmpty('No vocabulary with both sound and images is currently available for practice.');
     }
   } catch (error) {
     console.error('Initialization failed:', error);
     clearDelayedLoading();
-    setError('Failed to initialize goal task queue. Please try again.');
+    setError('Failed to initialize Eyes and Ears queue. Please try again.');
   }
 }
 
@@ -120,7 +125,7 @@ async function completeCurrentTask() {
     // No next task ready, need to generate one
     const success = await tryTransitionToTask();
     if (!success) {
-      setEmpty('Excellent work! No more goal tasks are currently available.');
+      setEmpty('Excellent work! No more exercises are currently available.');
     }
   }
 }
@@ -143,6 +148,15 @@ onUnmounted(() => {
 
 // Handle task completion
 const handleTaskFinished = async () => {
+  // Track the vocab UID before completing the task
+  if (state.value.status === 'task') {
+    const currentTask = state.value.currentTask;
+    const vocabUid = currentTask.associatedVocab?.[0];
+    if (vocabUid) {
+      lastUsedVocabUid.value = vocabUid;
+    }
+  }
+  
   await completeCurrentTask();
 };
 </script>
@@ -155,7 +169,7 @@ const handleTaskFinished = async () => {
       <div class="text-center">
         <span class="loading loading-spinner loading-lg"></span>
         <p class="mt-4 text-lg">
-          {{ state.status === 'loading' && state.message ? state.message : 'Loading goal tasks...' }}
+          {{ state.status === 'loading' && state.message ? state.message : 'Loading Eyes and Ears...' }}
         </p>
       </div>
     </div>

@@ -25,6 +25,9 @@ class VocabDatabase extends Dexie {
     this.version(2).stores({
       vocab: 'uid, language, content, *origins, [language+content], progress.due'
     });
+    this.version(3).stores({
+      vocab: 'uid, language, content, *origins, [language+content], progress.due, hasImage, hasSound'
+    });
   }
 }
 
@@ -691,6 +694,7 @@ export class VocabRepo implements VocabRepoContract {
 
       vocab.images = vocab.images || [];
       vocab.images.push(vocabImage);
+      vocab.hasImage = true;
 
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
@@ -725,6 +729,7 @@ export class VocabRepo implements VocabRepoContract {
 
       vocab.images = vocab.images || [];
       vocab.images.push(vocabImage);
+      vocab.hasImage = true;
 
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
@@ -738,6 +743,7 @@ export class VocabRepo implements VocabRepoContract {
     if (!vocab) return;
 
     vocab.images = vocab.images?.filter(img => img.uid !== imageId) || [];
+    vocab.hasImage = vocab.images.length > 0;
     await vocabDb.vocab.put(toRaw(vocab));
   }
 
@@ -812,6 +818,7 @@ export class VocabRepo implements VocabRepoContract {
       };
 
       vocab.sound = vocabSound;
+      vocab.hasSound = true;
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
       console.error('Failed to add sound from file:', error);
@@ -848,6 +855,7 @@ export class VocabRepo implements VocabRepoContract {
       };
 
       vocab.sound = vocabSound;
+      vocab.hasSound = true;
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
       console.error('Failed to add sound from URL:', error);
@@ -860,6 +868,39 @@ export class VocabRepo implements VocabRepoContract {
     if (!vocab) return;
 
     vocab.sound = undefined;
+    vocab.hasSound = false;
     await vocabDb.vocab.put(toRaw(vocab));
+  }
+
+  // Eyes and Ears operations
+  async getRandomVocabWithSoundAndImages(count: number, languages: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => 
+        vocab.hasSound === true &&
+        vocab.hasImage === true &&
+        !vocab.doNotPractice &&
+        (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
+      )
+      .toArray();
+
+    return pickRandom(vocab, count).map(v => this.ensureVocabFields(v));
+  }
+
+  async getRandomVocabWithImages(language: string, excludeVocabUid: string, vocabBlockList?: string[]): Promise<VocabData | null> {
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .equals(language)
+      .filter(vocab =>
+        vocab.hasImage === true &&
+        vocab.uid !== excludeVocabUid &&
+        (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
+      )
+      .toArray();
+
+    if (vocab.length === 0) return null;
+    const ensured = vocab.map(v => this.ensureVocabFields(v));
+    return pickRandom(ensured, 1)[0];
   }
 }
