@@ -619,9 +619,10 @@ export class UnifiedRemoteSetService {
     }
 
     const blob = await response.blob();
-    const file = new File([blob], imageData.filename, { type: blob.type });
     
-    await this.vocabRepo.addImageFromFile(vocabUid, file, imageData.alt);
+    // Use addImageFromUrl instead of addImageFromFile to avoid compression issues
+    const imageUrl = `/sets/${languageCode}/${setName}/images/${imageData.filename}`;
+    await this.vocabRepo.addImageFromUrl(vocabUid, imageUrl, imageData.alt);
   }
 
   private async downloadAndAddSound(
