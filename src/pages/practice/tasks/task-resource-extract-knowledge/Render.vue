@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { computed, ref, inject, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import ManageResourceVocab from '@/widgets/manage-resource-vocab/ManageResourceVocab.vue';
 import ManageResourceFactCards from '@/widgets/manage-resource-fact-cards/ManageResourceFactCards.vue';
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import LinkDisplayAsButton from '@/shared/links/LinkDisplayAsButton.vue';
 import TaskDecideWhetherToDoAgain from '@/pages/practice/tasks/ui/TaskDecideWhetherToDoAgain.vue';
 
 interface Props {
   task: Task;
+  repositories: RepositoriesContext;
 }
 
 const props = defineProps<Props>();
@@ -23,7 +24,7 @@ const resourceUid = computed(() => {
 });
 
 // Resource data and loading
-const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
+const resourceRepo = props.repositories.resourceRepo!;
 const resource = ref<ResourceData | null>(null);
 
 // Active tab state

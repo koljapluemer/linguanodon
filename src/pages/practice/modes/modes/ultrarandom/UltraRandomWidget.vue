@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted, ref } from 'vue';
+import { inject, onMounted, onUnmounted, ref, computed } from 'vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
@@ -7,6 +7,7 @@ import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoCont
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
@@ -25,6 +26,17 @@ const noteRepo = inject<NoteRepoContract>('noteRepo');
 if (!vocabRepo || !translationRepo || !factCardRepo || !languageRepo || !resourceRepo || !goalRepo || !noteRepo) {
   throw new Error('Required repositories not available');
 }
+
+// Create repositories object for TaskRenderer
+const repositories = computed<RepositoriesContext>(() => ({
+  vocabRepo,
+  translationRepo,
+  factCardRepo,
+  languageRepo,
+  resourceRepo,
+  goalRepo,
+  noteRepo
+}));
 
 // Queue state
 const {
@@ -221,7 +233,7 @@ const handleTaskFinished = async () => {
     <Transition mode="out-in" enter-active-class="transition-opacity duration-[50ms] ease-out"
       leave-active-class="transition-opacity duration-[50ms] ease-in" enter-from-class="opacity-0"
       enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
-      <TaskRenderer :key="state.currentTask.uid" :task="state.currentTask" @finished="handleTaskFinished" />
+      <TaskRenderer :key="state.currentTask.uid" :task="state.currentTask" :repositories="repositories" @finished="handleTaskFinished" />
     </Transition>
   </div>
 

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 import { Rating } from 'ts-fsrs';
 
@@ -16,6 +15,7 @@ interface AnswerOption {
 
 interface Props {
   task: Task;
+  repositories: RepositoriesContext;
 }
 
 const emit = defineEmits<{
@@ -24,8 +24,8 @@ const emit = defineEmits<{
 
 const props = defineProps<Props>();
 
-const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
-const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
+const vocabRepo = props.repositories.vocabRepo!;
+const translationRepo = props.repositories.translationRepo!;
 
 // Use the task state composable
 

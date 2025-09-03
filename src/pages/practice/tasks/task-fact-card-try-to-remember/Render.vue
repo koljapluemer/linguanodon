@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { createEmptyCard } from 'ts-fsrs';
 import type { Task } from '@/pages/practice/Task';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
-import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
 
 interface Props {
   task: Task;
+  repositories: RepositoriesContext;
 }
 
 const props = defineProps<Props>();
@@ -15,7 +16,7 @@ const emit = defineEmits<{
   finished: [];
 }>();
 
-const factCardRepo = inject<FactCardRepoContract>('factCardRepo')!;
+const factCardRepo = props.repositories.factCardRepo!;
 const factCard = ref<FactCardData | null>(null);
 
 const loadFactCard = async () => {

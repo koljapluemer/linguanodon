@@ -4,29 +4,35 @@
       <LanguageDisplay v-if="languageData" :language="languageData" />
     </div>
     <TaskPrompt :prompt="props.task.prompt" />
-    <component :is="getTaskComponent(props.task.taskType)" :task="props.task" @finished="handleTaskFinished" />
+    <component 
+      :is="getTaskComponent(props.task.taskType)" 
+      :task="props.task" 
+      :repositories="props.repositories"
+      @finished="handleTaskFinished" 
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { taskRegistry } from './taskRegistry';
 import type { Task } from '@/pages/practice/Task';
-import { inject, onMounted, ref } from 'vue';
-import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import { onMounted, ref } from 'vue';
 import type { LanguageData } from '@/entities/languages/LanguageData';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
 import TaskPrompt from './TaskPrompt.vue';
 
 interface Props {
   task: Task;
+  repositories: RepositoriesContext;
 }
 
 const props = defineProps<Props>();
-const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 const languageData = ref<LanguageData | null>(null);
 
 onMounted(async () => {
-  const lang = await languageRepo.getByCode(props.task.language);
+  if (!props.repositories.languageRepo) return;
+  const lang = await props.repositories.languageRepo.getByCode(props.task.language);
   if (lang) languageData.value = lang;
 });
 

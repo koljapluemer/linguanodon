@@ -84,10 +84,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData, VocabImage } from '@/entities/vocab/vocab/VocabData';
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
 import { Rating } from 'ts-fsrs';
 
@@ -98,6 +98,7 @@ interface ImageOption {
 
 interface Props {
   task: Task;
+  repositories: RepositoriesContext;
 }
 
 const emit = defineEmits<{
@@ -106,7 +107,7 @@ const emit = defineEmits<{
 
 const props = defineProps<Props>();
 
-const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
+const vocabRepo = props.repositories.vocabRepo!;
 
 // Exercise state
 const selectedIndex = ref<number | null>(null);

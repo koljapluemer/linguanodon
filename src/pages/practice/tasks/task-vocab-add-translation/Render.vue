@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 
 interface Props {
   task: Task;
+  repositories: RepositoriesContext;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<{ finished: [] }>();
 
-const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
-const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
+const vocabRepo = props.repositories.vocabRepo!;
+const translationRepo = props.repositories.translationRepo!;
 
 const vocab = ref<VocabData | null>(null);
 const newTranslationContent = ref('');

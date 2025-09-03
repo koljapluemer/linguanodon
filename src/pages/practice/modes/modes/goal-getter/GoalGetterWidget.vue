@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted } from 'vue';
+import { inject, onMounted, onUnmounted, computed } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
@@ -15,6 +16,12 @@ const languageRepo = inject<LanguageRepoContract>('languageRepo');
 if (!goalRepo || !languageRepo) {
   throw new Error('Required repositories not available');
 }
+
+// Create repositories object for TaskRenderer
+const repositories = computed<RepositoriesContext>(() => ({
+  goalRepo,
+  languageRepo
+}));
 
 // Queue state
 const {
@@ -193,7 +200,7 @@ const handleTaskFinished = async () => {
     <Transition mode="out-in" enter-active-class="transition-opacity duration-[50ms] ease-out"
       leave-active-class="transition-opacity duration-[50ms] ease-in" enter-from-class="opacity-0"
       enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
-      <TaskRenderer :key="state.currentTask.uid" :task="state.currentTask" @finished="handleTaskFinished" />
+      <TaskRenderer :key="state.currentTask.uid" :task="state.currentTask" :repositories="repositories" @finished="handleTaskFinished" />
     </Transition>
   </div>
 

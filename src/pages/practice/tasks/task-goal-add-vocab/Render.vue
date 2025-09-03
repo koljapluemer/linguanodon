@@ -27,15 +27,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue';
-import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import { ref, onMounted } from 'vue';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { Task } from '@/pages/practice/Task';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import ManageGoalVocab from '@/widgets/manage-goal-vocab/ManageGoalVocab.vue';
 import TaskDecideWhetherToDoAgain from '@/pages/practice/tasks/ui/TaskDecideWhetherToDoAgain.vue';
 
 interface Props {
   task: Task;
+  repositories: RepositoriesContext;
 }
 
 const props = defineProps<Props>();
@@ -43,7 +44,7 @@ const emit = defineEmits<{
   finished: [];
 }>();
 
-const goalRepo = inject<GoalRepoContract>('goalRepo')!;
+const goalRepo = props.repositories.goalRepo!;
 const goal = ref<GoalData | null>(null);
 const hasChanges = ref(false);
 const showDoneSection = ref(false);
