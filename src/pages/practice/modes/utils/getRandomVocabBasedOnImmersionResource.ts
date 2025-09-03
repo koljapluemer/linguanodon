@@ -1,7 +1,6 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import { useNewVocabTracker } from '../modes/classic-queue/generate-task/trackers/useNewVocabTracker';
 import { randomFromArray } from '@/shared/utils/arrayUtils';
 
 async function getVocabFromImmersionResource(
@@ -38,8 +37,8 @@ export async function getRandomVocabBasedOnImmersionResource(
     const newVocab = vocabItems.filter(v => v.progress.level === -1);
     const seenVocab = vocabItems.filter(v => v.progress.level >= 0);
 
-    const { canGenerateNewVocabTask } = useNewVocabTracker();
-    const availableNew = canGenerateNewVocabTask() ? newVocab : [];
+    // Always allow new vocab since we removed the tracker
+    const availableNew = newVocab;
     
     if (availableNew.length === 0 && seenVocab.length === 0) return null;
     if (availableNew.length === 0) return randomFromArray(seenVocab);

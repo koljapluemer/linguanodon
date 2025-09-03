@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PracticeOverview from '@/pages/practice/PracticeOverview.vue';
-import ClassicQueueWidget from '@/pages/practice/modes/modes/classic-queue/ClassicQueueWidget.vue';
 import FactCardGrindWidget from '@/pages/practice/modes/modes/fact-card-grind/FactCardGrindWidget.vue';
 import GoalGetterWidget from '@/pages/practice/modes/modes/goal-getter/GoalGetterWidget.vue';
 import SisyphosWidget from '@/pages/practice/modes/modes/sisyphos/SisyphosWidget.vue';
@@ -36,12 +35,6 @@ const router = createRouter({
       name: 'practice-overview',
       component: PracticeOverview,
       children: [
-        {
-          path: 'classic-queue',
-          name: 'practice-mode-classic-queue',
-          component: ClassicQueueWidget,
-          props: route => ({ focusOnVocab: route.query.focusOnVocab as string })
-        },
         {
           path: 'fact-card-grind',
           name: 'practice-mode-fact-card-grind',

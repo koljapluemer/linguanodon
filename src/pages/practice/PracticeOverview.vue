@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { Play, BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices } from 'lucide-vue-next';
+import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices } from 'lucide-vue-next';
 
 const practiceOptions = [
-  {
-    name: 'Classic Queue',
-    route: { name: 'practice-mode-classic-queue' },
-    icon: Play,
-    description: 'Practice vocabulary and tasks in an infinite queue'
-  },
   {
     name: 'Fact Card Grind',
     route: { name: 'practice-mode-fact-card-grind' },
