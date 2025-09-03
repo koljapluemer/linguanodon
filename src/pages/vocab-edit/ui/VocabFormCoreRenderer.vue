@@ -12,7 +12,7 @@
     <InlineInput
       v-model="formData.content"
       label="Content"
-      placeholder="The word or phrase"
+      placeholder="..."
       required
       size="large"
       @update:modelValue="$emit('field-change')"
