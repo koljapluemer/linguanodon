@@ -58,13 +58,7 @@ export class VocabRepo implements VocabRepoContract {
   async getVocabByUID(uid: string): Promise<VocabData | undefined> {
     const vocab = await vocabDb.vocab.get(uid);
     if (vocab) {
-      const ensured = this.ensureVocabFields(vocab);
-      console.log('🔧 REPO: getVocabByUID retrieved from Dexie:', {
-        uid: ensured.uid,
-        images: ensured.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
-        sound: ensured.sound ? { uid: ensured.sound.uid, hasBlob: !!ensured.sound.blob, blobType: ensured.sound.blob?.type, blobSize: ensured.sound.blob?.size } : 'none'
-      });
-      return ensured;
+      return this.ensureVocabFields(vocab);
     }
     return undefined;
   }
@@ -328,10 +322,6 @@ export class VocabRepo implements VocabRepoContract {
   }
 
   async saveVocab(vocab: Omit<VocabData, 'uid' | 'progress'>): Promise<VocabData> {
-    console.log('🔧 REPO: saveVocab input:', {
-      images: vocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
-      sound: vocab.sound ? { uid: vocab.sound.uid, hasBlob: !!vocab.sound.blob, blobType: vocab.sound.blob?.type, blobSize: vocab.sound.blob?.size } : 'none'
-    });
     
     const newVocab: VocabData = {
       uid: crypto.randomUUID(),
@@ -358,22 +348,11 @@ export class VocabRepo implements VocabRepoContract {
       }
     };
 
-    console.log('🔧 REPO: newVocab being stored in Dexie:', {
-      uid: newVocab.uid,
-      images: newVocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
-      sound: newVocab.sound ? { uid: newVocab.sound.uid, hasBlob: !!newVocab.sound.blob, blobType: newVocab.sound.blob?.type, blobSize: newVocab.sound.blob?.size } : 'none'
-    });
-
     await vocabDb.vocab.add(newVocab);
     return newVocab;
   }
 
   async updateVocab(vocab: VocabData): Promise<void> {
-    console.log('🔧 REPO: updateVocab input:', {
-      uid: vocab.uid,
-      images: vocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
-      sound: vocab.sound ? { uid: vocab.sound.uid, hasBlob: !!vocab.sound.blob, blobType: vocab.sound.blob?.type, blobSize: vocab.sound.blob?.size } : 'none'
-    });
     
     // Set hasImage and hasSound based on actual data
     vocab.hasImage = vocab.images && vocab.images.length > 0;
@@ -637,7 +616,6 @@ export class VocabRepo implements VocabRepoContract {
       .limit(count)
       .toArray();
 
-    console.log('getting getVocabWithLowestDueDate', vocab)
     return vocab.map(v => this.ensureVocabFields(v));
   }
 
@@ -880,23 +858,6 @@ export class VocabRepo implements VocabRepoContract {
 
   // Eyes and Ears operations
   async getRandomUnseenVocabWithSoundAndImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null> {
-    console.log('🔍 DEBUG: getRandomUnseenVocabWithSoundAndImages called with languages:', languages);
-    
-    // First, let's see what vocab we have in total for these languages
-    const allVocabInLanguages = await vocabDb.vocab
-      .where('language')
-      .anyOf(languages)
-      .toArray();
-    
-    console.log('🔍 DEBUG: Total vocab in languages:', allVocabInLanguages.length);
-    
-    // Check how many have sound/image
-    const withSound = allVocabInLanguages.filter(v => v.hasSound === true);
-    const withImage = allVocabInLanguages.filter(v => v.hasImage === true);
-    const withBoth = allVocabInLanguages.filter(v => v.hasSound === true && v.hasImage === true);
-    
-    console.log('🔍 DEBUG: Vocab with sound:', withSound.length, 'with image:', withImage.length, 'with both:', withBoth.length);
-    
     const vocab = await vocabDb.vocab
       .where('language')
       .anyOf(languages)
@@ -909,16 +870,12 @@ export class VocabRepo implements VocabRepoContract {
       )
       .toArray();
 
-    console.log('🔍 DEBUG: Found', vocab.length, 'unseen vocab with sound and images');
-    
     if (vocab.length === 0) return null;
     const ensured = vocab.map(v => this.ensureVocabFields(v));
     return pickRandom(ensured, 1)[0];
   }
 
   async getRandomDueVocabWithSoundAndImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null> {
-    console.log('🔍 DEBUG: getRandomDueVocabWithSoundAndImages called with languages:', languages);
-    
     const vocab = await vocabDb.vocab
       .where('language')
       .anyOf(languages)
@@ -932,8 +889,6 @@ export class VocabRepo implements VocabRepoContract {
       )
       .toArray();
 
-    console.log('🔍 DEBUG: Found', vocab.length, 'due vocab with sound and images');
-    
     if (vocab.length === 0) return null;
     const ensured = vocab.map(v => this.ensureVocabFields(v));
     return pickRandom(ensured, 1)[0];

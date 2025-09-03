@@ -48,7 +48,6 @@
         @click="selectOption(index)"
         :disabled="isAnswered"
         :class="getButtonClass(index)"
-        class="btn btn-lg p-4 h-32"
       >
         <VocabImageDisplay :image="option.image" />
       </button>
