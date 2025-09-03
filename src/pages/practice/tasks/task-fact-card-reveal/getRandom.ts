@@ -1,15 +1,15 @@
-import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/entities/tasks/Task';
 import { generateFactCardReveal } from '@/pages/practice/tasks/task-fact-card-reveal/generate';
 
-export async function getRandomFactCardRevealTask(
-  factCardRepo: FactCardRepoContract,
-  languageCodes: string[],
-  factCardBlockList?: string[]
-): Promise<Task | null> {
+export async function getRandomFactCardRevealTask({
+  factCardRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!factCardRepo) return null;
   try {
     // Get already seen due fact cards
-    const dueFactCards = await factCardRepo.getRandomAlreadySeenDueFactCards(10, languageCodes, factCardBlockList);
+    const dueFactCards = await factCardRepo.getRandomAlreadySeenDueFactCards(10, languageCodes);
     
     if (dueFactCards.length === 0) return null;
     

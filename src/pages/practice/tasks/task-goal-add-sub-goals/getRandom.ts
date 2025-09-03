@@ -1,11 +1,12 @@
-import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/entities/tasks/Task';
 import { generateAddSubGoals } from '@/pages/practice/tasks/task-goal-add-sub-goals/generate';
 
-export async function getRandomAddSubGoalsTask(
-  goalRepo: GoalRepoContract,
-  languageCodes: string[]
-): Promise<Task | null> {
+export async function getRandomAddSubGoalsTask({
+  goalRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!goalRepo) return null;
   try {
     // Get incomplete goals (more efficient than all goals)
     const goals = await goalRepo.getIncompleteGoals();

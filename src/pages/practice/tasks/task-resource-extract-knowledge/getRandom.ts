@@ -1,11 +1,12 @@
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/entities/tasks/Task';
 import { generateExtractKnowledgeFromResource } from '@/pages/practice/tasks/task-resource-extract-knowledge/generate';
 
-export async function getRandomExtractKnowledgeTask(
-  resourceRepo: ResourceRepoContract,
-  languageCodes: string[]
-): Promise<Task | null> {
+export async function getRandomExtractKnowledgeTask({
+  resourceRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!resourceRepo) return null;
   try {
     // Use the targeted method to get a due resource that needs extraction
     const resource = await resourceRepo.getRandomDueResource(languageCodes);

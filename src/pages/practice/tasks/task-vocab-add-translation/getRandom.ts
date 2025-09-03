@@ -1,16 +1,15 @@
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/entities/tasks/Task';
 import { generateAddTranslation } from '@/pages/practice/tasks/task-vocab-add-translation/generate';
 
-export async function getRandomAddTranslationTask(
-  vocabRepo: VocabRepoContract,
-  _translationRepo: TranslationRepoContract,
-  languageCodes: string[],
-  vocabBlockList?: string[]
-): Promise<Task | null> {
+export async function getRandomAddTranslationTask({
+  vocabRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!vocabRepo) return null;
+  
   try {
-    const vocab = await vocabRepo.getRandomVocabWithNoTranslationsInLanguages(languageCodes, vocabBlockList);
+    const vocab = await vocabRepo.getRandomVocabWithNoTranslationsInLanguages(languageCodes);
     if (!vocab) return null;
     return generateAddTranslation(vocab);
   } catch (error) {

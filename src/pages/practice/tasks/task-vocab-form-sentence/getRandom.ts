@@ -1,22 +1,20 @@
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/entities/tasks/Task';
 import { generateTaskFormSentenceFromTwoVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
 import { randomFromArray, pickRandom } from '@/shared/utils/arrayUtils';
 
-export async function getRandomVocabFormSentenceTask(
-  vocabRepo: VocabRepoContract,
-  _translationRepo: TranslationRepoContract,
-  languageCodes: string[],
-  vocabBlockList?: string[]
-): Promise<Task | null> {
+export async function getRandomVocabFormSentenceTask({
+  vocabRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!vocabRepo) return null;
   try {
     // Randomly select a single language to focus on
     const selectedLanguage = randomFromArray(languageCodes);
     if (!selectedLanguage) return null;
     
     // Get due vocab for the selected language only
-    const vocabItems = await vocabRepo.getDueVocabInLanguage(selectedLanguage, vocabBlockList);
+    const vocabItems = await vocabRepo.getDueVocabInLanguage(selectedLanguage);
     
     if (vocabItems.length < 2) return null;
     

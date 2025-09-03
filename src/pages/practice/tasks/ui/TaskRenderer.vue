@@ -1,6 +1,8 @@
 <template>
   <div class="space-y-2">
-    <LanguageDisplay v-if="languageData" :language="languageData" variant="short" />
+    <div class="badge">
+      <LanguageDisplay v-if="languageData" :language="languageData" />
+    </div>
     <TaskPrompt :prompt="props.task.prompt" />
     <component :is="getTaskComponent(props.task.taskType)" :task="props.task" @finished="handleTaskFinished" />
   </div>

@@ -1,6 +1,4 @@
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
 import { generateClozeReveal } from '@/pages/practice/tasks/task-cloze-reveal/generate';
@@ -15,18 +13,17 @@ async function tryGenerateFromVocab(vocab: VocabData) {
   return generateClozeReveal(vocab);
 }
 
-export async function getRandomClozeRevealTask(
-  vocabRepo: VocabRepoContract,
-  resourceRepo: ResourceRepoContract,
-  _translationRepo: TranslationRepoContract,
-  languageCodes: string[],
-  vocabBlockList?: string[]
-): Promise<Task | null> {
+export async function getRandomClozeRevealTask({
+  vocabRepo,
+  resourceRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!vocabRepo || !resourceRepo) return null;
   try {
     // 25% chance to try immersion resource first
     if (Math.random() < 0.25) {
       const immersionVocab = await getRandomDueVocabFromRandomValidImmersionResource(
-        resourceRepo, vocabRepo, languageCodes, vocabBlockList
+        resourceRepo, vocabRepo, languageCodes
       );
       if (immersionVocab) {
         const task = await tryGenerateFromVocab(immersionVocab);
@@ -35,11 +32,11 @@ export async function getRandomClozeRevealTask(
     }
 
     // Get due sentence vocab with level <= 6 directly from DB
-    const sentenceVocab = await vocabRepo.getDueSentenceVocabWithMaxLevel(languageCodes, 6, vocabBlockList);
+    const sentenceVocab = await vocabRepo.getDueSentenceVocabWithMaxLevel(languageCodes, 6);
     
     if (sentenceVocab.length === 0) {
       // Fallback to unseen sentence vocab (level -1, so no level filtering needed)
-      const unseenSentenceVocab = await vocabRepo.getRandomUnseenSentenceVocab(20, languageCodes, vocabBlockList);
+      const unseenSentenceVocab = await vocabRepo.getRandomUnseenSentenceVocab(20, languageCodes);
       if (unseenSentenceVocab.length === 0) return null;
       
       for (const vocab of unseenSentenceVocab) {

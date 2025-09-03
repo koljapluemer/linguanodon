@@ -1,20 +1,20 @@
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/entities/tasks/Task';
 import { generateVocabTryToRemember } from '@/pages/practice/tasks/task-vocab-try-to-remember/generate';
 import { getRandomNewVocabFromRandomValidImmersionResource } from '../../modes/utils/getRandomNewVocabFromRandomValidImmersionResource';
 
-export async function getRandomVocabTryToRememberTask(
-  vocabRepo: VocabRepoContract,
-  resourceRepo: ResourceRepoContract,
-  languageCodes: string[],
-  vocabBlockList?: string[]
-): Promise<Task | null> {
+export async function getRandomVocabTryToRememberTask({
+  vocabRepo,
+  resourceRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!vocabRepo || !resourceRepo) return null;
+  
   try {
     // 25% chance to try immersion resource first
     if (Math.random() < 0.25) {
       const immersionVocab = await getRandomNewVocabFromRandomValidImmersionResource(
-        resourceRepo, vocabRepo, languageCodes, vocabBlockList
+        resourceRepo, vocabRepo, languageCodes
       );
       if (immersionVocab) {
         return generateVocabTryToRemember(immersionVocab);
@@ -22,7 +22,7 @@ export async function getRandomVocabTryToRememberTask(
     }
 
     // Get unseen vocab (excluding sentences for try-to-remember tasks)
-    const allUnseenVocab = await vocabRepo.getRandomUnseenVocabInLanguages(languageCodes, 10, undefined, vocabBlockList);
+    const allUnseenVocab = await vocabRepo.getRandomUnseenVocabInLanguages(languageCodes, 10);
     const vocabItems = allUnseenVocab.filter(vocab => vocab.length !== 'sentence');
     
     if (vocabItems.length === 0) return null;

@@ -1,15 +1,16 @@
-import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Task } from '@/entities/tasks/Task';
 import { generateFactCardTryToRemember } from '@/pages/practice/tasks/task-fact-card-try-to-remember/generate';
 
-export async function getRandomFactCardTryToRememberTask(
-  factCardRepo: FactCardRepoContract,
-  languageCodes: string[],
-  factCardBlockList?: string[]
-): Promise<Task | null> {
+export async function getRandomFactCardTryToRememberTask({
+  factCardRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!factCardRepo) return null;
+  
   try {
     // Get unseen fact cards
-    const unseenFactCards = await factCardRepo.getRandomUnseenFactCards(10, languageCodes, factCardBlockList);
+    const unseenFactCards = await factCardRepo.getRandomUnseenFactCards(10, languageCodes);
     
     if (unseenFactCards.length === 0) return null;
     

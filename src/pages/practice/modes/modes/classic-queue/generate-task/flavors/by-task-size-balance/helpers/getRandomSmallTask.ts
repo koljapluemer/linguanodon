@@ -14,16 +14,27 @@ type SmallTaskGenerator = () => Promise<Task | null>;
 export async function getRandomSmallTask(
   context: TaskGeneratorContext
 ): Promise<Task | null> {
-  const { vocabRepo, translationRepo, resourceRepo, factCardRepo, languageCodes, vocabBlockList } = context;
+  const { vocabRepo, translationRepo, resourceRepo, factCardRepo, goalRepo, noteRepo, languageCodes } = context;
+  
+  // Create unified context for new generators
+  const unifiedContext = {
+    vocabRepo,
+    translationRepo,
+    resourceRepo,
+    factCardRepo,
+    goalRepo,
+    noteRepo,
+    languageCodes
+  };
   
   const smallTaskGenerators: SmallTaskGenerator[] = [
-    () => getRandomVocabTryToRememberTask(vocabRepo, resourceRepo, languageCodes, vocabBlockList),
-    () => getRandomVocabRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList),
-    () => getRandomVocabChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList),
-    () => getRandomClozeChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList),
-    () => getRandomClozeRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList),
-    () => getRandomFactCardTryToRememberTask(factCardRepo, languageCodes, vocabBlockList),
-    () => getRandomFactCardRevealTask(factCardRepo, languageCodes, vocabBlockList)
+    () => getRandomVocabTryToRememberTask(unifiedContext),
+    () => getRandomVocabRevealTask(unifiedContext),
+    () => getRandomVocabChoiceTask(unifiedContext),
+    () => getRandomClozeChoiceTask(unifiedContext),
+    () => getRandomClozeRevealTask(unifiedContext),
+    () => getRandomFactCardTryToRememberTask(unifiedContext),
+    () => getRandomFactCardRevealTask(unifiedContext)
   ];
 
   // Shuffle and try generators in random order

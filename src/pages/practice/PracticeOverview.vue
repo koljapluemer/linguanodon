@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Play, BookOpen, Target, RotateCcw, ImagePlus, Eye } from 'lucide-vue-next';
+import { Play, BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -37,6 +37,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-eyes-and-ears' },
     icon: Eye,
     description: 'Match sounds to images for vocab with audio and visuals'
+  },
+  {
+    name: 'Ultrarandom',
+    route: { name: 'practice-mode-ultrarandom' },
+    icon: Dices,
+    description: 'Completely random tasks from all available task types'
   }
 ];
 </script>

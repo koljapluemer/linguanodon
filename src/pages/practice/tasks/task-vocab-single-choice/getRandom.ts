@@ -1,6 +1,4 @@
-import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
-import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
 import { 
@@ -23,13 +21,11 @@ async function tryGenerateFromVocab(vocab: VocabData) {
   return availableGenerators[randomIndex]();
 }
 
-export async function getRandomVocabChoiceTask(
-  vocabRepo: VocabRepoContract,
-  _resourceRepo: ResourceRepoContract,
-  _translationRepo: TranslationRepoContract,
-  languageCodes: string[],
-  vocabBlockList?: string[]
-): Promise<Task | null> {
+export async function getRandomVocabChoiceTask({
+  vocabRepo,
+  languageCodes
+}: RepositoriesContext & { languageCodes: string[] }): Promise<Task | null> {
+  if (!vocabRepo) return null;
   try {
     // 25% chance to try immersion resource first
     if (Math.random() < 0.25) {
@@ -42,7 +38,7 @@ export async function getRandomVocabChoiceTask(
     }
 
     // Get due vocab (excluding sentences for choice tasks)
-    const allDueVocab = await vocabRepo.getDueVocabInLanguages(languageCodes, undefined, vocabBlockList);
+    const allDueVocab = await vocabRepo.getDueVocabInLanguages(languageCodes);
     const eligibleVocab = allDueVocab.filter(vocab => vocab.length !== 'sentence');
     
     if (eligibleVocab.length === 0) return null;
