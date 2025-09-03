@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices } from 'lucide-vue-next';
+import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices, Zap } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -36,7 +36,13 @@ const practiceOptions = [
     name: 'Ultrarandom',
     route: { name: 'practice-mode-ultrarandom' },
     icon: Dices,
-    description: 'Completely random tasks from all available task types'
+    description: 'Completely random tasks'
+  },
+  {
+    name: 'Illegal Immersion',
+    route: { name: 'practice-mode-illegal-immersion' },
+    icon: Zap,
+    description: 'Drill all the vocab for a piece of immersion content, then check if you understand it'
   }
 ];
 </script>

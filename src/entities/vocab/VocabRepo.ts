@@ -155,7 +155,7 @@ export class VocabRepo implements VocabRepoContract {
     });
   }
 
-  async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
+  async scoreVocab(vocabId: string, rating: Rating, immediateDue?: boolean): Promise<void> {
     const vocab = await vocabDb.vocab.get(vocabId);
     if (!vocab) {
       return;
@@ -207,6 +207,11 @@ export class VocabRepo implements VocabRepoContract {
       ...vocab.progress,
       ...updatedCard
     };
+
+    // If immediateDue is true and rating was low (Again/Hard), make it due now
+    if (immediateDue && (fsrsRating === Rating.Again || fsrsRating === Rating.Hard)) {
+      vocab.progress.due = new Date();
+    }
 
     await vocabDb.vocab.put(vocab);
   }

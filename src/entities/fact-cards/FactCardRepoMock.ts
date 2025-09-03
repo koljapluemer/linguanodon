@@ -56,6 +56,15 @@ export class FactCardRepoMock implements FactCardRepoContract {
     });
   }
 
+  async getFactCardsByUIDs(uids: string[]): Promise<FactCardData[]> {
+    console.info(`FactCardRepoMock: getFactCardsByUIDs([${uids.length} uids]) - returning sample fact cards`);
+    return uids.map(uid => this.createSampleFactCard({
+      uid,
+      front: `Question for card ${uid.slice(0, 8)}`,
+      back: `Answer for card ${uid.slice(0, 8)}`
+    }));
+  }
+
   async saveFactCard(factCard: Omit<FactCardData, 'uid' | 'progress'>): Promise<FactCardData> {
     console.info(`FactCardRepoMock: saveFactCard("${factCard.front}") - would save new fact card`);
     return this.createSampleFactCard({
@@ -73,8 +82,8 @@ export class FactCardRepoMock implements FactCardRepoContract {
   }
 
   // Progress operations
-  async scoreFactCard(factCardId: string, rating: Rating): Promise<void> {
-    console.info(`FactCardRepoMock: scoreFactCard(${factCardId}, ${rating}) - would score fact card with rating`);
+  async scoreFactCard(factCardId: string, rating: Rating, immediateDue?: boolean): Promise<void> {
+    console.info(`FactCardRepoMock: scoreFactCard(${factCardId}, ${rating}, ${immediateDue}) - would score fact card with rating`);
   }
 
   async updateLastReview(factCardId: string): Promise<void> {

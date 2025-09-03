@@ -10,6 +10,9 @@ import MarkdownRenderer from '@/shared/ui/MarkdownRenderer.vue';
 interface Props {
   task: Task;
   repositories: RepositoriesContext;
+  modeContext?: {
+    setWrongVocabDueAgainImmediately?: boolean;
+  };
 }
 
 const props = defineProps<Props>();
@@ -36,7 +39,8 @@ const handleRating = async (rating: Rating) => {
   
   try {
     // Score fact card and update last review
-    await factCardRepo.scoreFactCard(factCard.value.uid, rating);
+    const immediateDue = props.modeContext?.setWrongVocabDueAgainImmediately || false;
+    await factCardRepo.scoreFactCard(factCard.value.uid, rating, immediateDue);
     await factCardRepo.updateLastReview(factCard.value.uid);
     
     emit('finished');

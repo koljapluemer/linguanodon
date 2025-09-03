@@ -5,12 +5,13 @@ export interface FactCardRepoContract {
   // Basic CRUD operations
   getAllFactCards(): Promise<FactCardData[]>;
   getFactCardByUID(uid: string): Promise<FactCardData | undefined>;
+  getFactCardsByUIDs(uids: string[]): Promise<FactCardData[]>;
   saveFactCard(factCard: Omit<FactCardData, 'uid' | 'progress'>): Promise<FactCardData>;
   updateFactCard(factCard: FactCardData): Promise<void>;
   deleteFactCard(uid: string): Promise<void>;
 
   // Progress operations
-  scoreFactCard(factCardId: string, rating: Rating): Promise<void>;
+  scoreFactCard(factCardId: string, rating: Rating, immediateDue?: boolean): Promise<void>;
   updateLastReview(factCardId: string): Promise<void>;
 
   // Task generation operations

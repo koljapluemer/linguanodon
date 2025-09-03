@@ -1,5 +1,5 @@
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
-import type { GoalData } from '@/entities/goals/GoalData';
+
 import type { Task } from '@/pages/practice/Task';
 import { generateAddVocabToGoal } from '@/pages/practice/tasks/task-goal-add-vocab/generate';
 import { generateAddSubGoals } from '@/pages/practice/tasks/task-goal-add-sub-goals/generate';

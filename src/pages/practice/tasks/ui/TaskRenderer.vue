@@ -8,6 +8,7 @@
       :is="getTaskComponent(props.task.taskType)" 
       :task="props.task" 
       :repositories="props.repositories"
+      :mode-context="props.modeContext"
       @finished="handleTaskFinished" 
     />
   </div>
@@ -25,6 +26,9 @@ import TaskPrompt from './TaskPrompt.vue';
 interface Props {
   task: Task;
   repositories: RepositoriesContext;
+  modeContext?: {
+    setWrongVocabDueAgainImmediately?: boolean;
+  };
 }
 
 const props = defineProps<Props>();

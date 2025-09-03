@@ -11,6 +11,9 @@ import { generateClozeFromText, isRTLText, type ClozeData } from '@/pages/practi
 interface Props {
   task: Task;
   repositories: RepositoriesContext;
+  modeContext?: {
+    setWrongVocabDueAgainImmediately?: boolean;
+  };
 }
 
 const emit = defineEmits<{
@@ -97,7 +100,8 @@ const handleRating = async (rating: Rating) => {
   if (!vocab.value) return;
   
   try {
-    await vocabRepo.scoreVocab(vocab.value.uid, rating);
+    const immediateDue = props.modeContext?.setWrongVocabDueAgainImmediately || false;
+    await vocabRepo.scoreVocab(vocab.value.uid, rating, immediateDue);
     await vocabRepo.updateLastReview(vocab.value.uid);
     
     emit('finished');

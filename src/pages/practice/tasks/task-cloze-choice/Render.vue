@@ -16,6 +16,9 @@ interface AnswerOption {
 interface Props {
   task: Task;
   repositories: RepositoriesContext;
+  modeContext?: {
+    setWrongVocabDueAgainImmediately?: boolean;
+  };
 }
 
 const emit = defineEmits<{
@@ -174,7 +177,8 @@ const handleCompletion = async () => {
   
   try {
     const rating = firstAttemptWrong.value ? Rating.Again : Rating.Good;
-    await vocabRepo.scoreVocab(vocab.value.uid, rating);
+    const immediateDue = props.modeContext?.setWrongVocabDueAgainImmediately || false;
+    await vocabRepo.scoreVocab(vocab.value.uid, rating, immediateDue);
     await vocabRepo.updateLastReview(vocab.value.uid);
     
     setTimeout(() => emit('finished'), 750);

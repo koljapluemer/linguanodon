@@ -3,7 +3,7 @@ import type { LanguageData } from './LanguageData';
 
 export class LanguageRepoMock implements LanguageRepoContract {
   
-  private createSampleLanguage(overrides: Partial<LanguageData> = {}): LanguageData {
+  private _createSampleLanguage(overrides: Partial<LanguageData> = {}): LanguageData {
     return {
       code: 'en',
       name: 'English',

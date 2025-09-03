@@ -1,7 +1,7 @@
 import Dexie, { type Table } from 'dexie';
 import type { FactCardRepoContract } from './FactCardRepoContract';
 import type { FactCardData } from './FactCardData';
-import { createEmptyCard, fsrs, type Rating } from 'ts-fsrs';
+import { createEmptyCard, fsrs, Rating } from 'ts-fsrs';
 
 class FactCardDatabase extends Dexie {
   factCards!: Table<FactCardData>;
@@ -38,6 +38,11 @@ export class FactCardRepo implements FactCardRepoContract {
     return factCard ? this.ensureFactCardFields(factCard) : undefined;
   }
 
+  async getFactCardsByUIDs(uids: string[]): Promise<FactCardData[]> {
+    const factCards = await this.db.factCards.where('uid').anyOf(uids).toArray();
+    return factCards.map(fc => this.ensureFactCardFields(fc));
+  }
+
   async saveFactCard(factCard: Omit<FactCardData, 'uid' | 'progress'>): Promise<FactCardData> {
     const newFactCard: FactCardData = {
       uid: crypto.randomUUID(),
@@ -68,7 +73,7 @@ export class FactCardRepo implements FactCardRepoContract {
     await this.db.factCards.delete(uid);
   }
 
-  async scoreFactCard(factCardId: string, rating: Rating): Promise<void> {
+  async scoreFactCard(factCardId: string, rating: Rating, immediateDue?: boolean): Promise<void> {
     const factCard = await this.getFactCardByUID(factCardId);
     if (!factCard) return;
 
@@ -88,6 +93,11 @@ export class FactCardRepo implements FactCardRepoContract {
         last_review: new Date()
       }
     };
+
+    // If immediateDue is true and rating was low (Again/Hard), make it due now
+    if (immediateDue && (rating === Rating.Again || rating === Rating.Hard)) {
+      updatedFactCard.progress.due = new Date();
+    }
 
     await this.updateFactCard(updatedFactCard);
   }

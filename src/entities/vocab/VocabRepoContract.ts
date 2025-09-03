@@ -29,7 +29,7 @@ export interface VocabRepoContract {
   deleteVocab(id: string): Promise<void>;
   
   // Progress operations
-  scoreVocab(vocabId: string, rating: Rating): Promise<void>;
+  scoreVocab(vocabId: string, rating: Rating, immediateDue?: boolean): Promise<void>;
   updateLastReview(vocabId: string): Promise<void>;
   
   // Pronunciation operations

@@ -9,6 +9,9 @@ import SpacedRepetitionRating from '@/pages/practice/tasks/ui/SpacedRepetitionRa
 interface Props {
   task: Task;
   repositories: RepositoriesContext;
+  modeContext?: {
+    setWrongVocabDueAgainImmediately?: boolean;
+  };
 }
 
 const props = defineProps<Props>();
@@ -65,7 +68,9 @@ const handleRating = async (rating: Rating) => {
   
   try {
     // Score vocab and update last review
-    await vocabRepo.scoreVocab(vocab.value.uid, rating);
+    // In illegal immersion mode, use immediateDue for low ratings
+    const immediateDue = props.modeContext?.setWrongVocabDueAgainImmediately || false;
+    await vocabRepo.scoreVocab(vocab.value.uid, rating, immediateDue);
     await vocabRepo.updateLastReview(vocab.value.uid);
     
     emit('finished');

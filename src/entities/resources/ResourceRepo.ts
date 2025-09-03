@@ -67,13 +67,13 @@ export class ResourceRepo implements ResourceRepoContract {
   async getValidImmersionResources(languages: string[]): Promise<ResourceData[]> {
     const allResources = await this.db.resources.toArray();
     
-    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
     
     return allResources.filter(resource => 
       resource.isImmersionContent &&
       languages.includes(resource.language) &&
       !resource.finishedExtracting &&
-      (!resource.lastShownAt || resource.lastShownAt < tenMinutesAgo)
+      (!resource.lastShownAt || resource.lastShownAt < fiveMinutesAgo)
     );
   }
 

@@ -1,7 +1,27 @@
 import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
 import type { VocabData } from './VocabData';
 import type { Rating } from 'ts-fsrs';
+import type { LearningProgress } from '@/shared/types/LearningProgress';
 import { createEmptyCard } from 'ts-fsrs';
+
+function createMockProgress(overrides: Partial<LearningProgress> = {}): LearningProgress {
+  const base = createEmptyCard();
+  return {
+    ...base,
+    stability: base.stability ?? 1,
+    difficulty: base.difficulty ?? 5,
+    elapsed_days: base.elapsed_days ?? 0,
+    scheduled_days: base.scheduled_days ?? 1,
+    reps: base.reps ?? 0,
+    lapses: base.lapses ?? 0,
+    state: base.state ?? 0,
+    last_review: base.last_review ?? new Date(),
+    due: base.due ?? new Date(),
+    streak: 0,
+    level: -1,
+    ...overrides
+  };
+}
 
 export class VocabRepoMock implements VocabRepoContract {
   
@@ -64,7 +84,7 @@ export class VocabRepoMock implements VocabRepoContract {
       this.createSampleVocab({ 
         content: `due-vocab-${i}`,
         language: languages[0] || 'en',
-        progress: { ...createEmptyCard(), streak: 2, level: 1, due: new Date(Date.now() - 1000 * 60 * 60) }
+        progress: createMockProgress({ streak: 2, level: 1, due: new Date(Date.now() - 1000 * 60 * 60) })
       })
     );
   }
@@ -97,7 +117,7 @@ export class VocabRepoMock implements VocabRepoContract {
         content: 'This is a due sentence',
         language: languages[0] || 'en',
         length: 'sentence',
-        progress: { ...createEmptyCard(), streak: 1, level: Math.min(maxLevel, 2), due: new Date(Date.now() - 1000 * 60 * 60) }
+        progress: createMockProgress({ streak: 1, level: Math.min(maxLevel, 2), due: new Date(Date.now() - 1000 * 60 * 60) })
       }),
       this.createSampleVocab({ 
         content: 'Another due sentence',
@@ -157,8 +177,8 @@ export class VocabRepoMock implements VocabRepoContract {
   }
 
   // Progress operations
-  async scoreVocab(vocabId: string, rating: Rating): Promise<void> {
-    console.info(`VocabRepoMock: scoreVocab(${vocabId}, ${rating}) - would score vocab with rating`);
+  async scoreVocab(vocabId: string, rating: Rating, immediateDue?: boolean): Promise<void> {
+    console.info(`VocabRepoMock: scoreVocab(${vocabId}, ${rating}, ${immediateDue}) - would score vocab with rating`);
   }
 
   async updateLastReview(vocabId: string): Promise<void> {
