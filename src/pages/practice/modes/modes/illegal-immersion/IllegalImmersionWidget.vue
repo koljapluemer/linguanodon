@@ -11,7 +11,7 @@ import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
-import { generateIllegalImmersionTask } from './generateIllegalImmersionTasks';
+import { generateIllegalImmersionTask, getIllegalImmersionProgress } from './generateIllegalImmersionTasks';
 
 // Inject repositories
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
@@ -49,6 +49,20 @@ const {
 } = useQueueState();
 
 const lastUsedContentUid = ref<string | null>(null);
+
+// Progress tracking
+const progressInfo = ref({
+  currentPhase: 'initial-round' as 'initial-round' | 'due-round' | 'consume-content',
+  totalEstimatedTasks: 0,
+  completedTasks: 0,
+  progressPercentage: 0,
+  phaseDescription: ''
+});
+
+// Update progress info
+function updateProgress() {
+  progressInfo.value = getIllegalImmersionProgress();
+}
 
 // Generate next illegal immersion task
 async function generateNextTask(): Promise<Task | null> {
@@ -89,6 +103,9 @@ async function tryTransitionToTask(): Promise<boolean> {
       // Generate next task for preloading
       const nextTask = await generateNextTask();
       
+      // Update progress after generating tasks
+      updateProgress();
+      
       clearDelayedLoading();
       setTask(currentTask, nextTask);
       return true;
@@ -112,6 +129,9 @@ async function initializeQueue() {
     if (!success) {
       clearDelayedLoading();
       setEmpty('No immersion content is currently available for practice.');
+    } else {
+      // Initialize progress tracking
+      updateProgress();
     }
   } catch (error) {
     console.error('Initialization failed:', error);
@@ -144,6 +164,9 @@ async function completeCurrentTask() {
       if (newNextTask && state.value.status === 'task') {
         state.value.nextTask = newNextTask;
       }
+      
+      // Update progress after task completion
+      updateProgress();
     } catch (error) {
       console.error('Error generating next task:', error);
     }
@@ -152,6 +175,9 @@ async function completeCurrentTask() {
     const success = await tryTransitionToTask();
     if (!success) {
       setEmpty('Immersion session complete! No more content available.');
+    } else {
+      // Update progress after task transition
+      updateProgress();
     }
   }
 }
@@ -232,6 +258,30 @@ const handleTaskFinished = async () => {
       </div>
     </div>
   </Transition>
+
+  <!-- Progress Bar -->
+  <div v-if="state.status === 'task' && !showLoadingUI && progressInfo.totalEstimatedTasks > 0" class="mb-6">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium text-base-content/70">{{ progressInfo.phaseDescription }}</span>
+      <span class="text-sm font-medium text-base-content/70">
+        {{ progressInfo.completedTasks }}/{{ progressInfo.totalEstimatedTasks }}
+      </span>
+    </div>
+    <div class="w-full bg-base-300 rounded-full h-2.5">
+      <div 
+        class="bg-primary h-2.5 rounded-full transition-all duration-300"
+        :style="{ width: progressInfo.progressPercentage + '%' }"
+      ></div>
+    </div>
+    <div class="flex items-center justify-between mt-1">
+      <span class="text-xs text-base-content/50">
+        {{ Math.round(progressInfo.progressPercentage) }}% complete
+      </span>
+      <span class="text-xs text-base-content/50 capitalize">
+        {{ progressInfo.currentPhase.replace('-', ' ') }}
+      </span>
+    </div>
+  </div>
 
   <!-- Task -->
   <div v-if="state.status === 'task' && !showLoadingUI">

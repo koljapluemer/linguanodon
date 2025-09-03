@@ -18,6 +18,10 @@ interface IllegalImmersionState {
   dueVocabQueue: VocabData[];
   dueFactCardQueue: FactCardData[];
   phase: 'initial-round' | 'due-round' | 'consume-content';
+  initialVocabCount: number;
+  initialFactCardCount: number;
+  completedInitialTasks: number;
+  completedDueTasks: number;
 }
 
 // Global state for the illegal immersion mode
@@ -27,7 +31,11 @@ let immersionState: IllegalImmersionState = {
   factCardQueue: [],
   dueVocabQueue: [],
   dueFactCardQueue: [],
-  phase: 'initial-round'
+  phase: 'initial-round',
+  initialVocabCount: 0,
+  initialFactCardCount: 0,
+  completedInitialTasks: 0,
+  completedDueTasks: 0
 };
 
 export async function generateIllegalImmersionTask(
@@ -79,6 +87,7 @@ export async function generateIllegalImmersionTask(
       
       // Initial round complete, move to due round
       immersionState.phase = 'due-round';
+      immersionState.completedDueTasks = 0; // Reset due task counter
       await refreshDueQueues(immersionState.currentResource, vocabRepo, factCardRepo);
     }
     
@@ -125,11 +134,15 @@ async function initializeQueuesForResource(
     factCardRepo.getFactCardsByUIDs(resource.factCards)
   ]);
   
-  // Shuffle the arrays
+  // Shuffle the arrays and track initial counts
   immersionState.vocabQueue = shuffleArray(vocabList);
   immersionState.factCardQueue = shuffleArray(factCardList);
   immersionState.dueVocabQueue = [];
   immersionState.dueFactCardQueue = [];
+  immersionState.initialVocabCount = vocabList.length;
+  immersionState.initialFactCardCount = factCardList.length;
+  immersionState.completedInitialTasks = 0;
+  immersionState.completedDueTasks = 0;
 }
 
 async function getNextInitialRoundTask(
@@ -148,10 +161,18 @@ async function getNextInitialRoundTask(
   if (useVocab && immersionState.vocabQueue.length > 0) {
     const vocab = immersionState.vocabQueue.shift()!;
     const translations = await translationRepo.getTranslationsByIds(vocab.translations || []);
-    return await getRandomGeneratedTaskForVocab(vocab, translations, vocabRepo);
+    const task = await getRandomGeneratedTaskForVocab(vocab, translations, vocabRepo);
+    if (task) {
+      immersionState.completedInitialTasks++;
+    }
+    return task;
   } else if (immersionState.factCardQueue.length > 0) {
     const factCard = immersionState.factCardQueue.shift()!;
-    return await getRandomGeneratedTaskForFactCard(factCard);
+    const task = await getRandomGeneratedTaskForFactCard(factCard);
+    if (task) {
+      immersionState.completedInitialTasks++;
+    }
+    return task;
   }
   
   return null;
@@ -201,10 +222,18 @@ async function getNextDueRoundTask(
   if (useVocab && immersionState.dueVocabQueue.length > 0) {
     const vocab = immersionState.dueVocabQueue.shift()!;
     const translations = await translationRepo.getTranslationsByIds(vocab.translations || []);
-    return await getRandomGeneratedTaskForVocab(vocab, translations, vocabRepo);
+    const task = await getRandomGeneratedTaskForVocab(vocab, translations, vocabRepo);
+    if (task) {
+      immersionState.completedDueTasks++;
+    }
+    return task;
   } else if (immersionState.dueFactCardQueue.length > 0) {
     const factCard = immersionState.dueFactCardQueue.shift()!;
-    return await getRandomGeneratedTaskForFactCard(factCard);
+    const task = await getRandomGeneratedTaskForFactCard(factCard);
+    if (task) {
+      immersionState.completedDueTasks++;
+    }
+    return task;
   }
   
   return null;
@@ -217,6 +246,62 @@ function resetImmersionState(): void {
     factCardQueue: [],
     dueVocabQueue: [],
     dueFactCardQueue: [],
-    phase: 'initial-round'
+    phase: 'initial-round',
+    initialVocabCount: 0,
+    initialFactCardCount: 0,
+    completedInitialTasks: 0,
+    completedDueTasks: 0
+  };
+}
+
+// Export function to get current progress
+export function getIllegalImmersionProgress(): {
+  currentPhase: 'initial-round' | 'due-round' | 'consume-content';
+  totalEstimatedTasks: number;
+  completedTasks: number;
+  progressPercentage: number;
+  phaseDescription: string;
+} {
+  const { phase, initialVocabCount, initialFactCardCount, completedInitialTasks, completedDueTasks, dueVocabQueue, dueFactCardQueue } = immersionState;
+  
+  // Calculate total initial tasks (vocab + fact cards)
+  const totalInitialTasks = initialVocabCount + initialFactCardCount;
+  
+  // Estimate due tasks (current due queue + some buffer for newly created due items)
+  const currentDueTasks = dueVocabQueue.length + dueFactCardQueue.length;
+  
+  // Total estimated tasks includes:
+  // 1. Initial round tasks
+  // 2. Current due tasks + buffer (estimated 20% of initial tasks may become due again)
+  // 3. Final consumption task (1)
+  const estimatedAdditionalDueTasks = Math.max(currentDueTasks, Math.floor(totalInitialTasks * 0.2));
+  const totalEstimatedTasks = totalInitialTasks + estimatedAdditionalDueTasks + 1;
+  
+  let completedTasks = 0;
+  let phaseDescription = '';
+  
+  switch (phase) {
+    case 'initial-round':
+      completedTasks = completedInitialTasks;
+      phaseDescription = `Initial review (${completedInitialTasks}/${totalInitialTasks})`;
+      break;
+    case 'due-round':
+      completedTasks = totalInitialTasks + completedDueTasks;
+      phaseDescription = `Reviewing mistakes (${completedDueTasks} completed, ${currentDueTasks} remaining)`;
+      break;
+    case 'consume-content':
+      completedTasks = totalEstimatedTasks - 1; // All except the final task
+      phaseDescription = 'Final immersion task';
+      break;
+  }
+  
+  const progressPercentage = totalEstimatedTasks > 0 ? Math.min(100, (completedTasks / totalEstimatedTasks) * 100) : 0;
+  
+  return {
+    currentPhase: phase,
+    totalEstimatedTasks,
+    completedTasks,
+    progressPercentage,
+    phaseDescription
   };
 }
