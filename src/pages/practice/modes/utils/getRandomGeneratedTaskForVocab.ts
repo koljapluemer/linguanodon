@@ -1,4 +1,4 @@
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Task } from '@/pages/practice/Task';
 import { randomFromArray } from '@/shared/utils/arrayUtils';

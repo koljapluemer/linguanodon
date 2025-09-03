@@ -1,5 +1,5 @@
 import { fsrs } from 'ts-fsrs';
-import type { VocabData } from './vocab/VocabData';
+import type { VocabData } from './VocabData';
 
 /**
  * Calculate mastery level for a vocab item based on ts-fsrs retrievability

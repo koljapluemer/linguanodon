@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
 if (!vocabRepo) {

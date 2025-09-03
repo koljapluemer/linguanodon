@@ -15,7 +15,7 @@ import { computed, inject } from 'vue';
 import ManageVocabList from '@/features/manage-vocab-list/ManageVocabList.vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 
 const props = defineProps<{
   goal: GoalData;

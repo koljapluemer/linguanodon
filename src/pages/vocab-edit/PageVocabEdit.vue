@@ -48,7 +48,7 @@ import { useRoute } from 'vue-router';
 import VocabEditFormController from './ui/VocabEditFormController.vue';
 import DebugVocabProgress from '@/shared/ui/DebugVocabProgress.vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 import { calculateVocabMastery } from '@/entities/vocab/vocabMastery';
 
 const route = useRoute();

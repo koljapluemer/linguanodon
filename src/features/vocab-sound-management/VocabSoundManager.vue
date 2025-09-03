@@ -142,7 +142,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onUnmounted } from 'vue';
-import type { VocabSound } from '@/entities/vocab/vocab/VocabData';
+import type { VocabSound } from '@/entities/vocab/VocabData';
 import { formatAudioDuration } from '@/shared/utils/audioUtils';
 import { formatFileSize } from '@/shared/utils/fileUtils';
 

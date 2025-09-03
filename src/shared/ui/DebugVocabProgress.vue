@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 
 interface Props {
   vocabData: VocabData;

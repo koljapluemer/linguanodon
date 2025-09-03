@@ -53,7 +53,7 @@ import { ref, onMounted, inject } from 'vue';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;

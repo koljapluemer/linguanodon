@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
-import type { VocabData, VocabImage, VocabSound } from './vocab/VocabData';
+import type { VocabData, VocabImage, VocabSound } from './VocabData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
 import { pickRandom, shuffleArray } from '@/shared/utils/arrayUtils';
 import { levenshteinDistance, isLengthWithinRange } from '@/shared/utils/stringUtils';

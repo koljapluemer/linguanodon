@@ -32,7 +32,7 @@ import VocabFormMetaRenderer from './VocabFormMetaRenderer.vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
-import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';

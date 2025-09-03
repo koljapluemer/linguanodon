@@ -129,7 +129,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onUnmounted } from 'vue';
-import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
+import type { VocabImage } from '@/entities/vocab/VocabData';
 import { formatFileSize } from '@/shared/utils/fileUtils';
 
 const props = defineProps<{

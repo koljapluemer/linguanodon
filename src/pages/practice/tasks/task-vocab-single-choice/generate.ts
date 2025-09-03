@@ -1,4 +1,4 @@
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 import type { Task } from '@/pages/practice/Task';
 
 export function generateVocabChoiceFromFourNativeToTarget(vocab: VocabData): Task {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import VocabImageManager from '@/features/vocab-image-management/VocabImageManager.vue';
 

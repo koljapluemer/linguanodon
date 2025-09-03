@@ -46,7 +46,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 import { calculateVocabMastery } from '@/entities/vocab/vocabMastery';
 import ResourceEditForm from './ui/ResourceEditForm.vue';
 import ManageResourceVocab from '@/widgets/manage-resource-vocab/ManageResourceVocab.vue';

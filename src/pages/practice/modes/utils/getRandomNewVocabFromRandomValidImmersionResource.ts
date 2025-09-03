@@ -1,6 +1,6 @@
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 import { randomFromArray } from '@/shared/utils/arrayUtils';
 import { getRandomNewVocabFromImmersionResource } from './getRandomVocabBasedOnImmersionResource';
 

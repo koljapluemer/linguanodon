@@ -1,4 +1,4 @@
-import type { VocabData } from './vocab/VocabData';
+import type { VocabData } from './VocabData';
 
 /**
  * Determines if a vocab item is currently "top of mind" - meaning it has reached

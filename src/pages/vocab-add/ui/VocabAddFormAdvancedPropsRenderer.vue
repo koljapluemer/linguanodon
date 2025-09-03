@@ -73,7 +73,7 @@ import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
 import type { Length } from '@/shared/types/Length';
-import type { VocabImage, VocabSound } from '@/entities/vocab/vocab/VocabData';
+import type { VocabImage, VocabSound } from '@/entities/vocab/VocabData';
 
 interface VocabFormData {
   language: string;

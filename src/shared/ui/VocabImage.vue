@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue';
-import type { VocabImage } from '@/entities/vocab/vocab/VocabData';
+import type { VocabImage } from '@/entities/vocab/VocabData';
 
 const props = defineProps<{
   image: VocabImage;

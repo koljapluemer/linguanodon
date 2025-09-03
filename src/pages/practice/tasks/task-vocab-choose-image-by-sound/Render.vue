@@ -86,7 +86,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
-import type { VocabData, VocabImage } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData, VocabImage } from '@/entities/vocab/VocabData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
 import { Rating } from 'ts-fsrs';

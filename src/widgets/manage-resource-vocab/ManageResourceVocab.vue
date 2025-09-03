@@ -15,7 +15,7 @@ import { computed, inject, toRaw } from 'vue';
 import ManageVocabList from '@/features/manage-vocab-list/ManageVocabList.vue';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import type { VocabData } from '@/entities/vocab/vocab/VocabData';
+import type { VocabData } from '@/entities/vocab/VocabData';
 
 const props = defineProps<{
   resource: ResourceData;
