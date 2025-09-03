@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { 
   Play, 
-  Languages, 
+  Settings, 
   Clock, 
   Download,
   FolderOpen
@@ -64,10 +64,10 @@ const toggleMaterialSubmenu = () => {
           <span class="hidden md:inline ml-2">My Material</span>
         </button>
         
-        <!-- Languages -->
+        <!-- Settings -->
         <router-link :to="{ name: 'languages' }" class="btn btn-ghost btn-sm">
-          <Languages :size="16" />
-          <span class="hidden md:inline ml-2">Languages</span>
+          <Settings :size="16" />
+          <span class="hidden md:inline ml-2">Settings</span>
         </router-link>
         
         <!-- Time -->

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, inject } from 'vue';
-import { Languages, X } from 'lucide-vue-next';
+import { Settings, Languages, X, Search } from 'lucide-vue-next';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import isoLangs from '@/entities/languages/isoLangs.json';
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 
 // State
 const userLanguages = ref<LanguageData[]>([]);
@@ -17,6 +19,9 @@ const addLanguageSearch = ref('');
 const addLanguageSelected = ref<{ code: string; name: string; emoji?: string } | null>(null);
 const addLanguageSaving = ref(false);
 const showDropdown = ref(false);
+
+// Empty sound detection state
+const detectingSounds = ref(false);
 
 
 async function loadLanguages() {
@@ -97,16 +102,121 @@ function hideDropdown() {
     showDropdown.value = false;
   }, 200);
 }
+
+// Empty sound detection utilities
+async function getAudioDuration(audioBlob: Blob): Promise<number> {
+  return new Promise((resolve) => {
+    const audio = new Audio();
+    audio.onloadedmetadata = () => {
+      resolve(audio.duration);
+    };
+    audio.onerror = () => resolve(0);
+    audio.src = URL.createObjectURL(audioBlob);
+  });
+}
+
+function isLikelyEmptyAudio(audioBlob: Blob): boolean {
+  const minSizeThreshold = 1000; // bytes
+  return audioBlob.size < minSizeThreshold;
+}
+
+async function isAudioTooShort(audioBlob: Blob, minDuration = 0.1): Promise<boolean> {
+  const duration = await getAudioDuration(audioBlob);
+  return duration < minDuration;
+}
+
+async function isAudioSilent(audioBlob: Blob, threshold = 0.001): Promise<boolean> {
+  try {
+    const audioContext = new AudioContext();
+    const arrayBuffer = await audioBlob.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    
+    let rmsSum = 0;
+    let sampleCount = 0;
+    
+    for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
+      const channelData = audioBuffer.getChannelData(channel);
+      for (let i = 0; i < channelData.length; i++) {
+        rmsSum += channelData[i] * channelData[i];
+        sampleCount++;
+      }
+    }
+    
+    const rms = Math.sqrt(rmsSum / sampleCount);
+    return rms < threshold;
+  } catch (error) {
+    console.warn('Audio analysis failed:', error);
+    return false;
+  }
+}
+
+async function detectEmptyAudio(audioBlob: Blob): Promise<{ isEmpty: boolean; reason: string | null }> {
+  // Quick checks first
+  if (isLikelyEmptyAudio(audioBlob)) {
+    return { isEmpty: true, reason: 'file_too_small' };
+  }
+  
+  if (await isAudioTooShort(audioBlob)) {
+    return { isEmpty: true, reason: 'duration_too_short' };
+  }
+  
+  // Deep analysis
+  try {
+    const isSilent = await isAudioSilent(audioBlob);
+    return { isEmpty: isSilent, reason: isSilent ? 'silent_audio' : null };
+  } catch {
+    return { isEmpty: false, reason: 'analysis_failed' };
+  }
+}
+
+async function detectEmptySoundFiles() {
+  detectingSounds.value = true;
+  
+  try {
+    // Get all vocab with sound
+    const allVocab = await vocabRepo.getVocab();
+    const vocabWithSound = allVocab.filter(v => v.hasSound && v.sound?.blob);
+    
+    console.log(`Analyzing ${vocabWithSound.length} audio files...`);
+    
+    let emptyCount = 0;
+    const results: { uid: string; content: string; reason: string }[] = [];
+    
+    for (const vocab of vocabWithSound) {
+      if (vocab.sound?.blob) {
+        const detection = await detectEmptyAudio(vocab.sound.blob);
+        if (detection.isEmpty) {
+          emptyCount++;
+          results.push({
+            uid: vocab.uid,
+            content: vocab.content || 'Unknown',
+            reason: detection.reason || 'unknown'
+          });
+        }
+      }
+    }
+    
+    console.log(`Found ${emptyCount} empty sound files out of ${vocabWithSound.length} total:`);
+    if (results.length > 0) {
+      console.table(results);
+    }
+    
+  } catch (error) {
+    console.error('Error detecting empty sound files:', error);
+  } finally {
+    detectingSounds.value = false;
+  }
+}
 </script>
 
 <template>
   <div class="mb-8">
     <div class="flex items-center gap-3 mb-2">
-      <Languages class="w-8 h-8" />
-      <h1 class="text-3xl font-bold">Manage Languages</h1>
+      <Settings class="w-8 h-8" />
+      <h1 class="text-3xl font-bold">Settings</h1>
     </div>
     <p class="text-base-content/70">
-      Configure your target languages for personalized learning.
+      Configure your languages and manage your learning data.
     </p>
   </div>
 
@@ -120,7 +230,10 @@ function hideDropdown() {
 
     <!-- Target Languages Card -->
     <div class="space-y-6">
-      <h2 class="text-lg font-semibold">Target Languages</h2>
+      <h2 class="text-lg font-semibold flex items-center gap-2">
+        <Languages class="w-5 h-5" />
+        Target Languages
+      </h2>
       <p class="text-base-content/70 text-sm mb-4">
         Languages you want to learn. You can temporarily disable languages or remove them completely.
       </p>
@@ -173,6 +286,39 @@ function hideDropdown() {
           </div>
           <div v-if="addLanguageSearch && availableLanguages.length === 0" class="text-xs text-warning mt-1">
             No languages found matching your search.
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Management Section -->
+      <div class="space-y-6 mt-12">
+        <h2 class="text-lg font-semibold flex items-center gap-2">
+          <Search class="w-5 h-5" />
+          Data Management
+        </h2>
+        <p class="text-base-content/70 text-sm mb-4">
+          Tools to analyze and manage your learning data.
+        </p>
+
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body">
+            <h3 class="card-title text-base">Audio Analysis</h3>
+            <p class="text-sm text-base-content/70 mb-4">
+              Detect empty or silent audio files in your vocabulary collection.
+            </p>
+            
+            <button 
+              @click="detectEmptySoundFiles" 
+              :disabled="detectingSounds"
+              class="btn btn-outline btn-sm w-fit">
+              <Search class="w-4 h-4 mr-2" />
+              <span v-if="detectingSounds" class="loading loading-spinner loading-xs mr-2"></span>
+              {{ detectingSounds ? 'Analyzing Audio Files...' : 'Detect Empty Sound Files' }}
+            </button>
+            
+            <div v-if="detectingSounds" class="text-xs text-base-content/60 mt-2">
+              Check the console for detailed results
+            </div>
           </div>
         </div>
       </div>

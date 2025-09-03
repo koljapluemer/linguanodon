@@ -618,8 +618,6 @@ export class UnifiedRemoteSetService {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    const blob = await response.blob();
-    
     // Use addImageFromUrl instead of addImageFromFile to avoid compression issues
     const imageUrl = `/sets/${languageCode}/${setName}/images/${imageData.filename}`;
     await this.vocabRepo.addImageFromUrl(vocabUid, imageUrl, imageData.alt);
