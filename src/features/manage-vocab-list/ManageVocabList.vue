@@ -1,10 +1,6 @@
 <template>
   <div class="py-4">
-    <div v-if="vocabItems.length === 0" class="text-gray-500 text-center py-4">
-      No vocabulary yet. Use the form below to add some.
-    </div>
-
-    <div v-else class="space-y-4">
+    <div v-if="vocabItems.length !== 0" class="space-y-4">
       <div v-for="(vocab, index) in vocabItems" :key="vocab.uid" class="card bg-base-200 rounded shadow">
         <div class="card-body">
           <div class="flex">
@@ -14,7 +10,7 @@
                 placeholder="Enter vocabulary content..." @update:model-value="updateVocabContent(vocab, $event)" />
               <button v-else @click="startContentEdit(vocab)" class="btn btn-outline">
                 <Plus class="w-4 h-4 mr-1" />
-                Add meaning in {{ getLanguageName(vocab.language) }}
+                Add meaning in {{ currentLanguage ? renderLanguage(currentLanguage) : vocab.language }}
               </button>
             </div>
 
@@ -85,15 +81,16 @@
 
           <!-- Bottom row: Action buttons -->
           <div class="flex justify-end gap-2 mt-4 pt-3 border-t border-base-300">
-            <button v-if="config.allowDisconnect" type="button" @click="disconnectVocab(vocab.uid)" class="btn btn-sm btn-ghost"
-              title="Disconnect vocab from parent">
+            <button v-if="config.allowDisconnect" type="button" @click="disconnectVocab(vocab.uid)"
+              class="btn btn-sm btn-ghost" title="Disconnect vocab from parent">
               <Unlink class="w-4 h-4" />
             </button>
-            <button v-if="config.allowNavigate" type="button" @click="goToVocab(vocab.uid)" class="btn btn-sm btn-ghost" title="Go to vocab">
+            <button v-if="config.allowNavigate" type="button" @click="goToVocab(vocab.uid)" class="btn btn-sm btn-ghost"
+              title="Go to vocab">
               <ExternalLink class="w-4 h-4" />
             </button>
-            <button v-if="config.allowDelete" type="button" @click="deleteVocab(vocab.uid)" class="btn btn-sm btn-ghost text-error"
-              title="Delete vocab permanently">
+            <button v-if="config.allowDelete" type="button" @click="deleteVocab(vocab.uid)"
+              class="btn btn-sm btn-ghost text-error" title="Delete vocab permanently">
               <Trash2 class="w-4 h-4" />
             </button>
           </div>
@@ -105,34 +102,49 @@
     <div v-if="config.allowAdd" class="mt-6 p-4 border border-base-300 rounded-lg bg-base-50">
       <div class="space-y-4">
         <!-- 3-way toggle -->
-        <div class="flex gap-2">
-          <button @click="creationMode = 'translation-only'"
-            :class="creationMode === 'translation-only' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline'">
-            Add Translation
-          </button>
-          <button @click="creationMode = 'vocab-only'"
-            :class="creationMode === 'vocab-only' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline'">
-            Add Untranslated Vocab
-          </button>
-          <button @click="creationMode = 'vocab-and-translation'"
-            :class="creationMode === 'vocab-and-translation' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline'">
-            Add Vocab + Translation
-          </button>
+        <div class="inline-flex overflow-hidden border border-base-300 rounded-lg">
+          <label class="cursor-pointer">
+            <input type="radio" 
+              :checked="creationMode === 'translation-only'"
+              @change="creationMode = 'translation-only'"
+              class="sr-only peer">
+            <span class="relative inline-flex items-center h-full py-2 px-3 text-sm peer-checked:bg-primary peer-checked:text-primary-content">
+              Native only
+            </span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" 
+              :checked="creationMode === 'vocab-only'"
+              @change="creationMode = 'vocab-only'"
+              class="sr-only peer">
+            <span class="relative inline-flex items-center gap-1 h-full py-2 px-3 text-sm peer-checked:bg-secondary peer-checked:text-secondary-content">
+              <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" variant="short" /> only
+            </span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" 
+              :checked="creationMode === 'vocab-and-translation'"
+              @change="creationMode = 'vocab-and-translation'"
+              class="sr-only peer">
+            <span class="relative inline-flex items-center h-full py-2 px-3 text-sm peer-checked:bg-accent peer-checked:text-accent-content">
+              Both
+            </span>
+          </label>
         </div>
 
         <!-- Input fields based on mode -->
         <div class="space-y-3">
           <div v-if="creationMode === 'vocab-only' || creationMode === 'vocab-and-translation'"
             class="flex flex-col space-y-1">
-            <label class="text-sm font-medium">Vocabulary Content</label>
-            <input v-model="newVocabContent" type="text" placeholder="Enter vocabulary content..."
+            <label class="text-sm font-medium">Language Unit (  <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" />)</label>
+            <input v-model="newVocabContent" type="text" placeholder="..."
               class="input input-bordered w-full" />
           </div>
 
           <div v-if="creationMode === 'translation-only' || creationMode === 'vocab-and-translation'"
             class="flex flex-col space-y-1">
-            <label class="text-sm font-medium">Translation</label>
-            <input v-model="newTranslationContent" type="text" placeholder="Enter translation..."
+            <label class="text-sm font-medium">Language Unit (Native Translation)</label>
+            <input v-model="newTranslationContent" type="text" placeholder="..."
               class="input input-bordered w-full" />
           </div>
         </div>
@@ -159,6 +171,8 @@ import type { VocabData } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
+import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
+import { renderLanguage } from '@/entities/languages/renderLanguage';
 
 interface VocabListConfig {
   allowAdd: boolean;
@@ -188,12 +202,14 @@ const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 
 const vocabItems = ref<VocabData[]>([]);
 const translations = ref<Map<string, TranslationData>>(new Map());
-const languageMap = ref<Map<string, LanguageData>>(new Map());
+const currentLanguage = ref<LanguageData | undefined>();
 
 // Translation management state
 const editingTranslationKey = ref<string | null>(null);
 const creatingTranslationForVocab = ref<number | null>(null);
 const tempTranslation = ref<{ content: string }>({ content: '' });
+
+
 
 // New creation form state
 const creationMode = ref<'translation-only' | 'vocab-only' | 'vocab-and-translation'>('vocab-only');
@@ -218,6 +234,11 @@ watch(() => props.vocabIds, async () => {
   await loadVocab();
 }, { immediate: true });
 
+// Watch for changes in language prop
+watch(() => props.language, async (newLanguage) => {
+  currentLanguage.value = await languageRepo.getByCode(newLanguage);
+});
+
 async function loadVocab() {
   const vocabPromises = props.vocabIds.map(id => vocabRepo.getVocabByUID(id));
   const vocabResults = await Promise.all(vocabPromises);
@@ -235,10 +256,6 @@ async function loadVocab() {
 
 function getTranslationText(translationId: string): string {
   return translations.value.get(translationId)?.content || 'Unknown';
-}
-
-function getLanguageName(languageCode: string): string {
-  return languageMap.value.get(languageCode)?.name || languageCode;
 }
 
 async function startContentEdit(vocab: VocabData) {
@@ -396,7 +413,7 @@ async function createNewVocab() {
 
   // Add the new vocab to the local state
   vocabItems.value.push(vocab);
-  
+
   // Add translation to translations map if it exists
   if (translationIds.length > 0 && creationMode.value !== 'vocab-only') {
     const newTranslations = await translationRepo.getTranslationsByIds(translationIds);
@@ -408,7 +425,7 @@ async function createNewVocab() {
   // Clear form
   newVocabContent.value = '';
   newTranslationContent.value = '';
-  
+
   // Emit events
   const updatedVocabIds = [...props.vocabIds, vocab.uid];
   emit('update:vocab-ids', updatedVocabIds);
@@ -417,10 +434,10 @@ async function createNewVocab() {
 
 function disconnectVocab(vocabId: string) {
   if (!confirm('Are you sure you want to disconnect this vocabulary?')) return;
-  
+
   // Update local state
   vocabItems.value = vocabItems.value.filter(v => v.uid !== vocabId);
-  
+
   // Emit events
   const updatedVocabIds = props.vocabIds.filter(id => id !== vocabId);
   emit('update:vocab-ids', updatedVocabIds);
@@ -447,7 +464,7 @@ async function deleteVocab(vocabId: string) {
 
   // Update local state
   vocabItems.value = vocabItems.value.filter(v => v.uid !== vocabId);
-  
+
   // Emit events
   const updatedVocabIds = props.vocabIds.filter(id => id !== vocabId);
   emit('update:vocab-ids', updatedVocabIds);
@@ -456,10 +473,7 @@ async function deleteVocab(vocabId: string) {
 
 onMounted(async () => {
   await loadVocab();
-  const codes = Array.from(new Set(vocabItems.value.map(v => v.language)));
-  const langs = await Promise.all(codes.map(c => languageRepo.getByCode(c)));
-  const map = new Map<string, LanguageData>();
-  langs.forEach(l => { if (l) map.set(l.code, l); });
-  languageMap.value = map;
+  // Load the current language data
+  currentLanguage.value = await languageRepo.getByCode(props.language);
 });
 </script>
