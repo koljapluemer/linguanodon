@@ -44,7 +44,7 @@ export interface VocabData {
 
   relatedVocab: string[]; // uids of other vocab
   notRelatedVocab: string[]; // uids of other vocab
-  notInterestedInPronunciation?: boolean
+  notInterestedInPronunciationOrAlreadyAdded?: boolean
 
   isPicturable?: boolean; // can this vocab be visualized with images?
   images?: VocabImage[]; // associated images for this vocab

@@ -229,7 +229,7 @@ export class UnifiedRemoteSetService {
           const translationUids = this.resolveReferences(vocabData.translations || [], translationMap);
           const links = this.resolveLinks(vocabData.links || [], linkMap);
           
-          const localVocab: Omit<VocabData, 'uid' | 'progress' | 'tasks'> = {
+          const localVocab: Omit<VocabData, 'uid' | 'progress'> = {
             language: vocabData.language,
             content: vocabData.content,
             length: vocabData.length || 'unspecified',
@@ -240,7 +240,9 @@ export class UnifiedRemoteSetService {
             links: links,
             relatedVocab: [], // Will resolve in second pass
             notRelatedVocab: [], // Will resolve in second pass
-            origins: [localSet.uid]
+            origins: [localSet.uid],
+            isPicturable: vocabData.isPicturable,
+            notInterestedInPronunciationOrAlreadyAdded: vocabData.notInterestedInPronunciationOrAlreadyAdded
           };
           
           const savedVocab = await this.vocabRepo.saveVocab(localVocab);
@@ -271,6 +273,11 @@ export class UnifiedRemoteSetService {
           }
         }
       }
+    }
+
+    // Process media files for vocab that was just created
+    if (setFiles.vocab) {
+      await this.processVocabMedia(languageCode, setName, setFiles.vocab, vocabMap);
     }
 
     // Task generation is now handled ad-hoc during lessons
@@ -564,5 +571,73 @@ export class UnifiedRemoteSetService {
 
   async getDownloadedSets(): Promise<LocalSetData[]> {
     return await this.localSetRepo.getAllLocalSets();
+  }
+
+  private async processVocabMedia(
+    languageCode: string, 
+    setName: string, 
+    vocabData: z.infer<typeof vocabSchema>[], 
+    vocabMap: Map<string, string>
+  ): Promise<void> {
+    for (const vocab of vocabData) {
+      if (!vocab.id) continue;
+      
+      const localVocabUid = vocabMap.get(vocab.id);
+      if (!localVocabUid) continue;
+
+      // Process images
+      if (vocab.images && vocab.images.length > 0) {
+        for (const imageData of vocab.images) {
+          try {
+            await this.downloadAndAddImage(languageCode, setName, localVocabUid, imageData);
+          } catch (error) {
+            console.warn(`Failed to download image ${imageData.filename} for vocab ${vocab.id}:`, error);
+          }
+        }
+      }
+
+      // Process sound
+      if (vocab.sound) {
+        try {
+          await this.downloadAndAddSound(languageCode, setName, localVocabUid, vocab.sound);
+        } catch (error) {
+          console.warn(`Failed to download sound ${vocab.sound.filename} for vocab ${vocab.id}:`, error);
+        }
+      }
+    }
+  }
+
+  private async downloadAndAddImage(
+    languageCode: string,
+    setName: string, 
+    vocabUid: string,
+    imageData: { filename: string; alt?: string; tags?: string[] }
+  ): Promise<void> {
+    const response = await fetch(`/sets/${languageCode}/${setName}/images/${imageData.filename}`);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+    const file = new File([blob], imageData.filename, { type: blob.type });
+    
+    await this.vocabRepo.addImageFromFile(vocabUid, file, imageData.alt);
+  }
+
+  private async downloadAndAddSound(
+    languageCode: string,
+    setName: string,
+    vocabUid: string, 
+    soundData: { filename: string }
+  ): Promise<void> {
+    const response = await fetch(`/sets/${languageCode}/${setName}/audio/${soundData.filename}`);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+    const file = new File([blob], soundData.filename, { type: blob.type });
+    
+    await this.vocabRepo.addSoundFromFile(vocabUid, file);
   }
 }
