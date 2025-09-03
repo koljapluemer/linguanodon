@@ -1,87 +1,44 @@
 <template>
-  <div class="p-6 max-w-4xl mx-auto">
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title text-2xl mb-4">Task Debugger</h2>
-        
-        <div class="flex flex-col gap-4 md:flex-row md:items-center">
-          <div class="form-control w-full md:w-auto">
-            <label class="label">
-              <span class="label-text">Select Task Type</span>
-            </label>
-            <select 
-              v-model="selectedTaskType" 
-              class="select select-bordered w-full md:w-64"
-              @change="resetTask"
-            >
-              <option value="">Choose a task...</option>
-              <option 
-                v-for="(_, taskType) in taskRegistry" 
-                :key="taskType" 
-                :value="taskType"
-              >
-                {{ taskType }}
-              </option>
-            </select>
-          </div>
-          
-
-          
-          <div class="flex gap-2 mt-6 md:mt-0">
-            <button 
-              class="btn btn-primary" 
-              :disabled="!selectedTaskType || isGenerating"
-              @click="generateNewTask"
-            >
-              <span v-if="isGenerating" class="loading loading-spinner loading-sm"></span>
-              {{ isGenerating ? 'Generating...' : 'Generate Task' }}
-            </button>
-            
-            <button 
-              class="btn btn-outline" 
-              :disabled="!currentTask"
-              @click="resetTask"
-            >
-              Reset
-            </button>
-          </div>
-        </div>
-        
-        <div v-if="error" class="alert alert-error mt-4">
-          <div>
-            <h3 class="font-bold">Error</h3>
-            <p>{{ error }}</p>
-          </div>
-        </div>
-        
-        <div v-if="taskCompleted" class="mt-6">
-          <div class="alert alert-success">
-            <div>
-              <h3 class="font-bold">✅ Task Completed!</h3>
-              <p>The task has been finished. Generate a new task to continue debugging.</p>
-            </div>
-          </div>
-        </div>
-        
-        <div v-else-if="currentTask" class="mt-6">
-          <div class="divider">Current Task</div>
-          <TaskRenderer 
-            :task="currentTask" 
-            :repositories="mockRepositories"
-            @finished="onTaskFinished"
-          />
-        </div>
-        
-        <div v-else-if="!isGenerating && selectedTaskType" class="mt-6">
-          <div class="alert alert-info">
-            <div>
-              <h3 class="font-bold">No Task Generated</h3>
-              <p>Click "Generate Task" to create a new {{ selectedTaskType }} task.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="p-4">
+    <div class="flex gap-4 items-center mb-4">
+      <select 
+        v-model="selectedTaskType" 
+        class="select select-bordered"
+        @change="onTaskTypeChanged"
+      >
+        <option value="">Choose task...</option>
+        <option 
+          v-for="(_, taskType) in taskRegistry" 
+          :key="taskType" 
+          :value="taskType"
+        >
+          {{ taskType }}
+        </option>
+      </select>
+      
+      <button 
+        class="btn" 
+        :disabled="!currentTask && !taskCompleted"
+        @click="resetTask"
+      >
+        Reset
+      </button>
     </div>
+    
+    <div v-if="error" class="alert alert-error mb-4">
+      {{ error }}
+    </div>
+    
+    <div v-if="taskCompleted" class="alert alert-success mb-4">
+      Task completed!
+    </div>
+    
+    <TaskRenderer 
+      v-if="currentTask"
+      :task="currentTask" 
+      :repositories="mockRepositories"
+      @finished="onTaskFinished"
+    />
   </div>
 </template>
 
@@ -199,6 +156,13 @@ function resetTask() {
   currentTask.value = null;
   error.value = null;
   taskCompleted.value = false;
+}
+
+function onTaskTypeChanged() {
+  resetTask();
+  if (selectedTaskType.value) {
+    generateNewTask();
+  }
 }
 
 function onTaskFinished() {
