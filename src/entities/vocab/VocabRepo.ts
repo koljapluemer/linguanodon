@@ -427,6 +427,35 @@ export class VocabRepo implements VocabRepoContract {
     return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 
+  async getRandomUnseenVocabWithContentAndTranslations(languages: string[], count: number, setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
+    let query = vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab =>
+        isUnseen(vocab) &&
+        !vocab.doNotPractice &&
+        vocab.content && // Must have content
+        vocab.content.trim() !== '' && // Content must not be empty
+        vocab.translations && // Must have translations array
+        vocab.translations.length > 0 && // Must have at least one translation
+        (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
+      );
+
+    // Database-level filtering for set avoidance
+    if (setsToAvoid && setsToAvoid.length > 0) {
+      query = query.filter(vocab =>
+        !vocab.origins.some(origin => setsToAvoid.includes(origin))
+      );
+    }
+
+    const vocab = await query.toArray();
+    const ensuredVocab = vocab.map(v => this.ensureVocabFields(v));
+
+    // Shuffle and return requested count
+    const shuffled = ensuredVocab.sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, Math.min(count, shuffled.length));
+  }
+
   async addRelatedVocab(uid: string, relatedVocabUid: string): Promise<void> {
     const vocab = await vocabDb.vocab.get(uid);
     if (!vocab) return;

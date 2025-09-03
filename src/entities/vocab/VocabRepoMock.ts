@@ -233,6 +233,17 @@ export class VocabRepoMock implements VocabRepoContract {
     );
   }
 
+  async getRandomUnseenVocabWithContentAndTranslations(languages: string[], count: number, setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
+    console.info(`VocabRepoMock: getRandomUnseenVocabWithContentAndTranslations([${languages.join(', ')}], ${count}, ${setsToAvoid ? '[avoided-sets]' : 'no-avoided-sets'}, ${vocabBlockList ? '[blocked]' : 'no-blocks'}) - returning ${count} complete vocab`);
+    return Array.from({ length: count }, (_, i) => 
+      this.createSampleVocab({ 
+        content: `complete-vocab-${i}`,
+        language: languages[i % languages.length] || 'en',
+        translations: [`translation-${i}-1`, `translation-${i}-2`] // Ensure translations exist
+      })
+    );
+  }
+
   async findVocabByTranslationUids(language: string, translationUids: string[]): Promise<VocabData | undefined> {
     console.info(`VocabRepoMock: findVocabByTranslationUids(${language}, [${translationUids.join(', ')}]) - returning vocab with these translations`);
     return this.createSampleVocab({ 
