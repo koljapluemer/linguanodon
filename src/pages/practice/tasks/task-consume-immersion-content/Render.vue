@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, toRaw } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import ManageResourceVocab from '@/widgets/manage-resource-vocab/ManageResourceVocab.vue';
 import ManageResourceFactCards from '@/widgets/manage-resource-fact-cards/ManageResourceFactCards.vue';
@@ -55,7 +55,7 @@ const handleSkip = async () => {
   
   // Update lastShownAt when skipping
   const updatedResource: ResourceData = {
-    ...resource.value,
+    ...toRaw(resource.value),
     lastShownAt: new Date()
   };
   
@@ -83,7 +83,7 @@ const handleDone = async () => {
       
       // Add the note to the resource
       const updatedResource: ResourceData = {
-        ...resource.value,
+        ...toRaw(resource.value),
         notes: [...resource.value.notes, note.uid],
         lastShownAt: new Date()
       };
@@ -92,7 +92,7 @@ const handleDone = async () => {
     } else {
       // Just update lastShownAt
       const updatedResource: ResourceData = {
-        ...resource.value,
+        ...toRaw(resource.value),
         lastShownAt: new Date()
       };
       
