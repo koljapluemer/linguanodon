@@ -7,11 +7,13 @@
       @goal-updated="handleGoalUpdate"
     />
 
-    <div v-if="!showDoneSection" class="flex gap-2 mt-6">
-      <button @click="handleSkip" class="btn btn-outline">Skip</button>
-      <button @click="handleSkipAndDisable" class="btn btn-outline">Skip & Disable</button>
-      <button @click="handleDone" :disabled="!hasChanges" class="btn btn-primary">Done</button>
-    </div>
+    <TaskSkipDisableDone 
+      v-if="!showDoneSection"
+      :done-disabled="!hasChanges"
+      @skip="handleSkip"
+      @skip-and-disable="handleSkipAndDisable"
+      @done="handleDone"
+    />
 
     <div v-if="showDoneSection" class="mt-6">
       <TaskDecideWhetherToDoAgain 
@@ -33,6 +35,7 @@ import type { Task } from '@/pages/practice/Task';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import ManageGoalVocab from '@/widgets/manage-goal-vocab/ManageGoalVocab.vue';
 import TaskDecideWhetherToDoAgain from '@/pages/practice/tasks/ui/TaskDecideWhetherToDoAgain.vue';
+import TaskSkipDisableDone from '@/pages/practice/tasks/ui/TaskSkipDisableDone.vue';
 
 interface Props {
   task: Task;

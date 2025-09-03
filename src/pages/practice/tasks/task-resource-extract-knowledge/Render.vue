@@ -7,6 +7,7 @@ import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import LinkDisplayAsButton from '@/shared/links/LinkDisplayAsButton.vue';
 import TaskDecideWhetherToDoAgain from '@/pages/practice/tasks/ui/TaskDecideWhetherToDoAgain.vue';
+import TaskSkipDisableDone from '@/pages/practice/tasks/ui/TaskSkipDisableDone.vue';
 
 interface Props {
   task: Task;
@@ -153,11 +154,13 @@ onMounted(() => {
       />
     </div>
 
-    <div v-if="!showDoneSection" class="flex gap-2">
-      <button @click="handleSkip" class="btn btn-outline">Skip</button>
-      <button @click="handleSkipAndDisable" class="btn btn-outline">Skip & Disable</button>
-      <button @click="handleDone" :disabled="!hasChanges" class="btn btn-primary">Done</button>
-    </div>
+    <TaskSkipDisableDone 
+      v-if="!showDoneSection"
+      :done-disabled="!hasChanges"
+      @skip="handleSkip"
+      @skip-and-disable="handleSkipAndDisable"
+      @done="handleDone"
+    />
 
     <div v-if="showDoneSection">
       <TaskDecideWhetherToDoAgain 

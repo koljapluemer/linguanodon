@@ -4,6 +4,7 @@ import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import VocabImageManager from '@/features/vocab-image-management/VocabImageManager.vue';
+import TaskSkipDisableDone from '@/pages/practice/tasks/ui/TaskSkipDisableDone.vue';
 
 interface Props {
   task: Task;
@@ -88,11 +89,12 @@ onMounted(loadVocab);
     </div>
     
     <!-- Action Buttons -->
-    <div class="flex justify-center gap-4">
-      <button @click="handleSkip" class="btn btn-outline">Skip</button>
-      <button @click="handleSkipAndDisable" class="btn btn-outline">Skip & Disable</button>
-      <button @click="handleDone" :disabled="!hasChanges" class="btn btn-primary">Done</button>
-    </div>
+    <TaskSkipDisableDone 
+      :done-disabled="!hasChanges"
+      @skip="handleSkip"
+      @skip-and-disable="handleSkipAndDisable"
+      @done="handleDone"
+    />
   </div>
 
   <div v-else>
