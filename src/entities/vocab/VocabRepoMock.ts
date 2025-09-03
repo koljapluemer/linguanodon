@@ -212,6 +212,30 @@ export class VocabRepoMock implements VocabRepoContract {
     );
   }
 
+  async getDueNonSentenceVocabInLanguage(language: string, vocabBlockList?: string[]): Promise<VocabData[]> {
+    console.info(`VocabRepoMock: getDueNonSentenceVocabInLanguage(${language}, ${vocabBlockList ? '[blocked]' : 'no-blocks'}) - returning 3 due non-sentence vocab`);
+    return Array.from({ length: 3 }, (_, i) => 
+      this.createSampleVocab({ 
+        content: `due-${language}-word-${i}`,
+        language,
+        length: i === 1 ? 'phrase' : 'word', // Mix of words and phrases, no sentences
+        progress: { ...createEmptyCard(), streak: 1, level: 1, due: new Date(Date.now() - 1000 * 60 * 60) }
+      })
+    );
+  }
+
+  async getDueNonSentenceVocabPairsInLanguage(language: string, minPairs: number = 2, vocabBlockList?: string[]): Promise<VocabData[]> {
+    console.info(`VocabRepoMock: getDueNonSentenceVocabPairsInLanguage(${language}, ${minPairs}, ${vocabBlockList ? '[blocked]' : 'no-blocks'}) - returning 4 due non-sentence vocab for pairs`);
+    return Array.from({ length: 4 }, (_, i) => 
+      this.createSampleVocab({ 
+        content: `pair-${language}-word-${i}`,
+        language,
+        length: i % 2 === 0 ? 'word' : 'phrase', // Alternating words and phrases, no sentences
+        progress: { ...createEmptyCard(), streak: 1, level: 1, due: new Date(Date.now() - 1000 * 60 * 60) }
+      })
+    );
+  }
+
   async getDueVocabInLanguages(languages: string[], setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
     console.info(`VocabRepoMock: getDueVocabInLanguages([${languages.join(', ')}], ${setsToAvoid ? '[avoided-sets]' : 'no-avoided-sets'}, ${vocabBlockList ? '[blocked]' : 'no-blocks'}) - returning 3 due vocab`);
     return Array.from({ length: 3 }, (_, i) => 

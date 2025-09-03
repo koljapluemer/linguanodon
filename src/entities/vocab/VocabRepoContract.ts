@@ -45,6 +45,8 @@ export interface VocabRepoContract {
   
   // Query operations for distractor generation
   getDueVocabInLanguage(language: string, vocabBlockList?: string[]): Promise<VocabData[]>;
+  getDueNonSentenceVocabInLanguage(language: string, vocabBlockList?: string[]): Promise<VocabData[]>;
+  getDueNonSentenceVocabPairsInLanguage(language: string, minPairs?: number, vocabBlockList?: string[]): Promise<VocabData[]>;
   getDueVocabInLanguages(languages: string[], setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   getRandomUnseenVocabInLanguages(languages: string[], count: number, setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]>;
   getRandomUnseenVocabWithContentAndTranslations(languages: string[], count: number, setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]>;

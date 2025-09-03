@@ -1,6 +1,7 @@
 import type { VocabData } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Task } from '@/pages/practice/Task';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import { randomFromArray } from '@/shared/utils/arrayUtils';
 
 // Import all task generators
@@ -16,12 +17,14 @@ import { generateVocabChoiceFromFourNativeToTarget } from '@/pages/practice/task
 import { generateClozeChoiceFromTwo } from '@/pages/practice/tasks/task-cloze-choice/generate';
 import { generateClozeChoiceFromFour } from '@/pages/practice/tasks/task-cloze-choice/generate';
 import { generateClozeReveal } from '@/pages/practice/tasks/task-cloze-reveal/generate';
+import { generateTaskFormSentenceFromTwoVocab, generateFormSentenceTaskFromSingleVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
 
-type TaskGenerator = () => Task;
+type TaskGenerator = () => Task | Promise<Task>;
 
 export async function getRandomGeneratedTaskForVocab(
   vocab: VocabData,
-  translations: TranslationData[] = []
+  translations: TranslationData[] = [],
+  vocabRepo?: VocabRepoContract
 ): Promise<Task | null> {
   const level = vocab.progress.level;
   const isWordOrUnspecified = vocab.length === 'word' || vocab.length === 'unspecified';
@@ -74,6 +77,28 @@ export async function getRandomGeneratedTaskForVocab(
     eligibleTasks.push(() => generateVocabRevealNativeToTarget(vocab));
   }
 
+  // Form sentence tasks for non-sentence vocab (level 0+)
+  if (isWordOrUnspecified && hasContent && level >= 0 && vocabRepo) {
+    // Single vocab form sentence task
+    eligibleTasks.push(() => generateFormSentenceTaskFromSingleVocab(vocab));
+    
+    // Two vocab form sentence task (async - find another vocab)
+    eligibleTasks.push(async () => {
+      try {
+        const otherVocabs = await vocabRepo.getDueNonSentenceVocabInLanguage(vocab.language);
+        const otherVocab = otherVocabs.find(v => v.uid !== vocab.uid);
+        if (otherVocab) {
+          return generateTaskFormSentenceFromTwoVocab(vocab, otherVocab);
+        }
+        // Fallback to single vocab if no other vocab found
+        return generateFormSentenceTaskFromSingleVocab(vocab);
+      } catch (error) {
+        console.error('Error finding second vocab for form sentence task:', error);
+        return generateFormSentenceTaskFromSingleVocab(vocab);
+      }
+    });
+  }
+
   // Content enhancement tasks
   if (hasContent && !hasTranslations) {
     eligibleTasks.push(() => generateAddTranslation(vocab));
@@ -85,5 +110,5 @@ export async function getRandomGeneratedTaskForVocab(
 
   // Randomly pick one task from all eligible tasks
   const selectedTaskGenerator = randomFromArray(eligibleTasks);
-  return selectedTaskGenerator ? selectedTaskGenerator() : null;
+  return selectedTaskGenerator ? await selectedTaskGenerator() : null;
 }

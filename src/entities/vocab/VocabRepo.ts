@@ -380,6 +380,30 @@ export class VocabRepo implements VocabRepoContract {
     return vocab.map(v => this.ensureVocabFields(v));
   }
 
+  async getDueNonSentenceVocabInLanguage(language: string, vocabBlockList?: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .equals(language)
+      .filter(vocab =>
+        vocab.progress.level >= 0 &&
+        vocab.progress.due <= new Date() &&
+        !vocab.doNotPractice &&
+        vocab.length !== 'sentence' && // Exclude sentence-length vocab
+        (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
+      )
+      .toArray();
+
+    return vocab.map(v => this.ensureVocabFields(v));
+  }
+
+  async getDueNonSentenceVocabPairsInLanguage(language: string, minPairs: number = 2, vocabBlockList?: string[]): Promise<VocabData[]> {
+    const vocab = await this.getDueNonSentenceVocabInLanguage(language, vocabBlockList);
+    
+    // Return at least enough vocab to form the minimum number of pairs
+    // For form-sentence tasks, we need at least 2 vocab items
+    return vocab.length >= minPairs ? vocab : [];
+  }
+
   async getDueVocabInLanguages(languages: string[], setsToAvoid?: string[], vocabBlockList?: string[]): Promise<VocabData[]> {
     let query = vocabDb.vocab
       .where('language')
@@ -434,9 +458,9 @@ export class VocabRepo implements VocabRepoContract {
       .filter(vocab =>
         isUnseen(vocab) &&
         !vocab.doNotPractice &&
-        vocab.content && // Must have content
+        !!vocab.content && // Must have content
         vocab.content.trim() !== '' && // Content must not be empty
-        vocab.translations && // Must have translations array
+        !!vocab.translations && // Must have translations array
         vocab.translations.length > 0 && // Must have at least one translation
         (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
       );

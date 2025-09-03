@@ -13,8 +13,8 @@ export async function getRandomVocabFormSentenceTask({
     const selectedLanguage = randomFromArray(languageCodes);
     if (!selectedLanguage) return null;
     
-    // Get due vocab for the selected language only
-    const vocabItems = await vocabRepo.getDueVocabInLanguage(selectedLanguage);
+    // Get due NON-SENTENCE vocab for the selected language only
+    const vocabItems = await vocabRepo.getDueNonSentenceVocabPairsInLanguage(selectedLanguage, 2);
     
     if (vocabItems.length < 2) return null;
     
