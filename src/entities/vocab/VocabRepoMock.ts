@@ -1,5 +1,5 @@
 import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
-import type { VocabData } from './vocab/VocabData';
+import type { VocabData } from './VocabData';
 import type { Rating } from 'ts-fsrs';
 import { createEmptyCard } from 'ts-fsrs';
 

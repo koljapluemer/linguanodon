@@ -6,6 +6,7 @@ import SisyphosWidget from '@/pages/practice/modes/modes/sisyphos/SisyphosWidget
 import InsertImagesWidget from '@/pages/practice/modes/modes/insert-images/InsertImagesWidget.vue';
 import EyesAndEarsWidget from '@/pages/practice/modes/modes/eyes-and-ears/EyesAndEarsWidget.vue';
 import UltraRandomWidget from '@/pages/practice/modes/modes/ultrarandom/UltraRandomWidget.vue';
+import Debug from '@/pages/practice/tasks/Debug.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -64,6 +65,11 @@ const router = createRouter({
           path: 'ultrarandom',
           name: 'practice-mode-ultrarandom',
           component: UltraRandomWidget
+        },
+        {
+          path: 'debug-tasks',
+          name: 'debug-tasks',
+          component: Debug
         }
       ]
     },
