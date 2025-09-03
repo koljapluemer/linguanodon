@@ -1,8 +1,8 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabFormSentence } from '@/pages/practice/tasks/task-vocab-form-sentence/generateVocabFormSentence';
-import { generateVocabFormSingleSentence } from '@/pages/practice/tasks/task-vocab-form-sentence/generateVocabFormSingleSentence';
+import { generateTaskFormSentenceFromTwoVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
+import { generateFormSentenceTaskFromSingleVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
 
 export async function getBackupTask(
   vocabRepo: VocabRepoContract,
@@ -23,12 +23,12 @@ export async function getBackupTask(
       const vocab1 = vocabWithLowestDue[0];
       const vocab2 = vocabWithLowestDue[1];
       
-      return generateVocabFormSentence(vocab1, vocab2);
+      return generateTaskFormSentenceFromTwoVocab(vocab1, vocab2);
     }
     
     // Fall back to single-vocab sentence task with the most due vocab
     const vocab = vocabWithLowestDue[0];
-    return generateVocabFormSingleSentence(vocab);
+    return generateFormSentenceTaskFromSingleVocab(vocab);
     
     return null;
   } catch (error) {

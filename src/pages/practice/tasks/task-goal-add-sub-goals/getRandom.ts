@@ -1,8 +1,8 @@
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateAddVocabToGoal } from '@/pages/practice/tasks/task-goal-add-vocab/generateAddVocabToGoal';
+import { generateAddSubGoals } from '@/pages/practice/tasks/task-goal-add-sub-goals/generate';
 
-export async function getRandomAddVocabToGoalTask(
+export async function getRandomAddSubGoalsTask(
   goalRepo: GoalRepoContract,
   languageCodes: string[]
 ): Promise<Task | null> {
@@ -17,12 +17,12 @@ export async function getRandomAddVocabToGoalTask(
     const shuffled = [...filteredGoals].sort(() => Math.random() - 0.5);
     
     for (const goal of shuffled) {
-      return generateAddVocabToGoal(goal);
+      return generateAddSubGoals(goal);
     }
     
     return null;
   } catch (error) {
-    console.error('Error generating add vocab to goal task:', error);
+    console.error('Error generating add sub goals task:', error);
     return null;
   }
 }

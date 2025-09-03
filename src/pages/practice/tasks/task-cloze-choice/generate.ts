@@ -12,3 +12,15 @@ export function generateClozeChoiceFromFour(vocab: VocabData): Task {
     associatedVocab: [vocab.uid]
   };
 }
+
+export function generateClozeChoiceFromTwo(vocab: VocabData): Task {
+  const uid = `cloze-choose-from-two-${vocab.uid}-${Date.now()}`;
+  
+  return {
+    uid,
+    language: vocab.language,
+    taskType: 'cloze-choose-from-two',
+    prompt: 'Complete the missing word',
+    associatedVocab: [vocab.uid]
+  };
+}

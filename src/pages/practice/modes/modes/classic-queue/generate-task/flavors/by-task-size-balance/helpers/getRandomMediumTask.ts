@@ -1,10 +1,10 @@
 import type { Task } from '@/entities/tasks/Task';
 import type { TaskGeneratorContext } from '../../../types/TaskGeneratorContext';
-import { getRandomAddTranslationTask } from '../../by-task-type-balance/helpers/getRandomAddTranslationTask';
-import { getRandomAddSubGoalsTask } from '../../by-task-type-balance/helpers/getRandomAddSubGoalsTask';
-import { getRandomAddVocabToGoalTask } from '../../by-task-type-balance/helpers/getRandomAddVocabToGoalTask';
-import { getRandomVocabFormSentenceTask } from '../../by-task-type-balance/helpers/getRandomVocabFormSentenceTask';
-import { getRandomGuessWhatSentenceMeansTask } from '../../by-task-type-balance/helpers/getRandomGuessWhatSentenceMeansTask';
+import { getRandomAddTranslationTask } from '../../../../../../../tasks/task-vocab-add-translation/getRandom';
+import { getRandomAddSubGoalsTask } from '../../../../../../../tasks/task-goal-add-sub-goals/getRandom';
+import { getRandomAddVocabToGoalTask } from '../../../../../../../tasks/task-goal-add-vocab/getRandom';
+import { getRandomVocabFormSentenceTask } from '../../../../../../../tasks/task-vocab-form-sentence/getRandom.ts';
+import { getRandomGuessWhatSentenceMeansTask } from '../../../../../../../tasks/task-guess-what-sentence-means/getRandom';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 
 type MediumTaskGenerator = () => Promise<Task | null>;

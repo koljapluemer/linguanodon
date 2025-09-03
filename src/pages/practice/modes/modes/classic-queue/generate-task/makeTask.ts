@@ -7,28 +7,15 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { TaskGeneratorContext } from './types/TaskGeneratorContext';
-import { getRandomExtractKnowledgeTask } from './flavors/by-task-type-balance/helpers/getRandomExtractKnowledgeTask';
-import { getRandomAddSubGoalsTask } from './flavors/by-task-type-balance/helpers/getRandomAddSubGoalsTask';
-import { getRandomAddVocabToGoalTask } from './flavors/by-task-type-balance/helpers/getRandomAddVocabToGoalTask';
-import { getRandomVocabTryToRememberTask } from './flavors/by-task-type-balance/helpers/getRandomVocabTryToRememberTask';
-import { getRandomVocabRevealTask } from './flavors/by-task-type-balance/helpers/getRandomVocabRevealTask';
-import { getRandomVocabChoiceTask } from './flavors/by-task-type-balance/helpers/getRandomVocabChoiceTask';
-import { getRandomClozeChoiceTask } from './flavors/by-task-type-balance/helpers/getRandomClozeChoiceTask';
-import { getRandomClozeRevealTask } from './flavors/by-task-type-balance/helpers/getRandomClozeRevealTask';
-import { getRandomAddTranslationTask } from './flavors/by-task-type-balance/helpers/getRandomAddTranslationTask';
-import { getRandomVocabFormSentenceTask } from './flavors/by-task-type-balance/helpers/getRandomVocabFormSentenceTask';
 import { useTaskSizeTracker } from './trackers/useTaskSizeTracker';
 import { useTaskTypeTracker } from './trackers/useTaskTypeTracker';
 import { useNewVocabTracker } from './trackers/useNewVocabTracker';
 import { useTrackTaskNumber } from './trackers/useTrackTaskNumber';
 import { makeTaskWithFocusOnVocab } from './flavors/by-focused-vocab/makeTaskWithFocusOnVocab';
 import { chooseTaskBasedOnDesiredTaskSize } from './flavors/by-task-size-balance/chooseTaskBasedOnUnderusedTaskSize';
-import { chooseRareTask } from './flavors/by-task-type-balance/chooseRareTask';
 import { getBackupTask } from './flavors/backup/getBackupTask';
 import { useTrackUsedVocab } from './trackers/useTrackUsedVocab';
-import { pickWeightedRandom } from '@/shared/utils/arrayUtils';
 
-type TaskGenerator = () => Promise<Task | null>;
 
 export async function makeTask(
   vocabRepo: VocabRepoContract,
@@ -52,7 +39,7 @@ export async function makeTask(
     const languageCodes = activeLanguages.map(lang => lang.code);
     const { trackTask } = useTaskSizeTracker();
     const { trackTask: trackTaskType } = useTaskTypeTracker();
-    const { canGenerateNewVocabTask, trackTask: trackNewVocabTask, isNewVocabTask } = useNewVocabTracker();
+    const { trackTask: trackNewVocabTask } = useNewVocabTracker();
     const { incrementTaskCount } = useTrackTaskNumber();
     const { getRecentlyUsedVocab, trackVocabUsed } = useTrackUsedVocab();
     
@@ -85,58 +72,24 @@ export async function makeTask(
       // If focused task generation fails, fall back to standard generation
     }
     
-    // Define all available task generators with their task names
-    const baseGenerators: Array<{ generator: TaskGenerator; taskName: TaskName }> = [
-      { generator: () => getRandomAddTranslationTask(vocabRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'add-translation' },
-      { generator: () => getRandomExtractKnowledgeTask(resourceRepo, languageCodes), taskName: 'extract-knowledge-from-resource' },
-      { generator: () => getRandomAddSubGoalsTask(goalRepo, languageCodes), taskName: 'add-sub-goals' },
-      { generator: () => getRandomAddVocabToGoalTask(goalRepo, languageCodes), taskName: 'add-vocab-to-goal' },
-      { generator: () => getRandomVocabTryToRememberTask(vocabRepo, resourceRepo, languageCodes, vocabBlockList), taskName: 'vocab-try-to-remember' },
-      { generator: () => getRandomVocabRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'vocab-reveal-target-to-native' },
-      { generator: () => getRandomVocabChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'vocab-choose-from-two-target-to-native' },
-      { generator: () => getRandomClozeChoiceTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'cloze-choose-from-two' },
-      { generator: () => getRandomClozeRevealTask(vocabRepo, resourceRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'cloze-reveal' },
-      { generator: () => getRandomVocabFormSentenceTask(vocabRepo, translationRepo, languageCodes, vocabBlockList), taskName: 'vocab-form-sentence' }
-    ];
     
-    // Filter out tasks based on limits
-    let allGenerators = baseGenerators;
-    
-    // Filter out new vocab tasks if limits exceeded
-    if (!canGenerateNewVocabTask()) {
-      allGenerators = allGenerators.filter(g => !isNewVocabTask(g.taskName));
-    }
-    
-    // Choose task selection method: 2/3 weighted by size, 1/3 rare task picker
-    const selectionMethods = ['weighted-size', 'rare-task'];
-    const selectionWeights = [2, 1];
-    const selectedMethod = pickWeightedRandom(selectionMethods, selectionWeights);
-    
-    let result: { task: Task; taskName: TaskName; isPreferred?: boolean } | null = null;
-    
-    if (selectedMethod === 'weighted-size') {
-      const context: TaskGeneratorContext = {
-        vocabRepo,
-        translationRepo,
-        resourceRepo,
-        languageRepo,
-        goalRepo,
-        noteRepo,
-        factCardRepo,
-        languageCodes,
-        vocabBlockList
-      };
-      result = await chooseTaskBasedOnDesiredTaskSize(context);
-    } else {
-      const rareResult = await chooseRareTask(allGenerators);
-      if (rareResult) {
-        result = { ...rareResult, isPreferred: false };
-      }
-    }
+    // Use size-based task selection
+    const context: TaskGeneratorContext = {
+      vocabRepo,
+      translationRepo,
+      resourceRepo,
+      languageRepo,
+      goalRepo,
+      noteRepo,
+      factCardRepo,
+      languageCodes,
+      vocabBlockList
+    };
+    const result = await chooseTaskBasedOnDesiredTaskSize(context);
     
     if (result) {
       const { task, taskName, isPreferred } = result;
-      const methodUsed = selectedMethod === 'weighted-size' ? 'size-weighted' : 'rare-task';
+      const methodUsed = 'size-weighted';
       const preferenceLabel = isPreferred ? 'preferred' : 'fallback';
       const logMessage = `[TaskGenerator] Generated ${methodUsed} ${preferenceLabel} task: ${task.taskType}`;
       

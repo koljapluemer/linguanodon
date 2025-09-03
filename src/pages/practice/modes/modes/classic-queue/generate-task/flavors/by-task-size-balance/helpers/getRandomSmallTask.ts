@@ -1,12 +1,12 @@
 import type { Task } from '@/entities/tasks/Task';
 import type { TaskGeneratorContext } from '../../../types/TaskGeneratorContext';
-import { getRandomVocabTryToRememberTask } from '../../by-task-type-balance/helpers/getRandomVocabTryToRememberTask';
-import { getRandomVocabRevealTask } from '../../by-task-type-balance/helpers/getRandomVocabRevealTask';
-import { getRandomVocabChoiceTask } from '../../by-task-type-balance/helpers/getRandomVocabChoiceTask';
-import { getRandomClozeChoiceTask } from '../../by-task-type-balance/helpers/getRandomClozeChoiceTask';
-import { getRandomClozeRevealTask } from '../../by-task-type-balance/helpers/getRandomClozeRevealTask';
-import { getRandomFactCardTryToRememberTask } from '../../by-task-type-balance/helpers/getRandomFactCardTryToRememberTask';
-import { getRandomFactCardRevealTask } from '../../by-task-type-balance/helpers/getRandomFactCardRevealTask';
+import { getRandomVocabTryToRememberTask } from '../../../../../../../tasks/task-vocab-try-to-remember/getRandom';
+import { getRandomVocabRevealTask } from '../../../../../../../tasks/task-vocab-reveal/getRandom';
+import { getRandomVocabChoiceTask } from '../../../../../../../tasks/task-vocab-single-choice/getRandom';
+import { getRandomClozeChoiceTask } from '../../../../../../../tasks/task-cloze-choice/getRandom';
+import { getRandomClozeRevealTask } from '../../../../../../../tasks/task-cloze-reveal/getRandom';
+import { getRandomFactCardTryToRememberTask } from '../../../../../../../tasks/task-fact-card-try-to-remember/getRandom';
+import { getRandomFactCardRevealTask } from '../../../../../../../tasks/task-fact-card-reveal/getRandom';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 
 type SmallTaskGenerator = () => Promise<Task | null>;

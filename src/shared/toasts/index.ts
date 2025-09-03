@@ -37,20 +37,21 @@ const getDefaultDuration = (type: ToastType): number => {
 
 const add = (toast: Omit<ToastData, 'id' | 'createdAt'>) => {
   const id = crypto.randomUUID();
+  const duration = toast.duration ?? getDefaultDuration(toast.type);
   const newToast: ToastData = {
     ...toast,
     id,
     createdAt: Date.now(),
-    duration: toast.duration ?? getDefaultDuration(toast.type)
+    duration
   };
   
   toasts.value.push(newToast);
   
   // Auto dismiss after duration
-  if (newToast.duration > 0) {
+  if (duration > 0) {
     setTimeout(() => {
       remove(id);
-    }, newToast.duration);
+    }, duration);
   }
   
   return id;

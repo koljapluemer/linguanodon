@@ -1,8 +1,8 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabTryToRemember } from '@/pages/practice/tasks/task-vocab-try-to-remember/generateVocabTryToRemember';
-import { getRandomNewVocabFromRandomValidImmersionResource } from './getRandomNewVocabFromRandomValidImmersionResource';
+import { generateVocabTryToRemember } from '@/pages/practice/tasks/task-vocab-try-to-remember/generate';
+import { getRandomNewVocabFromRandomValidImmersionResource } from '../../modes/utils/getRandomNewVocabFromRandomValidImmersionResource';
 
 export async function getRandomVocabTryToRememberTask(
   vocabRepo: VocabRepoContract,

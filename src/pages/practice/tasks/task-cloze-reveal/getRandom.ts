@@ -3,9 +3,8 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
-import { generateClozeChoiceFromTwo } from '@/pages/practice/tasks/task-cloze-choice/generateClozeChoiceFromTwo';
-import { generateClozeChoiceFromFour } from '@/pages/practice/tasks/task-cloze-choice/generateClozeChoiceFromFour';
-import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
+import { generateClozeReveal } from '@/pages/practice/tasks/task-cloze-reveal/generate';
+import { getRandomDueVocabFromRandomValidImmersionResource } from '../../modes/utils/getRandomDueVocabFromRandomValidImmersionResource';
 
 async function tryGenerateFromVocab(vocab: VocabData) {
   // Filter to only sentence vocab (cloze tasks are now sentence-only)
@@ -13,17 +12,10 @@ async function tryGenerateFromVocab(vocab: VocabData) {
     return null;
   }
 
-  // Randomly pick between the two generators
-  const availableGenerators = [
-    () => generateClozeChoiceFromTwo(vocab),
-    () => generateClozeChoiceFromFour(vocab)
-  ];
-  
-  const randomIndex = Math.floor(Math.random() * availableGenerators.length);
-  return availableGenerators[randomIndex]();
+  return generateClozeReveal(vocab);
 }
 
-export async function getRandomClozeChoiceTask(
+export async function getRandomClozeRevealTask(
   vocabRepo: VocabRepoContract,
   resourceRepo: ResourceRepoContract,
   _translationRepo: TranslationRepoContract,
@@ -46,7 +38,7 @@ export async function getRandomClozeChoiceTask(
     const sentenceVocab = await vocabRepo.getDueSentenceVocabWithMaxLevel(languageCodes, 6, vocabBlockList);
     
     if (sentenceVocab.length === 0) {
-      // Fallback to unseen sentence vocab
+      // Fallback to unseen sentence vocab (level -1, so no level filtering needed)
       const unseenSentenceVocab = await vocabRepo.getRandomUnseenSentenceVocab(20, languageCodes, vocabBlockList);
       if (unseenSentenceVocab.length === 0) return null;
       
@@ -67,7 +59,7 @@ export async function getRandomClozeChoiceTask(
     
     return null;
   } catch (error) {
-    console.error('Error generating cloze choice task:', error);
+    console.error('Error generating cloze reveal task:', error);
     return null;
   }
 }

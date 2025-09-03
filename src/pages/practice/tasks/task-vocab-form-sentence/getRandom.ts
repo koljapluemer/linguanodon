@@ -1,7 +1,7 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabFormSentence } from '@/pages/practice/tasks/task-vocab-form-sentence/generateVocabFormSentence';
+import { generateTaskFormSentenceFromTwoVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
 import { randomFromArray, pickRandom } from '@/shared/utils/arrayUtils';
 
 export async function getRandomVocabFormSentenceTask(
@@ -28,7 +28,7 @@ export async function getRandomVocabFormSentenceTask(
         const vocab1 = shuffledVocab[i];
         const vocab2 = shuffledVocab[j];
         
-        return generateVocabFormSentence(vocab1, vocab2);
+        return generateTaskFormSentenceFromTwoVocab(vocab1, vocab2);
       }
     }
     

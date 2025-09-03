@@ -1,6 +1,6 @@
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateExtractKnowledgeFromResource } from '@/pages/practice/tasks/task-resource-extract-knowledge/generateExtractKnowledgeFromResource';
+import { generateExtractKnowledgeFromResource } from '@/pages/practice/tasks/task-resource-extract-knowledge/generate';
 
 export async function getRandomExtractKnowledgeTask(
   resourceRepo: ResourceRepoContract,

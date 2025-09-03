@@ -1,7 +1,7 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateAddTranslation } from '@/pages/practice/tasks/task-vocab-add-translation/generateAddTranslation';
+import { generateAddTranslation } from '@/pages/practice/tasks/task-vocab-add-translation/generate';
 
 export async function getRandomAddTranslationTask(
   vocabRepo: VocabRepoContract,

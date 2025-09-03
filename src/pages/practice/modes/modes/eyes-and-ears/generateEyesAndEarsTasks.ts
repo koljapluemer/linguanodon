@@ -1,6 +1,6 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabChooseImageBySound } from '@/pages/practice/tasks/task-vocab-choose-image-by-sound/generateVocabChooseImageBySound';
+import { generateVocabChooseImageBySound } from '@/pages/practice/tasks/task-vocab-choose-image-by-sound/generate';
 
 export async function generateEyesAndEars(
   vocabRepo: VocabRepoContract,

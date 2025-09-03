@@ -1,7 +1,7 @@
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { Task } from '@/entities/tasks/Task';
-import { generateFactCardTryToRemember } from '@/pages/practice/tasks/task-fact-card-try-to-remember/generateFactCardTryToRemember';
-import { generateFactCardReveal } from '@/pages/practice/tasks/task-fact-card-reveal/generateFactCardReveal';
+import { generateFactCardTryToRemember } from '@/pages/practice/tasks/task-fact-card-try-to-remember/generate';
+import { generateFactCardReveal } from '@/pages/practice/tasks/task-fact-card-reveal/generate';
 
 export async function getRandomGeneratedTaskForFactCard(
   factCard: FactCardData

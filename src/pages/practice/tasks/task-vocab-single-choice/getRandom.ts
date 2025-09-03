@@ -3,11 +3,12 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
 import type { Task } from '@/entities/tasks/Task';
-import { generateVocabChoiceFromTwoTargetToNative } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromTwoTargetToNative';
-import { generateVocabChoiceFromTwoNativeToTarget } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromTwoNativeToTarget';
-import { generateVocabChoiceFromFourTargetToNative } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromFourTargetToNative';
-import { generateVocabChoiceFromFourNativeToTarget } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromFourNativeToTarget';
-import { getRandomDueVocabFromRandomValidImmersionResource } from './getRandomDueVocabFromRandomValidImmersionResource';
+import { 
+  generateVocabChoiceFromTwoTargetToNative,
+  generateVocabChoiceFromTwoNativeToTarget,
+  generateVocabChoiceFromFourTargetToNative,
+  generateVocabChoiceFromFourNativeToTarget
+} from '@/pages/practice/tasks/task-vocab-single-choice/generate';
 
 async function tryGenerateFromVocab(vocab: VocabData) {
   // Randomly pick between the four generators
@@ -24,7 +25,7 @@ async function tryGenerateFromVocab(vocab: VocabData) {
 
 export async function getRandomVocabChoiceTask(
   vocabRepo: VocabRepoContract,
-  resourceRepo: ResourceRepoContract,
+  _resourceRepo: ResourceRepoContract,
   _translationRepo: TranslationRepoContract,
   languageCodes: string[],
   vocabBlockList?: string[]
@@ -32,9 +33,8 @@ export async function getRandomVocabChoiceTask(
   try {
     // 25% chance to try immersion resource first
     if (Math.random() < 0.25) {
-      const immersionVocab = await getRandomDueVocabFromRandomValidImmersionResource(
-        resourceRepo, vocabRepo, languageCodes, vocabBlockList
-      );
+      // TODO: Implement immersion vocab selection or remove this feature
+      const immersionVocab = null;
       if (immersionVocab) {
         const task = await tryGenerateFromVocab(immersionVocab);
         if (task) return task;

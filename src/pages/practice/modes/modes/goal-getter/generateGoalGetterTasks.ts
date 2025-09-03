@@ -1,7 +1,7 @@
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { Task } from '@/entities/tasks/Task';
-import { generateAddVocabToGoal } from '@/pages/practice/tasks/task-goal-add-vocab/generateAddVocabToGoal';
-import { generateAddSubGoals } from '@/pages/practice/tasks/task-goal-add-sub-goals/generateAddSubGoals';
+import { generateAddVocabToGoal } from '@/pages/practice/tasks/task-goal-add-vocab/generate';
+import { generateAddSubGoals } from '@/pages/practice/tasks/task-goal-add-sub-goals/generate';
 import { randomFromArray } from '@/shared/utils/arrayUtils';
 
 // Define goal task generators

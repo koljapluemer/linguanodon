@@ -4,18 +4,18 @@ import type { Task } from '@/entities/tasks/Task';
 import { randomFromArray } from '@/shared/utils/arrayUtils';
 
 // Import all task generators
-import { generateAddTranslation } from '@/pages/practice/tasks/task-vocab-add-translation/generateAddTranslation';
-import { generateVocabTryToRemember } from '@/pages/practice/tasks/task-vocab-try-to-remember/generateVocabTryToRemember';
-import { generateGuessWhatSentenceMeans } from '@/pages/practice/tasks/task-guess-what-sentence-means/generateGuessWhatSentenceMeans';
-import { generateVocabRevealTargetToNative } from '@/pages/practice/tasks/task-vocab-reveal/generateVocabRevealTargetToNative';
-import { generateVocabRevealNativeToTarget } from '@/pages/practice/tasks/task-vocab-reveal/generateVocabRevealNativeToTarget';
-import { generateVocabChoiceFromTwoTargetToNative } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromTwoTargetToNative';
-import { generateVocabChoiceFromTwoNativeToTarget } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromTwoNativeToTarget';
-import { generateVocabChoiceFromFourTargetToNative } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromFourTargetToNative';
-import { generateVocabChoiceFromFourNativeToTarget } from '@/pages/practice/tasks/task-vocab-single-choice/generateVocabChoiceFromFourNativeToTarget';
-import { generateClozeChoiceFromTwo } from '@/pages/practice/tasks/task-cloze-choice/generateClozeChoiceFromTwo';
-import { generateClozeChoiceFromFour } from '@/pages/practice/tasks/task-cloze-choice/generateClozeChoiceFromFour';
-import { generateClozeReveal } from '@/pages/practice/tasks/task-cloze-reveal/generateClozeReveal';
+import { generateAddTranslation } from '@/pages/practice/tasks/task-vocab-add-translation/generate';
+import { generateVocabTryToRemember } from '@/pages/practice/tasks/task-vocab-try-to-remember/generate';
+import { generateGuessWhatSentenceMeans } from '@/pages/practice/tasks/task-guess-what-sentence-means/generate';
+import { generateVocabRevealTargetToNative } from '@/pages/practice/tasks/task-vocab-reveal/generate';
+import { generateVocabRevealNativeToTarget } from '@/pages/practice/tasks/task-vocab-reveal/generate';
+import { generateVocabChoiceFromTwoTargetToNative } from '@/pages/practice/tasks/task-vocab-single-choice/generate';
+import { generateVocabChoiceFromTwoNativeToTarget } from '@/pages/practice/tasks/task-vocab-single-choice/generate';
+import { generateVocabChoiceFromFourTargetToNative } from '@/pages/practice/tasks/task-vocab-single-choice/generate';
+import { generateVocabChoiceFromFourNativeToTarget } from '@/pages/practice/tasks/task-vocab-single-choice/generate';
+import { generateClozeChoiceFromTwo } from '@/pages/practice/tasks/task-cloze-choice/generate';
+import { generateClozeChoiceFromFour } from '@/pages/practice/tasks/task-cloze-choice/generate';
+import { generateClozeReveal } from '@/pages/practice/tasks/task-cloze-reveal/generate';
 
 type TaskGenerator = () => Task;
 

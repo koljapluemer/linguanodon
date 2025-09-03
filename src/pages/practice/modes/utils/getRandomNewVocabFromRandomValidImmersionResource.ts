@@ -1,8 +1,8 @@
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import { getRandomNewVocabFromImmersionResource } from './getRandomVocabBasedOnImmersionResource';
 import { randomFromArray } from '@/shared/utils/arrayUtils';
+import { getRandomNewVocabFromImmersionResource } from './getRandomVocabBasedOnImmersionResource';
 
 export async function getRandomNewVocabFromRandomValidImmersionResource(
   resourceRepo: ResourceRepoContract,

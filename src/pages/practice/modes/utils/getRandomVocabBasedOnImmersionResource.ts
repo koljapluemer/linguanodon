@@ -1,7 +1,7 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { VocabData } from '@/entities/vocab/vocab/VocabData';
-import { useNewVocabTracker } from '../../../trackers/useNewVocabTracker';
+import { useNewVocabTracker } from '../modes/classic-queue/generate-task/trackers/useNewVocabTracker';
 import { randomFromArray } from '@/shared/utils/arrayUtils';
 
 async function getVocabFromImmersionResource(

@@ -1,6 +1,6 @@
 import type { Task } from '@/entities/tasks/Task';
 import type { TaskGeneratorContext } from '../../../types/TaskGeneratorContext';
-import { getRandomExtractKnowledgeTask } from '../../by-task-type-balance/helpers/getRandomExtractKnowledgeTask';
+import { getRandomExtractKnowledgeTask } from '../../../../../../../tasks/task-resource-extract-knowledge/getRandom';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 
 type BigTaskGenerator = () => Promise<Task | null>;
