@@ -21,7 +21,7 @@ import re
 load_dotenv()
 
 # Configuration
-DEBUG = True  # Set to True to process only first two words
+DEBUG = False  # Set to True to process only first two words
 TARGET_LANGUAGE = "cmn"  # Mandarin Chinese (ISO 639-3)
 SOURCE_LANGUAGE = "eng"  # English (ISO 639-3)
 OUTPUT_DIR = f"sets/{TARGET_LANGUAGE}/basic-vocab-with-images-and-sound"
@@ -205,23 +205,55 @@ def clean_word_for_search(word: str) -> str:
         cleaned = cleaned[4:]
     return cleaned
 
-def translate_with_deepl(text: str) -> Optional[Dict[str, str]]:
+def translate_with_deepl(text: str, timeout: int = 30) -> Optional[Dict[str, str]]:
     """Translate text to Mandarin using DeepL"""
     try:
-        result = deepl_client.translate_text(text, target_lang="ZH-HANS")  # Chinese Simplified
-        return {
-            "text": result.text,
-            "detected_source_lang": result.detected_source_lang
-        }
+        import signal
+        
+        def timeout_handler(signum, frame):
+            raise TimeoutError(f"DeepL translation timed out after {timeout} seconds")
+        
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(timeout)
+        
+        try:
+            result = deepl_client.translate_text(text, target_lang="ZH-HANS")  # Chinese Simplified
+            signal.alarm(0)  # Cancel alarm
+            return {
+                "text": result.text,
+                "detected_source_lang": result.detected_source_lang
+            }
+        finally:
+            signal.alarm(0)  # Ensure alarm is cancelled
+            
     except Exception as e:
         logger.warning(f"DeepL translation failed for '{text}': {e}")
         return None
 
 def download_image_from_pexels(search_term: str, filename: str) -> bool:
     """Download image from Pexels and save to images directory"""
+    # Check if file already exists
+    images_dir = Path(OUTPUT_DIR) / "images"
+    image_path = images_dir / filename
+    if image_path.exists():
+        logger.info(f"Image already exists for '{search_term}': {filename}")
+        return True
+    
     try:
-        # Search for photos
-        photos = pexels_api.search_photos(query=search_term, page=1, per_page=1)
+        import signal
+        
+        def timeout_handler(signum, frame):
+            raise TimeoutError(f"Pexels search timed out after 30 seconds")
+        
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(30)
+        
+        try:
+            # Search for photos
+            photos = pexels_api.search_photos(query=search_term, page=1, per_page=1)
+            signal.alarm(0)  # Cancel alarm
+        finally:
+            signal.alarm(0)  # Ensure alarm is cancelled
         
         if not photos or 'photos' not in photos or len(photos['photos']) == 0:
             logger.warning(f"No images found on Pexels for '{search_term}'")
@@ -233,15 +265,20 @@ def download_image_from_pexels(search_term: str, filename: str) -> bool:
         photographer = photo['photographer']
         photo_url = photo['url']
         
-        # Download image
-        response = requests.get(image_url, timeout=30)
-        response.raise_for_status()
+        # Download image with timeout
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(30)
+        
+        try:
+            response = requests.get(image_url, timeout=30)
+            response.raise_for_status()
+            signal.alarm(0)  # Cancel alarm
+        finally:
+            signal.alarm(0)  # Ensure alarm is cancelled
         
         # Save image
-        images_dir = Path(OUTPUT_DIR) / "images"
         images_dir.mkdir(parents=True, exist_ok=True)
         
-        image_path = images_dir / filename
         with open(image_path, 'wb') as f:
             f.write(response.content)
         
@@ -254,19 +291,36 @@ def download_image_from_pexels(search_term: str, filename: str) -> bool:
 
 def generate_audio_with_openai(text: str, filename: str) -> bool:
     """Generate audio using OpenAI TTS"""
+    # Check if file already exists
+    audio_dir = Path(OUTPUT_DIR) / "audio"
+    audio_path = audio_dir / filename
+    if audio_path.exists():
+        logger.info(f"Audio already exists for '{text}': {filename}")
+        return True
+    
     try:
-        response = openai_client.audio.speech.create(
-            model="tts-1",
-            voice="alloy",  # Using alloy voice which works well for Chinese
-            input=text,
-            response_format="opus"  # More efficient than MP3, better for web
-        )
+        import signal
+        
+        def timeout_handler(signum, frame):
+            raise TimeoutError(f"OpenAI TTS timed out after 60 seconds")
+        
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(60)  # TTS can take longer than other APIs
+        
+        try:
+            response = openai_client.audio.speech.create(
+                model="tts-1",
+                voice="alloy",  # Using alloy voice which works well for Chinese
+                input=text,
+                response_format="opus"  # More efficient than MP3, better for web
+            )
+            signal.alarm(0)  # Cancel alarm
+        finally:
+            signal.alarm(0)  # Ensure alarm is cancelled
         
         # Save audio
-        audio_dir = Path(OUTPUT_DIR) / "audio"
         audio_dir.mkdir(parents=True, exist_ok=True)
         
-        audio_path = audio_dir / filename
         response.stream_to_file(audio_path)
         
         logger.info(f"Generated audio for '{text}'")
