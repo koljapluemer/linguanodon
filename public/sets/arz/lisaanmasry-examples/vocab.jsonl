@@ -1,108 +1,108 @@
-{"id": "1", "language": "arz", "content": "نـِخـَلّـَص ا ِلجـَرد و َ بـَعدين هـَنـِتغـَذّى", "length": "sentence", "notes": ["1"], "translations": ["1"], "links": ["1"], "priority": 2, "relatedVocab": ["2", "3", "4", "5", "6", "7", "8", "9", "10"]}
-{"id": "2", "language": "arz", "content": "خـِلـِص", "length": "word", "notes": ["2", "3"], "links": ["1"], "priority": 1, "translations": ["2", "3"], "relatedVocab": ["3"]}
-{"id": "3", "language": "arz", "content": "يـِخلـَص", "length": "word", "notes": ["4", "5"], "links": ["1"], "priority": 1, "translations": ["2", "3"], "relatedVocab": ["2"]}
-{"id": "4", "language": "arz", "content": "جـَرد", "length": "word", "notes": ["9", "10"], "links": ["1"], "priority": 1, "translations": ["4"], "relatedVocab": ["5"]}
-{"id": "5", "language": "arz", "content": "جـُرود", "length": "word", "notes": ["11", "12"], "links": ["1"], "priority": 1, "translations": ["4"], "relatedVocab": ["4"]}
+{"id": "1", "language": "arz", "content": "نخلّص الجرد وبعدين هنتغذى", "length": "sentence", "notes": ["1"], "translations": ["1"], "links": ["1"], "priority": 2, "relatedVocab": ["2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+{"id": "2", "language": "arz", "content": "خلص", "length": "word", "notes": ["2", "3"], "links": ["1"], "priority": 1, "translations": ["2", "3"], "relatedVocab": ["3"]}
+{"id": "3", "language": "arz", "content": "يخلص", "length": "word", "notes": ["4", "5"], "links": ["1"], "priority": 1, "translations": ["2", "3"], "relatedVocab": ["2"]}
+{"id": "4", "language": "arz", "content": "جرد", "length": "word", "notes": ["9", "10"], "links": ["1"], "priority": 1, "translations": ["4"], "relatedVocab": ["5"]}
+{"id": "5", "language": "arz", "content": "جُرود", "length": "word", "notes": ["11", "12"], "links": ["1"], "priority": 1, "translations": ["4"], "relatedVocab": ["4"]}
 {"id": "6", "language": "arb", "content": "وَ", "length": "word", "notes": ["14", "15"], "links": ["1"], "priority": 1, "translations": ["5"]}
-{"id": "7", "language": "arz", "content": "بـَعدين", "length": "word", "notes": ["18", "19"], "links": ["1"], "priority": 1, "translations": ["6", "7", "8"]}
-{"id": "8", "language": "arz", "content": "إتغـَدّا", "length": "word", "notes": ["24", "25"], "links": ["1"], "priority": 1, "translations": ["9", "10"], "relatedVocab": ["9", "10"]}
-{"id": "9", "language": "arz", "content": "يـِتغـَدّا", "length": "word", "notes": ["26", "27"], "links": ["1"], "priority": 1, "translations": ["9", "10"], "relatedVocab": ["8", "10"]}
-{"id": "10", "language": "arz", "content": "مـِتغـَدّي", "length": "word", "notes": ["28", "29"], "links": ["1"], "priority": 1, "translations": ["9", "10"], "relatedVocab": ["8", "9"]}
-{"id": "11", "language": "arz", "content": "بـَعد شـُو َيا َ مـُمكـِن نـِبتـِدي نـِعمـِل ا ِلأكل", "length": "sentence", "notes": ["32", "33"], "translations": ["11"], "links": ["1"], "priority": 2, "relatedVocab": ["12", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"]}
-{"id": "12", "language": "arz", "content": "بـَعد شـُو َيا", "length": "word", "notes": ["34", "35", "37", "38"], "links": ["1"], "priority": 1, "translations": ["12", "12"]}
-{"id": "13", "language": "arb", "content": "مـُمكـِن", "length": "word", "notes": ["40", "41"], "links": ["1"], "priority": 1, "translations": ["13"], "relatedVocab": ["14"]}
-{"id": "14", "language": "arb", "content": "مـُمكـِنـَة", "length": "word", "notes": ["42", "43"], "links": ["1"], "priority": 1, "translations": ["13"], "relatedVocab": ["13"]}
-{"id": "15", "language": "arz", "content": "إبتـَدى", "length": "word", "notes": ["46", "47"], "links": ["1"], "priority": 1, "translations": ["14", "15", "16"], "relatedVocab": ["16", "17"]}
-{"id": "16", "language": "arz", "content": "يـِبتـِدي", "length": "word", "notes": ["48", "49"], "links": ["1"], "priority": 1, "translations": ["14", "15", "16"], "relatedVocab": ["15", "17"]}
-{"id": "17", "language": "arz", "content": "مـِبتـِدي", "length": "word", "notes": ["50", "51"], "links": ["1"], "priority": 1, "translations": ["14", "15", "16"], "relatedVocab": ["15", "16"]}
-{"id": "18", "language": "arb", "content": "عـَمـَل", "length": "word", "notes": ["55", "56"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["19", "20", "21"]}
-{"id": "19", "language": "arb", "content": "يـِعمـِل", "length": "word", "notes": ["57", "58"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["18", "20", "21"]}
-{"id": "20", "language": "arb", "content": "عا َمـَل", "length": "word", "notes": ["59", "60"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["18", "19", "21"]}
-{"id": "21", "language": "arb", "content": "مـَعمول", "length": "word", "notes": ["61", "62"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["18", "19", "20"]}
-{"id": "22", "language": "arz", "content": "أكل", "length": "word", "notes": ["64", "65"], "links": ["1"], "priority": 1, "translations": ["18", "19"]}
-{"id": "23", "language": "arz", "content": "مـَمـَرّ ا ِلعـَما َر َة ضـَلمـَة", "length": "sentence", "notes": ["68", "69"], "translations": ["20"], "links": ["1"], "priority": 2, "relatedVocab": ["24", "25", "26", "27", "28"]}
-{"id": "24", "language": "arb", "content": "مـَمـَرّ", "length": "word", "notes": ["70", "71"], "links": ["1"], "priority": 1, "translations": ["21", "22", "23"], "relatedVocab": ["25"]}
-{"id": "25", "language": "arb", "content": "مـَمـَرّا َت", "length": "word", "notes": ["72", "73"], "links": ["1"], "priority": 1, "translations": ["21", "22", "23"], "relatedVocab": ["24"]}
-{"id": "26", "language": "arb", "content": "عـِما َر َة", "length": "word", "notes": ["78", "79"], "links": ["1"], "priority": 1, "translations": ["24", "25"], "relatedVocab": ["27"]}
-{"id": "27", "language": "arb", "content": "عـِما َرا َت", "length": "word", "notes": ["80", "81"], "links": ["1"], "priority": 1, "translations": ["24", "25"], "relatedVocab": ["26"]}
-{"id": "28", "language": "arb", "content": "ضـَلمـَة", "length": "word", "notes": ["85", "86"], "links": ["1"], "priority": 1, "translations": ["26"]}
-{"id": "29", "language": "arz", "content": "قـَبـَضت مـُر َتّـَبـ ـــَك إمبا َر ِح؟", "length": "sentence", "notes": ["88", "89"], "translations": ["27"], "links": ["1"], "priority": 2, "relatedVocab": ["30", "31", "32", "33", "34", "35", "36", "37"]}
-{"id": "30", "language": "arz", "content": "قـَبـَض", "length": "word", "notes": ["90", "91"], "links": ["1"], "priority": 1, "translations": ["28"], "relatedVocab": ["31"]}
-{"id": "31", "language": "arz", "content": "يـِقبـَض", "length": "word", "notes": ["92", "93"], "links": ["1"], "priority": 1, "translations": ["28"], "relatedVocab": ["30"]}
-{"id": "32", "language": "arb", "content": "مـُر َتّـَب", "length": "word", "notes": ["95", "96"], "links": ["1"], "priority": 1, "translations": ["29"], "relatedVocab": ["33"]}
-{"id": "33", "language": "arb", "content": "مـُر َتّـَبا َت", "length": "word", "notes": ["97", "98"], "links": ["1"], "priority": 1, "translations": ["29"], "relatedVocab": ["32"]}
-{"id": "34", "language": "arz", "content": "ــَك", "length": "word", "notes": ["100", "101"], "links": ["1"], "priority": 1, "translations": ["30"], "relatedVocab": ["35", "36"]}
-{"id": "35", "language": "arz", "content": "ــِك", "length": "word", "notes": ["102", "103"], "links": ["1"], "priority": 1, "translations": ["30"], "relatedVocab": ["34", "36"]}
-{"id": "36", "language": "arz", "content": "ــُكـُم", "length": "word", "notes": ["104", "105"], "links": ["1"], "priority": 1, "translations": ["30"], "relatedVocab": ["34", "35"]}
-{"id": "37", "language": "arz", "content": "إمبا َر ِح", "length": "word", "notes": ["107", "108"], "links": ["1"], "priority": 1, "translations": ["31"]}
-{"id": "38", "language": "arz", "content": "ا ِلتـَلّا َجـَة مـِش شـَغّا َلـَة", "length": "sentence", "notes": ["110"], "translations": ["32"], "links": ["1"], "priority": 2, "relatedVocab": ["39", "40", "41", "42", "43", "44"]}
-{"id": "39", "language": "arz", "content": "تـَلّا َجـَة", "length": "word", "notes": ["111", "112"], "links": ["1"], "priority": 1, "translations": ["33", "34"], "relatedVocab": ["40"]}
-{"id": "40", "language": "arz", "content": "تـَلّا َجا َت", "length": "word", "notes": ["113", "114"], "links": ["1"], "priority": 1, "translations": ["33", "34"], "relatedVocab": ["39"]}
-{"id": "41", "language": "arz", "content": "مـِش", "length": "word", "notes": ["117", "118", "271", "272"], "links": ["1"], "priority": 1, "translations": ["35", "36", "37", "35", "36", "37"]}
-{"id": "42", "language": "arz", "content": "شـَغّا َل", "length": "word", "notes": ["122", "123"], "links": ["1"], "priority": 1, "translations": ["38", "39", "40", "41"], "relatedVocab": ["43", "44"]}
-{"id": "43", "language": "arz", "content": "شـَغّا َلـَة", "length": "word", "notes": ["124", "125"], "links": ["1"], "priority": 1, "translations": ["38", "39", "40", "41"], "relatedVocab": ["42", "44"]}
-{"id": "44", "language": "arz", "content": "شـَغّا َلين", "length": "word", "notes": ["126", "127"], "links": ["1"], "priority": 1, "translations": ["38", "39", "40", "41"], "relatedVocab": ["42", "43"]}
-{"id": "45", "language": "arz", "content": "عا َو ِز تا َكـُل سـَمـَك و َلا َ فـِرا َخ؟", "length": "sentence", "notes": ["134", "135"], "translations": ["42"], "links": ["1"], "priority": 2, "relatedVocab": ["46", "47", "48", "49", "50", "51", "52", "53"]}
-{"id": "46", "language": "arz", "content": "عا َيـِز", "length": "word", "notes": ["136", "137"], "links": ["1"], "priority": 1, "translations": ["43", "44"], "relatedVocab": ["47", "48"]}
-{"id": "47", "language": "arz", "content": "عا َيـِز َة", "length": "word", "notes": ["138", "139"], "links": ["1"], "priority": 1, "translations": ["43", "44"], "relatedVocab": ["46", "48"]}
-{"id": "48", "language": "arz", "content": "عا َيزين", "length": "word", "notes": ["140", "141"], "links": ["1"], "priority": 1, "translations": ["43", "44"], "relatedVocab": ["46", "47"]}
-{"id": "49", "language": "arz", "content": "كـَل", "length": "word", "notes": ["144", "145"], "links": ["1"], "priority": 1, "translations": ["45"], "relatedVocab": ["50"]}
-{"id": "50", "language": "arz", "content": "يا َكـُل", "length": "word", "notes": ["146", "147"], "links": ["1"], "priority": 1, "translations": ["45"], "relatedVocab": ["49"]}
-{"id": "51", "language": "arb", "content": "سـَمـَك", "length": "word", "notes": ["149", "150"], "links": ["1"], "priority": 1, "translations": ["46"]}
-{"id": "52", "language": "arb", "content": "و َلا", "length": "word", "notes": ["152", "153"], "links": ["1"], "priority": 1, "translations": ["47", "48", "49"]}
-{"id": "53", "language": "arz", "content": "فـِرا َخ", "length": "word", "notes": ["158", "159"], "links": ["1"], "priority": 1, "translations": ["50"]}
-{"id": "54", "language": "arz", "content": "كـُلّ حا َجـَة غا َليـَة في ا ِلمـَحـَل د َه", "length": "sentence", "notes": ["162"], "translations": ["51"], "links": ["1"], "priority": 2, "relatedVocab": ["55", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64"]}
-{"id": "55", "language": "arz", "content": "كـُلّ حا َجـَة", "length": "word", "notes": ["163", "164", "168", "169"], "links": ["1"], "priority": 1, "translations": ["52", "53", "52", "53"]}
-{"id": "56", "language": "arz", "content": "غا َلي", "length": "word", "notes": ["173", "174"], "links": ["1"], "priority": 1, "translations": ["54", "55", "56"], "relatedVocab": ["57", "58"]}
-{"id": "57", "language": "arz", "content": "غا َليـَة", "length": "word", "notes": ["175", "176"], "links": ["1"], "priority": 1, "translations": ["54", "55", "56"], "relatedVocab": ["56", "58"]}
-{"id": "58", "language": "arz", "content": "غا َليين", "length": "word", "notes": ["177", "178"], "links": ["1"], "priority": 1, "translations": ["54", "55", "56"], "relatedVocab": ["56", "57"]}
+{"id": "7", "language": "arz", "content": "بعدين", "length": "word", "notes": ["18", "19"], "links": ["1"], "priority": 1, "translations": ["6", "7", "8"]}
+{"id": "8", "language": "arz", "content": "إتغدّى", "length": "word", "notes": ["24", "25"], "links": ["1"], "priority": 1, "translations": ["9", "10"], "relatedVocab": ["9", "10"]}
+{"id": "9", "language": "arz", "content": "يتغدى", "length": "word", "notes": ["26", "27"], "links": ["1"], "priority": 1, "translations": ["9", "10"], "relatedVocab": ["8", "10"]}
+{"id": "10", "language": "arz", "content": "متغدي", "length": "word", "notes": ["28", "29"], "links": ["1"], "priority": 1, "translations": ["9", "10"], "relatedVocab": ["8", "9"]}
+{"id": "11", "language": "arz", "content": "بعد شو يا ممكن نبتدي نعمل الأكل", "length": "sentence", "notes": ["32", "33"], "translations": ["11"], "links": ["1"], "priority": 2, "relatedVocab": ["12", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"]}
+{"id": "12", "language": "arz", "content": "بعد شو يا", "length": "word", "notes": ["34", "35", "37", "38"], "links": ["1"], "priority": 1, "translations": ["12", "12"]}
+{"id": "13", "language": "arb", "content": "مُمكِن", "length": "word", "notes": ["40", "41"], "links": ["1"], "priority": 1, "translations": ["13"], "relatedVocab": ["14"]}
+{"id": "14", "language": "arb", "content": "مُمكِنة", "length": "word", "notes": ["42", "43"], "links": ["1"], "priority": 1, "translations": ["13"], "relatedVocab": ["13"]}
+{"id": "15", "language": "arz", "content": "ابتدى", "length": "word", "notes": ["46", "47"], "links": ["1"], "priority": 1, "translations": ["14", "15", "16"], "relatedVocab": ["16", "17"]}
+{"id": "16", "language": "arz", "content": "يبتدي", "length": "word", "notes": ["48", "49"], "links": ["1"], "priority": 1, "translations": ["14", "15", "16"], "relatedVocab": ["15", "17"]}
+{"id": "17", "language": "arz", "content": "مبتدي", "length": "word", "notes": ["50", "51"], "links": ["1"], "priority": 1, "translations": ["14", "15", "16"], "relatedVocab": ["15", "16"]}
+{"id": "18", "language": "arb", "content": "عمل", "length": "word", "notes": ["55", "56"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["19", "20", "21"]}
+{"id": "19", "language": "arb", "content": "يعمل", "length": "word", "notes": ["57", "58"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["18", "20", "21"]}
+{"id": "20", "language": "arb", "content": "عامل", "length": "word", "notes": ["59", "60"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["18", "19", "21"]}
+{"id": "21", "language": "arb", "content": "معمول", "length": "word", "notes": ["61", "62"], "links": ["1"], "priority": 1, "translations": ["17"], "relatedVocab": ["18", "19", "20"]}
+{"id": "22", "language": "arz", "content": "أَكَل", "length": "word", "notes": ["64", "65"], "links": ["1"], "priority": 1, "translations": ["18", "19"]}
+{"id": "23", "language": "arz", "content": "مَمَرّ العَمارة ضَلمة", "length": "sentence", "notes": ["68", "69"], "translations": ["20"], "links": ["1"], "priority": 2, "relatedVocab": ["24", "25", "26", "27", "28"]}
+{"id": "24", "language": "arb", "content": "مَمَرّ", "length": "word", "notes": ["70", "71"], "links": ["1"], "priority": 1, "translations": ["21", "22", "23"], "relatedVocab": ["25"]}
+{"id": "25", "language": "arb", "content": "مَمَرّات", "length": "word", "notes": ["72", "73"], "links": ["1"], "priority": 1, "translations": ["21", "22", "23"], "relatedVocab": ["24"]}
+{"id": "26", "language": "arb", "content": "عمارة", "length": "word", "notes": ["78", "79"], "links": ["1"], "priority": 1, "translations": ["24", "25"], "relatedVocab": ["27"]}
+{"id": "27", "language": "arb", "content": "عمارات", "length": "word", "notes": ["80", "81"], "links": ["1"], "priority": 1, "translations": ["24", "25"], "relatedVocab": ["26"]}
+{"id": "28", "language": "arb", "content": "ضلمة", "length": "word", "notes": ["85", "86"], "links": ["1"], "priority": 1, "translations": ["26"]}
+{"id": "29", "language": "arz", "content": "قبضت مراتبك إمبارح؟", "length": "sentence", "notes": ["88", "89"], "translations": ["27"], "links": ["1"], "priority": 2, "relatedVocab": ["30", "31", "32", "33", "34", "35", "36", "37"]}
+{"id": "30", "language": "arz", "content": "قبض", "length": "word", "notes": ["90", "91"], "links": ["1"], "priority": 1, "translations": ["28"], "relatedVocab": ["31"]}
+{"id": "31", "language": "arz", "content": "يقبض", "length": "word", "notes": ["92", "93"], "links": ["1"], "priority": 1, "translations": ["28"], "relatedVocab": ["30"]}
+{"id": "32", "language": "arb", "content": "مرتب", "length": "word", "notes": ["95", "96"], "links": ["1"], "priority": 1, "translations": ["29"], "relatedVocab": ["33"]}
+{"id": "33", "language": "arb", "content": "مرتباً", "length": "word", "notes": ["97", "98"], "links": ["1"], "priority": 1, "translations": ["29"], "relatedVocab": ["32"]}
+{"id": "34", "language": "arz", "content": "كَ", "length": "word", "notes": ["100", "101"], "links": ["1"], "priority": 1, "translations": ["30"], "relatedVocab": ["35", "36"]}
+{"id": "35", "language": "arz", "content": "ـِك", "length": "word", "notes": ["102", "103"], "links": ["1"], "priority": 1, "translations": ["30"], "relatedVocab": ["34", "36"]}
+{"id": "36", "language": "arz", "content": "كم", "length": "word", "notes": ["104", "105"], "links": ["1"], "priority": 1, "translations": ["30"], "relatedVocab": ["34", "35"]}
+{"id": "37", "language": "arz", "content": "إمبارح", "length": "word", "notes": ["107", "108"], "links": ["1"], "priority": 1, "translations": ["31"]}
+{"id": "38", "language": "arz", "content": "التلاجة مش شغالة", "length": "sentence", "notes": ["110"], "translations": ["32"], "links": ["1"], "priority": 2, "relatedVocab": ["39", "40", "41", "42", "43", "44"]}
+{"id": "39", "language": "arz", "content": "تلاجة", "length": "word", "notes": ["111", "112"], "links": ["1"], "priority": 1, "translations": ["33", "34"], "relatedVocab": ["40"]}
+{"id": "40", "language": "arz", "content": "تلاجات", "length": "word", "notes": ["113", "114"], "links": ["1"], "priority": 1, "translations": ["33", "34"], "relatedVocab": ["39"]}
+{"id": "41", "language": "arz", "content": "مش", "length": "word", "notes": ["117", "118", "271", "272"], "links": ["1"], "priority": 1, "translations": ["35", "36", "37", "35", "36", "37"]}
+{"id": "42", "language": "arz", "content": "شَغّال", "length": "word", "notes": ["122", "123"], "links": ["1"], "priority": 1, "translations": ["38", "39", "40", "41"], "relatedVocab": ["43", "44"]}
+{"id": "43", "language": "arz", "content": "شَغّالة", "length": "word", "notes": ["124", "125"], "links": ["1"], "priority": 1, "translations": ["38", "39", "40", "41"], "relatedVocab": ["42", "44"]}
+{"id": "44", "language": "arz", "content": "شَغّالين", "length": "word", "notes": ["126", "127"], "links": ["1"], "priority": 1, "translations": ["38", "39", "40", "41"], "relatedVocab": ["42", "43"]}
+{"id": "45", "language": "arz", "content": "عاوز تاكل سمك ولا فراخ؟", "length": "sentence", "notes": ["134", "135"], "translations": ["42"], "links": ["1"], "priority": 2, "relatedVocab": ["46", "47", "48", "49", "50", "51", "52", "53"]}
+{"id": "46", "language": "arz", "content": "عايز", "length": "word", "notes": ["136", "137"], "links": ["1"], "priority": 1, "translations": ["43", "44"], "relatedVocab": ["47", "48"]}
+{"id": "47", "language": "arz", "content": "عايزة", "length": "word", "notes": ["138", "139"], "links": ["1"], "priority": 1, "translations": ["43", "44"], "relatedVocab": ["46", "48"]}
+{"id": "48", "language": "arz", "content": "عايزين", "length": "word", "notes": ["140", "141"], "links": ["1"], "priority": 1, "translations": ["43", "44"], "relatedVocab": ["46", "47"]}
+{"id": "49", "language": "arz", "content": "كَل", "length": "word", "notes": ["144", "145"], "links": ["1"], "priority": 1, "translations": ["45"], "relatedVocab": ["50"]}
+{"id": "50", "language": "arz", "content": "يا كل", "length": "word", "notes": ["146", "147"], "links": ["1"], "priority": 1, "translations": ["45"], "relatedVocab": ["49"]}
+{"id": "51", "language": "arb", "content": "سمك", "length": "word", "notes": ["149", "150"], "links": ["1"], "priority": 1, "translations": ["46"]}
+{"id": "52", "language": "arb", "content": "ولا", "length": "word", "notes": ["152", "153"], "links": ["1"], "priority": 1, "translations": ["47", "48", "49"]}
+{"id": "53", "language": "arz", "content": "فيراخ", "length": "word", "notes": ["158", "159"], "links": ["1"], "priority": 1, "translations": ["50"]}
+{"id": "54", "language": "arz", "content": "كلّ حاجة غالية في المحل ده", "length": "sentence", "notes": ["162"], "translations": ["51"], "links": ["1"], "priority": 2, "relatedVocab": ["55", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64"]}
+{"id": "55", "language": "arz", "content": "كلّ حاجة", "length": "word", "notes": ["163", "164", "168", "169"], "links": ["1"], "priority": 1, "translations": ["52", "53", "52", "53"]}
+{"id": "56", "language": "arz", "content": "غالي", "length": "word", "notes": ["173", "174"], "links": ["1"], "priority": 1, "translations": ["54", "55", "56"], "relatedVocab": ["57", "58"]}
+{"id": "57", "language": "arz", "content": "غالية", "length": "word", "notes": ["175", "176"], "links": ["1"], "priority": 1, "translations": ["54", "55", "56"], "relatedVocab": ["56", "58"]}
+{"id": "58", "language": "arz", "content": "غاليين", "length": "word", "notes": ["177", "178"], "links": ["1"], "priority": 1, "translations": ["54", "55", "56"], "relatedVocab": ["56", "57"]}
 {"id": "59", "language": "arb", "content": "في", "length": "word", "notes": ["184", "185"], "links": ["1"], "priority": 1, "translations": ["57"]}
-{"id": "60", "language": "arb", "content": "مـَحـَلّ", "length": "word", "notes": ["187", "188"], "links": ["1"], "priority": 1, "translations": ["58", "59"], "relatedVocab": ["61"]}
-{"id": "61", "language": "arb", "content": "مـَحـَلّا َت", "length": "word", "notes": ["189", "190"], "links": ["1"], "priority": 1, "translations": ["58", "59"], "relatedVocab": ["60"]}
-{"id": "62", "language": "arz", "content": "د َه", "length": "word", "notes": ["194", "195", "294", "295"], "links": ["1"], "priority": 1, "translations": ["60", "61", "62", "60", "61", "62"], "relatedVocab": ["63", "64"]}
+{"id": "60", "language": "arb", "content": "مَحَلّ", "length": "word", "notes": ["187", "188"], "links": ["1"], "priority": 1, "translations": ["58", "59"], "relatedVocab": ["61"]}
+{"id": "61", "language": "arb", "content": "مَحَلاَت", "length": "word", "notes": ["189", "190"], "links": ["1"], "priority": 1, "translations": ["58", "59"], "relatedVocab": ["60"]}
+{"id": "62", "language": "arz", "content": "ده", "length": "word", "notes": ["194", "195", "294", "295"], "links": ["1"], "priority": 1, "translations": ["60", "61", "62", "60", "61", "62"], "relatedVocab": ["63", "64"]}
 {"id": "63", "language": "arz", "content": "ديه", "length": "word", "notes": ["196", "197", "296", "297"], "links": ["1"], "priority": 1, "translations": ["60", "61", "62", "60", "61", "62"], "relatedVocab": ["62", "64"]}
 {"id": "64", "language": "arz", "content": "دول", "length": "word", "notes": ["198", "199", "298", "299"], "links": ["1"], "priority": 1, "translations": ["60", "61", "62", "60", "61", "62"], "relatedVocab": ["62", "63"]}
-{"id": "65", "language": "arz", "content": "إنت َ عـَند َك سـَبـَب مـُعـَيـِن عـَلـَشا َن كـِدا َ إنت َ مـِش بـِتحـِبّ ا ِلمـَكا َن د َه", "length": "sentence", "notes": ["205"], "translations": ["63"], "links": ["1"], "priority": 2, "relatedVocab": ["66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "66", "67", "68", "41", "82", "83", "84", "85", "86", "87", "62", "63", "64"]}
-{"id": "66", "language": "arb", "content": "إنتَ", "length": "word", "notes": ["206", "207", "263", "264"], "links": ["1"], "priority": 1, "translations": ["64", "64"], "relatedVocab": ["67", "68"]}
+{"id": "65", "language": "arz", "content": "إنت عندك سبب معين علشان كدا إنت مش بتحب المكان ده", "length": "sentence", "notes": ["205"], "translations": ["63"], "links": ["1"], "priority": 2, "relatedVocab": ["66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "66", "67", "68", "41", "82", "83", "84", "85", "86", "87", "62", "63", "64"]}
+{"id": "66", "language": "arb", "content": "إنت", "length": "word", "notes": ["206", "207", "263", "264"], "links": ["1"], "priority": 1, "translations": ["64", "64"], "relatedVocab": ["67", "68"]}
 {"id": "67", "language": "arb", "content": "إنتِ", "length": "word", "notes": ["208", "209", "265", "266"], "links": ["1"], "priority": 1, "translations": ["64", "64"], "relatedVocab": ["66", "68"]}
 {"id": "68", "language": "arb", "content": "إنتوا", "length": "word", "notes": ["210", "211", "267", "268"], "links": ["1"], "priority": 1, "translations": ["64", "64"], "relatedVocab": ["66", "67"]}
-{"id": "69", "language": "arb", "content": "عـَند", "length": "word", "notes": ["214", "215"], "links": ["1"], "priority": 1, "translations": ["65", "65"]}
-{"id": "70", "language": "arb", "content": "ــَك", "length": "word", "notes": ["220", "221"], "links": ["1"], "priority": 1, "translations": ["64"], "relatedVocab": ["71", "72"]}
-{"id": "71", "language": "arb", "content": "ــِك", "length": "word", "notes": ["222", "223"], "links": ["1"], "priority": 1, "translations": ["64"], "relatedVocab": ["70", "72"]}
-{"id": "72", "language": "arb", "content": "ـكـُم", "length": "word", "notes": ["224", "225"], "links": ["1"], "priority": 1, "translations": ["64"], "relatedVocab": ["70", "71"]}
-{"id": "73", "language": "arb", "content": "سـَبـَب", "length": "word", "notes": ["228", "229"], "links": ["1"], "priority": 1, "translations": ["66", "67"], "relatedVocab": ["74"]}
-{"id": "74", "language": "arb", "content": "أسبا َب", "length": "word", "notes": ["230", "231"], "links": ["1"], "priority": 1, "translations": ["66", "67"], "relatedVocab": ["73"]}
-{"id": "75", "language": "arb", "content": "مـُعيـَن", "length": "word", "notes": ["236", "237"], "links": ["1"], "priority": 1, "translations": ["68", "69", "70"], "relatedVocab": ["76", "77"]}
-{"id": "76", "language": "arb", "content": "مـُعيـَنـَة", "length": "word", "notes": ["238", "239"], "links": ["1"], "priority": 1, "translations": ["68", "69", "70"], "relatedVocab": ["75", "77"]}
-{"id": "77", "language": "arb", "content": "مـُعيـَنين", "length": "word", "notes": ["240", "241"], "links": ["1"], "priority": 1, "translations": ["68", "69", "70"], "relatedVocab": ["75", "76"]}
-{"id": "78", "language": "arb", "content": "عـَلـَشا َن", "length": "word", "notes": ["246", "247"], "links": ["1"], "priority": 1, "translations": ["71", "72", "73"], "relatedVocab": ["79"]}
-{"id": "79", "language": "arb", "content": "عـَشا َن", "length": "word", "notes": ["248", "249"], "links": ["1"], "priority": 1, "translations": ["71", "72", "73"], "relatedVocab": ["78"]}
-{"id": "80", "language": "arz", "content": "كـِدا", "length": "word", "notes": ["255", "256"], "links": ["1"], "priority": 1, "translations": ["74", "75", "76"], "relatedVocab": ["81"]}
-{"id": "81", "language": "arz", "content": "كـِد َه", "length": "word", "notes": ["257", "258"], "links": ["1"], "priority": 1, "translations": ["74", "75", "76"], "relatedVocab": ["80"]}
-{"id": "82", "language": "arz", "content": "حـَبّ", "length": "word", "notes": ["276", "277"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["83", "84", "85"]}
-{"id": "83", "language": "arz", "content": "يـِحـِبّ", "length": "word", "notes": ["278", "279"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["82", "84", "85"]}
-{"id": "84", "language": "arz", "content": "حا َبـِب", "length": "word", "notes": ["280", "281"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["82", "83", "85"]}
-{"id": "85", "language": "arz", "content": "مـَحبوب", "length": "word", "notes": ["282", "283"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["82", "83", "84"]}
-{"id": "86", "language": "arb", "content": "مـَكا َن", "length": "word", "notes": ["286", "287"], "links": ["1"], "priority": 1, "translations": ["78", "79", "80", "81"], "relatedVocab": ["87"]}
-{"id": "87", "language": "arb", "content": "أما َكـِن", "length": "word", "notes": ["288", "289"], "links": ["1"], "priority": 1, "translations": ["78", "79", "80", "81"], "relatedVocab": ["86"]}
-{"id": "88", "language": "arz", "content": "ها َتـ ــلـ ــي جـَرد َل مـَييـَه", "length": "sentence", "notes": ["305"], "translations": ["82"], "links": ["1"], "priority": 2, "relatedVocab": ["89", "90", "91", "92", "93", "94", "95", "96", "97"]}
-{"id": "89", "language": "arz", "content": "ها َت", "length": "word", "notes": ["306", "307"], "links": ["1"], "priority": 1, "translations": ["83", "84", "85"], "relatedVocab": ["90", "91"]}
-{"id": "90", "language": "arz", "content": "ها َتي", "length": "word", "notes": ["308", "309"], "links": ["1"], "priority": 1, "translations": ["83", "84", "85"], "relatedVocab": ["89", "91"]}
-{"id": "91", "language": "arz", "content": "ها َتوا", "length": "word", "notes": ["310", "311"], "links": ["1"], "priority": 1, "translations": ["83", "84", "85"], "relatedVocab": ["89", "90"]}
+{"id": "69", "language": "arb", "content": "عند", "length": "word", "notes": ["214", "215"], "links": ["1"], "priority": 1, "translations": ["65", "65"]}
+{"id": "70", "language": "arb", "content": "كَ", "length": "word", "notes": ["220", "221"], "links": ["1"], "priority": 1, "translations": ["64"], "relatedVocab": ["71", "72"]}
+{"id": "71", "language": "arb", "content": "ِك", "length": "word", "notes": ["222", "223"], "links": ["1"], "priority": 1, "translations": ["64"], "relatedVocab": ["70", "72"]}
+{"id": "72", "language": "arb", "content": "كُم", "length": "word", "notes": ["224", "225"], "links": ["1"], "priority": 1, "translations": ["64"], "relatedVocab": ["70", "71"]}
+{"id": "73", "language": "arb", "content": "سبب", "length": "word", "notes": ["228", "229"], "links": ["1"], "priority": 1, "translations": ["66", "67"], "relatedVocab": ["74"]}
+{"id": "74", "language": "arb", "content": "أسباب", "length": "word", "notes": ["230", "231"], "links": ["1"], "priority": 1, "translations": ["66", "67"], "relatedVocab": ["73"]}
+{"id": "75", "language": "arb", "content": "معين", "length": "word", "notes": ["236", "237"], "links": ["1"], "priority": 1, "translations": ["68", "69", "70"], "relatedVocab": ["76", "77"]}
+{"id": "76", "language": "arb", "content": "مُعينة", "length": "word", "notes": ["238", "239"], "links": ["1"], "priority": 1, "translations": ["68", "69", "70"], "relatedVocab": ["75", "77"]}
+{"id": "77", "language": "arb", "content": "معينين", "length": "word", "notes": ["240", "241"], "links": ["1"], "priority": 1, "translations": ["68", "69", "70"], "relatedVocab": ["75", "76"]}
+{"id": "78", "language": "arb", "content": "علشان", "length": "word", "notes": ["246", "247"], "links": ["1"], "priority": 1, "translations": ["71", "72", "73"], "relatedVocab": ["79"]}
+{"id": "79", "language": "arb", "content": "عَشان", "length": "word", "notes": ["248", "249"], "links": ["1"], "priority": 1, "translations": ["71", "72", "73"], "relatedVocab": ["78"]}
+{"id": "80", "language": "arz", "content": "كدا", "length": "word", "notes": ["255", "256"], "links": ["1"], "priority": 1, "translations": ["74", "75", "76"], "relatedVocab": ["81"]}
+{"id": "81", "language": "arz", "content": "كده", "length": "word", "notes": ["257", "258"], "links": ["1"], "priority": 1, "translations": ["74", "75", "76"], "relatedVocab": ["80"]}
+{"id": "82", "language": "arz", "content": "حَبّ", "length": "word", "notes": ["276", "277"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["83", "84", "85"]}
+{"id": "83", "language": "arz", "content": "يحبّ", "length": "word", "notes": ["278", "279"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["82", "84", "85"]}
+{"id": "84", "language": "arz", "content": "حَبيب", "length": "word", "notes": ["280", "281"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["82", "83", "85"]}
+{"id": "85", "language": "arz", "content": "مَحبوب", "length": "word", "notes": ["282", "283"], "links": ["1"], "priority": 1, "translations": ["77"], "relatedVocab": ["82", "83", "84"]}
+{"id": "86", "language": "arb", "content": "مكان", "length": "word", "notes": ["286", "287"], "links": ["1"], "priority": 1, "translations": ["78", "79", "80", "81"], "relatedVocab": ["87"]}
+{"id": "87", "language": "arb", "content": "أما كِن", "length": "word", "notes": ["288", "289"], "links": ["1"], "priority": 1, "translations": ["78", "79", "80", "81"], "relatedVocab": ["86"]}
+{"id": "88", "language": "arz", "content": "هاتلي جردل مييه", "length": "sentence", "notes": ["305"], "translations": ["82"], "links": ["1"], "priority": 2, "relatedVocab": ["89", "90", "91", "92", "93", "94", "95", "96", "97"]}
+{"id": "89", "language": "arz", "content": "هات", "length": "word", "notes": ["306", "307"], "links": ["1"], "priority": 1, "translations": ["83", "84", "85"], "relatedVocab": ["90", "91"]}
+{"id": "90", "language": "arz", "content": "هاتي", "length": "word", "notes": ["308", "309"], "links": ["1"], "priority": 1, "translations": ["83", "84", "85"], "relatedVocab": ["89", "91"]}
+{"id": "91", "language": "arz", "content": "هاتوا", "length": "word", "notes": ["310", "311"], "links": ["1"], "priority": 1, "translations": ["83", "84", "85"], "relatedVocab": ["89", "90"]}
 {"id": "92", "language": "arb", "content": "لِ", "length": "word", "notes": ["315", "316"], "links": ["1"], "priority": 1, "translations": ["86"]}
-{"id": "93", "language": "arz", "content": "ـي", "length": "word", "notes": ["319", "320"], "links": ["1"], "priority": 1, "translations": ["87"], "relatedVocab": ["94"]}
-{"id": "94", "language": "arz", "content": "ـني", "length": "word", "notes": ["321", "322"], "links": ["1"], "priority": 1, "translations": ["87"], "relatedVocab": ["93"]}
-{"id": "95", "language": "arb", "content": "جـَرد َل", "length": "word", "notes": ["324", "325"], "links": ["1"], "priority": 1, "translations": ["88", "89"], "relatedVocab": ["96"]}
-{"id": "96", "language": "arb", "content": "جـَرا َد ِل", "length": "word", "notes": ["326", "327"], "links": ["1"], "priority": 1, "translations": ["88", "89"], "relatedVocab": ["95"]}
-{"id": "97", "language": "arz", "content": "مـَييـَه", "length": "word", "notes": ["330", "331"], "links": ["1"], "priority": 1, "translations": ["90"]}
-{"id": "98", "language": "arz", "content": "لـَو مـِشيت ب ِخـَطّ مـُستسقيم هـَتـِوصـَل أسر َع", "length": "sentence", "notes": ["333"], "translations": ["91"], "links": ["1"], "priority": 2, "relatedVocab": ["99", "100", "101", "102", "103", "104", "104", "105", "106", "107", "108"]}
-{"id": "99", "language": "arb", "content": "لـَو", "length": "word", "notes": ["334", "335"], "links": ["1"], "priority": 1, "translations": ["92"]}
-{"id": "100", "language": "arz", "content": "مـِشي", "length": "word", "notes": ["338", "339"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["101", "102", "103"]}
-{"id": "101", "language": "arz", "content": "يـِمشي", "length": "word", "notes": ["340", "341"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["100", "102", "103"]}
-{"id": "102", "language": "arz", "content": "ما َشي", "length": "word", "notes": ["342", "343"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["100", "101", "103"]}
-{"id": "103", "language": "arz", "content": "مـَمشي", "length": "word", "notes": ["344", "345"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["100", "101", "102"]}
-{"id": "104", "language": "arb", "content": "ب ِخـَطّ مـُستـَقيم", "length": "word", "notes": ["348", "349", "352", "353"], "links": ["1"], "priority": 1, "translations": ["95", "95"]}
-{"id": "105", "language": "arb", "content": "و َصـَل", "length": "word", "notes": ["356", "357"], "links": ["1"], "priority": 1, "translations": ["96", "97"], "relatedVocab": ["106", "107"]}
-{"id": "106", "language": "arb", "content": "يـِوصـَل", "length": "word", "notes": ["358", "359"], "links": ["1"], "priority": 1, "translations": ["96", "97"], "relatedVocab": ["105", "107"]}
-{"id": "107", "language": "arb", "content": "وا َصـِل", "length": "word", "notes": ["360", "361"], "links": ["1"], "priority": 1, "translations": ["96", "97"], "relatedVocab": ["105", "106"]}
-{"id": "108", "language": "arb", "content": "أسر َع", "length": "word", "notes": ["364", "365"], "links": ["1"], "priority": 1, "translations": ["98"]}
+{"id": "93", "language": "arz", "content": "ي", "length": "word", "notes": ["319", "320"], "links": ["1"], "priority": 1, "translations": ["87"], "relatedVocab": ["94"]}
+{"id": "94", "language": "arz", "content": "ني", "length": "word", "notes": ["321", "322"], "links": ["1"], "priority": 1, "translations": ["87"], "relatedVocab": ["93"]}
+{"id": "95", "language": "arb", "content": "جردل", "length": "word", "notes": ["324", "325"], "links": ["1"], "priority": 1, "translations": ["88", "89"], "relatedVocab": ["96"]}
+{"id": "96", "language": "arb", "content": "جرادل", "length": "word", "notes": ["326", "327"], "links": ["1"], "priority": 1, "translations": ["88", "89"], "relatedVocab": ["95"]}
+{"id": "97", "language": "arz", "content": "مَييَه", "length": "word", "notes": ["330", "331"], "links": ["1"], "priority": 1, "translations": ["90"]}
+{"id": "98", "language": "arz", "content": "لو مشيت بخط مستقيم هتوصل أسرع", "length": "sentence", "notes": ["333"], "translations": ["91"], "links": ["1"], "priority": 2, "relatedVocab": ["99", "100", "101", "102", "103", "104", "104", "105", "106", "107", "108"]}
+{"id": "99", "language": "arb", "content": "لو", "length": "word", "notes": ["334", "335"], "links": ["1"], "priority": 1, "translations": ["92"]}
+{"id": "100", "language": "arz", "content": "مشي", "length": "word", "notes": ["338", "339"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["101", "102", "103"]}
+{"id": "101", "language": "arz", "content": "يمشي", "length": "word", "notes": ["340", "341"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["100", "102", "103"]}
+{"id": "102", "language": "arz", "content": "ماشي", "length": "word", "notes": ["342", "343"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["100", "101", "103"]}
+{"id": "103", "language": "arz", "content": "مَمشي", "length": "word", "notes": ["344", "345"], "links": ["1"], "priority": 1, "translations": ["93", "94"], "relatedVocab": ["100", "101", "102"]}
+{"id": "104", "language": "arb", "content": "بخِطّ مستَقيم", "length": "word", "notes": ["348", "349", "352", "353"], "links": ["1"], "priority": 1, "translations": ["95", "95"]}
+{"id": "105", "language": "arb", "content": "وَصَل", "length": "word", "notes": ["356", "357"], "links": ["1"], "priority": 1, "translations": ["96", "97"], "relatedVocab": ["106", "107"]}
+{"id": "106", "language": "arb", "content": "يوصَل", "length": "word", "notes": ["358", "359"], "links": ["1"], "priority": 1, "translations": ["96", "97"], "relatedVocab": ["105", "107"]}
+{"id": "107", "language": "arb", "content": "واصِل", "length": "word", "notes": ["360", "361"], "links": ["1"], "priority": 1, "translations": ["96", "97"], "relatedVocab": ["105", "106"]}
+{"id": "108", "language": "arb", "content": "أسرع", "length": "word", "notes": ["364", "365"], "links": ["1"], "priority": 1, "translations": ["98"]}
