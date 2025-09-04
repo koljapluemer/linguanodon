@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, toRaw } from 'vue';
+import { ref, computed, onMounted, onUnmounted, toRaw } from 'vue';
 import type { Task } from '@/pages/practice/Task';
-import type { VocabData } from '@/entities/vocab/VocabData';
+import type { VocabData, VocabSound } from '@/entities/vocab/VocabData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import AudioRecorder from './AudioRecorder.vue';
+import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
 
 interface Props {
   task: Task;
@@ -24,6 +25,11 @@ const translations = ref<{ [vocabUid: string]: string[] }>({});
 const sentence = ref('');
 const activeTab = ref<'text' | 'audio'>('text');
 const audioRecording = ref<{ blob: Blob; duration: number } | null>(null);
+
+// Audio playback state
+const playingVocabUid = ref<string | null>(null);
+const audioElement = ref<HTMLAudioElement>();
+const audioUrl = ref<string | null>(null);
 
 const isDoneEnabled = computed(() => {
   if (activeTab.value === 'text') {
@@ -55,6 +61,59 @@ const handleSkip = async () => {
 
 const handleRecordingReady = (blob: Blob, duration: number) => {
   audioRecording.value = { blob, duration };
+};
+
+// Get a random playable sound for a vocab item
+const getPlayableSound = (vocab: VocabData): VocabSound | null => {
+  if (!vocab.sounds?.length) return null;
+  
+  const playableSounds = vocab.sounds.filter(sound => !sound.disableForPractice);
+  if (playableSounds.length === 0) return null;
+  
+  // Return a random sound
+  return playableSounds[Math.floor(Math.random() * playableSounds.length)];
+};
+
+// Play sound for a vocab item
+const playVocabSound = (vocabUid: string) => {
+  const vocab = vocabItems.value.find(v => v.uid === vocabUid);
+  if (!vocab) return;
+  
+  const sound = getPlayableSound(vocab);
+  if (!sound || !audioElement.value) return;
+  
+  // Stop any currently playing audio
+  if (playingVocabUid.value) {
+    audioElement.value.pause();
+    if (audioUrl.value) {
+      URL.revokeObjectURL(audioUrl.value);
+      audioUrl.value = null;
+    }
+  }
+  
+  try {
+    const url = URL.createObjectURL(sound.blob);
+    audioUrl.value = url;
+    audioElement.value.src = url;
+    audioElement.value.play();
+    playingVocabUid.value = vocabUid;
+  } catch (error) {
+    console.error('Failed to play audio:', error);
+  }
+};
+
+// Handle audio ended
+const handleAudioEnded = () => {
+  playingVocabUid.value = null;
+  if (audioUrl.value) {
+    URL.revokeObjectURL(audioUrl.value);
+    audioUrl.value = null;
+  }
+};
+
+// Check if vocab has playable sounds
+const hasPlayableSound = (vocab: VocabData): boolean => {
+  return getPlayableSound(vocab) !== null;
 };
 
 const handleDone = async () => {
@@ -124,19 +183,54 @@ const handleTaskCompletion = async () => {
 };
 
 onMounted(loadVocab);
+
+// Cleanup audio URLs on unmount
+onUnmounted(() => {
+  if (audioUrl.value) {
+    URL.revokeObjectURL(audioUrl.value);
+  }
+});
 </script>
 
 <template>
   <div v-if="vocabItems.length >= 1">
     <!-- Vocabulary Display -->
-    <div class="text-center mb-8">
-      <div class="mb-6">
-        <div class="text-4xl font-bold mb-2">{{ vocabItems[0].content }}</div>
-        <div class="text-xl text-base-content/70 mb-4">{{ translations[vocabItems[0].uid]?.join(', ') }}</div>
-        
-        <div v-if="vocabItems.length === 2">
-          <div class="text-4xl font-bold mb-2">{{ vocabItems[1].content }}</div>
-          <div class="text-xl text-base-content/70">{{ translations[vocabItems[1].uid]?.join(', ') }}</div>
+    <div class="mb-8">
+      <div class="grid gap-6" :class="vocabItems.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'">
+        <div v-for="vocab in vocabItems" :key="vocab.uid" class="text-center">
+          <!-- Vocab Content and Translation -->
+          <div class="mb-4">
+            <div class="text-4xl font-bold mb-2 flex items-center justify-center gap-3">
+              {{ vocab.content }}
+              <button
+                v-if="hasPlayableSound(vocab)"
+                @click="playVocabSound(vocab.uid)"
+                class="btn btn-circle btn-sm btn-primary"
+                :class="{ 'loading': playingVocabUid === vocab.uid }"
+                :disabled="playingVocabUid === vocab.uid"
+              >
+                <svg v-if="playingVocabUid !== vocab.uid" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="text-xl text-base-content/70 mb-4">{{ translations[vocab.uid]?.join(', ') }}</div>
+          </div>
+          
+          <!-- Images -->
+          <div v-if="vocab.images && vocab.images.length > 0" class="mb-4">
+            <div class="grid gap-2" :class="vocab.images.length === 1 ? 'grid-cols-1 max-w-xs mx-auto' : vocab.images.length === 2 ? 'grid-cols-2 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3 max-w-lg mx-auto'">
+              <VocabImageDisplay 
+                v-for="image in vocab.images.slice(0, 6)" 
+                :key="image.uid" 
+                :image="image"
+                class="rounded-lg"
+              />
+            </div>
+            <div v-if="vocab.images.length > 6" class="text-sm text-base-content/50 mt-2">
+              +{{ vocab.images.length - 6 }} more images
+            </div>
+          </div>
         </div>
       </div>
       
@@ -222,4 +316,11 @@ onMounted(loadVocab);
     <span class="loading loading-spinner loading-lg"></span>
     <p class="mt-4 text-base-content/70">Loading vocabulary...</p>
   </div>
+
+  <!-- Hidden audio element for sound playback -->
+  <audio 
+    ref="audioElement"
+    @ended="handleAudioEnded"
+    class="hidden"
+  ></audio>
 </template>

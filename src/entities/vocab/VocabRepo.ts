@@ -345,7 +345,7 @@ export class VocabRepo implements VocabRepoContract {
       images: vocab.images || [],
       hasImage: (vocab.images && vocab.images.length > 0) || false,
       sounds: vocab.sounds || [],
-      hasSound: (vocab.sounds && vocab.sounds.length > 0) || false,
+      hasSound: (vocab.sounds && vocab.sounds.some(sound => !sound.disableForPractice)) || false,
       progress: {
         ...createEmptyCard(),
         streak: 0,
@@ -361,7 +361,7 @@ export class VocabRepo implements VocabRepoContract {
     
     // Set hasImage and hasSound based on actual data
     vocab.hasImage = vocab.images && vocab.images.length > 0;
-    vocab.hasSound = vocab.sounds && vocab.sounds.length > 0;
+    vocab.hasSound = vocab.sounds && vocab.sounds.some(sound => !sound.disableForPractice);
     
     await vocabDb.vocab.put(vocab);
   }
@@ -861,7 +861,7 @@ export class VocabRepo implements VocabRepoContract {
 
       vocab.sounds = vocab.sounds || [];
       vocab.sounds.push(vocabSound);
-      vocab.hasSound = vocab.sounds.length > 0;
+      vocab.hasSound = vocab.sounds.some(sound => !sound.disableForPractice);
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
       console.error('Failed to add sound from file:', error);
@@ -899,7 +899,7 @@ export class VocabRepo implements VocabRepoContract {
 
       vocab.sounds = vocab.sounds || [];
       vocab.sounds.push(vocabSound);
-      vocab.hasSound = vocab.sounds.length > 0;
+      vocab.hasSound = vocab.sounds.some(sound => !sound.disableForPractice);
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
       console.error('Failed to add sound from URL:', error);

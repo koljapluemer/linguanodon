@@ -133,23 +133,62 @@ const vocabUid = computed(() => {
 
 async function loadVocabData() {
   if (!vocabUid.value) {
+    console.error('Choose Image by Sound: No vocab UID provided');
     loading.value = false;
     return;
   }
 
   try {
     const vocabData = await vocabRepo.getVocabByUID(vocabUid.value);
-    if (!vocabData || !vocabData.sounds?.length || !vocabData.images?.length) {
+    if (!vocabData) {
+      console.error('Choose Image by Sound: Vocab not found for UID:', vocabUid.value);
+      loading.value = false;
+      return;
+    }
+
+    if (!vocabData.sounds?.length) {
+      console.error('Choose Image by Sound: Vocab has no sounds', {
+        uid: vocabData.uid,
+        content: vocabData.content,
+        hasSound: vocabData.hasSound
+      });
+      loading.value = false;
+      return;
+    }
+
+    if (!vocabData.images?.length) {
+      console.error('Choose Image by Sound: Vocab has no images', {
+        uid: vocabData.uid,
+        content: vocabData.content,
+        hasImage: vocabData.hasImage
+      });
+      loading.value = false;
+      return;
+    }
+
+    // Find a playable sound (not disableForPractice)
+    const playableSound = vocabData.sounds.find(sound => !sound.disableForPractice);
+    if (!playableSound) {
+      console.error('Choose Image by Sound: Vocab has no playable sounds', {
+        uid: vocabData.uid,
+        content: vocabData.content,
+        totalSounds: vocabData.sounds.length,
+        disabledSounds: vocabData.sounds.filter(s => s.disableForPractice).length
+      });
       loading.value = false;
       return;
     }
 
     vocab.value = vocabData;
 
-    // Setup audio (use first sound)
-    const firstSound = vocabData.sounds[0];
-    if (firstSound?.blob) {
-      audioUrl.value = URL.createObjectURL(firstSound.blob);
+    // Setup audio (use playable sound)
+    if (playableSound.blob) {
+      audioUrl.value = URL.createObjectURL(playableSound.blob);
+    } else {
+      console.error('Choose Image by Sound: Playable sound has no blob', {
+        uid: vocabData.uid,
+        soundUid: playableSound.uid
+      });
     }
 
     await generateImageOptions();
@@ -160,7 +199,7 @@ async function loadVocabData() {
     }, 500);
     
   } catch (error) {
-    console.error('Failed to load vocab data:', error);
+    console.error('Choose Image by Sound: Failed to load vocab data for UID:', vocabUid.value, error);
   } finally {
     loading.value = false;
   }
