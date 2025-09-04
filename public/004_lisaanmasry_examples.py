@@ -12,7 +12,7 @@ import os
 from pathlib import Path
 
 # Configuration
-MAX_SENTENCES = 10
+MAX_SENTENCES = 9999
 SLEEP_TIME = 1  # Sleep time between requests in seconds
 WORD_CLICK_WAIT = 0.3  # Wait time after clicking a word
 
@@ -53,7 +53,7 @@ def get_next_link_id():
 
 def setup_driver():
     options = FFOptions()
-    options.add_argument('--headless')  # Run in headless mode
+    # options.add_argument('--headless')  # Run in headless mode
     try:
         # Use the geckodriver path we found
         service = Service(executable_path='/snap/bin/geckodriver')
@@ -441,11 +441,48 @@ def process_individual_words(driver, arz_p, sentence_vocab_id, shared_link_id):
 
     return word_vocab_ids
 
-def scrape_sentence(driver, url):
+def set_slider_to_start(driver):
+    """Move the sentence slider to the leftmost position (minimum value)"""
+    try:
+        slider = wait_for_element(driver, By.XPATH, "//input[@type='range']")
+        
+        # Get the min value of the slider (should be 1)
+        min_value = slider.get_attribute('min') or '1'
+        
+        # Set slider to minimum value using JavaScript
+        driver.execute_script(f"arguments[0].value = '{min_value}'; arguments[0].onchange('{min_value}');", slider)
+        
+        time.sleep(1)  # Wait for page to update
+        print(f'Set slider to minimum value: {min_value}')
+        return True
+    except (NoSuchElementException, TimeoutException) as e:
+        print(f'Error setting slider: {e}')
+        return False
+
+def click_next_example(driver):
+    """Click the next example button to navigate to the next sentence"""
+    try:
+        next_button = wait_for_element(driver, By.XPATH, "//img[@src='/images/ifx_next24.png']")
+        next_button.click()
+        time.sleep(WORD_CLICK_WAIT)  # Wait for page to update
+        return True
+    except (NoSuchElementException, TimeoutException) as e:
+        print(f'Error clicking next button: {e}')
+        return False
+
+def scrape_sentence(driver, url=None, is_first=False):
     """Scrape a single sentence and create all related data entries"""
     try:
-        driver.get(url)
-        print('Page loaded, waiting for content...')
+        if is_first and url:
+            driver.get(url)
+            print('Page loaded, waiting for content...')
+            
+            # Set slider to start position for first sentence
+            print('Setting slider to start position...')
+            if not set_slider_to_start(driver):
+                print('Warning: Could not set slider to start position')
+        elif not is_first:
+            print('Processing current sentence...')
         
         # Process sentence data
         sentence_data = process_sentence_data(driver)
@@ -541,14 +578,22 @@ def main():
         while sentences_processed < MAX_SENTENCES:
             print(f'Scraping sentence {sentences_processed + 1} of {MAX_SENTENCES}...')
             
-            success = scrape_sentence(driver, base_url)
+            # For first sentence, load the page. For subsequent ones, use current page
+            is_first = sentences_processed == 0
+            success = scrape_sentence(driver, base_url if is_first else None, is_first)
             if not success:
                 print('Failed to scrape sentence, stopping...')
                 break
 
             sentences_processed += 1
+            
+            # Navigate to next sentence if we're not done
             if sentences_processed < MAX_SENTENCES:
-                print(f'Sleeping for {SLEEP_TIME} seconds before next request...')
+                print(f'Navigating to next sentence...')
+                if not click_next_example(driver):
+                    print('Failed to navigate to next sentence, stopping...')
+                    break
+                print(f'Sleeping for {SLEEP_TIME} seconds...')
                 time.sleep(SLEEP_TIME)
                 
     finally:
