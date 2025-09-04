@@ -58,8 +58,8 @@
   <!-- Audio -->
   <div class="py-4">
     <VocabSoundManager
-      :sound="formData.sound"
-      @sound-changed="(sound) => $emit('update-sound', sound)"
+      :sounds="formData.sounds"
+      @sounds-changed="(sounds) => $emit('update-sounds', sounds)"
     />
   </div>
 </template>
@@ -86,7 +86,7 @@ interface VocabFormData {
   links: Link[];
   isPicturable?: boolean;
   images?: VocabImage[];
-  sound?: VocabSound;
+  sounds?: VocabSound[];
 }
 
 defineProps<{
@@ -102,6 +102,6 @@ defineEmits<{
   'update-link': [index: number, link: Link];
   'remove-link': [index: number];
   'update-images': [images: VocabImage[]];
-  'update-sound': [sound: VocabSound | undefined];
+  'update-sounds': [sounds: VocabSound[]];
 }>();
 </script>

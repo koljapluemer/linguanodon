@@ -23,6 +23,6 @@ export const vocabSchema = z.object({
     priority: z.number().optional(),
     isPicturable: z.boolean().optional(),
     images: z.array(remoteVocabImageSchema).optional(),
-    sound: remoteVocabSoundSchema.optional(),
+    sounds: z.array(remoteVocabSoundSchema).optional(),
     notInterestedInPronunciationOrAlreadyAdded: z.boolean().optional()
 })

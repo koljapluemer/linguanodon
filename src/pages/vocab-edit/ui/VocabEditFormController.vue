@@ -20,7 +20,7 @@
       @update-related-vocab="updateRelatedVocab"
       @update-picturable="updatePicturable"
       @update-images="updateImages"
-      @update-sound="updateSound"
+      @update-sounds="updateSounds"
     />
   </div>
 </template>
@@ -54,7 +54,7 @@ interface VocabFormData {
   relatedVocab?: string[];
   isPicturable?: boolean;
   images?: VocabImage[];
-  sound?: VocabSound;
+  sounds?: VocabSound[];
 }
 
 interface VocabFormState {
@@ -79,7 +79,7 @@ function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = [], translati
     relatedVocab: vocab.relatedVocab ? [...vocab.relatedVocab] : [],
     isPicturable: vocab.isPicturable,
     images: vocab.images ? [...vocab.images] : [],
-    sound: vocab.sound
+    sounds: vocab.sounds ? [...vocab.sounds] : []
   };
 }
 
@@ -99,7 +99,7 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     notRelatedVocab: existingVocab?.notRelatedVocab || [],
     isPicturable: formData.isPicturable,
     images: formData.images || [],
-    sound: formData.sound
+    sounds: formData.sounds || []
   };
 
   // For updates, include existing progress
@@ -219,17 +219,17 @@ async function saveInternal(): Promise<void> {
 
   // Extract Blobs before serialization (with toRaw to remove Vue reactivity)
   const originalImages = state.value.formData.images ? state.value.formData.images.map(img => toRaw(img)) : [];
-  const originalSound = state.value.formData.sound ? toRaw(state.value.formData.sound) : undefined;
+  const originalSounds = state.value.formData.sounds ? state.value.formData.sounds.map(sound => toRaw(sound)) : [];
   
   const serializedFormData = serializeFormData(state.value.formData);
   
   // Restore Blobs to serialized data
   serializedFormData.images = originalImages;
-  serializedFormData.sound = originalSound;
+  serializedFormData.sounds = originalSounds;
   
   console.log('🔧 EDIT: serializedFormData after Blob restoration:', {
     images: serializedFormData.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
-    sound: serializedFormData.sound ? { uid: serializedFormData.sound.uid, hasBlob: !!serializedFormData.sound.blob, blobType: serializedFormData.sound.blob?.type, blobSize: serializedFormData.sound.blob?.size } : 'none'
+    sounds: serializedFormData.sounds?.map(sound => ({ uid: sound.uid, hasBlob: !!sound.blob, blobType: sound.blob?.type, blobSize: sound.blob?.size }))
   });
 
   for (const note of serializedFormData.notes) {
@@ -286,7 +286,7 @@ async function saveInternal(): Promise<void> {
     console.log('🔧 EDIT: Final updatedVocab being passed to updateVocab:', {
       uid: updatedVocab.uid,
       images: updatedVocab.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })),
-      sound: updatedVocab.sound ? { uid: updatedVocab.sound.uid, hasBlob: !!updatedVocab.sound.blob, blobType: updatedVocab.sound.blob?.type, blobSize: updatedVocab.sound.blob?.size } : 'none'
+      sounds: updatedVocab.sounds?.map(sound => ({ uid: sound.uid, hasBlob: !!sound.blob, blobType: sound.blob?.type, blobSize: sound.blob?.size }))
     });
     
     await vocabRepo.updateVocab(toRaw(updatedVocab));
@@ -402,8 +402,8 @@ async function updateImages(images: VocabImage[]) {
   await handleFieldChange();
 }
 
-async function updateSound(sound: VocabSound | undefined) {
-  state.value.formData.sound = sound;
+async function updateSounds(sounds: VocabSound[]) {
+  state.value.formData.sounds = sounds;
   await handleFieldChange();
 }
 

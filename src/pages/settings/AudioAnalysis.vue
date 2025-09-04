@@ -12,7 +12,7 @@ const props = defineProps<Props>();
 
 // Empty sound detection state
 const detectingSounds = ref(false);
-const emptyAudioResults = ref<{ uid: string; content: string; reason: string }[]>([]);
+const emptyAudioResults = ref<{ uid: string; content: string; reason: string; soundIndex?: number; soundUid: string }[]>([]);
 const analysisCompleted = ref(false);
 const deletingEmptyAudio = ref(false);
 
@@ -92,24 +92,32 @@ async function detectEmptySoundFiles() {
   try {
     // Get all vocab with sound
     const allVocab = await props.vocabRepo.getVocab();
-    const vocabWithSound = allVocab.filter(v => v.hasSound && v.sound?.blob);
+    const vocabWithSound = allVocab.filter(v => v.hasSound && v.sounds?.some(s => s.blob));
     
-    ;
-    toast.info(`Analyzing ${vocabWithSound.length} audio files...`, { duration: 2000 });
+    // Count total audio files
+    const totalAudioFiles = vocabWithSound.reduce((count, v) => count + (v.sounds?.length || 0), 0);
+    toast.info(`Analyzing ${totalAudioFiles} audio files from ${vocabWithSound.length} vocab items...`, { duration: 2000 });
     
     let emptyCount = 0;
-    const results: { uid: string; content: string; reason: string }[] = [];
+    const results: { uid: string; content: string; reason: string; soundIndex?: number; soundUid: string }[] = [];
     
     for (const vocab of vocabWithSound) {
-      if (vocab.sound?.blob) {
-        const detection = await detectEmptyAudio(vocab.sound.blob);
-        if (detection.isEmpty) {
-          emptyCount++;
-          results.push({
-            uid: vocab.uid,
-            content: vocab.content || '...',
-            reason: detection.reason || 'unknown'
-          });
+      if (vocab.sounds) {
+        for (let i = 0; i < vocab.sounds.length; i++) {
+          const sound = vocab.sounds[i];
+          if (sound.blob) {
+            const detection = await detectEmptyAudio(sound.blob);
+            if (detection.isEmpty) {
+              emptyCount++;
+              results.push({
+                uid: vocab.uid,
+                content: vocab.content || '...',
+                reason: detection.reason || 'unknown',
+                soundIndex: vocab.sounds.length > 1 ? i : undefined,
+                soundUid: sound.uid
+              });
+            }
+          }
         }
       }
     }
@@ -149,7 +157,7 @@ async function deleteEmptyAudio() {
     let deletedCount = 0;
     
     for (const result of emptyAudioResults.value) {
-      await props.vocabRepo.removeSoundFromVocab(result.uid);
+      await props.vocabRepo.removeSoundFromVocab(result.uid, result.soundUid);
       deletedCount++;
     }
     

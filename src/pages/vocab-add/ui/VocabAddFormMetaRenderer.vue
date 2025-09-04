@@ -36,7 +36,7 @@
         @add-link="$emit('add-link', $event)"
         @remove-link="$emit('remove-link', $event)"
         @update-images="$emit('update-images', $event)"
-        @update-sound="$emit('update-sound', $event)"
+        @update-sounds="$emit('update-sounds', $event)"
       />
 
       <!-- Save Button -->
@@ -94,7 +94,7 @@ defineEmits<{
   'add-link': [link: Link];
   'remove-link': [index: number];
   'update-images': [images: VocabImage[]];
-  'update-sound': [sound: VocabSound | undefined];
+  'update-sounds': [sounds: VocabSound[]];
   'save': [];
 }>();
 

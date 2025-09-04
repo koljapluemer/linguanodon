@@ -60,8 +60,8 @@
 
     <!-- Audio -->
     <VocabSoundManager
-      :sound="formData.sound"
-      @sound-changed="(sound) => emit('update-sound', sound)"
+      :sounds="formData.sounds"
+      @sounds-changed="(sounds) => emit('update-sounds', sounds)"
     />
 
     <div class="space-y-4">
@@ -114,7 +114,7 @@ interface VocabFormData {
   relatedVocab?: string[];
   isPicturable?: boolean;
   images?: VocabImage[];
-  sound?: VocabSound;
+  sounds?: VocabSound[];
 }
 
 defineProps<{
@@ -131,7 +131,7 @@ const emit = defineEmits<{
   'remove-link': [index: number];
   'update-related-vocab': [vocabIds: string[]];
   'update-images': [images: VocabImage[]];
-  'update-sound': [sound: VocabSound | undefined];
+  'update-sounds': [sounds: VocabSound[]];
 }>();
 
 const lengthOptions = computed(() => {

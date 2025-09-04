@@ -47,7 +47,7 @@
         @remove-link="$emit('remove-link', $event)"
         @update-related-vocab="$emit('update-related-vocab', $event)"
         @update-images="$emit('update-images', $event)"
-        @update-sound="$emit('update-sound', $event)"
+        @update-sounds="$emit('update-sounds', $event)"
       />
     </div>
   </div>
@@ -102,7 +102,7 @@ defineEmits<{
   'remove-translation': [uid: string];
   'update-related-vocab': [vocabIds: string[]];
   'update-images': [images: VocabImage[]];
-  'update-sound': [sound: VocabSound | undefined];
+  'update-sounds': [sounds: VocabSound[]];
 }>();
 
 // Persistent toggle state in localStorage (shared between add and edit forms)

@@ -16,6 +16,7 @@ export interface VocabImage {
   originalFileName?: string;
   dimensions?: { width: number; height: number };
   originalDimensions?: { width: number; height: number };
+  disableForPractice?: boolean;
 }
 
 export interface VocabSound {
@@ -26,6 +27,7 @@ export interface VocabSound {
   mimeType: string;
   duration?: number; // in seconds
   originalFileName?: string;
+  disableForPractice?: boolean;
 }
 
 export interface VocabData {
@@ -50,7 +52,7 @@ export interface VocabData {
   images?: VocabImage[]; // associated images for this vocab
   hasImage?: boolean
 
-  sound?: VocabSound; // associated audio for this vocab
+  sounds?: VocabSound[]; // associated audio for this vocab
   hasSound?: boolean
 
 }

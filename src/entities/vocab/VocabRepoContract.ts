@@ -74,7 +74,7 @@ export interface VocabRepoContract {
   // Sound operations
   addSoundFromFile(vocabId: string, file: File): Promise<void>;
   addSoundFromUrl(vocabId: string, url: string): Promise<void>;
-  removeSoundFromVocab(vocabId: string): Promise<void>;
+  removeSoundFromVocab(vocabId: string, soundId: string): Promise<void>;
 
   // Eyes and Ears operations
   getRandomUnseenVocabWithSoundAndImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;

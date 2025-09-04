@@ -46,7 +46,7 @@ export class VocabRepo implements VocabRepoContract {
       relatedVocab: vocab.relatedVocab || [],
       notRelatedVocab: vocab.notRelatedVocab || [],
       images: vocab.images || [],
-      sound: vocab.sound || undefined
+      sounds: vocab.sounds || []
     };
   }
 
@@ -344,8 +344,8 @@ export class VocabRepo implements VocabRepoContract {
       isPicturable: vocab.isPicturable,
       images: vocab.images || [],
       hasImage: (vocab.images && vocab.images.length > 0) || false,
-      sound: vocab.sound,
-      hasSound: !!vocab.sound,
+      sounds: vocab.sounds || [],
+      hasSound: (vocab.sounds && vocab.sounds.length > 0) || false,
       progress: {
         ...createEmptyCard(),
         streak: 0,
@@ -361,7 +361,7 @@ export class VocabRepo implements VocabRepoContract {
     
     // Set hasImage and hasSound based on actual data
     vocab.hasImage = vocab.images && vocab.images.length > 0;
-    vocab.hasSound = !!vocab.sound;
+    vocab.hasSound = vocab.sounds && vocab.sounds.length > 0;
     
     await vocabDb.vocab.put(vocab);
   }
@@ -859,8 +859,9 @@ export class VocabRepo implements VocabRepoContract {
         originalFileName: file.name
       };
 
-      vocab.sound = vocabSound;
-      vocab.hasSound = true;
+      vocab.sounds = vocab.sounds || [];
+      vocab.sounds.push(vocabSound);
+      vocab.hasSound = vocab.sounds.length > 0;
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
       console.error('Failed to add sound from file:', error);
@@ -896,8 +897,9 @@ export class VocabRepo implements VocabRepoContract {
         originalFileName: undefined
       };
 
-      vocab.sound = vocabSound;
-      vocab.hasSound = true;
+      vocab.sounds = vocab.sounds || [];
+      vocab.sounds.push(vocabSound);
+      vocab.hasSound = vocab.sounds.length > 0;
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
       console.error('Failed to add sound from URL:', error);
@@ -905,12 +907,12 @@ export class VocabRepo implements VocabRepoContract {
     }
   }
 
-  async removeSoundFromVocab(vocabId: string): Promise<void> {
+  async removeSoundFromVocab(vocabId: string, soundId: string): Promise<void> {
     const vocab = await vocabDb.vocab.get(vocabId);
     if (!vocab) return;
 
-    vocab.sound = undefined;
-    vocab.hasSound = false;
+    vocab.sounds = vocab.sounds?.filter(sound => sound.uid !== soundId) || [];
+    vocab.hasSound = vocab.sounds.length > 0;
     await vocabDb.vocab.put(toRaw(vocab));
   }
 

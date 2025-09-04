@@ -2,63 +2,65 @@
   <div class="space-y-4">
     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Audio</h3>
 
-    <!-- Current Sound -->
-    <div v-if="localSound" class="card bg-base-200">
-      <div class="card-body p-4">
-        <div class="flex items-center gap-4">
-          <!-- Play/Pause Button -->
-          <button 
-            @click="togglePlayback"
-            class="btn btn-circle btn-primary"
-            :disabled="loading"
-          >
-            <svg v-if="!isPlaying" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-            <svg v-else class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-            </svg>
-          </button>
+    <!-- Current Sounds -->
+    <div v-if="localSounds && localSounds.length > 0" class="space-y-3">
+      <div v-for="sound in localSounds" :key="sound.uid" class="card bg-base-200">
+        <div class="card-body p-4">
+          <div class="flex items-center gap-4">
+            <!-- Play/Pause Button -->
+            <button 
+              @click="togglePlayback(sound.uid)"
+              class="btn btn-circle btn-primary"
+              :disabled="loading"
+            >
+              <svg v-if="playingSound !== sound.uid" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              <svg v-else class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+              </svg>
+            </button>
 
-          <!-- Audio Info -->
-          <div class="flex-1">
-            <div class="text-sm font-medium">
-              {{ localSound.originalFileName || 'Audio file' }}
+            <!-- Audio Info -->
+            <div class="flex-1">
+              <div class="text-sm font-medium">
+                {{ sound.originalFileName || 'Audio file' }}
+              </div>
+              <div class="text-xs text-base-content/60 flex gap-4">
+                <span>{{ formatFileSize(sound.fileSize) }}</span>
+                <span v-if="sound.duration">{{ formatAudioDuration(sound.duration) }}</span>
+                <span>{{ sound.mimeType.split('/')[1].toUpperCase() }}</span>
+              </div>
             </div>
-            <div class="text-xs text-base-content/60 flex gap-4">
-              <span>{{ formatFileSize(localSound.fileSize) }}</span>
-              <span v-if="localSound.duration">{{ formatAudioDuration(localSound.duration) }}</span>
-              <span>{{ localSound.mimeType.split('/')[1].toUpperCase() }}</span>
-            </div>
+
+            <!-- Remove Button -->
+            <button 
+              @click="removeSound(sound.uid)"
+              class="btn btn-sm btn-error btn-outline"
+              :disabled="loading"
+            >
+              Remove
+            </button>
           </div>
 
-          <!-- Remove Button -->
-          <button 
-            @click="removeSound"
-            class="btn btn-sm btn-error btn-outline"
-            :disabled="loading"
-          >
-            Remove
-          </button>
-        </div>
-
-        <!-- Audio Progress Bar (when playing) -->
-        <div v-if="isPlaying && audioElement && localSound.duration" class="mt-3">
-          <div class="flex items-center gap-2 text-xs text-base-content/60">
-            <span>{{ formatAudioDuration(currentTime) }}</span>
-            <progress 
-              class="progress progress-primary flex-1" 
-              :value="currentTime" 
-              :max="localSound.duration"
-            ></progress>
-            <span>{{ formatAudioDuration(localSound.duration) }}</span>
+          <!-- Audio Progress Bar (when playing) -->
+          <div v-if="playingSound === sound.uid && audioElement && sound.duration" class="mt-3">
+            <div class="flex items-center gap-2 text-xs text-base-content/60">
+              <span>{{ formatAudioDuration(currentTime) }}</span>
+              <progress 
+                class="progress progress-primary flex-1" 
+                :value="currentTime" 
+                :max="sound.duration"
+              ></progress>
+              <span>{{ formatAudioDuration(sound.duration) }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Add Sound Section -->
-    <div v-if="!localSound" class="card bg-base-200">
+    <div class="card bg-base-200">
       <div class="card-body p-4">
         <div class="tabs tabs-boxed tabs-sm mb-4">
           <button 
@@ -147,19 +149,19 @@ import { formatAudioDuration } from '@/shared/utils/audioUtils';
 import { formatFileSize } from '@/shared/utils/fileUtils';
 
 const props = defineProps<{
-  sound?: VocabSound;
+  sounds?: VocabSound[];
 }>();
 
 const emit = defineEmits<{
-  soundChanged: [sound: VocabSound | undefined];
+  soundsChanged: [sounds: VocabSound[]];
 }>();
 
-// Local reactive state for sound
-const localSound = ref<VocabSound | undefined>();
+// Local reactive state for sounds
+const localSounds = ref<VocabSound[]>([]);
 
 // Watch props to sync initial state
-watch(() => props.sound, (newSound) => {
-  localSound.value = newSound ? { ...newSound } : undefined;
+watch(() => props.sounds, (newSounds) => {
+  localSounds.value = newSounds ? [...newSounds] : [];
 }, { immediate: true });
 
 // State
@@ -173,7 +175,7 @@ const fileInput = ref<HTMLInputElement>();
 
 // Audio playback state
 const audioElement = ref<HTMLAudioElement>();
-const isPlaying = ref(false);
+const playingSound = ref<string | null>(null); // uid of currently playing sound
 const currentTime = ref(0);
 const createdUrl = ref<string | null>(null);
 
@@ -194,25 +196,33 @@ function getAudioUrl(sound: VocabSound): string {
 }
 
 // Toggle audio playback
-function togglePlayback() {
-  if (!localSound.value || !audioElement.value) return;
+function togglePlayback(soundId: string) {
+  if (!audioElement.value) return;
   
-  if (isPlaying.value) {
+  const sound = localSounds.value.find(s => s.uid === soundId);
+  if (!sound) return;
+  
+  if (playingSound.value === soundId) {
     audioElement.value.pause();
-    isPlaying.value = false;
+    playingSound.value = null;
   } else {
-    const url = getAudioUrl(localSound.value);
+    // Stop any currently playing sound
+    if (playingSound.value) {
+      audioElement.value.pause();
+    }
+    
+    const url = getAudioUrl(sound);
     if (url) {
       audioElement.value.src = url;
       audioElement.value.play();
-      isPlaying.value = true;
+      playingSound.value = soundId;
     }
   }
 }
 
 // Handle audio ended
 function handleAudioEnded() {
-  isPlaying.value = false;
+  playingSound.value = null;
   currentTime.value = 0;
 }
 
@@ -266,8 +276,8 @@ async function addFromUrl() {
       originalFileName: undefined
     };
     
-    localSound.value = vocabSound;
-    emit('soundChanged', vocabSound);
+    localSounds.value.push(vocabSound);
+    emit('soundsChanged', [...localSounds.value]);
     
     progress.value = 100;
     soundUrl.value = '';
@@ -314,8 +324,8 @@ async function handleFileUpload(event: Event) {
       originalFileName: file.name
     };
     
-    localSound.value = vocabSound;
-    emit('soundChanged', vocabSound);
+    localSounds.value.push(vocabSound);
+    emit('soundsChanged', [...localSounds.value]);
     
     progress.value = 100;
     
@@ -331,19 +341,19 @@ async function handleFileUpload(event: Event) {
 }
 
 // Remove sound
-function removeSound() {
-  // Stop playback if playing
-  if (isPlaying.value && audioElement.value) {
+function removeSound(soundId: string) {
+  // Stop playback if this sound is playing
+  if (playingSound.value === soundId && audioElement.value) {
     audioElement.value.pause();
-    isPlaying.value = false;
+    playingSound.value = null;
     currentTime.value = 0;
   }
   
-  // Update local state
-  localSound.value = undefined;
+  // Remove sound from local state
+  localSounds.value = localSounds.value.filter(sound => sound.uid !== soundId);
   
   // Tell parent about the change
-  emit('soundChanged', undefined);
+  emit('soundsChanged', [...localSounds.value]);
 }
 
 // Cleanup URLs when component unmounts
@@ -353,7 +363,7 @@ onUnmounted(() => {
   }
   
   // Stop audio if playing
-  if (isPlaying.value && audioElement.value) {
+  if (playingSound.value && audioElement.value) {
     audioElement.value.pause();
   }
 });

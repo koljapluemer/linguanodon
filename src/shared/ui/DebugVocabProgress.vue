@@ -21,7 +21,7 @@
       <div class="pt-2 border-t border-base-300 mt-2">
         <div><strong>Has Sound:</strong> {{ vocabData.hasSound ? 'Yes' : 'No' }}</div>
         <div><strong>Has Image:</strong> {{ vocabData.hasImage ? 'Yes' : 'No' }}</div>
-        <div><strong>Sound Object:</strong> {{ vocabData.sound ? 'Present' : 'None' }}</div>
+        <div><strong>Sounds Array:</strong> {{ vocabData.sounds?.length || 0 }} sounds</div>
         <div><strong>Images Array:</strong> {{ vocabData.images?.length || 0 }} images</div>
       </div>
       <div class="pt-2 border-t border-base-300 mt-2">

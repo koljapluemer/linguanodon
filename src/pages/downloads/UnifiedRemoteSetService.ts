@@ -594,12 +594,14 @@ export class UnifiedRemoteSetService {
         }
       }
 
-      // Process sound
-      if (vocab.sound) {
-        try {
-          await this.downloadAndAddSound(languageCode, setName, localVocabUid, vocab.sound);
-        } catch (error) {
-          console.warn(`Failed to download sound ${vocab.sound.filename} for vocab ${vocab.id}:`, error);
+      // Process sounds
+      if (vocab.sounds && vocab.sounds.length > 0) {
+        for (const soundData of vocab.sounds) {
+          try {
+            await this.downloadAndAddSound(languageCode, setName, localVocabUid, soundData);
+          } catch (error) {
+            console.warn(`Failed to download sound ${soundData.filename} for vocab ${vocab.id}:`, error);
+          }
         }
       }
     }

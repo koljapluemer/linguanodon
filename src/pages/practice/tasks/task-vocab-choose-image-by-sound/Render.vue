@@ -139,16 +139,17 @@ async function loadVocabData() {
 
   try {
     const vocabData = await vocabRepo.getVocabByUID(vocabUid.value);
-    if (!vocabData || !vocabData.sound || !vocabData.images?.length) {
+    if (!vocabData || !vocabData.sounds?.length || !vocabData.images?.length) {
       loading.value = false;
       return;
     }
 
     vocab.value = vocabData;
 
-    // Setup audio
-    if (vocabData.sound?.blob) {
-      audioUrl.value = URL.createObjectURL(vocabData.sound.blob);
+    // Setup audio (use first sound)
+    const firstSound = vocabData.sounds[0];
+    if (firstSound?.blob) {
+      audioUrl.value = URL.createObjectURL(firstSound.blob);
     }
 
     await generateImageOptions();
