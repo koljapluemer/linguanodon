@@ -94,7 +94,7 @@ async function detectEmptySoundFiles() {
     const allVocab = await props.vocabRepo.getVocab();
     const vocabWithSound = allVocab.filter(v => v.hasSound && v.sound?.blob);
     
-    console.log(`Analyzing ${vocabWithSound.length} audio files...`);
+    ;
     toast.info(`Analyzing ${vocabWithSound.length} audio files...`, { duration: 2000 });
     
     let emptyCount = 0;
@@ -114,7 +114,7 @@ async function detectEmptySoundFiles() {
       }
     }
     
-    console.log(`Found ${emptyCount} empty sound files out of ${vocabWithSound.length} total:`);
+    ;
     if (results.length > 0) {
       console.table(results);
     }

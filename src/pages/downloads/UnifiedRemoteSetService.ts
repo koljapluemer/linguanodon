@@ -469,7 +469,6 @@ export class UnifiedRemoteSetService {
         const response = await fetch(`/sets/${languageCode}/${setName}/${fileName}.jsonl`);
         if (!response.ok) {
           if (response.status === 404) {
-            console.log(`${fileName}.jsonl not found, skipping`);
             continue;
           }
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -478,7 +477,6 @@ export class UnifiedRemoteSetService {
         // Check content type - should be text/plain or application/json for JSONL
         const contentType = response.headers.get('content-type') || '';
         if (contentType.includes('text/html')) {
-          console.log(`${fileName}.jsonl returned HTML content type, skipping (file doesn't exist)`);
           continue;
         }
         

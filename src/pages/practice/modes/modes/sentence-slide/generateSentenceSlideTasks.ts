@@ -36,7 +36,7 @@ export async function generateSentenceSlideTask(
     
     // If we don't have a current sentence or need to pick a new one
     if (!slideState.currentSentence) {
-      console.log('[SentenceSlide] No current sentence, looking for new one...');
+      ;
       const sentence = await getRandomUnseenSentenceWithRelatedVocab(
         vocabRepo,
         languageCodes,
@@ -49,36 +49,36 @@ export async function generateSentenceSlideTask(
       );
       
       if (!sentence) {
-        console.log('[SentenceSlide] No sentence found, returning null');
+        ;
         return null;
       }
       
       slideState.currentSentence = sentence;
       await initializeConnectedVocabQueue(sentence, vocabRepo);
       slideState.phase = 'vocab-tasks';
-      console.log('[SentenceSlide] Initialized with sentence, connected vocab count:', slideState.connectedVocabQueue.length);
+      ;
     }
     
     // Phase 1: Work through connected vocabulary
     if (slideState.phase === 'vocab-tasks') {
-      console.log('[SentenceSlide] In vocab-tasks phase, connected vocab remaining:', slideState.connectedVocabQueue.length);
+      ;
       const task = await getNextVocabTask(vocabRepo, translationRepo);
       if (task) {
-        console.log('[SentenceSlide] Generated vocab task:', task.type, 'for vocab:', task.associatedVocab?.[0]);
+        ;
         return task;
       }
       
-      console.log('[SentenceSlide] No more vocab tasks, moving to sentence-meaning phase');
+      ;
       // All connected vocab done, move to sentence meaning task
       slideState.phase = 'sentence-meaning';
     }
     
     // Phase 2: Show sentence meaning guess task
     if (slideState.phase === 'sentence-meaning') {
-      console.log('[SentenceSlide] In sentence-meaning phase');
+      ;
       if (slideState.currentSentence) {
         const task = generateGuessWhatSentenceMeans(slideState.currentSentence);
-        console.log('[SentenceSlide] Generated sentence meaning task, resetting state for next sentence');
+        ;
         // Reset state for next sentence
         resetSlideState();
         return task;
@@ -86,7 +86,7 @@ export async function generateSentenceSlideTask(
     }
     
     // Fallback - reset and try again
-    console.log('[SentenceSlide] Fallback reached, resetting state');
+    ;
     resetSlideState();
     return null;
     
@@ -181,9 +181,6 @@ export async function removeVocabIfNotDue(
     if (!isStillDue) {
       // Remove from connected vocab queue
       slideState.connectedVocabQueue = slideState.connectedVocabQueue.filter(v => v.uid !== vocabId);
-      console.log(`Removed vocab ${vocabId} from connected queue (no longer due)`);
-    } else {
-      console.log(`Keeping vocab ${vocabId} in connected queue (still due)`);
     }
   } catch (error) {
     console.error('Error checking vocab due status:', error);

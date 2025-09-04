@@ -221,13 +221,7 @@ async function saveInternal(): Promise<void> {
   const originalImages = state.value.formData.images ? state.value.formData.images.map(img => toRaw(img)) : [];
   const originalSound = state.value.formData.sound ? toRaw(state.value.formData.sound) : undefined;
   
-  console.log('🔧 EDIT: originalImages before serialization:', originalImages.map(img => ({ uid: img.uid, hasBlog: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })));
-  console.log('🔧 EDIT: originalSound before serialization:', originalSound ? { uid: originalSound.uid, hasBlob: !!originalSound.blob, blobType: originalSound.blob?.type, blobSize: originalSound.blob?.size } : 'none');
-  
   const serializedFormData = serializeFormData(state.value.formData);
-  
-  console.log('🔧 EDIT: serializedFormData.images after JSON round-trip:', serializedFormData.images?.map(img => ({ uid: img.uid, hasBlob: !!img.blob, blobType: img.blob?.type, blobSize: img.blob?.size })));
-  console.log('🔧 EDIT: serializedFormData.sound after JSON round-trip:', serializedFormData.sound ? { uid: serializedFormData.sound.uid, hasBlob: !!serializedFormData.sound.blob, blobType: serializedFormData.sound.blob?.type, blobSize: serializedFormData.sound.blob?.size } : 'none');
   
   // Restore Blobs to serialized data
   serializedFormData.images = originalImages;

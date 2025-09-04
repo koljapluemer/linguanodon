@@ -64,16 +64,16 @@ async function generateNextTask(): Promise<Task | null> {
     const languages = await languageRepo!.getActiveTargetLanguages();
     const languageCodes = languages.map(lang => lang.code);
     
-    console.log('[SentenceSlideWidget] generateNextTask called, languages:', languageCodes);
+    ;
     
     if (languageCodes.length === 0) {
-      console.log('[SentenceSlideWidget] No active languages found');
+      ;
       return null;
     }
     
     // Create block list with last used content
     const blockList = lastUsedContentUid.value ? [lastUsedContentUid.value] : undefined;
-    console.log('[SentenceSlideWidget] Block list:', blockList);
+    ;
     
     const task = await generateSentenceSlideTask(
       vocabRepo!,
@@ -82,7 +82,7 @@ async function generateNextTask(): Promise<Task | null> {
       blockList
     );
     
-    console.log('[SentenceSlideWidget] Generated task:', task ? task.type : 'null');
+    ;
     return task;
   } catch (error) {
     console.error('[SentenceSlideWidget] Error generating sentence slide task:', error);
@@ -120,19 +120,19 @@ async function tryTransitionToTask(): Promise<boolean> {
 
 // Initialize queue
 async function initializeQueue() {
-  console.log('[SentenceSlideWidget] Initializing queue...');
+  ;
   setLoading('Preparing sentence slide session...');
   showLoadingUI.value = true; // Show loading immediately for initial load
 
   try {
     const success = await tryTransitionToTask();
-    console.log('[SentenceSlideWidget] tryTransitionToTask result:', success);
+    ;
     if (!success) {
-      console.log('[SentenceSlideWidget] No tasks available, showing empty state');
+      ;
       clearDelayedLoading();
       setEmpty('No sentence vocabulary is currently available for practice.');
     } else {
-      console.log('[SentenceSlideWidget] Successfully initialized, updating progress');
+      ;
       // Initialize progress tracking
       updateProgress();
     }

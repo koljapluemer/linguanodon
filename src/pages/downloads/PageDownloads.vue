@@ -108,14 +108,14 @@ const remoteSetService = new UnifiedRemoteSetService(
 async function loadLanguages() {
   try {
     const languageCodes = await remoteSetService.getAvailableLanguages();
-    console.log('Available language codes from remote:', languageCodes);
+    ;
 
     // Convert language codes to LanguageData format by getting from languageRepo
     const allLanguages = await languageRepo.getActiveTargetLanguages();
-    console.log('All local languages:', allLanguages);
+    ;
 
     availableLanguages.value = allLanguages.filter(lang => languageCodes.includes(lang.code));
-    console.log('Filtered available languages:', availableLanguages.value);
+    ;
 
     // For missing codes, create proper LanguageData objects using the language repo
     const missingCodes = languageCodes.filter(code =>

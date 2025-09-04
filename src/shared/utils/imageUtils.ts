@@ -43,8 +43,6 @@ export async function compressImage(
       const finalWidth = Math.round(originalWidth * finalScale);
       const finalHeight = Math.round(originalHeight * finalScale);
 
-      console.log(`Image resize: ${originalWidth}x${originalHeight} → ${finalWidth}x${finalHeight} (scale: ${finalScale.toFixed(3)})`);
-
       // Set canvas size to final dimensions
       canvas.width = finalWidth;
       canvas.height = finalHeight;
