@@ -42,7 +42,7 @@ Return ONLY the corrected Arabic text, nothing else."""
 
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You are an expert in Arabic typography and text formatting. Fix the Egyptian Arabic text's formatting issues while preserving the meaning and pronunciation. Do not invent diacritics that weren't there before. Do not remove a prefixed connector if it indicates that the word is used as a suffix."},
                 {"role": "user", "content": prompt}
@@ -56,6 +56,12 @@ Return ONLY the corrected Arabic text, nothing else."""
     except Exception as e:
         print(f"Error fixing text '{arabic_text}': {e}")
         return arabic_text  # Return original if fixing fails
+
+def save_entries_to_file(entries, file_path):
+    """Save all entries to the file"""
+    with open(file_path, 'w', encoding='utf-8') as f:
+        for entry in entries:
+            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
 
 def process_vocab_file():
     """Process the vocab.jsonl file and fix Arabic formatting in all entries"""
@@ -77,6 +83,8 @@ def process_vocab_file():
     
     # Process each entry
     fixed_count = 0
+    save_interval = 100
+    
     for i, entry in enumerate(entries):
         if 'content' in entry and entry.get('language') in ['arz', 'arb']:  # Only process Arabic entries
             original_content = entry['content']
@@ -90,15 +98,18 @@ def process_vocab_file():
                 print(f"  → {fixed_content}")
             else:
                 print(f"  → No changes needed")
+        
+        # Save progress every 100 entries
+        if (i + 1) % save_interval == 0:
+            print(f"\nSaving progress... (processed {i + 1}/{len(entries)} entries)")
+            save_entries_to_file(entries, file_path)
+            print(f"Progress saved. Fixed {fixed_count} entries so far.\n")
     
-    print(f"\nFixed {fixed_count} entries")
+    print(f"\nFixed {fixed_count} entries total")
     
-    # Save back to file
-    with open(file_path, 'w', encoding='utf-8') as f:
-        for entry in entries:
-            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
-    
-    print(f"Saved corrected data to {file_path}")
+    # Final save
+    save_entries_to_file(entries, file_path)
+    print(f"Final save completed to {file_path}")
 
 if __name__ == "__main__":
     try:
