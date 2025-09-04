@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices, Zap } from 'lucide-vue-next';
+import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices, Zap, ArrowRight } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -43,6 +43,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-illegal-immersion' },
     icon: Zap,
     description: 'Drill all the vocab for a piece of immersion content, then check if you understand it'
+  },
+  {
+    name: 'Sentence Slide',
+    route: { name: 'practice-mode-sentence-slide' },
+    icon: ArrowRight,
+    description: 'Work through connected vocab for sentences, then guess their meaning'
   }
 ];
 </script>

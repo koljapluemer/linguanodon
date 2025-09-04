@@ -4,13 +4,13 @@
       {{ isEditing ? 'Edit Fact Card' : 'Add New Fact Card' }}
     </h1>
     <div class="flex gap-2">
-      <router-link 
+      <!-- <router-link 
         v-if="isEditing && currentFactCard" 
         :to="{ path: '/practice/classic-queue', query: { focusOnFactCard: currentFactCard.uid } }" 
         class="btn btn-primary"
       >
         Practice this
-      </router-link>
+      </router-link> -->
       <router-link to="/fact-cards" class="btn btn-outline">
         Back to Fact Cards List
       </router-link>

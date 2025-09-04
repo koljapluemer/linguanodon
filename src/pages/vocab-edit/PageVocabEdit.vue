@@ -4,13 +4,13 @@
       {{ isEditing ? 'Edit Vocab' : 'Add New Vocab' }}
     </h1>
     <div class="flex gap-2">
-      <router-link 
+      <!-- <router-link 
         v-if="isEditing && currentVocab" 
         :to="{ path: '/practice/classic-queue', query: { focusOnVocab: currentVocab.uid } }" 
         class="btn btn-primary"
       >
         Practice this
-      </router-link>
+      </router-link> -->
       <router-link to="/vocab" class="btn btn-outline">
         Back to Vocab List
       </router-link>

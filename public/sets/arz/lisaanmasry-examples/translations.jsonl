@@ -1,98 +1,15 @@
-{"id": "1", "content": "we will finish the inventory and afterwards we will have lunch"}
-{"id": "2", "content": "complete", "notes": ["6", "7"]}
-{"id": "3", "content": "finish", "notes": ["8"]}
-{"id": "4", "content": "inventory", "notes": ["13"]}
-{"id": "5", "content": "and", "notes": ["16", "17"]}
-{"id": "6", "content": "afterwards", "notes": ["20"]}
-{"id": "7", "content": "after that", "notes": ["21"]}
-{"id": "8", "content": "then", "notes": ["22", "23"]}
-{"id": "9", "content": "(eat) lunch", "notes": ["30"]}
-{"id": "10", "content": "(have) lunch", "notes": ["31"]}
-{"id": "11", "content": "soon we can start to make the food"}
-{"id": "12", "content": "soon", "notes": ["36", "39"]}
-{"id": "13", "content": "can", "notes": ["44", "45"]}
-{"id": "14", "content": "begin", "notes": ["52"]}
-{"id": "15", "content": "commence", "notes": ["53"]}
-{"id": "16", "content": "start", "notes": ["54"]}
-{"id": "17", "content": "make", "notes": ["63"]}
-{"id": "18", "content": "food", "notes": ["66"]}
-{"id": "19", "content": "eating", "notes": ["67"]}
-{"id": "20", "content": "the corridor in the building is dark"}
-{"id": "21", "content": "corridor", "notes": ["74"]}
-{"id": "22", "content": "passage", "notes": ["75", "76"]}
-{"id": "23", "content": "hallway", "notes": ["77"]}
-{"id": "24", "content": "block of flats", "notes": ["82"]}
-{"id": "25", "content": "building", "notes": ["83", "84"]}
-{"id": "26", "content": "darkness", "notes": ["87"]}
-{"id": "27", "content": "did you get paid your salary yesterday?"}
-{"id": "28", "content": "(get) paid", "notes": ["94"]}
-{"id": "29", "content": "salary", "notes": ["99"]}
-{"id": "30", "content": "your", "notes": ["106"]}
-{"id": "31", "content": "yesterday", "notes": ["109"]}
-{"id": "32", "content": "the refrigirator is no working"}
-{"id": "33", "content": "refrigirator", "notes": ["115"]}
-{"id": "34", "content": "fridge", "notes": ["116"]}
-{"id": "35", "content": "not", "notes": ["119", "273"]}
-{"id": "36", "content": "is not", "notes": ["120", "274"]}
-{"id": "37", "content": "will not", "notes": ["121", "275"]}
-{"id": "38", "content": "functioning", "notes": ["128"]}
-{"id": "39", "content": "working", "notes": ["129"]}
-{"id": "40", "content": "running", "notes": ["130", "131"]}
-{"id": "41", "content": "on", "notes": ["132", "133"]}
-{"id": "42", "content": "Do you want to eat fish or chicken?"}
-{"id": "43", "content": "want", "notes": ["142"]}
-{"id": "44", "content": "wanting", "notes": ["143"]}
-{"id": "45", "content": "eat", "notes": ["148"]}
-{"id": "46", "content": "fish", "notes": ["151"]}
-{"id": "47", "content": "or", "notes": ["154", "155"]}
-{"id": "48", "content": "nor", "notes": ["156"]}
-{"id": "49", "content": "neither", "notes": ["157"]}
-{"id": "50", "content": "chicken", "notes": ["160", "161"]}
-{"id": "51", "content": "everything is expensive in that shop"}
-{"id": "52", "content": "everything", "notes": ["165", "170"]}
-{"id": "53", "content": "all", "notes": ["166", "167", "171", "172"]}
-{"id": "54", "content": "dear", "notes": ["179", "180"]}
-{"id": "55", "content": "expensive", "notes": ["181"]}
-{"id": "56", "content": "steep", "notes": ["182", "183"]}
-{"id": "57", "content": "in", "notes": ["186"]}
-{"id": "58", "content": "shop", "notes": ["191"]}
-{"id": "59", "content": "store", "notes": ["192", "193"]}
-{"id": "60", "content": "this", "notes": ["200", "201", "300", "301"]}
-{"id": "61", "content": "these", "notes": ["202", "302"]}
-{"id": "62", "content": "that", "notes": ["203", "204", "303", "304"]}
-{"id": "63", "content": "do you have a particular reason for not liking this place?"}
-{"id": "64", "content": "you", "notes": ["212", "213", "226", "227", "269", "270"]}
-{"id": "65", "content": "have", "notes": ["216", "217", "218", "219"]}
-{"id": "66", "content": "cause", "notes": ["232", "233"]}
-{"id": "67", "content": "reason", "notes": ["234", "235"]}
-{"id": "68", "content": "particular", "notes": ["242"]}
-{"id": "69", "content": "specific", "notes": ["243"]}
-{"id": "70", "content": "appointed", "notes": ["244", "245"]}
-{"id": "71", "content": "for", "notes": ["250", "251"]}
-{"id": "72", "content": "because", "notes": ["252"]}
-{"id": "73", "content": "cos", "notes": ["253", "254"]}
-{"id": "74", "content": "so", "notes": ["259", "260"]}
-{"id": "75", "content": "like this", "notes": ["261"]}
-{"id": "76", "content": "in this way", "notes": ["262"]}
-{"id": "77", "content": "like", "notes": ["284", "285"]}
-{"id": "78", "content": "place", "notes": ["290"]}
-{"id": "79", "content": "location", "notes": ["291"]}
-{"id": "80", "content": "venue", "notes": ["292"]}
-{"id": "81", "content": "site", "notes": ["293"]}
-{"id": "82", "content": "bring me a bucket of water"}
-{"id": "83", "content": "bring", "notes": ["312"]}
-{"id": "84", "content": "get", "notes": ["313"]}
-{"id": "85", "content": "pick (st.) up", "notes": ["314"]}
-{"id": "86", "content": "to", "notes": ["317", "318"]}
-{"id": "87", "content": "me", "notes": ["323"]}
-{"id": "88", "content": "bucket", "notes": ["328"]}
-{"id": "89", "content": "pail", "notes": ["329"]}
-{"id": "90", "content": "water", "notes": ["332"]}
-{"id": "91", "content": "if you walk straight you will arrive faster"}
-{"id": "92", "content": "if", "notes": ["336", "337"]}
-{"id": "93", "content": "walk", "notes": ["346"]}
-{"id": "94", "content": "step", "notes": ["347"]}
-{"id": "95", "content": "straight", "notes": ["350", "351", "354", "355"]}
-{"id": "96", "content": "arrive", "notes": ["362"]}
-{"id": "97", "content": "reach", "notes": ["363"]}
-{"id": "98", "content": "faster", "notes": ["366"]}
+{"id": "1", "content": "I have been in Egypt for five years"}
+{"id": "2", "content": "I have been (... for ...)", "notes": ["4", "5"]}
+{"id": "3", "content": "five", "notes": ["10"]}
+{"id": "4", "content": "year", "notes": ["17"]}
+{"id": "5", "content": "in", "notes": ["20", "23"]}
+{"id": "6", "content": "truth will never die"}
+{"id": "7", "content": "fact", "notes": ["30"]}
+{"id": "8", "content": "truth", "notes": ["31"]}
+{"id": "9", "content": "want", "notes": ["38"]}
+{"id": "10", "content": "wanting", "notes": ["39"]}
+{"id": "11", "content": "that", "notes": ["42", "43"]}
+{"id": "12", "content": "which", "notes": ["44", "45"]}
+{"id": "13", "content": "whatever", "notes": ["46"]}
+{"id": "14", "content": "what", "notes": ["47"]}
+{"id": "15", "content": "(the one) that", "notes": ["48"]}

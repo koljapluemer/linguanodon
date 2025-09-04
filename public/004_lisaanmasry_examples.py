@@ -10,9 +10,10 @@ import re
 import json
 import os
 from pathlib import Path
+from tqdm import tqdm
 
 # Configuration
-MAX_SENTENCES = 9999
+MAX_SENTENCES = 1535
 SLEEP_TIME = 1  # Sleep time between requests in seconds
 WORD_CLICK_WAIT = 0.3  # Wait time after clicking a word
 
@@ -59,8 +60,6 @@ def setup_driver():
         service = Service(executable_path='/snap/bin/geckodriver')
         driver = webdriver.Firefox(service=service, options=options)
     except Exception as e:
-        print(f"Error setting up Firefox driver: {e}")
-        print("Make sure geckodriver is installed and in PATH")
         raise
     return driver
 
@@ -216,7 +215,6 @@ def process_sentence_data(driver):
         # Find the Arabic sentence
         arz_p = example_div.find_element(By.CSS_SELECTOR, "p[class='ar']")
         sentence_arz = arz_p.text.strip()
-        print(f'Found Arabic sentence: {sentence_arz}')
 
         # Find the transliteration
         transliteration_p = None
@@ -228,15 +226,12 @@ def process_sentence_data(driver):
         sentence_transliteration = ""
         if transliteration_p:
             sentence_transliteration = transliteration_p.text.replace('Individual words:', '').strip()
-            print(f'Found transliteration: {sentence_transliteration}')
 
         # Find the English translation
         try:
             translation_h3 = example_div.find_element(By.XPATH, ".//h3[text()='Translation']")
             sentence_en = translation_h3.find_element(By.XPATH, "following-sibling::p[1]").text.strip()
-            print(f'Found English translation: {sentence_en}')
         except NoSuchElementException:
-            print('Could not find translation heading')
             return None
 
         # Find sentence notes
@@ -246,7 +241,7 @@ def process_sentence_data(driver):
             notes_p = notes_h3.find_element(By.XPATH, "following-sibling::p[1]")
             sentence_notes = notes_p.text.strip()
         except NoSuchElementException:
-            print('No notes found (this is optional)')
+            pass
 
         return {
             'sentence_arz': sentence_arz,
@@ -257,7 +252,6 @@ def process_sentence_data(driver):
         }
 
     except (NoSuchElementException, TimeoutException) as e:
-        print(f'Error extracting sentence data: {e}')
         return None
 
 def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_link_id):
@@ -311,11 +305,10 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_li
                 form_vocab_ids.append(vocab_id)
                 
             except (NoSuchElementException, StaleElementReferenceException) as e:
-                print(f'Error processing form row: {e}')
                 continue
 
     except (NoSuchElementException, TimeoutException) as e:
-        print(f'No forms table found: {e}')
+        pass
 
     # Process word meanings
     try:
@@ -366,11 +359,10 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_li
                             break
                 
             except (NoSuchElementException, StaleElementReferenceException) as e:
-                print(f'Error processing meaning row: {e}')
                 continue
 
     except (NoSuchElementException, TimeoutException) as e:
-        print(f'No meanings table found: {e}')
+        pass
 
     # Update related vocab for form entries (similar forms of same word)
     for i, form_id in enumerate(form_vocab_ids):
@@ -391,7 +383,6 @@ def process_word_forms_and_meanings(driver, word_lang, word_base_type, shared_li
 def process_individual_words(driver, arz_p, sentence_vocab_id, shared_link_id):
     """Process individual words in the sentence"""
     word_spans = arz_p.find_elements(By.TAG_NAME, "span")
-    print(f'Found {len(word_spans)} word spans')
     
     word_vocab_ids = []
     
@@ -406,7 +397,6 @@ def process_individual_words(driver, arz_p, sentence_vocab_id, shared_link_id):
                 
             span = spans[i]
             word_text = span.text
-            print(f'Processing word {i+1} of {len(word_spans)}: {word_text}')
             
             # Click the span and wait for word details
             span.click()
@@ -415,7 +405,6 @@ def process_individual_words(driver, arz_p, sentence_vocab_id, shared_link_id):
             try:
                 wait_for_element(driver, By.ID, "word")
             except TimeoutException:
-                print(f'Timeout waiting for word details for word {i+1}')
                 continue
             
             word_base_type, word_lang = get_word_info(driver)
@@ -429,7 +418,6 @@ def process_individual_words(driver, arz_p, sentence_vocab_id, shared_link_id):
             word_vocab_ids.extend(form_vocab_ids)
                 
         except Exception as e:
-            print(f'Error processing word {i+1}: {e}')
             continue
 
     # Update sentence vocab to reference all words
@@ -453,21 +441,23 @@ def set_slider_to_start(driver):
         driver.execute_script(f"arguments[0].value = '{min_value}'; arguments[0].onchange('{min_value}');", slider)
         
         time.sleep(1)  # Wait for page to update
-        print(f'Set slider to minimum value: {min_value}')
         return True
     except (NoSuchElementException, TimeoutException) as e:
-        print(f'Error setting slider: {e}')
         return False
 
 def click_next_example(driver):
     """Click the next example button to navigate to the next sentence"""
     try:
-        next_button = wait_for_element(driver, By.XPATH, "//img[@src='/images/ifx_next24.png']")
+        # Check if next button exists (it won't exist on the last sentence)
+        next_buttons = driver.find_elements(By.XPATH, "//img[@src='/images/ifx_next24.png']")
+        if not next_buttons:
+            return False
+        
+        next_button = next_buttons[0]
         next_button.click()
         time.sleep(WORD_CLICK_WAIT)  # Wait for page to update
         return True
     except (NoSuchElementException, TimeoutException) as e:
-        print(f'Error clicking next button: {e}')
         return False
 
 def scrape_sentence(driver, url=None, is_first=False):
@@ -475,14 +465,9 @@ def scrape_sentence(driver, url=None, is_first=False):
     try:
         if is_first and url:
             driver.get(url)
-            print('Page loaded, waiting for content...')
             
             # Set slider to start position for first sentence
-            print('Setting slider to start position...')
-            if not set_slider_to_start(driver):
-                print('Warning: Could not set slider to start position')
-        elif not is_first:
-            print('Processing current sentence...')
+            set_slider_to_start(driver)
         
         # Process sentence data
         sentence_data = process_sentence_data(driver)
@@ -529,11 +514,9 @@ def scrape_sentence(driver, url=None, is_first=False):
         # Process individual words
         word_vocab_ids = process_individual_words(driver, sentence_data['arz_p'], sentence_vocab_id, shared_link_id)
 
-        print(f'Successfully processed sentence: {sentence_data["sentence_arz"]}')
         return True
 
     except Exception as e:
-        print(f'Error scraping sentence: {e}')
         return False
 
 def save_jsonl_files():
@@ -562,46 +545,44 @@ def save_jsonl_files():
         for entry in link_data:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
-    print(f"Saved {len(vocab_data)} vocab entries")
-    print(f"Saved {len(translation_data)} translation entries")
-    print(f"Saved {len(note_data)} note entries")
-    print(f"Saved {len(link_data)} link entries")
+    pass
 
 def main():
-    print(f"Will process up to {MAX_SENTENCES} sentences")
     
     base_url = "https://eu.lisaanmasry.org/online/example.php"
     sentences_processed = 0
 
     driver = setup_driver()
+    
+    # Initialize progress bar
+    pbar = tqdm(total=MAX_SENTENCES, desc="Scraping sentences", unit="sentence")
+    
     try:
         while sentences_processed < MAX_SENTENCES:
-            print(f'Scraping sentence {sentences_processed + 1} of {MAX_SENTENCES}...')
-            
             # For first sentence, load the page. For subsequent ones, use current page
             is_first = sentences_processed == 0
             success = scrape_sentence(driver, base_url if is_first else None, is_first)
             if not success:
-                print('Failed to scrape sentence, stopping...')
+                pbar.set_description("Failed to scrape sentence - stopping")
                 break
 
             sentences_processed += 1
+            pbar.update(1)
+            pbar.set_description(f"Scraped {sentences_processed} sentences")
             
             # Navigate to next sentence if we're not done
             if sentences_processed < MAX_SENTENCES:
-                print(f'Navigating to next sentence...')
                 if not click_next_example(driver):
-                    print('Failed to navigate to next sentence, stopping...')
+                    pbar.set_description("Reached last sentence - stopping gracefully")
                     break
-                print(f'Sleeping for {SLEEP_TIME} seconds...')
                 time.sleep(SLEEP_TIME)
                 
     finally:
+        pbar.close()
         driver.quit()
 
     # Save all data to JSONL files
     save_jsonl_files()
-    print(f"Scraping completed! Processed {sentences_processed} sentences")
 
 if __name__ == "__main__":
     main()

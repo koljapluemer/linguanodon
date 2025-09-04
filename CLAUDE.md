@@ -113,3 +113,35 @@ CRITICAL: TaskRenderer (src/widgets/do-task/TaskRenderer.vue) handles ALL task c
 - Associated entity scoring and progress updates
 
 NEVER implement task completion logic anywhere else (queue state machines, task components, etc.)
+
+# DATABASE OPERATIONS RULE
+
+**CRITICAL: ALL data filtering and querying must be done in the repository layer, NOT in memory.**
+
+## The Problem
+- Memory filtering after fetching all data is inefficient and doesn't scale
+- Violates the repository pattern by putting business logic in the wrong layer
+- Can cause performance issues with large datasets
+
+## The Solution
+**ALWAYS** add proper repository methods with database-level filtering:
+
+```typescript
+// ❌ WRONG - memory filtering
+const allVocab = await vocabRepo.getVocab();
+const filteredVocab = allVocab.filter(v => v.someCondition);
+
+// ✅ CORRECT - repository method with DB filtering
+const filteredVocab = await vocabRepo.getVocabBySomeCondition();
+```
+
+## When This Applies
+- Any filtering, sorting, or querying of data
+- Complex selection criteria 
+- Performance-sensitive operations
+- Any time you're tempted to use `.filter()`, `.find()`, `.some()` etc. on repo results
+
+## Remember
+- Create specific repository methods for each query pattern
+- Use Dexie's IndexedDB querying capabilities
+- Let the database do the work, not JavaScript memory operations

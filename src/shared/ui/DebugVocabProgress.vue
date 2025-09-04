@@ -24,18 +24,28 @@
         <div><strong>Sound Object:</strong> {{ vocabData.sound ? 'Present' : 'None' }}</div>
         <div><strong>Images Array:</strong> {{ vocabData.images?.length || 0 }} images</div>
       </div>
+      <div class="pt-2 border-t border-base-300 mt-2">
+        <div><strong>Length:</strong> {{ vocabData.length }}</div>
+        <div><strong>Related Vocab Count:</strong> {{ vocabData.relatedVocab?.length || 0 }}</div>
+        <div><strong>Related Vocab UIDs:</strong> {{ vocabData.relatedVocab?.join(', ') || 'None' }}</div>
+        <div :class="sentenceSlideEligible ? 'text-success' : 'text-error'">
+          <strong>Sentence Slide Eligible:</strong> {{ sentenceSlideEligible ? 'YES' : 'NO' }}
+          {{ !sentenceSlideEligible ? `(${sentenceSlideIneligibleReason})` : '' }}
+        </div>
+      </div>
     </div>
   </details>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { VocabData } from '@/entities/vocab/VocabData';
 
 interface Props {
   vocabData: VocabData;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 function formatDate(date: Date | null | undefined): string {
   if (!date) return 'Not set';
@@ -46,4 +56,29 @@ function formatNumber(num: number | null | undefined): string {
   if (num == null) return 'Not set';
   return num.toFixed(3);
 }
+
+// Computed property to check if this vocab qualifies for sentence slide
+const sentenceSlideEligible = computed(() => {
+  return props.vocabData.length === 'sentence' &&
+         props.vocabData.progress.level === -1 &&
+         props.vocabData.relatedVocab && 
+         props.vocabData.relatedVocab.length >= 1 &&
+         !props.vocabData.doNotPractice;
+});
+
+const sentenceSlideIneligibleReason = computed(() => {
+  if (props.vocabData.length !== 'sentence') {
+    return `length is ${props.vocabData.length}, not sentence`;
+  }
+  if (props.vocabData.progress.level !== -1) {
+    return `level is ${props.vocabData.progress.level}, not -1 (unseen)`;
+  }
+  if (!props.vocabData.relatedVocab || props.vocabData.relatedVocab.length < 1) {
+    return `has ${props.vocabData.relatedVocab?.length || 0} related vocab, needs >= 1`;
+  }
+  if (props.vocabData.doNotPractice) {
+    return 'doNotPractice is true';
+  }
+  return '';
+});
 </script>

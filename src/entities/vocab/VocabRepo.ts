@@ -155,7 +155,7 @@ export class VocabRepo implements VocabRepoContract {
     });
   }
 
-  async scoreVocab(vocabId: string, rating: Rating, immediateDue?: boolean): Promise<void> {
+  async scoreVocab(vocabId: string, rating: Rating, setWrongVocabDueAgainImmediately?: boolean): Promise<void> {
     const vocab = await vocabDb.vocab.get(vocabId);
     if (!vocab) {
       return;
@@ -209,7 +209,7 @@ export class VocabRepo implements VocabRepoContract {
     };
 
     // If immediateDue is true and rating was low (Again/Hard), make it due now
-    if (immediateDue && (fsrsRating === Rating.Again || fsrsRating === Rating.Hard)) {
+    if (setWrongVocabDueAgainImmediately && (fsrsRating === Rating.Again || fsrsRating === Rating.Hard)) {
       vocab.progress.due = new Date();
     }
 
@@ -966,5 +966,76 @@ export class VocabRepo implements VocabRepoContract {
     if (vocab.length === 0) return null;
     const ensured = vocab.map(v => this.ensureVocabFields(v));
     return pickRandom(ensured, 1)[0];
+  }
+
+  async getRandomUnseenSentenceVocabWithRelatedVocab(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null> {
+    console.log('[VocabRepo] getRandomUnseenSentenceVocabWithRelatedVocab called with:');
+    console.log('[VocabRepo] EXACT languages array:', languages);
+    console.log('[VocabRepo] EXACT vocabBlockList:', vocabBlockList);
+    
+    // First get all records that match the language filter to see raw DB state
+    const allLanguageMatches = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .toArray();
+      
+    console.log('[VocabRepo] Total records matching languages:', allLanguageMatches.length);
+    console.log('[VocabRepo] Raw DB sample (first 3 records):', allLanguageMatches.slice(0, 3).map(v => ({
+      uid: v.uid,
+      content: v.content?.substring(0, 50) + '...',
+      language: v.language,
+      length: v.length,
+      progressLevel: v.progress?.level,
+      relatedVocab: v.relatedVocab,
+      relatedVocabLength: v.relatedVocab?.length,
+      doNotPractice: v.doNotPractice
+    })));
+    
+    // Now apply the full filter and see what each condition eliminates
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => 
+        vocab.length === 'sentence' &&
+        vocab.progress.level === -1 &&
+        vocab.relatedVocab && vocab.relatedVocab.length >= 1 &&
+        !vocab.doNotPractice &&
+        (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
+      )
+      .toArray();
+
+    console.log('[VocabRepo] Found vocab candidates after full filter:', vocab.length);
+    
+    // Debug each filter condition on a sample
+    if (allLanguageMatches.length > 0) {
+      const sample = allLanguageMatches.slice(0, 5);
+      console.log('[VocabRepo] Filter breakdown for sample records:');
+      sample.forEach(v => {
+        const lengthCheck = v.length === 'sentence';
+        const levelCheck = v.progress?.level === -1;
+        const relatedVocabCheck = v.relatedVocab && v.relatedVocab.length >= 1;
+        const practiceCheck = !v.doNotPractice;
+        const blockListCheck = !vocabBlockList || !vocabBlockList.includes(v.uid);
+        
+        console.log(`[VocabRepo] ${v.uid}: length=${lengthCheck}, level=${levelCheck}, relatedVocab=${relatedVocabCheck}, practice=${practiceCheck}, blockList=${blockListCheck}`);
+      });
+    }
+    
+    if (vocab.length > 0) {
+      console.log('[VocabRepo] Sample filtered vocab:', vocab.slice(0, 3).map(v => ({
+        uid: v.uid,
+        content: v.content?.substring(0, 50) + '...',
+        length: v.length,
+        level: v.progress.level,
+        relatedVocabCount: v.relatedVocab?.length,
+        doNotPractice: v.doNotPractice
+      })));
+    }
+
+    if (vocab.length === 0) return null;
+    const ensured = vocab.map(v => this.ensureVocabFields(v));
+    const selected = pickRandom(ensured, 1)[0];
+    console.log('[VocabRepo] Selected vocab:', { uid: selected.uid, content: selected.content?.substring(0, 50) + '...' });
+    return selected;
   }
 }

@@ -29,7 +29,7 @@ export interface VocabRepoContract {
   deleteVocab(id: string): Promise<void>;
   
   // Progress operations
-  scoreVocab(vocabId: string, rating: Rating, immediateDue?: boolean): Promise<void>;
+  scoreVocab(vocabId: string, rating: Rating, setWrongVocabDueAgainImmediately?: boolean): Promise<void>;
   updateLastReview(vocabId: string): Promise<void>;
   
   // Pronunciation operations
@@ -80,4 +80,7 @@ export interface VocabRepoContract {
   getRandomUnseenVocabWithSoundAndImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
   getRandomDueVocabWithSoundAndImages(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
   getRandomVocabWithImages(language: string, excludeVocabUid: string, vocabBlockList?: string[]): Promise<VocabData | null>;
+
+  // Sentence Slide operations
+  getRandomUnseenSentenceVocabWithRelatedVocab(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
 }
