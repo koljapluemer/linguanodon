@@ -1,5 +1,0 @@
-- shows the sub goal connected so far, standard adaptive meta-form with one line per goal and allowing to add one at the end. 
-- Show skipping options etc like [described here](docs/reference/tasks/extract-knowledge-from-resource.md)
-- After done, ask whether the user wants to add more goals in the future and update `finishedAddingSubGoals` accordingly
-- Size medium. 
-- Update `lastShownAt` as relevant

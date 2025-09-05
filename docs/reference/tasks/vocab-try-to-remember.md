@@ -1,6 +1,0 @@
-- do not rate difficulty
-- do not ask whether to do again. 
-- Prompt: "Try to remember the meaning of this word".
-- `Done` button at the bottom, active immediately
-- Use [repo](src/entities/vocab/VocabRepo.ts) to correctly init learn card
-- May be created for vocab as of yet unseen that have content and > 0 translations (should be an entity function)
