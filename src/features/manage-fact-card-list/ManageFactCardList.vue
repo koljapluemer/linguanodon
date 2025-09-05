@@ -70,7 +70,7 @@
     <!-- Always-visible fact card creation form -->
     <div v-if="config.allowAdd" class="mt-6 p-4 border border-base-300 rounded-lg bg-base-50">
       <div class="space-y-4">
-        <h3 class="text-sm font-medium">Add New Fact Card</h3>
+        <h3>Add New Fact Card</h3>
         
         <!-- Front input -->
         <div class="flex flex-col space-y-1">

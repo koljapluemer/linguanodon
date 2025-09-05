@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <h3 class="text-lg font-medium  ">Audio</h3>
+    <h3>Audio</h3>
 
     <!-- Current Sounds -->
     <div v-if="localSounds && localSounds.length > 0" class="space-y-3">

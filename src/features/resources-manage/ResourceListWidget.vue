@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-center">
-      <h1 class="text-3xl font-bold">Resources</h1>
+      <h1>Resources</h1>
 
       <router-link to="/resources/new" class="btn btn-primary">
         Add New Resource
@@ -21,7 +21,7 @@
 
     <!-- Empty State -->
     <div v-else-if="resources.length === 0" class="text-center p-12">
-      <h3 class="text-lg font-semibold mb-2">No resources yet</h3>
+      <h3>No resources yet</h3>
       <p class="text-base-content/70 mb-4">Create your first resource to get started.</p>
       <router-link to="/resources/new" class="btn btn-primary">
         Add New Resource
@@ -41,7 +41,7 @@
                 <span v-if="resource.priority" class="badge badge-secondary">P{{ resource.priority }}</span>
               </div>
 
-              <h3 class="card-title">{{ resource.title }}</h3>
+              <h3>{{ resource.title }}</h3>
 
               <div v-if="resource.content" class="text-base-content/70 mb-3">
                 {{ resource.content.substring(0, 150) }}{{ resource.content.length > 150 ? '...' : '' }}

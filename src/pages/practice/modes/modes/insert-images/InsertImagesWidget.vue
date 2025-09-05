@@ -196,8 +196,8 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'empty'" class="hero min-h-96">
       <div class="hero-content text-center">
         <div class="max-w-md">
-          <h1 class="text-5xl font-bold">🖼️</h1>
-          <h2 class="text-3xl font-bold mb-4">All Done!</h2>
+          <h1>🖼️</h1>
+          <h2>All Done!</h2>
           <p class="py-6">{{ state.message }}</p>
           <button class="btn btn-primary" @click="initializeQueue">
             Check Again

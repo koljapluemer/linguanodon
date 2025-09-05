@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">
+    <h1>
       {{ isEditing ? 'Edit Vocab' : 'Add New Vocab' }}
     </h1>
     <div class="flex gap-2">
@@ -24,7 +24,7 @@
   <div v-if="isEditing && currentVocab" class="mt-8">
     <div class="card shadow">
       <div class="card-body">
-        <h2 class="text-xl font-semibold mb-4">Mastery Progress</h2>
+        <h2>Mastery Progress</h2>
         <div class="space-y-2">
           <div class="flex justify-between items-center">
             <span class="text-sm font-medium">Current Mastery</span>

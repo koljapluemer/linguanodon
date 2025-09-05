@@ -65,7 +65,7 @@
     />
 
     <div class="space-y-4">
-      <h3 class="text-lg font-medium  ">See Also / Related Vocabulary</h3>
+      <h3>See Also / Related Vocabulary</h3>
       <ManageVocabList
         :vocab-ids="formData.relatedVocab || []"
         :language="formData.language"

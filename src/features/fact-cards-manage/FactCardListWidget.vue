@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-center">
-      <h1 class="text-3xl font-bold">Fact Cards</h1>
+      <h1>Fact Cards</h1>
       <router-link to="/fact-cards/new" class="btn btn-primary">
         Add New Fact Card
       </router-link>
@@ -37,7 +37,7 @@
 
     <!-- Empty State -->
     <div v-else-if="filteredFactCards.length === 0" class="text-center p-12">
-      <h3 class="text-lg font-semibold mb-2">
+      <h3>
         {{ searchQuery ? 'No matching fact cards' : 'No fact cards yet' }}
       </h3>
       <p class="text-base-content/70 mb-4">
@@ -67,7 +67,7 @@
               
               <!-- Front Content -->
               <div class="mb-3">
-                <h3 class="font-semibold text-sm uppercase tracking-wide text-base-content/60 mb-1">Front</h3>
+                <h3>Front</h3>
                 <div class="bg-base-200 p-3 rounded">
                   <MarkdownRenderer :content="factCard.front" />
                 </div>
@@ -75,7 +75,7 @@
               
               <!-- Back Content -->
               <div class="mb-3">
-                <h3 class="font-semibold text-sm uppercase tracking-wide text-base-content/60 mb-1">Back</h3>
+                <h3>Back</h3>
                 <div class="bg-base-200 p-3 rounded">
                   <MarkdownRenderer :content="factCard.back" />
                 </div>

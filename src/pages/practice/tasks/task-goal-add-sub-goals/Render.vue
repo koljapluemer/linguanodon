@@ -1,6 +1,6 @@
 <template>
   <div v-if="goal">
-    <h2 class="text-2xl font-bold mb-6">{{ goal.title }}</h2>
+    <h2>{{ goal.title }}</h2>
 
     <ManageSubGoalsWidget :goal="goal" @goal-updated="handleGoalUpdate" />
 

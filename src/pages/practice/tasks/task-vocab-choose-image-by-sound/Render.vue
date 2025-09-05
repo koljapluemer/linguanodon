@@ -7,46 +7,29 @@
   <!-- Exercise Content -->
   <div v-else-if="vocab && imageOptions.length === 2" class="text-center">
     <!-- Sound Player -->
-    <div class="mb-8">
-      <div class="card shadow">
-        <div class="flex flex-col items-center gap-4">
-          <button 
-            @click="playSound" 
-            :disabled="!audioUrl || isPlaying"
-            class="btn btn-circle btn-xl btn-primary"
-          >
-            <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.348a1.125 1.125 0 01-1.667-.985V5.653z" />
-            </svg>
-            <span v-else class="loading loading-spinner loading-lg"></span>
-          </button>
-          
-          <div class="flex flex-col items-center gap-2">
-            <div class="text-sm font-medium">Volume</div>
-            <input 
-              type="range" 
-              min="0" 
-              max="1" 
-              step="0.1" 
-              v-model="volume"
-              @input="updateVolume"
-              class="range range-primary w-32"
-            />
-            <div class="text-xs text-base-content/60">{{ Math.round(volume * 100) }}%</div>
-          </div>
-        </div>
+    <div class="flex flex-col items-center gap-4 my-4">
+      <button @click="playSound" :disabled="!audioUrl || isPlaying" class="btn btn-circle btn-xl btn-primary">
+        <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+          stroke="currentColor" class="w-10 h-10">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.348a1.125 1.125 0 01-1.667-.985V5.653z" />
+        </svg>
+        <span v-else class="loading loading-spinner loading-lg"></span>
+      </button>
+
+      <div class="flex flex-col items-center gap-2">
+        <div class="text-sm font-medium">Volume</div>
+        <input type="range" min="0" max="1" step="0.1" v-model="volume" @input="updateVolume"
+          class="range range-primary w-32" />
+        <div class="text-xs text-base-content/60">{{ Math.round(volume * 100) }}%</div>
       </div>
     </div>
 
     <!-- Image Options -->
     <div class="grid grid-cols-2 gap-6 max-w-md mx-auto mb-8">
-      <div 
-        v-for="(option, index) in imageOptions" 
-        :key="index"
-        @click="selectOption(index)"
+      <div v-for="(option, index) in imageOptions" :key="index" @click="selectOption(index)"
         :class="getImageContainerClass(index)"
-        class="cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95"
-      >
+        class="cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95">
         <VocabImageDisplay :image="option.image" />
       </div>
     </div>
@@ -75,12 +58,7 @@
   </div>
 
   <!-- Hidden audio element -->
-  <audio 
-    ref="audioElement" 
-    @loadeddata="onAudioLoaded"
-    @ended="onAudioEnded"
-    @error="onAudioError"
-  />
+  <audio ref="audioElement" @loadeddata="onAudioLoaded" @ended="onAudioEnded" @error="onAudioError" />
 </template>
 
 <script setup lang="ts">
@@ -192,12 +170,12 @@ async function loadVocabData() {
     }
 
     await generateImageOptions();
-    
+
     // Auto-play sound after loading
     setTimeout(() => {
       playSound();
     }, 500);
-    
+
   } catch (error) {
     console.error('Choose Image by Sound: Failed to load vocab data for UID:', vocabUid.value, error);
   } finally {
@@ -209,7 +187,7 @@ async function generateImageOptions() {
   if (!vocab.value || !vocab.value.images?.length) return;
 
   const options: ImageOption[] = [];
-  
+
   // Add correct option (random image from vocab)
   const correctImage = vocab.value.images[Math.floor(Math.random() * vocab.value.images.length)];
   options.push({ image: correctImage, isCorrect: true });
@@ -220,7 +198,7 @@ async function generateImageOptions() {
       vocab.value.language,
       vocab.value.uid
     );
-    
+
     if (distractorVocab?.images?.length) {
       const distractorImage = distractorVocab.images[Math.floor(Math.random() * distractorVocab.images.length)];
       options.push({ image: distractorImage, isCorrect: false });
@@ -235,7 +213,7 @@ async function generateImageOptions() {
 
 function playSound() {
   if (!audioElement.value || !audioUrl.value || isPlaying.value) return;
-  
+
   audioElement.value.src = audioUrl.value;
   audioElement.value.volume = volume.value;
   isPlaying.value = true;
@@ -308,13 +286,13 @@ function skipTask() {
 
 const handleCompletion = async () => {
   if (!vocab.value) return;
-  
+
   try {
     const rating = firstAttemptWrong.value ? Rating.Again : Rating.Good;
     const immediateDue = props.modeContext?.setWrongVocabDueAgainImmediately || false;
     await vocabRepo.scoreVocab(vocab.value.uid, rating, immediateDue);
     await vocabRepo.updateLastReview(vocab.value.uid);
-    
+
     setTimeout(() => emit('finished'), 750);
   } catch (error) {
     console.error('Error scoring vocab:', error);

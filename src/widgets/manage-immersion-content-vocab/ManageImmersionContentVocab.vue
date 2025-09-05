@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="text-lg font-semibold mb-4">Needed Vocabulary</h3>
+    <h3>Needed Vocabulary</h3>
     
     <div v-if="loading" class="text-center py-4">
       <span class="loading loading-spinner loading-md"></span>

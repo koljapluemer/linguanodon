@@ -104,8 +104,7 @@ function hideDropdown() {
 
 <template>
   <div class="space-y-6">
-    <h2 class="text-lg font-semibold flex items-center gap-2">
-      <Languages class="w-5 h-5" />
+    <h2>
       Target Languages
     </h2>
     <p class="text-base-content/70 text-sm mb-4">

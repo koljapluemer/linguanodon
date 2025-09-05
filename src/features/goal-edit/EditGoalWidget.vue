@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <h2 class="text-lg font-semibold">Goal Details</h2>
+    <h2>Goal Details</h2>
     
     <div class="flex flex-col space-y-1">
       <label class="text-sm font-medium">Language</label>

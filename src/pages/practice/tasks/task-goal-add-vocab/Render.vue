@@ -1,6 +1,6 @@
 <template>
   <div v-if="goal">
-    <h2 class="text-4xl font-bold my-6 text-center">{{ goal.title }}</h2>
+    <h2>{{ goal.title }}</h2>
 
     <ManageGoalVocab 
       :goal="goal"

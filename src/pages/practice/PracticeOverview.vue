@@ -54,29 +54,23 @@ const practiceOptions = [
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <!-- Show overview when at the root practice route -->
-    <div v-if="$route.name === 'practice-overview'" class="practice-overview">
-      
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
-        <router-link 
-          v-for="option in practiceOptions"
-          :key="option.name"
-          :to="option.route"
-          class="card shadow hover:shadow-md transition-shadow"
-        >
-          <div class="card-body text-center">
-            <div class="flex justify-center mb-4">
-              <component :is="option.icon" :size="48" class="text-primary" />
-            </div>
-            <h2 class="card-title justify-center text-xl mb-2">{{ option.name }}</h2>
-            <p class="text-base-content/70">{{ option.description }}</p>
+  <!-- Show overview when at the root practice route -->
+  <div v-if="$route.name === 'practice-overview'" class="practice-overview">
+    <h1>Practice</h1>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
+      <router-link v-for="option in practiceOptions" :key="option.name" :to="option.route"
+        class="card shadow hover:shadow-md transition-shadow">
+        <div class="card-body text-center">
+          <div class="flex justify-center mb-4">
+            <component :is="option.icon" :size="48" class="text-primary" />
           </div>
-        </router-link>
-      </div>
+          <h2>{{ option.name }}</h2>
+          <p class="text-base-content/70">{{ option.description }}</p>
+        </div>
+      </router-link>
     </div>
-
-    <!-- Show child component when a practice mode is active -->
-    <router-view v-else />
   </div>
+
+  <!-- Show child component when a practice mode is active -->
+  <router-view v-else />
 </template>

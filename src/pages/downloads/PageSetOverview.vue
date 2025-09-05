@@ -1,5 +1,4 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
     <div class="mb-6">
       <router-link to="/downloads" class="btn btn-ghost btn-sm mb-4">
         ← Back to Downloads
@@ -18,7 +17,7 @@
     <div v-else class="max-w-2xl mx-auto">
       <div class="card shadow">
         <div class="card-body">
-          <h1 class="card-title text-3xl mb-2">{{ metadata?.title || setName }}</h1>
+          <h1>{{ metadata?.title || setName }}</h1>
           <p class="text-base-content/60 mb-6">
             <span class="badge badge-outline">{{ language.toUpperCase() }}</span>
             <span v-if="metadata?.title" class="ml-2">{{ setName }}</span>
@@ -61,7 +60,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">

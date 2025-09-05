@@ -1,63 +1,61 @@
 <template>
-  <div>
-    <!-- Show downloads list when not in a sub-route -->
-    <div v-if="$route.name === 'downloads'">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Downloads</h1>
-        <select v-model="selectedLanguage" class="select ">
-          <option value="">Select Language</option>
-          <option v-for="language in availableLanguages" :key="language.code" :value="language.code">
-            {{ language.emoji ? `${language.emoji} ` : '' }}{{ language.name }}
-          </option>
-        </select>
-      </div>
+  <!-- Show downloads list when not in a sub-route -->
+  <div v-if="$route.name === 'downloads'">
+    <div class="flex justify-between items-center mb-6">
+      <h1>Downloads</h1>
+      <select v-model="selectedLanguage" class="select ">
+        <option value="">Select Language</option>
+        <option v-for="language in availableLanguages" :key="language.code" :value="language.code">
+          {{ language.emoji ? `${language.emoji} ` : '' }}{{ language.name }}
+        </option>
+      </select>
+    </div>
 
-      <div v-if="!selectedLanguage" class="text-center py-16 text-base-content/60">
-        <h3 class="text-xl font-semibold mb-2">Select a Language</h3>
-        <p>Choose a language from the dropdown above to view available downloads.</p>
-      </div>
+    <div v-if="!selectedLanguage" class="text-center py-16 text-base-content/60">
+      <h3>Select a Language</h3>
+      <p>Choose a language from the dropdown above to view available downloads.</p>
+    </div>
 
-      <div v-else class="space-y-6">
-        <div class="card shadow">
-          <div class="card-body">
-            <h2 class="card-title text-xl mb-4">Available Sets</h2>
+    <div v-else class="space-y-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <h2>Available Sets</h2>
 
-            <div v-if="error" class="alert alert-error mb-4">
-              {{ error }}
-            </div>
+          <div v-if="error" class="alert alert-error mb-4">
+            {{ error }}
+          </div>
 
-            <div v-if="loading" class="flex items-center justify-center py-8">
-              <span class="loading loading-spinner loading-lg"></span>
-              <span class="ml-4">Loading sets...</span>
-            </div>
+          <div v-if="loading" class="flex items-center justify-center py-8">
+            <span class="loading loading-spinner loading-lg"></span>
+            <span class="ml-4">Loading sets...</span>
+          </div>
 
-            <div v-else-if="availableSets.length === 0" class="text-center py-8 text-base-content/60">
-              <Download class="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p>No sets available for {{ selectedLanguage }}</p>
-            </div>
+          <div v-else-if="availableSets.length === 0" class="text-center py-8 text-base-content/60">
+            <Download class="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <p>No sets available for {{ selectedLanguage }}</p>
+          </div>
 
-            <div v-else class="space-y-3">
-              <div class="grid gap-3">
-                <div v-for="set in availableSets" :key="set.name"
-                  class="flex items-center justify-between p-4 rounded-lg border border-base-300 hover:border-primary hover:bg-base-200 transition-colors cursor-pointer"
-                  @click="goToSetOverview(set.name)">
-                  <div>
-                    <h4 class="font-medium">{{ set.title || set.name }}</h4>
-                    <p class="text-sm text-base-content/60">
-                      <span v-if="set.title">{{ set.name }} • </span>Language: {{ selectedLanguage }}
-                    </p>
+          <div v-else class="space-y-3">
+            <div class="grid gap-3">
+              <div v-for="set in availableSets" :key="set.name"
+                class="flex items-center justify-between p-4 rounded-lg border border-base-300 hover:border-primary hover:bg-base-200 transition-colors cursor-pointer"
+                @click="goToSetOverview(set.name)">
+                <div>
+                  <h4>{{ set.title || set.name }}</h4>
+                  <p class="text-sm text-base-content/60">
+                    <span v-if="set.title">{{ set.name }} • </span>Language: {{ selectedLanguage }}
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-2" @click.stop>
+                  <div v-if="isDownloaded(set.name)" class="flex items-center gap-2 text-success mr-2">
+                    <CheckCircle class="w-5 h-5" />
+                    <span class="text-sm font-medium">Downloaded</span>
                   </div>
-
-                  <div class="flex items-center gap-2" @click.stop>
-                    <div v-if="isDownloaded(set.name)" class="flex items-center gap-2 text-success mr-2">
-                      <CheckCircle class="w-5 h-5" />
-                      <span class="text-sm font-medium">Downloaded</span>
-                    </div>
-                    <button @click="quickDownload(set.name)" class="btn btn-outline btn-sm" :disabled="loading">
-                      <Download class="w-4 h-4 mr-2" />
-                      {{ isDownloaded(set.name) ? 'Re-download' : 'Quick Download' }}
-                    </button>
-                  </div>
+                  <button @click="quickDownload(set.name)" class="btn btn-outline btn-sm" :disabled="loading">
+                    <Download class="w-4 h-4 mr-2" />
+                    {{ isDownloaded(set.name) ? 'Re-download' : 'Quick Download' }}
+                  </button>
                 </div>
               </div>
             </div>
@@ -65,10 +63,10 @@
         </div>
       </div>
     </div>
-
-    <!-- Show child component when viewing a specific set -->
-    <router-view v-else />
   </div>
+
+  <!-- Show child component when viewing a specific set -->
+  <router-view v-else />
 </template>
 
 <script setup lang="ts">
@@ -193,7 +191,7 @@ async function quickDownload(setName: string) {
 
 function goToSetOverview(setName: string) {
   if (!selectedLanguage.value) return;
-  
+
   router.push({
     name: 'set-overview',
     params: {

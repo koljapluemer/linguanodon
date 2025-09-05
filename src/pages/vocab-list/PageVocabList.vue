@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Vocab Management</h1>
+    <h1>Vocab Management</h1>
     <router-link to="/vocab/new" class="btn btn-primary">
       Add New Vocab
     </router-link>

@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Goals</h1>
+    <h1>Goals</h1>
     <router-link to="/goals/add" class="btn btn-primary">
       Add New Goal
     </router-link>
@@ -18,7 +18,7 @@
       <div class="card-body">
         <div class="flex justify-between items-start">
           <div class="flex-1">
-            <h2 class="card-title text-lg">{{ goal.title }}</h2>
+            <h2>{{ goal.title }}</h2>
 
             <div class="flex gap-4 mt-3 text-sm">
               <span class="badge badge-outline">

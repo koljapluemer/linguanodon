@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Add New Goal</h1>
+    <h1>Add New Goal</h1>
     <router-link to="/goals" class="btn btn-outline">
       Back to Goals List
     </router-link>

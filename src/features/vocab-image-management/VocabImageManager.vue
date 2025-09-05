@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <h3 class="text-lg font-medium  ">Images</h3>
+    <h3>Images</h3>
 
     <!-- Current Images -->
     <div v-if="localImages && localImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">

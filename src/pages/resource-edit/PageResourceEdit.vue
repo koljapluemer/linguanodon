@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Edit Resource</h1>
+    <h1>Edit Resource</h1>
     <router-link to="/resources" class="btn btn-outline">
       Back to Resources List
     </router-link>
@@ -18,7 +18,7 @@
 
     <!-- Vocabulary Section -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Vocabulary</h2>
+      <h2>Vocabulary</h2>
 
       <!-- Vocab Mastery Progress -->
       <div v-if="resource.vocab.length > 0 && resource.isImmersionContent" class="mb-6">
@@ -34,7 +34,7 @@
 
     <!-- Fact Cards Section -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Fact Cards</h2>
+      <h2>Fact Cards</h2>
       <ManageResourceFactCards :resource="resource" @resource-updated="handleResourceUpdate" />
     </section>
   </div>

@@ -81,7 +81,7 @@ onMounted(loadVocab);
 
 <template>
   <div v-if="vocab">
-    <h2 class="text-2xl font-bold mb-4">{{ vocab.content }}</h2>
+    <h2>{{ vocab.content }}</h2>
 
     <div class="space-y-3 mb-4">
       <div

@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Edit Goal</h1>
+    <h1>Edit Goal</h1>
     <router-link to="/goals" class="btn btn-outline">
       Back to Goals List
     </router-link>
@@ -13,13 +13,13 @@
   <div v-else-if="goal" class="space-y-8">
     <!-- Basic Goal Information -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Goal Details</h2>
+      <h2>Goal Details</h2>
       <GoalEditFormRenderer :goal="goal" @goal-updated="handleGoalUpdate" />
     </section>
 
     <!-- Sub-goals Section -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Sub-Goals</h2>
+      <h2>Sub-Goals</h2>
       <ManageSubGoalsWidget :goal="goal" @goal-updated="handleGoalUpdate" />
       <div class="mt-4">
         <InlineCheckbox
@@ -32,13 +32,13 @@
 
     <!-- Milestones Section -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Milestones</h2>
+      <h2>Milestones</h2>
       <ManageMilestonesWidget :goal="goal" @goal-updated="handleGoalUpdate" />
     </section>
 
     <!-- Knowledge Section -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Knowledge & Vocabulary</h2>
+      <h2>Knowledge & Vocabulary</h2>
       <ManageGoalVocab :goal="goal" @goal-updated="handleGoalUpdate" />
       <div class="mt-4">
         <InlineCheckbox

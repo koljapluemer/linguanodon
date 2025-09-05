@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div class="flex justify-between items-center">
-      <h3 class="text-sm font-medium  ">Notes</h3>
+      <h3>Notes</h3>
       <button
         type="button"
         @click="addNewNote"

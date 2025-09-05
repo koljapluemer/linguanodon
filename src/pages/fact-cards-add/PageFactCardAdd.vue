@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Add New Fact Card</h1>
+    <h1>Add New Fact Card</h1>
     <router-link to="/fact-cards" class="btn btn-outline">
       Back to Fact Cards List
     </router-link>

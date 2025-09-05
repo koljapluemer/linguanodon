@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <h4 class="text-lg font-semibold">Translations</h4>
+    <h4>Translations</h4>
     
     <!-- Existing translations -->
     <div v-for="(translation, index) in translations" :key="translation.uid" class="space-y-2">

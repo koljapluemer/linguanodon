@@ -117,7 +117,7 @@ onMounted(() => {
 <template>
   <div v-if="resource">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-bold">{{ resource.title }}</h2>
+      <h2>{{ resource.title }}</h2>
       <LinkDisplayAsButton v-if="resource.link" :link="resource.link" />
     </div>
 
