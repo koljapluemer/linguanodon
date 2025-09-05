@@ -213,7 +213,7 @@ export class UnifiedRemoteSetService {
             ...existingVocab,
             notes: [...new Set([...existingVocab.notes, ...noteUids])],
             translations: [...new Set([...existingVocab.translations, ...translationUids])],
-            links: [...existingVocab.links, ...links],
+            links: this.deduplicateLinks([...existingVocab.links, ...links]),
             relatedVocab: [...new Set([...existingVocab.relatedVocab, ...relatedVocabUids])],
             notRelatedVocab: [...new Set([...existingVocab.notRelatedVocab, ...notRelatedVocabUids])],
             origins: [...existingOrigins],
@@ -579,6 +579,18 @@ export class UnifiedRemoteSetService {
        existing.mimeType === mimeType && 
        existing.originalFileName === originalFileName)
     );
+  }
+
+  private deduplicateLinks(links: Link[]): Link[] {
+    const seen = new Set<string>();
+    return links.filter(link => {
+      const key = `${link.label}|${link.url}`;
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
   }
 
   async isSetDownloaded(setName: string): Promise<boolean> {
