@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between items-center mb-6">
     <h1>
-      {{ isEditing ? 'Edit Fact Card' : 'Add New Fact Card' }}
+      {{ isEditing ? $t('factCards.edit') : $t('factCards.addNew') }}
     </h1>
     <div class="flex gap-2">
       <!-- <router-link 
@@ -12,7 +12,7 @@
         Practice this
       </router-link> -->
       <router-link to="/fact-cards" class="btn btn-outline">
-        Back to Fact Cards List
+        {{ $t('factCards.backToList') }}
       </router-link>
     </div>
   </div>
@@ -23,11 +23,11 @@
   <div v-if="isEditing && currentFactCard" class="mt-8">
     <div class="card shadow">
       <div class="card-body">
-        <h2>Mastery Progress</h2>
+        <h2>{{ $t('factCards.mastery.progress') }}</h2>
         <div class="space-y-2">
           <div class="flex justify-between items-center">
-            <span class=" font-medium">Current Mastery</span>
-            <span class=" font-bold">{{ factCardMastery }}%</span>
+            <span class=" font-medium">{{ $t('factCards.mastery.current') }}</span>
+            <span class=" font-bold">{{ factCardMastery }}{{ $t('factCards.mastery.percent') }}</span>
           </div>
           <progress class="progress progress-primary w-full" :value="factCardMastery" max="100"></progress>
         </div>

@@ -3,7 +3,7 @@ import { materialCategories } from '@/app/materialCategories';
 </script>
 
 <template>
-  <h1>My Material</h1>
+  <h1>{{ $t('material.title') }}</h1>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <router-link v-for="category in materialCategories" :key="category.name" :to="category.route"

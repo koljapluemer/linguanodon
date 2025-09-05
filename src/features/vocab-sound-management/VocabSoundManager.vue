@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <h3>Audio</h3>
+    <h3>{{ $t('media.audio.title') }}</h3>
 
     <!-- Current Sounds -->
     <div v-if="localSounds && localSounds.length > 0" class="space-y-3">
@@ -39,7 +39,7 @@
               class="btn btn-sm btn-error btn-outline"
               :disabled="loading"
             >
-              Remove
+              {{ $t('media.audio.remove') }}
             </button>
           </div>
 
@@ -68,14 +68,14 @@
             :class="{ 'tab-active': mode === 'url' }"
             @click="mode = 'url'"
           >
-            URL
+            {{ $t('media.audio.url') }}
           </button>
           <button 
             class="tab tab-sm" 
             :class="{ 'tab-active': mode === 'upload' }"
             @click="mode = 'upload'"
           >
-            Upload
+            {{ $t('media.audio.upload') }}
           </button>
         </div>
 
@@ -94,7 +94,7 @@
             class="btn btn-sm btn-primary"
           >
             <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-            <span v-else>Add</span>
+            <span v-else>{{ $t('media.audio.add') }}</span>
           </button>
         </div>
 
@@ -109,7 +109,7 @@
             class="file-input file-input-sm file-input-bordered"
           />
           <div class="label">
-            <span class="label-text-alt">Supported: MP3, WAV, M4A, OGG, WebM, AAC (max 10MB)</span>
+            <span class="label-text-alt">{{ $t('media.audio.supportedFormats') }}</span>
           </div>
         </div>
 
@@ -125,7 +125,7 @@
         <div v-if="error" class="alert alert-error alert-sm mt-2">
           <span class="text-xs">{{ error }}</span>
           <button class="btn btn-xs btn-outline" @click="error = ''">
-            ×
+            {{ $t('media.audio.close') }}
           </button>
         </div>
       </div>

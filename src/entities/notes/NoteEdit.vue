@@ -3,7 +3,7 @@
     <!-- Content and Note Type in one row -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="md:col-span-2 flex flex-col space-y-1">
-        <label class=" font-medium">Content</label>
+        <label class=" font-medium">{{ $t('notes.content') }}</label>
         <textarea
           v-model="tempNote.content"
           placeholder="Enter note content..."
@@ -13,7 +13,7 @@
       </div>
       
       <div class="flex flex-col space-y-1">
-        <label class=" font-medium">Note Type</label>
+        <label class=" font-medium">{{ $t('notes.noteType') }}</label>
         <input
           v-model="tempNote.noteType"
           type="text"
@@ -31,7 +31,7 @@
           type="checkbox"
           class="checkbox checkbox-sm"
         />
-        <span class="label-text">Show before exercise</span>
+        <span class="label-text">{{ $t('notes.showBeforeExercise') }}</span>
       </label>
     </div>
 
@@ -42,14 +42,14 @@
         class="btn btn-sm btn-ghost"
       >
         <X class="w-4 h-4" />
-        Cancel
+        {{ $t('common.cancel') }}
       </button>
       <button
         @click="saveEdit"
         class="btn btn-sm btn-success"
       >
         <Check class="w-4 h-4" />
-        Save
+        {{ $t('common.save') }}
       </button>
     </div>
   </div>

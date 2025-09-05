@@ -1,19 +1,19 @@
 <template>
   <div class="space-y-4">
     <div class="flex justify-between items-center">
-      <h3>Notes</h3>
+      <h3>{{ $t('notes.title') }}</h3>
       <button
         type="button"
         @click="addNewNote"
         class="btn btn-sm btn-outline"
       >
         <Plus class="w-4 h-4 mr-1" />
-        Add Note
+        {{ $t('notes.add') }}
       </button>
     </div>
     
     <div v-if="notes.length === 0" class=" text-center py-4">
-      No notes.
+      {{ $t('notes.states.empty') }}
     </div>
     
     <div v-else class="space-y-4">

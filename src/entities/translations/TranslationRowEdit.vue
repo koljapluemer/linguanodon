@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap gap-4">
     <div class="flex flex-col space-y-1 flex-1">
-      <label class=" font-medium">Translation</label>
+      <label class=" font-medium">{{ $t('vocabulary.translation') }}</label>
       <input
         v-model="editTranslation.content"
         class="input input-bordered input-lg w-full"
@@ -17,14 +17,14 @@
         :disabled="!editTranslation.content?.trim()"
         @click="save"
       >
-        Add
+        {{ $t('common.add') }}
       </button>
       <button
         v-if="!isNew"
         class="btn btn-sm btn-ghost"
         @click="cancel"
       >
-        Cancel
+        {{ $t('common.cancel') }}
       </button>
     </div>
   </div>

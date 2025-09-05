@@ -8,6 +8,7 @@ import pluginImport from "eslint-plugin-import";
 import vueParser from "vue-eslint-parser";
 import tsParser from "@typescript-eslint/parser";
 import pluginJsdoc from "eslint-plugin-jsdoc";
+import pluginVueI18n from "@intlify/eslint-plugin-vue-i18n";
 import { defineConfig } from "eslint/config";
 
 const importResolverSettings = {
@@ -40,10 +41,12 @@ export default defineConfig([
       '@typescript-eslint': tseslint.plugin,
       import: pluginImport,
       jsdoc: pluginJsdoc,
+      '@intlify/vue-i18n': pluginVueI18n,
     },
     rules: {
       ...pluginVue.configs["flat/recommended"].rules,
       ...tseslint.configs.recommended.rules,
+      ...pluginVueI18n.configs["flat/recommended"].rules,
       'import/no-unresolved': 'error',
       'jsdoc/require-jsdoc': 'off',
       'jsdoc/require-description': "off",
@@ -52,7 +55,8 @@ export default defineConfig([
       'jsdoc/require-param-type': "off",
       'jsdoc/require-param-description': "off",
       'jsdoc/require-returns-type': "off",
-      'jsdoc/require-returns-description': "off"
+      'jsdoc/require-returns-description': "off",
+      '@intlify/vue-i18n/no-raw-text': 'error',
     },
     settings: importResolverSettings,
   },

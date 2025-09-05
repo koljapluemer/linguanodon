@@ -10,7 +10,7 @@
                 placeholder="Enter vocabulary content..." @update:model-value="updateVocabContent(vocab, $event)" />
               <button v-else @click="startContentEdit(vocab)" class="btn btn-outline">
                 <Plus class="w-4 h-4 mr-1" />
-                Add meaning in {{ currentLanguage ? renderLanguage(currentLanguage) : vocab.language }}
+                {{ $t('vocabulary.addMeaningIn') }} {{ currentLanguage ? renderLanguage(currentLanguage) : vocab.language }}
               </button>
             </div>
 
@@ -20,7 +20,7 @@
             <!-- Right side: Translations -->
             <div class="flex-1 pl-4 flex flex-col gap-2">
               <!-- Translation list -->
-              <label class=" font-medium  ">Translations</label>
+              <label class=" font-medium  ">{{ $t('vocabulary.translations') }}</label>
               <div v-if="vocab.translations.length > 0" class="space-y-2 mb-4">
                 <div v-for="(translationId, tIndex) in vocab.translations" :key="translationId">
                   <!-- Edit mode -->
@@ -74,7 +74,7 @@
               <!-- Add translation button at bottom -->
               <button type="button" @click="addNewTranslation(index)" class="btn btn-sm btn-outline">
                 <Plus class="w-4 h-4 mr-1" />
-                Add Translation
+                {{ $t('translations.add') }}
               </button>
             </div>
           </div>
@@ -109,7 +109,7 @@
               @change="creationMode = 'translation-only'"
               class="sr-only peer">
             <span class="relative inline-flex items-center h-full py-2 px-3  peer-checked:bg-primary peer-checked:text-primary-content">
-              Native only
+              {{ $t('vocabulary.nativeOnly') }}
             </span>
           </label>
           <label class="cursor-pointer">
@@ -118,7 +118,7 @@
               @change="creationMode = 'vocab-only'"
               class="sr-only peer">
             <span class="relative inline-flex items-center gap-1 h-full py-2 px-3  peer-checked:bg-secondary peer-checked:text-secondary-content">
-              <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" variant="short" /> only
+              <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" variant="short" /> {{ $t('vocabulary.only') }}
             </span>
           </label>
           <label class="cursor-pointer">
@@ -127,7 +127,7 @@
               @change="creationMode = 'vocab-and-translation'"
               class="sr-only peer">
             <span class="relative inline-flex items-center h-full py-2 px-3  peer-checked:bg-accent peer-checked:text-accent-content">
-              Both
+              {{ $t('vocabulary.both') }}
             </span>
           </label>
         </div>
@@ -136,14 +136,14 @@
         <div class="space-y-3">
           <div v-if="creationMode === 'vocab-only' || creationMode === 'vocab-and-translation'"
             class="flex flex-col space-y-1">
-            <label class=" font-medium">Language Unit (  <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" />)</label>
+            <label class=" font-medium">{{ $t('vocabulary.languageUnit') }} {{ $t('manage.vocab.count') }}<LanguageDisplay v-if="currentLanguage" :language="currentLanguage" />{{ $t('manage.vocab.countEnd') }}</label>
             <input v-model="newVocabContent" type="text" placeholder="..."
               class="input input-bordered w-full" />
           </div>
 
           <div v-if="creationMode === 'translation-only' || creationMode === 'vocab-and-translation'"
             class="flex flex-col space-y-1">
-            <label class=" font-medium">Language Unit (Native Translation)</label>
+            <label class=" font-medium">{{ $t('vocabulary.languageUnit') }} {{ $t('manage.vocab.count') }}{{ $t('vocabulary.nativeTranslation') }}{{ $t('manage.vocab.countEnd') }}</label>
             <input v-model="newTranslationContent" type="text" placeholder="..."
               class="input input-bordered w-full" />
           </div>
@@ -153,7 +153,7 @@
         <div class="flex justify-end">
           <button @click="createNewVocab" class="btn btn-success btn-sm" :disabled="!canCreateVocab">
             <Plus class="w-4 h-4 mr-1" />
-            Add
+            {{ $t('common.add') }}
           </button>
         </div>
       </div>

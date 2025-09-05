@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div v-if="milestoneEntries.length === 0" class="text-center py-8 ">
-      No milestones attached.
+      {{ $t('goals.manage.milestones.noMilestones') }}
     </div>
     
     <div v-else class="space-y-2">
@@ -27,15 +27,15 @@
           @click="removeMilestone(milestone)"
           class="btn btn-sm btn-error btn-outline"
         >
-          Remove
+          {{ $t('goals.manage.milestones.remove') }}
         </button>
       </div>
     </div>
 
-    <div class="divider">Add New Milestone</div>
+    <div class="divider">{{ $t('goals.manage.milestones.addNew') }}</div>
 
     <div class="flex items-center gap-2">
-      <span class="  whitespace-nowrap">I will know I've achieved this when I can</span>
+      <span class="  whitespace-nowrap">{{ $t('goals.manage.milestones.placeholder') }}</span>
       <input
         v-model="newMilestone"
         type="text"
@@ -48,7 +48,7 @@
         :disabled="!newMilestone.trim()"
         class="btn btn-primary"
       >
-        Add
+        {{ $t('common.add') }}
       </button>
     </div>
     

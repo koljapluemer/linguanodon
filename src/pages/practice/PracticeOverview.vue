@@ -56,7 +56,7 @@ const practiceOptions = [
 <template>
   <!-- Show overview when at the root practice route -->
   <div v-if="$route.name === 'practice-overview'" class="practice-overview">
-    <h1>Practice</h1>
+    <h1>{{ $t('practice.title') }}</h1>
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
       <router-link v-for="option in practiceOptions" :key="option.name" :to="option.route"
         class="card shadow transition-hover hover:shadow-md">

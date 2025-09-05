@@ -3,7 +3,7 @@
     <div class="flex-1">
       <label class=" font-medium  ">
         {{ label }}
-        <span v-if="required" class="text-red-500">*</span>
+        <span v-if="required" class="text-red-500">{{ $t('common.required') }}</span>
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-center justify-between">

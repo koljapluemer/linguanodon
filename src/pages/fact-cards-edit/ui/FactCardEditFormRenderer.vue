@@ -3,7 +3,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-8">
       <span class="loading loading-spinner loading-lg"></span>
-      <p class="mt-4">Loading fact card...</p>
+      <p class="mt-4">{{ $t('factCards.states.loadingFactCard') }}</p>
     </div>
 
     <!-- Error State -->
@@ -42,7 +42,7 @@
       <div class="py-4">
         <div class="flex justify-between items-center mb-3">
           <div class=" font-medium  ">
-            Notes
+            {{ $t('notes.title') }}
           </div>
           <button
             type="button"
@@ -50,12 +50,12 @@
             class="btn btn-sm btn-outline"
           >
             <Plus class="w-4 h-4 mr-1" />
-            Add Note
+            {{ $t('factCards.notes.addNote') }}
           </button>
         </div>
         
         <div v-if="formData.notes.length === 0" class=" text-center py-4">
-          No notes attached.
+          {{ $t('factCards.notes.noNotes') }}
         </div>
         
         <div v-else class="space-y-4">
@@ -84,7 +84,7 @@
       <div class="py-4">
         <div class="flex justify-between items-center mb-3">
           <div class=" font-medium  ">
-            Links
+            {{ $t('factCards.links.title') }}
           </div>
           <button
             type="button"
@@ -92,12 +92,12 @@
             class="btn btn-sm btn-outline"
           >
             <Plus class="w-4 h-4 mr-1" />
-            Add Link
+            {{ $t('factCards.links.addLink') }}
           </button>
         </div>
         
         <div v-if="formData.links.length === 0" class=" text-center py-4">
-          No links attached.
+          {{ $t('factCards.links.noLinks') }}
         </div>
         
         <div v-else class="space-y-4">
@@ -128,11 +128,11 @@
         <div class="flex items-center gap-2">
           <span v-if="saving" class=" text-light flex items-center gap-1">
             <span class="loading loading-spinner loading-sm"></span>
-            Auto-saving...
+            {{ $t('factCards.autoSaving') }}
           </span>
           <span v-else-if="isEditing" class=" text-success flex items-center gap-1">
             <Check class="w-4 h-4" />
-            Changes saved automatically
+            {{ $t('factCards.changesSaved') }}
           </span>
         </div>
       </div>

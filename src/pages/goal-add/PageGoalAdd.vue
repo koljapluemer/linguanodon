@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1>Add New Goal</h1>
+    <h1>{{ $t('goals.addNew') }}</h1>
     <router-link to="/goals" class="btn btn-outline">
-      Back to Goals List
+      {{ $t('goals.backToList') }}
     </router-link>
   </div>
 

@@ -7,7 +7,7 @@
   <!-- Language -->
   <div class="py-4">
     <label class="label">
-      <span class="label-text font-medium">Language *</span>
+      <span class="label-text font-medium">{{ $t('factCards.form.language') }}</span>
     </label>
     <LanguageDropdown
       v-model="formData.language"
@@ -19,7 +19,7 @@
   <!-- Front -->
   <div class="py-4">
     <label class="label">
-      <span class="label-text font-medium">Front *</span>
+      <span class="label-text font-medium">{{ $t('factCards.form.front') }}</span>
     </label>
     <textarea
       v-model="formData.front"
@@ -33,7 +33,7 @@
   <!-- Back -->
   <div class="py-4">
     <label class="label">
-      <span class="label-text font-medium">Back *</span>
+      <span class="label-text font-medium">{{ $t('factCards.form.back') }}</span>
     </label>
     <textarea
       v-model="formData.back"
@@ -53,7 +53,7 @@
       class="btn btn-primary flex-1"
     >
       <span v-if="saving" class="loading loading-spinner loading-sm mr-2"></span>
-      {{ saving ? 'Saving...' : 'Save Fact Card' }}
+      {{ saving ? $t('factCards.form.saving') : $t('factCards.form.saveFactCard') }}
     </button>
     <button
       type="button"
@@ -62,7 +62,7 @@
       class="btn btn-outline btn-primary flex-1"
     >
       <span v-if="saving" class="loading loading-spinner loading-sm mr-2"></span>
-      {{ saving ? 'Saving...' : 'Save & Add Another' }}
+      {{ saving ? $t('factCards.form.saving') : $t('factCards.form.saveAndAddAnother') }}
     </button>
   </div>
 </template>

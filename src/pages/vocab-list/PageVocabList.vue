@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1>Vocabulary</h1>
+    <h1>{{ $t('vocabulary.title') }}</h1>
     <router-link to="/vocab/new" class="btn btn-primary">
-      Add New Vocab
+      {{ $t('vocabulary.addNew') }}
     </router-link>
   </div>
 
@@ -61,7 +61,7 @@
 
   <div v-if="loading" class="text-center py-8">
     <span class="loading loading-spinner loading-lg"></span>
-    <p class="mt-4">Loading vocabulary...</p>
+    <p class="mt-4">{{ $t('common.loading') }}</p>
   </div>
 
   <div v-else-if="error" class="alert alert-error mb-6">

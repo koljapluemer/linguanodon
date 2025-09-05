@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-between items-center mb-3">
       <h3>
-        {{ props.singleLinkMode ? 'Link' : 'Links' }}
+        {{ props.singleLinkMode ? $t('links.title').slice(0, -1) : $t('links.title') }}
       </h3>
       <button
         v-if="!props.singleLinkMode || props.links.length === 0"
@@ -11,12 +11,12 @@
         class="btn btn-sm btn-outline"
       >
         <Plus class="w-4 h-4 mr-1" />
-        {{ props.singleLinkMode ? 'Add Link' : 'Add Link' }}
+        {{ $t('links.addLink') }}
       </button>
     </div>
     
     <div v-if="props.links.length === 0" class=" text-center py-4">
-      {{ props.singleLinkMode ? 'No link set.' : 'No links attached.' }}
+      {{ props.singleLinkMode ? $t('links.noLink') : $t('links.noLinks') }}
     </div>
     
     <div v-else class="space-y-4">

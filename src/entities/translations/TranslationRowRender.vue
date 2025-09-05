@@ -6,7 +6,7 @@
     
     <div v-else class="flex-1">
       <div class="flex flex-col space-y-1">
-        <label class=" font-medium">Translation</label>
+        <label class=" font-medium">{{ $t('vocabulary.translation') }}</label>
         <input
           v-model="editTranslation.content"
           class="input input-bordered input-lg w-full"
@@ -23,21 +23,21 @@
         class="btn btn-sm btn-primary"
         @click="save"
       >
-        Save
+        {{ $t('common.save') }}
       </button>
       <button
         v-if="isEditing"
         class="btn btn-sm btn-ghost"
         @click="cancel"
       >
-        Cancel
+        {{ $t('common.cancel') }}
       </button>
       <button
         v-if="showDeleteButton && !isEditing"
         class="btn btn-sm btn-error"
         @click="$emit('delete')"
       >
-        Delete
+        {{ $t('common.delete') }}
       </button>
     </div>
   </div>

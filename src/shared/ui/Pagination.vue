@@ -7,9 +7,9 @@
         @change="$emit('update:pageSize', parseInt(($event.target as HTMLSelectElement).value))"
         class="select select-bordered select-sm"
       >
-        <option value="25">25 per page</option>
-        <option value="50">50 per page</option>
-        <option value="100">100 per page</option>
+        <option value="25">{{ $t('pagination.pageSize.25') }}</option>
+        <option value="50">{{ $t('pagination.pageSize.50') }}</option>
+        <option value="100">{{ $t('pagination.pageSize.100') }}</option>
       </select>
     </div>
 
@@ -20,7 +20,7 @@
         :disabled="currentPage <= 1"
         class="join-item btn btn-sm"
       >
-        Previous
+        {{ $t('pagination.previous') }}
       </button>
       
       <template v-for="page in visiblePages" :key="page">
@@ -37,13 +37,13 @@
         :disabled="currentPage >= totalPages"
         class="join-item btn btn-sm"
       >
-        Next
+        {{ $t('pagination.next') }}
       </button>
     </div>
 
     <!-- Page jump -->
     <div class="flex items-center gap-2">
-      <span class="text-light">Page</span>
+      <span class="text-light">{{ $t('pagination.page') }}</span>
       <input 
         type="number" 
         :value="currentPage"
@@ -52,7 +52,7 @@
         :max="totalPages"
         class="input input-bordered input-sm w-16 text-center"
       />
-      <span class="text-light">of {{ totalPages }}</span>
+      <span class="text-light">{{ $t('pagination.of') }} {{ totalPages }}</span>
     </div>
   </div>
 </template>

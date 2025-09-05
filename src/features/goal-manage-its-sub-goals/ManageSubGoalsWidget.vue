@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div v-if="subGoals.length === 0" class="text-center py-8 ">
-      No sub-goals yet. Add one below to break down this goal into smaller steps.
+      {{ $t('goals.manage.subGoals.noSubGoals') }}
     </div>
     
     <div v-else class="space-y-2">
@@ -21,21 +21,21 @@
           :to="`/goals/${subGoal.uid}/edit`"
           class="btn btn-sm btn-outline"
         >
-          Edit
+          {{ $t('common.edit') }}
         </router-link>
         <button
           @click="removeSubGoal(subGoal.uid)"
           class="btn btn-sm btn-error btn-outline"
         >
-          Remove
+          {{ $t('goals.manage.subGoals.remove') }}
         </button>
       </div>
     </div>
 
-    <div class="divider">Add New Sub-Goal</div>
+    <div class="divider">{{ $t('goals.manage.subGoals.addNew') }}</div>
 
     <div class="flex items-center gap-2">
-      <span class="  whitespace-nowrap">To reach the goal defined above, I will learn to</span>
+      <span class="  whitespace-nowrap">{{ $t('goals.manage.subGoals.placeholder') }}</span>
       <input
         v-model="newSubGoalTitle"
         type="text"
@@ -48,7 +48,7 @@
         :disabled="!newSubGoalTitle.trim()"
         class="btn btn-primary"
       >
-        Add
+        {{ $t('common.add') }}
       </button>
     </div>
   </div>

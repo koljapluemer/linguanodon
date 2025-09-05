@@ -73,7 +73,7 @@ function cancelEdit() {
     <!-- URL and Label in one row -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="flex flex-col space-y-1">
-        <label class=" font-medium">URL</label>
+        <label class=" font-medium">{{ $t('links.url') }}</label>
         <input
           v-model="tempLink.url"
           type="url"
@@ -83,7 +83,7 @@ function cancelEdit() {
       </div>
 
       <div class="flex flex-col space-y-1">
-        <label class=" font-medium">Label</label>
+        <label class=" font-medium">{{ $t('links.label') }}</label>
         <input
           v-model="tempLink.label"
           type="text"
@@ -96,7 +96,7 @@ function cancelEdit() {
     <!-- License fields in 3 rows with small inputs -->
     <div class="space-y-2">
       <div class="flex flex-col space-y-1">
-        <label class="text-xs font-medium">Owner</label>
+        <label class="text-xs font-medium">{{ $t('links.owner') }}</label>
         <input
           v-model="tempLink.owner"
           type="text"
@@ -106,7 +106,7 @@ function cancelEdit() {
       </div>
 
       <div class="flex flex-col space-y-1">
-        <label class="text-xs font-medium">Owner Link</label>
+        <label class="text-xs font-medium">{{ $t('links.ownerLink') }}</label>
         <input
           v-model="tempLink.ownerLink"
           type="url"
@@ -116,7 +116,7 @@ function cancelEdit() {
       </div>
 
       <div class="flex flex-col space-y-1">
-        <label class="text-xs font-medium">License</label>
+        <label class="text-xs font-medium">{{ $t('links.license') }}</label>
         <input
           v-model="tempLink.license"
           type="text"
@@ -133,20 +133,20 @@ function cancelEdit() {
         class="btn btn-sm btn-ghost"
       >
         <X class="w-4 h-4" />
-        Cancel
+        {{ $t('common.cancel') }}
       </button>
       <button
         @click="saveEdit"
         class="btn btn-sm btn-success"
       >
         <Check class="w-4 h-4" />
-        Save
+        {{ $t('common.save') }}
       </button>
     </div>
 
     <!-- Preview -->
     <div v-if="hasValidUrl" class="mt-4">
-      <div class=" font-medium mb-2">Preview</div>
+      <div class=" font-medium mb-2">{{ $t('links.preview') }}</div>
       <div class="p-3 bg-base-200 rounded">
         <LinkDisplayAsButton :link="tempLink" />
       </div>

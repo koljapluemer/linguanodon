@@ -2,9 +2,9 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-center">
-      <h1>Fact Cards</h1>
+      <h1>{{ $t('factCards.title') }}</h1>
       <router-link to="/fact-cards/new" class="btn btn-primary">
-        Add New Fact Card
+        {{ $t('factCards.addNew') }}
       </router-link>
     </div>
 
@@ -13,7 +13,7 @@
       <div class="card-body">
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Search fact cards</span>
+            <span class="label-text">{{ $t('factCards.searchPlaceholder') }}</span>
           </label>
           <input
             v-model="searchQuery"
@@ -38,13 +38,13 @@
     <!-- Empty State -->
     <div v-else-if="filteredFactCards.length === 0" class="text-center p-12">
       <h3>
-        {{ searchQuery ? 'No matching fact cards' : 'No fact cards yet' }}
+        {{ searchQuery ? $t('factCards.states.noMatches') : $t('factCards.states.noItems') }}
       </h3>
       <p class="text-light mb-4">
-        {{ searchQuery ? 'Try adjusting your search terms.' : 'Create your first fact card to get started.' }}
+        {{ searchQuery ? $t('factCards.suggestions.adjustSearch') : $t('factCards.suggestions.createFirst') }}
       </p>
       <router-link to="/fact-cards/new" class="btn btn-primary">
-        Add New Fact Card
+        {{ $t('factCards.addNew') }}
       </router-link>
     </div>
 
@@ -60,14 +60,14 @@
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-2">
                 <LanguageDisplay v-if="languageMap.get(factCard.language)" :language="languageMap.get(factCard.language)!" variant="short" />
-                <span v-if="factCard.origins && factCard.origins.length > 0 && !factCard.origins.includes('user-added')" class="badge badge-info">External</span>
-                <span v-if="factCard.doNotPractice" class="badge badge-warning">Excluded</span>
-                <span v-if="factCard.priority" class="badge badge-secondary">P{{ factCard.priority }}</span>
+                <span v-if="factCard.origins && factCard.origins.length > 0 && !factCard.origins.includes('user-added')" class="badge badge-info">{{ $t('vocabulary.origins.external') }}</span>
+                <span v-if="factCard.doNotPractice" class="badge badge-warning">{{ $t('factCards.tags.excluded') }}</span>
+                <span v-if="factCard.priority" class="badge badge-secondary">{{ $t('factCards.tags.priority') }}{{ factCard.priority }}</span>
               </div>
               
               <!-- Front Content -->
               <div class="mb-3">
-                <h3>Front</h3>
+                <h3>{{ $t('factCards.front') }}</h3>
                 <div class="bg-base-200 p-3 rounded">
                   <MarkdownRenderer :content="factCard.front" />
                 </div>
@@ -75,7 +75,7 @@
               
               <!-- Back Content -->
               <div class="mb-3">
-                <h3>Back</h3>
+                <h3>{{ $t('factCards.back') }}</h3>
                 <div class="bg-base-200 p-3 rounded">
                   <MarkdownRenderer :content="factCard.back" />
                 </div>
@@ -84,8 +84,8 @@
               <!-- Notes Count -->
               <div v-if="factCard.notes && factCard.notes.length > 0" class="mt-2">
                 <p class=" ">
-                  <span class="font-medium">Notes:</span> 
-                  {{ factCard.notes.length }} note{{ factCard.notes.length === 1 ? '' : 's' }}
+                  <span class="font-medium">{{ $t('factCards.notes.label') }}</span> 
+                  {{ factCard.notes.length }} {{ factCard.notes.length === 1 ? $t('factCards.notes.count') : $t('factCards.notes.countPlural') }}
                 </p>
               </div>
             </div>
@@ -96,7 +96,7 @@
                 :to="`/fact-cards/${factCard.uid}/edit`"
                 class="btn btn-sm btn-outline"
               >
-                Edit
+                {{ $t('common.edit') }}
               </router-link>
               <button
                 @click="deleteFactCard(factCard.uid)"
@@ -104,7 +104,7 @@
                 :disabled="deleting"
               >
                 <span v-if="deleting" class="loading loading-spinner loading-sm"></span>
-                <span v-else>Delete</span>
+                <span v-else>{{ $t('common.delete') }}</span>
               </button>
             </div>
           </div>

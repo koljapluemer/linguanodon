@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <h3>Images</h3>
+    <h3>{{ $t('media.images.title') }}</h3>
 
     <!-- Current Images -->
     <div v-if="localImages && localImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -21,14 +21,14 @@
               class="btn btn-sm btn-primary"
               :disabled="loading || isPicturable === false"
             >
-              Replace
+              {{ $t('media.images.replace') }}
             </button>
             <button 
               @click="removeImage(image.uid)"
               class="btn btn-sm btn-error"
               :disabled="loading"
             >
-              Remove
+              {{ $t('media.images.remove') }}
             </button>
           </div>
         </div>
@@ -37,7 +37,7 @@
         <div class="mt-2 text-xs text-base-content/60">
           {{ formatFileSize(image.fileSize) }}
           <span v-if="image.dimensions">
-            • {{ image.dimensions.width }}×{{ image.dimensions.height }}
+            {{ $t('media.images.bullet') }} {{ image.dimensions.width }}{{ $t('media.images.times') }}{{ image.dimensions.height }}
           </span>
         </div>
       </div>
@@ -52,14 +52,14 @@
             :class="{ 'tab-active': mode === 'url' }"
             @click="mode = 'url'"
           >
-            URL
+            {{ $t('media.images.url') }}
           </button>
           <button 
             class="tab tab-sm" 
             :class="{ 'tab-active': mode === 'upload' }"
             @click="mode = 'upload'"
           >
-            Upload
+            {{ $t('media.images.upload') }}
           </button>
         </div>
 
@@ -78,7 +78,7 @@
             class="btn btn-sm btn-primary"
           >
             <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-            <span v-else>Add</span>
+            <span v-else>{{ $t('media.images.add') }}</span>
           </button>
         </div>
 
@@ -93,7 +93,7 @@
             class="file-input file-input-sm file-input-bordered"
           />
           <div class="label">
-            <span class="label-text-alt">Images compressed to ~800×600px</span>
+            <span class="label-text-alt">{{ $t('media.images.compression') }}</span>
           </div>
         </div>
 
@@ -109,7 +109,7 @@
         <div v-if="error" class="alert alert-error alert-sm mt-2">
           <span class="text-xs">{{ error }}</span>
           <button class="btn btn-xs btn-outline" @click="error = ''">
-            ×
+            {{ $t('media.images.close') }}
           </button>
         </div>
       </div>

@@ -225,7 +225,7 @@ const handleTaskFinished = async () => {
       <div class="text-center">
         <span class="loading loading-spinner loading-lg"></span>
         <p class="mt-4 text-lg">
-          {{ state.status === 'loading' && state.message ? state.message : 'Starting illegal immersion...' }}
+          {{ state.status === 'loading' && state.message ? state.message : $t('practice.widgets.startingIllegalImmersion') }}
         </p>
       </div>
     </div>
@@ -237,7 +237,7 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'error'" class="alert alert-error">
       <span>{{ state.message }}</span>
       <button class="btn btn-sm" @click="retry">
-        Try Again
+        {{ $t('practice.widgets.tryAgain') }}
       </button>
     </div>
   </Transition>
@@ -249,10 +249,10 @@ const handleTaskFinished = async () => {
       <div class="hero-content text-center">
         <div class="max-w-md">
           <h1>🚫📚</h1>
-          <h2>Immersion Complete</h2>
+          <h2>{{ $t('practice.widgets.immersionComplete') }}</h2>
           <p class="py-6">{{ state.message }}</p>
           <button class="btn btn-primary" @click="initializeQueue">
-            Check for More Content
+            {{ $t('practice.widgets.checkForMoreContent') }}
           </button>
         </div>
       </div>
@@ -275,7 +275,7 @@ const handleTaskFinished = async () => {
     </div>
     <div class="flex items-center justify-between mt-1">
       <span class="text-xs text-base-content/50">
-        {{ Math.round(progressInfo.progressPercentage) }}% complete
+        {{ Math.round(progressInfo.progressPercentage) }}{{ $t('practice.widgets.percentComplete') }}
       </span>
       <span class="text-xs text-base-content/50 capitalize">
         {{ progressInfo.currentPhase.replace('-', ' ') }}
@@ -303,9 +303,9 @@ const handleTaskFinished = async () => {
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
     <div v-if="!['initializing', 'loading', 'task', 'empty', 'error'].includes(state.status)"
       class="alert alert-warning">
-      <span>The immersion session has gone astray. Please refresh.</span>
+      <span>{{ $t('practice.widgets.immersionGoneAstray') }}</span>
       <button class="btn btn-sm" @click="initializeQueue">
-        Reset Session
+        {{ $t('practice.widgets.refresh') }}
       </button>
     </div>
   </Transition>

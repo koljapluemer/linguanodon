@@ -10,7 +10,7 @@ const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 </script>
 
 <template>
-  <h1>Settings</h1>
+  <h1>{{ $t('navigation.settings') }}</h1>
 
   <LanguageSettings :language-repo="languageRepo" />
 

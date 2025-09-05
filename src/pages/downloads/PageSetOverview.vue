@@ -1,13 +1,13 @@
 <template>
     <div class="mb-6">
       <router-link to="/downloads" class="btn btn-ghost btn-sm mb-4">
-        ← Back to Downloads
+        {{ $t('downloads.backToDownloads') }}
       </router-link>
     </div>
 
     <div v-if="loading" class="flex items-center justify-center py-16">
       <span class="loading loading-spinner loading-lg"></span>
-      <span class="ml-4">Loading set information...</span>
+      <span class="ml-4">{{ $t('downloads.loadingSetInfo') }}</span>
     </div>
 
     <div v-else-if="error" class="alert alert-error">
@@ -27,7 +27,7 @@
 
           <div v-if="isDownloaded" class="alert alert-success mb-6">
             <CheckCircle class="w-5 h-5" />
-            <span>This set is already downloaded and ready to use!</span>
+            <span>{{ $t('downloads.alreadyDownloaded') }}</span>
           </div>
 
           <div class="card-actions justify-center">
@@ -39,10 +39,10 @@
               >
                 <Download v-if="!downloading" class="w-5 h-5 mr-2" />
                 <span v-if="downloading" class="loading loading-spinner loading-sm mr-2"></span>
-                {{ isDownloaded ? 'Start' : 'Download and Start' }}
+                {{ isDownloaded ? $t('downloads.start') : $t('downloads.downloadAndStart') }}
               </button>
               <p class=" text-base-content/60 mt-2 text-center">
-                Will start in {{ getPracticeModeName(metadata.preferredMode) }} mode
+                {{ $t('downloads.willStartIn') }} {{ getPracticeModeName(metadata.preferredMode) }} {{ $t('downloads.mode') }}
               </p>
             </div>
             
@@ -54,7 +54,7 @@
             >
               <Download v-if="!downloading" class="w-5 h-5 mr-2" />
               <span v-if="downloading" class="loading loading-spinner loading-sm mr-2"></span>
-              {{ isDownloaded ? 'Re-download' : 'Download' }}
+              {{ isDownloaded ? $t('downloads.redownload') : $t('downloads.download') }}
             </button>
           </div>
         </div>
