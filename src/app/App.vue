@@ -51,7 +51,7 @@ if (app) {
 
 @layer components {
   .text-light {
-    @apply text-light;
+    @apply text-base-content/70;
   }
 }
 

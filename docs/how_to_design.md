@@ -12,8 +12,9 @@
 - Do not use gray text. If text must be dis-emphasized, use only and consistently `text-light`. Do not give it an `sm` size.
 - Do not use excessive subheadings, redundant labels or little information widgets that the user does not care about. 
 - Before implementing a component, look for similar components and copy their styles and/or approach.
-- When setting margins, paddings, gaps and so on, prefer the size `2`, `4`, and `6`
+- When setting margins, paddings, gaps and so on, prefer the size `1`, `2`, `4`, and `6`
 - For recurring complex styles, use `@apply` in `App.vue`.
 - User color sparingly, and only for primary/important elements or those that must use color to communicate (e.g. a warning)
+- Make sure any given layout works well on mobile and desktop!
 
 - KEEP. IT. SIMPLE.

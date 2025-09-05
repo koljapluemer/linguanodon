@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { VocabRepoContract, VocabPaginationResult } from './VocabRepoContract';
+import type { VocabRepoContract, VocabPaginationResult, VocabListFilters } from './VocabRepoContract';
 import type { VocabData, VocabImage, VocabSound } from './VocabData';
 import { fsrs, createEmptyCard, Rating } from 'ts-fsrs';
 import { pickRandom, shuffleArray } from '@/shared/utils/arrayUtils';
@@ -275,16 +275,32 @@ export class VocabRepo implements VocabRepoContract {
     return pickRandom(withoutPronunciation, 1)[0];
   }
 
-  async getVocabPaginated(cursor?: string, limit: number = 20, searchQuery?: string): Promise<VocabPaginationResult> {
+  async getVocabPaginated(cursor?: string, limit: number = 20, filters?: VocabListFilters): Promise<VocabPaginationResult> {
     const allVocab = await vocabDb.vocab.toArray();
 
-    // Apply search filter if provided
+    // Apply filters
     let filteredVocab = allVocab;
-    if (searchQuery && searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
-      filteredVocab = allVocab.filter(vocab =>
+    
+    // Search filter
+    if (filters?.searchQuery) {
+      const query = filters.searchQuery.toLowerCase().trim();
+      filteredVocab = filteredVocab.filter(vocab =>
         vocab.content?.toLowerCase().includes(query) ||
         vocab.language.toLowerCase().includes(query)
+      );
+    }
+
+    // Language filter
+    if (filters?.languages && filters.languages.length > 0) {
+      filteredVocab = filteredVocab.filter(vocab =>
+        filters.languages!.includes(vocab.language)
+      );
+    }
+
+    // Origins filter
+    if (filters?.origins && filters.origins.length > 0) {
+      filteredVocab = filteredVocab.filter(vocab =>
+        vocab.origins.some(origin => filters.origins!.includes(origin))
       );
     }
 
@@ -294,15 +310,16 @@ export class VocabRepo implements VocabRepoContract {
     // Apply cursor-based pagination
     let startIndex = 0;
     if (cursor) {
-      startIndex = filteredVocab.findIndex(vocab => vocab.uid === cursor);
-      if (startIndex === -1) startIndex = 0;
-      else startIndex += 1; // Start after the cursor
+      const cursorIndex = parseInt(cursor, 10);
+      if (!isNaN(cursorIndex)) {
+        startIndex = cursorIndex;
+      }
     }
 
     const endIndex = startIndex + limit;
     const paginatedVocab = filteredVocab.slice(startIndex, endIndex);
     const hasMore = endIndex < filteredVocab.length;
-    const nextCursor = hasMore && paginatedVocab.length > 0 ? paginatedVocab[paginatedVocab.length - 1].uid : undefined;
+    const nextCursor = hasMore ? endIndex.toString() : undefined;
 
     return {
       vocab: paginatedVocab.map(v => this.ensureVocabFields(v)),
@@ -311,17 +328,36 @@ export class VocabRepo implements VocabRepoContract {
     };
   }
 
-  async getTotalVocabCount(searchQuery?: string): Promise<number> {
-    if (!searchQuery || !searchQuery.trim()) {
+  async getTotalVocabCount(filters?: VocabListFilters): Promise<number> {
+    if (!filters || (!filters.searchQuery && !filters.languages && !filters.origins)) {
       return await vocabDb.vocab.count();
     }
 
     const allVocab = await vocabDb.vocab.toArray();
-    const query = searchQuery.toLowerCase().trim();
-    const filteredVocab = allVocab.filter(vocab =>
-      vocab.content?.toLowerCase().includes(query) ||
-      vocab.language.toLowerCase().includes(query)
-    );
+    let filteredVocab = allVocab;
+
+    // Search filter
+    if (filters.searchQuery) {
+      const query = filters.searchQuery.toLowerCase().trim();
+      filteredVocab = filteredVocab.filter(vocab =>
+        vocab.content?.toLowerCase().includes(query) ||
+        vocab.language.toLowerCase().includes(query)
+      );
+    }
+
+    // Language filter
+    if (filters.languages && filters.languages.length > 0) {
+      filteredVocab = filteredVocab.filter(vocab =>
+        filters.languages!.includes(vocab.language)
+      );
+    }
+
+    // Origins filter
+    if (filters.origins && filters.origins.length > 0) {
+      filteredVocab = filteredVocab.filter(vocab =>
+        vocab.origins.some(origin => filters.origins!.includes(origin))
+      );
+    }
 
     return filteredVocab.length;
   }

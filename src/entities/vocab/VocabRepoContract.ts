@@ -7,6 +7,12 @@ export interface VocabPaginationResult {
   hasMore: boolean;
 }
 
+export interface VocabListFilters {
+  searchQuery?: string;
+  languages?: string[];
+  origins?: string[];
+}
+
 export interface VocabRepoContract {
   // Vocab operations
   getVocab(): Promise<VocabData[]>;
@@ -20,8 +26,8 @@ export interface VocabRepoContract {
   getDueOrUnseenVocabFromIds(uids: string[]): Promise<VocabData[]>;
   
   // Pagination operations
-  getVocabPaginated(cursor?: string, limit?: number, searchQuery?: string): Promise<VocabPaginationResult>;
-  getTotalVocabCount(searchQuery?: string): Promise<number>;
+  getVocabPaginated(cursor?: string, limit?: number, filters?: VocabListFilters): Promise<VocabPaginationResult>;
+  getTotalVocabCount(filters?: VocabListFilters): Promise<number>;
   
   // CRUD operations
   saveVocab(vocab: Omit<VocabData, 'uid' | 'progress' | 'tasks'>): Promise<VocabData>;
