@@ -27,7 +27,7 @@
           @keydown.enter="saveEdit"
           @keydown.escape="cancelEdit"
           :required="required"
-          class="flex-1 select "
+          class="flex-1 select"
         >
           <option value="" v-if="placeholder">{{ placeholder }}</option>
           <option 

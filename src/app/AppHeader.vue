@@ -13,12 +13,37 @@ import MyMaterialSubmenu from './MyMaterialSubmenu.vue';
 const route = useRoute();
 const showMaterialSubmenu = ref(false);
 
-// Show submenu on individual material pages, hide on overview page
+// Navigation state computations
+const isOnPracticePage = computed(() => {
+  return route.path.startsWith('/practice') || 
+         route.name === 'practice-overview' ||
+         (route.name as string)?.startsWith('practice-mode-');
+});
+
 const isOnMyMaterialOverviewPage = computed(() => route.name === 'my-material');
+
 const isOnMaterialPage = computed(() => {
   const materialPages = ['vocab-list', 'fact-cards-list', 'resources-list', 'goals-list'];
-  return materialPages.includes(route.name as string);
+  const materialEditPages = ['vocab-edit', 'vocab-new', 'fact-cards-edit', 'fact-cards-new', 'resources-edit', 'resources-new', 'goals-edit', 'goals-add'];
+  return materialPages.includes(route.name as string) || 
+         materialEditPages.includes(route.name as string) ||
+         isOnMyMaterialOverviewPage.value;
 });
+
+const isOnSettingsPage = computed(() => {
+  return route.path.startsWith('/settings') || route.name === 'settings';
+});
+
+const isOnTimeTrackingPage = computed(() => {
+  return route.path.startsWith('/time-tracking') || route.name === 'time-tracking';
+});
+
+const isOnDownloadsPage = computed(() => {
+  return route.path.startsWith('/downloads') || 
+         route.name === 'downloads' || 
+         route.name === 'set-overview';
+});
+
 const shouldShowSubmenu = computed(() => isOnMaterialPage.value && !isOnMyMaterialOverviewPage.value);
 
 const toggleMaterialSubmenu = () => {
@@ -33,12 +58,15 @@ const toggleMaterialSubmenu = () => {
 </script>
 
 <template>
-  <div>
-    <header class="flex justify-between items-center p-4">
+    <header class="flex justify-between items-center p-4 border-b-1 border-gray-300">
       <img src="@/assets/logo.png" alt="Logo The ~~Secret~~ Language App" class="h-10">
       <nav class="flex gap-2 justify-center">
         <!-- Practice -->
-        <router-link :to="{ name: 'practice-overview' }" class="btn btn-ghost btn-sm">
+        <router-link 
+          :to="{ name: 'practice-overview' }" 
+          class="btn btn-ghost btn-sm"
+          :class="{ 'btn-active': isOnPracticePage }"
+        >
           <Play :size="16" />
           <span class="hidden md:inline ml-2">Practice</span>
         </router-link>
@@ -57,26 +85,38 @@ const toggleMaterialSubmenu = () => {
           v-else
           @click="toggleMaterialSubmenu"
           class="btn btn-ghost btn-sm"
-          :class="{ 'btn-active': showMaterialSubmenu }"
+          :class="{ 'btn-active': isOnMaterialPage || showMaterialSubmenu }"
         >
           <FolderOpen :size="16" />
           <span class="hidden md:inline ml-2">My Material</span>
         </button>
         
         <!-- Settings -->
-        <router-link :to="{ name: 'settings' }" class="btn btn-ghost btn-sm">
+        <router-link 
+          :to="{ name: 'settings' }" 
+          class="btn btn-ghost btn-sm"
+          :class="{ 'btn-active': isOnSettingsPage }"
+        >
           <Settings :size="16" />
           <span class="hidden md:inline ml-2">Settings</span>
         </router-link>
         
         <!-- Time -->
-        <router-link :to="{ name: 'time-tracking' }" class="btn btn-ghost btn-sm">
+        <router-link 
+          :to="{ name: 'time-tracking' }" 
+          class="btn btn-ghost btn-sm"
+          :class="{ 'btn-active': isOnTimeTrackingPage }"
+        >
           <Clock :size="16" />
           <span class="hidden md:inline ml-2">Time</span>
         </router-link>
         
         <!-- Downloads -->
-        <router-link :to="{ name: 'downloads' }" class="btn btn-ghost btn-sm">
+        <router-link 
+          :to="{ name: 'downloads' }" 
+          class="btn btn-ghost btn-sm"
+          :class="{ 'btn-active': isOnDownloadsPage }"
+        >
           <Download :size="16" />
           <span class="hidden md:inline ml-2">Downloads</span>
         </router-link>
@@ -88,5 +128,4 @@ const toggleMaterialSubmenu = () => {
       :show="shouldShowSubmenu" 
       @close="showMaterialSubmenu = false"
     />
-  </div>
 </template>

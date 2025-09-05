@@ -33,7 +33,7 @@ if (app) {
 }
 
 .page-title {
-  @apply text-5xl font-bold mb-4 mt-2; 
+  @apply font-bold my-6 text-3xl md:text-5xl text-center; 
 }
 
 </style>
