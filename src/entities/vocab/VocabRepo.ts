@@ -283,7 +283,6 @@ export class VocabRepo implements VocabRepoContract {
     
     // Search filter (OR logic: vocab content OR translation match)
     if (filters?.searchQuery || (filters?.translationIds && filters.translationIds.length > 0)) {
-      console.log('SEARCH DEBUG - filters:', filters);
       filteredVocab = filteredVocab.filter(vocab => {
         // Check vocab content match
         let contentMatch = false;
@@ -300,8 +299,6 @@ export class VocabRepo implements VocabRepoContract {
           );
         }
 
-        console.log(`VOCAB ${vocab.content} - contentMatch: ${contentMatch}, translationMatch: ${translationMatch}, result: ${contentMatch || translationMatch}`);
-        
         // Return true if EITHER content matches OR translation matches
         return contentMatch || translationMatch;
       });

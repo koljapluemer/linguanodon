@@ -106,7 +106,23 @@
                 {{ getLanguageName(vocab.language) }}
               </span>
             </td>
-            <td>{{ vocab.translations?.length || 0 }}</td>
+            <td>
+              <div class="flex flex-wrap gap-1">
+                <span 
+                  v-for="translation in vocabTranslations[vocab.uid] || []" 
+                  :key="translation"
+                  class="badge badge-sm"
+                >
+                  {{ translation }}
+                </span>
+                <span 
+                  v-if="!vocabTranslations[vocab.uid] || vocabTranslations[vocab.uid].length === 0"
+                  class="text-light"
+                >
+                  No translations
+                </span>
+              </div>
+            </td>
             <td>
               <div class="flex flex-wrap gap-1">
                 <span v-for="origin in vocab.origins" :key="origin" class="badge badge-outline badge-sm">
@@ -177,6 +193,9 @@ const vocabItems = ref<VocabData[]>([]);
 const totalCount = ref(0);
 const loading = ref(true);
 const error = ref<string | null>(null);
+
+// Translation data for current page
+const vocabTranslations = ref<Record<string, string[]>>({});
 
 // Filters and search
 const searchQuery = ref('');
@@ -274,11 +293,8 @@ async function loadVocab() {
     
     // If there's a search query, also search translations
     if (searchQuery.value?.trim()) {
-      console.log('Searching translations for:', searchQuery.value.trim());
       const matchingTranslations = await translationRepo.searchTranslationsByContent(searchQuery.value.trim());
-      console.log('Found translations:', matchingTranslations);
       translationIds = matchingTranslations.map(t => t.uid);
-      console.log('Translation IDs:', translationIds);
     }
 
     const filters: VocabListFilters = {
@@ -297,10 +313,40 @@ async function loadVocab() {
 
     vocabItems.value = result.vocab;
     totalCount.value = count;
+    
+    // Load translations for current page items
+    await loadTranslationsForCurrentPage();
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load vocabulary';
   } finally {
     loading.value = false;
+  }
+}
+
+async function loadTranslationsForCurrentPage() {
+  try {
+    const translationData: Record<string, string[]> = {};
+    
+    // Get all translation IDs for current page vocab items
+    const allTranslationIds = vocabItems.value.flatMap(vocab => vocab.translations);
+    const uniqueTranslationIds = [...new Set(allTranslationIds)];
+    
+    if (uniqueTranslationIds.length > 0) {
+      // Load all translations at once
+      const translations = await translationRepo.getTranslationsByIds(uniqueTranslationIds);
+      const translationMap = new Map(translations.map(t => [t.uid, t.content]));
+      
+      // Map translations back to vocab items
+      for (const vocab of vocabItems.value) {
+        translationData[vocab.uid] = vocab.translations
+          .map(id => translationMap.get(id))
+          .filter((content): content is string => content !== undefined);
+      }
+    }
+    
+    vocabTranslations.value = translationData;
+  } catch (err) {
+    console.error('Failed to load translations:', err);
   }
 }
 
