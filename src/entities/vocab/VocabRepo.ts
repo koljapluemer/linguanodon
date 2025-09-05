@@ -740,8 +740,8 @@ export class VocabRepo implements VocabRepoContract {
 
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
-      console.error('Failed to add image from URL:', error);
-      throw error;
+      console.warn('Failed to add image from URL:', error);
+      // Don't throw - gracefully handle missing/invalid images
     }
   }
 

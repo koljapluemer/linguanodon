@@ -613,14 +613,21 @@ export class UnifiedRemoteSetService {
     vocabUid: string,
     imageData: { filename: string; alt?: string; tags?: string[] }
   ): Promise<void> {
-    const response = await fetch(`/sets/${languageCode}/${setName}/images/${imageData.filename}`);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-
-    // Use addImageFromUrl instead of addImageFromFile to avoid compression issues
     const imageUrl = `/sets/${languageCode}/${setName}/images/${imageData.filename}`;
-    await this.vocabRepo.addImageFromUrl(vocabUid, imageUrl, imageData.alt);
+    
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        console.warn(`Image not found: ${imageData.filename} (HTTP ${response.status})`);
+        return; // Skip this image and continue
+      }
+
+      // Use addImageFromUrl instead of addImageFromFile to avoid compression issues
+      await this.vocabRepo.addImageFromUrl(vocabUid, imageUrl, imageData.alt);
+    } catch (error) {
+      console.warn(`Failed to download image ${imageData.filename}:`, error);
+      // Don't rethrow - continue processing other images
+    }
   }
 
   private async downloadAndAddSound(
