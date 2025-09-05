@@ -1,6 +1,6 @@
 <template>
   <details class="border border-base-300 rounded-lg p-2 mt-4">
-    <summary class="cursor-pointer text-sm text-base-content/70 hover:text-base-content">
+    <summary class="cursor-pointer text-sm text-light hover:text-base-content">
       Debug: Vocab Progress Data
     </summary>
     <div class="mt-2 p-3 bg-base-200 rounded text-xs font-mono space-y-1">

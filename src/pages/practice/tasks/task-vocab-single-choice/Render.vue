@@ -226,7 +226,7 @@ onMounted(loadVocabData);
     <!-- Show answer when completed -->
     <div v-if="isAnswered" class="mb-6">
       <!-- Show answer for regular content -->
-      <div class="text-6xl font-bold text-base-content/70 mb-6">
+      <div class="text-6xl font-bold text-light mb-6">
         {{ answerOptions.find(opt => opt.isCorrect)?.content }}
       </div>
     </div>

@@ -40,7 +40,7 @@
       <h3>
         {{ searchQuery ? 'No matching fact cards' : 'No fact cards yet' }}
       </h3>
-      <p class="text-base-content/70 mb-4">
+      <p class="text-light mb-4">
         {{ searchQuery ? 'Try adjusting your search terms.' : 'Create your first fact card to get started.' }}
       </p>
       <router-link to="/fact-cards/new" class="btn btn-primary">

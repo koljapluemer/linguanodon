@@ -79,7 +79,7 @@ onMounted(loadFactCard);
         <MarkdownRenderer :content="factCard.front" />
       </div>
       <div class="divider mb-6"></div>
-      <div class="text-3xl text-base-content/70">
+      <div class="text-3xl text-light">
         <MarkdownRenderer :content="factCard.back" />
       </div>
     </div>

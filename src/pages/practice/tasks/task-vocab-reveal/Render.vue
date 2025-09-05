@@ -90,7 +90,7 @@ onMounted(loadVocab);
       
       <div v-if="isRevealed">
         <div class="divider mb-6">Answer</div>
-        <div :class="isSentence ? 'text-xl' : 'text-3xl'" class="text-base-content/70 mb-6">{{ solution }}</div>
+        <div :class="isSentence ? 'text-xl' : 'text-3xl'" class="text-light mb-6">{{ solution }}</div>
         
         <SpacedRepetitionRating @rating="handleRating" />
       </div>

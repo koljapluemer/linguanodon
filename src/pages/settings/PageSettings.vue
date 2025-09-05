@@ -14,9 +14,5 @@ const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 
   <LanguageSettings :language-repo="languageRepo" />
 
-  <h2>
-    Data Management
-  </h2>
-
   <AudioAnalysis :vocab-repo="vocabRepo" />
 </template>

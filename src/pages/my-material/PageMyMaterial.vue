@@ -11,7 +11,7 @@ import { materialCategories } from '@/app/materialCategories';
       <div class="card-body text-center">
         <component :is="category.icon" :size="48" class="mx-auto mb-4" />
         <h2>{{ category.name }}</h2>
-        <p class="text-base-content/70">{{ category.description }}</p>
+        <p class="text-light">{{ category.description }}</p>
       </div>
     </router-link>
   </div>

@@ -180,7 +180,7 @@ async function deleteEmptyAudio() {
   <div class="card shadow">
     <div class="card-body">
       <h3>Audio Analysis</h3>
-      <p class="text-sm text-base-content/70 mb-4">
+      <p class="text-sm text-light mb-4">
         Detect empty or silent audio files in your vocabulary collection.
       </p>
       

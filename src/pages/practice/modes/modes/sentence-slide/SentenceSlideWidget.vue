@@ -264,8 +264,8 @@ const handleTaskFinished = async () => {
   <!-- Progress Bar -->
   <div v-if="state.status === 'task' && !showLoadingUI && progressInfo.totalInitialConnectedVocab > 0" class="mb-6">
     <div class="flex items-center justify-between mb-2">
-      <span class="text-sm font-medium text-base-content/70">{{ progressInfo.phaseDescription }}</span>
-      <span class="text-sm font-medium text-base-content/70">
+      <span class="text-sm font-medium text-light">{{ progressInfo.phaseDescription }}</span>
+      <span class="text-sm font-medium text-light">
         {{ progressInfo.totalInitialConnectedVocab - progressInfo.remainingConnectedVocab }}/{{ progressInfo.totalInitialConnectedVocab }}
       </span>
     </div>

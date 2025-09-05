@@ -126,7 +126,7 @@
       <!-- Auto-save status -->
       <div class="py-4">
         <div class="flex items-center gap-2">
-          <span v-if="saving" class="text-sm text-base-content/70 flex items-center gap-1">
+          <span v-if="saving" class="text-sm text-light flex items-center gap-1">
             <span class="loading loading-spinner loading-sm"></span>
             Auto-saving...
           </span>

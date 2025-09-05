@@ -37,7 +37,7 @@ const maxMinutes = computed(() => {
 <template>
   <div class="mb-6">
     <h1>Learning Time Tracker</h1>
-    <p class="text-base-content/70 mt-2">Track your daily learning progress</p>
+    <p class="text-light mt-2">Track your daily learning progress</p>
   </div>
 
   <!-- Stats Cards -->

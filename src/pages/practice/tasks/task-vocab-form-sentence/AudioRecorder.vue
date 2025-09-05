@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-2">
     <div class="text-center">
-      <p class="text-lg text-base-content/70 mb-2">
+      <p class="text-lg text-light mb-2">
         {{ vocabCount === 1 ? 'Record yourself saying a sentence using this word' : 'Record yourself saying a sentence using both words' }}
       </p>
       
@@ -57,7 +57,7 @@
             </svg>
           </button>
           
-          <span class="text-sm text-base-content/70">
+          <span class="text-sm text-light">
             {{ formatDuration(Math.floor(audioDuration)) }}
           </span>
         </div>

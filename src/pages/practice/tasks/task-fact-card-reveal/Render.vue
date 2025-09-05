@@ -62,7 +62,7 @@ onMounted(loadFactCard);
       
       <div v-if="isRevealed">
         <div class="divider mb-6">Answer</div>
-        <div class="text-2xl text-base-content/70 mb-6">
+        <div class="text-2xl text-light mb-6">
           <MarkdownRenderer :content="factCard.back" />
         </div>
         

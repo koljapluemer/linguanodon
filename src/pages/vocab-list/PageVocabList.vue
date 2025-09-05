@@ -22,7 +22,7 @@
           <div class="flex items-center justify-between p-4 border rounded-lg">
             <div class="flex-1">
               <div class="font-semibold">{{ vocab.content }}</div>
-              <div class="text-sm text-base-content/60">{{ vocab.language }}</div>
+              <div class="text-sm text-light">{{ vocab.language }}</div>
               <div v-if="vocab.translations && vocab.translations.length" class="text-sm">
                 Translations: {{ vocab.translations.length }}
               </div>

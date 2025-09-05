@@ -107,7 +107,7 @@ function hideDropdown() {
     <h2>
       Target Languages
     </h2>
-    <p class="text-base-content/70 text-sm mb-4">
+    <p class="text-light text-sm mb-4">
       Languages you want to learn. You can temporarily disable languages or remove them completely.
     </p>
 

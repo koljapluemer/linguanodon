@@ -215,7 +215,7 @@ onUnmounted(() => {
                 </svg>
               </button>
             </div>
-            <div class="text-xl text-base-content/70 mb-4">{{ translations[vocab.uid]?.join(', ') }}</div>
+            <div class="text-xl text-light mb-4">{{ translations[vocab.uid]?.join(', ') }}</div>
           </div>
           
           <!-- Images -->
@@ -269,7 +269,7 @@ onUnmounted(() => {
         <!-- Text Tab -->
         <div v-if="activeTab === 'text' && !isRecordTask" class="w-full max-w-2xl">
           <div class="text-center mb-6">
-            <p class="text-lg text-base-content/70 mb-4">
+            <p class="text-lg text-light mb-4">
               {{ vocabItems.length === 1 ? 'Write a sentence using this word' : 'Write a sentence using both words' }}
             </p>
           </div>
@@ -315,7 +315,7 @@ onUnmounted(() => {
 
   <div v-else class="text-center py-12">
     <span class="loading loading-spinner loading-lg"></span>
-    <p class="mt-4 text-base-content/70">Loading vocabulary...</p>
+    <p class="mt-4 text-light">Loading vocabulary...</p>
   </div>
 
   <!-- Hidden audio element for sound playback -->

@@ -84,7 +84,7 @@ onMounted(loadVocab);
     <div class="text-center mb-8">
       <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold mb-6">{{ vocab.content }}</div>
       <div class="divider mb-6"></div>
-      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold text-base-content/70">
+      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold text-light">
         {{ translations.join(', ') }}
       </div>
     </div>

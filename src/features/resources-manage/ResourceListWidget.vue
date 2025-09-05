@@ -22,7 +22,7 @@
     <!-- Empty State -->
     <div v-else-if="resources.length === 0" class="text-center p-12">
       <h3>No resources yet</h3>
-      <p class="text-base-content/70 mb-4">Create your first resource to get started.</p>
+      <p class="text-light mb-4">Create your first resource to get started.</p>
       <router-link to="/resources/new" class="btn btn-primary">
         Add New Resource
       </router-link>
@@ -43,7 +43,7 @@
 
               <h3>{{ resource.title }}</h3>
 
-              <div v-if="resource.content" class="text-base-content/70 mb-3">
+              <div v-if="resource.content" class="text-light mb-3">
                 {{ resource.content.substring(0, 150) }}{{ resource.content.length > 150 ? '...' : '' }}
               </div>
 

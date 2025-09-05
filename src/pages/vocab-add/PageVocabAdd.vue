@@ -6,10 +6,7 @@
     </router-link>
   </div>
 
-  <!-- Vocab Form -->
-  <div class="max-w-2xl mx-auto">
-    <VocabAddFormController @vocab-saved="handleVocabSaved" />
-  </div>
+  <VocabAddFormController @vocab-saved="handleVocabSaved" />
 </template>
 
 <script setup lang="ts">

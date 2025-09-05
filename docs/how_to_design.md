@@ -4,11 +4,12 @@
 - Do not add classes to headings
 - Use wrapping components and especially cards sparingly, and only when needed.
 - When using a card, give it classes `card` and `shadow`. Nothing else. No variation unless called for.
+- If a card must have an hover effect because it's clickable, give it `transition-hover` and `hover:shadow-md`
 - A `card` always must have a `card-body` where the content lives (this is Daisy UI syntax)
 - A `card-title`, if existing, must be within `card-body`
 - Prefer clean `grid` and `flex` layouts over `space-*`
 - Use standard buttons unless special case calls for customization. Do not vary the size randomly unless called for
-- Do not use gray text. If text must be dis-emphasized, use only and consistently `text-base-content/70`
+- Do not use gray text. If text must be dis-emphasized, use only and consistently `text-light`
 - Do not use excessive subheadings, redundant labels or little information widgets that the user does not care about. 
 - Before implementing a component, look for similar components and copy their styles and/or approach.
 - When setting margins, paddings, gaps and so on, prefer the size `2`, `4`, and `6`

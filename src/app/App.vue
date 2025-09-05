@@ -49,6 +49,12 @@ if (app) {
   }
 }
 
+@layer components {
+  .text-light {
+    @apply text-light;
+  }
+}
+
 
 
 

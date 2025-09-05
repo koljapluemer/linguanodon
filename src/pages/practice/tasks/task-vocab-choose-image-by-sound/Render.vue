@@ -36,7 +36,7 @@
 
     <!-- Show result when completed -->
     <div v-if="isAnswered" class="mb-6">
-      <div class="text-4xl font-bold text-base-content/70 mb-4">
+      <div class="text-4xl font-bold text-light mb-4">
         {{ vocab.content }}
       </div>
     </div>
