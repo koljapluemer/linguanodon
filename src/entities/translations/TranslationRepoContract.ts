@@ -9,7 +9,7 @@ export interface TranslationRepoContract {
   deleteTranslations(ids: string[]): Promise<void>;
   
   // Query operations
-  findTranslationsByContent(content: string): Promise<TranslationData[]>;
+  searchTranslationsByContent(content: string): Promise<TranslationData[]>;
   
   // Distractor generation operations
   generateWrongTranslations(correctTranslationContent: string, count: number): Promise<string[]>;

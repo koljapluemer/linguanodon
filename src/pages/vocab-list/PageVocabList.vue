@@ -165,10 +165,12 @@ import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoCont
 import type { LanguageData } from '@/entities/languages/LanguageData';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 import type { LocalSetData } from '@/entities/local-sets/LocalSetData';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
+const translationRepo = inject<TranslationRepoContract>('translationRepo')!;
 
 // Data
 const vocabItems = ref<VocabData[]>([]);
@@ -268,8 +270,20 @@ async function loadVocab() {
   error.value = null;
 
   try {
+    let translationIds: string[] | undefined;
+    
+    // If there's a search query, also search translations
+    if (searchQuery.value?.trim()) {
+      console.log('Searching translations for:', searchQuery.value.trim());
+      const matchingTranslations = await translationRepo.searchTranslationsByContent(searchQuery.value.trim());
+      console.log('Found translations:', matchingTranslations);
+      translationIds = matchingTranslations.map(t => t.uid);
+      console.log('Translation IDs:', translationIds);
+    }
+
     const filters: VocabListFilters = {
       searchQuery: searchQuery.value?.trim() || undefined,
+      translationIds: translationIds && translationIds.length > 0 ? translationIds : undefined,
       languages: selectedLanguages.value.length > 0 ? selectedLanguages.value : undefined,
       origins: selectedSets.value.length > 0 ? selectedSets.value : undefined
     };

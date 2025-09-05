@@ -68,8 +68,11 @@ export class TranslationRepo implements TranslationRepoContract {
     await translationDb.translations.where('uid').anyOf(ids).delete();
   }
 
-  async findTranslationsByContent(content: string): Promise<TranslationData[]> {
-    return await translationDb.translations.where('content').equals(content).toArray();
+  async searchTranslationsByContent(content: string): Promise<TranslationData[]> {
+    const allTranslations = await translationDb.translations.toArray();
+    return allTranslations.filter(translation => 
+      translation.content.toLowerCase().includes(content.toLowerCase())
+    );
   }
 
   private async findIdealWrongTranslation(correctTranslationContent: string): Promise<string | null> {

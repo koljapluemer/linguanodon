@@ -9,6 +9,7 @@ export interface VocabPaginationResult {
 
 export interface VocabListFilters {
   searchQuery?: string;
+  translationIds?: string[];  // IDs of translations that match search
   languages?: string[];
   origins?: string[];
 }

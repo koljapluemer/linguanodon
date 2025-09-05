@@ -281,13 +281,30 @@ export class VocabRepo implements VocabRepoContract {
     // Apply filters
     let filteredVocab = allVocab;
     
-    // Search filter
-    if (filters?.searchQuery) {
-      const query = filters.searchQuery.toLowerCase().trim();
-      filteredVocab = filteredVocab.filter(vocab =>
-        vocab.content?.toLowerCase().includes(query) ||
-        vocab.language.toLowerCase().includes(query)
-      );
+    // Search filter (OR logic: vocab content OR translation match)
+    if (filters?.searchQuery || (filters?.translationIds && filters.translationIds.length > 0)) {
+      console.log('SEARCH DEBUG - filters:', filters);
+      filteredVocab = filteredVocab.filter(vocab => {
+        // Check vocab content match
+        let contentMatch = false;
+        if (filters?.searchQuery) {
+          const query = filters.searchQuery.toLowerCase().trim();
+          contentMatch = vocab.content?.toLowerCase().includes(query) || false;
+        }
+
+        // Check translation match
+        let translationMatch = false;
+        if (filters?.translationIds && filters.translationIds.length > 0) {
+          translationMatch = vocab.translations.some(translationId => 
+            filters.translationIds!.includes(translationId)
+          );
+        }
+
+        console.log(`VOCAB ${vocab.content} - contentMatch: ${contentMatch}, translationMatch: ${translationMatch}, result: ${contentMatch || translationMatch}`);
+        
+        // Return true if EITHER content matches OR translation matches
+        return contentMatch || translationMatch;
+      });
     }
 
     // Language filter
@@ -329,20 +346,34 @@ export class VocabRepo implements VocabRepoContract {
   }
 
   async getTotalVocabCount(filters?: VocabListFilters): Promise<number> {
-    if (!filters || (!filters.searchQuery && !filters.languages && !filters.origins)) {
+    if (!filters || (!filters.searchQuery && !filters.translationIds && !filters.languages && !filters.origins)) {
       return await vocabDb.vocab.count();
     }
 
     const allVocab = await vocabDb.vocab.toArray();
     let filteredVocab = allVocab;
 
-    // Search filter
-    if (filters.searchQuery) {
-      const query = filters.searchQuery.toLowerCase().trim();
-      filteredVocab = filteredVocab.filter(vocab =>
-        vocab.content?.toLowerCase().includes(query) ||
-        vocab.language.toLowerCase().includes(query)
-      );
+    // Search filter (OR logic: vocab content OR translation match)
+    if (filters.searchQuery || (filters.translationIds && filters.translationIds.length > 0)) {
+      filteredVocab = filteredVocab.filter(vocab => {
+        // Check vocab content match
+        let contentMatch = false;
+        if (filters.searchQuery) {
+          const query = filters.searchQuery.toLowerCase().trim();
+          contentMatch = vocab.content?.toLowerCase().includes(query) || false;
+        }
+
+        // Check translation match
+        let translationMatch = false;
+        if (filters.translationIds && filters.translationIds.length > 0) {
+          translationMatch = vocab.translations.some(translationId => 
+            filters.translationIds!.includes(translationId)
+          );
+        }
+
+        // Return true if EITHER content matches OR translation matches
+        return contentMatch || translationMatch;
+      });
     }
 
     // Language filter
