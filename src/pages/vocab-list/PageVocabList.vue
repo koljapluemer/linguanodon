@@ -70,15 +70,8 @@
 
   <div v-else>
     <!-- Results Summary -->
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex justify-center items-center mb-4">
       <span class="text-light">{{ totalCount }} vocabulary items</span>
-      <div class="flex gap-2">
-        <select v-model="pageSize" @change="loadVocab" class="select select-bordered select-sm">
-          <option value="25">25 per page</option>
-          <option value="50">50 per page</option>
-          <option value="100">100 per page</option>
-        </select>
-      </div>
     </div>
 
     <!-- Table -->
@@ -146,22 +139,14 @@
     </div>
 
     <!-- Pagination -->
-    <div v-if="totalCount > pageSize" class="flex justify-center mt-6">
-      <div class="join">
-        <button @click="goToPage(currentPage - 1)" :disabled="currentPage <= 1" class="join-item btn">
-          Previous
-        </button>
-
-        <template v-for="page in visiblePages" :key="page">
-          <button @click="goToPage(page)" :class="['join-item btn', { 'btn-active': page === currentPage }]">
-            {{ page }}
-          </button>
-        </template>
-
-        <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages" class="join-item btn">
-          Next
-        </button>
-      </div>
+    <div v-if="totalCount > 0" class="mt-6">
+      <Pagination
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        v-model:page-size="pageSize"
+        @go-to-page="goToPage"
+        @update:page-size="handlePageSizeChange"
+      />
     </div>
 
     <div v-if="vocabItems.length === 0" class="text-center py-8">
@@ -182,6 +167,7 @@ import type { LanguageData } from '@/entities/languages/LanguageData';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 import type { LocalSetData } from '@/entities/local-sets/LocalSetData';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import Pagination from '@/shared/ui/Pagination.vue';
 
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
@@ -213,17 +199,6 @@ const availableSets = ref<LocalSetData[]>([]);
 // Computed
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
 
-const visiblePages = computed(() => {
-  const pages: number[] = [];
-  const start = Math.max(1, currentPage.value - 2);
-  const end = Math.min(totalPages.value, currentPage.value + 2);
-
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
-
-  return pages;
-});
 
 // Debounced search
 let searchTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -264,6 +239,12 @@ function goToPage(page: number) {
     currentPage.value = page;
     loadVocab();
   }
+}
+
+function handlePageSizeChange(newSize: number) {
+  pageSize.value = newSize;
+  currentPage.value = 1; // Reset to first page when changing page size
+  loadVocab();
 }
 
 // Helper methods
