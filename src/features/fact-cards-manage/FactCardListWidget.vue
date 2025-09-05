@@ -9,7 +9,7 @@
     </div>
 
     <!-- Search -->
-    <div class="card bg-base-100 shadow-lg">
+    <div class="card shadow">
       <div class="card-body">
         <div class="form-control">
           <label class="label">
@@ -53,7 +53,7 @@
       <div 
         v-for="factCard in filteredFactCards" 
         :key="factCard.uid"
-        class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow"
+        class="card hover:shadow-md"
       >
         <div class="card-body">
           <div class="flex justify-between items-start">
@@ -83,7 +83,7 @@
 
               <!-- Notes Count -->
               <div v-if="factCard.notes && factCard.notes.length > 0" class="mt-2">
-                <p class="text-sm text-gray-700">
+                <p class="text-sm ">
                   <span class="font-medium">Notes:</span> 
                   {{ factCard.notes.length }} note{{ factCard.notes.length === 1 ? '' : 's' }}
                 </p>

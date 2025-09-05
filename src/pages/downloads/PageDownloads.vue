@@ -4,7 +4,7 @@
     <div v-if="$route.name === 'downloads'">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Downloads</h1>
-        <select v-model="selectedLanguage" class="select select-bordered">
+        <select v-model="selectedLanguage" class="select ">
           <option value="">Select Language</option>
           <option v-for="language in availableLanguages" :key="language.code" :value="language.code">
             {{ language.emoji ? `${language.emoji} ` : '' }}{{ language.name }}
@@ -18,7 +18,7 @@
       </div>
 
       <div v-else class="space-y-6">
-        <div class="card bg-base-100 shadow-lg">
+        <div class="card shadow">
           <div class="card-body">
             <h2 class="card-title text-xl mb-4">Available Sets</h2>
 

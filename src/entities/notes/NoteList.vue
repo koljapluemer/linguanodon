@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div class="flex justify-between items-center">
-      <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Notes</h3>
+      <h3 class="text-sm font-medium  ">Notes</h3>
       <button
         type="button"
         @click="addNewNote"
@@ -12,7 +12,7 @@
       </button>
     </div>
     
-    <div v-if="notes.length === 0" class="text-gray-500 text-center py-4">
+    <div v-if="notes.length === 0" class=" text-center py-4">
       No notes yet. Click "Add Note" to get started.
     </div>
     

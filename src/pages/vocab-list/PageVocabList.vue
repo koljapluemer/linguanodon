@@ -15,7 +15,7 @@
     <span>{{ error }}</span>
   </div>
 
-  <div v-else class="card bg-base-100 shadow-xl">
+  <div v-else class="card shadow">
     <div class="card-body">
       <div class="space-y-4">
         <div v-for="(vocab, index) in vocabItems" :key="vocab.uid" class="space-y-2">

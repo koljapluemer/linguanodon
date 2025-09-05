@@ -1,10 +1,10 @@
 <template>
   <div class="space-y-4">
-    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Audio</h3>
+    <h3 class="text-lg font-medium  ">Audio</h3>
 
     <!-- Current Sounds -->
     <div v-if="localSounds && localSounds.length > 0" class="space-y-3">
-      <div v-for="sound in localSounds" :key="sound.uid" class="card bg-base-200">
+      <div v-for="sound in localSounds" :key="sound.uid" class="card shadow">
         <div class="card-body p-4">
           <div class="flex items-center gap-4">
             <!-- Play/Pause Button -->
@@ -60,8 +60,8 @@
     </div>
 
     <!-- Add Sound Section -->
-    <div class="card bg-base-200">
-      <div class="card-body p-4">
+    <div class="card shadow">
+      <div class="card-body">
         <div class="tabs tabs-boxed tabs-sm mb-4">
           <button 
             class="tab tab-sm" 

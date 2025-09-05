@@ -13,7 +13,7 @@
     <div class="flex flex-col space-y-1">
       <label class="text-sm font-medium">Goal Title</label>
       <div class="flex items-center gap-2">
-        <span class="text-sm text-gray-600">I want to be able to</span>
+        <span class="text-sm ">I want to be able to</span>
         <input
           v-model="goalTitle"
           type="text"
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div v-if="saving" class="text-sm text-gray-500">
+    <div v-if="saving" class="text-sm ">
       Saving...
     </div>
   </div>

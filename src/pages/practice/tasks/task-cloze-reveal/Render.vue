@@ -123,7 +123,7 @@ onMounted(loadVocabData);
     <div class="mb-8">
       <div class="text-3xl mb-4" :dir="isRTL ? 'rtl' : 'ltr'">
         <span v-if="clozeData.beforeWord" class="me-2">{{ clozeData.beforeWord }}</span>
-        <span class="inline-block bg-gray-300 dark:bg-gray-600 text-transparent rounded px-2 py-1 mx-1 select-none" 
+        <span class="inline-block bg-gray-300  text-transparent rounded px-2 py-1 mx-1 select-none" 
               :style="{ width: Math.max(clozeData.hiddenWord.length * 0.6, 3) + 'em' }">
           {{ clozeData.hiddenWord }}
         </span>

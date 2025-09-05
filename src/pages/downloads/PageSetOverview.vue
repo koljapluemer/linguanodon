@@ -16,7 +16,7 @@
     </div>
 
     <div v-else class="max-w-2xl mx-auto">
-      <div class="card bg-base-100 shadow-lg">
+      <div class="card shadow">
         <div class="card-body">
           <h1 class="card-title text-3xl mb-2">{{ metadata?.title || setName }}</h1>
           <p class="text-base-content/60 mb-6">

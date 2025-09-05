@@ -7,14 +7,14 @@
   </div>
 
   <div v-if="goals.length === 0" class="text-center py-12">
-    <p class="text-gray-500 mb-4">No goals yet</p>
+    <p class=" mb-4">No goals yet</p>
     <router-link to="/goals/add" class="btn btn-primary">
       Create Your First Goal
     </router-link>
   </div>
 
   <div v-else class="space-y-4">
-    <div v-for="goal in goals" :key="goal.uid" class="card bg-base-100 shadow-xl">
+    <div v-for="goal in goals" :key="goal.uid" class="card shadow">
       <div class="card-body">
         <div class="flex justify-between items-start">
           <div class="flex-1">

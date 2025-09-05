@@ -8,7 +8,7 @@
   <div v-else-if="vocab && imageOptions.length === 2" class="text-center">
     <!-- Sound Player -->
     <div class="mb-8">
-      <div class="card bg-base-200 inline-block p-6">
+      <div class="card shadow">
         <div class="flex flex-col items-center gap-4">
           <button 
             @click="playSound" 

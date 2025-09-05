@@ -1,13 +1,13 @@
 <template>
   <div class="flex items-center justify-between py-2">
     <div class="flex-1">
-      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label class="text-sm font-medium  ">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-center justify-between">
-        <span :class="displayValueClasses">
+        <span class="">
           {{ displayValue || placeholder }}
         </span>
         <button
@@ -27,7 +27,7 @@
           @keydown.enter="saveEdit"
           @keydown.escape="cancelEdit"
           :required="required"
-          :class="selectClasses"
+          class="flex-1 select "
         >
           <option value="" v-if="placeholder">{{ placeholder }}</option>
           <option 
@@ -67,13 +67,11 @@ interface Props {
   placeholder?: string;
   required?: boolean;
   options: Array<string | { value: string; label: string }>;
-  size?: 'small' | 'medium' | 'big' | 'large';
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
-  required: false,
-  size: 'medium'
+  required: false
 });
 
 const emit = defineEmits<{
@@ -94,27 +92,6 @@ const displayValue = computed(() => {
   return option ? getOptionLabel(option) : props.modelValue;
 });
 
-const displayValueClasses = computed(() => {
-  const baseClasses = 'text-gray-900 dark:text-gray-100';
-  const sizeClasses = {
-    small: 'text-sm',
-    medium: 'text-lg',
-    big: 'text-2xl',
-    large: 'text-8xl font-extrabold'
-  };
-  return `${baseClasses} ${sizeClasses[props.size]}`;
-});
-
-const selectClasses = computed(() => {
-  const baseClasses = 'flex-1 select select-bordered';
-  const sizeClasses = {
-    small: 'select-sm text-sm',
-    medium: 'text-lg',
-    big: 'select-lg text-2xl',
-    large: 'select-xl'
-  };
-  return `${baseClasses} ${sizeClasses[props.size]}`;
-});
 
 function getOptionValue(option: string | { value: string; label: string }): string {
   return typeof option === 'string' ? option : option.value;

@@ -1,7 +1,7 @@
 <template>
   <div class="py-4">
     <div v-if="vocabItems.length !== 0" class="space-y-4">
-      <div v-for="(vocab, index) in vocabItems" :key="vocab.uid" class="card bg-base-200 rounded shadow">
+      <div v-for="(vocab, index) in vocabItems" :key="vocab.uid" class="card shadow">
         <div class="card-body">
           <div class="flex">
             <!-- Left side: Content -->
@@ -20,7 +20,7 @@
             <!-- Right side: Translations -->
             <div class="flex-1 pl-4 flex flex-col gap-2">
               <!-- Translation list -->
-              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Translations</label>
+              <label class="text-sm font-medium  ">Translations</label>
               <div v-if="vocab.translations.length > 0" class="space-y-2 mb-4">
                 <div v-for="(translationId, tIndex) in vocab.translations" :key="translationId">
                   <!-- Edit mode -->

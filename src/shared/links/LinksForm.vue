@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between items-center mb-3">
-      <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <h3 class="text-sm font-medium  ">
         {{ props.singleLinkMode ? 'Link' : 'Links' }}
       </h3>
       <button
@@ -15,7 +15,7 @@
       </button>
     </div>
     
-    <div v-if="props.links.length === 0" class="text-gray-500 text-center py-4">
+    <div v-if="props.links.length === 0" class=" text-center py-4">
       {{ props.singleLinkMode ? 'No link set.' : 'No links yet. Click "Add Link" to add external resources.' }}
     </div>
     

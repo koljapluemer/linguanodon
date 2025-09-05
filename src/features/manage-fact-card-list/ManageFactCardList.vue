@@ -1,11 +1,11 @@
 <template>
   <div class="py-4">
-    <div v-if="factCards.length === 0" class="text-gray-500 text-center py-4">
+    <div v-if="factCards.length === 0" class=" text-center py-4">
       No fact cards yet. Use the form below to add some.
     </div>
 
     <div v-else class="space-y-4">
-      <div v-for="factCard in factCards" :key="factCard.uid" class="card bg-base-200 rounded shadow">
+      <div v-for="factCard in factCards" :key="factCard.uid" class="card shadow">
         <div class="card-body">
           <div class="space-y-3">
             <!-- Front -->

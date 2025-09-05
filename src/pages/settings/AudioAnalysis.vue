@@ -177,7 +177,7 @@ async function deleteEmptyAudio() {
 </script>
 
 <template>
-  <div class="card bg-base-100 border border-base-300">
+  <div class="card shadow">
     <div class="card-body">
       <h3 class="card-title text-base">Audio Analysis</h3>
       <p class="text-sm text-base-content/70 mb-4">

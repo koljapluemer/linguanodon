@@ -1,5 +1,5 @@
 <template>
-  <div class="divide-y divide-gray-200 dark:divide-gray-700">
+  <div class="divide-y divide-gray-200 ">
     <LanguageDropdown
       v-model="formData.language"
       label="Language"
@@ -20,7 +20,7 @@
 
     <div class="py-4">
       <div class="flex justify-between items-center mb-3">
-        <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div class="text-sm font-medium  ">
           Translations
         </div>
         <button
@@ -33,7 +33,7 @@
         </button>
       </div>
       
-      <div v-if="formData.translations.length === 0" class="text-gray-500 text-center py-4">
+      <div v-if="formData.translations.length === 0" class=" text-center py-4">
         No translations yet. Click "Add Translation" to get started.
       </div>
       

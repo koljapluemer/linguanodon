@@ -11,7 +11,6 @@ export interface MaterialCategory {
   description: string;
   icon: Component;
   route: { name: string };
-  color: string;
 }
 
 export const materialCategories: MaterialCategory[] = [
@@ -20,21 +19,18 @@ export const materialCategories: MaterialCategory[] = [
     description: 'Vocabulary words and translations',
     icon: BookOpen,
     route: { name: 'vocab-list' },
-    color: 'text-blue-600'
   },
   {
     name: 'Fact Cards',
     description: 'Facts, cultural information, and concepts',
     icon: FileText,
     route: { name: 'fact-cards-list' },
-    color: 'text-purple-600'
   },
   {
     name: 'Resources',
     description: 'Articles, videos, and learning materials',
     icon: Archive,
     route: { name: 'resources-list' },
-    color: 'text-orange-600'
   },
 
   {
@@ -42,6 +38,5 @@ export const materialCategories: MaterialCategory[] = [
     description: 'Learning objectives and milestones',
     icon: Target,
     route: { name: 'goals-list' },
-    color: 'text-red-600'
   }
 ];

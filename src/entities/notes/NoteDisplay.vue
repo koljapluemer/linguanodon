@@ -10,7 +10,7 @@
             {{ note.noteType }}
           </div>
         </div>
-        <div v-if="note.showBeforeExercise" class="text-xs text-blue-600 dark:text-blue-400">
+        <div v-if="note.showBeforeExercise" class="text-xs text-blue-600 ">
           📌 Shows before exercise
         </div>
       </div>

@@ -67,7 +67,7 @@ const languageOptions = computed(() =>
 );
 
 const selectClasses = computed(() => {
-  const baseClasses = 'select select-bordered';
+  const baseClasses = 'select ';
   const sizeClasses = {
     small: 'select-sm text-sm',
     medium: '',

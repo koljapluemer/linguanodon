@@ -28,10 +28,12 @@ if (app) {
 
 <style>
 @import "tailwindcss";
-@plugin "daisyui";
-
-
-.big-card {
-  @apply card bg-base-100 shadow-xl;
+@plugin "daisyui" {
+  themes: fantasy --default
 }
+
+.page-title {
+  @apply text-5xl font-bold mb-4 mt-2; 
+}
+
 </style>

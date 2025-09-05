@@ -1,16 +1,16 @@
 <template>
   <div class="flex items-center justify-between py-2">
     <div class="flex-1">
-      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label class="text-sm font-medium  ">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-center justify-between">
-        <span class="text-base text-gray-900 dark:text-gray-100 flex items-center gap-2">
+        <span class="text-base   flex items-center gap-2">
           <span class="inline-flex items-center">
             <Check v-if="modelValue" class="w-5 h-5 text-green-600" />
-            <X v-else class="w-5 h-5 text-gray-400" />
+            <X v-else class="w-5 h-5 " />
           </span>
           {{ modelValue ? 'Yes' : 'No' }}
         </span>

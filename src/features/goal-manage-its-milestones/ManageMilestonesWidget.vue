@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <div v-if="milestoneEntries.length === 0" class="text-center py-8 text-gray-500">
+    <div v-if="milestoneEntries.length === 0" class="text-center py-8 ">
       No milestones yet. Add one below to track your progress.
     </div>
     
@@ -35,7 +35,7 @@
     <div class="divider">Add New Milestone</div>
 
     <div class="flex items-center gap-2">
-      <span class="text-sm text-gray-600 whitespace-nowrap">I will know I've achieved this when I can</span>
+      <span class="text-sm  whitespace-nowrap">I will know I've achieved this when I can</span>
       <input
         v-model="newMilestone"
         type="text"

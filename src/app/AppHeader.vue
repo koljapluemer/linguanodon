@@ -35,8 +35,7 @@ const toggleMaterialSubmenu = () => {
 <template>
   <div>
     <header class="flex justify-between items-center p-4">
-      <h1 class="text-2xl font-bold">Unnamed Language App</h1>
-      
+      <img src="@/assets/logo.png" alt="Logo The ~~Secret~~ Language App" class="h-10">
       <nav class="flex gap-2 justify-center">
         <!-- Practice -->
         <router-link :to="{ name: 'practice-overview' }" class="btn btn-ghost btn-sm">

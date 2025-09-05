@@ -3,7 +3,7 @@
     <label class="label">
       <span class="label-text font-medium">Length</span>
     </label>
-    <select v-model="formData.length" @change="$emit('field-change')" class="select select-bordered w-full">
+    <select v-model="formData.length" @change="$emit('field-change')" class="select  w-full">
       <option v-for="value in (['sentence', 'word', 'unspecified'] as Length[])" :key="value" :value="value">
         {{ value }}
       </option>

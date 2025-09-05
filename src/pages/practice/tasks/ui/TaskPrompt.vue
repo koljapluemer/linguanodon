@@ -1,7 +1,7 @@
 <template>
-    <div class="big-card">
-        <div class="card-body items-center text-center">
-            <div class="card-title">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title text-center">
                 {{ props.prompt }}
             </div>
         </div>

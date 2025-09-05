@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-between py-2">
     <div class="flex-1">
-      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label class="text-sm font-medium  ">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
       </label>
@@ -92,7 +92,7 @@ const displayValue = computed(() => {
 });
 
 const displayValueClasses = computed(() => {
-  const baseClasses = 'text-gray-900 dark:text-gray-100';
+  const baseClasses = ' ';
   const sizeClasses = {
     small: 'text-sm',
     medium: 'text-lg',

@@ -1,5 +1,5 @@
 <template>
-  <div class="divide-y divide-gray-200 dark:divide-gray-700">
+  <div class="divide-y divide-gray-200 ">
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-8">
       <span class="loading loading-spinner loading-lg"></span>
@@ -41,7 +41,7 @@
       <!-- Notes -->
       <div class="py-4">
         <div class="flex justify-between items-center mb-3">
-          <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div class="text-sm font-medium  ">
             Notes
           </div>
           <button
@@ -54,7 +54,7 @@
           </button>
         </div>
         
-        <div v-if="formData.notes.length === 0" class="text-gray-500 text-center py-4">
+        <div v-if="formData.notes.length === 0" class=" text-center py-4">
           No notes yet. Click "Add Note" to get started.
         </div>
         
@@ -83,7 +83,7 @@
       <!-- Links -->
       <div class="py-4">
         <div class="flex justify-between items-center mb-3">
-          <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div class="text-sm font-medium  ">
             Links
           </div>
           <button
@@ -96,7 +96,7 @@
           </button>
         </div>
         
-        <div v-if="formData.links.length === 0" class="text-gray-500 text-center py-4">
+        <div v-if="formData.links.length === 0" class=" text-center py-4">
           No links yet. Click "Add Link" to get started.
         </div>
         
@@ -108,7 +108,7 @@
           >
             <div class="flex-1">
               <div class="text-lg">{{ link.label || '(Untitled)' }}</div>
-              <div class="text-sm text-gray-500">{{ link.url }}</div>
+              <div class="text-sm ">{{ link.url }}</div>
             </div>
             <div class="flex items-center gap-2">
               <button

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Images</h3>
+    <h3 class="text-lg font-medium  ">Images</h3>
 
     <!-- Current Images -->
     <div v-if="localImages && localImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -44,7 +44,7 @@
     </div>
 
     <!-- Add Image Section -->
-    <div v-if="isPicturable !== false" class="card bg-base-200">
+    <div v-if="isPicturable !== false" class="card shadow">
       <div class="card-body p-4">
         <div class="tabs tabs-boxed tabs-sm mb-4">
           <button 

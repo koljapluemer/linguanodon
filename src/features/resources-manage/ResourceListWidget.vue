@@ -31,7 +31,7 @@
     <!-- Resources List -->
     <div v-else class="grid gap-4">
       <div v-for="resource in resources" :key="resource.uid"
-        class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
+        class="card shadow hover:shadow-md transition-shadow">
         <div class="card-body">
           <div class="flex justify-between items-start">
             <div class="flex-1">

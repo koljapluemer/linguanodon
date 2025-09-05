@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <div v-if="subGoals.length === 0" class="text-center py-8 text-gray-500">
+    <div v-if="subGoals.length === 0" class="text-center py-8 ">
       No sub-goals yet. Add one below to break down this goal into smaller steps.
     </div>
     
@@ -35,7 +35,7 @@
     <div class="divider">Add New Sub-Goal</div>
 
     <div class="flex items-center gap-2">
-      <span class="text-sm text-gray-600 whitespace-nowrap">To reach the goal defined above, I will learn to</span>
+      <span class="text-sm  whitespace-nowrap">To reach the goal defined above, I will learn to</span>
       <input
         v-model="newSubGoalTitle"
         type="text"

@@ -28,7 +28,7 @@
 
     <!-- Translations -->
     <div class="py-4">
-      <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+      <div class="text-sm font-medium   mb-3">
         Translations
       </div>
       

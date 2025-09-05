@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-start justify-between py-2">
     <div class="flex-1">
-      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label class="text-sm font-medium  ">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
       </label>
@@ -47,7 +47,7 @@
           >
             <X class="w-4 h-4" />
           </button>
-          <span class="text-xs text-gray-500 ml-auto">
+          <span class="text-xs  ml-auto">
             Ctrl+Enter to save, Esc to cancel
           </span>
         </div>
@@ -92,7 +92,7 @@ const displayValue = computed(() => {
 });
 
 const displayValueClasses = computed(() => {
-  const baseClasses = 'text-gray-900 dark:text-gray-100 whitespace-pre-wrap';
+  const baseClasses = '  whitespace-pre-wrap';
   const sizeClasses = {
     small: 'text-sm',
     medium: 'text-lg',

@@ -23,7 +23,7 @@
         @input="$emit('field-change')"
       />
       <div class="label">
-        <span class="label-text-alt text-gray-500">
+        <span class="label-text-alt ">
           Be specific about what you want to learn or accomplish
         </span>
       </div>

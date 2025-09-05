@@ -1,7 +1,7 @@
 <template>
   <div class="mt-8 space-y-8">
     <!-- Length, Priority and Exclude from Practice -->
-    <div class="divide-y divide-gray-200 dark:divide-gray-700">
+    <div class="divide-y divide-gray-200 ">
       <InlineSelect
         v-model="formData.length"
         label="Length"
@@ -65,7 +65,7 @@
     />
 
     <div class="space-y-4">
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">See Also / Related Vocabulary</h3>
+      <h3 class="text-lg font-medium  ">See Also / Related Vocabulary</h3>
       <ManageVocabList
         :vocab-ids="formData.relatedVocab || []"
         :language="formData.language"
