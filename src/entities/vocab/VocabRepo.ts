@@ -723,6 +723,20 @@ export class VocabRepo implements VocabRepoContract {
       const vocab = await vocabDb.vocab.get(vocabId);
       if (!vocab) throw new Error('Vocab not found');
 
+      // Check for duplicates before adding
+      vocab.images = vocab.images || [];
+      const isDuplicate = vocab.images.some(existing => 
+        // URL-based comparison (for remote images)
+        (imageUrl && existing.url && imageUrl === existing.url) ||
+        // Size + mimeType comparison (for all images)
+        (existing.fileSize === compressedBlob.size && existing.mimeType === compressedBlob.type)
+      );
+
+      if (isDuplicate) {
+        console.warn(`Image already exists, skipping: ${imageUrl}`);
+        return;
+      }
+
       const vocabImage: VocabImage = {
         uid: crypto.randomUUID(),
         url: imageUrl,
@@ -734,7 +748,6 @@ export class VocabRepo implements VocabRepoContract {
         compressed: true
       };
 
-      vocab.images = vocab.images || [];
       vocab.images.push(vocabImage);
       vocab.hasImage = true;
 

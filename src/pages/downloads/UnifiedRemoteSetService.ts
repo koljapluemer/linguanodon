@@ -15,7 +15,7 @@ import { resourceSchema } from '@/entities/remote-sets/validation/resourceSchema
 import { goalSchema } from '@/entities/remote-sets/validation/goalSchema';
 import { factCardSchema } from '@/entities/remote-sets/validation/factCardSchema';
 
-import type { VocabData } from '@/entities/vocab/VocabData';
+import type { VocabData, VocabImage } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { ResourceData } from '@/entities/resources/ResourceData';
@@ -563,6 +563,15 @@ export class UnifiedRemoteSetService {
     return resolvedLinks;
   }
 
+  private isImageDuplicate(imageUrl: string, fileSize: number, mimeType: string, existingImages: VocabImage[]): boolean {
+    return existingImages.some(existing => 
+      // URL-based comparison (for remote images)
+      (imageUrl && existing.url && imageUrl === existing.url) ||
+      // Size + mimeType comparison (for all images)
+      (existing.fileSize === fileSize && existing.mimeType === mimeType)
+    );
+  }
+
   async isSetDownloaded(setName: string): Promise<boolean> {
     return await this.localSetRepo.isRemoteSetDownloaded(setName);
   }
@@ -620,6 +629,16 @@ export class UnifiedRemoteSetService {
       if (!response.ok) {
         console.warn(`Image not found: ${imageData.filename} (HTTP ${response.status})`);
         return; // Skip this image and continue
+      }
+
+      // Check if this image already exists in the vocab
+      const existingVocab = await this.vocabRepo.getVocabByUID(vocabUid);
+      if (existingVocab && existingVocab.images) {
+        const blob = await response.blob();
+        if (this.isImageDuplicate(imageUrl, blob.size, blob.type, existingVocab.images)) {
+          console.warn(`Image already exists, skipping: ${imageData.filename}`);
+          return; // Skip duplicate image
+        }
       }
 
       // Use addImageFromUrl instead of addImageFromFile to avoid compression issues
