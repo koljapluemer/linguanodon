@@ -147,7 +147,14 @@ const router = createRouter({
     {
       path: '/downloads',
       name: 'downloads',
-      component: PageDownloads
+      component: PageDownloads,
+      children: [
+        {
+          path: ':language/:setName',
+          name: 'set-overview',
+          component: () => import('@/pages/downloads/PageSetOverview.vue')
+        }
+      ]
     },
     {
       path: '/settings',
