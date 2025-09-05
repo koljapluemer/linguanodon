@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices, Zap, ArrowRight } from 'lucide-vue-next';
+import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices, Zap, ArrowRight, RefreshCw } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -49,6 +49,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-sentence-slide' },
     icon: ArrowRight,
     description: 'Work through connected vocab for sentences, then guess their meaning'
+  },
+  {
+    name: 'Resource Rotation',
+    route: { name: 'practice-mode-resource-rotation' },
+    icon: RefreshCw,
+    description: 'Extract knowledge from resources that need processing'
   }
 ];
 </script>

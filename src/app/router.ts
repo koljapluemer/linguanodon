@@ -8,6 +8,7 @@ import EyesAndEarsWidget from '@/pages/practice/modes/modes/eyes-and-ears/EyesAn
 import UltraRandomWidget from '@/pages/practice/modes/modes/ultrarandom/UltraRandomWidget.vue';
 import IllegalImmersionWidget from '@/pages/practice/modes/modes/illegal-immersion/IllegalImmersionWidget.vue';
 import SentenceSlideWidget from '@/pages/practice/modes/modes/sentence-slide/SentenceSlideWidget.vue';
+import ResourceRotationWidget from '@/pages/practice/modes/modes/resource-rotation/ResourceRotationWidget.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -76,6 +77,11 @@ const router = createRouter({
           path: 'sentence-slide',
           name: 'practice-mode-sentence-slide',
           component: SentenceSlideWidget
+        },
+        {
+          path: 'resource-rotation',
+          name: 'practice-mode-resource-rotation',
+          component: ResourceRotationWidget
         }
       ]
     },

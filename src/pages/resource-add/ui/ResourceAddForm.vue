@@ -1,114 +1,80 @@
 <template>
-  <div class="max-w-2xl">
-    <form @submit.prevent="handleSave" class="space-y-6">
-      <!-- Title -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text font-medium">Title *</span>
-        </label>
-        <input
-          v-model="formData.title"
-          type="text"
-          placeholder="Resource title"
-          class="input input-bordered w-full"
-          :class="{ 'input-error': errors.title }"
-          required
-        />
-        <div v-if="errors.title" class="label">
-          <span class="label-text-alt text-error">{{ errors.title }}</span>
-        </div>
+  <form @submit.prevent="handleSave" class="space-y-6">
+    <!-- Title -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text font-medium">Title *</span>
+      </label>
+      <input v-model="formData.title" type="text" placeholder="Resource title" class="input input-bordered w-full"
+        :class="{ 'input-error': errors.title }" required />
+      <div v-if="errors.title" class="label">
+        <span class="label-text-alt text-error">{{ errors.title }}</span>
       </div>
-
-      <!-- Language -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text font-medium">Language *</span>
-        </label>
-        <LanguageDropdown
-          v-model="formData.language"
-          placeholder="Select target language"
-          required
-        />
-        <div v-if="errors.language" class="label">
-          <span class="label-text-alt text-error">{{ errors.language }}</span>
-        </div>
-      </div>
-
-      <!-- Is Immersion Content -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text font-medium">Is Immersion Content</span>
-        </label>
-        <div class="flex items-center gap-3">
-          <input
-            v-model="formData.isImmersionContent"
-            type="checkbox"
-            class="toggle toggle-primary"
-          />
-          <span class="">{{ formData.isImmersionContent ? 'Yes' : 'No' }}</span>
-        </div>
-        <div class="label">
-          <span class="label-text-alt">Toggle if this is immersion content (videos, podcasts, articles for immersion)</span>
-        </div>
-      </div>
-
-      <!-- Content -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text font-medium">Content</span>
-        </label>
-        <textarea
-          v-model="formData.content"
-          placeholder="Main content of the resource (text, article, etc.)"
-          class="textarea textarea-bordered w-full"
-          rows="6"
-        ></textarea>
-      </div>
-
-      <!-- Link -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text font-medium">Link</span>
-        </label>
-        <LinksForm
-          :links="formData.links"
-          :single-link-mode="true"
-          @add-link="handleAddLink"
-          @update-link="handleUpdateLink"
-          @remove-link="handleRemoveLink"
-          @field-change="() => {}"
-        />
-      </div>
-
-      <!-- Buttons -->
-      <div class="flex justify-end gap-2">
-        <router-link to="/resources" class="btn btn-ghost">
-          Cancel
-        </router-link>
-        <button
-          type="button"
-          class="btn btn-outline"
-          :disabled="!isFormValid || saving"
-          @click="handleSaveAndAddAnother"
-        >
-          <span v-if="saving" class="loading loading-spinner loading-sm mr-1"></span>
-          Save and Add Another
-        </button>
-        <button
-          type="submit"
-          class="btn btn-primary"
-          :disabled="!isFormValid || saving"
-        >
-          <span v-if="saving" class="loading loading-spinner loading-sm mr-1"></span>
-          Save
-        </button>
-      </div>
-    </form>
-
-    <!-- Error Display -->
-    <div v-if="error" class="alert alert-error mt-4">
-      <span>{{ error }}</span>
     </div>
+
+    <!-- Language -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text font-medium">Language *</span>
+      </label>
+      <LanguageDropdown v-model="formData.language" placeholder="Select target language" required />
+      <div v-if="errors.language" class="label">
+        <span class="label-text-alt text-error">{{ errors.language }}</span>
+      </div>
+    </div>
+
+    <!-- Is Immersion Content -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text font-medium">Is Immersion Content</span>
+      </label>
+      <div class="flex items-center gap-3">
+        <input v-model="formData.isImmersionContent" type="checkbox" class="toggle toggle-primary" />
+        <span class="">{{ formData.isImmersionContent ? 'Yes' : 'No' }}</span>
+      </div>
+      <div class="label">
+        <span class="label-text-alt">Toggle if this is immersion content (videos, podcasts, articles for
+          immersion)</span>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text font-medium">Content</span>
+      </label>
+      <textarea v-model="formData.content" placeholder="Main content of the resource (text, article, etc.)"
+        class="textarea textarea-bordered w-full" rows="6"></textarea>
+    </div>
+
+    <!-- Link -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text font-medium">Link</span>
+      </label>
+      <LinksForm :links="formData.links" :single-link-mode="true" @add-link="handleAddLink"
+        @update-link="handleUpdateLink" @remove-link="handleRemoveLink" @field-change="() => { }" />
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-2">
+      <router-link to="/resources" class="btn btn-ghost">
+        Cancel
+      </router-link>
+      <button type="button" class="btn btn-outline" :disabled="!isFormValid || saving" @click="handleSaveAndAddAnother">
+        <span v-if="saving" class="loading loading-spinner loading-sm mr-1"></span>
+        Save and Add Another
+      </button>
+      <button type="submit" class="btn btn-primary" :disabled="!isFormValid || saving">
+        <span v-if="saving" class="loading loading-spinner loading-sm mr-1"></span>
+        Save
+      </button>
+    </div>
+  </form>
+
+  <!-- Error Display -->
+  <div v-if="error" class="alert alert-error mt-4">
+    <span>{{ error }}</span>
   </div>
 </template>
 
@@ -140,18 +106,18 @@ const formData = ref({
 const errors = ref<Record<string, string>>({});
 
 const isFormValid = computed(() => {
-  return formData.value.title.trim() && 
-         formData.value.language.trim() &&
-         Object.keys(errors.value).length === 0;
+  return formData.value.title.trim() &&
+    formData.value.language.trim() &&
+    Object.keys(errors.value).length === 0;
 });
 
 function validateForm() {
   errors.value = {};
-  
+
   if (!formData.value.title.trim()) {
     errors.value.title = 'Title is required';
   }
-  
+
   if (!formData.value.language.trim()) {
     errors.value.language = 'Language is required';
   }
@@ -176,10 +142,10 @@ function handleRemoveLink(index: number) {
 async function saveResource(): Promise<ResourceData | null> {
   validateForm();
   if (!isFormValid.value) return null;
-  
+
   saving.value = true;
   error.value = null;
-  
+
   try {
     const resourceData: Omit<ResourceData, 'uid' | 'lastShownAt'> = {
       title: formData.value.title.trim(),
@@ -235,7 +201,7 @@ async function handleSaveAndAddAnother() {
       links: []
     };
     errors.value = {};
-    
+
     // Show success message or toast here if desired
   }
 }
