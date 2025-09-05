@@ -71,11 +71,11 @@ interface VocabFormData {
   priority?: number;
   doNotPractice?: boolean;
   notes: NoteData[];
-  links: Array<{
-    label: string;
-    url: string;
-  }>;
+  links: Link[];
   relatedVocab?: string[];
+  isPicturable?: boolean;
+  images?: VocabImage[];
+  sounds?: VocabSound[];
 }
 import type { VocabData } from '@/entities/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';

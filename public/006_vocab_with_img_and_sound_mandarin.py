@@ -173,7 +173,7 @@ def create_translation(content: str, notes: Optional[List[str]] = None) -> str:
 
 def create_vocab(language: str, content: str, length: str, notes: Optional[List[str]] = None, 
                 translations: Optional[List[str]] = None, links: Optional[List[str]] = None,
-                images: Optional[List[Dict]] = None, sound: Optional[Dict] = None,
+                images: Optional[List[Dict]] = None, sounds: Optional[List[Dict]] = None,
                 is_picturable: Optional[bool] = None) -> str:
     """Create a vocab entry and return its ID"""
     vocab_entry = {
@@ -190,8 +190,8 @@ def create_vocab(language: str, content: str, length: str, notes: Optional[List[
         vocab_entry["links"] = links
     if images:
         vocab_entry["images"] = images
-    if sound:
-        vocab_entry["sound"] = sound
+    if sounds:
+        vocab_entry["sounds"] = sounds
     if is_picturable is not None:
         vocab_entry["isPicturable"] = is_picturable
     
@@ -370,7 +370,7 @@ def process_word(english_word: str) -> bool:
     # Prepare vocab entry data
     notes = []
     images_list = []
-    sound_dict = None
+    sounds_list = []
     links = [shared_pexels_link_id]
     
     # Add image if successful
@@ -382,9 +382,9 @@ def process_word(english_word: str) -> bool:
     
     # Add audio if successful  
     if audio_success:
-        sound_dict = {
+        sounds_list.append({
             "filename": audio_filename
-        }
+        })
     
     # Determine word length
     word_length = "word"
@@ -398,7 +398,7 @@ def process_word(english_word: str) -> bool:
         translations=[english_translation_id],
         links=links,
         images=images_list if images_list else None,
-        sound=sound_dict,
+        sounds=sounds_list if sounds_list else None,
         is_picturable=image_success
     )
     

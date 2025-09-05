@@ -859,6 +859,20 @@ export class VocabRepo implements VocabRepoContract {
     if (!vocab) throw new Error('Vocab not found');
 
     try {
+      // Check for duplicates before adding
+      vocab.sounds = vocab.sounds || [];
+      const isDuplicate = vocab.sounds.some(existing => 
+        // Size + mimeType + filename comparison (for all sounds)
+        (existing.fileSize === file.size && 
+         existing.mimeType === file.type && 
+         existing.originalFileName === file.name)
+      );
+
+      if (isDuplicate) {
+        console.warn(`Sound already exists, skipping: ${file.name}`);
+        return;
+      }
+
       // Get audio duration
       const duration = await getAudioDuration(file);
 
@@ -872,13 +886,12 @@ export class VocabRepo implements VocabRepoContract {
         originalFileName: file.name
       };
 
-      vocab.sounds = vocab.sounds || [];
       vocab.sounds.push(vocabSound);
       vocab.hasSound = vocab.sounds.some(sound => !sound.disableForPractice);
       await vocabDb.vocab.put(toRaw(vocab));
     } catch (error) {
-      console.error('Failed to add sound from file:', error);
-      throw error;
+      console.warn('Failed to add sound from file:', error);
+      // Don't throw - gracefully handle missing/invalid sounds
     }
   }
 

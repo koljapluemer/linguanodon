@@ -47,10 +47,7 @@ interface VocabFormData {
   priority?: number;
   doNotPractice?: boolean;
   notes: NoteData[];
-  links: Array<{
-    label: string;
-    url: string;
-  }>;
+  links: Link[];
   relatedVocab?: string[];
   isPicturable?: boolean;
   images?: VocabImage[];

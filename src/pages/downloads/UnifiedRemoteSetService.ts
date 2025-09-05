@@ -15,7 +15,7 @@ import { resourceSchema } from '@/entities/remote-sets/validation/resourceSchema
 import { goalSchema } from '@/entities/remote-sets/validation/goalSchema';
 import { factCardSchema } from '@/entities/remote-sets/validation/factCardSchema';
 
-import type { VocabData, VocabImage } from '@/entities/vocab/VocabData';
+import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { ResourceData } from '@/entities/resources/ResourceData';
@@ -572,6 +572,15 @@ export class UnifiedRemoteSetService {
     );
   }
 
+  private isSoundDuplicate(fileSize: number, mimeType: string, originalFileName: string | undefined, existingSounds: VocabSound[]): boolean {
+    return existingSounds.some(existing => 
+      // Size + mimeType + filename comparison (for all sounds)
+      (existing.fileSize === fileSize && 
+       existing.mimeType === mimeType && 
+       existing.originalFileName === originalFileName)
+    );
+  }
+
   async isSetDownloaded(setName: string): Promise<boolean> {
     return await this.localSetRepo.isRemoteSetDownloaded(setName);
   }
@@ -655,14 +664,30 @@ export class UnifiedRemoteSetService {
     vocabUid: string, 
     soundData: { filename: string }
   ): Promise<void> {
-    const response = await fetch(`/sets/${languageCode}/${setName}/audio/${soundData.filename}`);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
+    try {
+      const response = await fetch(`/sets/${languageCode}/${setName}/audio/${soundData.filename}`);
+      if (!response.ok) {
+        console.warn(`Sound not found: ${soundData.filename} (HTTP ${response.status})`);
+        return; // Skip this sound and continue
+      }
 
-    const blob = await response.blob();
-    const file = new File([blob], soundData.filename, { type: blob.type });
-    
-    await this.vocabRepo.addSoundFromFile(vocabUid, file);
+      const blob = await response.blob();
+
+      // Check if this sound already exists in the vocab
+      const existingVocab = await this.vocabRepo.getVocabByUID(vocabUid);
+      if (existingVocab && existingVocab.sounds) {
+        if (this.isSoundDuplicate(blob.size, blob.type, soundData.filename, existingVocab.sounds)) {
+          console.warn(`Sound already exists, skipping: ${soundData.filename}`);
+          return; // Skip duplicate sound
+        }
+      }
+
+      const file = new File([blob], soundData.filename, { type: blob.type });
+      
+      await this.vocabRepo.addSoundFromFile(vocabUid, file);
+    } catch (error) {
+      console.warn(`Failed to download sound ${soundData.filename}:`, error);
+      // Don't rethrow - continue processing other sounds
+    }
   }
 }
