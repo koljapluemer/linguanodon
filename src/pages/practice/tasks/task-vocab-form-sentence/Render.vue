@@ -23,7 +23,8 @@ const noteRepo = props.repositories.noteRepo!;
 const vocabItems = ref<VocabData[]>([]);
 const translations = ref<{ [vocabUid: string]: string[] }>({});
 const sentence = ref('');
-const activeTab = ref<'text' | 'audio'>('text');
+const isRecordTask = props.task.taskType === 'vocab-record-sentence' || props.task.taskType === 'vocab-record-sentence-single';
+const activeTab = ref<'text' | 'audio'>(isRecordTask ? 'audio' : 'text');
 const audioRecording = ref<{ blob: Blob; duration: number } | null>(null);
 
 // Audio playback state
@@ -239,8 +240,8 @@ onUnmounted(() => {
 
     <!-- Tabbed Interface -->
     <div class="w-full max-w-4xl mx-auto mb-8">
-      <!-- Tab Headers -->
-      <div class="tabs tabs-bordered w-full justify-center mb-6">
+      <!-- Tab Headers (only show for non-record tasks) -->
+      <div v-if="!isRecordTask" class="tabs tabs-bordered w-full justify-center mb-6">
         <button 
           @click="activeTab = 'text'"
           :class="['tab', 'tab-bordered', { 'tab-active': activeTab === 'text' }]"
@@ -266,7 +267,7 @@ onUnmounted(() => {
       <!-- Tab Content -->
       <div class="min-h-[300px] flex items-center justify-center">
         <!-- Text Tab -->
-        <div v-if="activeTab === 'text'" class="w-full max-w-2xl">
+        <div v-if="activeTab === 'text' && !isRecordTask" class="w-full max-w-2xl">
           <div class="text-center mb-6">
             <p class="text-lg text-base-content/70 mb-4">
               {{ vocabItems.length === 1 ? 'Write a sentence using this word' : 'Write a sentence using both words' }}
@@ -288,7 +289,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Audio Tab -->
-        <div v-if="activeTab === 'audio'" class="w-full max-w-2xl">
+        <div v-if="activeTab === 'audio' || isRecordTask" class="w-full max-w-2xl">
           <AudioRecorder 
             :vocab-count="vocabItems.length"
             @recording-ready="handleRecordingReady"

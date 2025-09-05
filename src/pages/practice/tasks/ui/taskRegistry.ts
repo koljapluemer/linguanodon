@@ -40,6 +40,8 @@ export const taskRegistry: Record<string, TaskInfo> = {
   "cloze-reveal": { component: TaskClozeReveal, size: 'small' },
   "vocab-form-sentence": { component: TaskVocabFormSentence, size: 'medium' },
   "vocab-form-sentence-single": { component: TaskVocabFormSentence, size: 'medium' },
+  "vocab-record-sentence": { component: TaskVocabFormSentence, size: 'medium' },
+  "vocab-record-sentence-single": { component: TaskVocabFormSentence, size: 'medium' },
   "fact-card-try-to-remember": { component: TaskFactCardTryToRemember, size: 'small' },
   "fact-card-reveal": { component: TaskFactCardReveal, size: 'small' },
   "add-image-to-vocab": { component: TaskAddImageToVocab, size: 'medium' },

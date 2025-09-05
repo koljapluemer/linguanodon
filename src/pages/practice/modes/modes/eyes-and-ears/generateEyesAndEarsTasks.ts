@@ -2,7 +2,7 @@ import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
 import { generateVocabChooseImageBySound } from '@/pages/practice/tasks/task-vocab-choose-image-by-sound/generate';
-import { generateTaskFormSentenceFromTwoVocab, generateFormSentenceTaskFromSingleVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
+import { generateTaskFormSentenceFromTwoVocab, generateFormSentenceTaskFromSingleVocab, generateRecordSentenceTaskFromTwoVocab, generateRecordSentenceTaskFromSingleVocab } from '@/pages/practice/tasks/task-vocab-form-sentence/generate';
 import { randomFromArray, pickRandom } from '@/shared/utils/arrayUtils';
 
 // Helper function to check if vocab has both sound and images
@@ -117,14 +117,14 @@ export async function generateEyesAndEars(
         if (languagesWithPairs.length > 0) {
           const [, vocabsInLanguage] = randomFromArray(languagesWithPairs)!;
           const selectedPair = pickRandom(vocabsInLanguage, 2);
-          return generateTaskFormSentenceFromTwoVocab(selectedPair[0], selectedPair[1]);
+          return generateRecordSentenceTaskFromTwoVocab(selectedPair[0], selectedPair[1]);
         }
       }
       
       if (eligibleVocab.length >= 1) {
-        // Create single-vocab sentence task
+        // Create single-vocab record sentence task
         const selectedVocab = randomFromArray(eligibleVocab)!;
-        return generateFormSentenceTaskFromSingleVocab(selectedVocab);
+        return generateRecordSentenceTaskFromSingleVocab(selectedVocab);
       }
       
       console.warn('Eyes and Ears: No vocab found with both sound and images for form-sentence task', {
