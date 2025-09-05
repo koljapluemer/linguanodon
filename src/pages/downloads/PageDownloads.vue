@@ -35,25 +35,27 @@
 
         <div v-else class="space-y-3">
           <div class="grid gap-3">
-            <div v-for="setName in availableSets" :key="setName"
+            <div v-for="set in availableSets" :key="set.name"
               class="flex items-center justify-between p-4 rounded-lg border border-base-300">
               <div>
-                <h4 class="font-medium">{{ setName }}</h4>
-                <p class="text-sm text-base-content/60">Language: {{ selectedLanguage }}</p>
+                <h4 class="font-medium">{{ set.title || set.name }}</h4>
+                <p class="text-sm text-base-content/60">
+                  <span v-if="set.title">{{ set.name }} • </span>Language: {{ selectedLanguage }}
+                </p>
               </div>
 
-              <div v-if="isDownloaded(setName)" class="flex items-center gap-2">
+              <div v-if="isDownloaded(set.name)" class="flex items-center gap-2">
                 <div class="flex items-center gap-2 text-success mr-2">
                   <CheckCircle class="w-5 h-5" />
                   <span class="text-sm font-medium">Downloaded</span>
                 </div>
-                <button @click="downloadSet(setName)" class="btn btn-outline btn-sm" :disabled="loading">
+                <button @click="downloadSet(set.name)" class="btn btn-outline btn-sm" :disabled="loading">
                   <Download class="w-4 h-4 mr-2" />
                   Re-download
                 </button>
               </div>
 
-              <button v-else @click="downloadSet(setName)" class="btn btn-primary btn-sm" :disabled="loading">
+              <button v-else @click="downloadSet(set.name)" class="btn btn-primary btn-sm" :disabled="loading">
                 <Download class="w-4 h-4 mr-2" />
                 Download
               </button>
@@ -68,7 +70,7 @@
 <script setup lang="ts">
 import { ref, inject, onMounted, watch } from 'vue';
 import { Download, CheckCircle } from 'lucide-vue-next';
-import { UnifiedRemoteSetService } from '@/pages/downloads/UnifiedRemoteSetService';
+import { UnifiedRemoteSetService, type RemoteSetInfo } from '@/pages/downloads/UnifiedRemoteSetService';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
@@ -81,7 +83,7 @@ import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoCon
 
 const selectedLanguage = ref('');
 const availableLanguages = ref<LanguageData[]>([]);
-const availableSets = ref<string[]>([]);
+const availableSets = ref<RemoteSetInfo[]>([]);
 const downloadedSets = ref<Set<string>>(new Set());
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -149,9 +151,9 @@ async function loadSets() {
 
     // Load downloaded status for each set
     const downloadedStatuses = await Promise.all(
-      sets.map(async (setName) => ({
-        name: setName,
-        isDownloaded: await remoteSetService.isSetDownloaded(setName)
+      sets.map(async (set) => ({
+        name: set.name,
+        isDownloaded: await remoteSetService.isSetDownloaded(set.name)
       }))
     );
 

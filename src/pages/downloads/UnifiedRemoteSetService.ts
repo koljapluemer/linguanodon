@@ -24,6 +24,12 @@ import type { FactCardData } from '@/entities/fact-cards/FactCardData';
 import type { Link } from '@/shared/links/Link';
 
 import { z } from 'zod';
+import { remoteSetMetaDataSchema } from '@/entities/remote-sets/remoteSetMetaData';
+
+export interface RemoteSetInfo {
+  name: string;
+  title?: string;
+}
 
 interface RemoteSetFiles {
   vocab?: z.infer<typeof vocabSchema>[];
@@ -57,14 +63,47 @@ export class UnifiedRemoteSetService {
     }
   }
 
-  async getAvailableSets(languageCode: string): Promise<string[]> {
+  async getAvailableSets(languageCode: string): Promise<RemoteSetInfo[]> {
     try {
       const response = await fetch(`/sets/${languageCode}/index.json`);
       if (!response.ok) return [];
-      return await response.json();
+      const setNames: string[] = await response.json();
+      
+      // Fetch metadata for each set
+      const setsWithMetadata = await Promise.all(
+        setNames.map(async (setName) => {
+          const metadata = await this.getSetMetadata(languageCode, setName);
+          return {
+            name: setName,
+            title: metadata?.title
+          };
+        })
+      );
+      
+      return setsWithMetadata;
     } catch (error) {
       console.error(`Failed to fetch sets for ${languageCode}:`, error);
       return [];
+    }
+  }
+
+  async getSetMetadata(languageCode: string, setName: string): Promise<z.infer<typeof remoteSetMetaDataSchema> | null> {
+    try {
+      const response = await fetch(`/sets/${languageCode}/${setName}/metadata.json`);
+      if (!response.ok) return null;
+      
+      const data = await response.json();
+      const result = remoteSetMetaDataSchema.safeParse(data);
+      
+      if (result.success) {
+        return result.data;
+      } else {
+        console.warn(`Invalid metadata format for ${languageCode}/${setName}:`, result.error);
+        return null;
+      }
+    } catch (error) {
+      console.error(`Failed to fetch metadata for ${languageCode}/${setName}:`, error);
+      return null;
     }
   }
 

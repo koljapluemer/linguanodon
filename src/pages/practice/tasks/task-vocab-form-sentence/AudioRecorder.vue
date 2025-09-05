@@ -1,12 +1,12 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-2">
     <div class="text-center">
-      <p class="text-lg text-base-content/70 mb-6">
+      <p class="text-lg text-base-content/70 mb-2">
         {{ vocabCount === 1 ? 'Record yourself saying a sentence using this word' : 'Record yourself saying a sentence using both words' }}
       </p>
       
       <!-- Recording Controls -->
-      <div class="flex justify-center items-center gap-4 mb-6">
+      <div class="flex justify-center items-center gap-4 mb-2">
         <button
           v-if="!isRecording && !audioBlob"
           @click="startRecording"
@@ -35,7 +35,7 @@
       </div>
       
       <!-- Recording Status -->
-      <div v-if="!canRecord" class="alert alert-warning text-sm max-w-md mx-auto mb-4">
+      <div v-if="!canRecord" class="alert alert-warning text-sm max-w-md mx-auto mb-2">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
         </svg>
