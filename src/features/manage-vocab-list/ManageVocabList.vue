@@ -20,7 +20,7 @@
             <!-- Right side: Translations -->
             <div class="flex-1 pl-4 flex flex-col gap-2">
               <!-- Translation list -->
-              <label class="text-sm font-medium  ">Translations</label>
+              <label class=" font-medium  ">Translations</label>
               <div v-if="vocab.translations.length > 0" class="space-y-2 mb-4">
                 <div v-for="(translationId, tIndex) in vocab.translations" :key="translationId">
                   <!-- Edit mode -->
@@ -108,7 +108,7 @@
               :checked="creationMode === 'translation-only'"
               @change="creationMode = 'translation-only'"
               class="sr-only peer">
-            <span class="relative inline-flex items-center h-full py-2 px-3 text-sm peer-checked:bg-primary peer-checked:text-primary-content">
+            <span class="relative inline-flex items-center h-full py-2 px-3  peer-checked:bg-primary peer-checked:text-primary-content">
               Native only
             </span>
           </label>
@@ -117,7 +117,7 @@
               :checked="creationMode === 'vocab-only'"
               @change="creationMode = 'vocab-only'"
               class="sr-only peer">
-            <span class="relative inline-flex items-center gap-1 h-full py-2 px-3 text-sm peer-checked:bg-secondary peer-checked:text-secondary-content">
+            <span class="relative inline-flex items-center gap-1 h-full py-2 px-3  peer-checked:bg-secondary peer-checked:text-secondary-content">
               <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" variant="short" /> only
             </span>
           </label>
@@ -126,7 +126,7 @@
               :checked="creationMode === 'vocab-and-translation'"
               @change="creationMode = 'vocab-and-translation'"
               class="sr-only peer">
-            <span class="relative inline-flex items-center h-full py-2 px-3 text-sm peer-checked:bg-accent peer-checked:text-accent-content">
+            <span class="relative inline-flex items-center h-full py-2 px-3  peer-checked:bg-accent peer-checked:text-accent-content">
               Both
             </span>
           </label>
@@ -136,14 +136,14 @@
         <div class="space-y-3">
           <div v-if="creationMode === 'vocab-only' || creationMode === 'vocab-and-translation'"
             class="flex flex-col space-y-1">
-            <label class="text-sm font-medium">Language Unit (  <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" />)</label>
+            <label class=" font-medium">Language Unit (  <LanguageDisplay v-if="currentLanguage" :language="currentLanguage" />)</label>
             <input v-model="newVocabContent" type="text" placeholder="..."
               class="input input-bordered w-full" />
           </div>
 
           <div v-if="creationMode === 'translation-only' || creationMode === 'vocab-and-translation'"
             class="flex flex-col space-y-1">
-            <label class="text-sm font-medium">Language Unit (Native Translation)</label>
+            <label class=" font-medium">Language Unit (Native Translation)</label>
             <input v-model="newTranslationContent" type="text" placeholder="..."
               class="input input-bordered w-full" />
           </div>

@@ -69,7 +69,7 @@ const languageOptions = computed(() =>
 const selectClasses = computed(() => {
   const baseClasses = 'select ';
   const sizeClasses = {
-    small: 'select-sm text-sm',
+    small: 'select-sm ',
     medium: '',
     big: 'select-lg text-lg',
     large: 'select-lg text-xl'

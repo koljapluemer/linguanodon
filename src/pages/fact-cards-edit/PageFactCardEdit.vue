@@ -26,8 +26,8 @@
         <h2>Mastery Progress</h2>
         <div class="space-y-2">
           <div class="flex justify-between items-center">
-            <span class="text-sm font-medium">Current Mastery</span>
-            <span class="text-sm font-bold">{{ factCardMastery }}%</span>
+            <span class=" font-medium">Current Mastery</span>
+            <span class=" font-bold">{{ factCardMastery }}%</span>
           </div>
           <progress class="progress progress-primary w-full" :value="factCardMastery" max="100"></progress>
         </div>

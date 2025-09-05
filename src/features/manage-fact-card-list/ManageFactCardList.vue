@@ -74,13 +74,13 @@
         
         <!-- Front input -->
         <div class="flex flex-col space-y-1">
-          <label class="text-sm font-medium">Front</label>
+          <label class=" font-medium">Front</label>
           <textarea v-model="newFront" placeholder="Enter front side content..." class="textarea textarea-bordered w-full" rows="2"></textarea>
         </div>
 
         <!-- Back input -->
         <div class="flex flex-col space-y-1">
-          <label class="text-sm font-medium">Back</label>
+          <label class=" font-medium">Back</label>
           <textarea v-model="newBack" placeholder="Enter back side content..." class="textarea textarea-bordered w-full" rows="2"></textarea>
         </div>
 

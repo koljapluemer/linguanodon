@@ -228,7 +228,7 @@ onUnmounted(() => {
                 class="rounded-lg"
               />
             </div>
-            <div v-if="vocab.images.length > 6" class="text-sm text-base-content/50 mt-2">
+            <div v-if="vocab.images.length > 6" class=" text-base-content/50 mt-2">
               +{{ vocab.images.length - 6 }} more images
             </div>
           </div>
@@ -282,7 +282,7 @@ onUnmounted(() => {
           ></textarea>
           
           <div class="text-right mt-2">
-            <span class="text-sm text-base-content/50">
+            <span class=" text-base-content/50">
               {{ sentence.trim().length }} characters
             </span>
           </div>

@@ -6,7 +6,7 @@
     
     <div v-else class="flex-1">
       <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">Translation</label>
+        <label class=" font-medium">Translation</label>
         <input
           v-model="editTranslation.content"
           class="input input-bordered input-lg w-full"

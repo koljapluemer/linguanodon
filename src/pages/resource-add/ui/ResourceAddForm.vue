@@ -45,7 +45,7 @@
             type="checkbox"
             class="toggle toggle-primary"
           />
-          <span class="text-sm">{{ formData.isImmersionContent ? 'Yes' : 'No' }}</span>
+          <span class="">{{ formData.isImmersionContent ? 'Yes' : 'No' }}</span>
         </div>
         <div class="label">
           <span class="label-text-alt">Toggle if this is immersion content (videos, podcasts, articles for immersion)</span>

@@ -20,7 +20,7 @@
 
     <div class="py-4">
       <div class="flex justify-between items-center mb-3">
-        <div class="text-sm font-medium  ">
+        <div class=" font-medium  ">
           Translations
         </div>
         <button
@@ -45,7 +45,7 @@
           <!-- Edit mode -->
           <div v-if="editingIndex === index" class="space-y-4">
             <div class="flex flex-col space-y-1">
-              <label class="text-sm font-medium">Translation Content</label>
+              <label class=" font-medium">Translation Content</label>
               <input
                 v-model="tempTranslation.content"
                 type="text"
@@ -100,7 +100,7 @@
       <!-- New translation creation form -->
       <div v-if="isCreatingNew" class="space-y-4 mt-4">
         <div class="flex flex-col space-y-1">
-          <label class="text-sm font-medium">Translation Content</label>
+          <label class=" font-medium">Translation Content</label>
           <input
             v-model="tempTranslation.content"
             type="text"

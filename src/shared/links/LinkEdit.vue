@@ -73,7 +73,7 @@ function cancelEdit() {
     <!-- URL and Label in one row -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">URL</label>
+        <label class=" font-medium">URL</label>
         <input
           v-model="tempLink.url"
           type="url"
@@ -83,7 +83,7 @@ function cancelEdit() {
       </div>
 
       <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">Label</label>
+        <label class=" font-medium">Label</label>
         <input
           v-model="tempLink.label"
           type="text"
@@ -146,7 +146,7 @@ function cancelEdit() {
 
     <!-- Preview -->
     <div v-if="hasValidUrl" class="mt-4">
-      <div class="text-sm font-medium mb-2">Preview</div>
+      <div class=" font-medium mb-2">Preview</div>
       <div class="p-3 bg-base-200 rounded">
         <LinkDisplayAsButton :link="tempLink" />
       </div>

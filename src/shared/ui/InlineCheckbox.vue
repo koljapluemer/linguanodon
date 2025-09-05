@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-between py-2">
     <div class="flex-1">
-      <label class="text-sm font-medium  ">
+      <label class=" font-medium  ">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
       </label>
@@ -32,7 +32,7 @@
             type="checkbox"
             class="checkbox checkbox-sm"
           />
-          <span class="text-sm">{{ tempValue ? 'Yes' : 'No' }}</span>
+          <span class="">{{ tempValue ? 'Yes' : 'No' }}</span>
         </label>
         <div class="ml-auto flex items-center gap-2">
           <button

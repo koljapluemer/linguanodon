@@ -23,8 +23,8 @@
       <!-- Vocab Mastery Progress -->
       <div v-if="resource.vocab.length > 0 && resource.isImmersionContent" class="mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span class="text-sm font-medium">Average Vocab Mastery</span>
-          <span class="text-sm font-bold">{{ avgVocabMastery }}%</span>
+          <span class=" font-medium">Average Vocab Mastery</span>
+          <span class=" font-bold">{{ avgVocabMastery }}%</span>
         </div>
         <progress class="progress progress-primary w-full" :value="avgVocabMastery" max="100"></progress>
       </div>

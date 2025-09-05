@@ -41,7 +41,7 @@
                 <span v-if="downloading" class="loading loading-spinner loading-sm mr-2"></span>
                 {{ isDownloaded ? 'Start' : 'Download and Start' }}
               </button>
-              <p class="text-sm text-base-content/60 mt-2 text-center">
+              <p class=" text-base-content/60 mt-2 text-center">
                 Will start in {{ getPracticeModeName(metadata.preferredMode) }} mode
               </p>
             </div>

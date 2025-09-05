@@ -67,7 +67,7 @@ const maxMinutes = computed(() => {
 
     <div class="space-y-3">
       <div v-for="day in chartData" :key="day.date" class="flex items-center gap-4">
-        <div class="w-12 text-sm font-medium text-right">
+        <div class="w-12  font-medium text-right">
           {{ day.day }}
         </div>
 
@@ -86,7 +86,7 @@ const maxMinutes = computed(() => {
 
     <div v-if="maxMinutes <= 1" class="text-center mt-6 text-base-content/60">
       <p>No learning time recorded yet.</p>
-      <p class="text-sm mt-1">Visit the Queue to start tracking your learning time!</p>
+      <p class=" mt-1">Visit the Queue to start tracking your learning time!</p>
     </div>
   </div>
 </template>

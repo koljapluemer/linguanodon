@@ -41,7 +41,7 @@
       <!-- Notes -->
       <div class="py-4">
         <div class="flex justify-between items-center mb-3">
-          <div class="text-sm font-medium  ">
+          <div class=" font-medium  ">
             Notes
           </div>
           <button
@@ -83,7 +83,7 @@
       <!-- Links -->
       <div class="py-4">
         <div class="flex justify-between items-center mb-3">
-          <div class="text-sm font-medium  ">
+          <div class=" font-medium  ">
             Links
           </div>
           <button
@@ -108,7 +108,7 @@
           >
             <div class="flex-1">
               <div class="text-lg">{{ link.label || '(Untitled)' }}</div>
-              <div class="text-sm ">{{ link.url }}</div>
+              <div class=" ">{{ link.url }}</div>
             </div>
             <div class="flex items-center gap-2">
               <button
@@ -126,11 +126,11 @@
       <!-- Auto-save status -->
       <div class="py-4">
         <div class="flex items-center gap-2">
-          <span v-if="saving" class="text-sm text-light flex items-center gap-1">
+          <span v-if="saving" class=" text-light flex items-center gap-1">
             <span class="loading loading-spinner loading-sm"></span>
             Auto-saving...
           </span>
-          <span v-else-if="isEditing" class="text-sm text-success flex items-center gap-1">
+          <span v-else-if="isEditing" class=" text-success flex items-center gap-1">
             <Check class="w-4 h-4" />
             Changes saved automatically
           </span>

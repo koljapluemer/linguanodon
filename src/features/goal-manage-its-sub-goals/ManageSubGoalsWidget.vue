@@ -35,7 +35,7 @@
     <div class="divider">Add New Sub-Goal</div>
 
     <div class="flex items-center gap-2">
-      <span class="text-sm  whitespace-nowrap">To reach the goal defined above, I will learn to</span>
+      <span class="  whitespace-nowrap">To reach the goal defined above, I will learn to</span>
       <input
         v-model="newSubGoalTitle"
         type="text"

@@ -83,7 +83,7 @@
 
               <!-- Notes Count -->
               <div v-if="factCard.notes && factCard.notes.length > 0" class="mt-2">
-                <p class="text-sm ">
+                <p class=" ">
                   <span class="font-medium">Notes:</span> 
                   {{ factCard.notes.length }} note{{ factCard.notes.length === 1 ? '' : 's' }}
                 </p>

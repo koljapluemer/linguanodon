@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-between py-2">
     <div class="flex-1">
-      <label class="text-sm font-medium  ">
+      <label class=" font-medium  ">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
       </label>
@@ -87,7 +87,7 @@ const toggleRef = ref<HTMLInputElement>();
 const displayValueClasses = computed(() => {
   const baseClasses = ' ';
   const sizeClasses = {
-    small: 'text-sm',
+    small: '',
     medium: 'text-lg',
     big: 'text-2xl',
     large: 'text-8xl font-extrabold'
@@ -97,7 +97,7 @@ const displayValueClasses = computed(() => {
 
 const editingValueClasses = computed(() => {
   const sizeClasses = {
-    small: 'text-sm',
+    small: '',
     medium: 'text-lg',
     big: 'text-2xl',
     large: 'text-8xl font-extrabold'

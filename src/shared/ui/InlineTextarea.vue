@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-start justify-between py-2">
     <div class="flex-1">
-      <label class="text-sm font-medium  ">
+      <label class=" font-medium  ">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
       </label>
@@ -10,7 +10,7 @@
         <div :class="displayValueClasses" v-if="displayValue">
           {{ displayValue }}
         </div>
-        <div class="text-sm italic" v-else>empty</div>
+        <div class=" italic" v-else>empty</div>
         <button
           @click="startEditing"
           class="ml-2 btn btn-ghost flex-shrink-0"
@@ -94,7 +94,7 @@ const displayValue = computed(() => {
 const displayValueClasses = computed(() => {
   const baseClasses = '  whitespace-pre-wrap';
   const sizeClasses = {
-    small: 'text-sm',
+    small: '',
     medium: 'text-lg',
     big: 'text-2xl',
     large: 'text-8xl font-extrabold'
@@ -105,7 +105,7 @@ const displayValueClasses = computed(() => {
 const textareaClasses = computed(() => {
   const baseClasses = 'textarea textarea-bordered resize-none';
   const sizeClasses = {
-    small: 'textarea-sm text-sm',
+    small: 'textarea-sm ',
     medium: 'text-lg',
     big: 'textarea-lg text-2xl',
     large: 'textarea-xl'

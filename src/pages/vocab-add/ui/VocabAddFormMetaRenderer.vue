@@ -10,7 +10,7 @@
       <!-- Toggle for Basic/All Data -->
       <div class="flex items-center justify-end mb-6">
         <label class="flex items-center gap-2 cursor-pointer">
-          <span class="text-sm">Show all data</span>
+          <span class="">Show all data</span>
           <input
             v-model="showAllData"
             type="checkbox"

@@ -3,7 +3,7 @@
     <h2>Goal Details</h2>
     
     <div class="flex flex-col space-y-1">
-      <label class="text-sm font-medium">Language</label>
+      <label class=" font-medium">Language</label>
       <LanguageDropdown
         v-model="selectedLanguage"
         @update:modelValue="saveGoal"
@@ -11,9 +11,9 @@
     </div>
 
     <div class="flex flex-col space-y-1">
-      <label class="text-sm font-medium">Goal Title</label>
+      <label class=" font-medium">Goal Title</label>
       <div class="flex items-center gap-2">
-        <span class="text-sm ">I want to be able to</span>
+        <span class=" ">I want to be able to</span>
         <input
           v-model="goalTitle"
           type="text"
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div v-if="saving" class="text-sm ">
+    <div v-if="saving" class=" ">
       Saving...
     </div>
   </div>

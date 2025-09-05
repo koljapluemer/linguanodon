@@ -3,7 +3,7 @@
     <!-- Content and Note Type in one row -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="md:col-span-2 flex flex-col space-y-1">
-        <label class="text-sm font-medium">Content</label>
+        <label class=" font-medium">Content</label>
         <textarea
           v-model="tempNote.content"
           placeholder="Enter note content..."
@@ -13,7 +13,7 @@
       </div>
       
       <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">Note Type</label>
+        <label class=" font-medium">Note Type</label>
         <input
           v-model="tempNote.noteType"
           type="text"

@@ -3,7 +3,7 @@
     <div class="flex items-start gap-2">
       <div class="flex-1">
         <div class="flex items-start gap-2 mb-2">
-          <div class="whitespace-pre-wrap text-sm flex-1">
+          <div class="whitespace-pre-wrap  flex-1">
             {{ note.content || '(Empty note)' }}
           </div>
           <div v-if="note.noteType" class="badge badge-outline badge-sm">

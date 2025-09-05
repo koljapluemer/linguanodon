@@ -262,8 +262,8 @@ const handleTaskFinished = async () => {
   <!-- Progress Bar -->
   <div v-if="state.status === 'task' && !showLoadingUI && progressInfo.totalEstimatedTasks > 0" class="mb-6">
     <div class="flex items-center justify-between mb-2">
-      <span class="text-sm font-medium text-light">{{ progressInfo.phaseDescription }}</span>
-      <span class="text-sm font-medium text-light">
+      <span class=" font-medium text-light">{{ progressInfo.phaseDescription }}</span>
+      <span class=" font-medium text-light">
         {{ progressInfo.completedTasks }}/{{ progressInfo.totalEstimatedTasks }}
       </span>
     </div>

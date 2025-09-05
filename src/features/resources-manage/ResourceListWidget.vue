@@ -48,7 +48,7 @@
               </div>
 
               <!-- Extracted content counts -->
-              <div class="flex gap-4 text-sm text-base-content/60">
+              <div class="flex gap-4  text-base-content/60">
                 <span v-if="resource.vocab.length > 0">
                   {{ resource.vocab.length }} vocab
                 </span>

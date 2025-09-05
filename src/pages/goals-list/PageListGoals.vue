@@ -20,7 +20,7 @@
           <div class="flex-1">
             <h2>{{ goal.title }}</h2>
 
-            <div class="flex gap-4 mt-3 text-sm">
+            <div class="flex gap-4 mt-3 ">
               <span class="badge badge-outline">
                 {{ goal.subGoals.length }} sub-goals
               </span>

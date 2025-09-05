@@ -23,7 +23,7 @@
 
             <!-- Audio Info -->
             <div class="flex-1">
-              <div class="text-sm font-medium">
+              <div class=" font-medium">
                 {{ sound.originalFileName || 'Audio file' }}
               </div>
               <div class="text-xs text-base-content/60 flex gap-4">
@@ -115,7 +115,7 @@
 
         <!-- Loading/Error States -->
         <div v-if="loading" class="mt-2">
-          <div class="flex items-center gap-2 text-sm">
+          <div class="flex items-center gap-2 ">
             <span class="loading loading-spinner loading-xs"></span>
             <span>{{ loadingMessage }}</span>
           </div>

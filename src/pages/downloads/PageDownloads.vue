@@ -42,7 +42,7 @@
                 @click="goToSetOverview(set.name)">
                 <div>
                   <h4>{{ set.title || set.name }}</h4>
-                  <p class="text-sm text-base-content/60">
+                  <p class=" text-base-content/60">
                     <span v-if="set.title">{{ set.name }} • </span>Language: {{ selectedLanguage }}
                   </p>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="flex items-center gap-2" @click.stop>
                   <div v-if="isDownloaded(set.name)" class="flex items-center gap-2 text-success mr-2">
                     <CheckCircle class="w-5 h-5" />
-                    <span class="text-sm font-medium">Downloaded</span>
+                    <span class=" font-medium">Downloaded</span>
                   </div>
                   <button @click="quickDownload(set.name)" class="btn btn-outline btn-sm" :disabled="loading">
                     <Download class="w-4 h-4 mr-2" />

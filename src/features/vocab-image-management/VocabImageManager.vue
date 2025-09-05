@@ -99,7 +99,7 @@
 
         <!-- Loading/Error States -->
         <div v-if="loading" class="mt-2">
-          <div class="flex items-center gap-2 text-sm">
+          <div class="flex items-center gap-2 ">
             <span class="loading loading-spinner loading-xs"></span>
             <span>{{ loadingMessage }}</span>
           </div>

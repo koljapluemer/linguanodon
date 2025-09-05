@@ -107,7 +107,7 @@ function hideDropdown() {
     <h2>
       Target Languages
     </h2>
-    <p class="text-light text-sm mb-4">
+    <p class="text-light  mb-4">
       Languages you want to learn. You can temporarily disable languages or remove them completely.
     </p>
 
@@ -131,7 +131,7 @@ function hideDropdown() {
                 <span v-if="language.emoji">{{ language.emoji }}</span>
                 {{ language.name }}
               </div>
-              <div class="text-sm text-base-content/60">{{ language.code }}</div>
+              <div class=" text-base-content/60">{{ language.code }}</div>
             </div>
           </div>
           <button @click="removeLanguage(language.code)" class="btn btn-error btn-sm"
@@ -144,12 +144,12 @@ function hideDropdown() {
       <div v-else class="text-center py-6 text-base-content/60">
         <Languages class="w-8 h-8 mx-auto mb-2 opacity-50" />
         <p>No target languages added yet.</p>
-        <p class="text-sm">Add languages you want to learn.</p>
+        <p class="">Add languages you want to learn.</p>
       </div>
 
       <!-- Add Language Section -->
       <div class="flex flex-col space-y-1">
-        <label class="text-sm font-medium">Add Target Language</label>
+        <label class=" font-medium">Add Target Language</label>
         <div class="relative">
           <input v-model="addLanguageSearch" class="input input-bordered w-full"
             placeholder="Type to search for a language..." @focus="showDropdown = true" @blur="hideDropdown" />
@@ -161,7 +161,7 @@ function hideDropdown() {
               <div class="flex items-center gap-2">
                 <span v-if="lang.emoji">{{ lang.emoji }}</span>
                 <span class="font-medium">{{ lang.name }}</span>
-                <span class="text-sm text-base-content/60">({{ lang.code }})</span>
+                <span class=" text-base-content/60">({{ lang.code }})</span>
               </div>
             </button>
           </div>

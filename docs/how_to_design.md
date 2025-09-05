@@ -9,7 +9,7 @@
 - A `card-title`, if existing, must be within `card-body`
 - Prefer clean `grid` and `flex` layouts over `space-*`
 - Use standard buttons unless special case calls for customization. Do not vary the size randomly unless called for
-- Do not use gray text. If text must be dis-emphasized, use only and consistently `text-light`
+- Do not use gray text. If text must be dis-emphasized, use only and consistently `text-light`. Do not give it an `sm` size.
 - Do not use excessive subheadings, redundant labels or little information widgets that the user does not care about. 
 - Before implementing a component, look for similar components and copy their styles and/or approach.
 - When setting margins, paddings, gaps and so on, prefer the size `2`, `4`, and `6`

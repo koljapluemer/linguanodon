@@ -56,10 +56,10 @@ const getIcon = (type: string) => {
     <component :is="getIcon(toast.type)" class="w-5 h-5 shrink-0" />
     
     <div class="flex-1 min-w-0">
-      <div v-if="toast.title" class="font-semibold text-sm">
+      <div v-if="toast.title" class="font-semibold ">
         {{ toast.title }}
       </div>
-      <div class="text-sm">
+      <div class="">
         {{ toast.message }}
       </div>
     </div>

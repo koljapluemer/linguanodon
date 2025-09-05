@@ -35,7 +35,7 @@
     <div class="divider">Add New Milestone</div>
 
     <div class="flex items-center gap-2">
-      <span class="text-sm  whitespace-nowrap">I will know I've achieved this when I can</span>
+      <span class="  whitespace-nowrap">I will know I've achieved this when I can</span>
       <input
         v-model="newMilestone"
         type="text"
