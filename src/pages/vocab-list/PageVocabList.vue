@@ -7,18 +7,11 @@
   </div>
 
   <!-- Search -->
-  <div class="mb-6">
-    <input 
-      v-model="searchQuery" 
-      @input="debouncedSearch" 
-      type="text" 
-      placeholder="Search vocabulary..." 
-      class="input input-bordered w-full"
-    />
-  </div>
+  <input v-model="searchQuery" @input="debouncedSearch" type="text" placeholder="Search vocabulary..."
+    class="input input-bordered w-full" />
 
   <!-- Filters -->
-  <div class="grid gap-6 md:grid-cols-2 mb-6">
+  <div class="grid gap-2 md:grid-cols-2 mb-2">
     <!-- Language Filter -->
     <details class="collapse collapse-arrow bg-base-200">
       <summary class="collapse-title font-medium">
@@ -28,12 +21,8 @@
         <ul class="flex flex-col gap-2">
           <li v-for="language in availableLanguages" :key="language.code">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input 
-                type="checkbox" 
-                :checked="selectedLanguages.includes(language.code)"
-                @change="toggleLanguage(language.code)"
-                class="checkbox checkbox-sm"
-              />
+              <input type="checkbox" :checked="selectedLanguages.includes(language.code)"
+                @change="toggleLanguage(language.code)" class="checkbox checkbox-sm" />
               <span class="flex items-center gap-2">
                 <span v-if="language.emoji">{{ language.emoji }}</span>
                 {{ language.name }}
@@ -53,23 +42,15 @@
         <ul class="flex flex-col gap-2">
           <li>
             <label class="flex items-center gap-2 cursor-pointer">
-              <input 
-                type="checkbox" 
-                :checked="selectedSets.includes('user-added')"
-                @change="toggleSet('user-added')"
-                class="checkbox checkbox-sm"
-              />
+              <input type="checkbox" :checked="selectedSets.includes('user-added')" @change="toggleSet('user-added')"
+                class="checkbox checkbox-sm" />
               User Added
             </label>
           </li>
           <li v-for="set in availableSets" :key="set.uid">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input 
-                type="checkbox" 
-                :checked="selectedSets.includes(set.uid)"
-                @change="toggleSet(set.uid)"
-                class="checkbox checkbox-sm"
-              />
+              <input type="checkbox" :checked="selectedSets.includes(set.uid)" @change="toggleSet(set.uid)"
+                class="checkbox checkbox-sm" />
               {{ set.name }}
             </label>
           </li>
@@ -115,10 +96,7 @@
         <tbody>
           <tr v-for="vocab in vocabItems" :key="vocab.uid">
             <td>
-              <router-link 
-                :to="`/vocab/${vocab.uid}/edit`" 
-                class="font-bold link link-hover"
-              >
+              <router-link :to="`/vocab/${vocab.uid}/edit`" class="font-bold link link-hover">
                 {{ vocab.content }}
               </router-link>
             </td>
@@ -131,21 +109,18 @@
             <td>{{ vocab.translations?.length || 0 }}</td>
             <td>
               <div class="flex flex-wrap gap-1">
-                <span 
-                  v-for="origin in vocab.origins" 
-                  :key="origin" 
-                  class="badge badge-outline badge-sm"
-                >
+                <span v-for="origin in vocab.origins" :key="origin" class="badge badge-outline badge-sm">
                   {{ getOriginDisplayName(origin) }}
                 </span>
               </div>
             </td>
             <td>
               <button @click="deleteVocab(vocab.uid)" class="btn btn-sm btn-ghost">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 6h18"/>
-                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                  <path d="M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18" />
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                  <path d="M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
                 </svg>
               </button>
             </td>
@@ -157,28 +132,17 @@
     <!-- Pagination -->
     <div v-if="totalCount > pageSize" class="flex justify-center mt-6">
       <div class="join">
-        <button 
-          @click="goToPage(currentPage - 1)" 
-          :disabled="currentPage <= 1"
-          class="join-item btn"
-        >
+        <button @click="goToPage(currentPage - 1)" :disabled="currentPage <= 1" class="join-item btn">
           Previous
         </button>
-        
+
         <template v-for="page in visiblePages" :key="page">
-          <button 
-            @click="goToPage(page)" 
-            :class="['join-item btn', { 'btn-active': page === currentPage }]"
-          >
+          <button @click="goToPage(page)" :class="['join-item btn', { 'btn-active': page === currentPage }]">
             {{ page }}
           </button>
         </template>
-        
-        <button 
-          @click="goToPage(currentPage + 1)" 
-          :disabled="currentPage >= totalPages"
-          class="join-item btn"
-        >
+
+        <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages" class="join-item btn">
           Next
         </button>
       </div>
@@ -232,11 +196,11 @@ const visiblePages = computed(() => {
   const pages: number[] = [];
   const start = Math.max(1, currentPage.value - 2);
   const end = Math.min(totalPages.value, currentPage.value + 2);
-  
+
   for (let i = start; i <= end; i++) {
     pages.push(i);
   }
-  
+
   return pages;
 });
 
@@ -311,7 +275,7 @@ async function loadVocab() {
     };
 
     const offset = (currentPage.value - 1) * pageSize.value;
-    
+
     const [result, count] = await Promise.all([
       vocabRepo.getVocabPaginated(offset.toString(), pageSize.value, filters),
       vocabRepo.getTotalVocabCount(filters)
@@ -347,7 +311,7 @@ async function loadFilterOptions() {
       languageRepo.getAll(),
       localSetRepo.getAllLocalSets()
     ]);
-    
+
     // Initialize with all languages selected
     selectedLanguages.value = availableLanguages.value.map(l => l.code);
     selectedSets.value = ['user-added', ...availableSets.value.map(s => s.uid)];
