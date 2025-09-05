@@ -55,7 +55,7 @@
         </div>
         
         <div v-if="formData.notes.length === 0" class=" text-center py-4">
-          No notes yet. Click "Add Note" to get started.
+          No notes attached.
         </div>
         
         <div v-else class="space-y-4">
@@ -97,7 +97,7 @@
         </div>
         
         <div v-if="formData.links.length === 0" class=" text-center py-4">
-          No links yet. Click "Add Link" to get started.
+          No links attached.
         </div>
         
         <div v-else class="space-y-4">

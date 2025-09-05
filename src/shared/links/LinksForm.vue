@@ -16,7 +16,7 @@
     </div>
     
     <div v-if="props.links.length === 0" class=" text-center py-4">
-      {{ props.singleLinkMode ? 'No link set.' : 'No links yet. Click "Add Link" to add external resources.' }}
+      {{ props.singleLinkMode ? 'No link set.' : 'No links attached.' }}
     </div>
     
     <div v-else class="space-y-4">

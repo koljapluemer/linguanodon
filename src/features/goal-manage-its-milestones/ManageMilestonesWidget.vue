@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div v-if="milestoneEntries.length === 0" class="text-center py-8 ">
-      No milestones yet. Add one below to track your progress.
+      No milestones attached.
     </div>
     
     <div v-else class="space-y-2">

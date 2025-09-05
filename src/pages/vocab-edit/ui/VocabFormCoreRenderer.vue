@@ -34,7 +34,7 @@
       </div>
       
       <div v-if="formData.translations.length === 0" class=" text-center py-4">
-        No translations yet. Click "Add Translation" to get started.
+        No translations attached.
       </div>
       
       <div v-else class="space-y-4">

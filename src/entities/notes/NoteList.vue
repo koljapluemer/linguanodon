@@ -13,7 +13,7 @@
     </div>
     
     <div v-if="notes.length === 0" class=" text-center py-4">
-      No notes yet. Click "Add Note" to get started.
+      No notes.
     </div>
     
     <div v-else class="space-y-4">
