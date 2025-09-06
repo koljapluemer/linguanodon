@@ -1,6 +1,7 @@
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { Task } from '@/pages/practice/Task';
 import { generateVocabChooseFromSound } from '@/pages/practice/tasks/task-vocab-choose-from-sound/generate';
+import { useUsedVocabTracker } from '@/app/useUsedVocabTracker';
 
 export async function generateMinimalPairsTask(
   vocabRepo: VocabRepoContract,
@@ -8,20 +9,23 @@ export async function generateMinimalPairsTask(
   blockList?: string[]
 ): Promise<Task | null> {
   try {
-    // Get a random vocab that meets minimal pairs criteria
-    // The repo method now ensures the vocab has:
-    // - consideredCharacter = true
-    // - content exists
-    // - has playable sounds (not disableForPractice)
-    // - has relatedVocab with at least one valid character with sound and content
-    const vocab = await vocabRepo.getRandomDueOrUnseenVocabForMinimalPairs(languageCodes, blockList);
+    const { getLastUsedVocabUid, addUsedVocab } = useUsedVocabTracker();
+    
+    // Only block the last used vocab
+    const lastUsed = getLastUsedVocabUid();
+    const combinedBlockList = lastUsed ? [...(blockList || []), lastUsed] : (blockList || []);
+    
+    // Get a random vocab that meets minimal pairs criteria and wasn't just used
+    const vocab = await vocabRepo.getRandomDueOrUnseenVocabForMinimalPairs(languageCodes, combinedBlockList);
     
     if (!vocab) {
       return null;
     }
     
+    // Track this vocab as used (only the main vocab, not the distractor)
+    addUsedVocab(vocab.uid);
+    
     // Generate the vocab-choose-from-sound task 
-    // All validation is now done at the repo level
     return generateVocabChooseFromSound(vocab);
     
   } catch (error) {
