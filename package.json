@@ -10,7 +10,6 @@
     "lint": "eslint . --ext .ts,.vue",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
     "test": "vitest run --silent --reporter=dot",
-    "prepare": "husky",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
