@@ -30,6 +30,7 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
+import { useTimeTracking } from '@/shared/useTimeTracking';
 
 interface Props {
   task: Task;
@@ -63,6 +64,9 @@ const repositories: RepositoriesContextStrict = {
   goalRepo,
   noteRepo
 };
+
+// Time tracking
+useTimeTracking();
 
 onMounted(async () => {
   const lang = await languageRepo.getByCode(props.task.language);

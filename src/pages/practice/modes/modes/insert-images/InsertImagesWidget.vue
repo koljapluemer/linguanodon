@@ -8,7 +8,6 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/pages/practice/Task';
-import { useTimeTracking } from '@/shared/useTimeTracking';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
 import { generateInsertImagesTask } from './generateInsertImagesTasks';
@@ -152,8 +151,6 @@ async function retry() {
   await initializeQueue();
 }
 
-// Initialize time tracking for this page
-useTimeTracking();
 
 onMounted(async () => {
   await initializeQueue();

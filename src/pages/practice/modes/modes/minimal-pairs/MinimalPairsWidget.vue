@@ -9,7 +9,6 @@ import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
-import { useTimeTracking } from '@/shared/useTimeTracking';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
 import { generateMinimalPairsTask } from './generateMinimalPairsTasks';
 
@@ -144,9 +143,6 @@ async function completeCurrentTask() {
 async function retry() {
   await initializeQueue();
 }
-
-// Initialize time tracking for this page
-useTimeTracking();
 
 onMounted(async () => {
   await initializeQueue();
