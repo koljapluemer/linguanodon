@@ -14,8 +14,10 @@
     <SoundPlayer :sound="playableSound" :auto-play="true" />
 
     <div class="flex flex-row gap-4 mx-auto justify-center my-6">
-      <div v-for="(vocab, index) in shuffledVocabs" :key="vocab.uid" class="flex gap-2 flex-col ">
-        <button :class="getButtonClass(index)" class="btn btn-lg" @click="selectOption(index)"
+      <div v-for="(vocab, index) in shuffledVocabs" :key="vocab.uid" 
+           :class="getOptionContainerClass(index)"
+           class="flex gap-2 flex-col transition-all duration-300 ease-out">
+        <button :class="getButtonClass(index)" class="btn btn-lg transition-all duration-300" @click="selectOption(index)"
           :disabled="isButtonDisabled(index)">
           I hear {{ vocab.content }}
         </button>
@@ -164,6 +166,21 @@ function getButtonClass(index: number): string {
   }
 
   return 'btn-outline';
+}
+
+function getOptionContainerClass(index: number): string {
+  const isCorrect = index === correctIndex.value;
+  const isSelected = index === selectedIndex.value;
+
+  if (isCorrect && isSelected) {
+    return 'border-2 border-green-400 rounded-lg p-2 transform translate-y-[-2px]';
+  }
+
+  if (isAnswered.value && isCorrect) {
+    return 'border-2 border-green-400 rounded-lg p-2 transform translate-y-[-2px]';
+  }
+
+  return 'border-2 border-transparent rounded-lg p-2';
 }
 
 function isButtonDisabled(index: number): boolean {
