@@ -23,6 +23,10 @@ export class TranslationRepo implements TranslationRepoContract {
     return await translationDb.translations.where('uid').anyOf(ids).toArray();
   }
 
+  async getAllTranslations(): Promise<TranslationData[]> {
+    return await translationDb.translations.toArray();
+  }
+
   async getTranslationByContent(content: string): Promise<TranslationData | undefined> {
     return await translationDb.translations.where('content').equals(content).first();
   }
