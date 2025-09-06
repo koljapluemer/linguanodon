@@ -47,6 +47,7 @@ import SoundPlayer from '@/shared/ui/SoundPlayer.vue';
 import VocabWithTranslationsDisplay from '@/features/display-vocab-with-translations/VocabWithTranslationsDisplay.vue';
 import { Rating } from 'ts-fsrs';
 import { shuffleArray, randomFromArray } from '@/shared/utils/arrayUtils';
+import { useButtonWithKeyboardArrowControl } from '@/shared/composables/useButtonWithKeyboardArrowControl';
 
 interface Props {
   task: Task;
@@ -65,7 +66,7 @@ const props = defineProps<Props>();
 const vocabRepo = props.repositories.vocabRepo;
 
 // Exercise state
-const selectedIndex = ref<number | null>(null);
+const selectedAnswerIndex = ref<number | null>(null);
 const isAnswered = ref(false);
 const firstAttemptWrong = ref(false);
 const vocab1 = ref<VocabData | null>(null); // The vocab to be identified
@@ -74,6 +75,14 @@ const shuffledVocabs = ref<VocabData[]>([]);
 const correctIndex = ref<number>(0);
 const playableSound = ref<VocabSound | null>(null);
 const loading = ref(true);
+
+// Keyboard arrow control
+const buttonCount = computed(() => shuffledVocabs.value.length);
+const { selectedIndex } = useButtonWithKeyboardArrowControl({
+  buttonCount,
+  onSelect: selectOption,
+  disabled: computed(() => isAnswered.value || loading.value)
+});
 
 // Get the vocab ID from associated vocab
 const vocabUid = computed(() => {
@@ -133,7 +142,7 @@ async function loadVocabData() {
 async function selectOption(index: number) {
   if (isAnswered.value) return;
 
-  selectedIndex.value = index;
+  selectedAnswerIndex.value = index;
   const isCorrect = index === correctIndex.value;
 
   if (isCorrect) {
@@ -147,13 +156,14 @@ async function selectOption(index: number) {
 
 function getButtonClass(index: number): string {
   const isCorrect = index === correctIndex.value;
-  const isSelected = index === selectedIndex.value;
+  const isAnswerSelected = index === selectedAnswerIndex.value;
+  const isKeyboardSelected = index === selectedIndex.value;
 
-  if (isCorrect && isSelected) {
+  if (isCorrect && isAnswerSelected) {
     return 'btn-success';
   }
 
-  if (!isCorrect && isSelected) {
+  if (!isCorrect && isAnswerSelected) {
     return 'btn-error';
   }
 
@@ -165,14 +175,16 @@ function getButtonClass(index: number): string {
     return 'btn-outline opacity-50';
   }
 
+
   return 'btn-outline';
 }
 
 function getOptionContainerClass(index: number): string {
   const isCorrect = index === correctIndex.value;
-  const isSelected = index === selectedIndex.value;
+  const isAnswerSelected = index === selectedAnswerIndex.value;
+  const isKeyboardSelected = index === selectedIndex.value;
 
-  if (isCorrect && isSelected) {
+  if (isCorrect && isAnswerSelected) {
     return 'border-2 border-green-400 rounded-lg p-2 transform translate-y-[-2px]';
   }
 
@@ -180,15 +192,16 @@ function getOptionContainerClass(index: number): string {
     return 'border-2 border-green-400 rounded-lg p-2 transform translate-y-[-2px]';
   }
 
+
   return 'border-2 border-transparent rounded-lg p-2';
 }
 
 function isButtonDisabled(index: number): boolean {
   const isCorrect = index === correctIndex.value;
-  const isSelected = index === selectedIndex.value;
+  const isAnswerSelected = index === selectedAnswerIndex.value;
 
   if (isAnswered.value) return true;
-  if (!isCorrect && isSelected) return true;
+  if (!isCorrect && isAnswerSelected) return true;
 
   return false;
 }
