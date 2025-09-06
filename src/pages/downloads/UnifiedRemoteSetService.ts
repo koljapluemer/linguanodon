@@ -180,9 +180,9 @@ export class UnifiedRemoteSetService {
           
           existingOrigins.add(localSet.uid);
           
-          // Resolve note references and merge
+          // Resolve note references and merge with deduplication
           const noteUids = this.resolveReferences(translationData.notes || [], noteMap);
-          const mergedNotes = [...new Set([...existingTranslation.notes, ...noteUids])];
+          const mergedNotes = await this.deduplicateEntityNotes([...existingTranslation.notes, ...noteUids]);
           
           await this.translationRepo.updateTranslation({
             ...existingTranslation,
@@ -196,10 +196,11 @@ export class UnifiedRemoteSetService {
           }
         } else {
           const noteUids = this.resolveReferences(translationData.notes || [], noteMap);
+          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
           const localTranslation: Omit<TranslationData, 'uid' | 'origins'> = {
             content: translationData.content,
             priority: translationData.priority || 1,
-            notes: noteUids
+            notes: deduplicatedNotes
           };
           
           const savedTranslation = await this.translationRepo.saveTranslation(localTranslation);
@@ -241,16 +242,18 @@ export class UnifiedRemoteSetService {
           
           existingOrigins.add(localSet.uid);
           
-          // Resolve all references and merge arrays
+          // Resolve all references and merge arrays with deduplication
           const noteUids = this.resolveReferences(vocabData.notes || [], noteMap);
           const translationUids = this.resolveReferences(vocabData.translations || [], translationMap);
           const links = this.resolveLinks(vocabData.links || [], linkMap);
           const relatedVocabUids = this.resolveReferences(vocabData.relatedVocab || [], vocabMap);
           const notRelatedVocabUids = this.resolveReferences(vocabData.notRelatedVocab || [], vocabMap);
           
+          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingVocab.notes, ...noteUids]);
+          
           await this.vocabRepo.updateVocab({
             ...existingVocab,
-            notes: [...new Set([...existingVocab.notes, ...noteUids])],
+            notes: deduplicatedNotes,
             translations: [...new Set([...existingVocab.translations, ...translationUids])],
             links: this.deduplicateLinks([...existingVocab.links, ...links]),
             relatedVocab: [...new Set([...existingVocab.relatedVocab, ...relatedVocabUids])],
@@ -268,13 +271,15 @@ export class UnifiedRemoteSetService {
           const translationUids = this.resolveReferences(vocabData.translations || [], translationMap);
           const links = this.resolveLinks(vocabData.links || [], linkMap);
           
+          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
+          
           const localVocab: Omit<VocabData, 'uid' | 'progress'> = {
             language: vocabData.language,
             content: vocabData.content,
             length: vocabData.length || 'unspecified',
             priority: vocabData.priority || 1,
             doNotPractice: false, // Default value since remote schema doesn't have this
-            notes: noteUids,
+            notes: deduplicatedNotes,
             translations: translationUids,
             links: links,
             relatedVocab: [], // Will resolve in second pass
@@ -340,10 +345,11 @@ export class UnifiedRemoteSetService {
           existingOrigins.add(localSet.uid);
           
           const noteUids = this.resolveReferences(factCardData.notes || [], noteMap);
+          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingFactCard.notes, ...noteUids]);
           
           await this.factCardRepo.updateFactCard({
             ...existingFactCard,
-            notes: [...new Set([...existingFactCard.notes, ...noteUids])],
+            notes: deduplicatedNotes,
             origins: [...existingOrigins],
             priority: shouldIncrementPriority ? (existingFactCard.priority ?? 0) + (factCardData.priority || 1) : existingFactCard.priority
           });
@@ -353,6 +359,7 @@ export class UnifiedRemoteSetService {
           }
         } else {
           const noteUids = this.resolveReferences(factCardData.notes || [], noteMap);
+          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
           
           const localFactCard: Omit<FactCardData, 'uid' | 'progress'> = {
             language: factCardData.language,
@@ -360,7 +367,7 @@ export class UnifiedRemoteSetService {
             back: factCardData.back,
             priority: factCardData.priority || 1,
             doNotPractice: false,
-            notes: noteUids,
+            notes: deduplicatedNotes,
             links: [],
             origins: [localSet.uid]
           };
@@ -392,9 +399,11 @@ export class UnifiedRemoteSetService {
           const vocabUids = this.resolveReferences(resourceData.vocab || [], vocabMap);
           const factCardUids = this.resolveReferences(resourceData.factCards || [], factCardMap);
           
+          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingResource.notes, ...noteUids]);
+          
           await this.resourceRepo.updateResource({
             ...existingResource,
-            notes: [...new Set([...existingResource.notes, ...noteUids])],
+            notes: deduplicatedNotes,
             vocab: [...new Set([...existingResource.vocab, ...vocabUids])],
             factCards: [...new Set([...existingResource.factCards, ...factCardUids])],
             origins: [...existingOrigins],
@@ -410,6 +419,8 @@ export class UnifiedRemoteSetService {
           const factCardUids = this.resolveReferences(resourceData.factCards || [], factCardMap);
           const link = resourceData.link ? linkMap.get(resourceData.link) : undefined;
           
+          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
+          
           const localResource: Omit<ResourceData, 'uid' | 'lastShownAt'> = {
             language: resourceData.language,
             isImmersionContent: resourceData.isImmersionContent,
@@ -417,7 +428,7 @@ export class UnifiedRemoteSetService {
             content: resourceData.content,
             priority: resourceData.priority || 1,
             link: link,
-            notes: noteUids,
+            notes: deduplicatedNotes,
             vocab: vocabUids,
             factCards: factCardUids,
             origins: [localSet.uid],
@@ -455,8 +466,10 @@ export class UnifiedRemoteSetService {
           const factCardUids = this.resolveReferences(goalData.factCards || [], factCardMap);
           const subGoalUids = this.resolveReferences(goalData.subGoals || [], goalMap);
           
+          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingGoal.notes, ...noteUids]);
+          
           await this.goalRepo.update(existingGoal.uid, {
-            notes: [...new Set([...existingGoal.notes, ...noteUids])],
+            notes: deduplicatedNotes,
             vocab: [...new Set([...existingGoal.vocab, ...vocabUids])],
             factCards: [...new Set([...existingGoal.factCards, ...factCardUids])],
             subGoals: [...new Set([...existingGoal.subGoals, ...subGoalUids])],
@@ -472,10 +485,12 @@ export class UnifiedRemoteSetService {
           const factCardUids = this.resolveReferences(goalData.factCards || [], factCardMap);
           const subGoalUids = this.resolveReferences(goalData.subGoals || [], goalMap);
           
+          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
+          
           const localGoal: Omit<GoalData, 'uid'> = {
             language: goalData.language,
             title: goalData.title,
-            notes: noteUids,
+            notes: deduplicatedNotes,
             vocab: vocabUids,
             factCards: factCardUids,
             subGoals: subGoalUids,
@@ -630,6 +645,49 @@ export class UnifiedRemoteSetService {
       seen.add(key);
       return true;
     });
+  }
+
+  private async deduplicateEntityNotes(noteUids: string[]): Promise<string[]> {
+    if (noteUids.length <= 1) return noteUids;
+    
+    // Get all notes
+    const notes = await this.noteRepo.getNotesByUIDs(noteUids);
+    
+    // Group notes by content + noteType signature
+    const noteGroups = new Map<string, { note: NoteData; uid: string }[]>();
+    
+    for (const note of notes) {
+      const signature = `${note.content}|${note.noteType || ''}`;
+      if (!noteGroups.has(signature)) {
+        noteGroups.set(signature, []);
+      }
+      noteGroups.get(signature)!.push({ note, uid: note.uid });
+    }
+    
+    const keptNoteUids: string[] = [];
+    const uidsToDelete: string[] = [];
+    
+    // For each group, keep the first note and delete the rest
+    for (const group of noteGroups.values()) {
+      if (group.length > 1) {
+        // Keep the first note
+        keptNoteUids.push(group[0].uid);
+        
+        // Mark the duplicate notes for deletion
+        const duplicateUids = group.slice(1).map(item => item.uid);
+        uidsToDelete.push(...duplicateUids);
+      } else {
+        // No duplicates, keep the note
+        keptNoteUids.push(group[0].uid);
+      }
+    }
+    
+    // Delete the duplicate notes
+    if (uidsToDelete.length > 0) {
+      await this.noteRepo.deleteNotes(uidsToDelete);
+    }
+    
+    return keptNoteUids;
   }
 
   async isSetDownloaded(setName: string): Promise<boolean> {
