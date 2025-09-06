@@ -7,22 +7,8 @@
   <!-- Exercise Content -->
   <div v-else-if="vocab && imageOptions.length === 2" class="text-center">
     <!-- Sound Player -->
-    <div class="flex flex-col items-center gap-4 my-4">
-      <button @click="playSound" :disabled="!audioUrl || isPlaying" class="btn btn-circle btn-xl btn-primary">
-        <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-          stroke="currentColor" class="w-10 h-10">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.348a1.125 1.125 0 01-1.667-.985V5.653z" />
-        </svg>
-        <span v-else class="loading loading-spinner loading-lg"></span>
-      </button>
-
-      <div class="flex flex-col items-center gap-2">
-        <div class=" font-medium">Volume</div>
-        <input type="range" min="0" max="1" step="0.1" v-model="volume" @input="updateVolume"
-          class="range range-primary w-32" />
-        <div class="text-xs text-base-content/60">{{ Math.round(volume * 100) }}%</div>
-      </div>
+    <div class="my-4">
+      <SoundPlayer :sound="playableSound" :auto-play="true" />
     </div>
 
     <!-- Image Options -->
@@ -80,17 +66,16 @@
     </div>
   </div>
 
-  <!-- Hidden audio element -->
-  <audio ref="audioElement" @loadeddata="onAudioLoaded" @ended="onAudioEnded" @error="onAudioError" />
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
-import type { VocabData, VocabImage } from '@/entities/vocab/VocabData';
+import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { RepositoriesContextStrict } from '@/shared/types/RepositoriesContext';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
+import SoundPlayer from '@/shared/ui/SoundPlayer.vue';
 import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
 import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 import { Rating } from 'ts-fsrs';
@@ -126,11 +111,8 @@ const vocab = ref<VocabData | null>(null);
 const vocabNotes = ref<NoteData[]>([]);
 const loading = ref(true);
 
-// Audio state
-const audioElement = ref<HTMLAudioElement>();
-const audioUrl = ref<string | null>(null);
-const isPlaying = ref(false);
-const volume = ref(0.7);
+// Sound state  
+const playableSound = ref<VocabSound | null>(null);
 
 // Get the vocab ID from associated vocab
 const vocabUid = computed(() => {
@@ -173,8 +155,8 @@ async function loadVocabData() {
     }
 
     // Find a playable sound (not disableForPractice)
-    const playableSound = vocabData.sounds.find(sound => !sound.disableForPractice);
-    if (!playableSound) {
+    const availableSound = vocabData.sounds.find(sound => !sound.disableForPractice);
+    if (!availableSound) {
       console.error('Choose Image by Sound: Vocab has no playable sounds', {
         uid: vocabData.uid,
         content: vocabData.content,
@@ -192,22 +174,10 @@ async function loadVocabData() {
       vocabNotes.value = await noteRepo.getNotesByUIDs(vocabData.notes);
     }
 
-    // Setup audio (use playable sound)
-    if (playableSound.blob) {
-      audioUrl.value = URL.createObjectURL(playableSound.blob);
-    } else {
-      console.error('Choose Image by Sound: Playable sound has no blob', {
-        uid: vocabData.uid,
-        soundUid: playableSound.uid
-      });
-    }
+    // Setup sound (use playable sound) 
+    playableSound.value = availableSound;
 
     await generateImageOptions();
-
-    // Auto-play sound after loading
-    setTimeout(() => {
-      playSound();
-    }, 500);
 
   } catch (error) {
     console.error('Choose Image by Sound: Failed to load vocab data for UID:', vocabUid.value, error);
@@ -244,36 +214,6 @@ async function generateImageOptions() {
   imageOptions.value = options.sort(() => Math.random() - 0.5);
 }
 
-function playSound() {
-  if (!audioElement.value || !audioUrl.value || isPlaying.value) return;
-
-  audioElement.value.src = audioUrl.value;
-  audioElement.value.volume = volume.value;
-  isPlaying.value = true;
-  audioElement.value.play().catch(error => {
-    console.error('Failed to play audio:', error);
-    isPlaying.value = false;
-  });
-}
-
-function updateVolume() {
-  if (audioElement.value) {
-    audioElement.value.volume = volume.value;
-  }
-}
-
-function onAudioLoaded() {
-  // Audio is ready
-}
-
-function onAudioEnded() {
-  isPlaying.value = false;
-}
-
-function onAudioError(error: Event) {
-  console.error('Audio error:', error);
-  isPlaying.value = false;
-}
 
 async function selectOption(index: number) {
   if (isAnswered.value) return;
@@ -335,10 +275,4 @@ const handleCompletion = async () => {
 
 onMounted(loadVocabData);
 
-onUnmounted(() => {
-  // Cleanup audio URL
-  if (audioUrl.value) {
-    URL.revokeObjectURL(audioUrl.value);
-  }
-});
 </script>

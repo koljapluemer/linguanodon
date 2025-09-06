@@ -9,6 +9,7 @@ import UltraRandomWidget from '@/pages/practice/modes/modes/ultrarandom/UltraRan
 import IllegalImmersionWidget from '@/pages/practice/modes/modes/illegal-immersion/IllegalImmersionWidget.vue';
 import SentenceSlideWidget from '@/pages/practice/modes/modes/sentence-slide/SentenceSlideWidget.vue';
 import ResourceRotationWidget from '@/pages/practice/modes/modes/resource-rotation/ResourceRotationWidget.vue';
+import MinimalPairsWidget from '@/pages/practice/modes/modes/minimal-pairs/MinimalPairsWidget.vue';
 import PageVocabList from '@/pages/vocab-list/PageVocabList.vue';
 import PageVocabEdit from '@/pages/vocab-edit/PageVocabEdit.vue';
 import PageVocabAdd from '@/pages/vocab-add/PageVocabAdd.vue';
@@ -82,6 +83,11 @@ const router = createRouter({
           path: 'resource-rotation',
           name: 'practice-mode-resource-rotation',
           component: ResourceRotationWidget
+        },
+        {
+          path: 'minimal-pairs',
+          name: 'practice-mode-minimal-pairs',
+          component: MinimalPairsWidget
         }
       ]
     },

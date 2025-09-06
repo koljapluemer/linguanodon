@@ -90,4 +90,7 @@ export interface VocabRepoContract {
 
   // Sentence Slide operations
   getRandomUnseenSentenceVocabWithRelatedVocab(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
+
+  // Minimal Pairs operations
+  getRandomDueOrUnseenVocabForMinimalPairs(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
 }

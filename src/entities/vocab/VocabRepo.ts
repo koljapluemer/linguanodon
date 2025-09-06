@@ -1082,4 +1082,42 @@ export class VocabRepo implements VocabRepoContract {
     const ensured = vocab.map(v => this.ensureVocabFields(v));
     return pickRandom(ensured, 1)[0];
   }
+
+  async getRandomDueOrUnseenVocabForMinimalPairs(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null> {
+    const vocab = await vocabDb.vocab
+      .where('language')
+      .anyOf(languages)
+      .filter(vocab => {
+        // Must not be excluded from practice
+        if (vocab.doNotPractice) return false;
+        
+        // Must not be in block list
+        if (vocabBlockList && vocabBlockList.includes(vocab.uid)) return false;
+        
+        // Must be consideredCharacter
+        if (vocab.consideredCharacter !== true) return false;
+        
+        // Must have relatedVocab length > 0
+        if (!vocab.relatedVocab || vocab.relatedVocab.length === 0) return false;
+        
+        // Must have content set
+        if (!vocab.content) return false;
+        
+        // Must be either due or unseen
+        if (!vocab.progress) return true; // Consider unseen if no progress
+        
+        // Unseen: never seen before (level === -1)
+        const vocabIsUnseen = vocab.progress.level === -1;
+        
+        // Due: has been seen and is due now
+        const isDue = vocab.progress.level >= 0 && vocab.progress.due <= new Date();
+        
+        return vocabIsUnseen || isDue;
+      })
+      .toArray();
+
+    if (vocab.length === 0) return null;
+    const ensured = vocab.map(v => this.ensureVocabFields(v));
+    return pickRandom(ensured, 1)[0];
+  }
 }
