@@ -68,14 +68,19 @@ def create_translation(content, notes=None):
     translation_data.append(translation_entry)
     return translation_entry["id"]
 
-def create_vocab(language, content, length="single-word", notes=None, translations=None, priority=None):
+def create_vocab(language, content, considered_character=None, considered_sentence=None, considered_word=None, notes=None, translations=None, priority=None):
     """Create a vocab entry and return its ID"""
     vocab_entry = {
         "id": get_next_vocab_id(),
         "language": language,
-        "content": content,
-        "length": length
+        "content": content
     }
+    if considered_character is not None:
+        vocab_entry["consideredCharacter"] = considered_character
+    if considered_sentence is not None:
+        vocab_entry["consideredSentence"] = considered_sentence
+    if considered_word is not None:
+        vocab_entry["consideredWord"] = considered_word
     if priority is not None:
         vocab_entry["priority"] = priority
     if notes:
@@ -129,7 +134,7 @@ def process_vocab_item(vocab_item):
     vocab_id = create_vocab(
         language="apc",
         content=apc_content,
-        length="single-word",
+        considered_word=True,  # These are single words, so considered as words
         translations=[translation_id] if translation_id else None,
         priority=1
     )

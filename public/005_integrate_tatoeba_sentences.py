@@ -149,7 +149,7 @@ def load_existing_data():
                 except (KeyError, ValueError) as e:
                     logger.warning(f"Invalid entry on line {line_num} in links.jsonl: {e}")
 
-def create_vocab(language, content, length, translations=None, links=None, related_vocab=None):
+def create_vocab(language, content, considered_character=None, considered_sentence=None, considered_word=None, translations=None, links=None, related_vocab=None):
     """Create a vocab entry and return its ID, or return existing ID if duplicate content+language"""
     # Check if vocab with this content+language already exists
     for existing in vocab_data:
@@ -182,9 +182,14 @@ def create_vocab(language, content, length, translations=None, links=None, relat
     vocab_entry = {
         "id": get_next_vocab_id(),
         "language": language,
-        "content": content,
-        "length": length
+        "content": content
     }
+    if considered_character is not None:
+        vocab_entry["consideredCharacter"] = considered_character
+    if considered_sentence is not None:
+        vocab_entry["consideredSentence"] = considered_sentence
+    if considered_word is not None:
+        vocab_entry["consideredWord"] = considered_word
     if translations:
         vocab_entry["translations"] = translations
     if links:
@@ -347,7 +352,7 @@ def process_tatoeba_sentences(sentences):
             target_vocab_id = create_vocab(
                 language=TARGET_LANGUAGE,
                 content=target_text,
-                length="sentence",
+                considered_sentence=True,  # These are full sentences
                 translations=[source_translation_id],
                 links=[target_link_id, tatoeba_link_id]
             )

@@ -171,17 +171,23 @@ def create_translation(content: str, notes: Optional[List[str]] = None) -> str:
     translation_data.append(translation_entry)
     return translation_entry["id"]
 
-def create_vocab(language: str, content: str, length: str, notes: Optional[List[str]] = None, 
-                translations: Optional[List[str]] = None, links: Optional[List[str]] = None,
-                images: Optional[List[Dict]] = None, sounds: Optional[List[Dict]] = None,
-                is_picturable: Optional[bool] = None) -> str:
+def create_vocab(language: str, content: str, considered_character: Optional[bool] = None, 
+                considered_sentence: Optional[bool] = None, considered_word: Optional[bool] = None,
+                notes: Optional[List[str]] = None, translations: Optional[List[str]] = None, 
+                links: Optional[List[str]] = None, images: Optional[List[Dict]] = None, 
+                sounds: Optional[List[Dict]] = None, is_picturable: Optional[bool] = None) -> str:
     """Create a vocab entry and return its ID"""
     vocab_entry = {
         "id": get_next_vocab_id(),
         "language": language,
-        "content": content,
-        "length": length
+        "content": content
     }
+    if considered_character is not None:
+        vocab_entry["consideredCharacter"] = considered_character
+    if considered_sentence is not None:
+        vocab_entry["consideredSentence"] = considered_sentence
+    if considered_word is not None:
+        vocab_entry["consideredWord"] = considered_word
     if notes:
         vocab_entry["notes"] = notes
     if translations:
@@ -386,14 +392,11 @@ def process_word(english_word: str) -> bool:
             "filename": audio_filename
         })
     
-    # Determine word length
-    word_length = "word"
-    
     # Create vocab entry
     vocab_id = create_vocab(
         language=TARGET_LANGUAGE,
         content=mandarin_word,
-        length=word_length,
+        considered_word=True,  # These are individual words/phrases
         notes=notes if notes else None,
         translations=[english_translation_id],
         links=links,
