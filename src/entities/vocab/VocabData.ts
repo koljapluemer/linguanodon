@@ -1,5 +1,4 @@
 import type { LearningProgress } from "@/shared/types/LearningProgress";
-import type { Length } from "@/shared/types/Length";
 import type { Link } from "@/shared/links/Link";
 
 
@@ -34,7 +33,9 @@ export interface VocabData {
   uid: string;
   language: string;
   content?: string;
-  length: Length;
+  consideredCharacter?: boolean; // if undefined, assume false
+  consideredSentence?: boolean; // if undefined, assume false
+  consideredWord?: boolean // if undefined, assume true
   priority?: number;
   doNotPractice?: boolean;
   notes: string[]; // ids of NoteData repo

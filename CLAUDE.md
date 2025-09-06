@@ -10,7 +10,6 @@ Linguanodon is a language learning application built with Vue 3, TypeScript, and
 
 ```bash
 # Development
-npm run dev                # Start development server
 npm run build              # Build for production (includes type checking)
 npm run preview            # Preview production build
 
@@ -19,6 +18,8 @@ npm run lint               # Run ESLint
 npm run lint:fix           # Fix ESLint errors automatically
 npm run test               # Run tests with Vitest
 ```
+
+Do NOT run the dev server, it's pointless!
 
 ## Architecture
 
@@ -33,15 +34,6 @@ The project follows **Feature-Sliced Design (FSD)** architecture with strict lay
 - **shared/**: Foundation utilities, UI components, external connections
 
 ### Key Architectural Concepts
-
-**Queue-Based Learning System**: The core MVP revolves around `src/pages/queue/PageQueue.vue` which provides an infinite queue of:
-- **Exercises**: Practice sessions for vocabulary units
-- **Tasks**: Specific actions like adding pronunciation or consuming immersion content
-
-**Caching Strategy**: Uses `src/pages/queue/useCachedQueue.ts` to maintain:
-- Current/next vocab batches for exercises (5-20 units)
-- Current/next task in queue
-- Seamless user experience with preloading
 
 **Entity Repositories**: Uses contract-based repositories with Dexie (IndexedDB) for persistence:
 - `VocabAndTranslationRepo`: Core vocabulary management

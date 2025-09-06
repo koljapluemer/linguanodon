@@ -1,66 +1,41 @@
 <template>
-  <div class="space-y-4">
-    <div class="flex justify-between items-center">
-      <h3>{{ $t('notes.title') }}</h3>
-      <button
-        type="button"
-        @click="addNewNote"
-        class="btn btn-sm btn-outline"
-      >
-        <Plus class="w-4 h-4 mr-1" />
-        {{ $t('notes.add') }}
-      </button>
-    </div>
-    
-    <div v-if="notes.length === 0" class=" text-center py-4">
-      {{ $t('notes.states.empty') }}
-    </div>
-    
-    <div v-else class="space-y-4">
-      <div
-        v-for="(note, index) in notes"
-        :key="note.uid"
-      >
-        <NoteEdit
-          v-if="editingIndex === index"
-          :note="note"
-          :show-before-exercise-option="showBeforeExerciseOption"
-          @update:note="(updatedNote) => updateNote(updatedNote)"
-          @close="editingIndex = null"
-        />
-        <div v-else class="flex items-start justify-between gap-4">
-          <div class="flex-1">
-            <NoteDisplay :note="note" />
-          </div>
-          <div class="flex items-center gap-2">
-            <button
-              type="button"
-              @click="editingIndex = index"
-              class="btn btn-sm btn-ghost"
-            >
-              <Edit class="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              @click="deleteNote(note.uid)"
-              class="btn btn-ghost btn-circle text-error flex-shrink-0"
-            >
-              <X class="w-4 h-4" />
-            </button>
-          </div>
+
+  <div class="flex justify-between items-center">
+    <button type="button" @click="addNewNote" class="btn btn-sm btn-outline">
+      <Plus class="w-4 h-4 mr-1" />
+      {{ $t('notes.add') }}
+    </button>
+  </div>
+
+  <div v-if="notes.length === 0" class=" text-center py-4">
+    {{ $t('notes.states.empty') }}
+  </div>
+
+  <div v-else class="space-y-4">
+    <div v-for="(note, index) in notes" :key="note.uid">
+      <NoteEdit v-if="editingIndex === index" :note="note" :show-before-exercise-option="showBeforeExerciseOption"
+        @update:note="(updatedNote) => updateNote(updatedNote)" @close="editingIndex = null" />
+      <div v-else class="flex items-start justify-between gap-4">
+        <div class="flex-1">
+          <NoteDisplay :note="note" />
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" @click="editingIndex = index" class="btn btn-sm btn-ghost">
+            <Edit class="w-4 h-4" />
+          </button>
+          <button type="button" @click="deleteNote(note.uid)" class="btn btn-ghost btn-circle text-error flex-shrink-0">
+            <X class="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>
-    
-    <!-- New note creation form -->
-    <div v-if="isCreatingNew">
-      <NoteEdit
-        :note="{ uid: '', content: '', noteType: undefined, showBeforeExercise: false }"
-        :show-before-exercise-option="showBeforeExerciseOption"
-        @update:note="(newNote) => { $emit('add', newNote); isCreatingNew = false; }"
-        @close="isCreatingNew = false"
-      />
-    </div>
+  </div>
+
+  <!-- New note creation form -->
+  <div v-if="isCreatingNew">
+    <NoteEdit :note="{ uid: '', content: '', noteType: undefined, showBeforeExercise: false }"
+      :show-before-exercise-option="showBeforeExerciseOption"
+      @update:note="(newNote) => { $emit('add', newNote); isCreatingNew = false; }" @close="isCreatingNew = false" />
   </div>
 </template>
 

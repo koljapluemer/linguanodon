@@ -6,7 +6,7 @@ import { getRandomDueVocabFromRandomValidImmersionResource } from '../../modes/u
 
 async function tryGenerateFromVocab(vocab: VocabData) {
   // Filter to only sentence vocab (cloze tasks are now sentence-only)
-  if (vocab.length !== 'sentence') {
+  if (vocab.consideredSentence !== true) {
     return null;
   }
 

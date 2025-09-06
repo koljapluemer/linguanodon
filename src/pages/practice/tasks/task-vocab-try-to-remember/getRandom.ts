@@ -11,7 +11,7 @@ export async function getRandomVocabTryToRememberTask({
   try {
     // Get unseen vocab that has both content and translations (excluding sentences for try-to-remember tasks)
     const allUnseenVocab = await vocabRepo.getRandomUnseenVocabWithContentAndTranslations(languageCodes, 10);
-    const vocabItems = allUnseenVocab.filter(vocab => vocab.length !== 'sentence');
+    const vocabItems = allUnseenVocab.filter(vocab => vocab.consideredSentence !== true);
     
     if (vocabItems.length === 0) return null;
     

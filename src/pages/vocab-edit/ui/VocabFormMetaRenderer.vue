@@ -59,14 +59,15 @@ import VocabFormCoreRenderer from './VocabFormCoreRenderer.vue';
 import VocabFormAdvancedPropsRenderer from './VocabFormAdvancedPropsRenderer.vue';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
-import type { Length } from '@/shared/types/Length';
 import type { VocabImage, VocabSound } from '@/entities/vocab/VocabData';
 
 interface VocabFormData {
   id?: string;
   language: string;
   content: string;
-  length: Length;
+  consideredCharacter?: boolean;
+  consideredSentence?: boolean;
+  consideredWord?: boolean;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

@@ -133,6 +133,11 @@
       }
     }
   },
+  "vocab": {
+    "consideredCharacter": "Consider as character",
+    "consideredWord": "Consider as word", 
+    "consideredSentence": "Consider as sentence"
+  },
   "vocabulary": {
     "title": "Vocabulary",
     "addNew": "Add New Vocab",
@@ -470,7 +475,10 @@
     "hasImage": "Has Image:",
     "soundsArray": "Sounds Array:",
     "imagesArray": "Images Array:",
-    "length": "Length:",
+    "classification": "Classification:",
+    "consideredCharacter": "Considered Character:",
+    "consideredWord": "Considered Word:", 
+    "consideredSentence": "Considered Sentence:",
     "relatedVocabCount": "Related Vocab Count:",
     "relatedVocabUIDs": "Related Vocab UIDs:",
     "sentenceSlideEligible": "Sentence Slide Eligible:",

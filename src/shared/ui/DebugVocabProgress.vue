@@ -25,7 +25,12 @@
         <div><strong>{{ $t('debug.imagesArray') }}</strong> {{ vocabData.images?.length || 0 }} {{ $t('vocabulary.stats.images') }}</div>
       </div>
       <div class="pt-2 border-t border-base-300 mt-2">
-        <div><strong>{{ $t('debug.length') }}</strong> {{ vocabData.length }}</div>
+        <div><strong>{{ $t('debug.classification') }}</strong></div>
+        <div class="ml-4">
+          <div><strong>{{ $t('debug.consideredCharacter') }}</strong> {{ vocabData.consideredCharacter === true ? $t('common.yes') : $t('common.no') }}</div>
+          <div><strong>{{ $t('debug.consideredWord') }}</strong> {{ vocabData.consideredWord !== false ? $t('common.yes') : $t('common.no') }}</div>
+          <div><strong>{{ $t('debug.consideredSentence') }}</strong> {{ vocabData.consideredSentence === true ? $t('common.yes') : $t('common.no') }}</div>
+        </div>
         <div><strong>{{ $t('debug.relatedVocabCount') }}</strong> {{ vocabData.relatedVocab?.length || 0 }}</div>
         <div><strong>{{ $t('debug.relatedVocabUIDs') }}</strong> {{ vocabData.relatedVocab?.join(', ') || 'None' }}</div>
         <div :class="sentenceSlideEligible ? 'text-success' : 'text-error'">
@@ -59,7 +64,7 @@ function formatNumber(num: number | null | undefined): string {
 
 // Computed property to check if this vocab qualifies for sentence slide
 const sentenceSlideEligible = computed(() => {
-  return props.vocabData.length === 'sentence' &&
+  return props.vocabData.consideredSentence === true &&
          props.vocabData.progress.level === -1 &&
          props.vocabData.relatedVocab && 
          props.vocabData.relatedVocab.length >= 1 &&
@@ -67,8 +72,8 @@ const sentenceSlideEligible = computed(() => {
 });
 
 const sentenceSlideIneligibleReason = computed(() => {
-  if (props.vocabData.length !== 'sentence') {
-    return `length is ${props.vocabData.length}, not sentence`;
+  if (props.vocabData.consideredSentence !== true) {
+    return `not considered a sentence (consideredSentence: ${props.vocabData.consideredSentence})`;
   }
   if (props.vocabData.progress.level !== -1) {
     return `level is ${props.vocabData.progress.level}, not -1 (unseen)`;

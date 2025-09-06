@@ -32,7 +32,7 @@ const translationNotes = ref<NoteData[]>([]);
 const hasChanges = ref(false);
 
 const isSentence = computed(() => {
-  return vocab.value?.length === 'sentence';
+  return vocab.value?.consideredSentence === true;
 });
 
 const loadVocab = async () => {

@@ -29,12 +29,13 @@ import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/VocabDa
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
-import type { Length } from '@/shared/types/Length';
 
 interface VocabFormData {
   language: string;
   content: string;
-  length: Length;
+  consideredCharacter?: boolean;
+  consideredSentence?: boolean;
+  consideredWord?: boolean;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;
@@ -60,7 +61,9 @@ function formDataToVocabData(formData: VocabFormData): Omit<VocabData, 'progress
     uid: crypto.randomUUID(),
     language: formData.language,
     content: formData.content,
-    length: formData.length,
+    consideredCharacter: formData.consideredCharacter,
+    consideredSentence: formData.consideredSentence,
+    consideredWord: formData.consideredWord,
     translations: formData.translations.map(translation => translation.uid),
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
@@ -96,7 +99,9 @@ const state = ref<VocabFormState>({
   formData: {
     language: '',
     content: '',
-    length: 'unspecified',
+    consideredCharacter: false,
+    consideredSentence: false,
+    consideredWord: true,
     translations: [],
     priority: undefined,
     doNotPractice: undefined,

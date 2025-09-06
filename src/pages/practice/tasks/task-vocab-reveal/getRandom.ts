@@ -4,6 +4,7 @@ import type { Task } from '@/pages/practice/Task';
 import { generateVocabRevealNativeToTarget, generateVocabRevealTargetToNative } from '@/pages/practice/tasks/task-vocab-reveal/generate';
 import { getRandomDueVocabFromRandomValidImmersionResource } from '../../modes/utils/getRandomDueVocabFromRandomValidImmersionResource';
 
+
 async function tryGenerateFromVocab(vocab: VocabData) {
   // Randomly pick between the two generators
   return Math.random() < 0.5
@@ -34,11 +35,11 @@ export async function getRandomVocabRevealTask({
     
     // Filter vocab based on reveal task level requirements
     const eligibleVocab = allDueVocab.filter(vocab => {
-      if (vocab.length === 'sentence') {
+      if (vocab.consideredSentence === true) {
         // Sentences need level > 6 for reveal tasks
         return vocab.progress.level > 6;
       } else {
-        // Word/unspecified need level >= 3
+        // Non-sentence vocab need level >= 3
         return vocab.progress.level >= 3;
       }
     });

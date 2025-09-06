@@ -1,13 +1,20 @@
 <template>
+  <!-- Classification checkboxes -->
   <div class="py-4">
-    <label class="label">
-      <span class="label-text font-medium">Length</span>
-    </label>
-    <select v-model="formData.length" @change="$emit('field-change')" class="select  w-full">
-      <option v-for="value in (['sentence', 'word', 'unspecified'] as Length[])" :key="value" :value="value">
-        {{ value }}
-      </option>
-    </select>
+    <div class="space-y-2">
+      <label class="label cursor-pointer">
+        <span class="label-text">{{ $t('vocab.consideredCharacter') }}</span>
+        <input v-model="formData.consideredCharacter" @change="$emit('field-change')" type="checkbox" class="checkbox" />
+      </label>
+      <label class="label cursor-pointer">
+        <span class="label-text">{{ $t('vocab.consideredWord') }}</span>
+        <input v-model="formData.consideredWord" @change="$emit('field-change')" type="checkbox" class="checkbox" />
+      </label>
+      <label class="label cursor-pointer">
+        <span class="label-text">{{ $t('vocab.consideredSentence') }}</span>
+        <input v-model="formData.consideredSentence" @change="$emit('field-change')" type="checkbox" class="checkbox" />
+      </label>
+    </div>
   </div>
 
   <!-- Priority -->
@@ -72,13 +79,14 @@ import VocabSoundManager from '@/features/vocab-sound-management/VocabSoundManag
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { Link } from '@/shared/links/Link';
-import type { Length } from '@/shared/types/Length';
 import type { VocabImage, VocabSound } from '@/entities/vocab/VocabData';
 
 interface VocabFormData {
   language: string;
   content: string;
-  length: Length;
+  consideredCharacter?: boolean;
+  consideredSentence?: boolean;
+  consideredWord?: boolean;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;

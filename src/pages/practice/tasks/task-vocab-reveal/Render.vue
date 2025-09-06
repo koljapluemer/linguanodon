@@ -35,7 +35,7 @@ const isRevealed = ref(false);
 const isNativeToTarget = computed(() => props.task.taskType === 'vocab-reveal-native-to-target');
 
 const isSentence = computed(() => {
-  return vocab.value?.length === 'sentence';
+  return vocab.value?.consideredSentence === true;
 });
 
 const frontContent = computed(() => {

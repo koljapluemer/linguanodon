@@ -39,7 +39,9 @@ export class VocabRepo implements VocabRepoContract {
     return {
       ...vocab,
       content: vocab.content || '',
-      length: vocab.length || 'not-specified',
+      consideredCharacter: vocab.consideredCharacter,
+      consideredSentence: vocab.consideredSentence,
+      consideredWord: vocab.consideredWord, // Keep original value (undefined means true per VocabData comments)
       notes: vocab.notes || [],
       links: vocab.links || [],
       translations: vocab.translations || [],
@@ -49,6 +51,7 @@ export class VocabRepo implements VocabRepoContract {
       sounds: vocab.sounds || []
     };
   }
+
 
   async getVocab(): Promise<VocabData[]> {
     const vocab = await vocabDb.vocab.toArray();
@@ -110,7 +113,7 @@ export class VocabRepo implements VocabRepoContract {
       .anyOf(languages)
       .filter(vocab => {
         // Must be sentence type
-        if (vocab.length !== 'sentence') {
+        if (vocab.consideredSentence !== true) {
           return false;
         }
         
@@ -257,7 +260,7 @@ export class VocabRepo implements VocabRepoContract {
       .where('language')
       .anyOf(languages)
       .and(vocab => 
-        vocab.length !== 'sentence' &&
+        vocab.consideredSentence !== true &&
         !vocab.doNotPractice &&
         (vocab.priority ?? 1) >= 2
       )
@@ -396,7 +399,9 @@ export class VocabRepo implements VocabRepoContract {
       uid: crypto.randomUUID(),
       language: vocab.language,
       content: vocab.content,
-      length: vocab.length,
+      consideredCharacter: vocab.consideredCharacter,
+      consideredSentence: vocab.consideredSentence,
+      consideredWord: vocab.consideredWord,
       priority: vocab.priority,
       doNotPractice: vocab.doNotPractice,
       notes: vocab.notes,
@@ -457,7 +462,7 @@ export class VocabRepo implements VocabRepoContract {
         vocab.progress.level >= 0 &&
         vocab.progress.due <= new Date() &&
         !vocab.doNotPractice &&
-        vocab.length !== 'sentence' && // Exclude sentence-length vocab
+        vocab.consideredSentence !== true && // Exclude sentence vocab
         (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
       )
       .toArray();
@@ -618,7 +623,7 @@ export class VocabRepo implements VocabRepoContract {
     const now = new Date();
     const dueVocab = await vocabDb.vocab
       .where('language').equals(targetLanguage)
-      .and(vocab => vocab.length !== 'sentence')
+      .and(vocab => vocab.consideredSentence !== true)
       .and(vocab => vocab.content !== correctVocabContent)
       .and(vocab => vocab.progress && vocab.progress.level >= 0)
       .and(vocab => vocab.progress.due && new Date(vocab.progress.due) <= now)
@@ -646,7 +651,7 @@ export class VocabRepo implements VocabRepoContract {
     // Query all vocab excluding sentences and the correct answer
     const candidates = await vocabDb.vocab
       .where('language').equals(targetLanguage)
-      .and(vocab => vocab.length !== 'sentence')
+      .and(vocab => vocab.consideredSentence !== true)
       .and(vocab => vocab.content !== correctVocabContent)
       .and(vocab => !!vocab.content)
       .toArray();
@@ -760,7 +765,7 @@ export class VocabRepo implements VocabRepoContract {
     const now = new Date();
     let query = vocabDb.vocab
       .where('language').anyOf(languages)
-      .and(vocab => vocab.length === 'sentence')
+      .and(vocab => vocab.consideredSentence === true)
       .and(vocab => vocab.progress.level >= 0)
       .and(vocab => vocab.progress.level <= maxLevel)
       .and(vocab => vocab.progress.due && new Date(vocab.progress.due) <= now);
@@ -1065,7 +1070,7 @@ export class VocabRepo implements VocabRepoContract {
       .where('language')
       .anyOf(languages)
       .filter(vocab => 
-        vocab.length === 'sentence' &&
+        vocab.consideredSentence === true &&
         vocab.progress.level === -1 &&
         vocab.relatedVocab && vocab.relatedVocab.length >= 1 &&
         !vocab.doNotPractice &&

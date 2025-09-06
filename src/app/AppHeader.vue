@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { 
   Play, 
   Settings, 
@@ -9,6 +10,8 @@ import {
   FolderOpen
 } from 'lucide-vue-next';
 import MyMaterialSubmenu from './MyMaterialSubmenu.vue';
+
+const { t } = useI18n();
 
 const route = useRoute();
 const showMaterialSubmenu = ref(false);
@@ -67,7 +70,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnPracticePage }"
         >
           <Play :size="16" />
-          <span class="hidden md:inline ml-2">{{ $t('navigation.practice') }}</span>
+          <span class="hidden md:inline ml-2">{{ t('navigation.practice') }}</span>
         </router-link>
         
         <!-- My Material (navigates to overview page or toggles submenu) -->
@@ -78,7 +81,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnMaterialPage }"
         >
           <FolderOpen :size="16" />
-          <span class="hidden md:inline ml-2">{{ $t('navigation.myMaterial') }}</span>
+          <span class="hidden md:inline ml-2">{{ t('navigation.myMaterial') }}</span>
         </router-link>
         <button 
           v-else
@@ -87,7 +90,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnMaterialPage || showMaterialSubmenu }"
         >
           <FolderOpen :size="16" />
-          <span class="hidden md:inline ml-2">{{ $t('navigation.myMaterial') }}</span>
+          <span class="hidden md:inline ml-2">{{ t('navigation.myMaterial') }}</span>
         </button>
         
         <!-- Settings -->
@@ -97,7 +100,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnSettingsPage }"
         >
           <Settings :size="16" />
-          <span class="hidden md:inline ml-2">{{ $t('navigation.settings') }}</span>
+          <span class="hidden md:inline ml-2">{{ t('navigation.settings') }}</span>
         </router-link>
         
         <!-- Time -->
@@ -107,7 +110,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnTimeTrackingPage }"
         >
           <Clock :size="16" />
-          <span class="hidden md:inline ml-2">{{ $t('navigation.timeTracking') }}</span>
+          <span class="hidden md:inline ml-2">{{ t('navigation.timeTracking') }}</span>
         </router-link>
         
         <!-- Downloads -->
@@ -117,7 +120,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnDownloadsPage }"
         >
           <Download :size="16" />
-          <span class="hidden md:inline ml-2">{{ $t('navigation.downloads') }}</span>
+          <span class="hidden md:inline ml-2">{{ t('navigation.downloads') }}</span>
         </router-link>
       </nav>
     </header>

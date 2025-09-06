@@ -39,7 +39,7 @@ export async function getRandomVocabChoiceTask({
 
     // Get due vocab (excluding sentences for choice tasks)
     const allDueVocab = await vocabRepo.getDueVocabInLanguages(languageCodes);
-    const eligibleVocab = allDueVocab.filter(vocab => vocab.length !== 'sentence');
+    const eligibleVocab = allDueVocab.filter(vocab => vocab.consideredSentence !== true);
     
     if (eligibleVocab.length === 0) return null;
     

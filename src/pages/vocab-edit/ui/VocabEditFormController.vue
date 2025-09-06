@@ -36,13 +36,14 @@ import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/VocabDa
 import type { NoteData } from '@/entities/notes/NoteData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { Link } from '@/shared/links/Link';
-import type { Length } from '@/shared/types/Length';
 
 interface VocabFormData {
   id?: string;
   language: string;
   content: string;
-  length: Length;
+  consideredCharacter?: boolean;
+  consideredSentence?: boolean;
+  consideredWord?: boolean;
   translations: TranslationData[];
   priority?: number;
   doNotPractice?: boolean;
@@ -67,7 +68,9 @@ function vocabDataToFormData(vocab: VocabData, notes: NoteData[] = [], translati
     id: vocab.uid,
     language: vocab.language,
     content: vocab.content || '',
-    length: vocab.length,
+    consideredCharacter: vocab.consideredCharacter ?? false,
+    consideredSentence: vocab.consideredSentence ?? false,
+    consideredWord: vocab.consideredWord ?? true,
     translations: translations,
     priority: vocab.priority,
     doNotPractice: vocab.doNotPractice,
@@ -85,7 +88,9 @@ function formDataToVocabData(formData: VocabFormData, existingVocab?: VocabData)
     uid: formData.id || crypto.randomUUID(),
     language: formData.language,
     content: formData.content,
-    length: formData.length,
+    consideredCharacter: formData.consideredCharacter,
+    consideredSentence: formData.consideredSentence,
+    consideredWord: formData.consideredWord,
     translations: formData.translations.map(translation => translation.uid),
     priority: formData.priority,
     doNotPractice: formData.doNotPractice,
@@ -135,7 +140,9 @@ const state = ref<VocabFormState>({
   formData: {
     language: '',
     content: '',
-    length: 'unspecified',
+    consideredCharacter: false,
+    consideredSentence: false,
+    consideredWord: true,
     translations: [],
     priority: undefined,
     doNotPractice: undefined,

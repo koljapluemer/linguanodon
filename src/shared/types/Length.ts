@@ -1,1 +1,1 @@
-export type Length = 'sentence' | 'word' | 'unspecified'
+export type Length = 'sentence' | 'word' | 'character' | 'unspecified'

@@ -276,7 +276,9 @@ export class UnifiedRemoteSetService {
           const localVocab: Omit<VocabData, 'uid' | 'progress'> = {
             language: vocabData.language,
             content: vocabData.content,
-            length: vocabData.length || 'unspecified',
+            consideredCharacter: vocabData.consideredCharacter,
+            consideredSentence: vocabData.consideredSentence,
+            consideredWord: vocabData.consideredWord,
             priority: vocabData.priority || 1,
             doNotPractice: false, // Default value since remote schema doesn't have this
             notes: deduplicatedNotes,
