@@ -90,20 +90,22 @@ def create_mandarin_character_deck():
         if main_word in translations_data:
             translation_content = translations_data[main_word]
             
-            # Split translation by commas and create separate translations
-            translation_parts = [part.strip() for part in translation_content.split(',') if part.strip()]
+            # First extract parenthetical content, then split by commas
+            main_content, note_content = parse_translation_content(translation_content)
+            
+            # Split the main content by commas and create separate translations
+            translation_parts = [part.strip() for part in main_content.split(',') if part.strip()]
             
             for part in translation_parts:
-                main_content, note_content = parse_translation_content(part)
                 
                 # Create translation
-                if main_content not in translation_id_map:
+                if part not in translation_id_map:
                     translation_id = f"translation_{len(translation_items)}"
-                    translation_id_map[main_content] = translation_id
+                    translation_id_map[part] = translation_id
                     
                     translation_item = {
                         "id": translation_id,
-                        "content": main_content,
+                        "content": part,
                         "priority": 1
                     }
                     
@@ -125,7 +127,7 @@ def create_mandarin_character_deck():
                     
                     translation_items.append(translation_item)
                 
-                translation_ids.append(translation_id_map[main_content])
+                translation_ids.append(translation_id_map[part])
         
         # Create pinyin note for main word
         pinyin_note_key = (main_pinyin, "pinyin")
@@ -183,18 +185,22 @@ def create_mandarin_character_deck():
                 match_translation_ids = []
                 if match_word in translations_data:
                     translation_content = translations_data[match_word]
-                    translation_parts = [part.strip() for part in translation_content.split(',') if part.strip()]
+                    
+                    # First extract parenthetical content, then split by commas
+                    main_content, note_content = parse_translation_content(translation_content)
+                    
+                    # Split the main content by commas and create separate translations
+                    translation_parts = [part.strip() for part in main_content.split(',') if part.strip()]
                     
                     for part in translation_parts:
-                        main_content, note_content = parse_translation_content(part)
                         
-                        if main_content not in translation_id_map:
+                        if part not in translation_id_map:
                             translation_id = f"translation_{len(translation_items)}"
-                            translation_id_map[main_content] = translation_id
+                            translation_id_map[part] = translation_id
                             
                             translation_item = {
                                 "id": translation_id,
-                                "content": main_content,
+                                "content": part,
                                 "priority": 1
                             }
                             
@@ -215,7 +221,7 @@ def create_mandarin_character_deck():
                             
                             translation_items.append(translation_item)
                         
-                        match_translation_ids.append(translation_id_map[main_content])
+                        match_translation_ids.append(translation_id_map[part])
                 
                 # Create pinyin note for match
                 match_pinyin_note_key = (match_pinyin, "pinyin")
