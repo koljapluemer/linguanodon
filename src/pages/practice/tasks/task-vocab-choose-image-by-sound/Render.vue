@@ -39,8 +39,26 @@
       <div class="text-4xl font-bold text-light mb-4">
         {{ vocab.content }}
       </div>
+      
+      <!-- Vocab notes that should show before exercise -->
+      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mt-4">
+        <NoteDisplayMini 
+          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
     </div>
 
+    <!-- Links -->
+    <div v-if="vocab?.links && vocab.links.length > 0" class="space-y-2 mb-4">
+      <LinkDisplayMini
+        v-for="(link, index) in vocab.links"
+        :key="index"
+        :link="link"
+      />
+    </div>
+    
     <!-- Skip button -->
     <div class="flex justify-end">
       <button @click="skipTask" class="btn btn-outline btn-sm">Skip Exercise</button>
@@ -65,8 +83,11 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData, VocabImage } from '@/entities/vocab/VocabData';
+import type { NoteData } from '@/entities/notes/NoteData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
+import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
+import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 import { Rating } from 'ts-fsrs';
 
 interface ImageOption {
@@ -89,6 +110,7 @@ const emit = defineEmits<{
 const props = defineProps<Props>();
 
 const vocabRepo = props.repositories.vocabRepo!;
+const noteRepo = props.repositories.noteRepo!;
 
 // Exercise state
 const selectedIndex = ref<number | null>(null);
@@ -96,6 +118,7 @@ const isAnswered = ref(false);
 const firstAttemptWrong = ref(false);
 const imageOptions = ref<ImageOption[]>([]);
 const vocab = ref<VocabData | null>(null);
+const vocabNotes = ref<NoteData[]>([]);
 const loading = ref(true);
 
 // Audio state
@@ -158,6 +181,11 @@ async function loadVocabData() {
     }
 
     vocab.value = vocabData;
+    
+    // Load vocab notes
+    if (vocabData.notes && vocabData.notes.length > 0) {
+      vocabNotes.value = await noteRepo.getNotesByUIDs(vocabData.notes);
+    }
 
     // Setup audio (use playable sound)
     if (playableSound.blob) {

@@ -4,6 +4,9 @@ import { createEmptyCard } from 'ts-fsrs';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
+import type { NoteData } from '@/entities/notes/NoteData';
+import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
+import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
 interface Props {
   task: Task;
@@ -20,6 +23,7 @@ const translationRepo = props.repositories.translationRepo!;
 const noteRepo = props.repositories.noteRepo!;
 const vocab = ref<VocabData | null>(null);
 const translations = ref<string[]>([]);
+const vocabNotes = ref<NoteData[]>([]);
 const userGuess = ref('');
 const showTranslation = ref(false);
 
@@ -36,6 +40,11 @@ const loadVocab = async () => {
     vocab.value = vocabData;
     const translationData = await translationRepo.getTranslationsByIds(vocabData.translations);
     translations.value = translationData.map(t => t.content);
+    
+    // Load vocab notes
+    if (vocabData.notes && vocabData.notes.length > 0) {
+      vocabNotes.value = await noteRepo.getNotesByUIDs(vocabData.notes);
+    }
   }
 };
 
@@ -97,6 +106,15 @@ onMounted(loadVocab);
     <div class="text-3xl font-bold mb-8 p-6 bg-base-200 rounded-lg">
       {{ vocab.content }}
     </div>
+    
+    <!-- Vocab notes that should show before exercise -->
+    <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-6">
+      <NoteDisplayMini 
+        v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+        :key="note.uid"
+        :note="note"
+      />
+    </div>
 
     <div class="mb-8">
       <label for="user-guess" class="block text-lg font-medium mb-4">
@@ -121,6 +139,15 @@ onMounted(loadVocab);
         </div>
       </div>
 
+      <!-- Links -->
+      <div v-if="vocab.links && vocab.links.length > 0" class="space-y-2 mb-6">
+        <LinkDisplayMini
+          v-for="(link, index) in vocab.links"
+          :key="index"
+          :link="link"
+        />
+      </div>
+      
       <div class="text-center">
         <button @click="handleDone" class="btn btn-primary btn-lg">
           Done

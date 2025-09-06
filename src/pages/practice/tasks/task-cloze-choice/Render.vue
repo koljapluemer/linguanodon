@@ -3,10 +3,13 @@ import { ref, computed, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { NoteData } from '@/entities/notes/NoteData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 import { Rating } from 'ts-fsrs';
 import { generateClozeFromText, isRTLText, type ClozeData } from '@/pages/practice/tasks/utils/clozeUtils';
+import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
+import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
 interface AnswerOption {
   content: string;
@@ -29,6 +32,7 @@ const props = defineProps<Props>();
 
 const vocabRepo = props.repositories.vocabRepo!;
 const translationRepo = props.repositories.translationRepo!;
+const noteRepo = props.repositories.noteRepo!;
 
 const selectedIndex = ref<number | null>(null);
 const isAnswered = ref(false);
@@ -36,6 +40,8 @@ const firstAttemptWrong = ref(false);
 const answerOptions = ref<AnswerOption[]>([]);
 const vocab = ref<VocabData | null>(null);
 const translations = ref<TranslationData[]>([]);
+const vocabNotes = ref<NoteData[]>([]);
+const translationNotes = ref<NoteData[]>([]);
 const loading = ref(true);
 const clozeData = ref<ClozeData | null>(null);
 
@@ -90,6 +96,22 @@ async function loadVocabData() {
 
     vocab.value = vocabData;
     translations.value = await translationRepo.getTranslationsByIds(vocabData.translations);
+    
+    // Load vocab notes
+    if (vocabData.notes && vocabData.notes.length > 0) {
+      vocabNotes.value = await noteRepo.getNotesByUIDs(vocabData.notes);
+    }
+    
+    // Load translation notes
+    const allTranslationNoteIds: string[] = [];
+    translations.value.forEach(translation => {
+      if (translation.notes && translation.notes.length > 0) {
+        allTranslationNoteIds.push(...translation.notes);
+      }
+    });
+    if (allTranslationNoteIds.length > 0) {
+      translationNotes.value = await noteRepo.getNotesByUIDs(allTranslationNoteIds);
+    }
 
     await generateClozeOptions();
   } catch (error) {
@@ -209,6 +231,24 @@ onMounted(loadVocabData);
       <div v-if="secondaryContent" class="text-2xl text-light" >
         {{ secondaryContent }}
       </div>
+      
+      <!-- Vocab notes that should show before exercise -->
+      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mt-4">
+        <NoteDisplayMini 
+          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
+      
+      <!-- Translation notes that should show before exercise -->
+      <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mt-4">
+        <NoteDisplayMini 
+          v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
     </div>
     
     <div v-if="!isAnswered" class="flex flex-col md:flex-row gap-2 mb-6">
@@ -227,6 +267,15 @@ onMounted(loadVocabData);
       <div v-if="secondaryContent" class="text-2xl text-light">
         {{ secondaryContent }}
       </div>
+    </div>
+    
+    <!-- Links -->
+    <div v-if="vocab?.links && vocab.links.length > 0" class="space-y-2 mt-6">
+      <LinkDisplayMini
+        v-for="(link, index) in vocab.links"
+        :key="index"
+        :link="link"
+      />
     </div>
   </div>
 

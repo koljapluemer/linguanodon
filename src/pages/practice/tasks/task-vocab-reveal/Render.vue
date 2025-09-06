@@ -2,9 +2,13 @@
 import { ref, computed, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import type { Rating } from 'ts-fsrs';
 import SpacedRepetitionRating from '@/pages/practice/tasks/ui/SpacedRepetitionRating.vue';
+import type { NoteData } from '@/entities/notes/NoteData';
+import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
+import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
 interface Props {
   task: Task;
@@ -21,8 +25,11 @@ const emit = defineEmits<{
 
 const vocabRepo = props.repositories.vocabRepo!;
 const translationRepo = props.repositories.translationRepo!;
+const noteRepo = props.repositories.noteRepo!;
 const vocab = ref<VocabData | null>(null);
-const translations = ref<string[]>([]);
+const translations = ref<TranslationData[]>([]);
+const vocabNotes = ref<NoteData[]>([]);
+const translationNotes = ref<NoteData[]>([]);
 const isRevealed = ref(false);
 
 const isNativeToTarget = computed(() => props.task.taskType === 'vocab-reveal-native-to-target');
@@ -35,7 +42,7 @@ const frontContent = computed(() => {
   if (!vocab.value || translations.value.length === 0) return '';
   
   if (isNativeToTarget.value) {
-    return translations.value[0]; // Show translation
+    return translations.value[0]?.content; // Show translation
   } else {
     return vocab.value.content; // Show vocab
   }
@@ -47,7 +54,7 @@ const solution = computed(() => {
   if (isNativeToTarget.value) {
     return vocab.value.content; // Show vocab as solution
   } else {
-    return translations.value.join(', '); // Show translations as solution
+    return translations.value.map(t => t.content).join(', '); // Show translations as solution
   }
 });
 
@@ -58,8 +65,23 @@ const loadVocab = async () => {
   const vocabData = await vocabRepo.getVocabByUID(vocabUid);
   if (vocabData) {
     vocab.value = vocabData;
-    const translationData = await translationRepo.getTranslationsByIds(vocabData.translations);
-    translations.value = translationData.map(t => t.content);
+    translations.value = await translationRepo.getTranslationsByIds(vocabData.translations);
+    
+    // Load vocab notes
+    if (vocabData.notes && vocabData.notes.length > 0) {
+      vocabNotes.value = await noteRepo.getNotesByUIDs(vocabData.notes);
+    }
+    
+    // Load translation notes
+    const allTranslationNoteIds: string[] = [];
+    translations.value.forEach(translation => {
+      if (translation.notes && translation.notes.length > 0) {
+        allTranslationNoteIds.push(...translation.notes);
+      }
+    });
+    if (allTranslationNoteIds.length > 0) {
+      translationNotes.value = await noteRepo.getNotesByUIDs(allTranslationNoteIds);
+    }
   }
 };
 
@@ -88,11 +110,38 @@ onMounted(loadVocab);
     <div class="text-center mb-8">
       <div :class="isSentence ? 'text-3xl' : 'text-6xl'" class="font-bold mb-6">{{ frontContent }}</div>
       
+      <!-- Vocab notes that should show before exercise -->
+      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
+        <NoteDisplayMini 
+          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
+      
+      <!-- Translation notes that should show before exercise -->
+      <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
+        <NoteDisplayMini 
+          v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
+      
       <div v-if="isRevealed">
         <div class="divider mb-6">Answer</div>
         <div :class="isSentence ? 'text-xl' : 'text-3xl'" class="text-light mb-6">{{ solution }}</div>
         
         <SpacedRepetitionRating @rating="handleRating" />
+      </div>
+      
+      <!-- Links -->
+      <div v-if="vocab?.links && vocab.links.length > 0" class="space-y-2 mt-6">
+        <LinkDisplayMini
+          v-for="(link, index) in vocab.links"
+          :key="index"
+          :link="link"
+        />
       </div>
       
       <div v-else>

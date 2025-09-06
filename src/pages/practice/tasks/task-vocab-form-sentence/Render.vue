@@ -2,9 +2,13 @@
 import { ref, computed, onMounted, onUnmounted, toRaw } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData, VocabSound } from '@/entities/vocab/VocabData';
+import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import AudioRecorder from './AudioRecorder.vue';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
+import type { NoteData } from '@/entities/notes/NoteData';
+import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
+import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
 interface Props {
   task: Task;
@@ -21,7 +25,9 @@ const translationRepo = props.repositories.translationRepo!;
 const noteRepo = props.repositories.noteRepo!;
 
 const vocabItems = ref<VocabData[]>([]);
-const translations = ref<{ [vocabUid: string]: string[] }>({});
+const translations = ref<{ [vocabUid: string]: TranslationData[] }>({});
+const vocabNotes = ref<{ [vocabUid: string]: NoteData[] }>({});
+const translationNotes = ref<{ [vocabUid: string]: NoteData[] }>({});
 const sentence = ref('');
 const isRecordTask = props.task.taskType === 'vocab-record-sentence' || props.task.taskType === 'vocab-record-sentence-single';
 const activeTab = ref<'text' | 'audio'>(isRecordTask ? 'audio' : 'text');
@@ -50,7 +56,23 @@ const loadVocab = async () => {
     
     for (const vocab of vocabData) {
       const translationData = await translationRepo.getTranslationsByIds(vocab.translations);
-      translations.value[vocab.uid] = translationData.map(t => t.content);
+      translations.value[vocab.uid] = translationData;
+      
+      // Load vocab notes
+      if (vocab.notes && vocab.notes.length > 0) {
+        vocabNotes.value[vocab.uid] = await noteRepo.getNotesByUIDs(vocab.notes);
+      }
+      
+      // Load translation notes
+      const allTranslationNoteIds: string[] = [];
+      translationData.forEach(translation => {
+        if (translation.notes && translation.notes.length > 0) {
+          allTranslationNoteIds.push(...translation.notes);
+        }
+      });
+      if (allTranslationNoteIds.length > 0) {
+        translationNotes.value[vocab.uid] = await noteRepo.getNotesByUIDs(allTranslationNoteIds);
+      }
     }
   }
 };
@@ -215,7 +237,26 @@ onUnmounted(() => {
                 </svg>
               </button>
             </div>
-            <div class="text-xl text-light mb-4">{{ translations[vocab.uid]?.join(', ') }}</div>
+            <div class="text-xl text-light mb-4">{{ translations[vocab.uid]?.map(t => t.content).join(', ') }}</div>
+            
+            <!-- Vocab notes that should show before exercise -->
+            <div v-if="vocabNotes[vocab.uid]?.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-2">
+              <NoteDisplayMini 
+                v-for="note in vocabNotes[vocab.uid]?.filter(note => note.showBeforeExercise)" 
+                :key="note.uid"
+                :note="note"
+              />
+            </div>
+            
+            <!-- Translation notes that should show before exercise -->
+            <div v-if="translationNotes[vocab.uid]?.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-2">
+              <NoteDisplayMini 
+                v-for="note in translationNotes[vocab.uid]?.filter(note => note.showBeforeExercise)" 
+                :key="note.uid"
+                :note="note"
+              />
+            </div>
+            
           </div>
           
           <!-- Images -->
@@ -296,6 +337,17 @@ onUnmounted(() => {
           />
         </div>
       </div>
+    </div>
+    
+    <!-- Links -->
+    <div class="space-y-2 mb-6">
+      <template v-for="vocabItem in vocabItems" :key="vocabItem.uid">
+        <LinkDisplayMini
+          v-for="(link, index) in vocabItem.links || []"
+          :key="`${vocabItem.uid}-${index}`"
+          :link="link"
+        />
+      </template>
     </div>
     
     <!-- Action Buttons -->

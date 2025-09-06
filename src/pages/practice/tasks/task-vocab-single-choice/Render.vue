@@ -3,9 +3,12 @@ import { ref, computed, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
+import type { NoteData } from '@/entities/notes/NoteData';
 import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 import { Rating } from 'ts-fsrs';
+import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
+import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
 interface AnswerOption {
   content: string;
@@ -29,6 +32,7 @@ const props = defineProps<Props>();
 
 const vocabRepo = props.repositories.vocabRepo!;
 const translationRepo = props.repositories.translationRepo!;
+const noteRepo = props.repositories.noteRepo!;
 
 // Use the task state composable
 
@@ -39,6 +43,8 @@ const firstAttemptWrong = ref(false);
 const answerOptions = ref<AnswerOption[]>([]);
 const vocab = ref<VocabData | null>(null);
 const translations = ref<TranslationData[]>([]);
+const vocabNotes = ref<NoteData[]>([]);
+const translationNotes = ref<NoteData[]>([]);
 const loading = ref(true);
 
 // Get the vocab ID from associated vocab
@@ -86,6 +92,22 @@ async function loadVocabData() {
 
     vocab.value = vocabData;
     translations.value = await translationRepo.getTranslationsByIds(vocabData.translations);
+    
+    // Load vocab notes
+    if (vocabData.notes && vocabData.notes.length > 0) {
+      vocabNotes.value = await noteRepo.getNotesByUIDs(vocabData.notes);
+    }
+    
+    // Load translation notes
+    const allTranslationNoteIds: string[] = [];
+    translations.value.forEach(translation => {
+      if (translation.notes && translation.notes.length > 0) {
+        allTranslationNoteIds.push(...translation.notes);
+      }
+    });
+    if (allTranslationNoteIds.length > 0) {
+      translationNotes.value = await noteRepo.getNotesByUIDs(allTranslationNoteIds);
+    }
 
     await generateOptions();
   } catch (error) {
@@ -214,7 +236,25 @@ onMounted(loadVocabData);
   <div v-else-if="vocab && answerOptions.length > 0" class="text-center">
     <!-- Display Content -->
     <div class="text-6xl font-bold mb-8">{{ displayContent }}</div>
-
+    
+    <!-- Vocab notes that should show before exercise -->
+    <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
+      <NoteDisplayMini 
+        v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+        :key="note.uid"
+        :note="note"
+      />
+    </div>
+    
+    <!-- Translation notes that should show before exercise -->
+    <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
+      <NoteDisplayMini 
+        v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
+        :key="note.uid"
+        :note="note"
+      />
+    </div>
+    
     <!-- Answer Options - only show when not answered -->
     <div v-if="!isAnswered" class="flex flex-col md:flex-row gap-2 mb-6">
       <button v-for="(option, index) in answerOptions" :key="index" :class="getButtonClass(index)"
@@ -229,6 +269,15 @@ onMounted(loadVocabData);
       <div class="text-6xl font-bold text-light mb-6">
         {{ answerOptions.find(opt => opt.isCorrect)?.content }}
       </div>
+    </div>
+    
+    <!-- Links -->
+    <div v-if="vocab?.links && vocab.links.length > 0" class="space-y-2 mt-6">
+      <LinkDisplayMini
+        v-for="(link, index) in vocab.links"
+        :key="index"
+        :link="link"
+      />
     </div>
   </div>
 
