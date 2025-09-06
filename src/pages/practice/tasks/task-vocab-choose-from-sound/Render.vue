@@ -78,10 +78,6 @@ const vocabUid = computed(() => {
   return props.task.associatedVocab?.[0];
 });
 
-const correctVocab = computed(() => {
-  return vocab1.value;
-});
-
 async function loadVocabData() {
   if (!vocabUid.value) {
     console.error('Choose from Sound: No vocab UID provided');
@@ -97,86 +93,27 @@ async function loadVocabData() {
       return;
     }
 
-    // Must be a character and have sound
-    if (vocabData.consideredCharacter !== true) {
-      console.error('Choose from Sound: Vocab is not consideredCharacter', {
-        uid: vocabData.uid,
-        content: vocabData.content,
-        consideredCharacter: vocabData.consideredCharacter
-      });
-      loading.value = false;
-      return;
-    }
-
-    if (!vocabData.sounds?.length) {
-      console.error('Choose from Sound: Vocab has no sounds', {
-        uid: vocabData.uid,
-        content: vocabData.content,
-        hasSound: vocabData.hasSound
-      });
-      loading.value = false;
-      return;
-    }
-
-    // Must have content
-    if (!vocabData.content) {
-      console.error('Choose from Sound: Vocab has no content', {
-        uid: vocabData.uid
-      });
-      loading.value = false;
-      return;
-    }
-
-    // Must have related vocab 
-    if (!vocabData.relatedVocab?.length) {
-      console.error('Choose from Sound: Vocab has no related vocab', {
-        uid: vocabData.uid,
-        content: vocabData.content,
-        relatedVocabCount: vocabData.relatedVocab?.length || 0
-      });
-      loading.value = false;
-      return;
-    }
+    // Assumes the following:
+    // - consideredCharacter = true
+    // - has content
+    // - has playable sounds (not disableForPractice)
+    // - has relatedVocab with at least one valid character with sound and content
 
     vocab1.value = vocabData;
 
-    // Find a playable sound (not disableForPractice)
-    const availableSound = vocabData.sounds.find(sound => !sound.disableForPractice);
-    if (!availableSound) {
-      console.error('Choose from Sound: Vocab has no playable sounds', {
-        uid: vocabData.uid,
-        content: vocabData.content,
-        totalSounds: vocabData.sounds.length,
-        disabledSounds: vocabData.sounds.filter(s => s.disableForPractice).length
-      });
-      loading.value = false;
-      return;
-    }
+    // Pick random sound from available sounds (guaranteed to exist)
+    const playableSounds = vocabData.sounds!.filter(s => !s.disableForPractice);
+    playableSound.value = randomFromArray(playableSounds);
 
-    // Pick random sound from available sounds
-    const randomSound = randomFromArray(vocabData.sounds.filter(s => !s.disableForPractice));
-    playableSound.value = randomSound;
-
-    // Find a related vocab that is also a character and has sound and content
-    const relatedVocabList = await vocabRepo.getVocabByUIDs(vocabData.relatedVocab);
+    // Find valid related vocab (guaranteed to have at least one)
+    const relatedVocabList = await vocabRepo.getVocabByUIDs(vocabData.relatedVocab!);
     const validRelatedVocab = relatedVocabList.filter(v =>
       v.consideredCharacter === true &&
       v.sounds && v.sounds.some(s => !s.disableForPractice) &&
       v.content
     );
 
-    if (validRelatedVocab.length === 0) {
-      console.error('Choose from Sound: No valid related vocab found', {
-        uid: vocabData.uid,
-        content: vocabData.content,
-        totalRelated: relatedVocabList.length,
-        validRelated: validRelatedVocab.length
-      });
-      loading.value = false;
-      return;
-    }
-
-    // Pick random related vocab as distractor
+    // Pick random related vocab as distractor (guaranteed to exist)
     vocab2.value = randomFromArray(validRelatedVocab)!;
 
     // Shuffle the two vocabs and track correct index

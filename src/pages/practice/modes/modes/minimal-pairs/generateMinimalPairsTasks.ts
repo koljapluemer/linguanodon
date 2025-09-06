@@ -9,6 +9,11 @@ export async function generateMinimalPairsTask(
 ): Promise<Task | null> {
   try {
     // Get a random vocab that meets minimal pairs criteria
+    // The repo method now ensures the vocab has:
+    // - consideredCharacter = true
+    // - content exists
+    // - has playable sounds (not disableForPractice)
+    // - has relatedVocab with at least one valid character with sound and content
     const vocab = await vocabRepo.getRandomDueOrUnseenVocabForMinimalPairs(languageCodes, blockList);
     
     if (!vocab) {
@@ -16,6 +21,7 @@ export async function generateMinimalPairsTask(
     }
     
     // Generate the vocab-choose-from-sound task 
+    // All validation is now done at the repo level
     return generateVocabChooseFromSound(vocab);
     
   } catch (error) {

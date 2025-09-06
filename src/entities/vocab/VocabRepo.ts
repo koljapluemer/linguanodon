@@ -1097,11 +1097,15 @@ export class VocabRepo implements VocabRepoContract {
         // Must be consideredCharacter
         if (vocab.consideredCharacter !== true) return false;
         
-        // Must have relatedVocab length > 0
-        if (!vocab.relatedVocab || vocab.relatedVocab.length === 0) return false;
-        
         // Must have content set
         if (!vocab.content) return false;
+        
+        // Must have sounds that are not disabled for practice
+        if (!vocab.sounds || vocab.sounds.length === 0) return false;
+        if (!vocab.sounds.some(sound => !sound.disableForPractice)) return false;
+        
+        // Must have relatedVocab length > 0
+        if (!vocab.relatedVocab || vocab.relatedVocab.length === 0) return false;
         
         // Must be either due or unseen
         if (!vocab.progress) return true; // Consider unseen if no progress
@@ -1117,7 +1121,25 @@ export class VocabRepo implements VocabRepoContract {
       .toArray();
 
     if (vocab.length === 0) return null;
-    const ensured = vocab.map(v => this.ensureVocabFields(v));
-    return pickRandom(ensured, 1)[0];
+
+    // Additional validation: ensure the selected vocab has at least one valid related vocab
+    // that is also a character with sound and content
+    for (const candidate of vocab) {
+      const ensuredCandidate = this.ensureVocabFields(candidate);
+      
+      // Get related vocab and check if at least one meets criteria
+      const relatedVocabList = await vocabDb.vocab.where('uid').anyOf(ensuredCandidate.relatedVocab).toArray();
+      const validRelatedVocab = relatedVocabList.filter(v =>
+        v.consideredCharacter === true &&
+        v.content &&
+        v.sounds && v.sounds.some(s => !s.disableForPractice)
+      );
+      
+      if (validRelatedVocab.length > 0) {
+        return ensuredCandidate;
+      }
+    }
+
+    return null;
   }
 }
