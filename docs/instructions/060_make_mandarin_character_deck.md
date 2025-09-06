@@ -1,0 +1,13 @@
+- build out [THIS!!](public/007_mandarin_character_deck.py) script
+- goal is a set similar to [this one](public/sets/cmn/basic-vocab-with-images-and-sound)
+- must be understood by [this downloader](/home/b/GITHUB/linguanodon/src/pages/downloads/UnifiedRemoteSetService.ts)
+- core data schema will be [this](src/entities/remote-sets/validation/vocabSchema.ts)
+- you will be making a big chunk of [vocab](src/entities/vocab/VocabData.ts) all of them considered words *and* characters
+- loop [this JSON](public/data_in/chinese_words_tone_matches.json)
+- Make every top level word a vocab, and all of their `closest_matches`, as well
+- Add the pinyin of each as a [note](src/entities/notes/NoteData.ts) with `noteTyp` "pinyin" to the note
+- Add the `closest-matches` vocab object ids to the `relatedVocab` array of the top level object
+- Add [translations](src/entities/remote-sets/validation/translationSchema.ts) via [this json](public/data_in/chinese_translations.json)
+  - comma-separate the string from the json and make each elem its own translation
+  - if something is in parantheses, remove that from the translation's content, and instead make a note with the paranthesis attached to the translation
+- attach sound files (to the `sounds` schema) of each vocab by matching the files in [this folder](public/data_in/sounds/) — named $chinese_word.mp3
