@@ -204,6 +204,9 @@ function getOptionContainerClass(index: number): string {
     return 'border-2 border-green-400 rounded-lg p-2 transform translate-y-[-2px]';
   }
 
+  if (!isCorrect && isAnswerSelected) {
+    return 'border-2 border-transparent rounded-lg p-2 opacity-50';
+  }
 
   return 'border-2 border-transparent rounded-lg p-2';
 }

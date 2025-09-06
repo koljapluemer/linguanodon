@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, type Ref } from 'vue';
+import { onMounted, onUnmounted, type Ref } from 'vue';
 
 interface UseButtonWithKeyboardArrowControlOptions {
   buttonCount: Ref<number>;
@@ -8,8 +8,6 @@ interface UseButtonWithKeyboardArrowControlOptions {
 
 export function useButtonWithKeyboardArrowControl(options: UseButtonWithKeyboardArrowControlOptions) {
   const { buttonCount, onSelect, disabled } = options;
-  
-  const visualIndex = ref(0);
 
   const handleKeydown = (event: KeyboardEvent) => {
     if (disabled?.value) return;
@@ -20,14 +18,12 @@ export function useButtonWithKeyboardArrowControl(options: UseButtonWithKeyboard
     switch (event.key) {
       case 'ArrowLeft':
         event.preventDefault();
-        visualIndex.value = visualIndex.value > 0 ? visualIndex.value - 1 : count - 1;
-        onSelect(visualIndex.value);
+        onSelect(0); // Always select the leftmost visual button
         break;
       
       case 'ArrowRight':
         event.preventDefault();
-        visualIndex.value = visualIndex.value < count - 1 ? visualIndex.value + 1 : 0;
-        onSelect(visualIndex.value);
+        onSelect(1); // Always select the rightmost visual button
         break;
     }
   };
@@ -40,7 +36,5 @@ export function useButtonWithKeyboardArrowControl(options: UseButtonWithKeyboard
     window.removeEventListener('keydown', handleKeydown);
   });
 
-  return {
-    selectedIndex: visualIndex
-  };
+  return {};
 }
