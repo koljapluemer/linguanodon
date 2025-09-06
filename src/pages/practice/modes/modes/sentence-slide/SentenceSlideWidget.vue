@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted, ref, computed } from 'vue';
+import { inject, onMounted, onUnmounted, ref } from 'vue';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
-import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useTimeTracking } from '@/shared/useTimeTracking';
@@ -16,18 +18,14 @@ const vocabRepo = inject<VocabRepoContract>('vocabRepo');
 const translationRepo = inject<TranslationRepoContract>('translationRepo');
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
 const languageRepo = inject<LanguageRepoContract>('languageRepo');
+const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
+const goalRepo = inject<GoalRepoContract>('goalRepo');
+const noteRepo = inject<NoteRepoContract>('noteRepo');
 
-if (!vocabRepo || !translationRepo || !factCardRepo || !languageRepo) {
+if (!vocabRepo || !translationRepo || !factCardRepo || !languageRepo || !resourceRepo || !goalRepo || !noteRepo) {
   throw new Error('Required repositories not available');
 }
 
-// Create repositories object for TaskRenderer
-const repositories = computed<RepositoriesContext>(() => ({
-  vocabRepo,
-  translationRepo,
-  factCardRepo,
-  languageRepo
-}));
 
 // Queue state
 const {
@@ -293,7 +291,6 @@ const handleTaskFinished = async () => {
       <TaskRenderer 
         :key="state.currentTask.uid" 
         :task="state.currentTask" 
-        :repositories="repositories" 
         :mode-context="{ setWrongVocabDueAgainImmediately: true }"
         @finished="handleTaskFinished" 
       />

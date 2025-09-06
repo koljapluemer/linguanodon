@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <component :is="getTaskComponent(props.task.taskType)" :task="props.task" :repositories="props.repositories"
+    <component :is="getTaskComponent(props.task.taskType)" :task="props.task" :repositories="repositories"
       :mode-context="props.modeContext" @finished="handleTaskFinished" />
   </div>
 </template>
@@ -19,14 +19,20 @@
 <script setup lang="ts">
 import { taskRegistry } from './taskRegistry';
 import type { Task } from '@/pages/practice/Task';
-import { onMounted, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import type { LanguageData } from '@/entities/languages/LanguageData';
-import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
+import type { RepositoriesContextStrict } from '@/shared/types/RepositoriesContext';
+import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
+import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
+import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
+import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
+import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
 
 interface Props {
   task: Task;
-  repositories: RepositoriesContext;
   modeContext?: {
     setWrongVocabDueAgainImmediately?: boolean;
   };
@@ -35,9 +41,31 @@ interface Props {
 const props = defineProps<Props>();
 const languageData = ref<LanguageData | null>(null);
 
+// Inject all repositories
+const vocabRepo = inject<VocabRepoContract>('vocabRepo');
+const translationRepo = inject<TranslationRepoContract>('translationRepo');
+const factCardRepo = inject<FactCardRepoContract>('factCardRepo');
+const languageRepo = inject<LanguageRepoContract>('languageRepo');
+const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
+const goalRepo = inject<GoalRepoContract>('goalRepo');
+const noteRepo = inject<NoteRepoContract>('noteRepo');
+
+if (!vocabRepo || !translationRepo || !factCardRepo || !languageRepo || !resourceRepo || !goalRepo || !noteRepo) {
+  throw new Error('Required repositories not available');
+}
+
+const repositories: RepositoriesContextStrict = {
+  vocabRepo,
+  translationRepo,
+  factCardRepo,
+  languageRepo,
+  resourceRepo,
+  goalRepo,
+  noteRepo
+};
+
 onMounted(async () => {
-  if (!props.repositories.languageRepo) return;
-  const lang = await props.repositories.languageRepo.getByCode(props.task.language);
+  const lang = await languageRepo.getByCode(props.task.language);
   if (lang) languageData.value = lang;
 });
 

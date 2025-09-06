@@ -4,7 +4,7 @@ import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
-import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
+import type { RepositoriesContextStrict } from '@/shared/types/RepositoriesContext';
 import { shuffleArray } from '@/shared/utils/arrayUtils';
 import { Rating } from 'ts-fsrs';
 import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
@@ -18,7 +18,7 @@ interface AnswerOption {
 
 interface Props {
   task: Task;
-  repositories: RepositoriesContext;
+  repositories: RepositoriesContextStrict;
   modeContext?: {
     setWrongVocabDueAgainImmediately?: boolean;
   };
@@ -30,9 +30,9 @@ const emit = defineEmits<{
 
 const props = defineProps<Props>();
 
-const vocabRepo = props.repositories.vocabRepo!;
-const translationRepo = props.repositories.translationRepo!;
-const noteRepo = props.repositories.noteRepo!;
+const vocabRepo = props.repositories.vocabRepo;
+const translationRepo = props.repositories.translationRepo;
+const noteRepo = props.repositories.noteRepo;
 
 // Use the task state composable
 

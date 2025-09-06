@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onUnmounted, toRaw } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData, VocabSound } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
+import type { RepositoriesContextStrict } from '@/shared/types/RepositoriesContext';
 import AudioRecorder from './AudioRecorder.vue';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
 import type { NoteData } from '@/entities/notes/NoteData';
@@ -12,7 +12,7 @@ import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
 interface Props {
   task: Task;
-  repositories: RepositoriesContext;
+  repositories: RepositoriesContextStrict;
 }
 
 const props = defineProps<Props>();
@@ -20,9 +20,9 @@ const emit = defineEmits<{
   finished: [];
 }>();
 
-const vocabRepo = props.repositories.vocabRepo!;
-const translationRepo = props.repositories.translationRepo!;
-const noteRepo = props.repositories.noteRepo!;
+const vocabRepo = props.repositories.vocabRepo;
+const translationRepo = props.repositories.translationRepo;
+const noteRepo = props.repositories.noteRepo;
 
 const vocabItems = ref<VocabData[]>([]);
 const translations = ref<{ [vocabUid: string]: TranslationData[] }>({});

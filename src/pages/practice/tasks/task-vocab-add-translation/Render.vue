@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData } from '@/entities/vocab/VocabData';
-import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
+import type { RepositoriesContextStrict } from '@/shared/types/RepositoriesContext';
 import type { TranslationData } from '@/entities/translations/TranslationData';
 import type { NoteData } from '@/entities/notes/NoteData';
 import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
@@ -10,15 +10,15 @@ import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
 interface Props {
   task: Task;
-  repositories: RepositoriesContext;
+  repositories: RepositoriesContextStrict;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<{ finished: [] }>();
 
-const vocabRepo = props.repositories.vocabRepo!;
-const translationRepo = props.repositories.translationRepo!;
-const noteRepo = props.repositories.noteRepo!;
+const vocabRepo = props.repositories.vocabRepo;
+const translationRepo = props.repositories.translationRepo;
+const noteRepo = props.repositories.noteRepo;
 
 const vocab = ref<VocabData | null>(null);
 const newTranslationContent = ref('');

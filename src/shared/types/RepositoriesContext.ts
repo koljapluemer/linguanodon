@@ -15,3 +15,13 @@ export interface RepositoriesContext {
   noteRepo?: NoteRepoContract;
   languageRepo?: LanguageRepoContract;
 }
+
+export interface RepositoriesContextStrict {
+  vocabRepo: VocabRepoContract;
+  translationRepo: TranslationRepoContract;
+  factCardRepo: FactCardRepoContract;
+  resourceRepo: ResourceRepoContract;
+  goalRepo: GoalRepoContract;
+  noteRepo: NoteRepoContract;
+  languageRepo: LanguageRepoContract;
+}

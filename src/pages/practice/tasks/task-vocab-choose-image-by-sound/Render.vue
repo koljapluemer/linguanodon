@@ -84,7 +84,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { Task } from '@/pages/practice/Task';
 import type { VocabData, VocabImage } from '@/entities/vocab/VocabData';
 import type { NoteData } from '@/entities/notes/NoteData';
-import type { RepositoriesContext } from '@/shared/types/RepositoriesContext';
+import type { RepositoriesContextStrict } from '@/shared/types/RepositoriesContext';
 import VocabImageDisplay from '@/shared/ui/VocabImage.vue';
 import NoteDisplayMini from '@/entities/notes/NoteDisplayMini.vue';
 import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
@@ -97,7 +97,7 @@ interface ImageOption {
 
 interface Props {
   task: Task;
-  repositories: RepositoriesContext;
+  repositories: RepositoriesContextStrict;
   modeContext?: {
     setWrongVocabDueAgainImmediately?: boolean;
   };
@@ -109,8 +109,8 @@ const emit = defineEmits<{
 
 const props = defineProps<Props>();
 
-const vocabRepo = props.repositories.vocabRepo!;
-const noteRepo = props.repositories.noteRepo!;
+const vocabRepo = props.repositories.vocabRepo;
+const noteRepo = props.repositories.noteRepo;
 
 // Exercise state
 const selectedIndex = ref<number | null>(null);
