@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1>Add New Fact Card</h1>
+    <h1>{{ $t('factCards.addNew') }}</h1>
     <router-link to="/fact-cards" class="btn btn-outline">
-      Back to Fact Cards List
+      {{ $t('factCards.backToList') }}
     </router-link>
   </div>
 

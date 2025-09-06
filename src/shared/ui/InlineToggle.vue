@@ -3,7 +3,7 @@
     <div class="flex-1">
       <label class=" font-medium  ">
         {{ label }}
-        <span v-if="required" class="text-red-500">*</span>
+        <span v-if="required" class="text-red-500">{{ $t('common.required') }}</span>
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-center justify-between">
@@ -16,7 +16,7 @@
             :class="modelValue ? 'toggle-success' : ''"
           />
           <span :class="displayValueClasses">
-            {{ modelValue ? 'Yes' : 'No' }}
+            {{ modelValue ? $t('common.yes') : $t('common.no') }}
           </span>
         </div>
         <button
@@ -37,7 +37,7 @@
             type="checkbox"
             :class="toggleClasses"
           />
-          <span :class="editingValueClasses">{{ tempValue ? 'Yes' : 'No' }}</span>
+          <span :class="editingValueClasses">{{ tempValue ? $t('common.yes') : $t('common.no') }}</span>
         </div>
         <div class="ml-auto flex items-center gap-2">
           <button

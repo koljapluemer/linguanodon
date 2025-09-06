@@ -1,7 +1,7 @@
 <template>
   <div class="py-4">
     <div v-if="factCards.length === 0" class=" text-center py-4">
-      No fact cards yet. Use the form below to add some.
+      {{ $t('factCards.manage.noFactCards') }}
     </div>
 
     <div v-else class="space-y-4">
@@ -70,17 +70,17 @@
     <!-- Always-visible fact card creation form -->
     <div v-if="config.allowAdd" class="mt-6 p-4 border border-base-300 rounded-lg bg-base-50">
       <div class="space-y-4">
-        <h3>Add New Fact Card</h3>
+        <h3>{{ $t('factCards.addNew') }}</h3>
         
         <!-- Front input -->
         <div class="flex flex-col space-y-1">
-          <label class=" font-medium">Front</label>
+          <label class=" font-medium">{{ $t('factCards.front') }}</label>
           <textarea v-model="newFront" placeholder="Enter front side content..." class="textarea textarea-bordered w-full" rows="2"></textarea>
         </div>
 
         <!-- Back input -->
         <div class="flex flex-col space-y-1">
-          <label class=" font-medium">Back</label>
+          <label class=" font-medium">{{ $t('factCards.back') }}</label>
           <textarea v-model="newBack" placeholder="Enter back side content..." class="textarea textarea-bordered w-full" rows="2"></textarea>
         </div>
 
@@ -88,7 +88,7 @@
         <div class="flex justify-end">
           <button @click="createNewFactCard" class="btn btn-success btn-sm" :disabled="!canCreateFactCard">
             <Plus class="w-4 h-4 mr-1" />
-            Add
+            {{ $t('common.add') }}
           </button>
         </div>
       </div>

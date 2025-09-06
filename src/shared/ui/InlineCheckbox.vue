@@ -3,7 +3,7 @@
     <div class="flex-1">
       <label class=" font-medium  ">
         {{ label }}
-        <span v-if="required" class="text-red-500">*</span>
+        <span v-if="required" class="text-red-500">{{ $t('common.required') }}</span>
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-center justify-between">
@@ -12,7 +12,7 @@
             <Check v-if="modelValue" class="w-5 h-5 text-green-600" />
             <X v-else class="w-5 h-5 " />
           </span>
-          {{ modelValue ? 'Yes' : 'No' }}
+          {{ modelValue ? $t('common.yes') : $t('common.no') }}
         </span>
         <button
           @click="startEditing"
@@ -32,7 +32,7 @@
             type="checkbox"
             class="checkbox checkbox-sm"
           />
-          <span class="">{{ tempValue ? 'Yes' : 'No' }}</span>
+          <span class="">{{ tempValue ? $t('common.yes') : $t('common.no') }}</span>
         </label>
         <div class="ml-auto flex items-center gap-2">
           <button

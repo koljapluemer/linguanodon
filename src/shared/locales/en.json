@@ -1,0 +1,484 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "done": "Done",
+    "skip": "Skip",
+    "retry": "Retry",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "noResults": "No results found",
+    "yes": "Yes",
+    "no": "No",
+    "required": "*",
+    "page": "Page",
+    "of": "of",
+    "perPage": "per page",
+    "empty": "empty",
+    "confirmation": {
+      "delete": "Are you sure you want to delete this item?",
+      "unsavedChanges": "You have unsaved changes. Are you sure you want to leave?"
+    }
+  },
+  "navigation": {
+    "practice": "Practice",
+    "myMaterial": "My Material",
+    "settings": "Settings",
+    "timeTracking": "Time",
+    "downloads": "Downloads",
+    "home": "Home",
+    "vocabulary": "Vocabulary",
+    "factCards": "Fact Cards",
+    "resources": "Resources",
+    "goals": "Goals"
+  },
+  "practice": {
+    "title": "Practice",
+    "overview": "Practice Overview",
+    "modes": {
+      "factCardGrind": {
+        "name": "Fact Card Grind",
+        "description": "Practice cultural facts and concepts"
+      },
+      "goalGetter": {
+        "name": "Goal Getter", 
+        "description": "Work towards your learning goals"
+      },
+      "sisyphos": {
+        "name": "Sisyphos",
+        "description": "Endless review of seen content"
+      },
+      "insertImages": {
+        "name": "Insert Images",
+        "description": "Add visual mnemonics to vocabulary"
+      },
+      "eyesAndEars": {
+        "name": "Eyes and Ears",
+        "description": "Audio-visual vocabulary matching"
+      },
+      "ultrarandom": {
+        "name": "Ultrarandom",
+        "description": "Completely random practice tasks"
+      },
+      "illegalImmersion": {
+        "name": "Illegal Immersion",
+        "description": "Immersion content comprehension"
+      },
+      "sentenceSlide": {
+        "name": "Sentence Slide",
+        "description": "Connected vocabulary sentence work"
+      }
+    },
+    "states": {
+      "loading": "Loading practice session...",
+      "noTasks": "No practice tasks available",
+      "error": "Failed to load practice session"
+    },
+    "tasks": {
+      "instructions": "Instructions",
+      "skipDisable": "Skip & Disable",
+      "decideWhetherToDoAgain": "Decide Whether To Do Again",
+      "spacedRepetitionRating": "How well did you know this?",
+      "doNotLearn": "Do not learn",
+      "rating": {
+        "again": "Again",
+        "hard": "Hard", 
+        "good": "Good",
+        "easy": "Easy"
+      }
+    },
+    "widgets": {
+      "loadingEyesAndEars": "Loading Eyes and Ears...",
+      "loadingFactCards": "Loading fact cards...",
+      "loadingGoalTasks": "Loading goal tasks...",
+      "startingIllegalImmersion": "Starting illegal immersion...",
+      "allDone": "All Done!",
+      "checkAgain": "Check Again",
+      "checkForMoreContent": "Check for More Content",
+      "unknownQueueState": "Unknown queue state. Please refresh.",
+      "immersionComplete": "Immersion Complete",
+      "immersionGoneAstray": "The immersion session has gone astray. Please refresh.",
+      "percentComplete": "% complete",
+      "tryAgain": "Try Again",
+      "refresh": "Refresh"
+    }
+  },
+  "material": {
+    "title": "My Material",
+    "categories": {
+      "vocabulary": {
+        "name": "Vocabulary",
+        "description": "Words and phrases you're learning"
+      },
+      "factCards": {
+        "name": "Fact Cards",
+        "description": "Cultural facts and concepts"
+      },
+      "resources": {
+        "name": "Resources",
+        "description": "Articles, videos, and learning materials"
+      },
+      "goals": {
+        "name": "Goals",
+        "description": "Learning objectives and milestones"
+      }
+    }
+  },
+  "vocabulary": {
+    "title": "Vocabulary",
+    "addNew": "Add New Vocab",
+    "edit": "Edit Vocabulary",
+    "content": "Content",
+    "language": "Language",
+    "translations": "Translations",
+    "translation": "Translation",
+    "set": "Set",
+    "actions": "Actions",
+    "noTranslations": "No translations",
+    "searchPlaceholder": "Search vocabulary...",
+    "addMeaningIn": "Add meaning in",
+    "nativeOnly": "Native only",
+    "only": "only",
+    "both": "Both",
+    "languageUnit": "Language Unit",
+    "nativeTranslation": "Native Translation",
+    "filters": {
+      "languages": "Languages",
+      "sets": "Sets",
+      "selected": "selected"
+    },
+    "form": {
+      "content": "Vocabulary Content",
+      "language": "Language", 
+      "pronunciation": "Pronunciation",
+      "notes": "Notes",
+      "advanced": "Advanced Properties",
+      "meta": "Meta Information",
+      "core": "Core Properties"
+    },
+    "states": {
+      "loading": "Loading vocabulary...",
+      "noItems": "No vocabulary items found.",
+      "error": "Failed to load vocabulary"
+    },
+    "origins": {
+      "userAdded": "User Added",
+      "external": "External"
+    },
+    "stats": {
+      "totalItems": "vocabulary items",
+      "difficulty": "Difficulty:",
+      "lastReview": "Last Review:",
+      "elapsedDays": "Elapsed Days:",
+      "scheduledDays": "Scheduled Days:", 
+      "priority": "Priority:",
+      "doNotPractice": "Do Not Practice:",
+      "hasSound": "Has Sound:",
+      "hasImage": "Has Image:",
+      "soundsArray": "Sounds Array:",
+      "imagesArray": "Images Array:",
+      "length": "Length:",
+      "relatedVocabCount": "Related Vocab Count:",
+      "relatedVocabUIDs": "Related Vocab UIDs:",
+      "sentenceSlideEligible": "Sentence Slide Eligible:",
+      "sounds": "sounds",
+      "images": "images"
+    }
+  },
+  "factCards": {
+    "title": "Fact Cards",
+    "addNew": "Add New Fact Card",
+    "edit": "Edit Fact Card",
+    "front": "Front",
+    "back": "Back",
+    "searchPlaceholder": "Search fact cards",
+    "states": {
+      "loading": "Loading fact cards...",
+      "loadingFactCard": "Loading fact card...",
+      "noItems": "No fact cards yet",
+      "noMatches": "No matching fact cards",
+      "error": "Failed to load fact cards"
+    },
+    "suggestions": {
+      "adjustSearch": "Try adjusting your search terms.",
+      "createFirst": "Create your first fact card to get started."
+    },
+    "notes": {
+      "label": "Notes:",
+      "count": "note",
+      "countPlural": "notes",
+      "noNotes": "No notes attached.",
+      "addNote": "Add Note"
+    },
+    "tags": {
+      "excluded": "Excluded",
+      "priority": "P"
+    },
+    "manage": {
+      "noFactCards": "No fact cards yet. Use the form below to add some."
+    },
+    "form": {
+      "language": "Language *",
+      "front": "Front *",
+      "back": "Back *",
+      "saving": "Saving...",
+      "saveFactCard": "Save Fact Card",
+      "saveAndAddAnother": "Save & Add Another"
+    },
+    "mastery": {
+      "progress": "Mastery Progress",
+      "current": "Current Mastery",
+      "percent": "%"
+    },
+    "links": {
+      "title": "Links",
+      "addLink": "Add Link",
+      "noLinks": "No links attached."
+    },
+    "backToList": "Back to Fact Cards List",
+    "autoSaving": "Auto-saving...",
+    "changesSaved": "Changes saved automatically"
+  },
+  "goals": {
+    "title": "Goals",
+    "addNew": "Add New Goal",
+    "edit": "Edit Goal",
+    "details": "Goal Details",
+    "language": "Language",
+    "goalTitle": "Goal Title",
+    "description": "Description",
+    "goalType": "Goal Type",
+    "subGoals": "Sub-Goals",
+    "milestones": "Milestones",
+    "achieved": "Achieved",
+    "placeholder": {
+      "title": "I want to be able to",
+      "description": "This will help me achieve..."
+    },
+    "states": {
+      "loading": "Loading goals...",
+      "noItems": "No goals yet",
+      "error": "Failed to load goals"
+    },
+    "suggestions": {
+      "createFirst": "Create your first goal to get started."
+    },
+    "manage": {
+      "milestones": {
+        "noMilestones": "No milestones attached.",
+        "addNew": "Add New Milestone",
+        "placeholder": "I will know I've achieved this when I can",
+        "remove": "Remove"
+      },
+      "subGoals": {
+        "noSubGoals": "No sub-goals yet. Add one below to break down this goal into smaller steps.",
+        "addNew": "Add New Sub-Goal", 
+        "placeholder": "To reach the goal defined above, I will learn to",
+        "remove": "Remove"
+      }
+    },
+    "form": {
+      "language": "Language *",
+      "goalTitle": "Goal Title *",
+      "beSpecific": "Be specific about what you want to learn or accomplish",
+      "cancel": "Cancel",
+      "saveAndAddAnother": "Save & Add Another",
+      "save": "Save"
+    },
+    "backToList": "Back to Goals List",
+    "knowledgeAndVocab": "Knowledge & Vocabulary",
+    "stats": {
+      "subGoals": "sub-goals",
+      "vocab": "vocab",
+      "vocabMastered": "% vocab mastered"
+    }
+  },
+  "resources": {
+    "title": "Resources", 
+    "addNew": "Add New Resource",
+    "edit": "Edit Resource",
+    "immersionContent": "Immersion Content",
+    "extractKnowledge": "Extract Knowledge",
+    "url": "URL",
+    "title": "Title",
+    "content": "Content",
+    "notes": "Notes",
+    "vocab": "vocab",
+    "facts": "facts",
+    "ellipsis": "...",
+    "states": {
+      "loading": "Loading resources...",
+      "noItems": "No resources yet",
+      "error": "Failed to load resources"
+    },
+    "suggestions": {
+      "createFirst": "Create your first resource to get started."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "languages": {
+      "title": "Languages",
+      "description": "Manage your target languages",
+      "addLanguage": "Add Language",
+      "noLanguages": "No languages added yet",
+      "searchPlaceholder": "Search for a language...",
+      "inactive": "Inactive Languages",
+      "active": "Active Languages",
+      "states": {
+        "loading": "Loading languages...",
+        "error": "Failed to load languages"
+      }
+    },
+    "audio": {
+      "title": "Audio Analysis",
+      "description": "Analyze audio capabilities"
+    }
+  },
+  "timeTracking": {
+    "title": "Time Tracking",
+    "description": "Track your learning sessions"
+  },
+  "downloads": {
+    "title": "Downloads",
+    "description": "Download content sets",
+    "setOverview": "Set Overview",
+    "selectLanguage": "Select Language",
+    "selectALanguage": "Select a Language",
+    "chooseLanguagePrompt": "Choose a language from the dropdown above to view available downloads.",
+    "availableSets": "Available Sets",
+    "loadingSets": "Loading sets...",
+    "noSetsAvailable": "No sets available for",
+    "language": "Language:",
+    "downloaded": "Downloaded",
+    "redownload": "Re-download",
+    "quickDownload": "Quick Download",
+    "backToDownloads": "← Back to Downloads",
+    "loadingSetInfo": "Loading set information...",
+    "alreadyDownloaded": "This set is already downloaded and ready to use!",
+    "start": "Start",
+    "downloadAndStart": "Download and Start",
+    "willStartIn": "Will start in",
+    "mode": "mode",
+    "download": "Download"
+  },
+  "translations": {
+    "title": "Translations",
+    "add": "Add Translation",
+    "edit": "Edit Translation",
+    "content": "Translation Content"
+  },
+  "notes": {
+    "title": "Notes",
+    "add": "Add Note",
+    "edit": "Edit Note",
+    "content": "Content",
+    "noteType": "Note Type",
+    "showBeforeExercise": "Show before exercise",
+    "states": {
+      "empty": "No notes."
+    },
+    "types": {
+      "beforeExercise": "📌 Shows before exercise"
+    }
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "pageSize": {
+      "25": "25 per page",
+      "50": "50 per page", 
+      "100": "100 per page"
+    }
+  },
+  "inline": {
+    "controls": "Ctrl+Enter to save, Esc to cancel"
+  },
+  "media": {
+    "images": {
+      "title": "Images",
+      "replace": "Replace",
+      "remove": "Remove",
+      "add": "Add",
+      "url": "URL",
+      "upload": "Upload",
+      "close": "×",
+      "compression": "Images compressed to ~800×600px",
+      "bullet": "•",
+      "times": "×"
+    },
+    "audio": {
+      "title": "Audio",
+      "remove": "Remove",
+      "add": "Add",
+      "url": "URL",
+      "upload": "Upload",
+      "close": "×",
+      "supportedFormats": "Supported: MP3, WAV, M4A, OGG, WebM, AAC (max 10MB)"
+    }
+  },
+  "manage": {
+    "vocab": {
+      "count": "( ",
+      "countEnd": ")"
+    }
+  },
+  "errors": {
+    "loadFailed": "Failed to load data",
+    "saveFailed": "Failed to save changes",
+    "deleteFailed": "Failed to delete item",
+    "networkError": "Network error occurred"
+  },
+  "links": {
+    "title": "Links",
+    "addLink": "Add Link",
+    "noLinks": "No links attached.",
+    "noLink": "No link set.",
+    "url": "URL",
+    "label": "Label",
+    "owner": "Owner",
+    "ownerLink": "Owner Link",
+    "license": "License",
+    "preview": "Preview"
+  },
+  "debug": {
+    "vocabProgressData": "Debug: Vocab Progress Data",
+    "level": "Level:",
+    "streak": "Streak:",
+    "reps": "Reps:",
+    "due": "Due:",
+    "state": "State:",
+    "stability": "Stability:",
+    "difficulty": "Difficulty:",
+    "lastReview": "Last Review:",
+    "elapsedDays": "Elapsed Days:",
+    "scheduledDays": "Scheduled Days:",
+    "priority": "Priority:",
+    "doNotPractice": "Do Not Practice:",
+    "hasSound": "Has Sound:",
+    "hasImage": "Has Image:",
+    "soundsArray": "Sounds Array:",
+    "imagesArray": "Images Array:",
+    "length": "Length:",
+    "relatedVocabCount": "Related Vocab Count:",
+    "relatedVocabUIDs": "Related Vocab UIDs:",
+    "sentenceSlideEligible": "Sentence Slide Eligible:",
+    "yesUpper": "YES",
+    "noUpper": "NO"
+  },
+  "immersion": {
+    "neededVocabulary": "Needed Vocabulary",
+    "loadingVocabulary": "Loading vocabulary..."
+  }
+}

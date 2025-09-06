@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Language *</span>
+        <span class="label-text font-medium">{{ $t('goals.form.language') }}</span>
       </label>
       <LanguageDropdown
         v-model="formData.language"
@@ -12,7 +12,7 @@
 
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Goal Title *</span>
+        <span class="label-text font-medium">{{ $t('goals.form.goalTitle') }}</span>
       </label>
       <input
         v-model="formData.title"
@@ -24,7 +24,7 @@
       />
       <div class="label">
         <span class="label-text-alt ">
-          Be specific about what you want to learn or accomplish
+          {{ $t('goals.form.beSpecific') }}
         </span>
       </div>
     </div>

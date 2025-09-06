@@ -3,14 +3,14 @@
     <div class="flex-1">
       <label class=" font-medium  ">
         {{ label }}
-        <span v-if="required" class="text-red-500">*</span>
+        <span v-if="required" class="text-red-500">{{ $t('common.required') }}</span>
       </label>
       
       <div v-if="!isEditing" class="mt-1 flex items-start justify-between">
         <div :class="displayValueClasses" v-if="displayValue">
           {{ displayValue }}
         </div>
-        <div class=" italic" v-else>empty</div>
+        <div class=" italic" v-else>{{ $t('common.empty') }}</div>
         <button
           @click="startEditing"
           class="ml-2 btn btn-ghost flex-shrink-0"
@@ -48,7 +48,7 @@
             <X class="w-4 h-4" />
           </button>
           <span class="text-xs  ml-auto">
-            Ctrl+Enter to save, Esc to cancel
+            {{ $t('inline.controls') }}
           </span>
         </div>
       </div>

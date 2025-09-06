@@ -67,7 +67,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnPracticePage }"
         >
           <Play :size="16" />
-          <span class="hidden md:inline ml-2">Practice</span>
+          <span class="hidden md:inline ml-2">{{ $t('navigation.practice') }}</span>
         </router-link>
         
         <!-- My Material (navigates to overview page or toggles submenu) -->
@@ -78,7 +78,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnMaterialPage }"
         >
           <FolderOpen :size="16" />
-          <span class="hidden md:inline ml-2">My Material</span>
+          <span class="hidden md:inline ml-2">{{ $t('navigation.myMaterial') }}</span>
         </router-link>
         <button 
           v-else
@@ -87,7 +87,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnMaterialPage || showMaterialSubmenu }"
         >
           <FolderOpen :size="16" />
-          <span class="hidden md:inline ml-2">My Material</span>
+          <span class="hidden md:inline ml-2">{{ $t('navigation.myMaterial') }}</span>
         </button>
         
         <!-- Settings -->
@@ -97,7 +97,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnSettingsPage }"
         >
           <Settings :size="16" />
-          <span class="hidden md:inline ml-2">Settings</span>
+          <span class="hidden md:inline ml-2">{{ $t('navigation.settings') }}</span>
         </router-link>
         
         <!-- Time -->
@@ -107,7 +107,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnTimeTrackingPage }"
         >
           <Clock :size="16" />
-          <span class="hidden md:inline ml-2">Time</span>
+          <span class="hidden md:inline ml-2">{{ $t('navigation.timeTracking') }}</span>
         </router-link>
         
         <!-- Downloads -->
@@ -117,7 +117,7 @@ const toggleMaterialSubmenu = () => {
           :class="{ 'btn-active': isOnDownloadsPage }"
         >
           <Download :size="16" />
-          <span class="hidden md:inline ml-2">Downloads</span>
+          <span class="hidden md:inline ml-2">{{ $t('navigation.downloads') }}</span>
         </router-link>
       </nav>
     </header>

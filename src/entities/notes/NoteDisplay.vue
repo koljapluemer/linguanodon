@@ -11,7 +11,7 @@
           </div>
         </div>
         <div v-if="note.showBeforeExercise" class="text-xs text-blue-600 ">
-          📌 Shows before exercise
+          {{ $t('notes.types.beforeExercise') }}
         </div>
       </div>
     </div>

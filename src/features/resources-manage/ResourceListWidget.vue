@@ -2,10 +2,10 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-center">
-      <h1>Resources</h1>
+      <h1>{{ $t('resources.title') }}</h1>
 
       <router-link to="/resources/new" class="btn btn-primary">
-        Add New Resource
+        {{ $t('resources.addNew') }}
       </router-link>
     </div>
 
@@ -21,10 +21,10 @@
 
     <!-- Empty State -->
     <div v-else-if="resources.length === 0" class="text-center p-12">
-      <h3>No resources yet</h3>
-      <p class="text-light mb-4">Create your first resource to get started.</p>
+      <h3>{{ $t('resources.states.noItems') }}</h3>
+      <p class="text-light mb-4">{{ $t('resources.suggestions.createFirst') }}</p>
       <router-link to="/resources/new" class="btn btn-primary">
-        Add New Resource
+        {{ $t('resources.addNew') }}
       </router-link>
     </div>
 
@@ -38,22 +38,22 @@
               <div class="flex items-center gap-2 mb-2">
                 <LanguageDisplay v-if="languageMap.get(resource.language)"
                   :language="languageMap.get(resource.language)!" variant="short" />
-                <span v-if="resource.priority" class="badge badge-secondary">P{{ resource.priority }}</span>
+                <span v-if="resource.priority" class="badge badge-secondary">{{ $t('factCards.tags.priority') }}{{ resource.priority }}</span>
               </div>
 
               <h3>{{ resource.title }}</h3>
 
               <div v-if="resource.content" class="text-light mb-3">
-                {{ resource.content.substring(0, 150) }}{{ resource.content.length > 150 ? '...' : '' }}
+                {{ resource.content.substring(0, 150) }}{{ resource.content.length > 150 ? $t('resources.ellipsis') : '' }}
               </div>
 
               <!-- Extracted content counts -->
               <div class="flex gap-4  text-base-content/60">
                 <span v-if="resource.vocab.length > 0">
-                  {{ resource.vocab.length }} vocab
+                  {{ resource.vocab.length }} {{ $t('resources.vocab') }}
                 </span>
                 <span v-if="resource.factCards.length > 0">
-                  {{ resource.factCards.length }} facts
+                  {{ resource.factCards.length }} {{ $t('resources.facts') }}
                 </span>
               </div>
             </div>
@@ -61,12 +61,12 @@
             <!-- Actions -->
             <div class="flex gap-2 ml-4">
               <router-link :to="`/resources/${resource.uid}/edit`" class="btn btn-sm btn-outline">
-                Edit
+                {{ $t('common.edit') }}
               </router-link>
               <button @click="deleteResource(resource.uid)" class="btn btn-sm btn-outline btn-error"
                 :disabled="deleting">
                 <span v-if="deleting" class="loading loading-spinner loading-sm"></span>
-                <span v-else>Delete</span>
+                <span v-else>{{ $t('common.delete') }}</span>
               </button>
             </div>
           </div>

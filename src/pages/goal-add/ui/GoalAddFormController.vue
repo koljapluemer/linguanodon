@@ -8,7 +8,7 @@
     
     <div class="flex gap-3 pt-6 border-t">
       <router-link to="/goals" class="btn btn-outline flex-1">
-        Cancel
+        {{ $t('common.cancel') }}
       </router-link>
       <button
         type="button"
@@ -17,7 +17,7 @@
         class="btn btn-secondary flex-1"
       >
         <span v-if="isSaving" class="loading loading-spinner loading-sm mr-2"></span>
-        Save & Add Another
+        {{ $t('goals.form.saveAndAddAnother') }}
       </button>
       <button
         type="submit"
@@ -25,7 +25,7 @@
         class="btn btn-primary flex-1"
       >
         <span v-if="isSaving" class="loading loading-spinner loading-sm mr-2"></span>
-        Save
+        {{ $t('goals.form.save') }}
       </button>
     </div>
   </form>

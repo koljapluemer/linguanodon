@@ -1,9 +1,9 @@
 <template>
   <div class="space-y-6">
-    <h2>Goal Details</h2>
+    <h2>{{ $t('goals.details') }}</h2>
     
     <div class="flex flex-col space-y-1">
-      <label class=" font-medium">Language</label>
+      <label class=" font-medium">{{ $t('goals.language') }}</label>
       <LanguageDropdown
         v-model="selectedLanguage"
         @update:modelValue="saveGoal"
@@ -11,9 +11,9 @@
     </div>
 
     <div class="flex flex-col space-y-1">
-      <label class=" font-medium">Goal Title</label>
+      <label class=" font-medium">{{ $t('goals.goalTitle') }}</label>
       <div class="flex items-center gap-2">
-        <span class=" ">I want to be able to</span>
+        <span class=" ">{{ $t('goals.placeholder.title') }}</span>
         <input
           v-model="goalTitle"
           type="text"
@@ -26,7 +26,7 @@
     </div>
 
     <div v-if="saving" class=" ">
-      Saving...
+      {{ $t('common.loading') }}
     </div>
   </div>
 </template>

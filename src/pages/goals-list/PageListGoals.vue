@@ -1,15 +1,15 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1>Goals</h1>
+    <h1>{{ $t('goals.title') }}</h1>
     <router-link to="/goals/add" class="btn btn-primary">
-      Add New Goal
+      {{ $t('goals.addNew') }}
     </router-link>
   </div>
 
   <div v-if="goals.length === 0" class="text-center py-12">
-    <p class=" mb-4">No goals yet</p>
+    <p class=" mb-4">{{ $t('goals.states.noItems') }}</p>
     <router-link to="/goals/add" class="btn btn-primary">
-      Create Your First Goal
+      {{ $t('goals.suggestions.createFirst') }}
     </router-link>
   </div>
 
@@ -22,13 +22,13 @@
 
             <div class="flex gap-4 mt-3 ">
               <span class="badge badge-outline">
-                {{ goal.subGoals.length }} sub-goals
+                {{ goal.subGoals.length }} {{ $t('goals.stats.subGoals') }}
               </span>
               <span class="badge badge-outline">
-                {{ goal.vocab.length }} vocab
+                {{ goal.vocab.length }} {{ $t('goals.stats.vocab') }}
               </span>
               <span v-if="vocabStats[goal.uid]" class="badge badge-success">
-                {{ Math.round(vocabStats[goal.uid].topOfMindPercentage) }}% vocab mastered
+                {{ Math.round(vocabStats[goal.uid].topOfMindPercentage) }}{{ $t('goals.stats.vocabMastered') }}
               </span>
             </div>
 
@@ -36,10 +36,10 @@
 
           <div class="flex gap-2">
             <router-link :to="`/goals/${goal.uid}/edit`" class="btn btn-sm btn-outline">
-              Edit
+              {{ $t('common.edit') }}
             </router-link>
             <button @click="deleteGoal(goal.uid)" class="btn btn-sm btn-error btn-outline">
-              Delete
+              {{ $t('common.delete') }}
             </button>
           </div>
         </div>

@@ -2,9 +2,9 @@
   <!-- Show downloads list when not in a sub-route -->
   <div v-if="$route.name === 'downloads'">
     <div class="flex justify-between items-center mb-6">
-      <h1>Downloads</h1>
+      <h1>{{ $t('downloads.title') }}</h1>
       <select v-model="selectedLanguage" class="select ">
-        <option value="">Select Language</option>
+        <option value="">{{ $t('downloads.selectLanguage') }}</option>
         <option v-for="language in availableLanguages" :key="language.code" :value="language.code">
           {{ language.emoji ? `${language.emoji} ` : '' }}{{ language.name }}
         </option>
@@ -12,14 +12,14 @@
     </div>
 
     <div v-if="!selectedLanguage" class="text-center py-16 text-base-content/60">
-      <h3>Select a Language</h3>
-      <p>Choose a language from the dropdown above to view available downloads.</p>
+      <h3>{{ $t('downloads.selectALanguage') }}</h3>
+      <p>{{ $t('downloads.chooseLanguagePrompt') }}</p>
     </div>
 
     <div v-else class="space-y-6">
       <div class="card shadow">
         <div class="card-body">
-          <h2>Available Sets</h2>
+          <h2>{{ $t('downloads.availableSets') }}</h2>
 
           <div v-if="error" class="alert alert-error mb-4">
             {{ error }}
@@ -27,12 +27,12 @@
 
           <div v-if="loading" class="flex items-center justify-center py-8">
             <span class="loading loading-spinner loading-lg"></span>
-            <span class="ml-4">Loading sets...</span>
+            <span class="ml-4">{{ $t('downloads.loadingSets') }}</span>
           </div>
 
           <div v-else-if="availableSets.length === 0" class="text-center py-8 text-base-content/60">
             <Download class="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No sets available for {{ selectedLanguage }}</p>
+            <p>{{ $t('downloads.noSetsAvailable') }} {{ selectedLanguage }}</p>
           </div>
 
           <div v-else class="space-y-3">
@@ -43,18 +43,18 @@
                 <div>
                   <h4>{{ set.title || set.name }}</h4>
                   <p class=" text-base-content/60">
-                    <span v-if="set.title">{{ set.name }} • </span>Language: {{ selectedLanguage }}
+                    <span v-if="set.title">{{ set.name }} {{ $t('media.images.bullet') }} </span>{{ $t('downloads.language') }} {{ selectedLanguage }}
                   </p>
                 </div>
 
                 <div class="flex items-center gap-2" @click.stop>
                   <div v-if="isDownloaded(set.name)" class="flex items-center gap-2 text-success mr-2">
                     <CheckCircle class="w-5 h-5" />
-                    <span class=" font-medium">Downloaded</span>
+                    <span class=" font-medium">{{ $t('downloads.downloaded') }}</span>
                   </div>
                   <button @click="quickDownload(set.name)" class="btn btn-outline btn-sm" :disabled="loading">
                     <Download class="w-4 h-4 mr-2" />
-                    {{ isDownloaded(set.name) ? 'Re-download' : 'Quick Download' }}
+                    {{ isDownloaded(set.name) ? $t('downloads.redownload') : $t('downloads.quickDownload') }}
                   </button>
                 </div>
               </div>
