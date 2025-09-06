@@ -11,7 +11,7 @@
       <button @click="skipTask" class="btn btn-outline btn-sm">Skip Exercise</button>
     </div>
 
-    <SoundPlayer :sound="playableSound" :auto-play="true" />
+    <SoundPlayer ref="soundPlayerRef" :sound="playableSound" :auto-play="true" />
 
     <div class="flex flex-row gap-4 mx-auto justify-center my-6">
       <div v-for="(vocab, index) in shuffledVocabs" :key="vocab.uid" 
@@ -48,6 +48,7 @@ import VocabWithTranslationsDisplay from '@/features/display-vocab-with-translat
 import { Rating } from 'ts-fsrs';
 import { shuffleArray, randomFromArray } from '@/shared/utils/arrayUtils';
 import { useButtonWithKeyboardArrowControl } from '@/shared/composables/useButtonWithKeyboardArrowControl';
+import { useReplaySoundWithSpacebar } from '@/shared/composables/useReplaySoundWithSpacebar';
 
 interface Props {
   task: Task;
@@ -75,13 +76,26 @@ const shuffledVocabs = ref<VocabData[]>([]);
 const correctIndex = ref<number>(0);
 const playableSound = ref<VocabSound | null>(null);
 const loading = ref(true);
+const soundPlayerRef = ref<{ playSound: () => void } | null>(null);
 
 // Keyboard arrow control
 const buttonCount = computed(() => shuffledVocabs.value.length);
-const { selectedIndex } = useButtonWithKeyboardArrowControl({
+useButtonWithKeyboardArrowControl({
   buttonCount,
   onSelect: selectOption,
   disabled: computed(() => isAnswered.value || loading.value)
+});
+
+// Sound replay with spacebar
+const replaySound = () => {
+  if (soundPlayerRef.value) {
+    soundPlayerRef.value.playSound();
+  }
+};
+
+useReplaySoundWithSpacebar({
+  onReplay: replaySound,
+  disabled: computed(() => loading.value)
 });
 
 // Get the vocab ID from associated vocab
@@ -157,7 +171,6 @@ async function selectOption(index: number) {
 function getButtonClass(index: number): string {
   const isCorrect = index === correctIndex.value;
   const isAnswerSelected = index === selectedAnswerIndex.value;
-  const isKeyboardSelected = index === selectedIndex.value;
 
   if (isCorrect && isAnswerSelected) {
     return 'btn-success';
@@ -182,7 +195,6 @@ function getButtonClass(index: number): string {
 function getOptionContainerClass(index: number): string {
   const isCorrect = index === correctIndex.value;
   const isAnswerSelected = index === selectedAnswerIndex.value;
-  const isKeyboardSelected = index === selectedIndex.value;
 
   if (isCorrect && isAnswerSelected) {
     return 'border-2 border-green-400 rounded-lg p-2 transform translate-y-[-2px]';

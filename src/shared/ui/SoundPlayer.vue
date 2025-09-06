@@ -1,11 +1,7 @@
 <template>
   <div class="flex flex-col items-center gap-4">
     <button @click="playSound" :disabled="!audioUrl || isPlaying" class="btn btn-circle btn-xl btn-primary">
-      <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-        stroke="currentColor" class="w-10 h-10">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.348a1.125 1.125 0 01-1.667-.985V5.653z" />
-      </svg>
+      <Play v-if="!isPlaying" class="w-10 h-10" />
       <span v-else class="loading loading-spinner loading-lg"></span>
     </button>
 
@@ -23,6 +19,7 @@
 
 <script setup lang="ts">
 import { ref, onUnmounted, watch } from 'vue';
+import { Play } from 'lucide-vue-next';
 import type { VocabSound } from '@/entities/vocab/VocabData';
 
 interface Props {
@@ -100,5 +97,10 @@ onUnmounted(() => {
   if (audioUrl.value) {
     URL.revokeObjectURL(audioUrl.value);
   }
+});
+
+// Expose playSound method for external use
+defineExpose({
+  playSound
 });
 </script>
