@@ -219,35 +219,42 @@ onMounted(loadVocabData);
   </div>
 
   <div v-else-if="vocab && answerOptions.length > 0 && clozeData" class="text-center">
-    <div class="mb-8">
-      <div class="text-3xl mb-4" :dir="isRTL ? 'rtl' : 'ltr'">
-        <span v-if="clozeData.beforeWord" class="me-2">{{ clozeData.beforeWord }}</span>
-        <span class="inline-block bg-gray-300  text-transparent rounded px-2 py-1 mx-1 select-none" 
-              :style="{ width: Math.max(clozeData.hiddenWord.length * 0.6, 3) + 'em' }">
-          {{ clozeData.hiddenWord }}
-        </span>
-        <span v-if="clozeData.afterWord" class="ms-2">{{ clozeData.afterWord }}</span>
-      </div>
-      <div v-if="secondaryContent" class="text-2xl text-light" >
-        {{ secondaryContent }}
-      </div>
-      
-      <!-- Vocab notes that should show before exercise -->
-      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mt-4">
-        <NoteDisplayMini 
-          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
-          :key="note.uid"
-          :note="note"
-        />
+    <!-- Cloze section with potential notes sidebar -->
+    <div class="flex gap-4 mb-8">
+      <div class="flex-1">
+        <div class="text-3xl mb-4" :dir="isRTL ? 'rtl' : 'ltr'">
+          <span v-if="clozeData.beforeWord" class="me-2">{{ clozeData.beforeWord }}</span>
+          <span class="inline-block bg-gray-300  text-transparent rounded px-2 py-1 mx-1 select-none" 
+                :style="{ width: Math.max(clozeData.hiddenWord.length * 0.6, 3) + 'em' }">
+            {{ clozeData.hiddenWord }}
+          </span>
+          <span v-if="clozeData.afterWord" class="ms-2">{{ clozeData.afterWord }}</span>
+        </div>
+        <div v-if="secondaryContent" class="text-2xl text-light" >
+          {{ secondaryContent }}
+        </div>
       </div>
       
-      <!-- Translation notes that should show before exercise -->
-      <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mt-4">
-        <NoteDisplayMini 
-          v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
-          :key="note.uid"
-          :note="note"
-        />
+      <!-- Notes sidebar -->
+      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0 || translationNotes.filter(note => note.showBeforeExercise).length > 0" class="w-64 space-y-3">
+        <!-- Vocab notes -->
+        <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2">
+          <NoteDisplayMini 
+            v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+            :key="note.uid"
+            :note="note"
+          />
+        </div>
+        
+        <!-- Translation notes -->
+        <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2">
+          
+          <NoteDisplayMini 
+            v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
+            :key="note.uid"
+            :note="note"
+          />
+        </div>
       </div>
     </div>
     

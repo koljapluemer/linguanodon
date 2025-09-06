@@ -103,24 +103,33 @@ onMounted(loadVocab);
 
 <template>
   <div v-if="vocab">
-    <h2>{{ vocab.content }}</h2>
-    
-    <!-- Vocab notes that should show before exercise -->
-    <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
-      <NoteDisplayMini 
-        v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
-        :key="note.uid"
-        :note="note"
-      />
+    <!-- Vocab section -->
+    <div class="flex gap-4 mb-6">
+      <div class="flex-1">
+        <h2>{{ vocab.content }}</h2>
+      </div>
+      <!-- Vocab notes sidebar -->
+      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="w-64 space-y-2">
+        
+        <NoteDisplayMini 
+          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
     </div>
     
-    <!-- Translation notes that should show before exercise -->
-    <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
-      <NoteDisplayMini 
-        v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
-        :key="note.uid"
-        :note="note"
-      />
+    <!-- Translation notes (generic since we don't have specific translations here) -->
+    <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="flex gap-4 mb-4">
+      <div class="flex-1"></div>
+      <div class="w-64 space-y-2">
+        
+        <NoteDisplayMini 
+          v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
     </div>
     
     <div class="space-y-3 mb-4">

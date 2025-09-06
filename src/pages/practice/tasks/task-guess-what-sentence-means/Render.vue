@@ -103,17 +103,22 @@ onMounted(loadVocab);
 
 <template>
   <div v-if="vocab" class="max-w-4xl mx-auto">
-    <div class="text-3xl font-bold mb-8 p-6 bg-base-200 rounded-lg">
-      {{ vocab.content }}
-    </div>
-    
-    <!-- Vocab notes that should show before exercise -->
-    <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-6">
-      <NoteDisplayMini 
-        v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
-        :key="note.uid"
-        :note="note"
-      />
+    <!-- Vocab section with sidebar -->
+    <div class="flex gap-4 mb-8">
+      <div class="flex-1">
+        <div class="text-3xl font-bold p-6 bg-base-200 rounded-lg">
+          {{ vocab.content }}
+        </div>
+      </div>
+      <!-- Vocab notes sidebar -->
+      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="w-64 space-y-2">
+        
+        <NoteDisplayMini 
+          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+          :key="note.uid"
+          :note="note"
+        />
+      </div>
     </div>
 
     <div class="mb-8">

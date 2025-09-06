@@ -36,17 +36,22 @@
 
     <!-- Show result when completed -->
     <div v-if="isAnswered" class="mb-6">
-      <div class="text-4xl font-bold text-light mb-4">
-        {{ vocab.content }}
-      </div>
-      
-      <!-- Vocab notes that should show before exercise -->
-      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mt-4">
-        <NoteDisplayMini 
-          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
-          :key="note.uid"
-          :note="note"
-        />
+      <!-- Vocab section -->
+      <div class="flex gap-4">
+        <div class="flex-1 text-center">
+          <div class="text-4xl font-bold text-light">
+            {{ vocab.content }}
+          </div>
+        </div>
+        <!-- Vocab notes sidebar -->
+        <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="w-64 space-y-2">
+          
+          <NoteDisplayMini 
+            v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+            :key="note.uid"
+            :note="note"
+          />
+        </div>
       </div>
     </div>
 

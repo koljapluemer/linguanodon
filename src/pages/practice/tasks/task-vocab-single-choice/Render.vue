@@ -234,25 +234,34 @@ onMounted(loadVocabData);
 
   <!-- Exercise Content -->
   <div v-else-if="vocab && answerOptions.length > 0" class="text-center">
-    <!-- Display Content -->
-    <div class="text-6xl font-bold mb-8">{{ displayContent }}</div>
-    
-    <!-- Vocab notes that should show before exercise -->
-    <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
-      <NoteDisplayMini 
-        v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
-        :key="note.uid"
-        :note="note"
-      />
-    </div>
-    
-    <!-- Translation notes that should show before exercise -->
-    <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
-      <NoteDisplayMini 
-        v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
-        :key="note.uid"
-        :note="note"
-      />
+    <!-- Main content with notes sidebar -->
+    <div class="flex gap-4 mb-8">
+      <div class="flex-1">
+        <div class="text-6xl font-bold">{{ displayContent }}</div>
+      </div>
+      
+      <!-- Notes sidebar -->
+      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0 || translationNotes.filter(note => note.showBeforeExercise).length > 0" class="w-64 space-y-3">
+        <!-- Vocab notes -->
+        <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2">
+          
+          <NoteDisplayMini 
+            v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+            :key="note.uid"
+            :note="note"
+          />
+        </div>
+        
+        <!-- Translation notes -->
+        <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2">
+          
+          <NoteDisplayMini 
+            v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
+            :key="note.uid"
+            :note="note"
+          />
+        </div>
+      </div>
     </div>
     
     <!-- Answer Options - only show when not answered -->

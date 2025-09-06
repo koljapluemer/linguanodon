@@ -103,30 +103,44 @@ onMounted(loadVocab);
 
 <template>
   <div v-if="vocab">
-    <div class="text-center mb-8">
-      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold mb-6">{{ vocab.content }}</div>
-      
-      <!-- Vocab notes that should show before exercise -->
-      <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mb-4">
-        <NoteDisplayMini 
-          v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
-          :key="note.uid"
-          :note="note"
-        />
-      </div>
-      
-      <div class="divider mb-6"></div>
-      <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold text-light">
-        {{ translations.map(t => t.content).join(', ') }}
-      </div>
-      
-      <!-- Translation notes that should show before exercise -->
-      <div v-if="translationNotes.filter(note => note.showBeforeExercise).length > 0" class="space-y-2 mt-4">
-        <NoteDisplayMini 
-          v-for="note in translationNotes.filter(note => note.showBeforeExercise)" 
-          :key="note.uid"
-          :note="note"
-        />
+    <div class="flex gap-6 mb-8">
+      <!-- Main content -->
+      <div class="flex-1">
+        <!-- Vocab section -->
+        <div class="flex gap-4 mb-6">
+          <div class="flex-1 text-center">
+            <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold">{{ vocab.content }}</div>
+          </div>
+          <!-- Vocab notes sidebar -->
+          <div v-if="vocabNotes.filter(note => note.showBeforeExercise).length > 0" class="w-64 space-y-2">
+            
+            <NoteDisplayMini 
+              v-for="note in vocabNotes.filter(note => note.showBeforeExercise)" 
+              :key="note.uid"
+              :note="note"
+            />
+          </div>
+        </div>
+        
+        <div class="divider mb-6"></div>
+        
+        <!-- Translation sections -->
+        <div class="space-y-4">
+          <div v-for="translation in translations" :key="translation.uid" class="flex gap-4">
+            <div class="flex-1 text-center">
+              <div :class="isSentence ? 'text-3xl' : 'text-5xl'" class="font-bold text-light">{{ translation.content }}</div>
+            </div>
+            <!-- Translation notes sidebar -->
+            <div v-if="translationNotes.filter(note => note.showBeforeExercise && translation.notes?.includes(note.uid)).length > 0" class="w-64 space-y-2">
+              
+              <NoteDisplayMini 
+                v-for="note in translationNotes.filter(note => note.showBeforeExercise && translation.notes?.includes(note.uid))" 
+                :key="note.uid"
+                :note="note"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     
