@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { ResourceRepoContract } from './ResourceRepoContract';
+import type { ResourceRepoContract, ResourceListFilters } from './ResourceRepoContract';
 import type { ResourceData } from './ResourceData';
 
 class ResourceDatabase extends Dexie {
@@ -129,5 +129,74 @@ export class ResourceRepo implements ResourceRepoContract {
     };
 
     await this.db.resources.put(updatedResource);
+  }
+
+  private applyFilters(resources: ResourceData[], filters?: ResourceListFilters): ResourceData[] {
+    if (!filters) return resources;
+    
+    let filtered = resources;
+
+    // Search filter
+    if (filters.searchQuery?.trim()) {
+      const query = filters.searchQuery.trim().toLowerCase();
+      filtered = filtered.filter(resource => {
+        // Search in title
+        if (resource.title.toLowerCase().includes(query)) return true;
+        
+        // Search in content
+        if (resource.content?.toLowerCase().includes(query)) return true;
+        
+        // Search in link properties
+        if (resource.link) {
+          const link = resource.link;
+          if (link.label?.toLowerCase().includes(query) ||
+              link.url?.toLowerCase().includes(query) ||
+              link.owner?.toLowerCase().includes(query) ||
+              link.ownerLink?.toLowerCase().includes(query) ||
+              link.license?.toLowerCase().includes(query)) {
+            return true;
+          }
+        }
+        
+        return false;
+      });
+    }
+
+    // Language filter
+    if (filters.languages && filters.languages.length > 0) {
+      filtered = filtered.filter(resource => filters.languages!.includes(resource.language));
+    }
+
+    // Origins filter
+    if (filters.origins && filters.origins.length > 0) {
+      filtered = filtered.filter(resource => 
+        resource.origins.some(origin => filters.origins!.includes(origin))
+      );
+    }
+
+    return filtered;
+  }
+
+  async getResourcesPaginated(offset: number, limit: number, filters?: ResourceListFilters): Promise<ResourceData[]> {
+    const allResources = await this.db.resources.toArray();
+    const filtered = this.applyFilters(allResources, filters);
+    
+    // Sort by lastShownAt descending (most recent first), then by title
+    filtered.sort((a, b) => {
+      if (a.lastShownAt && b.lastShownAt) {
+        return b.lastShownAt.getTime() - a.lastShownAt.getTime();
+      }
+      if (a.lastShownAt && !b.lastShownAt) return -1;
+      if (!a.lastShownAt && b.lastShownAt) return 1;
+      return a.title.localeCompare(b.title);
+    });
+    
+    return filtered.slice(offset, offset + limit);
+  }
+
+  async getTotalResourcesCount(filters?: ResourceListFilters): Promise<number> {
+    const allResources = await this.db.resources.toArray();
+    const filtered = this.applyFilters(allResources, filters);
+    return filtered.length;
   }
 }

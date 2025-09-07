@@ -13,7 +13,7 @@
     </div>
     <div v-if="link.owner || link.license" class="text-xs text-base-content/70 mt-1 flex gap-2">
       <span v-if="link.owner" class="flex items-center gap-1">
-        <span>by</span>
+        <span>{{ t('common.by') }}</span>
         <a 
           v-if="link.ownerLink" 
           :href="link.ownerLink" 
@@ -35,6 +35,9 @@
 <script setup lang="ts">
 import type { Link } from './Link';
 import { ExternalLink } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Props {
   link: Link | null | undefined;

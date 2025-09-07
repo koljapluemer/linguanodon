@@ -57,8 +57,16 @@ export default defineConfig([
       'jsdoc/require-returns-type': "off",
       'jsdoc/require-returns-description': "off",
       '@intlify/vue-i18n/no-raw-text': 'error',
+      '@intlify/vue-i18n/no-missing-keys': 'error',
+      '@intlify/vue-i18n/no-unused-keys': 'warn',
     },
-    settings: importResolverSettings,
+    settings: {
+      ...importResolverSettings,
+      'vue-i18n': {
+        localeDir: './src/shared/locales/*.json',
+        messageSyntaxVersion: '^9.0.0'
+      }
+    },
   },
   {
     files: ["**/*.ts"],

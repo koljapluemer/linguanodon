@@ -1,110 +1,295 @@
 <template>
-  <div class="space-y-6">
-    <!-- Header -->
-    <div class="flex justify-between items-center">
-      <h1>{{ $t('resources.title') }}</h1>
+  <div class="flex justify-between items-center mb-6">
+    <h1>{{ $t('resources.title') }}</h1>
+    <router-link to="/resources/new" class="btn btn-primary">
+      {{ $t('resources.addNew') }}
+    </router-link>
+  </div>
 
-      <router-link to="/resources/new" class="btn btn-primary">
-        {{ $t('resources.addNew') }}
-      </router-link>
-    </div>
+  <!-- Search -->
+  <input v-model="searchQuery" @input="debouncedSearch" type="text" :placeholder="$t('resources.search')"
+    class="input input-bordered w-full" />
 
-    <!-- Loading State -->
-    <div v-if="loading" class="flex justify-center p-8">
-      <span class="loading loading-spinner loading-lg"></span>
-    </div>
-
-    <!-- Error State -->
-    <div v-else-if="error" class="alert alert-error">
-      <span>{{ error }}</span>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else-if="resources.length === 0" class="text-center p-12">
-      <h3>{{ $t('resources.states.noItems') }}</h3>
-      <p class="text-light mb-4">{{ $t('resources.suggestions.createFirst') }}</p>
-      <router-link to="/resources/new" class="btn btn-primary">
-        {{ $t('resources.addNew') }}
-      </router-link>
-    </div>
-
-    <!-- Resources List -->
-    <div v-else class="grid gap-4">
-      <div v-for="resource in resources" :key="resource.uid"
-        class="card shadow hover:shadow-md transition-shadow">
-        <div class="card-body">
-          <div class="flex justify-between items-start">
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
-                <LanguageDisplay v-if="languageMap.get(resource.language)"
-                  :language="languageMap.get(resource.language)!" variant="short" />
-                <span v-if="resource.priority" class="badge badge-secondary">{{ $t('factCards.tags.priority') }}{{ resource.priority }}</span>
-              </div>
-
-              <h3>{{ resource.title }}</h3>
-
-              <div v-if="resource.content" class="text-light mb-3">
-                {{ resource.content.substring(0, 150) }}{{ resource.content.length > 150 ? $t('resources.ellipsis') : '' }}
-              </div>
-
-              <!-- Extracted content counts -->
-              <div class="flex gap-4  text-base-content/60">
-                <span v-if="resource.vocab.length > 0">
-                  {{ resource.vocab.length }} {{ $t('resources.vocab') }}
-                </span>
-                <span v-if="resource.factCards.length > 0">
-                  {{ resource.factCards.length }} {{ $t('resources.facts') }}
-                </span>
-              </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex gap-2 ml-4">
-              <router-link :to="`/resources/${resource.uid}/edit`" class="btn btn-sm btn-outline">
-                {{ $t('common.edit') }}
-              </router-link>
-              <button @click="deleteResource(resource.uid)" class="btn btn-sm btn-outline btn-error"
-                :disabled="deleting">
-                <span v-if="deleting" class="loading loading-spinner loading-sm"></span>
-                <span v-else>{{ $t('common.delete') }}</span>
-              </button>
-            </div>
-          </div>
-        </div>
+  <!-- Filters -->
+  <div class="grid gap-2 md:grid-cols-2 mb-2">
+    <!-- Language Filter -->
+    <details class="collapse collapse-arrow bg-base-200">
+      <summary class="collapse-title font-medium">
+        {{ languageFilterTitle }}
+      </summary>
+      <div class="collapse-content">
+        <ul class="flex flex-col gap-2">
+          <li v-for="language in availableLanguages" :key="language.code">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" :checked="selectedLanguages.includes(language.code)"
+                @change="toggleLanguage(language.code)" class="checkbox checkbox-sm" />
+              <span class="flex items-center gap-2">
+                <span v-if="language.emoji">{{ language.emoji }}</span>
+                {{ language.name }}
+              </span>
+            </label>
+          </li>
+        </ul>
       </div>
+    </details>
+
+    <!-- Set Filter -->
+    <details class="collapse collapse-arrow bg-base-200">
+      <summary class="collapse-title font-medium">
+        {{ setFilterTitle }}
+      </summary>
+      <div class="collapse-content">
+        <ul class="flex flex-col gap-2">
+          <li>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" :checked="selectedSets.includes('user-added')" @change="toggleSet('user-added')"
+                class="checkbox checkbox-sm" />
+              {{ $t('common.userAdded') }}
+            </label>
+          </li>
+          <li v-for="set in availableSets" :key="set.uid">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" :checked="selectedSets.includes(set.uid)" @change="toggleSet(set.uid)"
+                class="checkbox checkbox-sm" />
+              {{ set.name }}
+            </label>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <div v-if="loading" class="text-center py-8">
+    <span class="loading loading-spinner loading-lg"></span>
+    <p class="mt-4">{{ $t('common.loading') }}</p>
+  </div>
+
+  <div v-else-if="error" class="alert alert-error mb-6">
+    <span>{{ error }}</span>
+  </div>
+
+  <div v-else>
+    <!-- Results Summary -->
+    <div class="flex justify-center items-center mb-4">
+      <span class="text-light">{{ totalCount }} {{ $t('common.resources') }}</span>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="table table-zebra">
+        <thead>
+          <tr>
+            <th>{{ $t('common.title') }}</th>
+            <th>{{ $t('common.language') }}</th>
+            <th>{{ $t('resources.content') }}</th>
+            <th>{{ $t('common.link') }}</th>
+            <th>{{ $t('common.set') }}</th>
+            <th>{{ $t('common.actions') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="resource in resourceItems" :key="resource.uid">
+            <td>
+              <router-link :to="`/resources/${resource.uid}/edit`" class="font-bold link link-hover">
+                {{ resource.title }}
+              </router-link>
+            </td>
+            <td>
+              <span class="flex items-center gap-2">
+                <span v-if="getLanguageEmoji(resource.language)">{{ getLanguageEmoji(resource.language) }}</span>
+                {{ getLanguageName(resource.language) }}
+              </span>
+            </td>
+            <td class="max-w-xs">
+              <div v-if="resource.content" class="text-sm truncate" :title="resource.content">
+                {{ resource.content }}
+              </div>
+              <div v-else class="text-base-content/60 italic text-sm">
+                {{ $t('resources.noContent') }}
+              </div>
+            </td>
+            <td class="max-w-sm">
+              <LinkDisplayMini v-if="resource.link" :link="resource.link" />
+              <div v-else class="text-base-content/60 italic text-sm">
+                {{ $t('common.noLink') }}
+              </div>
+            </td>
+            <td>
+              <div class="flex flex-wrap gap-1">
+                <span v-for="origin in resource.origins" :key="origin" class="badge badge-outline badge-sm">
+                  {{ getOriginDisplayName(origin) }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <button @click="deleteResource(resource.uid)" class="btn btn-sm btn-ghost">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18" />
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                  <path d="M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div v-if="totalCount > 0" class="mt-6">
+      <Pagination
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        v-model:page-size="pageSize"
+        @go-to-page="goToPage"
+        @update:page-size="handlePageSizeChange"
+      />
+    </div>
+
+    <div v-if="resourceItems.length === 0" class="text-center py-8">
+      <p class="text-light">{{ $t('resources.states.noItems') }}</p>
+      <router-link to="/resources/new" class="btn btn-primary mt-4">
+        {{ $t('resources.addNew') }}
+      </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, inject } from 'vue';
-import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
+import { ref, inject, onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import type { ResourceRepoContract, ResourceListFilters } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
-import LanguageDisplay from '@/entities/languages/LanguageDisplay.vue';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
+import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
+import type { LocalSetData } from '@/entities/local-sets/LocalSetData';
+import Pagination from '@/shared/ui/Pagination.vue';
+import LinkDisplayMini from '@/shared/links/LinkDisplayMini.vue';
 
-const resourceRepo = inject<ResourceRepoContract>('resourceRepo');
-if (!resourceRepo) {
-  throw new Error('ResourceRepo not provided');
-}
+const { t } = useI18n();
 
-const resources = ref<ResourceData[]>([]);
-const languageMap = ref<Map<string, LanguageData>>(new Map());
-const loading = ref(false);
-const deleting = ref(false);
+const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
+
+// Data
+const resourceItems = ref<ResourceData[]>([]);
+const totalCount = ref(0);
+const loading = ref(true);
 const error = ref<string | null>(null);
 
-async function loadResources() {
-  if (!resourceRepo) return;
+// Filters and search
+const searchQuery = ref('');
+const selectedLanguages = ref<string[]>([]);
+const selectedSets = ref<string[]>([]);
 
+// Pagination
+const currentPage = ref(1);
+const pageSize = ref(25);
+
+// Available options for filters
+const availableLanguages = ref<LanguageData[]>([]);
+const availableSets = ref<LocalSetData[]>([]);
+
+// Computed
+const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
+
+const languageFilterTitle = computed(() => 
+  `${t('common.languages')} (${selectedLanguages.value.length} ${t('common.selected')})`
+);
+
+const setFilterTitle = computed(() => 
+  `${t('common.sets')} (${selectedSets.value.length} ${t('common.selected')})`
+);
+
+// Debounced search
+let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+function debouncedSearch() {
+  if (searchTimeout) clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    currentPage.value = 1;
+    loadResources();
+  }, 300);
+}
+
+// Filter methods
+function toggleLanguage(languageCode: string) {
+  const index = selectedLanguages.value.indexOf(languageCode);
+  if (index > -1) {
+    selectedLanguages.value.splice(index, 1);
+  } else {
+    selectedLanguages.value.push(languageCode);
+  }
+  currentPage.value = 1;
+  loadResources();
+}
+
+function toggleSet(setId: string) {
+  const index = selectedSets.value.indexOf(setId);
+  if (index > -1) {
+    selectedSets.value.splice(index, 1);
+  } else {
+    selectedSets.value.push(setId);
+  }
+  currentPage.value = 1;
+  loadResources();
+}
+
+// Pagination
+function goToPage(page: number) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    loadResources();
+  }
+}
+
+function handlePageSizeChange(newSize: number) {
+  pageSize.value = newSize;
+  currentPage.value = 1; // Reset to first page when changing page size
+  loadResources();
+}
+
+// Helper methods
+function getLanguageName(code: string): string {
+  const language = availableLanguages.value.find(l => l.code === code);
+  return language?.name || code.toUpperCase();
+}
+
+function getLanguageEmoji(code: string): string | undefined {
+  const language = availableLanguages.value.find(l => l.code === code);
+  return language?.emoji;
+}
+
+function getOriginDisplayName(origin: string): string {
+  if (origin === 'user-added') return 'User Added';
+  const set = availableSets.value.find(s => s.uid === origin);
+  return set?.name || origin;
+}
+
+// Main load function
+async function loadResources() {
   loading.value = true;
   error.value = null;
 
   try {
-    resources.value = await resourceRepo.getAllResources();
+    const filters: ResourceListFilters = {
+      searchQuery: searchQuery.value?.trim() || undefined,
+      languages: selectedLanguages.value.length > 0 ? selectedLanguages.value : undefined,
+      origins: selectedSets.value.length > 0 ? selectedSets.value : undefined
+    };
+
+    const offset = (currentPage.value - 1) * pageSize.value;
+
+    const [result, count] = await Promise.all([
+      resourceRepo.getResourcesPaginated(offset, pageSize.value, filters),
+      resourceRepo.getTotalResourcesCount(filters)
+    ]);
+
+    resourceItems.value = result;
+    totalCount.value = count;
   } catch (err) {
-    console.error('Error loading resources:', err);
     error.value = err instanceof Error ? err.message : 'Failed to load resources';
   } finally {
     loading.value = false;
@@ -112,30 +297,37 @@ async function loadResources() {
 }
 
 async function deleteResource(uid: string) {
-  if (!confirm('Are you sure you want to delete this resource?') || !resourceRepo) {
+  const resourceToDelete = resourceItems.value.find(r => r.uid === uid);
+  if (!resourceToDelete || !confirm(`Are you sure you want to delete "${resourceToDelete.title}"?`)) {
     return;
   }
 
-  deleting.value = true;
   try {
     await resourceRepo.deleteResource(uid);
-    // Remove from local list
-    resources.value = resources.value.filter(r => r.uid !== uid);
+    await loadResources(); // Reload to update pagination
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to delete resource';
-  } finally {
-    deleting.value = false;
+    console.error('Failed to delete resource:', err);
+    error.value = 'Failed to delete resource';
   }
 }
 
-const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
+async function loadFilterOptions() {
+  try {
+    [availableLanguages.value, availableSets.value] = await Promise.all([
+      languageRepo.getAll(),
+      localSetRepo.getAllLocalSets()
+    ]);
+
+    // Initialize with all languages selected
+    selectedLanguages.value = availableLanguages.value.map(l => l.code);
+    selectedSets.value = ['user-added', ...availableSets.value.map(s => s.uid)];
+  } catch (err) {
+    console.error('Failed to load filter options:', err);
+  }
+}
 
 onMounted(async () => {
+  await loadFilterOptions();
   await loadResources();
-  const codes = Array.from(new Set(resources.value.map(r => r.language)));
-  const langs = await Promise.all(codes.map(c => languageRepo.getByCode(c)));
-  const map = new Map<string, LanguageData>();
-  langs.forEach(l => { if (l) map.set(l.code, l); });
-  languageMap.value = map;
 });
 </script>
