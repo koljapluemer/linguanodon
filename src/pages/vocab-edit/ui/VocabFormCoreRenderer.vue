@@ -21,7 +21,7 @@
     <div class="py-4">
       <div class="flex justify-between items-center mb-3">
         <div class=" font-medium  ">
-          Translations
+          {{ $t('vocabulary.translations') }}
         </div>
         <button
           type="button"
@@ -29,12 +29,12 @@
           class="btn btn-sm btn-outline"
         >
           <Plus class="w-4 h-4 mr-1" />
-          Add Translation
+          {{ $t('vocabulary.form.addTranslation') }}
         </button>
       </div>
       
       <div v-if="formData.translations.length === 0" class=" text-center py-4">
-        No translations attached.
+        {{ $t('vocabulary.form.noTranslationsAttached') }}
       </div>
       
       <div v-else class="space-y-4">
@@ -45,7 +45,7 @@
           <!-- Edit mode -->
           <div v-if="editingIndex === index" class="space-y-4">
             <div class="flex flex-col space-y-1">
-              <label class=" font-medium">Translation Content</label>
+              <label class=" font-medium">{{ $t('vocabulary.form.translationContent') }}</label>
               <input
                 v-model="tempTranslation.content"
                 type="text"
@@ -60,14 +60,14 @@
                 class="btn btn-sm btn-ghost"
               >
                 <X class="w-4 h-4" />
-                Cancel
+                {{ $t('common.cancel') }}
               </button>
               <button
                 @click="saveEdit"
                 class="btn btn-sm btn-success"
               >
                 <Check class="w-4 h-4" />
-                Save
+                {{ $t('common.save') }}
               </button>
             </div>
           </div>
@@ -100,7 +100,7 @@
       <!-- New translation creation form -->
       <div v-if="isCreatingNew" class="space-y-4 mt-4">
         <div class="flex flex-col space-y-1">
-          <label class=" font-medium">Translation Content</label>
+          <label class=" font-medium">{{ $t('vocabulary.form.translationContent') }}</label>
           <input
             v-model="tempTranslation.content"
             type="text"
@@ -115,7 +115,7 @@
             class="btn btn-sm btn-ghost"
           >
             <X class="w-4 h-4" />
-            Cancel
+            {{ $t('common.cancel') }}
           </button>
           <button
             @click="saveNewTranslation"
@@ -123,7 +123,7 @@
             :disabled="!tempTranslation.content?.trim()"
           >
             <Check class="w-4 h-4" />
-            Save
+            {{ $t('common.save') }}
           </button>
         </div>
       </div>

@@ -182,7 +182,7 @@ onMounted(loadVocabData);
     </div>
     
     <div v-if="isRevealed">
-      <div class="divider mb-6">Answer</div>
+      <div class="divider mb-6">{{ $t('practice.tasks.answer') }}</div>
       
       <div class="mb-6">
         <div class="text-3xl mb-4" :dir="isRTL ? 'rtl' : 'ltr'">
@@ -199,7 +199,7 @@ onMounted(loadVocabData);
     </div>
     
     <div v-else>
-      <button @click="isRevealed = true" class="btn btn-primary">Reveal</button>
+      <button @click="isRevealed = true" class="btn btn-primary">{{ $t('practice.tasks.reveal') }}</button>
     </div>
     
     <!-- Links -->
@@ -213,6 +213,6 @@ onMounted(loadVocabData);
   </div>
 
   <div v-else>
-    <span>Failed to load exercise data</span>
+    <span>{{ $t('practice.tasks.failedToLoad') }}</span>
   </div>
 </template>

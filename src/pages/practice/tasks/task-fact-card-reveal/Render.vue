@@ -61,7 +61,7 @@ onMounted(loadFactCard);
       </div>
       
       <div v-if="isRevealed">
-        <div class="divider mb-6">Answer</div>
+        <div class="divider mb-6">{{ $t('practice.tasks.answer') }}</div>
         <div class="text-2xl text-light mb-6">
           <MarkdownRenderer :content="factCard.back" />
         </div>
@@ -70,7 +70,7 @@ onMounted(loadFactCard);
       </div>
       
       <div v-else>
-        <button @click="isRevealed = true" class="btn btn-primary">Reveal</button>
+        <button @click="isRevealed = true" class="btn btn-primary">{{ $t('practice.tasks.reveal') }}</button>
       </div>
     </div>
   </div>

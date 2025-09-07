@@ -2,7 +2,7 @@
   <div class="space-y-2">
     <div class="text-center">
       <p class="text-lg text-light mb-2">
-        {{ vocabCount === 1 ? 'Record yourself saying a sentence using this word' : 'Record yourself saying a sentence using both words' }}
+        {{ vocabCount === 1 ? $t('practice.tasks.recordSentenceWord') : $t('practice.tasks.recordSentenceBoth') }}
       </p>
       
       <!-- Recording Controls -->
@@ -39,7 +39,7 @@
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
         </svg>
-        <span>Microphone access is required to record audio</span>
+        <span>{{ $t('practice.tasks.microphoneAccess') }}</span>
       </div>
       
       <!-- Playback Controls -->
@@ -67,7 +67,7 @@
             @click="clearRecording"
             class="btn btn-ghost btn-sm"
           >
-            Record Again
+            {{ $t('practice.tasks.recordAgain') }}
           </button>
         </div>
       </div>
@@ -76,9 +76,9 @@
     <!-- Progress indicator when recording -->
     <div v-if="isRecording" class="text-center">
       <div class="radial-progress text-primary" :style="`--value:${Math.min(recordingDuration / 60 * 100, 100)}`">
-        {{ Math.floor(recordingDuration) }}s
+        {{ Math.floor(recordingDuration) }}{{ $t('practice.tasks.seconds') }}
       </div>
-      <p class="text-xs text-base-content/50 mt-2">Maximum 60 seconds</p>
+      <p class="text-xs text-base-content/50 mt-2">{{ $t('practice.tasks.maxSeconds') }}</p>
     </div>
     
     <!-- Audio element for playback -->

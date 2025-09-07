@@ -144,7 +144,7 @@ onMounted(loadVocab);
           class="input input-bordered input-lg flex-1"
           placeholder="Enter translation..."
         />
-        <button type="button" class="btn btn-ghost btn-circle text-error" @click="removeLocalTranslation(t.uid)">✕</button>
+        <button type="button" class="btn btn-ghost btn-circle text-error" @click="removeLocalTranslation(t.uid)">{{ $t('practice.tasks.removeTranslation') }}</button>
       </div>
 
       <div class="flex items-center gap-2">
@@ -170,7 +170,7 @@ onMounted(loadVocab);
     </div>
     
     <div class="flex gap-2 justify-end">
-      <button class="btn btn-primary" :disabled="translations.length === 0" @click="handleDone">Done</button>
+      <button class="btn btn-primary" :disabled="translations.length === 0" @click="handleDone">{{ $t('common.done') }}</button>
     </div>
   </div>
   <div v-else>

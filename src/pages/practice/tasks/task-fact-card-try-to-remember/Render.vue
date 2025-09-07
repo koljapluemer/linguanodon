@@ -85,8 +85,8 @@ onMounted(loadFactCard);
     </div>
     
     <div class="flex justify-center gap-4">
-      <button @click="handleSkip" class="btn btn-ghost">Do not learn this</button>
-      <button @click="handleDone" class="btn btn-primary">Done</button>
+      <button @click="handleSkip" class="btn btn-ghost">{{ $t('practice.tasks.doNotLearn') }}</button>
+      <button @click="handleDone" class="btn btn-primary">{{ $t('common.done') }}</button>
     </div>
   </div>
 

@@ -105,15 +105,15 @@ function hideDropdown() {
 <template>
   <div class="space-y-6">
     <h2>
-      Target Languages
+      {{ $t('settings.targetLanguages') }}
     </h2>
     <p class="text-light  mb-4">
-      Languages you want to learn. You can temporarily disable languages or remove them completely.
+      {{ $t('settings.targetLanguagesDescription') }}
     </p>
 
     <div v-if="loading" class="text-center py-8">
       <span class="loading loading-spinner loading-lg"></span>
-      <p class="mt-4">Loading...</p>
+      <p class="mt-4">{{ $t('common.loading') }}</p>
     </div>
 
     <div v-else>
@@ -143,13 +143,13 @@ function hideDropdown() {
 
       <div v-else class="text-center py-6 text-base-content/60">
         <Languages class="w-8 h-8 mx-auto mb-2 opacity-50" />
-        <p>No target languages added yet.</p>
-        <p class="">Add languages you want to learn.</p>
+        <p>{{ $t('settings.noTargetLanguages') }}</p>
+        <p class="">{{ $t('settings.addTargetLanguagesDescription') }}</p>
       </div>
 
       <!-- Add Language Section -->
       <div class="flex flex-col space-y-1">
-        <label class=" font-medium">Add Target Language</label>
+        <label class=" font-medium">{{ $t('settings.addTargetLanguage') }}</label>
         <div class="relative">
           <input v-model="addLanguageSearch" class="input input-bordered w-full"
             placeholder="Type to search for a language..." @focus="showDropdown = true" @blur="hideDropdown" />
@@ -161,12 +161,12 @@ function hideDropdown() {
               <div class="flex items-center gap-2">
                 <span v-if="lang.emoji">{{ lang.emoji }}</span>
                 <span class="font-medium">{{ lang.name }}</span>
-                <span class=" text-base-content/60">({{ lang.code }})</span>
+                <span class=" text-base-content/60">{{ $t('manage.vocab.count') }}{{ lang.code }}{{ $t('manage.vocab.countEnd') }}</span>
               </div>
             </button>
           </div>
           <div v-if="addLanguageSearch && availableLanguages.length === 0" class="text-xs text-warning mt-1">
-            No languages found matching your search.
+            {{ $t('settings.noLanguagesFound') }}
           </div>
         </div>
       </div>

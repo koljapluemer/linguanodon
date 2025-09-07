@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between items-center mb-6">
     <h1>
-      {{ isEditing ? 'Edit Vocab' : 'Add New Vocab' }}
+      {{ isEditing ? $t('vocabulary.edit') : $t('vocabulary.addNew') }}
     </h1>
     <div class="flex gap-2">
       <!-- <router-link 
@@ -12,7 +12,7 @@
         Practice this
       </router-link> -->
       <router-link to="/vocab" class="btn btn-outline">
-        Back to Vocab List
+        {{ $t('vocabulary.form.backToVocabList') }}
       </router-link>
     </div>
   </div>
@@ -24,11 +24,11 @@
   <div v-if="isEditing && currentVocab" class="mt-8">
     <div class="card shadow">
       <div class="card-body">
-        <h2>Mastery Progress</h2>
+        <h2>{{ $t('vocabulary.form.masteryProgress') }}</h2>
         <div class="space-y-2">
           <div class="flex justify-between items-center">
-            <span class=" font-medium">Current Mastery</span>
-            <span class=" font-bold">{{ vocabMastery }}%</span>
+            <span class=" font-medium">{{ $t('vocabulary.form.currentMastery') }}</span>
+            <span class=" font-bold">{{ vocabMastery }}{{ $t('vocabulary.form.percent') }}</span>
           </div>
           <progress class="progress progress-primary w-full" :value="vocabMastery" max="100"></progress>
         </div>

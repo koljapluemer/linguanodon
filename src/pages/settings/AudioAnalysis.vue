@@ -177,23 +177,23 @@ async function deleteEmptyAudio() {
 </script>
 
 <template>
-  <h3>Audio Analysis</h3>
+  <h3>{{ $t('settings.audio.title') }}</h3>
   <p class=" text-light mb-4">
-    Detect empty or silent audio files in your vocabulary collection.
+    {{ $t('settings.audio.description') }}
   </p>
 
   <div class="flex gap-2">
     <button @click="detectEmptySoundFiles" :disabled="detectingSounds" class="btn btn-outline btn-sm w-fit">
       <Search class="w-4 h-4 mr-2" />
       <span v-if="detectingSounds" class="loading loading-spinner loading-xs mr-2"></span>
-      {{ detectingSounds ? 'Analyzing Audio Files...' : 'Detect Empty Sound Files' }}
+      {{ detectingSounds ? $t('settings.audio.analyzingAudio') : $t('settings.audio.detectEmptyFiles') }}
     </button>
 
     <button @click="deleteEmptyAudio"
       :disabled="!analysisCompleted || emptyAudioResults.length === 0 || deletingEmptyAudio"
       class="btn btn-error btn-sm w-fit">
       <span v-if="deletingEmptyAudio" class="loading loading-spinner loading-xs mr-2"></span>
-      {{ deletingEmptyAudio ? 'Deleting...' : `Delete ${emptyAudioResults.length} Empty Audio Files` }}
+      {{ deletingEmptyAudio ? $t('settings.audio.deleting') : `Delete ${emptyAudioResults.length} Empty Audio Files` }}
     </button>
   </div>
 
@@ -201,7 +201,7 @@ async function deleteEmptyAudio() {
   <div v-if="analysisCompleted && emptyAudioResults.length > 0" class="mt-4">
     <details class="collapse collapse-plus bg-base-200">
       <summary class="collapse-title  font-medium">
-        View {{ emptyAudioResults.length }} vocabulary items with broken audio
+        {{ $t('settings.audio.viewBrokenAudio') }} {{ emptyAudioResults.length }} {{ $t('settings.audio.brokenAudioItems') }}
       </summary>
       <div class="collapse-content">
         <ul class="list-disc list-inside space-y-1  mt-2">
@@ -211,7 +211,7 @@ async function deleteEmptyAudio() {
               class="link link-primary hover:link-hover">
               {{ result.content }}
             </router-link>
-            <span class="text-base-content/60 ml-2 text-xs">({{ result.reason.replace('_', ' ') }})</span>
+            <span class="text-base-content/60 ml-2 text-xs">{{ $t('manage.vocab.count') }}{{ result.reason.replace('_', ' ') }}{{ $t('manage.vocab.countEnd') }}</span>
           </li>
         </ul>
       </div>

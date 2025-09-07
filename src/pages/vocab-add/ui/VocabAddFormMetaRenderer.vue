@@ -10,7 +10,7 @@
       <!-- Toggle for Basic/All Data -->
       <div class="flex items-center justify-end mb-6">
         <label class="flex items-center gap-2 cursor-pointer">
-          <span class="">Show all data</span>
+          <span class="">{{ $t('vocabulary.form.showAllData') }}</span>
           <input
             v-model="showAllData"
             type="checkbox"
@@ -48,7 +48,7 @@
           class="btn btn-primary w-full"
         >
           <span v-if="saving" class="loading loading-spinner loading-sm mr-2"></span>
-          {{ saving ? 'Saving...' : 'Save Vocab' }}
+          {{ saving ? $t('vocabulary.form.saving') : $t('vocabulary.form.saveVocab') }}
         </button>
       </div>
     </div>

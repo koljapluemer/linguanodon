@@ -6,10 +6,10 @@
     </button>
 
     <div class="flex flex-col items-center gap-2">
-      <div class="font-medium">Volume</div>
+      <div class="font-medium">{{ $t('media.audio.volume') }}</div>
       <input type="range" min="0" max="1" step="0.1" v-model="volume" @input="updateVolume"
         class="range range-primary w-32" />
-      <div class="text-xs text-base-content/60">{{ Math.round(volume * 100) }}%</div>
+      <div class="text-xs text-base-content/60">{{ Math.round(volume * 100) }}{{ $t('resources.percent') }}</div>
     </div>
 
     <!-- Hidden audio element -->

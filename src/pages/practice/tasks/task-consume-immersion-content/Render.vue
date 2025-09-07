@@ -123,7 +123,7 @@ onMounted(() => {
       
       <div class="form-control mb-4">
         <label class="label">
-          <span class="label-text">How was your experience? (optional)</span>
+          <span class="label-text">{{ $t('practice.tasks.howWasExperience') }}</span>
         </label>
         <textarea 
           v-model="experienceComment"
@@ -135,7 +135,7 @@ onMounted(() => {
 
     <details class="collapse collapse-arrow border border-base-300 mb-6">
       <summary class="collapse-title text-lg font-medium">
-        Manage vocabulary and fact cards for this resource
+        {{ $t('practice.tasks.manageVocabFacts') }}
       </summary>
       <div class="collapse-content">
         <div class="tabs tabs-boxed mb-4">
@@ -144,14 +144,14 @@ onMounted(() => {
             :class="{ 'tab-active': !showManagementWidgets || showManagementWidgets === 'vocab' }"
             @click="showManagementWidgets = 'vocab'"
           >
-            Vocabulary
+            {{ $t('practice.tasks.vocabulary') }}
           </button>
           <button 
             class="tab"
             :class="{ 'tab-active': showManagementWidgets === 'facts' }"
             @click="showManagementWidgets = 'facts'"
           >
-            Fact Cards
+            {{ $t('practice.tasks.factCards') }}
           </button>
         </div>
 

@@ -292,6 +292,6 @@ onMounted(loadVocabData);
 
   <!-- Error State -->
   <div v-else>
-    <span>Failed to load exercise data</span>
+    <span>{{ $t('practice.tasks.failedToLoad') }}</span>
   </div>
 </template>

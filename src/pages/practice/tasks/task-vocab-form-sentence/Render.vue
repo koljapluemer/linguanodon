@@ -270,7 +270,7 @@ onUnmounted(() => {
               />
             </div>
             <div v-if="vocab.images.length > 6" class=" text-base-content/50 mt-2">
-              +{{ vocab.images.length - 6 }} more images
+              {{ $t('common.add') }}{{ vocab.images.length - 6 }} {{ $t('practice.tasks.moreImages') }}
             </div>
           </div>
         </div>
@@ -290,7 +290,7 @@ onUnmounted(() => {
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
           </svg>
-          Write Text
+          {{ $t('practice.tasks.writeText') }}
         </button>
         
         <button 
@@ -301,7 +301,7 @@ onUnmounted(() => {
             <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
             <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
           </svg>
-          Record Audio
+          {{ $t('practice.tasks.recordAudio') }}
         </button>
       </div>
 
@@ -311,7 +311,7 @@ onUnmounted(() => {
         <div v-if="activeTab === 'text' && !isRecordTask" class="w-full max-w-2xl">
           <div class="text-center mb-6">
             <p class="text-lg text-light mb-4">
-              {{ vocabItems.length === 1 ? 'Write a sentence using this word' : 'Write a sentence using both words' }}
+              {{ vocabItems.length === 1 ? $t('practice.tasks.writeSentenceWord') : $t('practice.tasks.writeSentenceBoth') }}
             </p>
           </div>
           
@@ -324,7 +324,7 @@ onUnmounted(() => {
           
           <div class="text-right mt-2">
             <span class=" text-base-content/50">
-              {{ sentence.trim().length }} characters
+              {{ sentence.trim().length }} {{ $t('practice.tasks.characters') }}
             </span>
           </div>
         </div>
@@ -352,14 +352,14 @@ onUnmounted(() => {
     
     <!-- Action Buttons -->
     <div class="flex justify-center gap-4">
-      <button @click="handleSkip" class="btn btn-ghost">Skip</button>
+      <button @click="handleSkip" class="btn btn-ghost">{{ $t('common.skip') }}</button>
       <button @click="handleDone" class="btn btn-primary" :disabled="!isDoneEnabled">
-        Done
+        {{ $t('common.done') }}
         <span v-if="activeTab === 'text' && sentence.trim().length >= 3" class="ml-2">
-          💬
+          {{ $t('practice.tasks.textIcon') }}
         </span>
         <span v-if="activeTab === 'audio' && audioRecording" class="ml-2">
-          🎤
+          {{ $t('practice.tasks.audioIcon') }}
         </span>
       </button>
     </div>
@@ -367,7 +367,7 @@ onUnmounted(() => {
 
   <div v-else class="text-center py-12">
     <span class="loading loading-spinner loading-lg"></span>
-    <p class="mt-4 text-light">Loading vocabulary...</p>
+    <p class="mt-4 text-light">{{ $t('practice.tasks.loadingVocabulary') }}</p>
   </div>
 
   <!-- Hidden audio element for sound playback -->

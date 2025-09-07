@@ -3,7 +3,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-8">
       <span class="loading loading-spinner loading-lg"></span>
-      <p class="mt-4">Loading vocab...</p>
+      <p class="mt-4">{{ $t('vocabulary.form.loadingVocab') }}</p>
     </div>
 
     <!-- Error State -->
@@ -16,7 +16,7 @@
       <!-- Toggle for Basic/All Data -->
       <div class="flex items-center justify-end mb-6">
         <label class="flex items-center gap-2 cursor-pointer">
-          <span class="">Show all data</span>
+          <span class="">{{ $t('vocabulary.form.showAllData') }}</span>
           <input
             v-model="showAllData"
             type="checkbox"

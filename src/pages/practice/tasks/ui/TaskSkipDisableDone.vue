@@ -13,7 +13,7 @@
       @click="$emit('skipAndDisable')" 
       class="btn btn-outline"
     >
-      Skip & Disable
+      {{ $t('practice.tasks.skipDisable') }}
     </button>
     
     <button 

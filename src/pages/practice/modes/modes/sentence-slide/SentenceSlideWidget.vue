@@ -222,7 +222,7 @@ const handleTaskFinished = async () => {
       <div class="text-center">
         <span class="loading loading-spinner loading-lg"></span>
         <p class="mt-4 text-lg">
-          {{ state.status === 'loading' && state.message ? state.message : 'Preparing sentence slide...' }}
+          {{ state.status === 'loading' && state.message ? state.message : $t('practice.widgets.preparingSentenceSlide') }}
         </p>
       </div>
     </div>
@@ -234,7 +234,7 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'error'" class="alert alert-error">
       <span>{{ state.message }}</span>
       <button class="btn btn-sm" @click="retry">
-        Try Again
+        {{ $t('practice.widgets.tryAgain') }}
       </button>
     </div>
   </Transition>
@@ -245,11 +245,11 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'empty'" class="hero min-h-96">
       <div class="hero-content text-center">
         <div class="max-w-md">
-          <h1>📚✨</h1>
-          <h2>Slide Complete</h2>
+          <h1>{{ $t('practice.widgets.sentenceSlideIcon') }}</h1>
+          <h2>{{ $t('practice.widgets.slideComplete') }}</h2>
           <p class="py-6">{{ state.message }}</p>
           <button class="btn btn-primary" @click="initializeQueue">
-            Check for More Sentences
+            {{ $t('practice.widgets.checkForMoreSentences') }}
           </button>
         </div>
       </div>
@@ -261,7 +261,7 @@ const handleTaskFinished = async () => {
     <div class="flex items-center justify-between mb-2">
       <span class=" font-medium text-light">{{ progressInfo.phaseDescription }}</span>
       <span class=" font-medium text-light">
-        {{ progressInfo.totalInitialConnectedVocab - progressInfo.remainingConnectedVocab }}/{{ progressInfo.totalInitialConnectedVocab }}
+        {{ progressInfo.totalInitialConnectedVocab - progressInfo.remainingConnectedVocab }}{{ $t('common.of') }}{{ progressInfo.totalInitialConnectedVocab }}
       </span>
     </div>
     <div class="w-full bg-base-300 rounded-full h-2.5">
@@ -272,10 +272,10 @@ const handleTaskFinished = async () => {
     </div>
     <div class="flex items-center justify-between mt-1">
       <span class="text-xs text-base-content/50">
-        {{ Math.round(progressInfo.progressPercentage) }}% complete
+        {{ Math.round(progressInfo.progressPercentage) }}{{ $t('practice.widgets.percentComplete') }}
       </span>
       <span class="text-xs text-base-content/50">
-        {{ progressInfo.remainingConnectedVocab }} remaining
+        {{ progressInfo.remainingConnectedVocab }} {{ $t('practice.widgets.remaining') }}
       </span>
     </div>
   </div>
@@ -299,9 +299,9 @@ const handleTaskFinished = async () => {
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
     <div v-if="!['initializing', 'loading', 'task', 'empty', 'error'].includes(state.status)"
       class="alert alert-warning">
-      <span>The sentence slide has gone off track. Please refresh.</span>
+      <span>{{ $t('practice.widgets.sentenceSlideOffTrack') }}</span>
       <button class="btn btn-sm" @click="initializeQueue">
-        Reset Slide
+        {{ $t('practice.widgets.resetSlide') }}
       </button>
     </div>
   </Transition>

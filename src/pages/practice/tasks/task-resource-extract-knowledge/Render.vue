@@ -127,14 +127,14 @@ onMounted(() => {
         :class="{ 'tab-active': activeTab === 'vocab' }"
         @click="activeTab = 'vocab'"
       >
-        Vocabulary
+        {{ $t('practice.tasks.vocabulary') }}
       </button>
       <button 
         class="tab"
         :class="{ 'tab-active': activeTab === 'facts' }"
         @click="activeTab = 'facts'"
       >
-        Fact Cards
+        {{ $t('practice.tasks.factCards') }}
       </button>
     </div>
 

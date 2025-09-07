@@ -174,7 +174,7 @@ const handleTaskFinished = async () => {
       <div class="text-center">
         <span class="loading loading-spinner loading-lg"></span>
         <p class="mt-4 text-lg">
-          {{ state.status === 'loading' && state.message ? state.message : 'Preparing image insertion session...' }}
+          {{ state.status === 'loading' && state.message ? state.message : $t('practice.widgets.preparingImageInsertion') }}
         </p>
       </div>
     </div>
@@ -186,7 +186,7 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'error'" class="alert alert-error">
       <span>{{ state.message }}</span>
       <button class="btn btn-sm" @click="retry">
-        Try Again
+        {{ $t('practice.widgets.tryAgain') }}
       </button>
     </div>
   </Transition>
@@ -197,11 +197,11 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'empty'" class="hero min-h-96">
       <div class="hero-content text-center">
         <div class="max-w-md">
-          <h1>🖼️</h1>
-          <h2>All Done!</h2>
+          <h1>{{ $t('practice.widgets.insertImagesIcon') }}</h1>
+          <h2>{{ $t('practice.widgets.allDone') }}</h2>
           <p class="py-6">{{ state.message }}</p>
           <button class="btn btn-primary" @click="initializeQueue">
-            Check Again
+            {{ $t('practice.widgets.checkAgain') }}
           </button>
         </div>
       </div>
@@ -222,9 +222,9 @@ const handleTaskFinished = async () => {
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
     <div v-if="!['initializing', 'loading', 'task', 'empty', 'error'].includes(state.status)"
       class="alert alert-warning">
-      <span>Unknown queue state. Please refresh.</span>
+      <span>{{ $t('practice.widgets.unknownQueueState') }}</span>
       <button class="btn btn-sm" @click="initializeQueue">
-        Refresh
+        {{ $t('practice.widgets.refresh') }}
       </button>
     </div>
   </Transition>

@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1>Edit Resource</h1>
+    <h1>{{ $t('resources.edit') }}</h1>
     <router-link to="/resources" class="btn btn-outline">
-      Back to Resources List
+      {{ $t('resources.backToResourcesList') }}
     </router-link>
   </div>
 
@@ -18,13 +18,13 @@
 
     <!-- Vocabulary Section -->
     <section>
-      <h2>Vocabulary</h2>
+      <h2>{{ $t('navigation.vocabulary') }}</h2>
 
       <!-- Vocab Mastery Progress -->
       <div v-if="resource.vocab.length > 0 && resource.isImmersionContent" class="mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span class=" font-medium">Average Vocab Mastery</span>
-          <span class=" font-bold">{{ avgVocabMastery }}%</span>
+          <span class=" font-medium">{{ $t('resources.averageVocabMastery') }}</span>
+          <span class=" font-bold">{{ avgVocabMastery }}{{ $t('resources.percent') }}</span>
         </div>
         <progress class="progress progress-primary w-full" :value="avgVocabMastery" max="100"></progress>
       </div>
@@ -34,7 +34,7 @@
 
     <!-- Fact Cards Section -->
     <section>
-      <h2>Fact Cards</h2>
+      <h2>{{ $t('navigation.factCards') }}</h2>
       <ManageResourceFactCards :resource="resource" @resource-updated="handleResourceUpdate" />
     </section>
   </div>

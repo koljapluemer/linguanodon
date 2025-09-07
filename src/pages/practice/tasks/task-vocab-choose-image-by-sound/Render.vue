@@ -52,17 +52,17 @@
     
     <!-- Skip button -->
     <div class="flex justify-end">
-      <button @click="skipTask" class="btn btn-outline btn-sm">Skip Exercise</button>
+      <button @click="skipTask" class="btn btn-outline btn-sm">{{ $t('practice.tasks.skipExercise') }}</button>
     </div>
   </div>
 
   <!-- Error State -->
   <div v-else class="text-center">
     <div class="alert alert-error max-w-md mx-auto">
-      <span>Failed to load exercise data</span>
+      <span>{{ $t('practice.tasks.failedToLoad') }}</span>
     </div>
     <div class="mt-4">
-      <button @click="skipTask" class="btn btn-outline">Skip Exercise</button>
+      <button @click="skipTask" class="btn btn-outline">{{ $t('practice.tasks.skipExercise') }}</button>
     </div>
   </div>
 

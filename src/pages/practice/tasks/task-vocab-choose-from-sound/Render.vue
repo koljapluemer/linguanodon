@@ -8,7 +8,7 @@
   <div v-else-if="vocab1 && vocab2 && playableSound" class="text-center">
     <!-- Skip button -->
     <div class="flex justify-end mb-4">
-      <button @click="skipTask" class="btn btn-outline btn-sm">Skip Exercise</button>
+      <button @click="skipTask" class="btn btn-outline btn-sm">{{ $t('practice.tasks.skipExercise') }}</button>
     </div>
 
     <SoundPlayer ref="soundPlayerRef" :sound="playableSound" :auto-play="true" />
@@ -19,7 +19,7 @@
            class="flex gap-2 flex-col transition-all duration-300 ease-out">
         <button :class="getButtonClass(index)" class="btn btn-lg transition-all duration-300" @click="selectOption(index)"
           :disabled="isButtonDisabled(index)">
-          I hear {{ vocab.content }}
+          {{ $t('practice.tasks.iHear') }} {{ vocab.content }}
         </button>
         <VocabWithTranslationsDisplay :vocab-uid="vocab.uid" :repositories="repositories"
           :showAllNotesImmediately="true" />
@@ -30,10 +30,10 @@
   <!-- Error State -->
   <div v-else class="text-center">
     <div class="alert alert-error max-w-md mx-auto">
-      <span>Failed to load exercise data</span>
+      <span>{{ $t('practice.tasks.failedToLoad') }}</span>
     </div>
     <div class="mt-4">
-      <button @click="skipTask" class="btn btn-outline">Skip Exercise</button>
+      <button @click="skipTask" class="btn btn-outline">{{ $t('practice.tasks.skipExercise') }}</button>
     </div>
   </div>
 </template>

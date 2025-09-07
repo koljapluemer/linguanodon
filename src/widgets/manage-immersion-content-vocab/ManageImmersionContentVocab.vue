@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h3>Needed Vocabulary</h3>
+    <h3>{{ $t('immersion.neededVocabulary') }}</h3>
     
     <div v-if="loading" class="text-center py-4">
       <span class="loading loading-spinner loading-md"></span>
-      <p class="mt-2">Loading vocabulary...</p>
+      <p class="mt-2">{{ $t('immersion.loadingVocabulary') }}</p>
     </div>
     
     <div v-else-if="error" class="alert alert-error">

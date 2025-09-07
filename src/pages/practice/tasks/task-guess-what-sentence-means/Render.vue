@@ -123,7 +123,7 @@ onMounted(loadVocab);
 
     <div class="mb-8">
       <label for="user-guess" class="block text-lg font-medium mb-4">
-        Your guess:
+        {{ $t('practice.tasks.yourGuess') }}
       </label>
       <textarea id="user-guess" v-model="userGuess" :disabled="showTranslation"
         class="textarea textarea-bordered textarea-lg w-full h-32 text-lg"
@@ -132,13 +132,13 @@ onMounted(loadVocab);
 
     <div v-if="!showTranslation" class="text-center">
       <button @click="handleReveal" :disabled="!canReveal" class="btn btn-primary btn-lg">
-        Reveal Translation
+        {{ $t('practice.tasks.revealTranslation') }}
       </button>
     </div>
 
     <div v-if="showTranslation">
       <div class="mb-8">
-        <div class="divider text-lg font-medium">Translation</div>
+        <div class="divider text-lg font-medium">{{ $t('practice.tasks.translation') }}</div>
         <div class="text-2xl font-bold text-center p-6 bg-accent/10 rounded-lg">
           {{ translations.join(', ') }}
         </div>
@@ -155,7 +155,7 @@ onMounted(loadVocab);
       
       <div class="text-center">
         <button @click="handleDone" class="btn btn-primary btn-lg">
-          Done
+          {{ $t('common.done') }}
         </button>
       </div>
     </div>

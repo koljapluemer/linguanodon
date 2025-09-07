@@ -140,7 +140,7 @@ onMounted(loadVocab);
     <div class="text-center">
       
       <div v-if="isRevealed">
-        <div class="divider mb-6">Answer</div>
+        <div class="divider mb-6">{{ $t('practice.tasks.answer') }}</div>
         <div :class="isSentence ? 'text-xl' : 'text-3xl'" class="text-light mb-6">{{ solution }}</div>
         
         <SpacedRepetitionRating @rating="handleRating" />
@@ -156,7 +156,7 @@ onMounted(loadVocab);
       </div>
       
       <div v-else>
-        <button @click="isRevealed = true" class="btn btn-primary">Reveal</button>
+        <button @click="isRevealed = true" class="btn btn-primary">{{ $t('practice.tasks.reveal') }}</button>
       </div>
     </div>
   </div>

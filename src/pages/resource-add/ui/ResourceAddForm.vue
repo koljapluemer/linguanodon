@@ -3,7 +3,7 @@
     <!-- Title -->
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Title *</span>
+        <span class="label-text font-medium">{{ $t('resources.form.title') }}</span>
       </label>
       <input v-model="formData.title" type="text" placeholder="Resource title" class="input input-bordered w-full"
         :class="{ 'input-error': errors.title }" required />
@@ -15,7 +15,7 @@
     <!-- Language -->
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Language *</span>
+        <span class="label-text font-medium">{{ $t('resources.form.language') }}</span>
       </label>
       <LanguageDropdown v-model="formData.language" placeholder="Select target language" required />
       <div v-if="errors.language" class="label">
@@ -26,22 +26,21 @@
     <!-- Is Immersion Content -->
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Is Immersion Content</span>
+        <span class="label-text font-medium">{{ $t('resources.form.isImmersionContent') }}</span>
       </label>
       <div class="flex items-center gap-3">
         <input v-model="formData.isImmersionContent" type="checkbox" class="toggle toggle-primary" />
-        <span class="">{{ formData.isImmersionContent ? 'Yes' : 'No' }}</span>
+        <span class="">{{ formData.isImmersionContent ? $t('resources.form.yes') : $t('resources.form.no') }}</span>
       </div>
       <div class="label">
-        <span class="label-text-alt">Toggle if this is immersion content (videos, podcasts, articles for
-          immersion)</span>
+        <span class="label-text-alt">{{ $t('resources.form.isImmersionTooltip') }}</span>
       </div>
     </div>
 
     <!-- Content -->
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Content</span>
+        <span class="label-text font-medium">{{ $t('resources.form.content') }}</span>
       </label>
       <textarea v-model="formData.content" placeholder="Main content of the resource (text, article, etc.)"
         class="textarea textarea-bordered w-full" rows="6"></textarea>
@@ -50,7 +49,7 @@
     <!-- Link -->
     <div class="form-control">
       <label class="label">
-        <span class="label-text font-medium">Link</span>
+        <span class="label-text font-medium">{{ $t('resources.form.link') }}</span>
       </label>
       <LinksForm :links="formData.links" :single-link-mode="true" @add-link="handleAddLink"
         @update-link="handleUpdateLink" @remove-link="handleRemoveLink" @field-change="() => { }" />
@@ -59,15 +58,15 @@
     <!-- Buttons -->
     <div class="flex justify-end gap-2">
       <router-link to="/resources" class="btn btn-ghost">
-        Cancel
+        {{ $t('resources.form.cancel') }}
       </router-link>
       <button type="button" class="btn btn-outline" :disabled="!isFormValid || saving" @click="handleSaveAndAddAnother">
         <span v-if="saving" class="loading loading-spinner loading-sm mr-1"></span>
-        Save and Add Another
+        {{ $t('resources.form.saveAndAddAnother') }}
       </button>
       <button type="submit" class="btn btn-primary" :disabled="!isFormValid || saving">
         <span v-if="saving" class="loading loading-spinner loading-sm mr-1"></span>
-        Save
+        {{ $t('resources.form.save') }}
       </button>
     </div>
   </form>

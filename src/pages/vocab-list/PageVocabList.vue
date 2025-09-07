@@ -15,7 +15,7 @@
     <!-- Language Filter -->
     <details class="collapse collapse-arrow bg-base-200">
       <summary class="collapse-title font-medium">
-        Languages ({{ selectedLanguages.length }} selected)
+        {{ $t('vocabulary.filters.languages') }} {{ $t('manage.vocab.count') }}{{ selectedLanguages.length }} {{ $t('vocabulary.filters.selected') }}{{ $t('manage.vocab.countEnd') }}
       </summary>
       <div class="collapse-content">
         <ul class="flex flex-col gap-2">
@@ -36,7 +36,7 @@
     <!-- Set Filter -->
     <details class="collapse collapse-arrow bg-base-200">
       <summary class="collapse-title font-medium">
-        Sets ({{ selectedSets.length }} selected)
+        {{ $t('vocabulary.filters.sets') }} {{ $t('manage.vocab.count') }}{{ selectedSets.length }} {{ $t('vocabulary.filters.selected') }}{{ $t('manage.vocab.countEnd') }}
       </summary>
       <div class="collapse-content">
         <ul class="flex flex-col gap-2">
@@ -44,7 +44,7 @@
             <label class="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" :checked="selectedSets.includes('user-added')" @change="toggleSet('user-added')"
                 class="checkbox checkbox-sm" />
-              User Added
+              {{ $t('common.userAdded') }}
             </label>
           </li>
           <li v-for="set in availableSets" :key="set.uid">
@@ -71,7 +71,7 @@
   <div v-else>
     <!-- Results Summary -->
     <div class="flex justify-center items-center mb-4">
-      <span class="text-light">{{ totalCount }} vocabulary items</span>
+      <span class="text-light">{{ totalCount }} {{ $t('vocabulary.stats.totalItems') }}</span>
     </div>
 
     <!-- Table -->
@@ -79,11 +79,11 @@
       <table class="table table-zebra">
         <thead>
           <tr>
-            <th>Content</th>
-            <th>Language</th>
-            <th>Translations</th>
-            <th>Set</th>
-            <th>Actions</th>
+            <th>{{ $t('vocabulary.content') }}</th>
+            <th>{{ $t('vocabulary.language') }}</th>
+            <th>{{ $t('vocabulary.translations') }}</th>
+            <th>{{ $t('vocabulary.set') }}</th>
+            <th>{{ $t('vocabulary.actions') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -112,7 +112,7 @@
                   v-if="!vocabTranslations[vocab.uid] || vocabTranslations[vocab.uid].length === 0"
                   class="text-light"
                 >
-                  No translations
+                  {{ $t('vocabulary.noTranslations') }}
                 </span>
               </div>
             </td>
@@ -150,9 +150,9 @@
     </div>
 
     <div v-if="vocabItems.length === 0" class="text-center py-8">
-      <p class="text-light">No vocabulary items found.</p>
+      <p class="text-light">{{ $t('vocabulary.states.noItems') }}</p>
       <router-link to="/vocab/new" class="btn btn-primary mt-4">
-        Add New Vocab
+        {{ $t('vocabulary.addNew') }}
       </router-link>
     </div>
   </div>

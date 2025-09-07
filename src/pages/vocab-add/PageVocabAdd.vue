@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-between items-center mb-6">
-    <h1>Add New Vocab</h1>
+    <h1>{{ $t('vocabulary.addNew') }}</h1>
     <router-link to="/vocab" class="btn btn-outline">
-      Back to Vocab List
+      {{ $t('vocabulary.form.backToVocabList') }}
     </router-link>
   </div>
 

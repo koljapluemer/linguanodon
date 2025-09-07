@@ -186,7 +186,7 @@ const handleTaskFinished = async () => {
       <div class="text-center">
         <span class="loading loading-spinner loading-lg"></span>
         <p class="mt-4 text-lg">
-          {{ state.status === 'loading' && state.message ? state.message : 'Preparing your eternal review session...' }}
+          {{ state.status === 'loading' && state.message ? state.message : $t('practice.widgets.preparingEternalReview') }}
         </p>
       </div>
     </div>
@@ -198,7 +198,7 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'error'" class="alert alert-error">
       <span>{{ state.message }}</span>
       <button class="btn btn-sm" @click="retry">
-        Try Again
+        {{ $t('practice.widgets.tryAgain') }}
       </button>
     </div>
   </Transition>
@@ -209,11 +209,11 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'empty'" class="hero min-h-96">
       <div class="hero-content text-center">
         <div class="max-w-md">
-          <h1>🗿</h1>
-          <h2>Boulder at Rest</h2>
+          <h1>{{ $t('practice.widgets.sisyphosIcon') }}</h1>
+          <h2>{{ $t('practice.widgets.boulderAtRest') }}</h2>
           <p class="py-6">{{ state.message }}</p>
           <button class="btn btn-primary" @click="initializeQueue">
-            Roll Again
+            {{ $t('practice.widgets.rollAgain') }}
           </button>
         </div>
       </div>
@@ -234,9 +234,9 @@ const handleTaskFinished = async () => {
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
     <div v-if="!['initializing', 'loading', 'task', 'empty', 'error'].includes(state.status)"
       class="alert alert-warning">
-      <span>The boulder has rolled off course. Please refresh.</span>
+      <span>{{ $t('practice.widgets.boulderOffCourse') }}</span>
       <button class="btn btn-sm" @click="initializeQueue">
-        Reset Boulder
+        {{ $t('practice.widgets.resetBoulder') }}
       </button>
     </div>
   </Transition>

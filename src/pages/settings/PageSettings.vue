@@ -120,9 +120,9 @@ async function deduplicateNotes(notes: NoteData[]): Promise<{ keptNotes: NoteDat
 
   <AudioAnalysis :vocab-repo="vocabRepo" />
 
-  <h3>Note De-duplication</h3>
+  <h3>{{ $t('settings.noteDeduplication') }}</h3>
   <p class="text-light mb-4">
-    Remove duplicate notes that have the same content and type within each vocab or translation entry.
+    {{ $t('settings.noteDeduplicationDescription') }}
   </p>
 
   <button 
@@ -131,10 +131,10 @@ async function deduplicateNotes(notes: NoteData[]): Promise<{ keptNotes: NoteDat
     class="btn btn-outline btn-sm w-fit"
   >
     <span v-if="isDeduplicating" class="loading loading-spinner loading-xs mr-2"></span>
-    {{ isDeduplicating ? 'De-duplicating...' : 'De-duplicate Notes' }}
+    {{ isDeduplicating ? $t('settings.deduplicating') : $t('settings.deduplicateNotes') }}
   </button>
 
   <div v-if="deduplicationResults" class="mt-4">
-    <p>Removed {{ deduplicationResults.duplicatesRemoved }} duplicate notes from {{ deduplicationResults.vocabProcessed + deduplicationResults.translationsProcessed }} entries</p>
+    <p>{{ $t('settings.removedDuplicates') }} {{ deduplicationResults.duplicatesRemoved }} {{ $t('settings.duplicateNotesFrom') }} {{ deduplicationResults.vocabProcessed + deduplicationResults.translationsProcessed }} {{ $t('settings.entries') }}</p>
   </div>
 </template>

@@ -237,7 +237,7 @@ const handleTaskFinished = async () => {
     <div v-if="state.status === 'empty'" class="hero min-h-96">
       <div class="hero-content text-center">
         <div class="max-w-md">
-          <h1>🚫📚</h1>
+          <h1>{{ $t('practice.widgets.illegalImmersionIcon') }}</h1>
           <h2>{{ $t('practice.widgets.immersionComplete') }}</h2>
           <p class="py-6">{{ state.message }}</p>
           <button class="btn btn-primary" @click="initializeQueue">
@@ -253,7 +253,7 @@ const handleTaskFinished = async () => {
     <div class="flex items-center justify-between mb-2">
       <span class=" font-medium text-light">{{ progressInfo.phaseDescription }}</span>
       <span class=" font-medium text-light">
-        {{ progressInfo.completedTasks }}/{{ progressInfo.totalEstimatedTasks }}
+        {{ progressInfo.completedTasks }}{{ $t('common.of') }}{{ progressInfo.totalEstimatedTasks }}
       </span>
     </div>
     <div class="w-full bg-base-300 rounded-full h-2.5">

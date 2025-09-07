@@ -1,6 +1,6 @@
 <template>
   <div class="mb-4">
-    <h1>Add Resource</h1>
+    <h1>{{ $t('resources.addNew') }}</h1>
   </div>
   
   <ResourceAddForm @resource-saved="handleResourceSaved" />

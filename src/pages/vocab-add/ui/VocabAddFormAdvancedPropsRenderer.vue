@@ -20,7 +20,7 @@
   <!-- Priority -->
   <div class="py-4">
     <label class="label">
-      <span class="label-text font-medium">Priority</span>
+      <span class="label-text font-medium">{{ $t('vocabulary.form.priority') }}</span>
     </label>
     <input v-model.number="formData.priority" @input="$emit('field-change')" type="number" min="1" max="5"
       placeholder="1" class="input input-bordered w-full" />
@@ -29,7 +29,7 @@
   <!-- Exclude from Practice -->
   <div class="py-4">
     <label class="label cursor-pointer">
-      <span class="label-text font-medium">Exclude from practice</span>
+      <span class="label-text font-medium">{{ $t('vocabulary.form.excludeFromPractice') }}</span>
       <input v-model="formData.doNotPractice" @change="$emit('field-change')" type="checkbox" class="toggle" />
     </label>
   </div>
@@ -48,7 +48,7 @@
   <!-- Can be visualized toggle -->
   <div class="py-4">
     <label class="label cursor-pointer">
-      <span class="label-text font-medium">Can be visualized</span>
+      <span class="label-text font-medium">{{ $t('vocabulary.form.canBeVisualized') }}</span>
       <input v-model="formData.isPicturable" @change="$emit('field-change')" type="checkbox" class="toggle" />
     </label>
   </div>

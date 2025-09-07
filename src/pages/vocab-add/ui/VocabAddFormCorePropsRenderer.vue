@@ -2,7 +2,7 @@
     <!-- Language -->
     <div class="py-4">
       <label class="label">
-        <span class="label-text font-medium">Language *</span>
+        <span class="label-text font-medium">{{ $t('vocabulary.form.language') }} {{ $t('common.required') }}</span>
       </label>
       <LanguageDropdown
         v-model="formData.language"
@@ -14,7 +14,7 @@
     <!-- Content -->
     <div class="py-4">
       <label class="label">
-        <span class="label-text font-medium">Content *</span>
+        <span class="label-text font-medium">{{ $t('vocabulary.form.content') }} {{ $t('common.required') }}</span>
       </label>
       <input
         v-model="formData.content"
@@ -29,7 +29,7 @@
     <!-- Translations -->
     <div class="py-4">
       <div class=" font-medium   mb-3">
-        Translations
+        {{ $t('vocabulary.translations') }}
       </div>
       
       <div class="space-y-3">

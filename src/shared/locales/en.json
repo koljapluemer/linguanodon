@@ -91,6 +91,14 @@
       "sentenceSlide": {
         "name": "Sentence Slide",
         "description": "Connected vocabulary sentence work"
+      },
+      "minimalPairs": {
+        "name": "Minimal Pairs",
+        "description": "Practice distinguishing similar sounds"
+      },
+      "resourceRotation": {
+        "name": "Resource Rotation",
+        "description": "Rotate through learning resources"
       }
     },
     "states": {
@@ -104,6 +112,34 @@
       "decideWhetherToDoAgain": "Decide Whether To Do Again",
       "spacedRepetitionRating": "How well did you know this?",
       "doNotLearn": "Do not learn",
+      "skipExercise": "Skip Exercise",
+      "answer": "Answer",
+      "reveal": "Reveal",
+      "failedToLoad": "Failed to load exercise data",
+      "iHear": "I hear",
+      "yourGuess": "Your guess:",
+      "revealTranslation": "Reveal Translation",
+      "translation": "Translation",
+      "howWasExperience": "How was your experience? (optional)",
+      "manageVocabFacts": "Manage vocabulary and fact cards for this resource",
+      "vocabulary": "Vocabulary",
+      "factCards": "Fact Cards",
+      "removeTranslation": "✕",
+      "writeText": "Write Text",
+      "recordAudio": "Record Audio",
+      "writeSentenceWord": "Write a sentence using this word",
+      "writeSentenceBoth": "Write a sentence using both words",
+      "characters": "characters",
+      "microphoneAccess": "Microphone access is required to record audio",
+      "recordAgain": "Record Again",
+      "maxSeconds": "Maximum 60 seconds",
+      "recordSentenceWord": "Record yourself saying a sentence using this word",
+      "recordSentenceBoth": "Record yourself saying a sentence using both words",
+      "moreImages": "more images",
+      "loadingVocabulary": "Loading vocabulary...",
+      "seconds": "s",
+      "textIcon": "💬",
+      "audioIcon": "🎤",
       "rating": {
         "again": "Again",
         "hard": "Hard", 
@@ -116,15 +152,46 @@
       "loadingFactCards": "Loading fact cards...",
       "loadingGoalTasks": "Loading goal tasks...",
       "startingIllegalImmersion": "Starting illegal immersion...",
+      "preparingImageInsertion": "Preparing image insertion session...",
+      "loadingMinimalPairs": "Loading Minimal Pairs mode...",
+      "preparingResourceRotation": "Preparing resource rotation...",
+      "preparingSentenceSlide": "Preparing sentence slide...",
+      "preparingEternalReview": "Preparing your eternal review session...",
+      "preparingUltraRandom": "Preparing ultra random tasks...",
       "allDone": "All Done!",
+      "allPairsMastered": "All Pairs Mastered",
+      "resourcePoolEmpty": "Resource Pool Empty",
+      "slideComplete": "Slide Complete",
+      "boulderAtRest": "Boulder at Rest",
+      "randomComplete": "Random Complete!",
       "checkAgain": "Check Again",
       "checkForMoreContent": "Check for More Content",
+      "checkForMoreSentences": "Check for More Sentences",
+      "rollAgain": "Roll Again",
       "unknownQueueState": "Unknown queue state. Please refresh.",
+      "queueWentWrong": "Something went wrong with the queue. Please refresh.",
+      "resourceRotationUnexpected": "Resource rotation has encountered an unexpected state. Please refresh.",
+      "sentenceSlideOffTrack": "The sentence slide has gone off track. Please refresh.",
+      "boulderOffCourse": "The boulder has rolled off course. Please refresh.",
+      "randomnessBroke": "The randomness broke the system. Please refresh.",
       "immersionComplete": "Immersion Complete",
       "immersionGoneAstray": "The immersion session has gone astray. Please refresh.",
       "percentComplete": "% complete",
+      "remaining": "remaining",
       "tryAgain": "Try Again",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "reset": "Reset",
+      "resetSlide": "Reset Slide",
+      "resetBoulder": "Reset Boulder",
+      "resetRandom": "Reset Random",
+      "addResource": "Add Resource",
+      "illegalImmersionIcon": "🚫📚",
+      "insertImagesIcon": "🖼️",
+      "minimalPairsIcon": "🎯",
+      "resourceRotationIcon": "📚",
+      "sentenceSlideIcon": "📚✨",
+      "sisyphosIcon": "🗿",
+      "ultraRandomIcon": "🎲"
     }
   },
   "material": {
@@ -183,7 +250,22 @@
       "notes": "Notes",
       "advanced": "Advanced Properties",
       "meta": "Meta Information",
-      "core": "Core Properties"
+      "core": "Core Properties",
+      "priority": "Priority",
+      "excludeFromPractice": "Exclude from practice",
+      "canBeVisualized": "Can be visualized",
+      "showAllData": "Show all data",
+      "saving": "Saving...",
+      "saveVocab": "Save Vocab",
+      "backToVocabList": "Back to Vocab List",
+      "masteryProgress": "Mastery Progress",
+      "currentMastery": "Current Mastery",
+      "seeAlso": "See Also / Related Vocabulary",
+      "addTranslation": "Add Translation",
+      "noTranslationsAttached": "No translations attached.",
+      "translationContent": "Translation Content",
+      "loadingVocab": "Loading vocab...",
+      "percent": "%"
     },
     "states": {
       "loading": "Loading vocabulary...",
@@ -339,6 +421,22 @@
     "vocab": "vocab",
     "facts": "facts",
     "ellipsis": "...",
+    "backToResourcesList": "Back to Resources List",
+    "averageVocabMastery": "Average Vocab Mastery",
+    "percent": "%",
+    "form": {
+      "title": "Title *",
+      "language": "Language *",
+      "isImmersionContent": "Is Immersion Content",
+      "yes": "Yes",
+      "no": "No",
+      "isImmersionTooltip": "Toggle if this is immersion content (videos, podcasts, articles for immersion)",
+      "content": "Content",
+      "link": "Link",
+      "cancel": "Cancel",
+      "saveAndAddAnother": "Save and Add Another",
+      "save": "Save"
+    },
     "states": {
       "loading": "Loading resources...",
       "noItems": "No resources found.",
@@ -350,6 +448,19 @@
   },
   "settings": {
     "title": "Settings",
+    "targetLanguages": "Target Languages",
+    "targetLanguagesDescription": "Languages you want to learn. You can temporarily disable languages or remove them completely.",
+    "noTargetLanguages": "No target languages added yet.",
+    "addTargetLanguagesDescription": "Add languages you want to learn.",
+    "addTargetLanguage": "Add Target Language",
+    "noLanguagesFound": "No languages found matching your search.",
+    "noteDeduplication": "Note De-duplication",
+    "noteDeduplicationDescription": "Remove duplicate notes that have the same content and type within each vocab or translation entry.",
+    "deduplicating": "De-duplicating...",
+    "deduplicateNotes": "De-duplicate Notes",
+    "removedDuplicates": "Removed",
+    "duplicateNotesFrom": "duplicate notes from",
+    "entries": "entries",
     "languages": {
       "title": "Languages",
       "description": "Manage your target languages",
@@ -365,12 +476,26 @@
     },
     "audio": {
       "title": "Audio Analysis",
-      "description": "Analyze audio capabilities"
+      "description": "Detect empty or silent audio files in your vocabulary collection.",
+      "analyzingAudio": "Analyzing Audio Files...",
+      "detectEmptyFiles": "Detect Empty Sound Files",
+      "deleting": "Deleting...",
+      "viewBrokenAudio": "View",
+      "brokenAudioItems": "vocabulary items with broken audio"
     }
   },
   "timeTracking": {
     "title": "Time Tracking",
-    "description": "Track your learning sessions"
+    "description": "Track your learning sessions",
+    "learningTimeTracker": "Learning Time Tracker",
+    "trackDailyProgress": "Track your daily learning progress",
+    "today": "Today",
+    "minutesLearned": "minutes learned",
+    "thisWeek": "This Week",
+    "total": "Total",
+    "lastSevenDays": "Last 7 Days",
+    "noLearningTime": "No learning time recorded yet.",
+    "visitQueueToStart": "Visit the Queue to start tracking your learning time!"
   },
   "downloads": {
     "title": "Downloads",
@@ -449,7 +574,8 @@
       "url": "URL",
       "upload": "Upload",
       "close": "×",
-      "supportedFormats": "Supported: MP3, WAV, M4A, OGG, WebM, AAC (max 10MB)"
+      "supportedFormats": "Supported: MP3, WAV, M4A, OGG, WebM, AAC (max 10MB)",
+      "volume": "Volume"
     }
   },
   "manage": {
@@ -507,5 +633,6 @@
   "immersion": {
     "neededVocabulary": "Needed Vocabulary",
     "loadingVocabulary": "Loading vocabulary..."
-  }
+  },
+  "minutes": "m"
 }

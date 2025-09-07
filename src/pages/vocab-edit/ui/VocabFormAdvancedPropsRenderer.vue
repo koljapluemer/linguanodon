@@ -21,7 +21,7 @@
       @update:modelValue="$emit('field-change')" />
 
     <!-- Notes -->
-    <h3>Notes</h3>
+    <h3>{{ $t('vocabulary.form.notes') }}</h3>
     <NoteList :notes="formData.notes" :show-before-exercise-option="true" @add="$emit('add-note', $event)"
       @update="$emit('update-note', $event)" @delete="$emit('remove-note', $event)" />
 
@@ -38,7 +38,7 @@
     <VocabSoundManager :sounds="formData.sounds" @sounds-changed="(sounds) => emit('update-sounds', sounds)" />
 
     <div class="space-y-4">
-      <h3>See Also / Related Vocabulary</h3>
+      <h3>{{ $t('vocabulary.form.seeAlso') }}</h3>
       <ManageVocabList :vocab-ids="formData.relatedVocab || []" :language="formData.language" :config="{
         allowAdd: true,
         allowEdit: true,
