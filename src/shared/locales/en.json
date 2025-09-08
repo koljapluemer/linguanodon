@@ -314,6 +314,9 @@
       "adjustSearch": "Try adjusting your search terms.",
       "createFirst": "Create your first fact card to get started."
     },
+    "stats": {
+      "totalItems": "fact cards"
+    },
     "notes": {
       "label": "Notes:",
       "count": "note",

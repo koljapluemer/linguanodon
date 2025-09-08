@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { FactCardRepoContract } from './FactCardRepoContract';
+import type { FactCardRepoContract, FactCardListFilters } from './FactCardRepoContract';
 import type { FactCardData } from './FactCardData';
 import { createEmptyCard, fsrs, Rating } from 'ts-fsrs';
 
@@ -181,5 +181,45 @@ export class FactCardRepo implements FactCardRepoContract {
     const shuffled = factCards.sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, Math.min(count, shuffled.length));
     return selected.map(fc => this.ensureFactCardFields(fc));
+  }
+
+  private buildFilteredQuery(filters?: FactCardListFilters) {
+    let collection = this.db.factCards.toCollection();
+
+    if (filters?.languages && filters.languages.length > 0) {
+      collection = this.db.factCards.where('language').anyOf(filters.languages);
+    }
+
+    return collection.filter(factCard => {
+      // Search in front and back content
+      if (filters?.searchQuery) {
+        const searchTerm = filters.searchQuery.toLowerCase();
+        const matchesSearch = 
+          factCard.front.toLowerCase().includes(searchTerm) ||
+          factCard.back.toLowerCase().includes(searchTerm);
+        if (!matchesSearch) return false;
+      }
+
+      // Filter by origins
+      if (filters?.origins && filters.origins.length > 0) {
+        const hasMatchingOrigin = factCard.origins.some(origin => 
+          filters.origins!.includes(origin)
+        );
+        if (!hasMatchingOrigin) return false;
+      }
+
+      return true;
+    });
+  }
+
+  async getFactCardsPaginated(offset: number, limit: number, filters?: FactCardListFilters): Promise<FactCardData[]> {
+    const query = this.buildFilteredQuery(filters);
+    const factCards = await query.offset(offset).limit(limit).toArray();
+    return factCards.map(fc => this.ensureFactCardFields(fc));
+  }
+
+  async getTotalFactCardsCount(filters?: FactCardListFilters): Promise<number> {
+    const query = this.buildFilteredQuery(filters);
+    return await query.count();
   }
 }

@@ -1,6 +1,12 @@
 import type { FactCardData } from './FactCardData';
 import type { Rating } from 'ts-fsrs';
 
+export interface FactCardListFilters {
+  searchQuery?: string;
+  languages?: string[];
+  origins?: string[];
+}
+
 export interface FactCardRepoContract {
   // Basic CRUD operations
   getAllFactCards(): Promise<FactCardData[]>;
@@ -17,4 +23,8 @@ export interface FactCardRepoContract {
   // Task generation operations
   getRandomUnseenFactCards(count: number, languages: string[], factCardBlockList?: string[]): Promise<FactCardData[]>;
   getRandomAlreadySeenDueFactCards(count: number, languages: string[], factCardBlockList?: string[]): Promise<FactCardData[]>;
+
+  // List and pagination operations
+  getFactCardsPaginated(offset: number, limit: number, filters?: FactCardListFilters): Promise<FactCardData[]>;
+  getTotalFactCardsCount(filters?: FactCardListFilters): Promise<number>;
 }
