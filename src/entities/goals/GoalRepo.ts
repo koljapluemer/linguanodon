@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { GoalData } from './GoalData';
-import type { GoalRepoContract } from './GoalRepoContract';
+import type { GoalRepoContract, GoalListFilters } from './GoalRepoContract';
 
 class GoalDatabase extends Dexie {
   goals!: Table<GoalData>;
@@ -98,5 +98,65 @@ export class GoalRepo implements GoalRepoContract {
       .where('subGoals')
       .anyOf([goalId])
       .first();
+  }
+
+  private applyFilters(goals: GoalData[], filters?: GoalListFilters): GoalData[] {
+    if (!filters) return goals;
+    
+    let filtered = goals;
+
+    // Search filter
+    if (filters.searchQuery?.trim()) {
+      const query = filters.searchQuery.trim().toLowerCase();
+      filtered = filtered.filter(goal => {
+        // Search in title
+        if (goal.title.toLowerCase().includes(query)) return true;
+        
+        // Search in milestones
+        if (goal.milestones) {
+          const milestoneKeys = Object.keys(goal.milestones);
+          if (milestoneKeys.some(milestone => milestone.toLowerCase().includes(query))) return true;
+        }
+        
+        return false;
+      });
+    }
+
+    // Language filter
+    if (filters.languages && filters.languages.length > 0) {
+      filtered = filtered.filter(goal => filters.languages!.includes(goal.language));
+    }
+
+    // Origins filter
+    if (filters.origins && filters.origins.length > 0) {
+      filtered = filtered.filter(goal => 
+        goal.origins.some(origin => filters.origins!.includes(origin))
+      );
+    }
+
+    return filtered;
+  }
+
+  async getGoalsPaginated(offset: number, limit: number, filters?: GoalListFilters): Promise<GoalData[]> {
+    const allGoals = await this.db.goals.toArray();
+    const filtered = this.applyFilters(allGoals, filters);
+    
+    // Sort by lastShownAt descending (most recent first), then by title
+    filtered.sort((a, b) => {
+      if (a.lastShownAt && b.lastShownAt) {
+        return b.lastShownAt.getTime() - a.lastShownAt.getTime();
+      }
+      if (a.lastShownAt && !b.lastShownAt) return -1;
+      if (!a.lastShownAt && b.lastShownAt) return 1;
+      return a.title.localeCompare(b.title);
+    });
+    
+    return filtered.slice(offset, offset + limit);
+  }
+
+  async getTotalGoalsCount(filters?: GoalListFilters): Promise<number> {
+    const allGoals = await this.db.goals.toArray();
+    const filtered = this.applyFilters(allGoals, filters);
+    return filtered.length;
   }
 }

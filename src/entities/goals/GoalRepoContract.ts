@@ -1,5 +1,11 @@
 import type { GoalData } from './GoalData';
 
+export interface GoalListFilters {
+  searchQuery?: string;
+  languages?: string[];
+  origins?: string[];
+}
+
 export interface GoalRepoContract {
   getAll(): Promise<GoalData[]>;
   getById(id: string): Promise<GoalData | undefined>;
@@ -12,4 +18,6 @@ export interface GoalRepoContract {
   getSubGoals(parentId: string): Promise<GoalData[]>;
   getRootGoals(): Promise<GoalData[]>; // goals without parent
   getParentGoal(goalId: string): Promise<GoalData | undefined>;
+  getGoalsPaginated(offset: number, limit: number, filters?: GoalListFilters): Promise<GoalData[]>;
+  getTotalGoalsCount(filters?: GoalListFilters): Promise<number>;
 }

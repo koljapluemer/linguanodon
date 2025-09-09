@@ -365,6 +365,8 @@
     "subGoals": "Sub-Goals",
     "milestones": "Milestones",
     "achieved": "Achieved",
+    "search": "Search goals...",
+    "noMilestones": "No milestones",
     "placeholder": {
       "title": "I want to be able to",
       "description": "This will help me achieve..."
@@ -404,6 +406,7 @@
     "stats": {
       "subGoals": "sub-goals",
       "vocab": "vocab",
+      "totalItems": "goals",
       "vocabMastered": "% vocab mastered"
     }
   },
