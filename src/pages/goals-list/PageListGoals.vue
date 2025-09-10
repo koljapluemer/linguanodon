@@ -172,8 +172,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, inject, computed } from 'vue';
+import { ref, onMounted, inject, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 import type { GoalRepoContract, GoalListFilters } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
@@ -186,6 +187,8 @@ import { isCurrentlyTopOfMind } from '@/entities/vocab/isCurrentlyTopOfMind';
 import Pagination from '@/shared/ui/Pagination.vue';
 
 const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
 
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const vocabRepo = inject<VocabRepoContract>('vocabRepo')!;
@@ -199,14 +202,21 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const vocabStats = ref<Record<string, { topOfMindPercentage: number }>>({});
 
-// Filters and search
-const searchQuery = ref('');
-const selectedLanguages = ref<string[]>([]);
-const selectedSets = ref<string[]>([]);
+// URL parameter initialization
+function parseArrayParam(value: string | string[] | undefined): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return value.split(',').filter(v => v.length > 0);
+}
 
-// Pagination
-const currentPage = ref(1);
-const pageSize = ref(25);
+// Filters and search - initialized from URL parameters
+const searchQuery = ref(route.query.search as string || '');
+const selectedLanguages = ref<string[]>(parseArrayParam(route.query.languages));
+const selectedSets = ref<string[]>(parseArrayParam(route.query.sets));
+
+// Pagination - initialized from URL parameters
+const currentPage = ref(parseInt(route.query.page as string) || 1);
+const pageSize = ref(parseInt(route.query.pageSize as string) || 25);
 
 // Available options for filters
 const availableLanguages = ref<LanguageData[]>([]);
@@ -223,12 +233,36 @@ const setFilterTitle = computed(() =>
   `${t('common.sets')} (${selectedSets.value.length} ${t('common.selected')})`
 );
 
+// URL parameter synchronization
+function updateUrlParams() {
+  const query: Record<string, string | undefined> = {};
+  
+  if (searchQuery.value.trim()) {
+    query.search = searchQuery.value.trim();
+  }
+  if (selectedLanguages.value.length > 0) {
+    query.languages = selectedLanguages.value.join(',');
+  }
+  if (selectedSets.value.length > 0) {
+    query.sets = selectedSets.value.join(',');
+  }
+  if (currentPage.value > 1) {
+    query.page = currentPage.value.toString();
+  }
+  if (pageSize.value !== 25) {
+    query.pageSize = pageSize.value.toString();
+  }
+
+  router.replace({ query });
+}
+
 // Debounced search
 let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 function debouncedSearch() {
   if (searchTimeout) clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
     currentPage.value = 1;
+    updateUrlParams();
     loadGoals();
   }, 300);
 }
@@ -242,6 +276,7 @@ function toggleLanguage(languageCode: string) {
     selectedLanguages.value.push(languageCode);
   }
   currentPage.value = 1;
+  updateUrlParams();
   loadGoals();
 }
 
@@ -253,6 +288,7 @@ function toggleSet(setId: string) {
     selectedSets.value.push(setId);
   }
   currentPage.value = 1;
+  updateUrlParams();
   loadGoals();
 }
 
@@ -260,6 +296,7 @@ function toggleSet(setId: string) {
 function goToPage(page: number) {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
+    updateUrlParams();
     loadGoals();
   }
 }
@@ -267,6 +304,7 @@ function goToPage(page: number) {
 function handlePageSizeChange(newSize: number) {
   pageSize.value = newSize;
   currentPage.value = 1; // Reset to first page when changing page size
+  updateUrlParams();
   loadGoals();
 }
 
@@ -370,13 +408,28 @@ async function loadFilterOptions() {
       localSetRepo.getAllLocalSets()
     ]);
 
-    // Initialize with all languages selected
-    selectedLanguages.value = availableLanguages.value.map(l => l.code);
-    selectedSets.value = ['user-added', ...availableSets.value.map(s => s.uid)];
+    // If no URL filters are set, initialize with all languages and sets selected
+    if (selectedLanguages.value.length === 0 && selectedSets.value.length === 0) {
+      selectedLanguages.value = availableLanguages.value.map(l => l.code);
+      selectedSets.value = ['user-added', ...availableSets.value.map(s => s.uid)];
+    }
   } catch (err) {
     console.error('Failed to load filter options:', err);
   }
 }
+
+// Watch for URL parameter changes from browser navigation
+watch(
+  () => route.query,
+  (newQuery) => {
+    searchQuery.value = newQuery.search as string || '';
+    selectedLanguages.value = parseArrayParam(newQuery.languages);
+    selectedSets.value = parseArrayParam(newQuery.sets);
+    currentPage.value = parseInt(newQuery.page as string) || 1;
+    pageSize.value = parseInt(newQuery.pageSize as string) || 25;
+    loadGoals();
+  }
+);
 
 onMounted(async () => {
   await loadFilterOptions();
