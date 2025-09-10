@@ -80,16 +80,19 @@
                 <span v-else class="badge badge-outline badge-sm">{{ $t('downloads.available') }}</span>
               </td>
               <td>
-                <div class="flex items-center gap-2">
-                  <button @click="goToSetOverview(set.name, set.language)" class="btn btn-sm btn-ghost">
+                <div class="flex items-center gap-1">
+                  <button @click="goToSetOverview(set.name, set.language)" class="btn btn-sm btn-ghost" :title="$t('downloads.viewDetails')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
                   </button>
-                  <button @click="quickDownload(set.name, set.language)" class="btn btn-sm btn-outline" :disabled="loading">
+                  <button @click="quickDownload(set.name, set.language)" class="btn btn-sm btn-outline" :disabled="loading" :title="$t('downloads.quickDownload')">
                     <Download class="w-4 h-4" />
+                  </button>
+                  <button @click="downloadAndStart(set.name, set.language)" class="btn btn-sm btn-primary" :disabled="loading" :title="$t('downloads.downloadAndStart')">
+                    <Play class="w-4 h-4" />
                   </button>
                 </div>
               </td>
@@ -112,8 +115,9 @@
 import { ref, inject, onMounted, watch, computed } from 'vue';
 import { useRouter, useRoute, type LocationQueryValue } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { Download, CheckCircle } from 'lucide-vue-next';
+import { Download, CheckCircle, Play } from 'lucide-vue-next';
 import { UnifiedRemoteSetService, type RemoteSetInfo } from '@/pages/downloads/UnifiedRemoteSetService';
+import { DownloadAndPracticeService } from '@/pages/downloads/DownloadAndPracticeService';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
@@ -147,6 +151,8 @@ const remoteSetService = new UnifiedRemoteSetService(
   factCardRepo,
   languageRepo
 );
+
+const downloadAndPracticeService = new DownloadAndPracticeService(remoteSetService, router);
 
 // URL parameter initialization
 function parseArrayParam(value: LocationQueryValue | LocationQueryValue[]): string[] {
@@ -310,18 +316,41 @@ async function loadLanguagesAndSets() {
 }
 
 async function quickDownload(setName: string, language: string) {
-  loading.value = true;
-  error.value = null;
+  await downloadAndPracticeService.downloadOnly({
+    language,
+    setName,
+    onDownloadStart: () => {
+      loading.value = true;
+      error.value = null;
+    },
+    onDownloadComplete: () => {
+      downloadedSets.value.add(`${language}-${setName}`);
+      loading.value = false;
+    },
+    onError: (errorMessage) => {
+      error.value = errorMessage;
+      loading.value = false;
+    }
+  });
+}
 
-  try {
-    await remoteSetService.downloadSet(language, setName);
-    downloadedSets.value.add(`${language}-${setName}`);
-  } catch (err) {
-    console.error('Download error:', err);
-    error.value = err instanceof Error ? err.message : 'Failed to download set';
-  } finally {
-    loading.value = false;
-  }
+async function downloadAndStart(setName: string, language: string) {
+  await downloadAndPracticeService.downloadAndStartPractice({
+    language,
+    setName,
+    onDownloadStart: () => {
+      loading.value = true;
+      error.value = null;
+    },
+    onDownloadComplete: () => {
+      downloadedSets.value.add(`${language}-${setName}`);
+      loading.value = false;
+    },
+    onError: (errorMessage) => {
+      error.value = errorMessage;
+      loading.value = false;
+    }
+  });
 }
 
 function goToSetOverview(setName: string, language: string) {

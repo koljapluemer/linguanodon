@@ -67,6 +67,7 @@ import { ref, inject, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Download, CheckCircle } from 'lucide-vue-next';
 import { UnifiedRemoteSetService } from '@/pages/downloads/UnifiedRemoteSetService';
+import { DownloadAndPracticeService } from '@/pages/downloads/DownloadAndPracticeService';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
 import type { TranslationRepoContract } from '@/entities/translations/TranslationRepoContract';
@@ -110,6 +111,8 @@ const remoteSetService = new UnifiedRemoteSetService(
   languageRepo
 );
 
+const downloadAndPracticeService = new DownloadAndPracticeService(remoteSetService, router);
+
 function getPracticeModeName(mode: string): string {
   const modeNames: { [key: string]: string } = {
     'practice-mode-fact-card-grind': 'Fact Card Grind',
@@ -142,36 +145,41 @@ async function loadSetInfo() {
 }
 
 async function downloadAndStart() {
-  if (!metadata.value?.preferredMode) return;
-  
-  downloading.value = true;
-  
-  try {
-    if (!isDownloaded.value) {
-      await remoteSetService.downloadSet(language.value, setName.value);
+  await downloadAndPracticeService.downloadAndStartPractice({
+    language: language.value,
+    setName: setName.value,
+    onDownloadStart: () => {
+      downloading.value = true;
+      error.value = null;
+    },
+    onDownloadComplete: () => {
       isDownloaded.value = true;
+      downloading.value = false;
+    },
+    onError: (errorMessage) => {
+      error.value = errorMessage;
+      downloading.value = false;
     }
-    
-    // Redirect to the preferred practice mode
-    router.push({ name: metadata.value.preferredMode });
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to download set';
-  } finally {
-    downloading.value = false;
-  }
+  });
 }
 
 async function downloadOnly() {
-  downloading.value = true;
-  
-  try {
-    await remoteSetService.downloadSet(language.value, setName.value);
-    isDownloaded.value = true;
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to download set';
-  } finally {
-    downloading.value = false;
-  }
+  await downloadAndPracticeService.downloadOnly({
+    language: language.value,
+    setName: setName.value,
+    onDownloadStart: () => {
+      downloading.value = true;
+      error.value = null;
+    },
+    onDownloadComplete: () => {
+      isDownloaded.value = true;
+      downloading.value = false;
+    },
+    onError: (errorMessage) => {
+      error.value = errorMessage;
+      downloading.value = false;
+    }
+  });
 }
 
 onMounted(loadSetInfo);
