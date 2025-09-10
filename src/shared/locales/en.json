@@ -78,7 +78,14 @@
       },
       "eyesAndEars": {
         "name": "Eyes and Ears",
-        "description": "Audio-visual vocabulary matching"
+        "description": "Audio-visual vocabulary matching",
+        "setup": {
+          "title": "Choose Exercise Types",
+          "description": "Select which types of exercises you'd like to practice with.",
+          "includeGeneration": "Include generation exercises",
+          "recallOnly": "Recall exercises only",
+          "hint": "Generation exercises include sentence formation, while recall exercises focus on recognition."
+        }
       },
       "ultrarandom": {
         "name": "Ultrarandom",

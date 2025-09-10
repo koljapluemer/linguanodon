@@ -46,14 +46,27 @@ async function getVocabWithSoundAndImages(
   });
 }
 
+export interface EyesAndEarsOptions {
+  includeGenerationExercises?: boolean;
+}
+
 export async function generateEyesAndEars(
   vocabRepo: VocabRepoContract,
   languageCodes: string[],
-  vocabBlockList?: string[]
+  vocabBlockList?: string[],
+  options: EyesAndEarsOptions = {}
 ): Promise<Task | null> {
   try {
-    // Randomly choose task type: 60% choose image by sound, 40% form sentence
-    const taskType = Math.random() < 0.6 ? 'choose-image' : 'form-sentence';
+    // Choose task type based on user preferences
+    let taskType: 'choose-image' | 'form-sentence';
+    
+    if (options.includeGenerationExercises === false) {
+      // Recall exercises only - always choose image by sound
+      taskType = 'choose-image';
+    } else {
+      // Include generation exercises - randomly choose: 60% choose image by sound, 40% form sentence
+      taskType = Math.random() < 0.6 ? 'choose-image' : 'form-sentence';
+    }
     
     if (taskType === 'choose-image') {
       // Original choose-image-by-sound task

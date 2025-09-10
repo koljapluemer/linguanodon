@@ -10,7 +10,7 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { Task } from '@/pages/practice/Task';
 import TaskRenderer from '@/pages/practice/tasks/ui/TaskRenderer.vue';
 import { useQueueState } from '@/pages/practice/modes/utils/useQueueState';
-import { generateEyesAndEars } from './generateEyesAndEarsTasks';
+import { generateEyesAndEars, type EyesAndEarsOptions } from './generateEyesAndEarsTasks';
 
 // Inject repositories
 const vocabRepo = inject<VocabRepoContract>('vocabRepo');
@@ -41,6 +41,12 @@ const {
 
 const lastUsedVocabUid = ref<string | null>(null);
 
+// Settings screen state
+const showSettings = ref(true);
+const exerciseOptions = ref<EyesAndEarsOptions>({
+  includeGenerationExercises: true
+});
+
 // Generate a single eyes and ears task
 async function generateNextTask(): Promise<Task | null> {
   try {
@@ -54,7 +60,7 @@ async function generateNextTask(): Promise<Task | null> {
     // Create block list with last used vocab
     const blockList = lastUsedVocabUid.value ? [lastUsedVocabUid.value] : undefined;
     
-    return await generateEyesAndEars(vocabRepo!, languageCodes, blockList);
+    return await generateEyesAndEars(vocabRepo!, languageCodes, blockList, exerciseOptions.value);
   } catch (error) {
     console.error('Error generating eyes and ears task:', error);
     return null;
@@ -145,9 +151,22 @@ async function retry() {
   await initializeQueue();
 }
 
+// Settings screen functions
+function startWithGenerationExercises() {
+  exerciseOptions.value.includeGenerationExercises = true;
+  showSettings.value = false;
+  initializeQueue();
+}
 
-onMounted(async () => {
-  await initializeQueue();
+function startRecallExercisesOnly() {
+  exerciseOptions.value.includeGenerationExercises = false;
+  showSettings.value = false;
+  initializeQueue();
+}
+
+
+onMounted(() => {
+  // Don't initialize queue automatically - wait for user to select options
 });
 
 onUnmounted(() => {
@@ -170,10 +189,34 @@ const handleTaskFinished = async () => {
 </script>
 
 <template>
+  <!-- Settings Screen -->
+  <Transition enter-active-class="transition-opacity duration-[50ms]"
+    leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
+    <div v-if="showSettings" class="hero min-h-96">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h1 class="text-2xl font-bold mb-4">{{ $t('practice.modes.eyesAndEars.setup.title') }}</h1>
+          <p class="mb-6">{{ $t('practice.modes.eyesAndEars.setup.description') }}</p>
+          
+          <div class="flex flex-col gap-3">
+            <button @click="startWithGenerationExercises" class="btn btn-primary btn-lg">
+              {{ $t('practice.modes.eyesAndEars.setup.includeGeneration') }}
+            </button>
+            <button @click="startRecallExercisesOnly" class="btn btn-outline btn-lg">
+              {{ $t('practice.modes.eyesAndEars.setup.recallOnly') }}
+            </button>
+          </div>
+          
+          <p class="text-sm text-base-content/70 mt-4">{{ $t('practice.modes.eyesAndEars.setup.hint') }}</p>
+        </div>
+      </div>
+    </div>
+  </Transition>
+
   <!-- Loading State (only show when showLoadingUI is true or initializing) -->
   <Transition enter-active-class="transition-opacity duration-[50ms]"
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
-    <div v-if="state.status === 'initializing' || showLoadingUI" class="flex justify-center items-center min-h-96">
+    <div v-if="!showSettings && (state.status === 'initializing' || showLoadingUI)" class="flex justify-center items-center min-h-96">
       <div class="text-center">
         <span class="loading loading-spinner loading-lg"></span>
         <p class="mt-4 text-lg">
@@ -186,7 +229,7 @@ const handleTaskFinished = async () => {
   <!-- Error State -->
   <Transition enter-active-class="transition-opacity duration-[50ms]"
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
-    <div v-if="state.status === 'error'" class="alert alert-error">
+    <div v-if="!showSettings && state.status === 'error'" class="alert alert-error">
       <span>{{ state.message }}</span>
       <button class="btn btn-sm" @click="retry">
         {{ $t('practice.widgets.tryAgain') }}
@@ -197,7 +240,7 @@ const handleTaskFinished = async () => {
   <!-- No Content Available -->
   <Transition enter-active-class="transition-opacity duration-[50ms]"
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
-    <div v-if="state.status === 'empty'" class="hero min-h-96">
+    <div v-if="!showSettings && state.status === 'empty'" class="hero min-h-96">
       <div class="hero-content text-center">
         <div class="max-w-md">
           <h1>{{ $t('practice.widgets.allDone') }}</h1>
@@ -211,7 +254,7 @@ const handleTaskFinished = async () => {
   </Transition>
 
   <!-- Task -->
-  <div v-if="state.status === 'task' && !showLoadingUI">
+  <div v-if="!showSettings && state.status === 'task' && !showLoadingUI">
     <Transition mode="out-in" enter-active-class="transition-opacity duration-[50ms] ease-out"
       leave-active-class="transition-opacity duration-[50ms] ease-in" enter-from-class="opacity-0"
       enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
@@ -222,7 +265,7 @@ const handleTaskFinished = async () => {
   <!-- Fallback (should never happen with state machine) -->
   <Transition enter-active-class="transition-opacity duration-[50ms]"
     leave-active-class="transition-opacity duration-[50ms]" enter-from-class="opacity-0" leave-to-class="opacity-0">
-    <div v-if="!['initializing', 'loading', 'task', 'empty', 'error'].includes(state.status)"
+    <div v-if="!showSettings && !['initializing', 'loading', 'task', 'empty', 'error'].includes(state.status)"
       class="alert alert-warning">
       <span>{{ $t('practice.widgets.unknownQueueState') }}</span>
       <button class="btn btn-sm" @click="initializeQueue">
