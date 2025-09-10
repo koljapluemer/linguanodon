@@ -174,7 +174,7 @@
 <script setup lang="ts">
 import { ref, onMounted, inject, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, type LocationQueryValue } from 'vue-router';
 import type { GoalRepoContract, GoalListFilters } from '@/entities/goals/GoalRepoContract';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { VocabRepoContract } from '@/entities/vocab/VocabRepoContract';
@@ -203,9 +203,11 @@ const error = ref<string | null>(null);
 const vocabStats = ref<Record<string, { topOfMindPercentage: number }>>({});
 
 // URL parameter initialization
-function parseArrayParam(value: string | string[] | undefined): string[] {
+function parseArrayParam(value: LocationQueryValue | LocationQueryValue[]): string[] {
   if (!value) return [];
-  if (Array.isArray(value)) return value;
+  if (Array.isArray(value)) {
+    return value.filter((v): v is string => v !== null);
+  }
   return value.split(',').filter(v => v.length > 0);
 }
 

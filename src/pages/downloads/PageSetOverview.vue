@@ -74,6 +74,7 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import { remoteSetMetaDataSchema } from '@/entities/remote-sets/remoteSetMetaData';
 import { z } from 'zod';
 
@@ -96,6 +97,7 @@ const noteRepo = inject<NoteRepoContract>('noteRepo')!;
 const resourceRepo = inject<ResourceRepoContract>('resourceRepo')!;
 const goalRepo = inject<GoalRepoContract>('goalRepo')!;
 const factCardRepo = inject<FactCardRepoContract>('factCardRepo')!;
+const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 
 const remoteSetService = new UnifiedRemoteSetService(
   localSetRepo,
@@ -104,7 +106,8 @@ const remoteSetService = new UnifiedRemoteSetService(
   noteRepo,
   resourceRepo,
   goalRepo,
-  factCardRepo
+  factCardRepo,
+  languageRepo
 );
 
 function getPracticeModeName(mode: string): string {

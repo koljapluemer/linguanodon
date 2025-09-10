@@ -158,7 +158,7 @@ import type { LanguageData } from '@/entities/languages/LanguageData';
 import type { LocalSetRepoContract } from '@/entities/local-sets/LocalSetRepoContract';
 import type { LocalSetData } from '@/entities/local-sets/LocalSetData';
 import Pagination from '@/shared/ui/Pagination.vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, type LocationQueryValue } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
@@ -174,9 +174,11 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 
 // URL parameter initialization
-function parseArrayParam(value: string | string[] | undefined): string[] {
+function parseArrayParam(value: LocationQueryValue | LocationQueryValue[]): string[] {
   if (!value) return [];
-  if (Array.isArray(value)) return value;
+  if (Array.isArray(value)) {
+    return value.filter((v): v is string => v !== null);
+  }
   return value.split(',').filter(v => v.length > 0);
 }
 

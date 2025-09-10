@@ -3,64 +3,103 @@
   <div v-if="$route.name === 'downloads'">
     <div class="flex justify-between items-center mb-6">
       <h1>{{ $t('downloads.title') }}</h1>
-      <select v-model="selectedLanguage" class="select ">
-        <option value="">{{ $t('downloads.selectLanguage') }}</option>
-        <option v-for="language in availableLanguages" :key="language.code" :value="language.code">
-          {{ language.emoji ? `${language.emoji} ` : '' }}{{ language.name }}
-        </option>
-      </select>
     </div>
 
-    <div v-if="!selectedLanguage" class="text-center py-16 text-base-content/60">
-      <h3>{{ $t('downloads.selectALanguage') }}</h3>
-      <p>{{ $t('downloads.chooseLanguagePrompt') }}</p>
+    <!-- Search -->
+    <input v-model="searchQuery" @input="debouncedSearch" type="text" :placeholder="$t('downloads.search')"
+      class="input input-bordered w-full mb-2" />
+
+    <!-- Filters -->
+    <div class="grid gap-2 md:grid-cols-1 mb-2">
+      <!-- Language Filter -->
+      <details class="collapse collapse-arrow bg-base-200">
+        <summary class="collapse-title font-medium">
+          {{ languageFilterTitle }}
+        </summary>
+        <div class="collapse-content">
+          <ul class="flex flex-col gap-2">
+            <li v-for="language in availableLanguages" :key="language.code">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" :checked="selectedLanguages.includes(language.code)"
+                  @change="toggleLanguage(language.code)" class="checkbox checkbox-sm" />
+                <span class="flex items-center gap-2">
+                  <span v-if="language.emoji">{{ language.emoji }}</span>
+                  {{ language.name }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </details>
     </div>
 
-    <div v-else class="space-y-6">
-      <div class="card shadow">
-        <div class="card-body">
-          <h2>{{ $t('downloads.availableSets') }}</h2>
+    <div v-if="loading" class="text-center py-8">
+      <span class="loading loading-spinner loading-lg"></span>
+      <p class="mt-4">{{ $t('common.loading') }}</p>
+    </div>
 
-          <div v-if="error" class="alert alert-error mb-4">
-            {{ error }}
-          </div>
+    <div v-else-if="error" class="alert alert-error mb-6">
+      <span>{{ error }}</span>
+    </div>
 
-          <div v-if="loading" class="flex items-center justify-center py-8">
-            <span class="loading loading-spinner loading-lg"></span>
-            <span class="ml-4">{{ $t('downloads.loadingSets') }}</span>
-          </div>
+    <div v-else>
+      <!-- Results Summary -->
+      <div class="flex justify-center items-center mb-4">
+        <span class="text-light">{{ filteredSets.length }} {{ $t('downloads.stats.totalItems') }}</span>
+      </div>
 
-          <div v-else-if="availableSets.length === 0" class="text-center py-8 text-base-content/60">
-            <Download class="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>{{ $t('downloads.noSetsAvailable') }} {{ selectedLanguage }}</p>
-          </div>
-
-          <div v-else class="space-y-3">
-            <div class="grid gap-3">
-              <div v-for="set in availableSets" :key="set.name"
-                class="flex items-center justify-between p-4 rounded-lg border border-base-300 hover:border-primary hover:bg-base-200 transition-colors cursor-pointer"
-                @click="goToSetOverview(set.name)">
-                <div>
-                  <h4>{{ set.title || set.name }}</h4>
-                  <p class=" text-base-content/60">
-                    <span v-if="set.title">{{ set.name }} {{ $t('media.images.bullet') }} </span>{{ $t('downloads.language') }} {{ selectedLanguage }}
-                  </p>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>{{ $t('downloads.setName') }}</th>
+              <th>{{ $t('common.language') }}</th>
+              <th>{{ $t('downloads.status') }}</th>
+              <th>{{ $t('common.actions') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="set in filteredSets" :key="`${set.language}-${set.name}`">
+              <td>
+                <button @click="goToSetOverview(set.name, set.language)" class="font-bold link link-hover text-left">
+                  {{ set.title || set.name }}
+                </button>
+              </td>
+              <td>
+                <span class="flex items-center gap-2">
+                  <span v-if="getLanguageEmoji(set.language)">{{ getLanguageEmoji(set.language) }}</span>
+                  {{ getLanguageName(set.language) }}
+                </span>
+              </td>
+              <td>
+                <div v-if="isDownloaded(`${set.language}-${set.name}`)" class="flex items-center gap-2 text-success">
+                  <CheckCircle class="w-4 h-4" />
+                  <span class="badge badge-success badge-sm">{{ $t('downloads.downloaded') }}</span>
                 </div>
-
-                <div class="flex items-center gap-2" @click.stop>
-                  <div v-if="isDownloaded(set.name)" class="flex items-center gap-2 text-success mr-2">
-                    <CheckCircle class="w-5 h-5" />
-                    <span class=" font-medium">{{ $t('downloads.downloaded') }}</span>
-                  </div>
-                  <button @click="quickDownload(set.name)" class="btn btn-outline btn-sm" :disabled="loading">
-                    <Download class="w-4 h-4 mr-2" />
-                    {{ isDownloaded(set.name) ? $t('downloads.redownload') : $t('downloads.quickDownload') }}
+                <span v-else class="badge badge-outline badge-sm">{{ $t('downloads.available') }}</span>
+              </td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <button @click="goToSetOverview(set.name, set.language)" class="btn btn-sm btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                  </button>
+                  <button @click="quickDownload(set.name, set.language)" class="btn btn-sm btn-outline" :disabled="loading">
+                    <Download class="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-if="filteredSets.length === 0" class="text-center py-8">
+        <p class="text-light">{{ $t('downloads.states.noItems') }}</p>
       </div>
     </div>
   </div>
@@ -70,8 +109,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, inject, onMounted, watch, computed } from 'vue';
+import { useRouter, useRoute, type LocationQueryValue } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Download, CheckCircle } from 'lucide-vue-next';
 import { UnifiedRemoteSetService, type RemoteSetInfo } from '@/pages/downloads/UnifiedRemoteSetService';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
@@ -84,14 +124,9 @@ import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoCont
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
 
+const { t } = useI18n();
 const router = useRouter();
-
-const selectedLanguage = ref('');
-const availableLanguages = ref<LanguageData[]>([]);
-const availableSets = ref<RemoteSetInfo[]>([]);
-const downloadedSets = ref<Set<string>>(new Set());
-const loading = ref(false);
-const error = ref<string | null>(null);
+const route = useRoute();
 
 const languageRepo = inject<LanguageRepoContract>('languageRepo')!;
 const localSetRepo = inject<LocalSetRepoContract>('localSetRepo')!;
@@ -109,20 +144,116 @@ const remoteSetService = new UnifiedRemoteSetService(
   noteRepo,
   resourceRepo,
   goalRepo,
-  factCardRepo
+  factCardRepo,
+  languageRepo
 );
 
-async function loadLanguages() {
+// URL parameter initialization
+function parseArrayParam(value: LocationQueryValue | LocationQueryValue[]): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) {
+    return value.filter((v): v is string => v !== null);
+  }
+  return value.split(',').filter(v => v.length > 0);
+}
+
+// Extended set info to include language for the table view
+interface ExtendedSetInfo extends RemoteSetInfo {
+  language: string;
+}
+
+// Data
+const allSets = ref<ExtendedSetInfo[]>([]);
+const availableLanguages = ref<LanguageData[]>([]);
+const downloadedSets = ref<Set<string>>(new Set());
+const loading = ref(false);
+const error = ref<string | null>(null);
+
+// Filters and search - initialized from URL parameters
+const searchQuery = ref(route.query.search as string || '');
+const selectedLanguages = ref<string[]>(parseArrayParam(route.query.languages));
+
+// Computed
+const languageFilterTitle = computed(() => 
+  `${t('common.languages')} (${selectedLanguages.value.length} ${t('common.selected')})`
+);
+
+const filteredSets = computed(() => {
+  let filtered = allSets.value;
+
+  // Filter by selected languages
+  if (selectedLanguages.value.length > 0) {
+    filtered = filtered.filter(set => selectedLanguages.value.includes(set.language));
+  }
+
+  // Filter by search query
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(set => 
+      set.name.toLowerCase().includes(query) ||
+      (set.title && set.title.toLowerCase().includes(query))
+    );
+  }
+
+  return filtered;
+});
+
+// URL parameter synchronization
+function updateUrlParams() {
+  const query: Record<string, string | undefined> = {};
+  
+  if (searchQuery.value.trim()) {
+    query.search = searchQuery.value.trim();
+  }
+  if (selectedLanguages.value.length > 0) {
+    query.languages = selectedLanguages.value.join(',');
+  }
+
+  router.replace({ query });
+}
+
+// Debounced search
+let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+function debouncedSearch() {
+  if (searchTimeout) clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    updateUrlParams();
+  }, 300);
+}
+
+// Filter methods
+function toggleLanguage(languageCode: string) {
+  const index = selectedLanguages.value.indexOf(languageCode);
+  if (index > -1) {
+    selectedLanguages.value.splice(index, 1);
+  } else {
+    selectedLanguages.value.push(languageCode);
+  }
+  updateUrlParams();
+}
+
+// Helper methods
+function getLanguageName(code: string): string {
+  const language = availableLanguages.value.find(l => l.code === code);
+  return language?.name || code.toUpperCase();
+}
+
+function getLanguageEmoji(code: string): string | undefined {
+  const language = availableLanguages.value.find(l => l.code === code);
+  return language?.emoji;
+}
+
+async function loadLanguagesAndSets() {
+  loading.value = true;
+  error.value = null;
+
   try {
+    // Load available language codes from remote service
     const languageCodes = await remoteSetService.getAvailableLanguages();
-    ;
 
     // Convert language codes to LanguageData format by getting from languageRepo
     const allLanguages = await languageRepo.getActiveTargetLanguages();
-    ;
-
     availableLanguages.value = allLanguages.filter(lang => languageCodes.includes(lang.code));
-    ;
 
     // For missing codes, create proper LanguageData objects using the language repo
     const missingCodes = languageCodes.filter(code =>
@@ -135,52 +266,56 @@ async function loadLanguages() {
       );
       availableLanguages.value.push(...missingLanguages);
     }
-  } catch (error) {
-    console.error('Failed to load languages:', error);
-  }
-}
 
-async function loadSets() {
-  if (!selectedLanguage.value) {
-    availableSets.value = [];
-    downloadedSets.value.clear();
-    return;
-  }
+    // If no URL filters are set, initialize with all languages selected
+    if (selectedLanguages.value.length === 0) {
+      selectedLanguages.value = availableLanguages.value.map(l => l.code);
+    }
 
-  loading.value = true;
-  error.value = null;
+    // Load sets for all available languages
+    const allSetsData: ExtendedSetInfo[] = [];
+    const downloadedStatuses: Array<{ key: string, isDownloaded: boolean }> = [];
 
-  try {
-    const sets = await remoteSetService.getAvailableSets(selectedLanguage.value);
-    availableSets.value = sets;
+    for (const language of availableLanguages.value) {
+      try {
+        const sets = await remoteSetService.getAvailableSets(language.code);
+        const extendedSets = sets.map(set => ({
+          ...set,
+          language: language.code
+        }));
+        allSetsData.push(...extendedSets);
 
-    // Load downloaded status for each set
-    const downloadedStatuses = await Promise.all(
-      sets.map(async (set) => ({
-        name: set.name,
-        isDownloaded: await remoteSetService.isSetDownloaded(set.name)
-      }))
-    );
+        // Check download status for each set
+        const statuses = await Promise.all(
+          sets.map(async (set) => ({
+            key: `${language.code}-${set.name}`,
+            isDownloaded: await remoteSetService.isSetDownloaded(set.name)
+          }))
+        );
+        downloadedStatuses.push(...statuses);
+      } catch (err) {
+        console.error(`Failed to load sets for ${language.code}:`, err);
+      }
+    }
 
+    allSets.value = allSetsData;
     downloadedSets.value = new Set(
-      downloadedStatuses.filter(s => s.isDownloaded).map(s => s.name)
+      downloadedStatuses.filter(s => s.isDownloaded).map(s => s.key)
     );
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to load sets';
+    error.value = err instanceof Error ? err.message : 'Failed to load data';
   } finally {
     loading.value = false;
   }
 }
 
-async function quickDownload(setName: string) {
-  if (!selectedLanguage.value) return;
-
+async function quickDownload(setName: string, language: string) {
   loading.value = true;
   error.value = null;
 
   try {
-    await remoteSetService.downloadSet(selectedLanguage.value, setName);
-    downloadedSets.value.add(setName);
+    await remoteSetService.downloadSet(language, setName);
+    downloadedSets.value.add(`${language}-${setName}`);
   } catch (err) {
     console.error('Download error:', err);
     error.value = err instanceof Error ? err.message : 'Failed to download set';
@@ -189,23 +324,28 @@ async function quickDownload(setName: string) {
   }
 }
 
-function goToSetOverview(setName: string) {
-  if (!selectedLanguage.value) return;
-
+function goToSetOverview(setName: string, language: string) {
   router.push({
     name: 'set-overview',
     params: {
-      language: selectedLanguage.value,
+      language: language,
       setName: setName
     }
   });
 }
 
-function isDownloaded(setName: string): boolean {
-  return downloadedSets.value.has(setName);
+function isDownloaded(key: string): boolean {
+  return downloadedSets.value.has(key);
 }
 
-watch(() => selectedLanguage.value, loadSets, { immediate: true });
+// Watch for URL parameter changes from browser navigation
+watch(
+  () => route.query,
+  (newQuery) => {
+    searchQuery.value = newQuery.search as string || '';
+    selectedLanguages.value = parseArrayParam(newQuery.languages);
+  }
+);
 
-onMounted(loadLanguages);
+onMounted(loadLanguagesAndSets);
 </script>

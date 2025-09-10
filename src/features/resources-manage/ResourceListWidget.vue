@@ -159,7 +159,7 @@
 <script setup lang="ts">
 import { ref, inject, onMounted, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, type LocationQueryValue } from 'vue-router';
 import type { ResourceRepoContract, ResourceListFilters } from '@/entities/resources/ResourceRepoContract';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
@@ -184,9 +184,11 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 
 // URL parameter initialization
-function parseArrayParam(value: string | string[] | undefined): string[] {
+function parseArrayParam(value: LocationQueryValue | LocationQueryValue[]): string[] {
   if (!value) return [];
-  if (Array.isArray(value)) return value;
+  if (Array.isArray(value)) {
+    return value.filter((v): v is string => v !== null);
+  }
   return value.split(',').filter(v => v.length > 0);
 }
 

@@ -140,6 +140,7 @@
       "seconds": "s",
       "textIcon": "💬",
       "audioIcon": "🎤",
+      "sentenceIdea": "Idea: Make a sentence describing what you think of {word}.",
       "rating": {
         "again": "Again",
         "hard": "Hard", 
@@ -524,7 +525,17 @@
     "downloadAndStart": "Download and Start",
     "willStartIn": "Will start in",
     "mode": "mode",
-    "download": "Download"
+    "download": "Download",
+    "search": "Search downloads...",
+    "setName": "Set Name",
+    "status": "Status",
+    "available": "Available",
+    "stats": {
+      "totalItems": "download sets"
+    },
+    "states": {
+      "noItems": "No download sets found."
+    }
   },
   "translations": {
     "title": "Translations",

@@ -218,7 +218,7 @@ onUnmounted(() => {
 <template>
   <div v-if="vocabItems.length >= 1">
     <small v-if="vocabItems.length === 1">
-      Idea: Make a sentence describing what you think of {{ vocabItems[0].content }}.
+      {{ $t('practice.tasks.sentenceIdea', { word: vocabItems[0].content }) }}
     </small>
     <!-- Vocabulary Display -->
     <div class="mb-8">
