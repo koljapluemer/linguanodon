@@ -72,10 +72,15 @@ export class LanguageRepo implements LanguageRepoContract {
     const isoLang = (isoLangs as { code: string; name: string; emoji?: string }[])
       .find(l => l.code === code);
     
+    if (!isoLang) {
+      console.error(`Language code '${code}' not found in ISO language data`);
+      throw new Error(`Unknown language code: ${code}`);
+    }
+    
     return {
       code,
-      name: isoLang?.name || code.toUpperCase(),
-      emoji: isoLang?.emoji,
+      name: isoLang.name,
+      emoji: isoLang.emoji,
       isActive: true
     };
   }

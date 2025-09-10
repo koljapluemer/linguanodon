@@ -104,6 +104,10 @@ class LanguageProcessor:
         # Shared Pexels link ID
         self.shared_pexels_link_id = None
         
+        # Cache for existing translations
+        self.existing_translations = {}
+        self.existing_vocab = {}
+        
     def get_next_vocab_id(self):
         self.vocab_id += 1
         return str(self.vocab_id)
@@ -281,14 +285,28 @@ class LanguageProcessor:
             logger.warning(f"Skipping '{english_word}' for {self.language_config['name']} - no fitting image exists")
             return False
         
-        # Translate to target language
-        translation_result = self.translate_with_deepl(english_word)
-        if not translation_result:
-            logger.warning(f"Skipping '{english_word}' for {self.language_config['name']} - translation failed")
-            return False
+        # Check if we already have this English word in our translations
+        # If so, we need to find the corresponding vocab entry to get the target language word
+        target_word = None
+        if english_word in self.existing_translations:
+            # We have this English word, now we need to find its target language translation
+            # by loading the existing vocab file and finding the entry that references this translation
+            target_word = self.get_existing_target_word(english_word)
+            if target_word:
+                logger.info(f"Using existing translation '{english_word}' -> '{target_word}' ({self.language_config['name']})")
+            else:
+                logger.warning(f"Found English word '{english_word}' in translations but couldn't find target word, retranslating")
+                target_word = None
         
-        target_word = translation_result["text"]
-        logger.info(f"Translated '{english_word}' to '{target_word}' ({self.language_config['name']})")
+        if not target_word:
+            # Translate to target language
+            translation_result = self.translate_with_deepl(english_word)
+            if not translation_result:
+                logger.warning(f"Skipping '{english_word}' for {self.language_config['name']} - translation failed")
+                return False
+            
+            target_word = translation_result["text"]
+            logger.info(f"Translated '{english_word}' to '{target_word}' ({self.language_config['name']})")
         
         # Generate audio filename
         audio_filename = f"{target_word}.opus"
@@ -329,8 +347,64 @@ class LanguageProcessor:
         logger.info(f"Successfully processed '{english_word}' -> '{target_word}' ({self.language_config['name']})")
         return True
 
+    def load_existing_translations(self):
+        """Load existing translations from file to avoid re-translating"""
+        translations_file = self.output_dir / "translations.jsonl"
+        if translations_file.exists():
+            logger.info(f"Loading existing translations for {self.language_config['name']}")
+            try:
+                with open(translations_file, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            translation_entry = json.loads(line)
+                            # Map English content (stored in translation_entry['content']) to the translation entry
+                            # The translation_entry['content'] is actually the English word that was translated
+                            self.existing_translations[translation_entry['content']] = translation_entry
+                logger.info(f"Loaded {len(self.existing_translations)} existing translations for {self.language_config['name']}")
+            except Exception as e:
+                logger.warning(f"Failed to load existing translations for {self.language_config['name']}: {e}")
+        else:
+            logger.info(f"No existing translations file found for {self.language_config['name']}")
+
+    def load_existing_vocab(self):
+        """Load existing vocab from file to map translation IDs to target words"""
+        vocab_file = self.output_dir / "vocab.jsonl"
+        if vocab_file.exists():
+            logger.info(f"Loading existing vocab for {self.language_config['name']}")
+            try:
+                with open(vocab_file, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            vocab_entry = json.loads(line)
+                            # Map vocab by translation IDs to content
+                            if 'translations' in vocab_entry and vocab_entry['translations']:
+                                for translation_id in vocab_entry['translations']:
+                                    self.existing_vocab[translation_id] = vocab_entry['content']
+                logger.info(f"Loaded {len(self.existing_vocab)} existing vocab entries for {self.language_config['name']}")
+            except Exception as e:
+                logger.warning(f"Failed to load existing vocab for {self.language_config['name']}: {e}")
+        else:
+            logger.info(f"No existing vocab file found for {self.language_config['name']}")
+
+    def get_existing_target_word(self, english_word: str) -> Optional[str]:
+        """Get the target language word for an existing English translation"""
+        if english_word not in self.existing_translations:
+            return None
+        
+        translation_entry = self.existing_translations[english_word]
+        translation_id = translation_entry['id']
+        
+        # Look up the target word in vocab using the translation ID
+        return self.existing_vocab.get(translation_id)
+
     def initialize(self):
-        """Initialize the processor by creating shared Pexels link"""
+        """Initialize the processor by loading existing data and creating shared Pexels link"""
+        # Load existing translations and vocab to avoid re-translating
+        self.load_existing_translations()
+        self.load_existing_vocab()
+        
         self.shared_pexels_link_id = self.create_link(
             "Pexels",
             "https://pexels.com",
@@ -368,10 +442,19 @@ class LanguageProcessor:
                 for entry in self.link_data:
                     f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         
+        # Save metadata.json
+        metadata = {
+            "preferredMode": "practice-mode-eyes-and-ears",
+            "title": f"{self.language_config['name']} Essential Vocabulary with Images and Sound"
+        }
+        with open(self.output_dir / "metadata.json", "w", encoding="utf-8") as f:
+            json.dump(metadata, f, indent=4, ensure_ascii=False)
+        
         logger.info(f"Saved {len(self.vocab_data)} vocab entries for {self.language_config['name']}")
         logger.info(f"Saved {len(self.translation_data)} translation entries for {self.language_config['name']}")
         logger.info(f"Saved {len(self.note_data)} note entries for {self.language_config['name']}")
         logger.info(f"Saved {len(self.link_data)} link entries for {self.language_config['name']}")
+        logger.info(f"Saved metadata.json for {self.language_config['name']}")
         logger.info(f"Files saved to: {self.output_dir}")
 
 def setup_apis():
