@@ -6,6 +6,7 @@ import type { NoteRepoContract } from '@/entities/notes/NoteRepoContract';
 import type { ResourceRepoContract } from '@/entities/resources/ResourceRepoContract';
 import type { GoalRepoContract } from '@/entities/goals/GoalRepoContract';
 import type { FactCardRepoContract } from '@/entities/fact-cards/FactCardRepoContract';
+import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 
 import { vocabSchema } from '@/entities/remote-sets/validation/vocabSchema';
 import { translationSchema } from '@/entities/remote-sets/validation/translationSchema';
@@ -49,7 +50,8 @@ export class UnifiedRemoteSetService {
     private noteRepo: NoteRepoContract,
     private resourceRepo: ResourceRepoContract,
     private goalRepo: GoalRepoContract,
-    private factCardRepo: FactCardRepoContract
+    private factCardRepo: FactCardRepoContract,
+    private languageRepo: LanguageRepoContract
   ) {}
 
   async getAvailableLanguages(): Promise<string[]> {
@@ -112,6 +114,13 @@ export class UnifiedRemoteSetService {
     const setFiles = await this.loadAndValidateSetFiles(languageCode, setName);
     if (!setFiles) {
       throw new Error('Failed to validate set files');
+    }
+
+    // Ensure language exists in the database as active (only if not already present)
+    const existingLanguage = await this.languageRepo.getByCode(languageCode);
+    if (!existingLanguage) {
+      const newLanguage = await this.languageRepo.createLanguageFromCode(languageCode);
+      await this.languageRepo.add(newLanguage);
     }
 
     // Create or update local set entry
