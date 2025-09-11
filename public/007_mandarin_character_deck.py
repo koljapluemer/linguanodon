@@ -155,7 +155,6 @@ def create_mandarin_character_deck():
             "id": main_vocab_id,
             "language": "cmn",
             "content": main_word,
-            "consideredCharacter": True,
             "consideredWord": True,
             "priority": 1,
             "notes": [main_pinyin_note_id],
