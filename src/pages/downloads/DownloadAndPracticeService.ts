@@ -68,7 +68,7 @@ export class DownloadAndPracticeService {
 
   private async loadSetMetadata(language: string, setName: string): Promise<z.infer<typeof remoteSetMetaDataSchema> | null> {
     try {
-      const response = await fetch(`/sets/${language}/${setName}/meta.json`);
+      const response = await fetch(`/sets/${language}/${setName}/metadata.json`);
       if (!response.ok) return null;
       
       const data = await response.json();

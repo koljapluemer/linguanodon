@@ -59,7 +59,6 @@ link_id = 0
 # Shared link ID - created once, used by all vocab entries
 shared_pexels_link_id = None
 
-# Word list
 WORDS = [
     "the apple", "the banana", "the orange", "the grape", "the watermelon", "the strawberry", "the lemon", "the peach", "the pear", "the pineapple",
     "the dog", "the cat", "the horse", "the cow", "the sheep", "the pig", "the chicken", "the duck", "the goose", "the rabbit",
