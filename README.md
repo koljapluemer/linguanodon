@@ -1,4 +1,4 @@
-# The ~~Secret~~ Language Learning App
+# The ~~Secret~~ Language App
 
 
 ![demo screenshot](/docs/img/demo.png)
