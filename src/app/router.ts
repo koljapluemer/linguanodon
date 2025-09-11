@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PracticeOverview from '@/pages/practice/PracticeOverview.vue';
+import PracticeHome from '@/pages/practice/PracticeHome.vue';
 import FactCardGrindWidget from '@/pages/practice/modes/modes/fact-card-grind/FactCardGrindWidget.vue';
 import GoalGetterWidget from '@/pages/practice/modes/modes/goal-getter/GoalGetterWidget.vue';
 import SisyphosWidget from '@/pages/practice/modes/modes/sisyphos/SisyphosWidget.vue';
@@ -23,6 +24,7 @@ import PageListGoals from '@/pages/goals-list/PageListGoals.vue';
 import PageGoalAdd from '@/pages/goal-add/PageGoalAdd.vue';
 import PageGoalEdit from '@/pages/goal-edit/PageGoalEdit.vue';
 import PageDownloads from '@/pages/downloads/PageDownloads.vue';
+import DownloadsHome from '@/pages/downloads/DownloadsHome.vue';
 import PageTimeTracking from '@/pages/time-tracking/PageTimeTracking.vue';
 import PageMyMaterial from '@/pages/my-material/PageMyMaterial.vue';
 import PageSettings from '@/pages/settings/PageSettings.vue';
@@ -36,9 +38,13 @@ const router = createRouter({
     },
     {
       path: '/practice',
-      name: 'practice-overview',
       component: PracticeOverview,
       children: [
+        {
+          path: '',
+          name: 'practice-overview',
+          component: PracticeHome
+        },
         {
           path: 'fact-card-grind',
           name: 'practice-mode-fact-card-grind',
@@ -158,9 +164,13 @@ const router = createRouter({
     },
     {
       path: '/downloads',
-      name: 'downloads',
       component: PageDownloads,
       children: [
+        {
+          path: '',
+          name: 'downloads',
+          component: DownloadsHome
+        },
         {
           path: ':language/:setName',
           name: 'set-overview',
