@@ -1,5 +1,5 @@
 <template>
-  <div v-if="link" class="bg-base-200 rounded-lg px-3 py-2 text-sm border-l-4 border-primary">
+  <div v-if="link" class="bg-base-200 rounded-lg px-3 py-2 text-sm border-l-4 border-primary inline-block max-w-fit">
     <div class="flex items-center gap-2">
       <ExternalLink class="w-4 h-4 text-primary flex-shrink-0" />
       <a 
