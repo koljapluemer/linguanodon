@@ -9,11 +9,12 @@ import os
 import json
 import time
 import logging
+import random
+import requests
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dotenv import load_dotenv
 import deepl
-from openai import OpenAI
 
 # Load environment variables
 load_dotenv()
@@ -54,7 +55,8 @@ logger = logging.getLogger(__name__)
 
 # API clients
 deepl_client = None
-openai_client = None
+speechgen_token = None
+speechgen_email = None
 
 # Word list (same as original)
 WORDS = [
@@ -107,6 +109,9 @@ class LanguageProcessor:
         # Cache for existing translations
         self.existing_translations = {}
         self.existing_vocab = {}
+        
+        # Available voices for this language
+        self.available_voices = []
         
     def get_next_vocab_id(self):
         self.vocab_id += 1
@@ -219,8 +224,31 @@ class LanguageProcessor:
             logger.warning(f"DeepL translation failed for '{text}' to {self.language_config['name']}: {e}")
             return None
 
-    def generate_audio_with_openai(self, text: str, filename: str) -> bool:
-        """Generate audio using OpenAI TTS"""
+    def fetch_speechgen_voices(self) -> List[Dict]:
+        """Fetch available voices from SpeechGen API for this language"""
+        try:
+            response = requests.get(
+                "https://speechgen.io/index.php?r=api/voices",
+                timeout=30
+            )
+            response.raise_for_status()
+            
+            voices_data = response.json()
+            language_key = self.language_config['name']  # "Spanish" or "German"
+            
+            if language_key in voices_data:
+                language_voices = voices_data[language_key]
+                logger.info(f"Found {len(language_voices)} {language_key} voices")
+                return language_voices
+            else:
+                logger.warning(f"No '{language_key}' key found in voices data")
+                return []
+        except Exception as e:
+            logger.warning(f"Failed to fetch voices for {self.language_config['name']}: {e}")
+            return []
+
+    def generate_audio_with_speechgen(self, text: str, filename: str) -> bool:
+        """Generate audio using SpeechGen TTS"""
         # Check if file already exists
         audio_dir = self.output_dir / "audio"
         audio_path = audio_dir / filename
@@ -229,35 +257,56 @@ class LanguageProcessor:
             return True
         
         try:
-            import signal
+            # Select random voice for this language
+            if not self.available_voices:
+                logger.warning(f"No voices available for {self.language_config['name']}")
+                return False
             
-            def timeout_handler(signum, frame):
-                raise TimeoutError(f"OpenAI TTS timed out after 60 seconds")
+            voice = random.choice(self.available_voices)
+            voice_name = voice.get('voice', voice.get('name', 'default'))
             
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(60)  # TTS can take longer than other APIs
+            # Prepare API request
+            params = {
+                'token': speechgen_token,
+                'email': speechgen_email,
+                'voice': voice_name,
+                'text': text,
+                'format': 'mp3',
+                'speed': 1.0
+            }
             
-            try:
-                # Use appropriate voice for language
-                voice = "alloy"  # Works well for most languages
+            logger.info(f"Generating audio for '{text}' using voice '{voice_name}' ({self.language_config['name']})")
+            
+            # Make API request
+            response = requests.post(
+                "https://speechgen.io/index.php?r=api/text",
+                data=params,
+                timeout=60
+            )
+            response.raise_for_status()
+            
+            result = response.json()
+            
+            if result.get('status') == 1 and 'file' in result:
+                # Download the audio file
+                audio_url = result['file']
+                audio_response = requests.get(audio_url, timeout=30)
+                audio_response.raise_for_status()
                 
-                response = openai_client.audio.speech.create(
-                    model="tts-1",
-                    voice=voice,
-                    input=text,
-                    response_format="opus"  # More efficient than MP3, better for web
-                )
-                signal.alarm(0)  # Cancel alarm
-            finally:
-                signal.alarm(0)  # Ensure alarm is cancelled
-            
-            # Save audio
-            audio_dir.mkdir(parents=True, exist_ok=True)
-            
-            response.stream_to_file(audio_path)
-            
-            logger.info(f"Generated audio for '{text}' ({self.language_config['name']})")
-            return True
+                # Save audio
+                audio_dir.mkdir(parents=True, exist_ok=True)
+                
+                # Change extension to mp3 since SpeechGen returns mp3
+                audio_path = audio_path.with_suffix('.mp3')
+                
+                with open(audio_path, 'wb') as f:
+                    f.write(audio_response.content)
+                
+                logger.info(f"Generated audio for '{text}' using voice '{voice_name}' ({self.language_config['name']})")
+                return True
+            else:
+                logger.warning(f"SpeechGen API failed for {self.language_config['name']}: {result}")
+                return False
             
         except Exception as e:
             logger.warning(f"Failed to generate audio for '{text}' ({self.language_config['name']}): {e}")
@@ -309,10 +358,10 @@ class LanguageProcessor:
             logger.info(f"Translated '{english_word}' to '{target_word}' ({self.language_config['name']})")
         
         # Generate audio filename
-        audio_filename = f"{target_word}.opus"
+        audio_filename = f"{target_word}.mp3"
         
         # Generate audio
-        audio_success = self.generate_audio_with_openai(target_word, audio_filename)
+        audio_success = self.generate_audio_with_speechgen(target_word, audio_filename)
         
         # Create English translation
         english_translation_id = self.create_translation(english_word)
@@ -405,6 +454,13 @@ class LanguageProcessor:
         self.load_existing_translations()
         self.load_existing_vocab()
         
+        # Fetch voices for this language
+        self.available_voices = self.fetch_speechgen_voices()
+        if not self.available_voices:
+            logger.warning(f"No voices found for {self.language_config['name']}, audio generation may fail")
+        else:
+            logger.info(f"Loaded {len(self.available_voices)} voices for {self.language_config['name']}")
+        
         self.shared_pexels_link_id = self.create_link(
             "Pexels",
             "https://pexels.com",
@@ -459,7 +515,7 @@ class LanguageProcessor:
 
 def setup_apis():
     """Initialize API clients with environment variables"""
-    global deepl_client, openai_client
+    global deepl_client, speechgen_token, speechgen_email
     
     # DeepL
     deepl_key = os.getenv('DEEPL_API_KEY')
@@ -467,11 +523,13 @@ def setup_apis():
         raise ValueError("DEEPL_API_KEY not found in environment variables")
     deepl_client = deepl.Translator(deepl_key)
     
-    # OpenAI
-    openai_key = os.getenv('OPENAI_API_KEY')
-    if not openai_key:
-        raise ValueError("OPENAI_API_KEY not found in environment variables")
-    openai_client = OpenAI(api_key=openai_key)
+    # SpeechGen
+    speechgen_token = os.getenv('SPEECHGEN_API_KEY')
+    speechgen_email = os.getenv('SPEECHGEN_EMAIL')
+    if not speechgen_token:
+        raise ValueError("SPEECHGEN_API_KEY not found in environment variables")
+    if not speechgen_email:
+        raise ValueError("SPEECHGEN_EMAIL not found in environment variables")
     
     logger.info("API clients initialized successfully")
 

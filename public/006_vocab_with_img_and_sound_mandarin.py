@@ -9,12 +9,12 @@ import json
 import requests
 import time
 import logging
+import random
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dotenv import load_dotenv
 import deepl
 from pexelsapi.pexels import Pexels
-from openai import OpenAI
 import re
 
 # Load environment variables
@@ -40,9 +40,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # API clients
-deepl_client = None
+deepL_client = None
 pexels_api = None
-openai_client = None
+speechgen_token = None
+speechgen_email = None
+available_voices = []
 
 # Data storage
 vocab_data = []
@@ -85,7 +87,7 @@ WORDS = [
 
 def setup_apis():
     """Initialize API clients with environment variables"""
-    global deepl_client, pexels_api, openai_client
+    global deepl_client, pexels_api, speechgen_token, speechgen_email, available_voices
     
     # DeepL
     deepl_key = os.getenv('DEEPL_API_KEY')
@@ -99,13 +101,20 @@ def setup_apis():
         raise ValueError("PEXELS_API_KEY not found in environment variables")
     pexels_api = Pexels(pexels_key)
     
-    # OpenAI
-    openai_key = os.getenv('OPENAI_API_KEY')
-    if not openai_key:
-        raise ValueError("OPENAI_API_KEY not found in environment variables")
-    openai_client = OpenAI(api_key=openai_key)
+    # SpeechGen
+    speechgen_token = os.getenv('SPEECHGEN_API_KEY')
+    speechgen_email = os.getenv('SPEECHGEN_EMAIL')
+    if not speechgen_token:
+        raise ValueError("SPEECHGEN_API_KEY not found in environment variables")
+    if not speechgen_email:
+        raise ValueError("SPEECHGEN_EMAIL not found in environment variables")
     
-    logger.info("API clients initialized successfully")
+    # Fetch available voices
+    available_voices = fetch_speechgen_voices()
+    if not available_voices:
+        raise ValueError("Failed to fetch SpeechGen voices")
+    
+    logger.info(f"API clients initialized successfully with {len(available_voices)} voices")
 
 def get_next_vocab_id():
     global vocab_id
@@ -294,8 +303,29 @@ def download_image_from_pexels(search_term: str, filename: str) -> bool:
         logger.warning(f"Failed to download image for '{search_term}': {e}")
         return False
 
-def generate_audio_with_openai(text: str, filename: str) -> bool:
-    """Generate audio using OpenAI TTS"""
+def fetch_speechgen_voices() -> List[Dict]:
+    """Fetch available voices from SpeechGen API"""
+    try:
+        response = requests.get(
+            "https://speechgen.io/index.php?r=api/voices",
+            timeout=30
+        )
+        response.raise_for_status()
+        
+        voices_data = response.json()
+        if 'Chinese' in voices_data:
+            chinese_voices = voices_data['Chinese']
+            logger.info(f"Found {len(chinese_voices)} Chinese voices")
+            return chinese_voices
+        else:
+            logger.warning("No 'Chinese' key found in voices data")
+            return []
+    except Exception as e:
+        logger.warning(f"Failed to fetch voices: {e}")
+        return []
+
+def generate_audio_with_speechgen(text: str, filename: str) -> bool:
+    """Generate audio using SpeechGen TTS"""
     # Check if file already exists
     audio_dir = Path(OUTPUT_DIR) / "audio"
     audio_path = audio_dir / filename
@@ -304,32 +334,52 @@ def generate_audio_with_openai(text: str, filename: str) -> bool:
         return True
     
     try:
-        import signal
+        # Select random voice
+        voice = random.choice(available_voices)
+        voice_name = voice.get('voice', voice.get('name', 'default'))
         
-        def timeout_handler(signum, frame):
-            raise TimeoutError(f"OpenAI TTS timed out after 60 seconds")
+        # Prepare API request
+        params = {
+            'token': speechgen_token,
+            'email': speechgen_email,
+            'voice': voice_name,
+            'text': text,
+            'format': 'mp3',
+            'speed': 1.0
+        }
         
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(60)  # TTS can take longer than other APIs
+        logger.info(f"Generating audio for '{text}' using voice '{voice_name}'")
         
-        try:
-            response = openai_client.audio.speech.create(
-                model="tts-1",
-                voice="alloy",  # Using alloy voice which works well for Chinese
-                input=text,
-                response_format="opus"  # More efficient than MP3, better for web
-            )
-            signal.alarm(0)  # Cancel alarm
-        finally:
-            signal.alarm(0)  # Ensure alarm is cancelled
+        # Make API request
+        response = requests.post(
+            "https://speechgen.io/index.php?r=api/text",
+            data=params,
+            timeout=60
+        )
+        response.raise_for_status()
         
-        # Save audio
-        audio_dir.mkdir(parents=True, exist_ok=True)
+        result = response.json()
         
-        response.stream_to_file(audio_path)
-        
-        logger.info(f"Generated audio for '{text}'")
-        return True
+        if result.get('status') == 1 and 'file' in result:
+            # Download the audio file
+            audio_url = result['file']
+            audio_response = requests.get(audio_url, timeout=30)
+            audio_response.raise_for_status()
+            
+            # Save audio
+            audio_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Change extension to mp3 since SpeechGen returns mp3
+            audio_path = audio_path.with_suffix('.mp3')
+            
+            with open(audio_path, 'wb') as f:
+                f.write(audio_response.content)
+            
+            logger.info(f"Generated audio for '{text}' using voice '{voice_name}'")
+            return True
+        else:
+            logger.warning(f"SpeechGen API failed: {result}")
+            return False
         
     except Exception as e:
         logger.warning(f"Failed to generate audio for '{text}': {e}")
@@ -353,13 +403,13 @@ def process_word(english_word: str) -> bool:
     
     # Generate filenames
     image_filename = f"{search_term}.jpg"
-    audio_filename = f"{mandarin_word}.opus"
+    audio_filename = f"{mandarin_word}.mp3"
     
     # Download image
     image_success = download_image_from_pexels(search_term, image_filename)
     
     # Generate audio
-    audio_success = generate_audio_with_openai(mandarin_word, audio_filename)
+    audio_success = generate_audio_with_speechgen(mandarin_word, audio_filename)
     
     # If both media failed, skip this word
     if not image_success and not audio_success:
