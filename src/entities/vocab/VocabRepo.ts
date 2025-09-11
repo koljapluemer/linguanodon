@@ -1094,9 +1094,6 @@ export class VocabRepo implements VocabRepoContract {
         // Must not be in block list
         if (vocabBlockList && vocabBlockList.includes(vocab.uid)) return false;
         
-        // Must be consideredCharacter
-        if (vocab.consideredCharacter !== true) return false;
-        
         // Must have content set
         if (!vocab.content) return false;
         
@@ -1130,7 +1127,6 @@ export class VocabRepo implements VocabRepoContract {
       // Get related vocab and check if at least one meets criteria
       const relatedVocabList = await vocabDb.vocab.where('uid').anyOf(ensuredCandidate.relatedVocab).toArray();
       const validRelatedVocab = relatedVocabList.filter(v =>
-        v.consideredCharacter === true &&
         v.content &&
         v.sounds && v.sounds.some(s => !s.disableForPractice)
       );
