@@ -12,13 +12,11 @@ if (app) {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
-    <AppHeader />
-    <main class="prose mx-auto flex-1 container flex flex-col gap-4 my-2">
-      <router-view />
-    </main>
-    <ToastContainer />
-  </div>
+  <AppHeader />
+  <main class="prose mx-auto flex-1 container flex flex-col gap-4 my-2">
+    <router-view />
+  </main>
+  <ToastContainer />
 </template>
 
 <style>
@@ -32,18 +30,23 @@ if (app) {
   h1 {
     @apply text-4xl font-bold leading-tight my-6 text-center;
   }
+
   h2 {
     @apply text-3xl font-semibold leading-snug;
   }
+
   h3 {
     @apply text-2xl font-semibold leading-snug;
   }
+
   h4 {
     @apply text-xl font-medium leading-snug;
   }
+
   h5 {
     @apply text-lg font-medium leading-snug;
   }
+
   h6 {
     @apply text-base font-medium leading-snug uppercase tracking-wide;
   }
@@ -54,8 +57,4 @@ if (app) {
     @apply text-base-content/70;
   }
 }
-
-
-
-
 </style>

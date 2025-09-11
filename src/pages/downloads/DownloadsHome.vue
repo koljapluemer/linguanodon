@@ -49,12 +49,11 @@
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="table table-zebra">
+        <table class="table table-zebra table-compact">
           <thead>
             <tr>
               <th>{{ $t('downloads.setName') }}</th>
               <th>{{ $t('common.language') }}</th>
-              <th>{{ $t('downloads.status') }}</th>
               <th>{{ $t('common.actions') }}</th>
             </tr>
           </thead>
@@ -72,37 +71,38 @@
                 </span>
               </td>
               <td>
-                <div v-if="isDownloaded(`${set.language}-${set.name}`)" class="flex items-center gap-2 text-success">
-                  <CheckCircle class="w-4 h-4" />
-                  <span class="badge badge-success badge-sm">{{ $t('downloads.downloaded') }}</span>
-                </div>
-                <span v-else class="badge badge-outline badge-sm">{{ $t('downloads.available') }}</span>
-              </td>
-              <td>
                 <div v-if="isDownloading(`${set.language}-${set.name}`)" class="flex flex-col gap-1">
                   <div class="text-xs text-base-content/70">{{ getDownloadProgress(`${set.language}-${set.name}`)?.phase || 'Downloading...' }}</div>
-                  <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-1">
                     <progress 
-                      class="progress progress-primary w-24" 
+                      class="progress progress-primary w-16" 
                       :value="getDownloadProgress(`${set.language}-${set.name}`)?.percentage || 0" 
                       max="100"
                     ></progress>
-                    <span class="text-xs font-mono">{{ (getDownloadProgress(`${set.language}-${set.name}`)?.percentage || 0) + '%' }}</span>
+                    <span class="text-xs font-mono w-8 text-right">{{ (getDownloadProgress(`${set.language}-${set.name}`)?.percentage || 0) + '%' }}</span>
                   </div>
                 </div>
                 <div v-else class="flex items-center gap-1">
-                  <button @click="goToSetOverview(set.name, set.language)" class="btn btn-sm btn-ghost" :title="$t('downloads.viewDetails')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
+                  <button 
+                    v-if="isDownloaded(`${set.language}-${set.name}`)"
+                    @click="quickDownload(set.name, set.language)" 
+                    class="btn btn-xs btn-outline" 
+                    :disabled="isDownloading(`${set.language}-${set.name}`)" 
+                    :title="$t('downloads.redownload')"
+                  >
+                    <RefreshCw class="w-3 h-3" />
                   </button>
-                  <button @click="quickDownload(set.name, set.language)" class="btn btn-sm btn-outline" :disabled="isDownloading(`${set.language}-${set.name}`)" :title="$t('downloads.quickDownload')">
-                    <Download class="w-4 h-4" />
+                  <button 
+                    v-else
+                    @click="quickDownload(set.name, set.language)" 
+                    class="btn btn-xs btn-outline" 
+                    :disabled="isDownloading(`${set.language}-${set.name}`)" 
+                    :title="$t('downloads.quickDownload')"
+                  >
+                    <Download class="w-3 h-3" />
                   </button>
-                  <button @click="downloadAndStart(set.name, set.language)" class="btn btn-sm btn-primary" :disabled="isDownloading(`${set.language}-${set.name}`)" :title="$t('downloads.downloadAndStart')">
-                    <Play class="w-4 h-4" />
+                  <button @click="downloadAndStart(set.name, set.language)" class="btn btn-xs btn-primary" :disabled="isDownloading(`${set.language}-${set.name}`)" :title="$t('downloads.downloadAndStart')">
+                    <Play class="w-3 h-3" />
                   </button>
                 </div>
               </td>
@@ -122,7 +122,7 @@
 import { ref, inject, onMounted, watch, computed } from 'vue';
 import { useRouter, useRoute, type LocationQueryValue } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { Download, CheckCircle, Play } from 'lucide-vue-next';
+import { Download, Play, RefreshCw } from 'lucide-vue-next';
 import { UnifiedRemoteSetService, type RemoteSetInfo, type DownloadProgress } from '@/pages/downloads/UnifiedRemoteSetService';
 import { DownloadAndPracticeService } from '@/pages/downloads/DownloadAndPracticeService';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
