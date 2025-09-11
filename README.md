@@ -1,12 +1,26 @@
-# Linguanodon Frontend
+# The ~~Secret~~ Language Learning App
 
-The ultimate language learning app. *Maybe*.
 
-## Dev Notes
+![demo screenshot](/docs/img/demo.png)
 
-- Last commit with legacy folder intact: `3f9177b1e080a`
-- Last commit with old exercise/task split: `bfc5bafa923`
+## [Check out live website here](https://secret-language-app.netlify.app/)
 
-## Credit
 
--  ISO 639-3 code set by [this web page](https://iso639-3.sil.org/code_tables/download_tables) (needs inline credit)
+***goal*: building a language learning app that I actually enjoy using**
+
+## Running it
+
+```
+npm i
+npm run dev
+```
+
+## Features
+
+- Local first, no data leaves the device
+- Exercises are dynamically generated based on language data
+- Add your own content and download pre-made lessons
+- Supports any language
+- State of the art spaced repetition built on top of [ts-fsrs](https://github.com/open-spaced-repetition/ts-fsrs)
+- Integrate sources and immersion content from around the internet
+- Learn with a (growing) number of different language learning methodologies
