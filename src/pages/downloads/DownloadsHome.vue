@@ -79,7 +79,18 @@
                 <span v-else class="badge badge-outline badge-sm">{{ $t('downloads.available') }}</span>
               </td>
               <td>
-                <div class="flex items-center gap-1">
+                <div v-if="isDownloading(`${set.language}-${set.name}`)" class="flex flex-col gap-1">
+                  <div class="text-xs text-base-content/70">{{ getDownloadProgress(`${set.language}-${set.name}`)?.phase || 'Downloading...' }}</div>
+                  <div class="flex items-center gap-2">
+                    <progress 
+                      class="progress progress-primary w-24" 
+                      :value="getDownloadProgress(`${set.language}-${set.name}`)?.percentage || 0" 
+                      max="100"
+                    ></progress>
+                    <span class="text-xs font-mono">{{ (getDownloadProgress(`${set.language}-${set.name}`)?.percentage || 0) + '%' }}</span>
+                  </div>
+                </div>
+                <div v-else class="flex items-center gap-1">
                   <button @click="goToSetOverview(set.name, set.language)" class="btn btn-sm btn-ghost" :title="$t('downloads.viewDetails')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -87,10 +98,10 @@
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
                   </button>
-                  <button @click="quickDownload(set.name, set.language)" class="btn btn-sm btn-outline" :disabled="loading" :title="$t('downloads.quickDownload')">
+                  <button @click="quickDownload(set.name, set.language)" class="btn btn-sm btn-outline" :disabled="isDownloading(`${set.language}-${set.name}`)" :title="$t('downloads.quickDownload')">
                     <Download class="w-4 h-4" />
                   </button>
-                  <button @click="downloadAndStart(set.name, set.language)" class="btn btn-sm btn-primary" :disabled="loading" :title="$t('downloads.downloadAndStart')">
+                  <button @click="downloadAndStart(set.name, set.language)" class="btn btn-sm btn-primary" :disabled="isDownloading(`${set.language}-${set.name}`)" :title="$t('downloads.downloadAndStart')">
                     <Play class="w-4 h-4" />
                   </button>
                 </div>
@@ -112,7 +123,7 @@ import { ref, inject, onMounted, watch, computed } from 'vue';
 import { useRouter, useRoute, type LocationQueryValue } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Download, CheckCircle, Play } from 'lucide-vue-next';
-import { UnifiedRemoteSetService, type RemoteSetInfo } from '@/pages/downloads/UnifiedRemoteSetService';
+import { UnifiedRemoteSetService, type RemoteSetInfo, type DownloadProgress } from '@/pages/downloads/UnifiedRemoteSetService';
 import { DownloadAndPracticeService } from '@/pages/downloads/DownloadAndPracticeService';
 import type { LanguageRepoContract } from '@/entities/languages/LanguageRepoContract';
 import type { LanguageData } from '@/entities/languages/LanguageData';
@@ -170,6 +181,10 @@ const availableLanguages = ref<LanguageData[]>([]);
 const downloadedSets = ref<Set<string>>(new Set());
 const loading = ref(false);
 const error = ref<string | null>(null);
+
+// Progress tracking per set
+const downloadProgress = ref<Map<string, DownloadProgress>>(new Map());
+const downloadingSets = ref<Set<string>>(new Set());
 
 // Filters and search - initialized from URL parameters
 const searchQuery = ref(route.query.search as string || '');
@@ -312,39 +327,53 @@ async function loadLanguagesAndSets() {
 }
 
 async function quickDownload(setName: string, language: string) {
+  const key = `${language}-${setName}`;
+  
   await downloadAndPracticeService.downloadOnly({
     language,
     setName,
     onDownloadStart: () => {
-      loading.value = true;
+      downloadingSets.value.add(key);
       error.value = null;
     },
+    onDownloadProgress: (progress) => {
+      downloadProgress.value.set(key, progress);
+    },
     onDownloadComplete: () => {
-      downloadedSets.value.add(`${language}-${setName}`);
-      loading.value = false;
+      downloadedSets.value.add(key);
+      downloadingSets.value.delete(key);
+      downloadProgress.value.delete(key);
     },
     onError: (errorMessage) => {
       error.value = errorMessage;
-      loading.value = false;
+      downloadingSets.value.delete(key);
+      downloadProgress.value.delete(key);
     }
   });
 }
 
 async function downloadAndStart(setName: string, language: string) {
+  const key = `${language}-${setName}`;
+  
   await downloadAndPracticeService.downloadAndStartPractice({
     language,
     setName,
     onDownloadStart: () => {
-      loading.value = true;
+      downloadingSets.value.add(key);
       error.value = null;
     },
+    onDownloadProgress: (progress) => {
+      downloadProgress.value.set(key, progress);
+    },
     onDownloadComplete: () => {
-      downloadedSets.value.add(`${language}-${setName}`);
-      loading.value = false;
+      downloadedSets.value.add(key);
+      downloadingSets.value.delete(key);
+      downloadProgress.value.delete(key);
     },
     onError: (errorMessage) => {
       error.value = errorMessage;
-      loading.value = false;
+      downloadingSets.value.delete(key);
+      downloadProgress.value.delete(key);
     }
   });
 }
@@ -361,6 +390,14 @@ function goToSetOverview(setName: string, language: string) {
 
 function isDownloaded(key: string): boolean {
   return downloadedSets.value.has(key);
+}
+
+function isDownloading(key: string): boolean {
+  return downloadingSets.value.has(key);
+}
+
+function getDownloadProgress(key: string): DownloadProgress | undefined {
+  return downloadProgress.value.get(key);
 }
 
 // Watch for URL parameter changes from browser navigation

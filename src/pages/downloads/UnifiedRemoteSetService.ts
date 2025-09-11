@@ -32,6 +32,17 @@ export interface RemoteSetInfo {
   title?: string;
 }
 
+export interface DownloadProgress {
+  phase: string;
+  current: number;
+  total: number;
+  percentage: number;
+}
+
+export interface DownloadOptions {
+  onProgress?: (progress: DownloadProgress) => void;
+}
+
 interface RemoteSetFiles {
   vocab?: z.infer<typeof vocabSchema>[];
   translations?: z.infer<typeof translationSchema>[];
@@ -109,13 +120,26 @@ export class UnifiedRemoteSetService {
     }
   }
 
-  async downloadSet(languageCode: string, setName: string): Promise<void> {
+  async downloadSet(languageCode: string, setName: string, options?: DownloadOptions): Promise<void> {
+    const reportProgress = (phase: string, current: number, total: number) => {
+      if (options?.onProgress) {
+        const percentage = total > 0 ? Math.round((current / total) * 100) : 0;
+        options.onProgress({ phase, current, total, percentage });
+      }
+    };
+
+    reportProgress('Loading and validating files', 0, 100);
+    
     // First validate all files before writing anything
     const setFiles = await this.loadAndValidateSetFiles(languageCode, setName);
     if (!setFiles) {
       throw new Error('Failed to validate set files');
     }
 
+    reportProgress('Loading and validating files', 100, 100);
+
+    reportProgress('Setting up language and local set', 0, 100);
+    
     // Ensure language exists in the database as active (only if not already present)
     const existingLanguage = await this.languageRepo.getByCode(languageCode);
     if (!existingLanguage) {
@@ -131,6 +155,8 @@ export class UnifiedRemoteSetService {
       lastDownloadedAt: new Date()
     });
 
+    reportProgress('Setting up language and local set', 100, 100);
+
     // Create lookup maps for resolving references
     const linkMap = new Map<string, Link>();
     const noteMap = new Map<string, string>(); // remote ID -> local UID
@@ -145,9 +171,13 @@ export class UnifiedRemoteSetService {
     const newResourceUids: string[] = [];
     const newGoalUids: string[] = [];
 
+    reportProgress('Processing links and notes', 0, 100);
+    
     // Process links first (they're embedded, not stored as entities)
     if (setFiles.links) {
-      for (const linkData of setFiles.links) {
+      for (let i = 0; i < setFiles.links.length; i++) {
+        const linkData = setFiles.links[i];
+        reportProgress('Processing links', i, setFiles.links.length);
         if (linkData.id) {
           linkMap.set(linkData.id, {
             label: linkData.label,
@@ -162,7 +192,9 @@ export class UnifiedRemoteSetService {
 
     // Process notes 
     if (setFiles.notes) {
-      for (const noteData of setFiles.notes) {
+      for (let i = 0; i < setFiles.notes.length; i++) {
+        const noteData = setFiles.notes[i];
+        reportProgress('Processing notes', i, setFiles.notes.length);
         // Always create new notes (as per instructions - don't share notes)
         const localNote: Omit<NoteData, 'uid'> = {
           content: noteData.content,
@@ -178,7 +210,9 @@ export class UnifiedRemoteSetService {
 
     // Process translations
     if (setFiles.translations) {
-      for (const translationData of setFiles.translations) {
+      for (let i = 0; i < setFiles.translations.length; i++) {
+        const translationData = setFiles.translations[i];
+        reportProgress('Processing translations', i, setFiles.translations.length);
         if (!translationData.content) continue;
         const existingTranslation = await this.translationRepo.getTranslationByContent(translationData.content);
         
@@ -222,7 +256,9 @@ export class UnifiedRemoteSetService {
 
     // Process vocab
     if (setFiles.vocab) {
-      for (const vocabData of setFiles.vocab) {
+      for (let i = 0; i < setFiles.vocab.length; i++) {
+        const vocabData = setFiles.vocab[i];
+        reportProgress('Processing vocabulary', i, setFiles.vocab.length);
         if (!vocabData.language) continue;
         
         let existingVocab: VocabData | undefined;
@@ -332,14 +368,18 @@ export class UnifiedRemoteSetService {
 
     // Process media files for vocab that was just created
     if (setFiles.vocab) {
+      reportProgress('Processing media files', 0, 100);
       await this.processVocabMedia(languageCode, setName, setFiles.vocab, vocabMap);
+      reportProgress('Processing media files', 100, 100);
     }
 
     // Task generation is now handled ad-hoc during lessons
 
     // Process fact cards
     if (setFiles.factCards) {
-      for (const factCardData of setFiles.factCards) {
+      for (let i = 0; i < setFiles.factCards.length; i++) {
+        const factCardData = setFiles.factCards[i];
+        reportProgress('Processing fact cards', i, setFiles.factCards.length);
         // Check if fact card already exists by front+back+language
         const allFactCards = await this.factCardRepo.getAllFactCards();
         const existingFactCard = allFactCards.find(fc => 
@@ -393,7 +433,9 @@ export class UnifiedRemoteSetService {
 
     // Process resources
     if (setFiles.resources) {
-      for (const resourceData of setFiles.resources) {
+      for (let i = 0; i < setFiles.resources.length; i++) {
+        const resourceData = setFiles.resources[i];
+        reportProgress('Processing resources', i, setFiles.resources.length);
         const existingResource = await this.resourceRepo.getResourceByTitleAndLanguage(
           resourceData.title,
           resourceData.language
@@ -459,7 +501,9 @@ export class UnifiedRemoteSetService {
 
     // Process goals
     if (setFiles.goals) {
-      for (const goalData of setFiles.goals) {
+      for (let i = 0; i < setFiles.goals.length; i++) {
+        const goalData = setFiles.goals[i];
+        reportProgress('Processing goals', i, setFiles.goals.length);
         // Check if goal already exists by title+language
         const allGoals = await this.goalRepo.getAll();
         const existingGoal = allGoals.find(g => 
@@ -521,6 +565,8 @@ export class UnifiedRemoteSetService {
         }
       }
     }
+
+    reportProgress('Download complete', 100, 100);
 
     // Task generation is now handled ad-hoc during lessons
   }

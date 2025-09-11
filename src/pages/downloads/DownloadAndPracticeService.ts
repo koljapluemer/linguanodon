@@ -1,5 +1,5 @@
 import type { Router } from 'vue-router';
-import { UnifiedRemoteSetService } from './UnifiedRemoteSetService';
+import { UnifiedRemoteSetService, type DownloadProgress } from './UnifiedRemoteSetService';
 import { remoteSetMetaDataSchema } from '@/entities/remote-sets/remoteSetMetaData';
 import { z } from 'zod';
 
@@ -7,6 +7,7 @@ export interface DownloadAndPracticeOptions {
   language: string;
   setName: string;
   onDownloadStart?: () => void;
+  onDownloadProgress?: (progress: DownloadProgress) => void;
   onDownloadComplete?: () => void;
   onError?: (error: string) => void;
 }
@@ -21,7 +22,7 @@ export class DownloadAndPracticeService {
    * Downloads a set and immediately starts practice in the preferred mode
    */
   async downloadAndStartPractice(options: DownloadAndPracticeOptions): Promise<void> {
-    const { language, setName, onDownloadStart, onDownloadComplete, onError } = options;
+    const { language, setName, onDownloadStart, onDownloadProgress, onDownloadComplete, onError } = options;
     
     try {
       onDownloadStart?.();
@@ -30,7 +31,9 @@ export class DownloadAndPracticeService {
       const isAlreadyDownloaded = await this.remoteSetService.isSetDownloaded(setName);
       
       if (!isAlreadyDownloaded) {
-        await this.remoteSetService.downloadSet(language, setName);
+        await this.remoteSetService.downloadSet(language, setName, {
+          onProgress: onDownloadProgress
+        });
       }
 
       // Load metadata to get preferred practice mode
@@ -52,12 +55,14 @@ export class DownloadAndPracticeService {
   /**
    * Downloads a set without starting practice
    */
-  async downloadOnly(options: Pick<DownloadAndPracticeOptions, 'language' | 'setName' | 'onDownloadStart' | 'onDownloadComplete' | 'onError'>): Promise<void> {
-    const { language, setName, onDownloadStart, onDownloadComplete, onError } = options;
+  async downloadOnly(options: Pick<DownloadAndPracticeOptions, 'language' | 'setName' | 'onDownloadStart' | 'onDownloadProgress' | 'onDownloadComplete' | 'onError'>): Promise<void> {
+    const { language, setName, onDownloadStart, onDownloadProgress, onDownloadComplete, onError } = options;
     
     try {
       onDownloadStart?.();
-      await this.remoteSetService.downloadSet(language, setName);
+      await this.remoteSetService.downloadSet(language, setName, {
+        onProgress: onDownloadProgress
+      });
       onDownloadComplete?.();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to download set';
