@@ -160,13 +160,16 @@ export class UnifiedRemoteSetService {
     // Process all notes in one batch to avoid O(n²) operations
     const noteMap = new Map<string, string>();
     if (setFiles.notes) {
-      const remoteIdToLocalUid = await this.noteRepo.createNotesFromRemoteBatch(setFiles.notes);
+      const remoteIdToLocalUid = await this.noteRepo.createNotesFromRemoteBatch(
+        setFiles.notes,
+        (current, total) => reportProgress('Processing notes', current, total)
+      );
       remoteIdToLocalUid.forEach((localUid, remoteId) => {
         noteMap.set(remoteId, localUid);
       });
+    } else {
+      reportProgress('Processing notes', 100, 100);
     }
-
-    reportProgress('Processing notes', 100, 100);
 
     // Create lookup maps for resolving references
     const linkMap = new Map<string, Link>();

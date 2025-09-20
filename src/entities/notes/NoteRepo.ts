@@ -75,46 +75,43 @@ export class NoteRepo implements NoteRepoContract {
     return noteUids;
   }
 
-  async findOrCreateNoteByContentAndType(content: string, noteType?: string, showBeforeExercise?: boolean): Promise<NoteData> {
-    // Check if note exists by content and noteType
-    const existingNote = await this.db.notes
-      .filter(note =>
-        note.content === content &&
-        note.noteType === noteType
-      )
-      .first();
 
-    if (existingNote) {
-      return this.ensureNoteFields(existingNote);
+  async createNotesFromRemoteBatch(remoteNotes: { id?: string; content: string; showBeforeExercice?: boolean; noteType?: string }[], onProgress?: (current: number, total: number) => void): Promise<Map<string, string>> {
+    if (remoteNotes.length === 0) {
+      onProgress?.(0, 0);
+      return new Map();
     }
 
-    // Create new note
-    const newNote: NoteData = {
-      uid: crypto.randomUUID(),
-      content: content,
-      showBeforeExercise: showBeforeExercise ?? false,
-      noteType: noteType
-    };
-
-    await this.db.notes.add(newNote);
-    return newNote;
-  }
-
-  async createNotesFromRemoteBatch(remoteNotes: { id?: string; content: string; showBeforeExercice?: boolean; noteType?: string }[]): Promise<Map<string, string>> {
+    const newNotes: NoteData[] = [];
     const remoteIdToLocalUid = new Map<string, string>();
 
-    for (const remoteNote of remoteNotes) {
-      const localNote = await this.findOrCreateNoteByContentAndType(
-        remoteNote.content,
-        remoteNote.noteType,
-        remoteNote.showBeforeExercice
-      );
+    // Process all remote notes - create a new note for each one
+    for (let i = 0; i < remoteNotes.length; i++) {
+      const remoteNote = remoteNotes[i];
+      onProgress?.(i, remoteNotes.length);
+
+      const localNote: NoteData = {
+        uid: crypto.randomUUID(),
+        content: remoteNote.content,
+        showBeforeExercise: remoteNote.showBeforeExercice ?? false,
+        noteType: remoteNote.noteType
+      };
+
+      newNotes.push(localNote);
 
       if (remoteNote.id) {
         remoteIdToLocalUid.set(remoteNote.id, localNote.uid);
       }
     }
 
+    // Bulk insert all notes
+    if (newNotes.length > 0) {
+      await this.db.transaction('rw', this.db.notes, async () => {
+        await this.db.notes.bulkAdd(newNotes);
+      });
+    }
+
+    onProgress?.(remoteNotes.length, remoteNotes.length);
     return remoteIdToLocalUid;
   }
 }

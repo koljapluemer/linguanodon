@@ -13,6 +13,5 @@ export interface NoteRepoContract {
   createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean }[]): Promise<string[]>;
 
   // Batch operations for performance
-  findOrCreateNoteByContentAndType(content: string, noteType?: string, showBeforeExercise?: boolean): Promise<NoteData>;
-  createNotesFromRemoteBatch(remoteNotes: { id?: string; content: string; showBeforeExercice?: boolean; noteType?: string }[]): Promise<Map<string, string>>;
+  createNotesFromRemoteBatch(remoteNotes: { id?: string; content: string; showBeforeExercice?: boolean; noteType?: string }[], onProgress?: (current: number, total: number) => void): Promise<Map<string, string>>;
 }
