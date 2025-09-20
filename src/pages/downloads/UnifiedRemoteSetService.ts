@@ -205,73 +205,50 @@ export class UnifiedRemoteSetService {
 
     reportProgress('Processing links', 100, 100);
 
-    // Process translations
+    // Process translations in batch for performance
     if (setFiles.translations) {
-      for (let i = 0; i < setFiles.translations.length; i++) {
-        const translationData = setFiles.translations[i];
-        reportProgress('Processing translations', i, setFiles.translations.length);
-        if (!translationData.content) continue;
-        const existingTranslation = await this.translationRepo.getTranslationByContent(translationData.content);
-        
-        if (existingTranslation) {
-          // Add new origin if not already present
-          const existingOrigins = new Set(existingTranslation.origins || []);
-          const shouldIncrementPriority = !existingOrigins.has(localSet.uid);
-          
-          existingOrigins.add(localSet.uid);
-          
-          // Resolve note references
-          const noteUids = this.resolveReferences(translationData.notes || [], noteMap);
-          const mergedNotes = [...new Set([...existingTranslation.notes, ...noteUids])];
-          
-          await this.translationRepo.updateTranslation({
-            ...existingTranslation,
-            notes: mergedNotes,
-            origins: [...existingOrigins],
-            priority: shouldIncrementPriority ? (existingTranslation.priority ?? 0) + (translationData.priority || 1) : existingTranslation.priority
-          });
-          
-          if (translationData.id) {
-            translationMap.set(translationData.id, existingTranslation.uid);
-          }
-        } else {
-          const noteUids = this.resolveReferences(translationData.notes || [], noteMap);
-          const localTranslation: Omit<TranslationData, 'uid' | 'origins'> = {
-            content: translationData.content,
-            priority: translationData.priority || 1,
-            notes: noteUids
-          };
-          
-          const savedTranslation = await this.translationRepo.saveTranslation(localTranslation);
-          if (translationData.id) {
-            translationMap.set(translationData.id, savedTranslation.uid);
-          }
-        }
-      }
+      const translationIdMap = await this.processTranslationsInBatch(
+        setFiles.translations,
+        localSet.uid,
+        noteMap,
+        (current, total) => reportProgress('Processing translations', current, total)
+      );
+
+      // Merge the translation ID mappings
+      translationIdMap.forEach((localUid, remoteId) => {
+        translationMap.set(remoteId, localUid);
+      });
     }
 
-    // Process vocab
+    // Process vocab - pre-load all existing vocab for performance
     if (setFiles.vocab) {
+      // PERFORMANCE FIX: Load all vocab once instead of N queries
+      const allExistingVocab = await this.vocabRepo.getVocab();
+      const vocabByLanguageAndContent = new Map<string, VocabData>();
+      allExistingVocab.forEach(v => {
+        if (v.content) {
+          vocabByLanguageAndContent.set(`${v.language}:${v.content}`, v);
+        }
+      });
+
       for (let i = 0; i < setFiles.vocab.length; i++) {
         const vocabData = setFiles.vocab[i];
         reportProgress('Processing vocabulary', i, setFiles.vocab.length);
         if (!vocabData.language) continue;
-        
+
         let existingVocab: VocabData | undefined;
-        
+
         if (vocabData.content) {
-          // Match by content + language
-          existingVocab = await this.vocabRepo.getVocabByLanguageAndContent(
-            vocabData.language,
-            vocabData.content
-          );
+          // Match by content + language - use pre-loaded data
+          existingVocab = vocabByLanguageAndContent.get(`${vocabData.language}:${vocabData.content}`);
         } else {
           // Match by checking if all remote translations are present in local vocab
           const translationUids = this.resolveReferences(vocabData.translations || [], translationMap);
           if (translationUids.length > 0) {
-            existingVocab = await this.vocabRepo.findVocabByTranslationUids(
-              vocabData.language,
-              translationUids
+            // Use pre-loaded data instead of database query
+            existingVocab = allExistingVocab.find(v =>
+              v.language === vocabData.language &&
+              translationUids.every(uid => v.translations.includes(uid))
             );
           }
         }
@@ -806,4 +783,79 @@ export class UnifiedRemoteSetService {
       // Don't rethrow - continue processing other sounds
     }
   }
+
+  private async processTranslationsInBatch(
+    remoteTranslations: z.infer<typeof translationSchema>[],
+    localSetUid: string,
+    noteMap: Map<string, string>,
+    onProgress?: (current: number, total: number) => void
+  ): Promise<Map<string, string>> {
+    if (remoteTranslations.length === 0) {
+      onProgress?.(0, 0);
+      return new Map();
+    }
+
+    // Step 1: Load all existing translations once
+    onProgress?.(0, remoteTranslations.length);
+    const existingTranslations = await this.translationRepo.getAllTranslations();
+    const existingByContent = new Map<string, TranslationData>();
+    existingTranslations.forEach(t => existingByContent.set(t.content, t));
+
+    const translationsToUpdate: TranslationData[] = [];
+    const translationsToCreate: TranslationData[] = [];
+    const remoteIdToLocalUid = new Map<string, string>();
+
+    // Step 2: Process all in memory
+    for (let i = 0; i < remoteTranslations.length; i++) {
+      const remoteTranslation = remoteTranslations[i];
+      onProgress?.(i, remoteTranslations.length);
+
+      if (!remoteTranslation.content) continue;
+
+      const existing = existingByContent.get(remoteTranslation.content);
+
+      if (existing) {
+        // Merge with existing
+        const existingOrigins = new Set(existing.origins || []);
+        const shouldIncrementPriority = !existingOrigins.has(localSetUid);
+        existingOrigins.add(localSetUid);
+
+        const noteUids = this.resolveReferences(remoteTranslation.notes || [], noteMap);
+        const mergedNotes = [...new Set([...existing.notes, ...noteUids])];
+
+        translationsToUpdate.push({
+          ...existing,
+          notes: mergedNotes,
+          origins: [...existingOrigins],
+          priority: shouldIncrementPriority ? (existing.priority ?? 0) + (remoteTranslation.priority || 1) : existing.priority
+        });
+
+        if (remoteTranslation.id) {
+          remoteIdToLocalUid.set(remoteTranslation.id, existing.uid);
+        }
+      } else {
+        // Create new translation
+        const noteUids = this.resolveReferences(remoteTranslation.notes || [], noteMap);
+        const newTranslation: TranslationData = {
+          uid: crypto.randomUUID(),
+          content: remoteTranslation.content,
+          priority: remoteTranslation.priority || 1,
+          notes: noteUids,
+          origins: [localSetUid]
+        };
+
+        translationsToCreate.push(newTranslation);
+        if (remoteTranslation.id) {
+          remoteIdToLocalUid.set(remoteTranslation.id, newTranslation.uid);
+        }
+      }
+    }
+
+    // Step 3: Bulk database operations
+    await this.translationRepo.bulkProcessTranslations(translationsToUpdate, translationsToCreate);
+
+    onProgress?.(remoteTranslations.length, remoteTranslations.length);
+    return remoteIdToLocalUid;
+  }
+
 }

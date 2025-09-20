@@ -14,4 +14,7 @@ export interface TranslationRepoContract {
   
   // Distractor generation operations
   generateWrongTranslations(correctTranslationContent: string, count: number): Promise<string[]>;
+
+  // Bulk operations for performance
+  bulkProcessTranslations(toUpdate: TranslationData[], toCreate: TranslationData[]): Promise<void>;
 }

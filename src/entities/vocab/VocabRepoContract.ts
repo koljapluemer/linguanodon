@@ -98,4 +98,7 @@ export interface VocabRepoContract {
   getRandomDueVocabFromSet(setUid: string, count: number, vocabBlockList?: string[]): Promise<VocabData[]>;
   getRandomUnseenVocabFromSet(setUid: string, count: number, vocabBlockList?: string[]): Promise<VocabData[]>;
   getUnseenVocabCountFromSet(setUid: string): Promise<number>;
+
+  // Bulk operations for performance
+  bulkProcessVocab(toUpdate: VocabData[], toCreate: Omit<VocabData, 'uid' | 'progress'>[]): Promise<VocabData[]>;
 }

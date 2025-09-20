@@ -1195,4 +1195,36 @@ export class VocabRepo implements VocabRepoContract {
 
     return count;
   }
+
+  async bulkProcessVocab(toUpdate: VocabData[], toCreate: Omit<VocabData, 'uid' | 'progress'>[]): Promise<VocabData[]> {
+    const createdVocab: VocabData[] = [];
+
+    await vocabDb.transaction('rw', vocabDb.vocab, async () => {
+      // Handle updates
+      if (toUpdate.length > 0) {
+        await vocabDb.vocab.bulkPut(toUpdate);
+      }
+
+      // Handle creates - generate UIDs and progress in the repo where it belongs
+      if (toCreate.length > 0) {
+        const vocabToAdd: VocabData[] = toCreate.map(vocabData => {
+          const newVocab: VocabData = {
+            uid: crypto.randomUUID(),
+            ...vocabData,
+            progress: {
+              ...createEmptyCard(),
+              streak: 0,
+              level: -1
+            }
+          };
+          createdVocab.push(newVocab);
+          return newVocab;
+        });
+
+        await vocabDb.vocab.bulkAdd(vocabToAdd);
+      }
+    });
+
+    return createdVocab;
+  }
 }

@@ -139,4 +139,15 @@ export class TranslationRepo implements TranslationRepoContract {
     
     return wrongAnswers;
   }
+
+  async bulkProcessTranslations(toUpdate: TranslationData[], toCreate: TranslationData[]): Promise<void> {
+    await translationDb.transaction('rw', translationDb.translations, async () => {
+      if (toUpdate.length > 0) {
+        await translationDb.translations.bulkPut(toUpdate);
+      }
+      if (toCreate.length > 0) {
+        await translationDb.translations.bulkAdd(toCreate);
+      }
+    });
+  }
 }
