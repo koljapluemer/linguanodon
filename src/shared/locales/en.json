@@ -1,6 +1,9 @@
 {
   "common": {
     "loading": "Loading...",
+    "backToSettings": "Back to Settings",
+    "currentSet": "Current Set",
+    "newVocabProgress": "New Vocab Progress",
     "error": "Something went wrong",
     "save": "Save",
     "cancel": "Cancel",
@@ -106,6 +109,25 @@
       "resourceRotation": {
         "name": "Resource Rotation",
         "description": "Rotate through learning resources"
+      },
+      "setStudy": {
+        "name": "Set Study",
+        "description": "Study vocabulary from downloaded sets",
+        "setup": {
+          "title": "Set Study Setup",
+          "description": "Study vocabulary from downloaded sets with customizable new word limits.",
+          "selectSet": "Select Set",
+          "chooseSet": "Choose a set to study",
+          "setLanguagePrefix": "(",
+          "setLanguageSuffix": ")",
+          "setDescriptionPrefix": " - ",
+          "noSetsAvailable": "No sets available. Please download sets first.",
+          "maxNewVocab": "Maximum New Vocabulary",
+          "maxNewVocabPlaceholder": "10",
+          "maxNewVocabHelp": "How many new words to introduce per session",
+          "startStudying": "Start Studying",
+          "hint": "Due vocabulary will be prioritized over new vocabulary."
+        }
       }
     },
     "states": {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices, Zap, ArrowRight, RefreshCw, Volume2 } from 'lucide-vue-next';
+import { BookOpen, Target, RotateCcw, ImagePlus, Eye, Dices, Zap, ArrowRight, RefreshCw, Volume2, Layers } from 'lucide-vue-next';
 
 const practiceOptions = [
   {
@@ -61,6 +61,12 @@ const practiceOptions = [
     route: { name: 'practice-mode-minimal-pairs' },
     icon: Volume2,
     description: 'Distinguish similar-sounding characters by listening and choosing'
+  },
+  {
+    name: 'Set Study',
+    route: { name: 'practice-mode-set-study' },
+    icon: Layers,
+    description: 'Study vocabulary from downloaded sets with customizable new word limits'
   }
 ];
 </script>

@@ -1138,4 +1138,61 @@ export class VocabRepo implements VocabRepoContract {
 
     return null;
   }
+
+  // Set Study operations
+  async getRandomDueVocabFromSet(setUid: string, count: number, vocabBlockList?: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('origins')
+      .equals(setUid)
+      .filter(vocab =>
+        vocab.progress.level >= 0 &&
+        vocab.progress.due <= new Date() &&
+        !vocab.doNotPractice &&
+        vocab.origins.includes(setUid) &&
+        (!vocabBlockList || !vocabBlockList.includes(vocab.uid))
+      )
+      .toArray();
+
+    const ensuredVocab = vocab.map(v => this.ensureVocabFields(v));
+    return pickRandom(ensuredVocab, count);
+  }
+
+  async getRandomUnseenVocabFromSet(setUid: string, count: number, vocabBlockList?: string[]): Promise<VocabData[]> {
+    const vocab = await vocabDb.vocab
+      .where('origins')
+      .equals(setUid)
+      .filter(vocab => {
+        if (!vocab.progress) {
+          console.warn('Found vocab with null/undefined progress:', vocab.uid);
+          return !vocab.doNotPractice &&
+                 vocab.origins.includes(setUid) &&
+                 (!vocabBlockList || !vocabBlockList.includes(vocab.uid));
+        }
+        return isUnseen(vocab) &&
+               !vocab.doNotPractice &&
+               vocab.origins.includes(setUid) &&
+               (!vocabBlockList || !vocabBlockList.includes(vocab.uid));
+      })
+      .toArray();
+
+    const ensuredVocab = vocab.map(v => this.ensureVocabFields(v));
+    return pickRandom(ensuredVocab, count);
+  }
+
+  async getUnseenVocabCountFromSet(setUid: string): Promise<number> {
+    const count = await vocabDb.vocab
+      .where('origins')
+      .equals(setUid)
+      .filter(vocab => {
+        if (!vocab.progress) {
+          return !vocab.doNotPractice && vocab.origins.includes(setUid);
+        }
+        return isUnseen(vocab) &&
+               !vocab.doNotPractice &&
+               vocab.origins.includes(setUid);
+      })
+      .count();
+
+    return count;
+  }
 }

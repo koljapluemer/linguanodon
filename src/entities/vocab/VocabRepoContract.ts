@@ -93,4 +93,9 @@ export interface VocabRepoContract {
 
   // Minimal Pairs operations
   getRandomDueOrUnseenVocabForMinimalPairs(languages: string[], vocabBlockList?: string[]): Promise<VocabData | null>;
+
+  // Set Study operations
+  getRandomDueVocabFromSet(setUid: string, count: number, vocabBlockList?: string[]): Promise<VocabData[]>;
+  getRandomUnseenVocabFromSet(setUid: string, count: number, vocabBlockList?: string[]): Promise<VocabData[]>;
+  getUnseenVocabCountFromSet(setUid: string): Promise<number>;
 }

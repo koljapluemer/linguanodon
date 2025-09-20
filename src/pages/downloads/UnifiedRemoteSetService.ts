@@ -151,7 +151,6 @@ export class UnifiedRemoteSetService {
     const localSet = await this.localSetRepo.saveLocalSet({
       name: setName,
       language: languageCode,
-      description: `Unified set: ${setName}`,
       lastDownloadedAt: new Date()
     });
 
