@@ -560,6 +560,17 @@ files = [
 requests = "*"
 
 [[package]]
+name = "pinyin"
+version = "0.4.0"
+description = "Translate chinese chars to pinyin based on Mandarin.dat"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "pinyin-0.4.0.tar.gz", hash = "sha256:8842ae53cb7a81c8c3ec03d1cd7dba9aedb20d8d6962aebc620fad74da0868f5"},
+]
+
+[[package]]
 name = "pycparser"
 version = "2.22"
 description = "C parser in Python"
@@ -970,4 +981,4 @@ requests = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.14"
-content-hash = "878bcfc836efd26f0bb26964c3c0d174289e46d04809b05434c3af1c13dae3d0"
+content-hash = "32d562435127fe1c957b3b75c51cb16a0e8d77e692a8ff72919132112d49c3b0"
