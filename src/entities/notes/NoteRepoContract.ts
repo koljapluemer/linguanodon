@@ -8,7 +8,11 @@ export interface NoteRepoContract {
   updateNote(note: NoteData): Promise<void>;
   deleteNote(uid: string): Promise<void>;
   deleteNotes(uids: string[]): Promise<void>;
-  
+
   // Remote import operations
   createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean }[]): Promise<string[]>;
+
+  // Batch operations for performance
+  findOrCreateNoteByContentAndType(content: string, noteType?: string, showBeforeExercise?: boolean): Promise<NoteData>;
+  createNotesFromRemoteBatch(remoteNotes: { id?: string; content: string; showBeforeExercice?: boolean; noteType?: string }[]): Promise<Map<string, string>>;
 }

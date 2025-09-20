@@ -61,7 +61,7 @@ export class NoteRepo implements NoteRepoContract {
 
   async createNotesFromRemote(remoteNotes: { content: string; showBeforeExercise?: boolean; noteType?: string }[]): Promise<string[]> {
     const noteUids: string[] = [];
-    
+
     for (const remoteNote of remoteNotes) {
       const noteData: Omit<NoteData, 'uid'> = {
         content: remoteNote.content,
@@ -71,7 +71,50 @@ export class NoteRepo implements NoteRepoContract {
       const savedNote = await this.saveNote(noteData);
       noteUids.push(savedNote.uid);
     }
-    
+
     return noteUids;
+  }
+
+  async findOrCreateNoteByContentAndType(content: string, noteType?: string, showBeforeExercise?: boolean): Promise<NoteData> {
+    // Check if note exists by content and noteType
+    const existingNote = await this.db.notes
+      .filter(note =>
+        note.content === content &&
+        note.noteType === noteType
+      )
+      .first();
+
+    if (existingNote) {
+      return this.ensureNoteFields(existingNote);
+    }
+
+    // Create new note
+    const newNote: NoteData = {
+      uid: crypto.randomUUID(),
+      content: content,
+      showBeforeExercise: showBeforeExercise ?? false,
+      noteType: noteType
+    };
+
+    await this.db.notes.add(newNote);
+    return newNote;
+  }
+
+  async createNotesFromRemoteBatch(remoteNotes: { id?: string; content: string; showBeforeExercice?: boolean; noteType?: string }[]): Promise<Map<string, string>> {
+    const remoteIdToLocalUid = new Map<string, string>();
+
+    for (const remoteNote of remoteNotes) {
+      const localNote = await this.findOrCreateNoteByContentAndType(
+        remoteNote.content,
+        remoteNote.noteType,
+        remoteNote.showBeforeExercice
+      );
+
+      if (remoteNote.id) {
+        remoteIdToLocalUid.set(remoteNote.id, localNote.uid);
+      }
+    }
+
+    return remoteIdToLocalUid;
   }
 }

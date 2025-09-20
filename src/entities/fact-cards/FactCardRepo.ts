@@ -73,6 +73,16 @@ export class FactCardRepo implements FactCardRepoContract {
     await this.db.factCards.delete(uid);
   }
 
+  async getFactCardByFrontBackLanguage(front: string, back: string, language: string): Promise<FactCardData | undefined> {
+    const factCard = await this.db.factCards
+      .where('language')
+      .equals(language)
+      .filter(fc => fc.front === front && fc.back === back)
+      .first();
+
+    return factCard ? this.ensureFactCardFields(factCard) : undefined;
+  }
+
   async scoreFactCard(factCardId: string, rating: Rating, immediateDue?: boolean): Promise<void> {
     const factCard = await this.getFactCardByUID(factCardId);
     if (!factCard) return;

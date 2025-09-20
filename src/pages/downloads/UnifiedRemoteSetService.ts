@@ -18,7 +18,6 @@ import { factCardSchema } from '@/entities/remote-sets/validation/factCardSchema
 
 import type { VocabData, VocabImage, VocabSound } from '@/entities/vocab/VocabData';
 import type { TranslationData } from '@/entities/translations/TranslationData';
-import type { NoteData } from '@/entities/notes/NoteData';
 import type { ResourceData } from '@/entities/resources/ResourceData';
 import type { GoalData } from '@/entities/goals/GoalData';
 import type { FactCardData } from '@/entities/fact-cards/FactCardData';
@@ -129,7 +128,7 @@ export class UnifiedRemoteSetService {
     };
 
     reportProgress('Loading and validating files', 0, 100);
-    
+
     // First validate all files before writing anything
     const setFiles = await this.loadAndValidateSetFiles(languageCode, setName);
     if (!setFiles) {
@@ -139,7 +138,7 @@ export class UnifiedRemoteSetService {
     reportProgress('Loading and validating files', 100, 100);
 
     reportProgress('Setting up language and local set', 0, 100);
-    
+
     // Ensure language exists in the database as active (only if not already present)
     const existingLanguage = await this.languageRepo.getByCode(languageCode);
     if (!existingLanguage) {
@@ -156,9 +155,21 @@ export class UnifiedRemoteSetService {
 
     reportProgress('Setting up language and local set', 100, 100);
 
+    reportProgress('Processing notes', 0, 100);
+
+    // Process all notes in one batch to avoid O(n²) operations
+    const noteMap = new Map<string, string>();
+    if (setFiles.notes) {
+      const remoteIdToLocalUid = await this.noteRepo.createNotesFromRemoteBatch(setFiles.notes);
+      remoteIdToLocalUid.forEach((localUid, remoteId) => {
+        noteMap.set(remoteId, localUid);
+      });
+    }
+
+    reportProgress('Processing notes', 100, 100);
+
     // Create lookup maps for resolving references
     const linkMap = new Map<string, Link>();
-    const noteMap = new Map<string, string>(); // remote ID -> local UID
     const translationMap = new Map<string, string>(); // remote ID -> local UID
     const vocabMap = new Map<string, string>(); // remote ID -> local UID
     const resourceMap = new Map<string, string>(); // remote ID -> local UID
@@ -170,8 +181,8 @@ export class UnifiedRemoteSetService {
     const newResourceUids: string[] = [];
     const newGoalUids: string[] = [];
 
-    reportProgress('Processing links and notes', 0, 100);
-    
+    reportProgress('Processing links', 0, 100);
+
     // Process links first (they're embedded, not stored as entities)
     if (setFiles.links) {
       for (let i = 0; i < setFiles.links.length; i++) {
@@ -189,23 +200,7 @@ export class UnifiedRemoteSetService {
       }
     }
 
-    // Process notes 
-    if (setFiles.notes) {
-      for (let i = 0; i < setFiles.notes.length; i++) {
-        const noteData = setFiles.notes[i];
-        reportProgress('Processing notes', i, setFiles.notes.length);
-        // Always create new notes (as per instructions - don't share notes)
-        const localNote: Omit<NoteData, 'uid'> = {
-          content: noteData.content,
-          showBeforeExercise: noteData.showBeforeExercice || false,
-          noteType: noteData.noteType || 'general'
-        };
-        const savedNote = await this.noteRepo.saveNote(localNote);
-        if (noteData.id) {
-          noteMap.set(noteData.id, savedNote.uid);
-        }
-      }
-    }
+    reportProgress('Processing links', 100, 100);
 
     // Process translations
     if (setFiles.translations) {
@@ -222,9 +217,9 @@ export class UnifiedRemoteSetService {
           
           existingOrigins.add(localSet.uid);
           
-          // Resolve note references and merge with deduplication
+          // Resolve note references
           const noteUids = this.resolveReferences(translationData.notes || [], noteMap);
-          const mergedNotes = await this.deduplicateEntityNotes([...existingTranslation.notes, ...noteUids]);
+          const mergedNotes = [...new Set([...existingTranslation.notes, ...noteUids])];
           
           await this.translationRepo.updateTranslation({
             ...existingTranslation,
@@ -238,11 +233,10 @@ export class UnifiedRemoteSetService {
           }
         } else {
           const noteUids = this.resolveReferences(translationData.notes || [], noteMap);
-          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
           const localTranslation: Omit<TranslationData, 'uid' | 'origins'> = {
             content: translationData.content,
             priority: translationData.priority || 1,
-            notes: deduplicatedNotes
+            notes: noteUids
           };
           
           const savedTranslation = await this.translationRepo.saveTranslation(localTranslation);
@@ -293,11 +287,11 @@ export class UnifiedRemoteSetService {
           const relatedVocabUids = this.resolveReferences(vocabData.relatedVocab || [], vocabMap);
           const notRelatedVocabUids = this.resolveReferences(vocabData.notRelatedVocab || [], vocabMap);
           
-          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingVocab.notes, ...noteUids]);
+          const mergedNotes = [...new Set([...existingVocab.notes, ...noteUids])];
           
           await this.vocabRepo.updateVocab({
             ...existingVocab,
-            notes: deduplicatedNotes,
+            notes: mergedNotes,
             translations: [...new Set([...existingVocab.translations, ...translationUids])],
             links: this.deduplicateLinks([...existingVocab.links, ...links]),
             relatedVocab: [...new Set([...existingVocab.relatedVocab, ...relatedVocabUids])],
@@ -315,8 +309,6 @@ export class UnifiedRemoteSetService {
           const translationUids = this.resolveReferences(vocabData.translations || [], translationMap);
           const links = this.resolveLinks(vocabData.links || [], linkMap);
           
-          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
-          
           const localVocab: Omit<VocabData, 'uid' | 'progress'> = {
             language: vocabData.language,
             content: vocabData.content,
@@ -325,7 +317,7 @@ export class UnifiedRemoteSetService {
             consideredWord: vocabData.consideredWord,
             priority: vocabData.priority || 1,
             doNotPractice: false, // Default value since remote schema doesn't have this
-            notes: deduplicatedNotes,
+            notes: noteUids,
             translations: translationUids,
             links: links,
             relatedVocab: [], // Will resolve in second pass
@@ -380,11 +372,10 @@ export class UnifiedRemoteSetService {
         const factCardData = setFiles.factCards[i];
         reportProgress('Processing fact cards', i, setFiles.factCards.length);
         // Check if fact card already exists by front+back+language
-        const allFactCards = await this.factCardRepo.getAllFactCards();
-        const existingFactCard = allFactCards.find(fc => 
-          fc.front === factCardData.front && 
-          fc.back === factCardData.back && 
-          fc.language === factCardData.language
+        const existingFactCard = await this.factCardRepo.getFactCardByFrontBackLanguage(
+          factCardData.front,
+          factCardData.back,
+          factCardData.language
         );
 
         if (existingFactCard) {
@@ -395,11 +386,11 @@ export class UnifiedRemoteSetService {
           existingOrigins.add(localSet.uid);
           
           const noteUids = this.resolveReferences(factCardData.notes || [], noteMap);
-          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingFactCard.notes, ...noteUids]);
+          const mergedNotes = [...new Set([...existingFactCard.notes, ...noteUids])];
           
           await this.factCardRepo.updateFactCard({
             ...existingFactCard,
-            notes: deduplicatedNotes,
+            notes: mergedNotes,
             origins: [...existingOrigins],
             priority: shouldIncrementPriority ? (existingFactCard.priority ?? 0) + (factCardData.priority || 1) : existingFactCard.priority
           });
@@ -409,7 +400,7 @@ export class UnifiedRemoteSetService {
           }
         } else {
           const noteUids = this.resolveReferences(factCardData.notes || [], noteMap);
-          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
+          // Notes already processed in batch
           
           const localFactCard: Omit<FactCardData, 'uid' | 'progress'> = {
             language: factCardData.language,
@@ -417,7 +408,7 @@ export class UnifiedRemoteSetService {
             back: factCardData.back,
             priority: factCardData.priority || 1,
             doNotPractice: false,
-            notes: deduplicatedNotes,
+            notes: noteUids,
             links: [],
             origins: [localSet.uid]
           };
@@ -451,11 +442,11 @@ export class UnifiedRemoteSetService {
           const vocabUids = this.resolveReferences(resourceData.vocab || [], vocabMap);
           const factCardUids = this.resolveReferences(resourceData.factCards || [], factCardMap);
           
-          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingResource.notes, ...noteUids]);
+          const mergedNotes = [...new Set([...existingResource.notes, ...noteUids])];
           
           await this.resourceRepo.updateResource({
             ...existingResource,
-            notes: deduplicatedNotes,
+            notes: mergedNotes,
             vocab: [...new Set([...existingResource.vocab, ...vocabUids])],
             factCards: [...new Set([...existingResource.factCards, ...factCardUids])],
             origins: [...existingOrigins],
@@ -471,7 +462,7 @@ export class UnifiedRemoteSetService {
           const factCardUids = this.resolveReferences(resourceData.factCards || [], factCardMap);
           const link = resourceData.link ? linkMap.get(resourceData.link) : undefined;
           
-          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
+          // Notes already processed in batch
           
           const localResource: Omit<ResourceData, 'uid' | 'lastShownAt'> = {
             language: resourceData.language,
@@ -480,7 +471,7 @@ export class UnifiedRemoteSetService {
             content: resourceData.content,
             priority: resourceData.priority || 1,
             link: link,
-            notes: deduplicatedNotes,
+            notes: noteUids,
             vocab: vocabUids,
             factCards: factCardUids,
             origins: [localSet.uid],
@@ -504,10 +495,9 @@ export class UnifiedRemoteSetService {
         const goalData = setFiles.goals[i];
         reportProgress('Processing goals', i, setFiles.goals.length);
         // Check if goal already exists by title+language
-        const allGoals = await this.goalRepo.getAll();
-        const existingGoal = allGoals.find(g => 
-          g.title === goalData.title && 
-          g.language === goalData.language
+        const existingGoal = await this.goalRepo.getGoalByTitleAndLanguage(
+          goalData.title,
+          goalData.language
         );
 
         if (existingGoal) {
@@ -520,10 +510,10 @@ export class UnifiedRemoteSetService {
           const factCardUids = this.resolveReferences(goalData.factCards || [], factCardMap);
           const subGoalUids = this.resolveReferences(goalData.subGoals || [], goalMap);
           
-          const deduplicatedNotes = await this.deduplicateEntityNotes([...existingGoal.notes, ...noteUids]);
-          
+          const mergedNotes = [...new Set([...existingGoal.notes, ...noteUids])];
+
           await this.goalRepo.update(existingGoal.uid, {
-            notes: deduplicatedNotes,
+            notes: mergedNotes,
             vocab: [...new Set([...existingGoal.vocab, ...vocabUids])],
             factCards: [...new Set([...existingGoal.factCards, ...factCardUids])],
             subGoals: [...new Set([...existingGoal.subGoals, ...subGoalUids])],
@@ -539,12 +529,12 @@ export class UnifiedRemoteSetService {
           const factCardUids = this.resolveReferences(goalData.factCards || [], factCardMap);
           const subGoalUids = this.resolveReferences(goalData.subGoals || [], goalMap);
           
-          const deduplicatedNotes = await this.deduplicateEntityNotes(noteUids);
+          // Notes already processed in batch
           
           const localGoal: Omit<GoalData, 'uid'> = {
             language: goalData.language,
             title: goalData.title,
-            notes: deduplicatedNotes,
+            notes: noteUids,
             vocab: vocabUids,
             factCards: factCardUids,
             subGoals: subGoalUids,
@@ -703,48 +693,6 @@ export class UnifiedRemoteSetService {
     });
   }
 
-  private async deduplicateEntityNotes(noteUids: string[]): Promise<string[]> {
-    if (noteUids.length <= 1) return noteUids;
-    
-    // Get all notes
-    const notes = await this.noteRepo.getNotesByUIDs(noteUids);
-    
-    // Group notes by content + noteType signature
-    const noteGroups = new Map<string, { note: NoteData; uid: string }[]>();
-    
-    for (const note of notes) {
-      const signature = `${note.content}|${note.noteType || ''}`;
-      if (!noteGroups.has(signature)) {
-        noteGroups.set(signature, []);
-      }
-      noteGroups.get(signature)!.push({ note, uid: note.uid });
-    }
-    
-    const keptNoteUids: string[] = [];
-    const uidsToDelete: string[] = [];
-    
-    // For each group, keep the first note and delete the rest
-    for (const group of noteGroups.values()) {
-      if (group.length > 1) {
-        // Keep the first note
-        keptNoteUids.push(group[0].uid);
-        
-        // Mark the duplicate notes for deletion
-        const duplicateUids = group.slice(1).map(item => item.uid);
-        uidsToDelete.push(...duplicateUids);
-      } else {
-        // No duplicates, keep the note
-        keptNoteUids.push(group[0].uid);
-      }
-    }
-    
-    // Delete the duplicate notes
-    if (uidsToDelete.length > 0) {
-      await this.noteRepo.deleteNotes(uidsToDelete);
-    }
-    
-    return keptNoteUids;
-  }
 
   async isSetDownloaded(setName: string): Promise<boolean> {
     return await this.localSetRepo.isRemoteSetDownloaded(setName);

@@ -12,6 +12,9 @@ export interface GoalRepoContract {
   create(goal: Omit<GoalData, 'uid' | 'tasks'>): Promise<GoalData>;
   update(id: string, updates: Omit<Partial<GoalData>, 'uid' | 'tasks'>): Promise<GoalData>;
   delete(id: string): Promise<void>;
+
+  // Existence check operations
+  getGoalByTitleAndLanguage(title: string, language: string): Promise<GoalData | undefined>;
   getIncompleteGoals(): Promise<GoalData[]>;
   getGoalsNeedingVocab(languages: string[]): Promise<GoalData[]>;
   getGoalsNeedingSubGoals(languages: string[]): Promise<GoalData[]>;

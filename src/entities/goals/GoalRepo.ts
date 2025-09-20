@@ -51,6 +51,12 @@ export class GoalRepo implements GoalRepoContract {
     await this.db.goals.delete(id);
   }
 
+  async getGoalByTitleAndLanguage(title: string, language: string): Promise<GoalData | undefined> {
+    return await this.db.goals
+      .filter(goal => goal.title === title && goal.language === language)
+      .first();
+  }
+
   async getIncompleteGoals(): Promise<GoalData[]> {
     const allGoals = await this.db.goals.toArray();
     return allGoals; // All goals are considered active since isActive was removed

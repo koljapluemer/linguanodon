@@ -16,6 +16,9 @@ export interface FactCardRepoContract {
   updateFactCard(factCard: FactCardData): Promise<void>;
   deleteFactCard(uid: string): Promise<void>;
 
+  // Existence check operations
+  getFactCardByFrontBackLanguage(front: string, back: string, language: string): Promise<FactCardData | undefined>;
+
   // Progress operations
   scoreFactCard(factCardId: string, rating: Rating, immediateDue?: boolean): Promise<void>;
   updateLastReview(factCardId: string): Promise<void>;
