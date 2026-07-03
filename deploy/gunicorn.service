@@ -1,0 +1,15 @@
+[Unit]
+Description=Gunicorn for linguanodon
+After=network.target
+
+[Service]
+User=deploy
+Group=deploy
+WorkingDirectory=/home/deploy/linguanodon
+EnvironmentFile=/etc/linguanodon.env
+ExecStart=/home/deploy/linguanodon/.venv/bin/gunicorn config.wsgi --bind 127.0.0.1:8000 --workers 2
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
