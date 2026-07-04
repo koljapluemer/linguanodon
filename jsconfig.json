@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "checkJs": true,
+    "allowJs": true,
+    "noEmit": true,
+    "moduleResolution": "bundler"
+  },
+  "include": ["tprboard/static/tprboard/js/**/*.js"],
+  "exclude": ["**/vendor/**"]
+}

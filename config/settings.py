@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'tprboard',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +90,17 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# tprboard's content (vocab/tasks/3D-object relationships) is read-only in
+# normal operation, so it lives in its own committed SQLite file rather than
+# the app's operational database. DATABASE_ROUTERS below routes the tprboard
+# app's models here automatically.
+DATABASES['tprboard'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'tprboard.sqlite3',
+}
+
+DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']
 
 
 # Password validation

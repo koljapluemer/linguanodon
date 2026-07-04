@@ -1,6 +1,6 @@
 # Deploying to the VPS
 
-This app takes over the droplet that used to run `bestlanguageapp`. Django +
+This app takes over the droplet that used to run `transparent-input`. Django +
 gunicorn behind nginx, Postgres on the same box. No CI/CD — deploys are a
 manual `git pull` over SSH.
 
@@ -8,7 +8,7 @@ Config files: `deploy/gunicorn.service`, `deploy/nginx.conf`.
 
 ---
 
-## One-time: retire bestlanguageapp
+## One-time: retire transparent-input
 
 SSH in as `deploy` (the user and its sudo/systemctl rights already exist from
 the old setup):
@@ -27,27 +27,27 @@ sudo systemctl disable gunicorn
 Remove the old nginx site:
 
 ```bash
-sudo rm /etc/nginx/sites-enabled/bestlanguageapp
-sudo rm /etc/nginx/sites-available/bestlanguageapp
+sudo rm /etc/nginx/sites-enabled/transparent-input
+sudo rm /etc/nginx/sites-available/transparent-input
 ```
 
 Drop the old database (back it up first with `pg_dump` if you want to keep
 anything):
 
 ```bash
-sudo -u postgres psql -c "DROP DATABASE bestlanguageapp;"
-sudo -u postgres psql -c "DROP USER bestlanguageapp;"
+sudo -u postgres psql -c "DROP DATABASE transparent-input;"
+sudo -u postgres psql -c "DROP USER transparent-input;"
 ```
 
 Remove the old checkout and env file:
 
 ```bash
-rm -rf ~/bestlanguageapp
-sudo rm /etc/bestlanguageapp.env
+rm -rf ~/transparent-input
+sudo rm /etc/transparent-input.env
 ```
 
 The old GitHub deploy key (`~/.ssh/id_ed25519`) was scoped read-only to the
-`bestlanguageapp` repo on GitHub — it won't work for the new repo. You can
+`transparent-input` repo on GitHub — it won't work for the new repo. You can
 either reuse the same keypair (add its public key as a deploy key on the new
 repo) or generate a fresh one; instructions for both are below.
 
@@ -132,9 +132,16 @@ sudo chmod 600 /etc/linguanodon.env
 set -a && source /etc/linguanodon.env && set +a
 cd ~/linguanodon
 uv run python manage.py migrate
+uv run python manage.py migrate --database=tprboard
 uv run python manage.py collectstatic --noinput
 uv run python manage.py createsuperuser
 ```
+
+`tprboard.sqlite3` (the tpr-board vocabulary/task content) is committed
+directly to the repo, not loaded from a fixture - `git pull` already brings
+the populated file. The `migrate --database=tprboard` step only matters when
+a future code change ships a new migration for that app; it's a no-op
+otherwise.
 
 ### 6. Install and start gunicorn
 
@@ -158,7 +165,7 @@ A bare IP works fine here — skip step 8 if you don't have a domain yet.
 
 ### 8. SSL (requires a real domain, not an IP)
 
-If you're keeping the same domain that pointed at bestlanguageapp, the
+If you're keeping the same domain that pointed at transparent-input, the
 existing certificate covers the domain but not the new nginx server block's
 content — just rerun certbot against it:
 
@@ -185,6 +192,7 @@ All commands below assume you are **SSH'd in as deploy**.
   git pull
   uv sync --no-dev
   uv run python manage.py migrate
+  uv run python manage.py migrate --database=tprboard
   uv run python manage.py collectstatic --noinput
   sudo systemctl restart gunicorn
   ```

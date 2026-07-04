@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}TPR Board{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'tprboard/css/style.css' %}">
+<div id="app" class="h-screen w-screen"></div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+  }
+}
+</script>
+<script id="tprboard-config" type="application/json">{{ config_json|safe }}</script>
+<script type="module" src="{% static 'tprboard/js/main.js' %}"></script>
+{% endblock %}
