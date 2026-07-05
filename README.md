@@ -25,6 +25,7 @@ uv run python manage.py runserver          # dev server at http://127.0.0.1:8000
 uv run python manage.py makemigrations     # after changing core/models
 uv run python manage.py migrate
 uv run python manage.py migrate --database=tprboard  # after changing tprboard/models
+uv run python manage.py migrate --database=comprehensible_input  # after changing comprehensible_input/models
 uv run python manage.py shell              # Django shell with app context
 uv run python manage.py check              # sanity-check the project
 uv add <package>                           # add a dependency
@@ -45,4 +46,17 @@ uv add <package>                           # add a dependency
   npx -y -p typescript tsc --project jsconfig.json
   ```
   This is a dev-time convenience only, never part of deploy/collectstatic.
+- `accounts/` — user accounts. A custom `User` model (`AUTH_USER_MODEL`)
+  extending Django's `AbstractUser` with a `role` field (`NEW`/`TRUSTED`/
+  `MODERATOR`/`ADMIN`). Signup is a small custom view; sign-in/sign-out use
+  Django's built-in `LoginView`/`LogoutView`. Lives on `default` (Postgres in
+  prod), like every app without its own `DATABASES` entry.
+- `comprehensible_input/` — superbeginner comprehensible-input video
+  watching. Any visitor can browse by language and watch; only `ADMIN`-role
+  users can add/edit/delete videos (custom CRUD views, gated by
+  `accounts.permissions.AdminRequiredMixin`). Its `Language`/`Video` content
+  is live, admin-managed data (not a fixed import like the sibling apps
+  below), so `comprehensible_input.sqlite3` is gitignored rather than
+  committed. Watch time is tracked per video/language client-side in
+  IndexedDB (same hand-written, build-free JS style as `tprboard`).
 - `deploy/` — systemd/nginx config for the VPS deploy (see `doc/deploy.md`)

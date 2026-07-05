@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ video.title }}{% endblock %}
+
+{% block content %}
+<div class="p-4">
+    <div class="mb-4 flex justify-between max-w-3xl mx-auto">
+        <a href="{% url 'comprehensible_input:video_list' video.language_id %}" class="btn btn-sm btn-outline">Back to {{ video.language.name }}</a>
+        <a href="{% url 'comprehensible_input:stats' %}" class="btn btn-sm btn-outline">Stats</a>
+    </div>
+    <div class="max-w-3xl mx-auto flex flex-col gap-4">
+        <h1 class="text-xl font-semibold">{{ video.title }}</h1>
+        <div id="player" class="aspect-video w-full"></div>
+    </div>
+</div>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script id="comprehensible-input-config" type="application/json">{{ config_json|safe }}</script>
+<script type="module" src="{% static 'comprehensible_input/js/main.js' %}"></script>
+{% endblock %}

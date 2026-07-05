@@ -133,6 +133,7 @@ set -a && source /etc/linguanodon.env && set +a
 cd ~/linguanodon
 uv run python manage.py migrate
 uv run python manage.py migrate --database=tprboard
+uv run python manage.py migrate --database=comprehensible_input
 uv run python manage.py collectstatic --noinput
 uv run python manage.py createsuperuser
 ```
@@ -141,7 +142,26 @@ uv run python manage.py createsuperuser
 directly to the repo, not loaded from a fixture - `git pull` already brings
 the populated file. The `migrate --database=tprboard` step only matters when
 a future code change ships a new migration for that app; it's a no-op
-otherwise.
+otherwise. `comprehensible_input.sqlite3` is NOT committed (it holds live,
+admin-entered data) - the `migrate --database=comprehensible_input` step
+creates it fresh on the server.
+
+After `createsuperuser`, the account it creates has `is_staff`/`is_superuser`
+but its app-level `role` still defaults to `NEW` - to let it manage
+comprehensible-input videos, open `/admin/`, edit the user, and set `role`
+to `Admin`.
+
+**One-time note (first deploy after `accounts` was added):** this introduces
+a custom `AUTH_USER_MODEL` (`accounts.User`). Django does not support
+switching `AUTH_USER_MODEL` after `migrate` has already run against the
+built-in `auth.User` - and this Postgres database already has. Before
+running `migrate` on this deploy, drop and recreate the database (safe: no
+real account data exists in prod yet):
+
+```bash
+sudo -u postgres psql -c "DROP DATABASE linguanodon;"
+sudo -u postgres psql -c "CREATE DATABASE linguanodon OWNER linguanodon;"
+```
 
 ### 6. Install and start gunicorn
 
@@ -193,6 +213,7 @@ All commands below assume you are **SSH'd in as deploy**.
   uv sync --no-dev
   uv run python manage.py migrate
   uv run python manage.py migrate --database=tprboard
+  uv run python manage.py migrate --database=comprehensible_input
   uv run python manage.py collectstatic --noinput
   sudo systemctl restart gunicorn
   ```

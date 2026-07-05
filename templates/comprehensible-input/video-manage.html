@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Videos{% endblock %}
+
+{% block content %}
+<div class="min-h-screen p-4">
+    <div class="max-w-3xl mx-auto flex flex-col gap-4">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Manage videos</h1>
+            <a href="{% url 'comprehensible_input:video_add' %}" class="btn btn-primary">Add video</a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Language</th>
+                    <th>YouTube ID</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for video in videos %}
+                <tr>
+                    <td>{{ video.title }}</td>
+                    <td>{{ video.language.name }}</td>
+                    <td>{{ video.youtube_id }}</td>
+                    <td class="flex gap-2 justify-end">
+                        <a href="{% url 'comprehensible_input:video_edit' video.pk %}" class="btn btn-sm btn-outline">Edit</a>
+                        <a href="{% url 'comprehensible_input:video_delete' video.pk %}" class="btn btn-sm btn-outline btn-error">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center opacity-70">No videos yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

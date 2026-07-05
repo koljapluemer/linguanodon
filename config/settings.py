@@ -43,10 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
     'core',
     'tprboard',
     'viettonepractice',
     'hebrewscript',
+    'comprehensible_input',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +122,15 @@ DATABASES['hebrewscript'] = {
     'NAME': BASE_DIR / 'hebrewscript.sqlite3',
 }
 
+# comprehensible_input's Language/Video content is live, admin-managed CRUD
+# data (unlike the read-only imported content of the apps above), so its
+# sqlite file is not committed to git. Routed here automatically by
+# DATABASE_ROUTERS below.
+DATABASES['comprehensible_input'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'comprehensible_input.sqlite3',
+}
+
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']
 
 
@@ -161,3 +172,8 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.User'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'

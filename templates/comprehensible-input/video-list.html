@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ language.name }} Videos{% endblock %}
+
+{% block content %}
+<div class="min-h-screen p-4">
+    <div class="mb-4 flex justify-between max-w-2xl mx-auto">
+        <a href="{% url 'comprehensible_input:language_list' %}" class="btn btn-sm btn-outline">Back to languages</a>
+        <a href="{% url 'comprehensible_input:stats' %}" class="btn btn-sm btn-outline">Stats</a>
+    </div>
+    <div class="flex flex-col items-center gap-6">
+        <h1 class="text-2xl font-bold">{{ language.name }}</h1>
+        <div class="flex flex-col gap-2 w-full max-w-md">
+            {% for video in videos %}
+                <a href="{% url 'comprehensible_input:watch' video.pk %}" class="btn btn-primary">{{ video.title }}</a>
+            {% empty %}
+                <p class="text-center opacity-70">No videos for this language yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

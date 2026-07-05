@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen items-center justify-center p-4">
+    <form method="post" class="card w-full max-w-sm bg-base-100 p-6 shadow-sm flex flex-col gap-2">
+        {% csrf_token %}
+        <h1 class="text-xl font-semibold mb-2">Sign up</h1>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-error text-sm">{{ form.non_field_errors|join:", " }}</div>
+        {% endif %}
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Username</legend>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p class="fieldset-label text-error">{{ form.username.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Password</legend>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <p class="fieldset-label text-error">{{ form.password1.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Confirm password</legend>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <p class="fieldset-label text-error">{{ form.password2.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary mt-2">Create account</button>
+        <a href="{% url 'accounts:login' %}" class="link text-sm text-center mt-1">Already have an account? Sign in</a>
+    </form>
+</div>
+{% endblock %}

@@ -20,7 +20,9 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('accounts/', include('accounts.urls')),
     path('tpr-board/', include('tprboard.urls')),
     path('viet-tone-practice/', include('viettonepractice.urls')),
     path('hebrew-script/', include('hebrewscript.urls')),
+    path('comprehensible-input/', include('comprehensible_input.urls')),
 ]

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Sign in{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen items-center justify-center p-4">
+    <form method="post" class="card w-full max-w-sm bg-base-100 p-6 shadow-sm flex flex-col gap-2">
+        {% csrf_token %}
+        <h1 class="text-xl font-semibold mb-2">Sign in</h1>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-error text-sm">{{ form.non_field_errors|join:", " }}</div>
+        {% endif %}
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Username</legend>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p class="fieldset-label text-error">{{ form.username.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Password</legend>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <p class="fieldset-label text-error">{{ form.password.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="btn btn-primary mt-2">Sign in</button>
+        <a href="{% url 'accounts:signup' %}" class="link text-sm text-center mt-1">Need an account? Sign up</a>
+    </form>
+</div>
+{% endblock %}

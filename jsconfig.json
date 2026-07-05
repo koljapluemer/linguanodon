@@ -9,7 +9,8 @@
   "include": [
     "tprboard/static/tprboard/js/**/*.js",
     "viettonepractice/static/viettonepractice/js/**/*.js",
-    "hebrewscript/static/hebrewscript/js/**/*.js"
+    "hebrewscript/static/hebrewscript/js/**/*.js",
+    "comprehensible_input/static/comprehensible_input/js/**/*.js"
   ],
   "exclude": ["**/vendor/**"]
 }

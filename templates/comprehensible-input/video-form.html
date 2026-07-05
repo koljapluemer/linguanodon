@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form.instance.pk %}Edit video{% else %}Add video{% endif %}{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen items-center justify-center p-4">
+    <form method="post" class="card w-full max-w-sm bg-base-100 p-6 shadow-sm flex flex-col gap-2">
+        {% csrf_token %}
+        <h1 class="text-xl font-semibold mb-2">{% if form.instance.pk %}Edit video{% else %}Add video{% endif %}</h1>
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">YouTube ID</legend>
+            {{ form.youtube_id }}
+            {% if form.youtube_id.errors %}
+                <p class="fieldset-label text-error">{{ form.youtube_id.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Title</legend>
+            {{ form.title }}
+            {% if form.title.errors %}
+                <p class="fieldset-label text-error">{{ form.title.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Language</legend>
+            {{ form.language }}
+            {% if form.language.errors %}
+                <p class="fieldset-label text-error">{{ form.language.errors|join:", " }}</p>
+            {% endif %}
+        </fieldset>
+
+        <div class="flex gap-2 mt-2">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{% url 'comprehensible_input:video_manage' %}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
