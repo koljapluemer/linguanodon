@@ -25,4 +25,5 @@ urlpatterns = [
     path('viet-tone-practice/', include('viettonepractice.urls')),
     path('hebrew-script/', include('hebrewscript.urls')),
     path('comprehensible-input/', include('comprehensible_input.urls')),
+    path('arabic-numbers/', include('arabicnumbers.urls')),
 ]

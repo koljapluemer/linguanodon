@@ -26,6 +26,7 @@ uv run python manage.py makemigrations     # after changing core/models
 uv run python manage.py migrate
 uv run python manage.py migrate --database=tprboard  # after changing tprboard/models
 uv run python manage.py migrate --database=comprehensible_input  # after changing comprehensible_input/models
+uv run python manage.py migrate --database=arabicnumbers  # after changing arabicnumbers/models
 uv run python manage.py shell              # Django shell with app context
 uv run python manage.py check              # sanity-check the project
 uv add <package>                           # add a dependency
@@ -59,4 +60,10 @@ uv add <package>                           # add a dependency
   below), so `comprehensible_input.sqlite3` is gitignored rather than
   committed. Watch time is tracked per video/language client-side in
   IndexedDB (same hand-written, build-free JS style as `tprboard`).
+- `arabicnumbers/` — Arabic numbers practice (0-100), a build-free port of
+  the standalone `arabic-numbers-practice` SPA. Its number/numeral/
+  transliteration content lives in a dedicated `arabicnumbers.sqlite3`,
+  committed to git like `tprboard.sqlite3`. Practice progress (spaced-
+  repetition state, mission progress) is tracked client-side in IndexedDB,
+  same as `tprboard`/`comprehensible_input`.
 - `deploy/` — systemd/nginx config for the VPS deploy (see `doc/deploy.md`)

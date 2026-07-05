@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'viettonepractice',
     'hebrewscript',
     'comprehensible_input',
+    'arabicnumbers',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,14 @@ DATABASES['hebrewscript'] = {
 DATABASES['comprehensible_input'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'comprehensible_input.sqlite3',
+}
+
+# arabicnumbers's number/numeral/transliteration content is a fixed, small
+# dataset - read-only in normal operation, so it lives in its own committed
+# SQLite file. Routed here automatically by DATABASE_ROUTERS below.
+DATABASES['arabicnumbers'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'arabicnumbers.sqlite3',
 }
 
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']
