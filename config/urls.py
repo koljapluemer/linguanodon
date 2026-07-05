@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('core.urls')),
     path('tpr-board/', include('tprboard.urls')),
     path('viet-tone-practice/', include('viettonepractice.urls')),
+    path('hebrew-script/', include('hebrewscript.urls')),
 ]

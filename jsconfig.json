@@ -6,6 +6,10 @@
     "noEmit": true,
     "moduleResolution": "bundler"
   },
-  "include": ["tprboard/static/tprboard/js/**/*.js", "viettonepractice/static/viettonepractice/js/**/*.js"],
+  "include": [
+    "tprboard/static/tprboard/js/**/*.js",
+    "viettonepractice/static/viettonepractice/js/**/*.js",
+    "hebrewscript/static/hebrewscript/js/**/*.js"
+  ],
   "exclude": ["**/vendor/**"]
 }

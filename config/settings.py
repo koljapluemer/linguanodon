@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core',
     'tprboard',
     'viettonepractice',
+    'hebrewscript',
 ]
 
 MIDDLEWARE = [
@@ -108,6 +109,15 @@ DATABASES['tprboard'] = {
 DATABASES['viettonepractice'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'viettonepractice.sqlite3',
+}
+
+# hebrewscript's clip content (transcript + audio filename) is a fixed
+# import from the learn-hebrew-script dataset - read-only in normal
+# operation, so it lives in its own committed SQLite file. Routed here
+# automatically by DATABASE_ROUTERS below.
+DATABASES['hebrewscript'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'hebrewscript.sqlite3',
 }
 
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']
