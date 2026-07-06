@@ -13,7 +13,8 @@
     "comprehensible_input/static/comprehensible_input/js/**/*.js",
     "arabicnumbers/static/arabicnumbers/js/**/*.js",
     "prepositions3d/static/prepositions3d/js/**/*.js",
-    "saetze/static/saetze/js/**/*.js"
+    "saetze/static/saetze/js/**/*.js",
+    "egyptiansentences/static/egyptiansentences/js/**/*.js"
   ],
   "exclude": ["**/vendor/**"]
 }

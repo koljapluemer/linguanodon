@@ -28,4 +28,5 @@ urlpatterns = [
     path('arabic-numbers/', include('arabicnumbers.urls')),
     path('prepositions-3d/', include('prepositions3d.urls')),
     path('saetze/', include('saetze.urls')),
+    path('egyptian-sentences/', include('egyptiansentences.urls')),
 ]

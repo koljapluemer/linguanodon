@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'arabicnumbers',
     'prepositions3d',
     'saetze',
+    'egyptiansentences',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,16 @@ DATABASES['prepositions3d'] = {
 DATABASES['saetze'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'saetze.sqlite3',
+}
+
+# egyptiansentences's sentence/cloze-word content (Egyptian Arabic cloze
+# drills from lisaanmasry.org, with precomputed distractors) is a fixed
+# import from the basic-egyptian-sentences dataset - read-only in normal
+# operation, so it lives in its own committed SQLite file. Routed here
+# automatically by DATABASE_ROUTERS below.
+DATABASES['egyptiansentences'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'egyptiansentences.sqlite3',
 }
 
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']

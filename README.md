@@ -29,6 +29,7 @@ uv run python manage.py migrate --database=comprehensible_input  # after changin
 uv run python manage.py migrate --database=arabicnumbers  # after changing arabicnumbers/models
 uv run python manage.py migrate --database=prepositions3d  # after changing prepositions3d/models
 uv run python manage.py migrate --database=saetze  # after changing saetze/models
+uv run python manage.py migrate --database=egyptiansentences  # after changing egyptiansentences/models
 uv run python manage.py shell              # Django shell with app context
 uv run python manage.py check              # sanity-check the project
 uv add <package>                           # add a dependency
@@ -82,4 +83,15 @@ uv add <package>                           # add a dependency
   to git like `tprboard.sqlite3`. No progress tracking (the original's
   Firebase analytics and its unused Dexie/FSRS placeholders were dropped) -
   just the random-exercise practice loop.
+- `egyptiansentences/` — Basic Egyptian Sentences (timed cloze-word quiz for
+  survival Arabic), a build-free port of the standalone
+  `basic-egyptian-sentences` SPA. Its sentence/cloze-word content (sourced
+  from lisaanmasry.org, non-commercial use per Mike Green's license) lives in
+  a dedicated `egyptiansentences.sqlite3`, committed to git like
+  `tprboard.sqlite3`. Wrong-answer distractors are precomputed at import time
+  (Levenshtein distance against the full word list, top 5 kept per
+  cloze-able word) rather than computed live in the browser like the
+  original - the frontend just picks randomly among the stored 5. The 60s
+  timed "Go" mode, streak/time-bonus scoring, and highscores are preserved,
+  tracked client-side in `localStorage` same as the original.
 - `deploy/` — systemd/nginx config for the VPS deploy (see `doc/deploy.md`)
