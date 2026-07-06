@@ -11,7 +11,8 @@
     "viettonepractice/static/viettonepractice/js/**/*.js",
     "hebrewscript/static/hebrewscript/js/**/*.js",
     "comprehensible_input/static/comprehensible_input/js/**/*.js",
-    "arabicnumbers/static/arabicnumbers/js/**/*.js"
+    "arabicnumbers/static/arabicnumbers/js/**/*.js",
+    "prepositions3d/static/prepositions3d/js/**/*.js"
   ],
   "exclude": ["**/vendor/**"]
 }

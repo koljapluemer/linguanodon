@@ -135,6 +135,7 @@ uv run python manage.py migrate
 uv run python manage.py migrate --database=tprboard
 uv run python manage.py migrate --database=comprehensible_input
 uv run python manage.py migrate --database=arabicnumbers
+uv run python manage.py migrate --database=prepositions3d
 uv run python manage.py collectstatic --noinput
 uv run python manage.py createsuperuser
 ```
@@ -148,7 +149,10 @@ admin-entered data) - the `migrate --database=comprehensible_input` step
 creates it fresh on the server. `arabicnumbers.sqlite3` (the Arabic numbers
 0-100 content) is committed directly to the repo like `tprboard.sqlite3` -
 the `migrate --database=arabicnumbers` step is likewise a no-op until a
-future migration ships for that app.
+future migration ships for that app. `prepositions3d.sqlite3` (the
+Acquire Prepositions 3D gloss/translation content) is committed directly to
+the repo like `tprboard.sqlite3` - the `migrate --database=prepositions3d`
+step is likewise a no-op until a future migration ships for that app.
 
 After `createsuperuser`, the account it creates has `is_staff`/`is_superuser`
 but its app-level `role` still defaults to `NEW` - to let it manage
@@ -219,6 +223,7 @@ All commands below assume you are **SSH'd in as deploy**.
   uv run python manage.py migrate --database=tprboard
   uv run python manage.py migrate --database=comprehensible_input
   uv run python manage.py migrate --database=arabicnumbers
+  uv run python manage.py migrate --database=prepositions3d
   uv run python manage.py collectstatic --noinput
   sudo systemctl restart gunicorn
   ```

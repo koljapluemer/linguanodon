@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'hebrewscript',
     'comprehensible_input',
     'arabicnumbers',
+    'prepositions3d',
 ]
 
 MIDDLEWARE = [
@@ -138,6 +139,15 @@ DATABASES['comprehensible_input'] = {
 DATABASES['arabicnumbers'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'arabicnumbers.sqlite3',
+}
+
+# prepositions3d's gloss/translation content (per-language sentences + audio
+# paths) is a fixed import from the acquire-prepositions-3d dataset -
+# read-only in normal operation, so it lives in its own committed SQLite
+# file. Routed here automatically by DATABASE_ROUTERS below.
+DATABASES['prepositions3d'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'prepositions3d.sqlite3',
 }
 
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']

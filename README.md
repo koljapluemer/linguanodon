@@ -27,6 +27,7 @@ uv run python manage.py migrate
 uv run python manage.py migrate --database=tprboard  # after changing tprboard/models
 uv run python manage.py migrate --database=comprehensible_input  # after changing comprehensible_input/models
 uv run python manage.py migrate --database=arabicnumbers  # after changing arabicnumbers/models
+uv run python manage.py migrate --database=prepositions3d  # after changing prepositions3d/models
 uv run python manage.py shell              # Django shell with app context
 uv run python manage.py check              # sanity-check the project
 uv add <package>                           # add a dependency
@@ -66,4 +67,11 @@ uv add <package>                           # add a dependency
   committed to git like `tprboard.sqlite3`. Practice progress (spaced-
   repetition state, mission progress) is tracked client-side in IndexedDB,
   same as `tprboard`/`comprehensible_input`.
+- `prepositions3d/` — Acquire Prepositions 3D (WebXR/desktop preposition
+  game), a build-free port of the standalone `acquire-prepositions-3d` SPA.
+  Its gloss/translation content lives in a dedicated `prepositions3d.sqlite3`,
+  committed to git like `tprboard.sqlite3`. Its static JS is hand-written ES
+  modules with JSDoc type annotations, loading A-Frame from a pinned CDN
+  build - no build step. Learning progress is tracked client-side in
+  localStorage only (no third-party analytics, unlike the original SPA).
 - `deploy/` — systemd/nginx config for the VPS deploy (see `doc/deploy.md`)

@@ -1,0 +1,42 @@
+import json
+from collections import defaultdict
+
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.templatetags.static import static
+from django.urls import reverse
+
+from prepositions3d.models import Language, Translation
+
+
+def game(request):
+    config = {
+        'modelsBaseUrl': static('prepositions3d/models/'),
+        'soundBaseUrl': static('prepositions3d/sound/'),
+        'apiLanguagesUrl': reverse('prepositions3d:api_languages'),
+        'apiGlossaryUrl': reverse('prepositions3d:api_glossary'),
+    }
+    return render(request, 'prepositions-3d/game.html', {'config_json': json.dumps(config)})
+
+
+def api_languages(request):
+    return JsonResponse({language.code: language.name for language in Language.objects.all()})
+
+
+def api_glossary(request):
+    translations = (
+        Translation.objects
+        .select_related('task', 'language')
+        .order_by('task__order', 'language_id')
+    )
+
+    payload = defaultdict(dict)
+    for translation in translations:
+        entry = payload[translation.task_id]
+        entry[translation.language_id] = translation.text
+        if translation.audio_path:
+            entry.setdefault('audio', {})[translation.language_id] = static(
+                f'prepositions3d/audio/{translation.audio_path}'
+            )
+
+    return JsonResponse(dict(payload))
