@@ -27,4 +27,5 @@ urlpatterns = [
     path('comprehensible-input/', include('comprehensible_input.urls')),
     path('arabic-numbers/', include('arabicnumbers.urls')),
     path('prepositions-3d/', include('prepositions3d.urls')),
+    path('saetze/', include('saetze.urls')),
 ]

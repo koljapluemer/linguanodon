@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Sätze{% endblock %}
+
+{% block content %}
+<div class="min-h-screen p-4">
+    <div class="flex flex-col items-center gap-6">
+        <h1 class="text-2xl font-bold">Sätze — German Cloze Drills</h1>
+        <div class="flex flex-col gap-2 w-full max-w-xs">
+            {% for lesson in lessons %}
+                <a href="{% url 'saetze:practice' lesson.key %}" class="btn btn-primary">{{ lesson.name }}</a>
+            {% empty %}
+                <p class="text-center opacity-70">No lessons imported yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -28,6 +28,7 @@ uv run python manage.py migrate --database=tprboard  # after changing tprboard/m
 uv run python manage.py migrate --database=comprehensible_input  # after changing comprehensible_input/models
 uv run python manage.py migrate --database=arabicnumbers  # after changing arabicnumbers/models
 uv run python manage.py migrate --database=prepositions3d  # after changing prepositions3d/models
+uv run python manage.py migrate --database=saetze  # after changing saetze/models
 uv run python manage.py shell              # Django shell with app context
 uv run python manage.py check              # sanity-check the project
 uv add <package>                           # add a dependency
@@ -74,4 +75,11 @@ uv add <package>                           # add a dependency
   modules with JSDoc type annotations, loading A-Frame from a pinned CDN
   build - no build step. Learning progress is tracked client-side in
   localStorage only (no third-party analytics, unlike the original SPA).
+- `saetze/` — Sätze (German cloze-sentence drills for confusable word
+  families like "jeder/alle/ganz"), a build-free port of the standalone
+  `saetze` SPA. Its lesson/exercise content (sourced from Tatoeba, CC BY 2.0
+  FR, credited per-sentence) lives in a dedicated `saetze.sqlite3`, committed
+  to git like `tprboard.sqlite3`. No progress tracking (the original's
+  Firebase analytics and its unused Dexie/FSRS placeholders were dropped) -
+  just the random-exercise practice loop.
 - `deploy/` — systemd/nginx config for the VPS deploy (see `doc/deploy.md`)

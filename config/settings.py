@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'comprehensible_input',
     'arabicnumbers',
     'prepositions3d',
+    'saetze',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,15 @@ DATABASES['arabicnumbers'] = {
 DATABASES['prepositions3d'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'prepositions3d.sqlite3',
+}
+
+# saetze's lesson/exercise content (German cloze-sentence drills with Tatoeba
+# attribution) is a fixed import from the saetze dataset - read-only in
+# normal operation, so it lives in its own committed SQLite file. Routed here
+# automatically by DATABASE_ROUTERS below.
+DATABASES['saetze'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'saetze.sqlite3',
 }
 
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']

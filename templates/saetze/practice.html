@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ lesson.name }} — Sätze{% endblock %}
+
+{% block content %}
+<div class="min-h-screen p-4">
+    <div id="app"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.27/dist/vue.global.prod.js"></script>
+<script id="saetze-config" type="application/json">{{ config_json|safe }}</script>
+<script type="module" src="{% static 'saetze/js/main.js' %}"></script>
+{% endblock %}
