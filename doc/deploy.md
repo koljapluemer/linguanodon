@@ -138,6 +138,7 @@ uv run python manage.py migrate --database=arabicnumbers
 uv run python manage.py migrate --database=prepositions3d
 uv run python manage.py migrate --database=saetze
 uv run python manage.py migrate --database=egyptiansentences
+uv run python manage.py migrate --database=infinitesentences
 uv run python manage.py collectstatic --noinput
 uv run python manage.py createsuperuser
 ```
@@ -162,6 +163,10 @@ likewise a no-op until a future migration ships for that app.
 precomputed distractors) is committed directly to the repo like
 `tprboard.sqlite3` - the `migrate --database=egyptiansentences` step is
 likewise a no-op until a future migration ships for that app.
+`infinitesentences.sqlite3` (the Infinite Sentences language/sentence/gloss
+content) is committed directly to the repo like `tprboard.sqlite3` - the
+`migrate --database=infinitesentences` step is likewise a no-op until a
+future migration ships for that app.
 
 After `createsuperuser`, the account it creates has `is_staff`/`is_superuser`
 but its app-level `role` still defaults to `NEW` - to let it manage
@@ -235,6 +240,7 @@ All commands below assume you are **SSH'd in as deploy**.
   uv run python manage.py migrate --database=prepositions3d
   uv run python manage.py migrate --database=saetze
   uv run python manage.py migrate --database=egyptiansentences
+  uv run python manage.py migrate --database=infinitesentences
   uv run python manage.py collectstatic --noinput
   sudo systemctl restart gunicorn
   ```

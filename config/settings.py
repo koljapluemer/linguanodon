@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'prepositions3d',
     'saetze',
     'egyptiansentences',
+    'infinitesentences',
 ]
 
 MIDDLEWARE = [
@@ -169,6 +170,16 @@ DATABASES['saetze'] = {
 DATABASES['egyptiansentences'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'egyptiansentences.sqlite3',
+}
+
+# infinitesentences's sentence/gloss content (vocabulary-in-context drills
+# built from Tatoeba sentence pairs, across dozens of native/target language
+# combinations) is a fixed import from the infinite-sentences-data dataset -
+# read-only in normal operation, so it lives in its own committed SQLite
+# file. Routed here automatically by DATABASE_ROUTERS below.
+DATABASES['infinitesentences'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'infinitesentences.sqlite3',
 }
 
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']

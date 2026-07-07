@@ -30,6 +30,7 @@ uv run python manage.py migrate --database=arabicnumbers  # after changing arabi
 uv run python manage.py migrate --database=prepositions3d  # after changing prepositions3d/models
 uv run python manage.py migrate --database=saetze  # after changing saetze/models
 uv run python manage.py migrate --database=egyptiansentences  # after changing egyptiansentences/models
+uv run python manage.py migrate --database=infinitesentences  # after changing infinitesentences/models
 uv run python manage.py shell              # Django shell with app context
 uv run python manage.py check              # sanity-check the project
 uv add <package>                           # add a dependency
@@ -94,4 +95,18 @@ uv add <package>                           # add a dependency
   original - the frontend just picks randomly among the stored 5. The 60s
   timed "Go" mode, streak/time-bonus scoring, and highscores are preserved,
   tracked client-side in `localStorage` same as the original.
+- `infinitesentences/` — Infinite Sentences (vocab-in-context drills built
+  from Tatoeba sentence pairs, across dozens of native/target language
+  combinations, with FSRS-scheduled spaced repetition), a build-free port of
+  the standalone `infinite-sentences-frontend` SPA. Its language/sentence/
+  gloss content lives in a dedicated `infinitesentences.sqlite3`, committed
+  to git like `tprboard.sqlite3`, imported from the `infinite-sentences-data`
+  submodule via `import_infinitesentences_data`. FSRS scheduling uses the
+  `ts-fsrs` library vendored directly as an ES module (`static/infinitesentences
+  /vendor/ts-fsrs.mjs`, MIT-licensed) rather than a hand-port, same vendoring
+  approach as `tprboard`'s `ebisu.min.mjs`. All progress (spaced-repetition
+  card state, learned sentences, streaks, daily counts) is tracked
+  client-side in `localStorage` only, same as the other apps above. The
+  original's Firebase-backed feedback modals were dropped (no Django-side
+  equivalent yet).
 - `deploy/` — systemd/nginx config for the VPS deploy (see `doc/deploy.md`)
