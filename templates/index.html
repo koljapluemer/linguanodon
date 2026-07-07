@@ -1,19 +1,44 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Linguanodon{% endblock %}
 
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
-    <h1 class="text-3xl font-bold">Linguanodon</h1>
-    <a href="{% url 'typingpractice:practice_vie' %}" class="btn btn-primary">Vietnamese Typing Practice</a>
-    <a href="{% url 'tprboard:board' %}" class="btn btn-primary">TPR Board</a>
-    <a href="{% url 'viettonepractice:practice' %}" class="btn btn-primary">Vietnamese Tone Practice</a>
-    <a href="{% url 'hebrewscript:practice' %}" class="btn btn-primary">Hebrew Script Practice</a>
-    <a href="{% url 'comprehensible_input:language_list' %}" class="btn btn-primary">Comprehensible Input</a>
-    <a href="{% url 'arabicnumbers:practice' %}" class="btn btn-primary">Arabic Numbers Practice</a>
-    <a href="{% url 'prepositions3d:game' %}" class="btn btn-primary">Acquire Prepositions 3D</a>
-    <a href="{% url 'saetze:lesson_list' %}" class="btn btn-primary">Sätze (German Cloze Drills)</a>
-    <a href="{% url 'egyptiansentences:practice' %}" class="btn btn-primary">Basic Egyptian Sentences</a>
-    <a href="{% url 'infinitesentences:landing' %}" class="btn btn-primary">Infinite Sentences</a>
+<div class="max-w-6xl mx-auto px-4 py-10">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold">Linguanodon</h1>
+        <p class="mt-2 opacity-70">A collection of small apps for language practice.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for app in apps_list %}
+        <div class="card bg-base-100 border border-base-300 shadow-sm hover:shadow-lg transition-shadow">
+            <figure class="h-40 bg-base-200">
+                {% if app.screenshots %}
+                    <img src="{% static app.screenshots.0 %}" alt="{{ app.name }} screenshot" class="h-full w-full object-cover">
+                {% elif app.logo %}
+                    <img src="{% static app.logo %}" alt="{{ app.name }} logo" class="h-20 w-20 object-contain">
+                {% else %}
+                    <div class="avatar placeholder">
+                        <div class="bg-neutral text-neutral-content w-16 rounded-full">
+                            <span class="text-2xl">{{ app.name|first }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </figure>
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h2 class="card-title">{{ app.name }}</h2>
+                    <span class="badge {{ app.state.badge_class }} whitespace-nowrap">{{ app.state.value }}</span>
+                </div>
+                <p class="text-sm opacity-70">{{ app.description }}</p>
+                <p class="text-xs opacity-60 mt-1"><span class="font-medium">Languages:</span> {{ app.languages }}</p>
+                <div class="card-actions justify-end mt-4">
+                    <a href="{% url app.url_name %}" class="btn btn-primary btn-sm">Open</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
