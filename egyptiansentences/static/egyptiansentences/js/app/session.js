@@ -8,6 +8,7 @@
 // precomputed at import time and stored on each ClozeWord (see
 // import_egyptiansentences_data.py).
 
+import { queueEvent } from "/static/tracking/js/client.js";
 import { showToast } from "./toast.js";
 
 /** @typedef {import('../types.js').Sentence} Sentence */
@@ -163,6 +164,10 @@ export function createGameSession(config) {
 
     timerRunning.value = false;
     isRevealed.value = true;
+
+    void queueEvent("egyptiansentences", "trial", {
+      payload: { sentenceId: currentSentence.value?.id, isCorrect },
+    });
 
     clearAdvanceTimeout();
     advanceTimeoutId = window.setTimeout(moveToNextExercise, ADVANCE_DELAY_MS);

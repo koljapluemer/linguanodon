@@ -109,3 +109,36 @@ export const putMissions = (missions) =>
   withStore(MISSIONS_STORE, "readwrite", (store) =>
     requestToPromise(store.put({ id: MISSIONS_KEY, value: missions }))
   );
+
+/**
+ * Merges state pulled from the server (e.g. progress from another device) into local IndexedDB,
+ * keeping whichever side was reviewed more recently per key. Missions/gamification state is
+ * intentionally not synced (session-scoped, low value), matching what session.js pushes.
+ *
+ * @param {Record<string, {state: any, updated_at: string}>} remoteStates
+ */
+export const mergeRemoteState = async (remoteStates) => {
+  for (const [itemKey, { state: remoteRecord }] of Object.entries(remoteStates)) {
+    if (itemKey.startsWith("num:")) {
+      const existing = await withStore(NUMBER_STATE_STORE, "readonly", (store) =>
+        requestToPromise(store.get(remoteRecord.val))
+      );
+      const remoteReviewedAt = remoteRecord.sr.dueAt - remoteRecord.sr.interval;
+      const localReviewedAt = existing ? existing.sr.dueAt - existing.sr.interval : -Infinity;
+
+      if (remoteReviewedAt > localReviewedAt) {
+        await putNumberState(remoteRecord);
+      }
+    } else {
+      const existing = await withStore(EXERCISE_STORE, "readonly", (store) =>
+        requestToPromise(store.get(remoteRecord.key))
+      );
+      const remoteReviewedAt = remoteRecord.stats.at(-1)?.timestamp ?? 0;
+      const localReviewedAt = existing ? existing.stats.at(-1)?.timestamp ?? 0 : -Infinity;
+
+      if (remoteReviewedAt > localReviewedAt) {
+        await putExercise(remoteRecord);
+      }
+    }
+  }
+};

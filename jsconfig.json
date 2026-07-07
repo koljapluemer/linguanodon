@@ -7,6 +7,8 @@
     "moduleResolution": "bundler"
   },
   "include": [
+    "tracking/static/tracking/js/**/*.js",
+    "typingpractice/static/typingpractice/js/**/*.js",
     "tprboard/static/tprboard/js/**/*.js",
     "viettonepractice/static/viettonepractice/js/**/*.js",
     "hebrewscript/static/hebrewscript/js/**/*.js",

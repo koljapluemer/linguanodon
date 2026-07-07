@@ -1,9 +1,10 @@
 // @ts-check
+import { pullState, trackActiveTime } from '/static/tracking/js/client.js'
 import { BoardScene } from './app/board-scene.js'
 import { loadLanguageOptions, loadLocaleTaskMap, loadObjectPool } from './app/data.js'
 import { createLucideIcon } from './app/icons.js'
 import { createAppLayout } from './app/layout.js'
-import { loadLearningSnapshot, recordCompletedRound } from './app/learning.js'
+import { loadLearningSnapshot, mergeRemoteState, recordCompletedRound } from './app/learning.js'
 import { createStatsTracker, formatPlayedTime } from './app/stats.js'
 import { createRelationshipIndex, planRound } from './app/tasks.js'
 
@@ -592,6 +593,8 @@ async function init() {
 
   statsTracker.subscribe(updateStatsView)
   renderLanguageOptions()
+  trackActiveTime('tprboard')
+  await mergeRemoteState(await pullState('tprboard'))
 
   if (!state.selectedLanguageCode) {
     await showLanguageSelectionState()

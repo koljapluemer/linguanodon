@@ -5,6 +5,7 @@
 
 /** @typedef {import('../types.js').PracticeConfig} PracticeConfig */
 
+import { pullState } from "/static/tracking/js/client.js";
 import { pickRandom, takeRandom } from "./random.js";
 import { createPracticeStore, createUserSettingsStore } from "./store.js";
 import { loadSentenceByIndex, loadSentenceCount } from "./api.js";
@@ -312,6 +313,7 @@ export function createPracticeSession(config) {
     isLoading.value = true;
     resetSession();
     try {
+      practiceStore.mergeRemoteState(await pullState("infinitesentences"));
       maxIndex.value = await loadSentenceCount(config.apiSentenceCountUrl);
       await ensureTwoSentences();
 

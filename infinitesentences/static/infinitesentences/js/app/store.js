@@ -4,6 +4,7 @@
 // progress/preference data stays entirely client-side, same as every other
 // integrated app in this project.
 
+import { queueEvent, queueState } from "/static/tracking/js/client.js";
 import { createEmptyCard, fsrs } from "./fsrs.js";
 
 /** @typedef {import('../types.js').SerializedCard} SerializedCard */
@@ -160,12 +161,16 @@ export function createPracticeStore() {
       const result = scheduler.next(card, now, rating);
       state.glossCards[glossKey] = serializeCard(result.card);
       persist();
+      void queueEvent("infinitesentences", "trial", { payload: { kind: "recall", glossKey, rating } });
+      void queueState("infinitesentences", glossKey, state.glossCards[glossKey]);
     },
 
     /** @param {string} sentenceKey */
     markSentenceLearned(sentenceKey) {
       state.learnedSentences[sentenceKey] = new Date().toISOString();
       persist();
+      void queueEvent("infinitesentences", "trial", { payload: { kind: "challenge", sentenceKey } });
+      void queueState("infinitesentences", sentenceKey, { learnedAt: state.learnedSentences[sentenceKey] });
     },
 
     /** @param {string} sentenceKey */
@@ -265,6 +270,39 @@ export function createPracticeStore() {
       }
 
       return currentStreak;
+    },
+
+    /**
+     * Merges state pulled from the server (e.g. progress from another device) into local
+     * storage, keeping whichever side was reviewed/learned more recently per key. ISO 8601
+     * timestamps compare correctly with plain string comparison, so no date parsing is needed.
+     *
+     * @param {Record<string, {state: any, updated_at: string}>} remoteStates
+     */
+    mergeRemoteState(remoteStates) {
+      let changed = false;
+
+      for (const [itemKey, { state: remoteValue }] of Object.entries(remoteStates)) {
+        if (!remoteValue || typeof remoteValue !== "object") continue;
+
+        if ("learnedAt" in remoteValue) {
+          const localLearnedAt = state.learnedSentences[itemKey];
+          if (!localLearnedAt || remoteValue.learnedAt > localLearnedAt) {
+            state.learnedSentences[itemKey] = remoteValue.learnedAt;
+            changed = true;
+          }
+        } else if ("due" in remoteValue) {
+          const localCard = state.glossCards[itemKey];
+          const remoteReviewedAt = remoteValue.last_review ?? "";
+          const localReviewedAt = localCard?.last_review ?? "";
+          if (!localCard || remoteReviewedAt > localReviewedAt) {
+            state.glossCards[itemKey] = remoteValue;
+            changed = true;
+          }
+        }
+      }
+
+      if (changed) persist();
     },
   };
 }

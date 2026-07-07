@@ -1,6 +1,8 @@
 // @ts-check
 /** @typedef {import('./types.js').WatchPageConfig} WatchPageConfig */
 
+import { pullState } from "/static/tracking/js/client.js";
+import { mergeRemoteWatchTime } from "./app/idb.js";
 import { createPlayer } from "./app/player.js";
 import { createWatchTracker } from "./app/watchTracker.js";
 
@@ -15,3 +17,5 @@ createPlayer("player", config.youtubeId, (state) => {
 });
 
 window.addEventListener("beforeunload", () => tracker.destroy());
+
+void pullState("comprehensible_input").then(mergeRemoteWatchTime);

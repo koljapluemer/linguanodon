@@ -1,4 +1,5 @@
 // @ts-check
+import { queueEvent, queueState } from '/static/tracking/js/client.js'
 import { getGlossKeysWithLanguage, getGlossPrompt } from '../language/glossary.js'
 import { FeedbackAudio } from '../ui/feedback-audio.js'
 
@@ -411,6 +412,11 @@ export class Game {
     this.completedGlossKeys.add(task.glossKey)
     this.saveLearningEvents(events)
     this.currentTask = null
+
+    void queueEvent('prepositions3d', 'trial', {
+      payload: { glossKey: event.glossKey, triesUntilCorrect: event.triesUntilCorrect, timeOnTaskMs: event.timeOnTaskMs },
+    })
+    void queueState('prepositions3d', event.glossKey, event)
   }
 
   /**
@@ -457,6 +463,32 @@ export class Game {
       window.localStorage.setItem(LEARNING_EVENTS_STORAGE_KEY, JSON.stringify(events))
     } catch {
       // localStorage can fail in private browsing or when quota is exceeded.
+    }
+  }
+
+  /**
+   * Merges learning events pulled from the server (e.g. completions from another device) into
+   * local storage. A glossKey can legitimately be completed more than once here (repeat plays
+   * append a new event), so this only fills in glossKeys with no local completion yet rather
+   * than trying to reconcile per-glossKey history across devices.
+   *
+   * @param {Record<string, {state: unknown, updated_at: string}>} remoteStates
+   */
+  mergeRemoteLearningEvents(remoteStates) {
+    const events = this.loadLearningEvents()
+    const localGlossKeys = new Set(events.map((event) => event.glossKey))
+    let changed = false
+
+    for (const { state } of Object.values(remoteStates)) {
+      if (isStoredLearningEvent(state) && !localGlossKeys.has(state.glossKey)) {
+        events.push(state)
+        this.completedGlossKeys.add(state.glossKey)
+        changed = true
+      }
+    }
+
+    if (changed) {
+      this.saveLearningEvents(events)
     }
   }
 }

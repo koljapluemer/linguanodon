@@ -1,6 +1,7 @@
 // @ts-check
 /** @typedef {import('./types.js').PracticeConfig} PracticeConfig */
 
+import { trackActiveTime } from "/static/tracking/js/client.js";
 import { PracticeAppComponent } from "./app/practiceApp.js";
 
 const configElement = /** @type {HTMLScriptElement} */ (document.getElementById("infinitesentences-config"));
@@ -9,3 +10,4 @@ const config = JSON.parse(configElement.textContent ?? "{}");
 
 const { createApp } = window.Vue;
 createApp(PracticeAppComponent, { config }).mount("#app");
+trackActiveTime("infinitesentences");

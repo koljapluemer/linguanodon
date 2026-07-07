@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'core',
+    'tracking',
+    'typingpractice',
     'tprboard',
     'viettonepractice',
     'hebrewscript',

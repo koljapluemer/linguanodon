@@ -1,4 +1,5 @@
 // @ts-check
+import { queueEvent, queueState } from '/static/tracking/js/client.js'
 import { defaultModel, updateRecall } from './ebisu.js'
 
 /**
@@ -328,6 +329,41 @@ export async function loadLearningSnapshot(languageCode) {
 }
 
 /**
+ * Merges state pulled from the server (e.g. progress made on another device) into local
+ * IndexedDB, keeping whichever side reviewed more recently per item.
+ *
+ * @param {Record<string, {state: LearningRecord, updated_at: string}>} remoteStates
+ */
+export async function mergeRemoteState(remoteStates) {
+  const entries = Object.values(remoteStates)
+
+  if (!entries.length) {
+    return
+  }
+
+  const database = await openLearningDatabase()
+
+  try {
+    const transaction = database.transaction([LEARNING_ITEMS_STORE, SENTENCE_LEARNING_ITEMS_STORE], 'readwrite')
+    const itemsStore = transaction.objectStore(LEARNING_ITEMS_STORE)
+    const sentenceItemsStore = transaction.objectStore(SENTENCE_LEARNING_ITEMS_STORE)
+
+    for (const { state: remoteItem } of entries) {
+      const store = 'objectName' in remoteItem ? itemsStore : sentenceItemsStore
+      const localItem = await requestToPromise(store.get(remoteItem.key))
+
+      if (!localItem || remoteItem.lastReviewedAt > localItem.lastReviewedAt) {
+        store.put(remoteItem)
+      }
+    }
+
+    await transactionToPromise(transaction)
+  } finally {
+    database.close()
+  }
+}
+
+/**
  * @param {RecordCompletedRoundParams} params
  */
 export async function recordCompletedRound({
@@ -403,4 +439,10 @@ export async function recordCompletedRound({
   } finally {
     database.close()
   }
+
+  void queueEvent('tprboard', 'trial', { payload: { difficulty, languageCode, outcome } })
+  nextItems.forEach((item) => {
+    void queueState('tprboard', item.key, item)
+  })
+  void queueState('tprboard', nextSentenceItem.key, nextSentenceItem)
 }

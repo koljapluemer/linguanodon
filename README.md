@@ -40,6 +40,12 @@ uv add <package>                           # add a dependency
 
 - `config/` — Django project (settings, root urls, wsgi/asgi)
 - `core/` — the main app
+- `typingpractice/` — Vietnamese typing practice (TELEX/VNI keystroke
+  decomposition drilled against a fixed word list). Its word list is a small
+  static JSON file bundled in the app (`typingpractice/data/vie.json`) rather
+  than a dedicated sqlite DB - there's no admin CRUD or import step to
+  justify one at this size. Static JS is hand-written, build-free, same
+  convention as every app below.
 - `tprboard/` — TPR Board (3D vocabulary game), a build-free port of the
   standalone `tpr-board` SPA. Its content (vocab/tasks/3D-object
   relationships) lives in a dedicated `tprboard.sqlite3`, routed there

@@ -4,6 +4,8 @@
 // answers, reveal + auto-advance on correct). Firebase analytics tracking
 // from the original is intentionally dropped - no backend for it here.
 
+import { queueEvent } from "/static/tracking/js/client.js";
+
 /** @typedef {import('../types.js').Exercise} Exercise */
 /** @typedef {import('../types.js').PracticeConfig} PracticeConfig */
 
@@ -72,6 +74,9 @@ export function createPracticeSession(config) {
     }
 
     revealedAnswer.value = current.correct_answer;
+    void queueEvent("saetze", "trial", {
+      payload: { exerciseId: current.id, hadWrongAttempt: disabledAnswers.value.length > 0 },
+    });
     clearAdvanceTimeout();
     advanceTimeoutId = window.setTimeout(() => {
       showRandomExercise();

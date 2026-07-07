@@ -6,6 +6,7 @@
 /** @typedef {import('../types.js').PracticeSessionConfig} PracticeSessionConfig */
 /** @typedef {import('../types.js').DecayedPairHistoryStats} DecayedPairHistoryStats */
 
+import { queueEvent } from "/static/tracking/js/client.js";
 import { toClips, buildPracticeCatalog } from "./catalog.js";
 import { appendPracticeEvent, listPracticeEvents, toPracticeEventAnalytics, toStoredClip } from "./practiceEvents.js";
 import {
@@ -415,6 +416,9 @@ export function createPracticeSession(config) {
 
       await appendPracticeEvent(answerEvent);
       practiceEvents.value.push(answerEvent);
+      void queueEvent("viettonepractice", "trial", {
+        payload: { clipFilename: round.value.clip.filename, isCorrect: option.isCorrect },
+      });
     }
 
     if (option.isCorrect) {

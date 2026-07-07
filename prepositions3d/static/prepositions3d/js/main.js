@@ -1,4 +1,5 @@
 // @ts-check
+import { pullState, trackActiveTime } from '/static/tracking/js/client.js'
 import { registerDraggable } from './components/draggable.js'
 import { registerDropZone } from './components/drop-zone.js'
 import { registerGameTicker, setGameTickerGame } from './components/game-ticker.js'
@@ -26,6 +27,7 @@ registerMouseLookLimited()
 registerShadowCatcher()
 registerXrMode()
 buildScene(config.modelsBaseUrl)
+trackActiveTime('prepositions3d')
 
 const sceneEl = document.querySelector('a-scene')
 sceneEl?.addEventListener('loaded', () => {
@@ -54,4 +56,5 @@ async function startGame(sceneEl) {
   game = new Game({ ui, sceneEl, zones: ZONES, language: DEFAULT_LANGUAGE, soundBaseUrl: config.soundBaseUrl })
   setGameTickerGame(game)
   sceneEl.setAttribute('game-ticker', '')
+  void pullState('prepositions3d').then((remoteStates) => game?.mergeRemoteLearningEvents(remoteStates))
 }

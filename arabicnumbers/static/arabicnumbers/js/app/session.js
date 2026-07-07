@@ -12,6 +12,7 @@
 /** @typedef {import('../types.js').AnswerValue} AnswerValue */
 /** @typedef {import('../types.js').Missions} Missions */
 
+import { queueEvent, queueState } from "/static/tracking/js/client.js";
 import * as idb from "./idb.js";
 
 const { ref } = window.Vue;
@@ -281,9 +282,23 @@ export function createPracticeSession(config) {
     });
     parentNumber.sr.dueAt = nowSeconds() + parentNumber.sr.interval;
 
-    idb.putNumberState({ val: parentNumber.val, level: parentNumber.level, sr: parentNumber.sr });
-    idb.putExercise(toPlain({ key: currentExercise.key, stats: currentExercise.stats, sr: currentExercise.sr }));
+    const plainNumberState = { val: parentNumber.val, level: parentNumber.level, sr: parentNumber.sr };
+    const plainExercise = toPlain({ key: currentExercise.key, stats: currentExercise.stats, sr: currentExercise.sr });
+
+    idb.putNumberState(plainNumberState);
+    idb.putExercise(plainExercise);
     idb.putMissions(toPlain(missions.value));
+
+    void queueEvent("arabicnumbers", "trial", {
+      payload: {
+        numberVal: parentNumber.val,
+        promptType: fieldUsedAsPrompt.value,
+        answerType: fieldUsedAsAnswer.value,
+        isCorrect: guessWasCorrect,
+      },
+    });
+    void queueState("arabicnumbers", `num:${parentNumber.val}`, plainNumberState);
+    void queueState("arabicnumbers", currentExercise.key, plainExercise);
   }
 
   async function load() {

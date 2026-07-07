@@ -21,6 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('accounts/', include('accounts.urls')),
+    path('tracking/', include('tracking.urls')),
+    path('typing-practice/', include('typingpractice.urls')),
     path('tpr-board/', include('tprboard.urls')),
     path('viet-tone-practice/', include('viettonepractice.urls')),
     path('hebrew-script/', include('hebrewscript.urls')),
