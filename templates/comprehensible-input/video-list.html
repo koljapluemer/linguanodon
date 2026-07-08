@@ -9,11 +9,16 @@
     </div>
     <div class="flex flex-col items-center gap-6">
         <h1 class="text-2xl font-bold">{{ language.name }}</h1>
-        <div class="flex flex-col gap-2 w-full max-w-md">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl">
             {% for video in videos %}
-                <a href="{% url 'comprehensible_input:practice' video.pk %}" class="btn btn-primary">{{ video.title }}</a>
+                <a href="{% url 'comprehensible_input:practice' video.pk %}" class="card bg-base-100 shadow-sm hover:shadow-md transition-shadow">
+                    <figure><img src="{{ video.thumbnail_url }}" alt="{{ video.title }}" /></figure>
+                    <div class="card-body p-4">
+                        <h2 class="card-title text-base">{{ video.title }}</h2>
+                    </div>
+                </a>
             {% empty %}
-                <p class="text-center opacity-70">No videos for this language yet.</p>
+                <p class="text-center opacity-70 col-span-full">No videos for this language yet.</p>
             {% endfor %}
         </div>
     </div>

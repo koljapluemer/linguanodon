@@ -57,7 +57,7 @@ class AppInfo:
         Convention over configuration: every app has one at this fixed path,
         so it doesn't need to be set per entry above.
         """
-        return f'{self.slug}/branding/screenshot.png'
+        return f'{self.slug}/branding/screenshot.webp'
 
 
 APPS: list[AppInfo] = [

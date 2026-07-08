@@ -12,7 +12,7 @@ from core.apps_registry import nav_context
 def landing(request):
     config = {
         'selectNativeLanguageUrl': reverse('infinitesentences:select_native_language'),
-        'screenshotUrl': static('infinitesentences/img/screenshot.png'),
+        'screenshotUrl': static('infinitesentences/branding/screenshot.webp'),
     }
     context = {'config_json': json.dumps(config), **nav_context('infinitesentences', 'home')}
     return render(request, 'infinite-sentences/landing.html', context)
