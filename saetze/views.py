@@ -5,10 +5,12 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from saetze.models import Exercise, Lesson
+from core.apps_registry import nav_context
 
 
-def lesson_list(request):
-    return render(request, 'saetze/lesson-list.html', {'lessons': Lesson.objects.all()})
+def home(request):
+    context = {'lessons': Lesson.objects.all(), **nav_context('saetze', 'home')}
+    return render(request, 'saetze/home.html', context)
 
 
 def lesson_practice(request, lesson_key):
@@ -16,7 +18,8 @@ def lesson_practice(request, lesson_key):
     config = {
         'apiExercisesUrl': reverse('saetze:api_exercises', args=[lesson_key]),
     }
-    return render(request, 'saetze/practice.html', {'lesson': lesson, 'config_json': json.dumps(config)})
+    context = {'lesson': lesson, 'config_json': json.dumps(config), **nav_context('saetze', 'practice')}
+    return render(request, 'saetze/practice.html', context)
 
 
 def api_exercises(request, lesson_key):

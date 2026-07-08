@@ -5,10 +5,12 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'arabicnumbers/css/style.css' %}">
+{% include "_app_subnav.html" %}
 <div class="min-h-screen p-4">
   <div id="app"></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5.27/dist/vue.global.prod.js"></script>
 <script id="arabicnumbers-config" type="application/json">{{ config_json|safe }}</script>
 <script type="module" src="{% static 'arabicnumbers/js/main.js' %}"></script>
+{% include "_app_footer.html" %}
 {% endblock %}

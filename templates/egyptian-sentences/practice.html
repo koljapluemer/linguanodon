@@ -4,10 +4,12 @@
 {% block title %}Basic Egyptian Sentences — Linguanodon{% endblock %}
 
 {% block content %}
+{% include "_app_subnav.html" %}
 <div class="min-h-screen p-4">
     <div id="app"></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5.27/dist/vue.global.prod.js"></script>
 <script id="egyptiansentences-config" type="application/json">{{ config_json|safe }}</script>
 <script type="module" src="{% static 'egyptiansentences/js/main.js' %}"></script>
+{% include "_app_footer.html" %}
 {% endblock %}

@@ -1,8 +1,8 @@
 // @ts-check
 // Port of infinite-sentences-frontend's src/pages/stats/{StatsPage,StreakVisualization,DailyCountsChart}.vue
+// Nav chrome (AppHeader/AppFooter) is now the shared Django-rendered
+// _app_subnav.html/_app_footer.html.
 
-import { AppHeaderComponent } from "./components/AppHeader.js";
-import { AppFooterComponent } from "./components/AppFooter.js";
 import { createPracticeStore, createUserSettingsStore } from "./store.js";
 import { loadLanguages } from "./api.js";
 import { iconMarkup } from "./icons.js";
@@ -22,10 +22,6 @@ function generateColor(index, total) {
 }
 
 export const StatsAppComponent = {
-  components: {
-    AppHeader: AppHeaderComponent,
-    AppFooter: AppFooterComponent,
-  },
   props: {
     config: { type: Object, required: true },
   },
@@ -114,8 +110,6 @@ export const StatsAppComponent = {
     return { last14Days, streak, flameIcon, circleIcon, chartCanvas };
   },
   template: `
-    <AppHeader current-page="stats" :landing-url="config.landingUrl" :stats-url="config.statsUrl" :settings-url="config.settingsUrl" />
-
     <div class="max-w-2xl mx-auto w-full p-4">
       <div class="mb-6">
         <h2 class="text-xl font-semibold mb-4">Streak</h2>
@@ -134,7 +128,5 @@ export const StatsAppComponent = {
         </div>
       </div>
     </div>
-
-    <AppFooter :api-languages-url="config.apiLanguagesUrl" :select-native-language-url="config.selectNativeLanguageUrl" />
   `,
 };

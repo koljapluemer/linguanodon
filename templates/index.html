@@ -13,18 +13,10 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for app in apps_list %}
         <div class="card bg-base-100 border border-base-300 shadow-sm hover:shadow-lg transition-shadow">
-            <figure class="h-40 bg-base-200">
-                {% if app.screenshots %}
-                    <img src="{% static app.screenshots.0 %}" alt="{{ app.name }} screenshot" class="h-full w-full object-cover">
-                {% elif app.logo %}
-                    <img src="{% static app.logo %}" alt="{{ app.name }} logo" class="h-20 w-20 object-contain">
-                {% else %}
-                    <div class="avatar placeholder">
-                        <div class="bg-neutral text-neutral-content w-16 rounded-full">
-                            <span class="text-2xl">{{ app.name|first }}</span>
-                        </div>
-                    </div>
-                {% endif %}
+            <figure class="h-40 bg-base-200 relative overflow-hidden">
+                <img src="{% static app.screenshot_static_path %}" alt="{{ app.name }} screenshot" class="h-full w-full object-cover">
+                <div class="absolute bottom-2 right-2 flex items-center justify-center w-10 h-10 rounded-full text-2xl font-bold shadow"
+                     style="color: #7a29e9; background-color: #210b3f;">{{ app.code }}</div>
             </figure>
             <div class="card-body">
                 <div class="flex items-start justify-between gap-2">
@@ -34,7 +26,7 @@
                 <p class="text-sm opacity-70">{{ app.description }}</p>
                 <p class="text-xs opacity-60 mt-1"><span class="font-medium">Languages:</span> {{ app.languages }}</p>
                 <div class="card-actions justify-end mt-4">
-                    <a href="{% url app.url_name %}" class="btn btn-primary btn-sm">Open</a>
+                    <a href="{% url app.practice_url_name|default:app.home_url_name %}" class="btn btn-primary btn-sm">Open</a>
                 </div>
             </div>
         </div>

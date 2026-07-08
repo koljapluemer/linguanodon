@@ -4,11 +4,10 @@
 {% block title %}Comprehensible Input - Stats{% endblock %}
 
 {% block content %}
+{% include "_app_subnav.html" %}
 <div class="min-h-screen p-4">
-    <div class="mb-4 flex justify-end max-w-2xl mx-auto">
-        <a href="{% url 'comprehensible_input:language_list' %}" class="btn btn-sm btn-outline">Back</a>
-    </div>
     <div id="stats-app" class="max-w-2xl mx-auto"></div>
 </div>
 <script type="module" src="{% static 'comprehensible_input/js/stats.js' %}"></script>
+{% include "_app_footer.html" %}
 {% endblock %}

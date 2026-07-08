@@ -7,6 +7,11 @@ from django.templatetags.static import static
 from django.urls import reverse
 
 from tprboard.models import BoardObject, Locale, SentenceFormulation
+from core.apps_registry import nav_context
+
+
+def home(request):
+    return render(request, 'tpr-board/home.html', nav_context('tprboard', 'home'))
 
 
 def board(request):
@@ -18,7 +23,20 @@ def board(request):
         'apiObjectsUrl': reverse('tprboard:api_objects'),
         'apiLocaleTasksBaseUrl': '/tpr-board/api/locales/',
     }
-    return render(request, 'tpr-board/board.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('tprboard', 'practice')}
+    return render(request, 'tpr-board/board.html', context)
+
+
+def stats(request):
+    return render(request, 'tpr-board/stats.html', nav_context('tprboard', 'stats'))
+
+
+def settings(request):
+    config = {
+        'apiLanguagesUrl': reverse('tprboard:api_languages'),
+    }
+    context = {'config_json': json.dumps(config), **nav_context('tprboard', 'settings')}
+    return render(request, 'tpr-board/settings.html', context)
 
 
 def api_languages(request):

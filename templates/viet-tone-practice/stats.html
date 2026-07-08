@@ -4,13 +4,12 @@
 {% block title %}Vietnamese Tone Practice - Stats{% endblock %}
 
 {% block content %}
+{% include "_app_subnav.html" %}
 <div class="min-h-screen p-4">
-  <div class="mb-4 flex justify-end max-w-6xl mx-auto">
-    <a href="{% url 'viettonepractice:practice' %}" class="btn btn-sm btn-outline">Back to practice</a>
-  </div>
   <div id="stats-app"></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-error-bars@4.4.5/build/index.umd.min.js"></script>
 <script type="module" src="{% static 'viettonepractice/js/stats.js' %}"></script>
+{% include "_app_footer.html" %}
 {% endblock %}

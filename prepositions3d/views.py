@@ -7,16 +7,22 @@ from django.templatetags.static import static
 from django.urls import reverse
 
 from prepositions3d.models import Language, Translation
+from core.apps_registry import nav_context
 
 
-def game(request):
+def home(request):
+    return render(request, 'prepositions-3d/home.html', nav_context('prepositions3d', 'home'))
+
+
+def practice(request):
     config = {
         'modelsBaseUrl': static('prepositions3d/models/'),
         'soundBaseUrl': static('prepositions3d/sound/'),
         'apiLanguagesUrl': reverse('prepositions3d:api_languages'),
         'apiGlossaryUrl': reverse('prepositions3d:api_glossary'),
     }
-    return render(request, 'prepositions-3d/game.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('prepositions3d', 'practice')}
+    return render(request, 'prepositions-3d/game.html', context)
 
 
 def api_languages(request):

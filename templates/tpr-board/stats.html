@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Stats — TPR Board{% endblock %}
+
+{% block content %}
+{% include "_app_subnav.html" %}
+<div id="app" class="min-h-screen p-4"></div>
+<script type="module" src="{% static 'tprboard/js/stats-page.js' %}"></script>
+{% include "_app_footer.html" %}
+{% endblock %}

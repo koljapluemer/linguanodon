@@ -1,15 +1,11 @@
 // @ts-check
 // Port of infinite-sentences-frontend's src/pages/landing/LandingPage.vue
+// Nav chrome (AppHeader/AppFooter) is now the shared Django-rendered
+// _app_subnav.html/_app_footer.html.
 
-import { AppHeaderComponent } from "./components/AppHeader.js";
-import { AppFooterComponent } from "./components/AppFooter.js";
 import { iconMarkup } from "./icons.js";
 
 export const LandingAppComponent = {
-  components: {
-    AppHeader: AppHeaderComponent,
-    AppFooter: AppFooterComponent,
-  },
   props: {
     config: { type: Object, required: true },
   },
@@ -21,8 +17,6 @@ export const LandingAppComponent = {
     };
   },
   template: `
-    <AppHeader current-page="landing" :landing-url="config.landingUrl" :stats-url="config.statsUrl" :settings-url="config.settingsUrl" />
-
     <div class="max-w-2xl mx-auto w-full flex flex-col gap-12 py-8 px-4">
       <section class="flex flex-col items-center text-center gap-6">
         <div class="flex flex-col gap-2">
@@ -62,7 +56,5 @@ export const LandingAppComponent = {
         </div>
       </section>
     </div>
-
-    <AppFooter :api-languages-url="config.apiLanguagesUrl" :select-native-language-url="config.selectNativeLanguageUrl" />
   `,
 };

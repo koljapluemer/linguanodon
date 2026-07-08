@@ -40,8 +40,10 @@ const readChartPalette = () => ({
   axis: readThemeColor("--color-base-content"),
   axisBorder: readThemeColor("--color-base-300"),
   errorBar: readThemeColor("--color-base-content"),
+  error: readThemeColor("--color-error"),
   grid: readThemeColor("--color-base-300"),
   primary: readThemeColor("--color-primary"),
+  success: readThemeColor("--color-success"),
   surface: readThemeColor("--color-base-100"),
   tooltipBackground: readThemeColor("--color-base-100"),
 });
@@ -72,6 +74,7 @@ export const createAccuracyTrendChart = (canvas, initialTrials) => {
   let range = "recent";
   /** @type {any} */
   let chart = null;
+  const palette = readChartPalette();
 
   const render = () => {
     const visibleTrials = range === "recent" ? trials.slice(-RECENT_TRIAL_WINDOW) : trials;
@@ -82,8 +85,8 @@ export const createAccuracyTrendChart = (canvas, initialTrials) => {
       label: "Individual trials",
       data: visibleTrials.map((trial) => ({ x: trial.trialNumber, y: 50 })),
       borderWidth: 0,
-      pointBackgroundColor: visibleTrials.map((trial) => (trial.isCorrect ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)")),
-      pointBorderColor: visibleTrials.map((trial) => (trial.isCorrect ? "rgb(22, 101, 52)" : "rgb(153, 27, 27)")),
+      pointBackgroundColor: visibleTrials.map((trial) => (trial.isCorrect ? palette.success : palette.error)),
+      pointBorderColor: visibleTrials.map((trial) => (trial.isCorrect ? palette.success : palette.error)),
       pointHoverRadius: 5,
       pointRadius: 4,
       showLine: false,
@@ -340,8 +343,8 @@ export const createPairHistoryChart = (canvas, trials) => {
         {
           data: trials.map((trial) => ({ x: trial.trialNumber, y: trial.isCorrect ? 100 : 0 })),
           label: "Attempts",
-          pointBackgroundColor: trials.map((trial) => (trial.isCorrect ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)")),
-          pointBorderColor: trials.map((trial) => (trial.isCorrect ? "rgb(21, 128, 61)" : "rgb(185, 28, 28)")),
+          pointBackgroundColor: trials.map((trial) => (trial.isCorrect ? palette.success : palette.error)),
+          pointBorderColor: trials.map((trial) => (trial.isCorrect ? palette.success : palette.error)),
           pointBorderWidth: 1.5,
           pointHoverRadius: 5,
           pointRadius: 4,

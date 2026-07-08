@@ -5,13 +5,19 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from egyptiansentences.models import Sentence
+from core.apps_registry import nav_context
+
+
+def home(request):
+    return render(request, 'egyptian-sentences/home.html', nav_context('egyptiansentences', 'home'))
 
 
 def practice(request):
     config = {
         'apiSentencesUrl': reverse('egyptiansentences:api_sentences'),
     }
-    return render(request, 'egyptian-sentences/practice.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('egyptiansentences', 'practice')}
+    return render(request, 'egyptian-sentences/practice.html', context)
 
 
 def api_sentences(request):

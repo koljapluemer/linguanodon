@@ -7,11 +7,13 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, T
 from accounts.permissions import AdminRequiredMixin
 from comprehensible_input.forms import VideoForm
 from comprehensible_input.models import Language, Video
+from core.apps_registry import nav_context
 
 
 class LanguageListView(ListView):
-    template_name = 'comprehensible-input/language-list.html'
+    template_name = 'comprehensible-input/home.html'
     context_object_name = 'languages'
+    extra_context = nav_context('comprehensible_input', 'home')
 
     def get_queryset(self):
         return Language.objects.filter(videos__isnull=False).distinct()
@@ -35,6 +37,7 @@ class WatchView(DetailView):
     model = Video
     template_name = 'comprehensible-input/watch.html'
     context_object_name = 'video'
+    extra_context = nav_context('comprehensible_input', 'practice')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -51,6 +54,7 @@ class WatchView(DetailView):
 
 class StatsView(TemplateView):
     template_name = 'comprehensible-input/stats.html'
+    extra_context = nav_context('comprehensible_input', 'stats')
 
 
 class VideoManageListView(AdminRequiredMixin, ListView):

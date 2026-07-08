@@ -5,7 +5,10 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'tprboard/css/style.css' %}">
-<div id="app" class="h-screen w-screen"></div>
+<div class="flex h-screen w-screen flex-col">
+    {% include "_app_subnav.html" %}
+    <div id="app" class="min-h-0 flex-1"></div>
+</div>
 <script type="importmap">
 {
   "imports": {
@@ -16,4 +19,5 @@
 </script>
 <script id="tprboard-config" type="application/json">{{ config_json|safe }}</script>
 <script type="module" src="{% static 'tprboard/js/main.js' %}"></script>
+{% include "_app_footer.html" %}
 {% endblock %}

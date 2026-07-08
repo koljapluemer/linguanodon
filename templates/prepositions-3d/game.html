@@ -4,8 +4,10 @@
 {% block title %}Prepositions 3D{% endblock %}
 
 {% block content %}
+{% include "_app_subnav.html" %}
 <div id="app" class="h-screen w-screen"></div>
 <script src="https://cdn.jsdelivr.net/npm/aframe@1.7.1/dist/aframe-master.min.js"></script>
 <script id="prepositions3d-config" type="application/json">{{ config_json|safe }}</script>
 <script type="module" src="{% static 'prepositions3d/js/main.js' %}"></script>
+{% include "_app_footer.html" %}
 {% endblock %}

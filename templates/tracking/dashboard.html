@@ -4,63 +4,9 @@
 {% block title %}Your activity — Linguanodon{% endblock %}
 
 {% block content %}
-<style>
-  .tracking-dashboard {
-    --surface-1: #fcfcfb;
-    --text-primary: #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted: #898781;
-    --gridline: #e1e0d9;
-    --baseline: #c3c2b7;
-    --series-1: #2a78d6;
-    --series-2: #1baf7a;
-    --series-3: #eda100;
-    --series-4: #008300;
-    --series-5: #4a3aa7;
-    --series-6: #e34948;
-    --series-7: #e87ba4;
-    --series-8: #eb6834;
-    --series-other: #898781;
-  }
+<link rel="stylesheet" href="{% static 'core/css/chart-theme.css' %}">
 
-  /*
-   * This app's theme is DaisyUI's data-theme attribute (currently hardcoded to "light" in
-   * base.html, no toggle exists yet) - not the OS prefers-color-scheme, which would desync from
-   * the page's actual (always-light) background and flip text to white-on-light.
-   */
-  :root[data-theme="dark"] .tracking-dashboard {
-      --surface-1: #1a1a19;
-      --text-primary: #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted: #898781;
-      --gridline: #2c2c2a;
-      --baseline: #383835;
-      --series-1: #3987e5;
-      --series-2: #199e70;
-      --series-3: #c98500;
-      --series-4: #008300;
-      --series-5: #9085e9;
-      --series-6: #e66767;
-      --series-7: #d55181;
-      --series-8: #d95926;
-      --series-other: #898781;
-    }
-  }
-
-  .tracking-chart-tooltip {
-    position: fixed;
-    background: var(--surface-1);
-    border: 1px solid var(--gridline);
-    border-radius: 6px;
-    padding: 8px 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    pointer-events: none;
-    z-index: 40;
-    min-width: 140px;
-  }
-</style>
-
-<div class="tracking-dashboard max-w-4xl mx-auto p-6 space-y-10">
+<div class="chart-theme max-w-4xl mx-auto p-6 space-y-10">
   <div>
     <h1 class="text-2xl font-semibold" style="color: var(--text-primary)">Your activity</h1>
     <p class="text-sm mt-1" style="color: var(--text-secondary)">Last 30 days, across every app.</p>

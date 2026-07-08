@@ -1,8 +1,9 @@
 // @ts-check
 // Port of infinite-sentences-frontend's src/pages/select-target-language/SelectTargetLanguagePage.vue
+// This is a transient onboarding step (like comprehensible_input's
+// video_list), no shared subnav here - same as before AppHeader/AppFooter
+// were removed as shared components.
 
-import { AppHeaderComponent } from "./components/AppHeader.js";
-import { AppFooterComponent } from "./components/AppFooter.js";
 import { LanguageSymbolsComponent } from "./elements/LanguageSymbols.js";
 import { createLanguagePreferencesStore } from "./store.js";
 import { loadLanguages, loadTargetLanguageIsos } from "./api.js";
@@ -11,8 +12,6 @@ const { ref, onMounted } = window.Vue;
 
 export const SelectTargetLanguageAppComponent = {
   components: {
-    AppHeader: AppHeaderComponent,
-    AppFooter: AppFooterComponent,
     LanguageSymbols: LanguageSymbolsComponent,
   },
   props: {
@@ -58,8 +57,6 @@ export const SelectTargetLanguageAppComponent = {
     return { nativeLanguage, targetLanguages, loading, error, selectTargetLanguage };
   },
   template: `
-    <AppHeader current-page="select-target-language" :landing-url="config.landingUrl" :stats-url="config.statsUrl" :settings-url="config.settingsUrl" />
-
     <div class="max-w-2xl mx-auto w-full p-4">
       <h1 class="text-3xl font-bold mb-6">Select Target Language</h1>
 
@@ -90,7 +87,5 @@ export const SelectTargetLanguageAppComponent = {
         </button>
       </div>
     </div>
-
-    <AppFooter :api-languages-url="config.apiLanguagesUrl" :select-native-language-url="config.selectNativeLanguageUrl" />
   `,
 };

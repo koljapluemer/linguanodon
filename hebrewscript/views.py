@@ -6,6 +6,11 @@ from django.templatetags.static import static
 from django.urls import reverse
 
 from hebrewscript.models import Clip
+from core.apps_registry import nav_context
+
+
+def home(request):
+    return render(request, 'hebrew-script/home.html', nav_context('hebrewscript', 'home'))
 
 
 def practice(request):
@@ -13,11 +18,12 @@ def practice(request):
         'audioBaseUrl': static('hebrewscript/audio/'),
         'apiClipsUrl': reverse('hebrewscript:api_clips'),
     }
-    return render(request, 'hebrew-script/practice.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('hebrewscript', 'practice')}
+    return render(request, 'hebrew-script/practice.html', context)
 
 
 def stats(request):
-    return render(request, 'hebrew-script/stats.html')
+    return render(request, 'hebrew-script/stats.html', nav_context('hebrewscript', 'stats'))
 
 
 def api_clips(request):

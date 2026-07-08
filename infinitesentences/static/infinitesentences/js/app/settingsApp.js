@@ -1,18 +1,14 @@
 // @ts-check
 // Port of infinite-sentences-frontend's src/pages/settings/SettingsPage.vue
+// Nav chrome (AppHeader/AppFooter) is now the shared Django-rendered
+// _app_subnav.html/_app_footer.html.
 
-import { AppHeaderComponent } from "./components/AppHeader.js";
-import { AppFooterComponent } from "./components/AppFooter.js";
 import { createLanguagePreferencesStore, createUserSettingsStore } from "./store.js";
 import { loadLanguages } from "./api.js";
 
 const { ref, watch, onMounted } = window.Vue;
 
 export const SettingsAppComponent = {
-  components: {
-    AppHeader: AppHeaderComponent,
-    AppFooter: AppFooterComponent,
-  },
   props: {
     config: { type: Object, required: true },
   },
@@ -57,8 +53,6 @@ export const SettingsAppComponent = {
     return { dailyGoal, nativeLabel, targetLabel, hasLanguagesSet, changeNativeLanguage, changeTargetLanguage };
   },
   template: `
-    <AppHeader current-page="settings" :landing-url="config.landingUrl" :stats-url="config.statsUrl" :settings-url="config.settingsUrl" />
-
     <div class="max-w-md mx-auto w-full p-4">
       <fieldset class="fieldset">
         <label for="daily-goal" class="label">Daily sentence goal</label>
@@ -79,7 +73,5 @@ export const SettingsAppComponent = {
         </div>
       </div>
     </div>
-
-    <AppFooter :api-languages-url="config.apiLanguagesUrl" :select-native-language-url="config.selectNativeLanguageUrl" />
   `,
 };

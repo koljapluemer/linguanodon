@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Settings — Vietnamese Typing Practice{% endblock %}
+
+{% block content %}
+{% include "_app_subnav.html" %}
+<div class="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
+    <h1 class="text-2xl font-bold">Settings</h1>
+
+    <div class="flex flex-col items-center gap-2">
+        <span class="text-sm opacity-70">Keystroke input method</span>
+        <div class="join" id="method-toggle">
+            <button type="button" class="btn join-item" data-method="off">Off</button>
+            <button type="button" class="btn join-item" data-method="telex">TELEX</button>
+            <button type="button" class="btn join-item" data-method="vni">VNI</button>
+        </div>
+    </div>
+</div>
+<script type="module" src="{% static 'typingpractice/js/settings.js' %}"></script>
+{% include "_app_footer.html" %}
+{% endblock %}

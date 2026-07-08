@@ -6,28 +6,20 @@ from django.templatetags.static import static
 from django.urls import reverse
 
 from infinitesentences.models import Language, LanguagePair, Sentence
-
-
-def _nav_urls():
-    return {
-        'landingUrl': reverse('infinitesentences:landing'),
-        'selectNativeLanguageUrl': reverse('infinitesentences:select_native_language'),
-        'statsUrl': reverse('infinitesentences:stats'),
-        'settingsUrl': reverse('infinitesentences:settings'),
-    }
+from core.apps_registry import nav_context
 
 
 def landing(request):
     config = {
-        **_nav_urls(),
+        'selectNativeLanguageUrl': reverse('infinitesentences:select_native_language'),
         'screenshotUrl': static('infinitesentences/img/screenshot.png'),
     }
-    return render(request, 'infinite-sentences/landing.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('infinitesentences', 'home')}
+    return render(request, 'infinite-sentences/landing.html', context)
 
 
 def select_native_language(request):
     config = {
-        **_nav_urls(),
         'apiLanguagesUrl': reverse('infinitesentences:api_languages'),
         'apiNativeLanguagesUrl': reverse('infinitesentences:api_native_languages'),
         'selectTargetLanguageUrlTemplate': reverse(
@@ -39,9 +31,9 @@ def select_native_language(request):
 
 def select_target_language(request, native_iso):
     config = {
-        **_nav_urls(),
         'nativeIso': native_iso,
         'apiLanguagesUrl': reverse('infinitesentences:api_languages'),
+        'selectNativeLanguageUrl': reverse('infinitesentences:select_native_language'),
         'apiTargetLanguagesUrl': reverse(
             'infinitesentences:api_target_languages', kwargs={'native_iso': native_iso}
         ),
@@ -54,7 +46,6 @@ def select_target_language(request, native_iso):
 
 def practice(request, native_iso, target_iso):
     config = {
-        **_nav_urls(),
         'nativeIso': native_iso,
         'targetIso': target_iso,
         'apiLanguagesUrl': reverse('infinitesentences:api_languages'),
@@ -67,26 +58,28 @@ def practice(request, native_iso, target_iso):
             kwargs={'native_iso': native_iso, 'target_iso': target_iso, 'index': '__INDEX__'},
         ),
     }
-    return render(request, 'infinite-sentences/practice.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('infinitesentences', 'practice')}
+    return render(request, 'infinite-sentences/practice.html', context)
 
 
 def stats(request):
     config = {
-        **_nav_urls(),
         'apiLanguagesUrl': reverse('infinitesentences:api_languages'),
     }
-    return render(request, 'infinite-sentences/stats.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('infinitesentences', 'stats')}
+    return render(request, 'infinite-sentences/stats.html', context)
 
 
 def settings_page(request):
     config = {
-        **_nav_urls(),
         'apiLanguagesUrl': reverse('infinitesentences:api_languages'),
+        'selectNativeLanguageUrl': reverse('infinitesentences:select_native_language'),
         'selectTargetLanguageUrlTemplate': reverse(
             'infinitesentences:select_target_language', kwargs={'native_iso': '__NATIVE_ISO__'}
         ),
     }
-    return render(request, 'infinite-sentences/settings.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('infinitesentences', 'settings')}
+    return render(request, 'infinite-sentences/settings.html', context)
 
 
 def api_languages(request):

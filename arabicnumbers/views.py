@@ -5,13 +5,19 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from arabicnumbers.models import ArabicNumber
+from core.apps_registry import nav_context
+
+
+def home(request):
+    return render(request, 'arabic-numbers/home.html', nav_context('arabicnumbers', 'home'))
 
 
 def practice(request):
     config = {
         'apiNumbersUrl': reverse('arabicnumbers:api_numbers'),
     }
-    return render(request, 'arabic-numbers/practice.html', {'config_json': json.dumps(config)})
+    context = {'config_json': json.dumps(config), **nav_context('arabicnumbers', 'practice')}
+    return render(request, 'arabic-numbers/practice.html', context)
 
 
 def api_numbers(request):

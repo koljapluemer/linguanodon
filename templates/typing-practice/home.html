@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Vietnamese Typing Practice{% endblock %}
+
+{% block content %}
+{% include "_app_subnav.html" %}
+{% include "_app_hero.html" %}
+<div class="max-w-4xl mx-auto px-4 pb-10 text-sm opacity-80">
+    <p>Type Vietnamese words shown on screen against a fixed word list,
+    optionally using TELEX or VNI keystroke input (configurable in
+    Settings) to practice composing diacritics.</p>
+</div>
+{% include "_app_footer.html" %}
+{% endblock %}

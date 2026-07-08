@@ -1,0 +1,18 @@
+{% if app_info %}
+<div class="bg-base-100 border-b border-base-300">
+    <div class="tabs max-w-4xl mx-auto px-4">
+        {% if app_info.home_url_name %}
+        <a href="{% url app_info.home_url_name %}" class="tab{% if current_page == 'home' %} tab-active{% endif %}">Home</a>
+        {% endif %}
+        {% if app_info.practice_url_name %}
+        <a href="{% url app_info.practice_url_name %}" class="tab{% if current_page == 'practice' %} tab-active{% endif %}">Practice</a>
+        {% endif %}
+        {% if app_info.stats_url_name %}
+        <a href="{% url app_info.stats_url_name %}" class="tab{% if current_page == 'stats' %} tab-active{% endif %}">Stats</a>
+        {% endif %}
+        {% if app_info.settings_url_name %}
+        <a href="{% url app_info.settings_url_name %}" class="tab{% if current_page == 'settings' %} tab-active{% endif %}">Settings</a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

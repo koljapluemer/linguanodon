@@ -82,7 +82,7 @@ export const PracticeAppComponent = {
                 class="w-4 h-4 flex items-center justify-center shadow-xs relative border border-gray-400 rounded"
               >
                 <div
-                  class="absolute inset-0 bg-yellow-500 bottom-0 rounded"
+                  class="absolute inset-0 bottom-0 rounded"
                   :style="{ height: number.level * 10 + '%', backgroundColor: calculateColor(number.level), transition: 'height 0.5s ease' }"
                 ></div>
               </div>

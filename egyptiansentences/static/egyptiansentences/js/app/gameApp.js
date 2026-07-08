@@ -58,10 +58,6 @@ export const GameAppComponent = {
       </div>
 
       <template v-else-if="gameMode === 'undetermined'">
-        <div class="glass border border-base-200/60 rounded-2xl shadow p-4 w-full">
-          <h1 class="font-bold text-4xl text-center text-base-content">Basic Egyptian Sentences</h1>
-        </div>
-
         <div class="glass border border-base-200/60 rounded-2xl shadow flex flex-col gap-4 p-4 items-center w-full">
           <p class="text-center text-base-content/90">Practice your survival Arabic and get ready for Egypt.</p>
           <div class="flex flex-col gap-2 items-center">

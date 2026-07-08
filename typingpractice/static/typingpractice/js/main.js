@@ -127,9 +127,10 @@ const input = /** @type {HTMLInputElement} */ (document.getElementById("typing-i
 const wpmEl = /** @type {HTMLElement} */ (document.getElementById("stat-wpm"));
 const accEl = /** @type {HTMLElement} */ (document.getElementById("stat-accuracy"));
 const timeEl = /** @type {HTMLElement} */ (document.getElementById("stat-time"));
-const methodToggle = /** @type {HTMLElement} */ (document.getElementById("method-toggle"));
 
-let method = localStorage.getItem("vnInputMethod") || "off";
+// The TELEX/VNI/Off method is chosen on the settings page; this page just
+// reads the persisted choice and re-reads it on each load.
+const method = localStorage.getItem("vnInputMethod") || "off";
 
 /** @type {WordPair[][]} */
 let allLines = [];
@@ -280,16 +281,6 @@ function handleInput(e) {
   if (input.value.length >= target.length) advanceLine(input.value);
 }
 
-/** @param {string} m */
-function setMethod(m) {
-  method = m;
-  localStorage.setItem("vnInputMethod", m);
-  methodToggle.querySelectorAll("button").forEach((btn) => {
-    btn.classList.toggle("btn-active", /** @type {HTMLElement} */ (btn).dataset.method === m);
-  });
-  renderLines();
-}
-
 function start() {
   allLines = chunk(wordPairs, WORDS_PER_LINE);
   lineIndex = 0;
@@ -297,9 +288,6 @@ function start() {
   nextLine = nextChunk();
   target = currentLine.map(([vie]) => vie).join(" ");
   input.value = "";
-  methodToggle.querySelectorAll("button").forEach((btn) => {
-    btn.classList.toggle("btn-active", /** @type {HTMLElement} */ (btn).dataset.method === method);
-  });
   renderLines();
   input.focus();
   setInterval(tick, 500);
@@ -309,11 +297,6 @@ input.addEventListener("input", /** @type {EventListener} */ (handleInput));
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) pauseTimer();
-});
-
-methodToggle.addEventListener("click", (e) => {
-  const btn = /** @type {HTMLElement} */ (e.target).closest("button[data-method]");
-  if (btn instanceof HTMLElement && btn.dataset.method) setMethod(btn.dataset.method);
 });
 
 start();

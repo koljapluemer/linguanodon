@@ -5,7 +5,7 @@ import { loadLanguageOptions, loadLocaleTaskMap, loadObjectPool } from './app/da
 import { createLucideIcon } from './app/icons.js'
 import { createAppLayout } from './app/layout.js'
 import { loadLearningSnapshot, mergeRemoteState, recordCompletedRound } from './app/learning.js'
-import { createStatsTracker, formatPlayedTime } from './app/stats.js'
+import { createStatsTracker } from './app/stats.js'
 import { createRelationshipIndex, planRound } from './app/tasks.js'
 
 /**
@@ -80,25 +80,12 @@ const taskAudio = {
   syncToken: 0,
 }
 
-layout.languageButton.appendChild(
-  createLucideIcon(window.lucide.Languages, { class: 'size-5', width: '20', height: '20' }),
-)
 layout.streakIcon.appendChild(
   createLucideIcon(window.lucide.Flame, { class: 'size-4', width: '16', height: '16' }),
-)
-layout.statsButton.appendChild(
-  createLucideIcon(window.lucide.BarChart3, { class: 'size-5', width: '20', height: '20' }),
 )
 layout.taskReplayButton.appendChild(
   createLucideIcon(window.lucide.Volume2, { class: 'size-5', width: '20', height: '20' }),
 )
-layout.languageButton.addEventListener('click', () => {
-  openLanguageModal()
-})
-layout.statsButton.addEventListener('click', () => {
-  updateStatsView(statsTracker.getStats())
-  layout.statsModal.showModal()
-})
 layout.taskReplayButton.addEventListener('click', () => {
   void replayTaskAudio()
 })
@@ -118,31 +105,21 @@ taskAudio.element.preload = 'auto'
 /**
  * @param {PlayerStats} stats
  */
-function updateStatsView(stats) {
-  updateStreakView(stats)
-  layout.statsBestStreakValue.textContent = String(stats.bestStreak)
-  layout.statsTimePlayedValue.textContent = formatPlayedTime(stats.timePlayedMs)
-  layout.statsTasksCompletedValue.textContent = String(stats.tasksCompleted)
-}
-
-/**
- * @param {PlayerStats} stats
- */
 function updateStreakView(stats) {
   const { bestStreak, currentStreak, recordStreakBaseline } = stats
   const isRecordRun = currentStreak > 0 && currentStreak > recordStreakBaseline
 
   layout.streakValue.textContent = String(currentStreak)
   layout.streakIndicator.className = `flex shrink-0 items-center gap-1.5 text-sm font-semibold tabular-nums transition-colors duration-300 ${
-    isRecordRun ? 'text-emerald-700' : 'text-base-content/70'
+    isRecordRun ? 'text-success' : 'text-base-content/70'
   }`
   layout.streakIcon.className = `flex items-center transition-colors duration-300 ${
-    isRecordRun ? 'text-emerald-600' : 'text-amber-500/85'
+    isRecordRun ? 'text-success' : 'text-warning'
   }`
 
   if (currentStreak === 0) {
     layout.streakBarCurrentFill.className =
-      'absolute inset-y-0 left-0 w-0 rounded-full bg-amber-400/70 transition-[width,background-color,opacity] duration-300'
+      'absolute inset-y-0 left-0 w-0 rounded-full bg-warning/70 transition-[width,background-color,opacity] duration-300'
     layout.streakBarRecordFill.className =
       'absolute inset-y-0 left-0 w-0 rounded-full bg-transparent transition-[width,background-color,opacity] duration-300'
     layout.streakBarCurrentFill.style.width = '0%'
@@ -155,9 +132,9 @@ function updateStreakView(stats) {
     const baselineRatio = recordStreakBaseline > 0 ? Math.min(recordStreakBaseline / currentStreak, 1) : 0
 
     layout.streakBarCurrentFill.className =
-      'absolute inset-y-0 left-0 rounded-full bg-emerald-500/70 transition-[width,background-color,opacity] duration-300'
+      'absolute inset-y-0 left-0 rounded-full bg-success/70 transition-[width,background-color,opacity] duration-300'
     layout.streakBarRecordFill.className =
-      'absolute inset-y-0 left-0 rounded-full bg-amber-400/65 transition-[width,background-color,opacity] duration-300'
+      'absolute inset-y-0 left-0 rounded-full bg-warning/65 transition-[width,background-color,opacity] duration-300'
     layout.streakBarCurrentFill.style.width = '100%'
     layout.streakBarRecordFill.style.width = `${baselineRatio * 100}%`
     layout.streakIndicator.title = `Current streak: ${currentStreak}. Previous record: ${recordStreakBaseline}.`
@@ -167,7 +144,7 @@ function updateStreakView(stats) {
   const recordRatio = bestStreak > 0 ? Math.min(currentStreak / bestStreak, 1) : 0
 
   layout.streakBarCurrentFill.className =
-    'absolute inset-y-0 left-0 rounded-full bg-amber-400/70 transition-[width,background-color,opacity] duration-300'
+    'absolute inset-y-0 left-0 rounded-full bg-warning/70 transition-[width,background-color,opacity] duration-300'
   layout.streakBarRecordFill.className =
     'absolute inset-y-0 left-0 rounded-full bg-transparent transition-[width,background-color,opacity] duration-300'
   layout.streakBarCurrentFill.style.width = `${recordRatio * 100}%`
@@ -362,9 +339,6 @@ function updateLanguageButtons() {
   layout.currentLanguageText.textContent = selectedLanguage
     ? `Current: ${selectedLanguage.name}`
     : 'Choose a language to start playing.'
-  layout.languageButton.title = selectedLanguage
-    ? `Learning ${selectedLanguage.name}`
-    : 'Which language do you want to practice?'
 
   const buttons = layout.languageOptions.querySelectorAll('button[data-language-code]')
 
@@ -591,7 +565,7 @@ async function init() {
   state.objectPool = objectPool
   state.selectedLanguageCode = getInitialLanguageCode(languageOptions)
 
-  statsTracker.subscribe(updateStatsView)
+  statsTracker.subscribe(updateStreakView)
   renderLanguageOptions()
   trackActiveTime('tprboard')
   await mergeRemoteState(await pullState('tprboard'))

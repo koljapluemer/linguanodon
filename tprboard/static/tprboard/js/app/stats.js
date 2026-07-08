@@ -243,9 +243,12 @@ function readStoredCount(value) {
 }
 
 /**
+ * Reads the persisted stats snapshot without starting a live tracker (no
+ * event listeners, no time-tracking side effects) - for read-only display
+ * on the stats page.
  * @returns {PlayerStats}
  */
-function readPlayerStats() {
+export function readPlayerStats() {
   const rawStats = localStorage.getItem(STATS_STORAGE_KEY)
 
   if (!rawStats) {

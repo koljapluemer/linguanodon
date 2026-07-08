@@ -3,17 +3,11 @@
 /**
  * @typedef {object} AppLayout
  * @property {HTMLParagraphElement} currentLanguageText
- * @property {HTMLButtonElement} languageButton
  * @property {HTMLDivElement} languageModalActions
  * @property {HTMLFormElement} languageModalBackdrop
  * @property {HTMLDialogElement} languageModal
  * @property {HTMLDivElement} languageOptions
  * @property {HTMLDivElement} sceneRoot
- * @property {HTMLParagraphElement} statsBestStreakValue
- * @property {HTMLButtonElement} statsButton
- * @property {HTMLDialogElement} statsModal
- * @property {HTMLParagraphElement} statsTasksCompletedValue
- * @property {HTMLParagraphElement} statsTimePlayedValue
  * @property {HTMLSpanElement} streakBarCurrentFill
  * @property {HTMLSpanElement} streakBarRecordFill
  * @property {HTMLSpanElement} streakIcon
@@ -48,22 +42,6 @@ export function createAppLayout(app, options) {
   app.innerHTML = `
     <div id="layout" class="flex h-full w-full flex-col" data-theme="light">
       <div class="flex min-h-0 min-w-0 flex-1">
-        <aside class="flex w-16 shrink-0 flex-col items-center gap-2 border-r border-base-300 bg-base-100/80 p-3 backdrop-blur">
-          <button
-            id="language-button"
-            type="button"
-            class="btn btn-square btn-ghost"
-            aria-label="Choose language"
-            aria-haspopup="dialog"
-          ></button>
-          <button
-            id="stats-button"
-            type="button"
-            class="btn btn-square btn-ghost"
-            aria-label="Show stats"
-            aria-haspopup="dialog"
-          ></button>
-        </aside>
         <div class="flex min-w-0 flex-1 flex-col">
           <section id="streak-panel" class="px-8 pt-5 pb-2">
             <div class="mx-auto flex max-w-5xl items-center gap-3">
@@ -176,52 +154,16 @@ export function createAppLayout(app, options) {
           <button type="submit">close</button>
         </form>
       </dialog>
-      <dialog id="stats-modal" class="modal">
-        <div class="modal-box">
-          <div class="mb-4">
-            <h2 class="text-lg font-semibold">Stats</h2>
-            <p class="text-sm text-base-content/70">Stored locally on this device.</p>
-          </div>
-          <dl class="flex flex-col gap-4">
-            <div class="rounded-box bg-base-200/70 px-4 py-3">
-              <dt class="text-sm text-base-content/70">Time played</dt>
-              <dd id="stats-time-played" class="text-2xl font-semibold">0m</dd>
-            </div>
-            <div class="rounded-box bg-base-200/70 px-4 py-3">
-              <dt class="text-sm text-base-content/70">Tasks completed</dt>
-              <dd id="stats-tasks-completed" class="text-2xl font-semibold">0</dd>
-            </div>
-            <div class="rounded-box bg-base-200/70 px-4 py-3">
-              <dt class="text-sm text-base-content/70">Best streak</dt>
-              <dd id="stats-best-streak" class="text-2xl font-semibold">0</dd>
-            </div>
-          </dl>
-          <div class="modal-action">
-            <form method="dialog">
-              <button type="submit" class="btn">Close</button>
-            </form>
-          </div>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-          <button type="submit">close</button>
-        </form>
-      </dialog>
     </div>
   `
 
   return {
     currentLanguageText: queryRequiredElement(app, '#current-language-text'),
-    languageButton: queryRequiredElement(app, '#language-button'),
     languageModalActions: queryRequiredElement(app, '#language-modal-actions'),
     languageModalBackdrop: queryRequiredElement(app, '#language-modal-backdrop'),
     languageModal: queryRequiredElement(app, '#language-modal'),
     languageOptions: queryRequiredElement(app, '#language-options'),
     sceneRoot: queryRequiredElement(app, '#scene'),
-    statsBestStreakValue: queryRequiredElement(app, '#stats-best-streak'),
-    statsButton: queryRequiredElement(app, '#stats-button'),
-    statsModal: queryRequiredElement(app, '#stats-modal'),
-    statsTasksCompletedValue: queryRequiredElement(app, '#stats-tasks-completed'),
-    statsTimePlayedValue: queryRequiredElement(app, '#stats-time-played'),
     streakBarCurrentFill: queryRequiredElement(app, '#streak-bar-current-fill'),
     streakBarRecordFill: queryRequiredElement(app, '#streak-bar-record-fill'),
     streakIcon: queryRequiredElement(app, '#streak-icon'),
