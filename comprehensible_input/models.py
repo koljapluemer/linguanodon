@@ -21,3 +21,7 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def thumbnail_url(self):
+        return f'https://img.youtube.com/vi/{self.youtube_id}/mqdefault.jpg'
