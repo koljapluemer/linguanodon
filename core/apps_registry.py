@@ -28,6 +28,15 @@ class AppState(Enum):
             AppState.RECOMMENDED: 'badge-success',
         }[self]
 
+    @property
+    def sort_order(self) -> int:
+        """Index-grid ordering: recommended, then usable, then proof of concept."""
+        return {
+            AppState.RECOMMENDED: 0,
+            AppState.USABLE: 1,
+            AppState.PROOF_OF_CONCEPT: 2,
+        }[self]
+
 
 @dataclass(frozen=True)
 class AppInfo:
@@ -82,7 +91,7 @@ APPS: list[AppInfo] = [
         name='Comprehensible Input',
         code='CI',
         description='Browse and watch superbeginner comprehensible-input videos.',
-        state=AppState.USABLE,
+        state=AppState.PROOF_OF_CONCEPT,
         home_url_name='comprehensible_input:home',
         practice_url_name=None,
         stats_url_name='comprehensible_input:stats',
@@ -91,8 +100,8 @@ APPS: list[AppInfo] = [
         slug='tprboard',
         name='TPR Board',
         code='TP',
-        description='A 3D vocabulary game that teaches words through actions and relationships between objects.',
-        state=AppState.USABLE,
+        description='Acquire a language by executing understandable drag-and-drop tasks. Inspired by the Total Physical Response method',
+        state=AppState.RECOMMENDED,
         home_url_name='tprboard:home',
         practice_url_name='tprboard:practice',
         stats_url_name='tprboard:stats',
@@ -103,7 +112,7 @@ APPS: list[AppInfo] = [
         slug='prepositions3d',
         name='Acquire Prepositions 3D',
         code='PR',
-        description='A WebXR/desktop 3D game for acquiring spatial prepositions.',
+        description='A Virtual Reality/desktop 3D game for acquiring spatial prepositions (behind, left of, between, ...).',
         state=AppState.USABLE,
         home_url_name='prepositions3d:home',
         practice_url_name='prepositions3d:practice',
@@ -111,7 +120,7 @@ APPS: list[AppInfo] = [
     AppInfo(
         slug='saetze',
         name='Sätze',
-        code='SZ',
+        code='ä',
         description='German cloze-sentence drills for confusable word families like "jeder/alle/ganz".',
         state=AppState.USABLE,
         home_url_name='saetze:home',
@@ -121,9 +130,9 @@ APPS: list[AppInfo] = [
     AppInfo(
         slug='egyptiansentences',
         name='Basic Egyptian Sentences',
-        code='EG',
-        description='Timed cloze-word quiz for survival Egyptian Arabic sentences.',
-        state=AppState.USABLE,
+        code='arz',
+        description='Timed cloze-word quiz for Egyptian Arabic sentences.',
+        state=AppState.RECOMMENDED,
         home_url_name='egyptiansentences:home',
         practice_url_name='egyptiansentences:practice',
         footer_html='Sentence data from lisaanmasry.org, used under Mike Green’s non-commercial license.',
@@ -131,18 +140,18 @@ APPS: list[AppInfo] = [
     AppInfo(
         slug='arabicnumbers',
         name='Arabic Numbers Practice',
-        code='AN',
-        description='Learn to read and transliterate Arabic numbers from 0 to 100.',
+        code='٣',
+        description='Learn to read the Arabic numbers from 0 to 100.',
         state=AppState.USABLE,
         home_url_name='arabicnumbers:home',
         practice_url_name='arabicnumbers:practice',
     ),
     AppInfo(
         slug='hebrewscript',
-        name='Hebrew Script Practice',
-        code='HS',
-        description='Listen to audio clips and match them to Hebrew script.',
-        state=AppState.USABLE,
+        name='Script Practice',
+        code='א',
+        description='Acquire a foreign script without declarative learning by matching sounds to writing.',
+        state=AppState.PROOF_OF_CONCEPT,
         home_url_name='hebrewscript:home',
         practice_url_name='hebrewscript:practice',
         stats_url_name='hebrewscript:stats',
@@ -150,8 +159,8 @@ APPS: list[AppInfo] = [
     AppInfo(
         slug='viettonepractice',
         name='Vietnamese Tone Practice',
-        code='VT',
-        description='Listen to audio clips and identify Vietnamese tones by ear.',
+        code='ằ',
+        description='Get perceptual exposure tasks to learn to hear Vietnamese tones.',
         state=AppState.USABLE,
         home_url_name='viettonepractice:home',
         practice_url_name='viettonepractice:practice',
@@ -160,8 +169,8 @@ APPS: list[AppInfo] = [
     AppInfo(
         slug='typingpractice',
         name='Vietnamese Typing Practice',
-        code='TY',
-        description='Practice Vietnamese TELEX/VNI keystroke input against a fixed word list.',
+        code='đ',
+        description='Practice Vietnamese TELEX/VNI keyboard input.',
         state=AppState.USABLE,
         home_url_name='typingpractice:home',
         practice_url_name='typingpractice:practice_vie',
