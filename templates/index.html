@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load language_tags %}
 
 {% block title %}Linguanodon{% endblock %}
 
@@ -24,7 +25,7 @@
                     <span class="badge {{ app.state.badge_class }} whitespace-nowrap">{{ app.state.value }}</span>
                 </div>
                 <p class="text-sm opacity-70">{{ app.description }}</p>
-                <p class="text-xs opacity-60 mt-1"><span class="font-medium">Languages:</span> {{ app.languages }}</p>
+                <p class="text-xs opacity-60 mt-1"><span class="font-medium">Languages:</span> {{ app.slug|language_display }}</p>
                 <div class="card-actions justify-end mt-4">
                     <a href="{% url app.practice_url_name|default:app.home_url_name %}" class="btn btn-primary btn-sm">Open</a>
                 </div>

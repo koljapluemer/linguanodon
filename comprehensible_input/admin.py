@@ -5,8 +5,8 @@ from comprehensible_input.models import Language, Video
 
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    search_fields = ['name']
+    list_display = ['name', 'code']
+    search_fields = ['name', 'code']
 
 
 @admin.register(Video)

@@ -3,6 +3,7 @@ from django.db import models
 
 class Language(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    code = models.CharField(max_length=8, unique=True)
 
     class Meta:
         ordering = ['name']

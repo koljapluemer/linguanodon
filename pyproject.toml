@@ -11,4 +11,5 @@ dependencies = [
     "dj-database-url>=2.3",
     "whitenoise>=6.9",
     "python-dotenv>=1.2.2",
+    "iso639-lang>=2.6.3",
 ]

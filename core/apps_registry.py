@@ -38,7 +38,6 @@ class AppInfo:
     # core.management.commands.generate_favicons).
     code: str
     description: str
-    languages: str
     state: AppState
     home_url_name: str | None
     # None where `practice` takes a required argument (a lesson/video/
@@ -64,9 +63,8 @@ APPS: list[AppInfo] = [
     AppInfo(
         slug='infinitesentences',
         name='Infinite Sentences',
-        code='IS',
-        description='Vocab-in-context sentence drills from Tatoeba pairs, with FSRS-scheduled spaced repetition.',
-        languages='Multiple',
+        code='∞',
+        description='Practice the vocabulary needed to comprehend a natural sentence, then try to understand it.',
         state=AppState.RECOMMENDED,
         home_url_name='infinitesentences:landing',
         practice_url_name=None,
@@ -83,8 +81,7 @@ APPS: list[AppInfo] = [
         slug='comprehensible_input',
         name='Comprehensible Input',
         code='CI',
-        description='Browse and watch superbeginner comprehensible-input videos by language.',
-        languages='Multiple',
+        description='Browse and watch superbeginner comprehensible-input videos.',
         state=AppState.USABLE,
         home_url_name='comprehensible_input:home',
         practice_url_name=None,
@@ -95,7 +92,6 @@ APPS: list[AppInfo] = [
         name='TPR Board',
         code='TP',
         description='A 3D vocabulary game that teaches words through actions and relationships between objects.',
-        languages='Multiple',
         state=AppState.USABLE,
         home_url_name='tprboard:home',
         practice_url_name='tprboard:practice',
@@ -108,7 +104,6 @@ APPS: list[AppInfo] = [
         name='Acquire Prepositions 3D',
         code='PR',
         description='A WebXR/desktop 3D game for acquiring spatial prepositions.',
-        languages='Multiple',
         state=AppState.USABLE,
         home_url_name='prepositions3d:home',
         practice_url_name='prepositions3d:practice',
@@ -118,7 +113,6 @@ APPS: list[AppInfo] = [
         name='Sätze',
         code='SZ',
         description='German cloze-sentence drills for confusable word families like "jeder/alle/ganz".',
-        languages='German',
         state=AppState.USABLE,
         home_url_name='saetze:home',
         practice_url_name=None,
@@ -129,7 +123,6 @@ APPS: list[AppInfo] = [
         name='Basic Egyptian Sentences',
         code='EG',
         description='Timed cloze-word quiz for survival Egyptian Arabic sentences.',
-        languages='Egyptian Arabic',
         state=AppState.USABLE,
         home_url_name='egyptiansentences:home',
         practice_url_name='egyptiansentences:practice',
@@ -140,7 +133,6 @@ APPS: list[AppInfo] = [
         name='Arabic Numbers Practice',
         code='AN',
         description='Learn to read and transliterate Arabic numbers from 0 to 100.',
-        languages='Arabic',
         state=AppState.USABLE,
         home_url_name='arabicnumbers:home',
         practice_url_name='arabicnumbers:practice',
@@ -150,7 +142,6 @@ APPS: list[AppInfo] = [
         name='Hebrew Script Practice',
         code='HS',
         description='Listen to audio clips and match them to Hebrew script.',
-        languages='Hebrew',
         state=AppState.USABLE,
         home_url_name='hebrewscript:home',
         practice_url_name='hebrewscript:practice',
@@ -161,7 +152,6 @@ APPS: list[AppInfo] = [
         name='Vietnamese Tone Practice',
         code='VT',
         description='Listen to audio clips and identify Vietnamese tones by ear.',
-        languages='Vietnamese',
         state=AppState.USABLE,
         home_url_name='viettonepractice:home',
         practice_url_name='viettonepractice:practice',
@@ -172,7 +162,6 @@ APPS: list[AppInfo] = [
         name='Vietnamese Typing Practice',
         code='TY',
         description='Practice Vietnamese TELEX/VNI keystroke input against a fixed word list.',
-        languages='Vietnamese',
         state=AppState.USABLE,
         home_url_name='typingpractice:home',
         practice_url_name='typingpractice:practice_vie',
