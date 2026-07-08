@@ -5,19 +5,24 @@
 {% block title %}Linguanodon{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 py-10">
-    <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold">Linguanodon</h1>
-        <p class="mt-2 opacity-70">A collection of small apps for language practice.</p>
+<div class="max-w-6xl mx-auto px-4 py-10 flex-col gap-32 flex">
+    <div class="flex flex-row items-center gap-2">
+        <img src="{% static 'core/logo.webp' %}" alt="" class="object-contain" style="max-height: min(30vh, 400px); max-width: 40%;">
+        <img src="{% static 'core/logo_text.webp' %}" alt="Linguanodon" class="w-full object-contain">
     </div>
+
+    <p class="text-4xl leading-12">
+        Hi, I am <a href="https://koljasam.com/" class="link">Kolja Sam</a>. <br /> On this site, I am sharing interfaces for language learning that I built. <br /> Everything here is free and open source. <br /> Feel free to look around:
+    </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for app in apps_list %}
         <div class="card bg-base-100 border border-base-300 shadow-sm hover:shadow-lg transition-shadow">
             <figure class="h-40 bg-base-200 relative overflow-hidden">
-                <img src="{% static app.screenshot_static_path %}" alt="{{ app.name }} screenshot" class="h-full w-full object-cover">
+                <img src="{% static app.screenshot_static_path %}" alt="{{ app.name }} screenshot"
+                    class="h-full w-full object-cover">
                 <div class="absolute bottom-2 right-2 flex items-center justify-center w-10 h-10 rounded-full text-2xl font-bold shadow"
-                     style="color: #7a29e9; background-color: #210b3f;">{{ app.code }}</div>
+                    style="color: #7a29e9; background-color: #210b3f;">{{ app.code }}</div>
             </figure>
             <div class="card-body">
                 <div class="flex items-start justify-between gap-2">
@@ -27,7 +32,8 @@
                 <p class="text-sm opacity-70">{{ app.description }}</p>
                 <p class="text-xs opacity-60 mt-1"><span class="font-medium">Languages:</span> {{ app.slug|language_display }}</p>
                 <div class="card-actions justify-end mt-4">
-                    <a href="{% url app.practice_url_name|default:app.home_url_name %}" class="btn btn-primary btn-sm">Open</a>
+                    <a href="{% url app.practice_url_name|default:app.home_url_name %}"
+                        class="btn btn-primary btn-sm">Open</a>
                 </div>
             </div>
         </div>
