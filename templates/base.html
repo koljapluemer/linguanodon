@@ -15,21 +15,17 @@
 
 <body class="min-h-screen bg-base-200" data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
     <div class="navbar bg-base-100 shadow-sm px-4">
-        <div class="flex-1">
+        <a href="{% url 'index' %}"  class="flex-1 flex flex gap-4 flex-row items-center">
             <img src="{% static 'core/logo.webp' %}" alt="" class="h-12 object-contain">
-            <a href="{% url 'index' %}" class="hidden md:block btn btn-ghost text-lg">Linguanodon</a>
-        </div>
-        <div class="flex-none flex items-center gap-2">
+            <span class="hidden md:block link link-hover">Linguanodon</span>
+        </a>
+        <div class="flex-none flex items-center gap-4">
             {% if user.is_authenticated %}
-            <a href="{% url 'tracking:dashboard' %}" class="btn btn-sm btn-ghost">Activity</a>
-            <span class="text-sm opacity-70">{{ user.username }}</span>
-            <form method="post" action="{% url 'accounts:logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline">Sign out</button>
-            </form>
+            <a href="{% url 'tracking:dashboard' %}" class="link">Activity</a>
+            <a href="{% url 'accounts:profile' %}" class="link">{{ user.username }}</a>
             {% else %}
-            <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-outline">Sign in</a>
-            <a href="{% url 'accounts:signup' %}" class="btn btn-sm btn-primary">Sign up</a>
+            <a href="{% url 'accounts:login' %}" class="link">Sign in</a>
+            <a href="{% url 'accounts:signup' %}" class="link">Sign up</a>
             {% endif %}
         </div>
     </div>

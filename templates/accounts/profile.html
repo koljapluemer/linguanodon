@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen items-center justify-center p-4">
+    <div class="card w-full max-w-sm bg-base-100 p-6 shadow-sm flex flex-col gap-4">
+        <h1 class="text-xl font-semibold">Profile</h1>
+
+        <div class="flex flex-col gap-1">
+            <span class="text-sm opacity-70">Name</span>
+            <span class="font-medium">{{ user.username }}</span>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <span class="text-sm opacity-70">Email</span>
+            <span class="font-medium">{{ user.email|default:"—" }}</span>
+        </div>
+
+        <form method="post" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline w-full">Sign out</button>
+        </form>
+
+        <button type="button" class="btn btn-error btn-outline w-full" onclick="delete_account_modal.showModal()">Delete account</button>
+    </div>
+</div>
+
+<dialog id="delete_account_modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-semibold">Delete account?</h3>
+        <p class="py-2 text-sm opacity-70">This permanently deletes your account and all associated data. This cannot be undone.</p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Cancel</button>
+            </form>
+            <form method="post" action="{% url 'accounts:delete' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-error">Delete account</button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+{% endblock %}
