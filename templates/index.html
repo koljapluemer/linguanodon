@@ -5,13 +5,13 @@
 {% block title %}Linguanodon{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 py-10 flex-col gap-32 flex">
-    <div class="flex flex-row items-center gap-2">
-        <img src="{% static 'core/logo.webp' %}" alt="" class="object-contain" style="max-height: min(30vh, 400px); max-width: 40%;">
+<div class="max-w-6xl mx-auto px-4 py-10 flex-col gap-8 md:gap-32 flex">
+    <div class="flex md:flex-row items-center gap-2 flex-col">
+        <img src="{% static 'core/logo.webp' %}" alt="" class="object-contain hidden md:block" style="max-height: min(30vh, 400px); max-width: 40%;">
         <img src="{% static 'core/logo_text.webp' %}" alt="Linguanodon" class="w-full object-contain">
     </div>
 
-    <p class="text-4xl leading-12">
+    <p class="text-xl md:text-4xl md:leading-12">
         Hi, I am <a href="https://koljasam.com/" class="link">Kolja Sam</a>. <br /> On this site, I am sharing interfaces for language learning that I built. <br /> Everything here is free and open source. <br /> Feel free to look around:
     </p>
 
