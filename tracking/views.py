@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 
+from core.apps_registry import APPS
 from tracking.models import ActivityEvent, LearningState
 
 MAX_EVENTS_PER_SYNC = 500
@@ -20,17 +21,9 @@ DASHBOARD_WINDOW_DAYS = 30
 
 # Fixed order for stacking/coloring apps on the dashboard, so a series' color stays put as more
 # apps get wired up rather than shifting whenever alphabetical sort would insert one earlier.
-KNOWN_APP_ORDER = [
-    'tprboard',
-    'viettonepractice',
-    'hebrewscript',
-    'comprehensible_input',
-    'arabicnumbers',
-    'prepositions3d',
-    'saetze',
-    'egyptiansentences',
-    'infinitesentences',
-]
+# Sourced from the app registry (core/apps_registry.py) so it can't drift out of sync with the
+# actual set of practice apps.
+KNOWN_APP_ORDER = [app.slug for app in APPS]
 
 
 def _app_sort_key(app_label):

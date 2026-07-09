@@ -1,10 +1,14 @@
 /*
  * Shared chart color palette, used by every per-app stats page's Chart.js
- * config (--series-1..--series-8, --series-other) plus the surrounding
+ * config (--series-1..--series-10, --series-other) plus the surrounding
  * text/gridline colors. One palette, defined once, so charts look
  * consistent everywhere a chart appears instead of each app picking its
  * own colors. Light-only - this project has no dark mode (see
  * doc/design-system.md).
+ *
+ * 10 series colors, one per practice app in core/apps_registry.py - keep in
+ * sync with that list so every known app gets a stable, distinct color and
+ * --series-other is reserved for apps not yet in the registry.
  */
 .chart-theme {
   --surface-1: #fcfcfb;
@@ -21,17 +25,7 @@
   --series-6: #e34948;
   --series-7: #e87ba4;
   --series-8: #eb6834;
+  --series-9: #0f9bb0;
+  --series-10: #9c6b1f;
   --series-other: #898781;
-}
-
-.tracking-chart-tooltip {
-  position: fixed;
-  background: var(--surface-1);
-  border: 1px solid var(--gridline);
-  border-radius: 6px;
-  padding: 8px 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  pointer-events: none;
-  z-index: 40;
-  min-width: 140px;
 }
