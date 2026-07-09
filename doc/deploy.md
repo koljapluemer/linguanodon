@@ -1,7 +1,7 @@
 # Deploying to the VPS
 
-Django + gunicorn behind nginx, Postgres on the same box, running on a
-DigitalOcean droplet (Ubuntu 24.04 LTS). No CI/CD — deploys are a manual
+Django + gunicorn behind nginx, Postgres on the same box, running on a brand
+new DigitalOcean droplet (Ubuntu 24.04 LTS). No CI/CD — deploys are a manual
 `git pull` over SSH. Droplet-level daily backups are enabled in the
 DigitalOcean control panel (Droplet → Backups) — that's the disaster-recovery
 story; nothing further to set up for that here.
@@ -10,18 +10,14 @@ Config files: `deploy/gunicorn.service`, `deploy/nginx.conf`.
 
 ---
 
-## Part 1 — One-time: fresh droplet setup
-
-Skip this section entirely if you're reusing an already-hardened droplet
-(e.g. the one this app took over from `transparent-input` — see Part 2).
-Only needed the first time you stand up a new droplet from scratch.
+## Part 1 — One-time: server setup
 
 ### 1. Create the droplet
 
-Ubuntu 24.04 LTS, smallest size that fits the workload comfortably (this app
-is Django + SQLite content files + one small Postgres DB — a 1 GB droplet is
-plenty to start). Enable **Backups** and the **Monitoring** agent at
-creation time (both free, both in the control panel) — no reason not to.
+Ubuntu 24.04 LTS, smallest size that fits comfortably (this app is Django +
+SQLite content files + one small Postgres DB — a 1 GB droplet is plenty to
+start). Enable **Backups** and the **Monitoring** agent at creation time
+(both free, both in the control panel).
 
 ### 2. Non-root user + SSH hardening
 
@@ -97,58 +93,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ---
 
-## Part 2 — One-time: retire transparent-input
+## Part 2 — One-time: set up linguanodon
 
-Only relevant if this droplet previously ran `transparent-input` (the app
-`linguanodon` replaced). Skip on a fresh droplet.
-
-SSH in as `deploy` (the user and its sudo/systemctl rights already exist
-from the old setup):
+SSH in as `deploy` (created in Part 1, step 2):
 
 ```bash
 ssh deploy@YOUR_IP
 ```
-
-Stop and disable the old service:
-
-```bash
-sudo systemctl stop gunicorn
-sudo systemctl disable gunicorn
-```
-
-Remove the old nginx site:
-
-```bash
-sudo rm /etc/nginx/sites-enabled/transparent-input
-sudo rm /etc/nginx/sites-available/transparent-input
-```
-
-Drop the old database (back it up first with `pg_dump` if you want to keep
-anything):
-
-```bash
-sudo -u postgres psql -c "DROP DATABASE transparent-input;"
-sudo -u postgres psql -c "DROP USER transparent-input;"
-```
-
-Remove the old checkout and env file:
-
-```bash
-rm -rf ~/transparent-input
-sudo rm /etc/transparent-input.env
-```
-
-The old GitHub deploy key (`~/.ssh/id_ed25519`) was scoped read-only to the
-`transparent-input` repo on GitHub — it won't work for the new repo. You can
-either reuse the same keypair (add its public key as a deploy key on the new
-repo) or generate a fresh one; instructions for both are in Part 3, step 2.
-
-nginx, Postgres and `uv` are already installed from the old setup, so Part 1
-step 6 is a no-op here.
-
----
-
-## Part 3 — One-time: set up linguanodon
 
 ### 1. Database
 
@@ -164,13 +115,7 @@ CREATE DATABASE linguanodon OWNER linguanodon;
 
 ### 2. GitHub access
 
-If reusing an old keypair, print the existing public key:
-
-```bash
-cat ~/.ssh/id_ed25519.pub
-```
-
-Otherwise generate a new one:
+Generate a deploy keypair:
 
 ```bash
 ssh-keygen -t ed25519 -C "deploy@droplet" -f ~/.ssh/id_ed25519 -N ""
@@ -254,18 +199,6 @@ but its app-level `role` still defaults to `NEW` - to let it manage
 comprehensible-input videos, open `/admin/`, edit the user, and set `role`
 to `Admin`.
 
-**One-time note (first deploy after `accounts` was added):** this introduces
-a custom `AUTH_USER_MODEL` (`accounts.User`). Django does not support
-switching `AUTH_USER_MODEL` after `migrate` has already run against the
-built-in `auth.User`. If this Postgres database previously ran migrations
-under the default user model, drop and recreate it first (safe if no real
-account data exists yet):
-
-```bash
-sudo -u postgres psql -c "DROP DATABASE linguanodon;"
-sudo -u postgres psql -c "CREATE DATABASE linguanodon OWNER linguanodon;"
-```
-
 ### 6. Install and start gunicorn
 
 ```bash
@@ -309,11 +242,6 @@ anything within 30 days of expiry — no cron needed. Verify it actually works:
 sudo certbot renew --dry-run
 ```
 
-If reusing the domain that pointed at `transparent-input`, the existing
-certificate covers the domain but not this nginx server block's content —
-rerunning `certbot --nginx -d linguanodon.com -d www.linguanodon.com` as
-above handles that.
-
 Once the cert is live, turn on the HTTPS-only Django settings:
 
 ```bash
@@ -326,8 +254,17 @@ This flips `SECURE_SSL_REDIRECT`, `SESSION_COOKIE_SECURE`,
 gated behind one flag so they can't end up half-on. Sanity-check with:
 
 ```bash
+set -a && source /etc/linguanodon.env && set +a
+cd ~/linguanodon
 uv run python manage.py check --deploy
 ```
+
+The `source` line is required every time you open a *new* shell to run a
+`manage.py` command by hand — `EnvironmentFile=` in `gunicorn.service` only
+loads the env into gunicorn's own process, not into your SSH session. If
+`check --deploy` still complains about a weak `SECRET_KEY` after this, the
+env genuinely isn't loaded in that shell (this is the #1 false alarm this
+check produces on a real deploy).
 
 ---
 
