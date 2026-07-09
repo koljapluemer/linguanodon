@@ -1,17 +1,109 @@
 # Deploying to the VPS
 
-This app takes over the droplet that used to run `transparent-input`. Django +
-gunicorn behind nginx, Postgres on the same box. No CI/CD — deploys are a
-manual `git pull` over SSH.
+Django + gunicorn behind nginx, Postgres on the same box, running on a
+DigitalOcean droplet (Ubuntu 24.04 LTS). No CI/CD — deploys are a manual
+`git pull` over SSH. Droplet-level daily backups are enabled in the
+DigitalOcean control panel (Droplet → Backups) — that's the disaster-recovery
+story; nothing further to set up for that here.
 
 Config files: `deploy/gunicorn.service`, `deploy/nginx.conf`.
 
 ---
 
-## One-time: retire transparent-input
+## Part 1 — One-time: fresh droplet setup
 
-SSH in as `deploy` (the user and its sudo/systemctl rights already exist from
-the old setup):
+Skip this section entirely if you're reusing an already-hardened droplet
+(e.g. the one this app took over from `transparent-input` — see Part 2).
+Only needed the first time you stand up a new droplet from scratch.
+
+### 1. Create the droplet
+
+Ubuntu 24.04 LTS, smallest size that fits the workload comfortably (this app
+is Django + SQLite content files + one small Postgres DB — a 1 GB droplet is
+plenty to start). Enable **Backups** and the **Monitoring** agent at
+creation time (both free, both in the control panel) — no reason not to.
+
+### 2. Non-root user + SSH hardening
+
+Log in as root the first time, then:
+
+```bash
+adduser deploy
+usermod -aG sudo deploy
+rsync --archive --chown=deploy:deploy ~/.ssh /home/deploy
+```
+
+(or manually copy your public key into `/home/deploy/.ssh/authorized_keys`).
+
+Then, **before disabling password auth**, open a *second* terminal and
+confirm you can SSH in as `deploy` with your key. Once confirmed, harden SSH.
+On 24.04, drop overrides in `/etc/ssh/sshd_config.d/` rather than editing the
+main file (it survives package upgrades):
+
+```bash
+sudo tee /etc/ssh/sshd_config.d/99-hardening.conf <<'EOF'
+PermitRootLogin no
+PasswordAuthentication no
+EOF
+sudo sshd -t   # validate syntax BEFORE reloading, or you can lock yourself out
+sudo systemctl reload ssh
+```
+
+Keep the DigitalOcean web console (Droplet → Access → Console) in your back
+pocket in case you do lock yourself out.
+
+### 3. Firewall
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw enable
+```
+
+Optionally mirror the same rules in DigitalOcean's Cloud Firewall
+(Networking → Firewalls) for defense in depth — redundant for a single
+droplet but zero cost.
+
+### 4. fail2ban + unattended-upgrades
+
+```bash
+sudo apt update
+sudo apt install -y fail2ban unattended-upgrades
+sudo dpkg-reconfigure -plow unattended-upgrades   # answer "Yes"
+```
+
+### 5. Swap
+
+Droplets ship with no swap. Add some so an out-of-memory spike doesn't just
+kill the process:
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+sudo sysctl vm.swappiness=10
+echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
+```
+
+### 6. Install system packages
+
+```bash
+sudo apt install -y nginx postgresql postgresql-contrib certbot python3-certbot-nginx
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+---
+
+## Part 2 — One-time: retire transparent-input
+
+Only relevant if this droplet previously ran `transparent-input` (the app
+`linguanodon` replaced). Skip on a fresh droplet.
+
+SSH in as `deploy` (the user and its sudo/systemctl rights already exist
+from the old setup):
 
 ```bash
 ssh deploy@YOUR_IP
@@ -49,14 +141,14 @@ sudo rm /etc/transparent-input.env
 The old GitHub deploy key (`~/.ssh/id_ed25519`) was scoped read-only to the
 `transparent-input` repo on GitHub — it won't work for the new repo. You can
 either reuse the same keypair (add its public key as a deploy key on the new
-repo) or generate a fresh one; instructions for both are below.
+repo) or generate a fresh one; instructions for both are in Part 3, step 2.
 
-nginx and Postgres are already installed from the old setup, so there's
-nothing to `apt install` this time.
+nginx, Postgres and `uv` are already installed from the old setup, so Part 1
+step 6 is a no-op here.
 
 ---
 
-## One-time: set up linguanodon
+## Part 3 — One-time: set up linguanodon
 
 ### 1. Database
 
@@ -72,7 +164,7 @@ CREATE DATABASE linguanodon OWNER linguanodon;
 
 ### 2. GitHub access
 
-If reusing the old keypair, print the existing public key:
+If reusing an old keypair, print the existing public key:
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
@@ -89,8 +181,6 @@ Copy the output, then in GitHub → `koljapluemer/linguandon` → **Settings →
 Deploy keys → Add deploy key** → paste it in (read-only access is enough).
 
 ### 3. Clone the repo and install deps
-
-`uv` is already installed from the old setup.
 
 ```bash
 cd ~
@@ -116,9 +206,15 @@ sudo nano /etc/linguanodon.env
 ```
 SECRET_KEY=<paste generated key here>
 DATABASE_URL=postgresql://linguanodon:<db-password>@localhost/linguanodon
-ALLOWED_HOSTS=your-domain.com
+ALLOWED_HOSTS=linguanodon.com,www.linguanodon.com
 DEBUG=false
+SSL_ENABLED=false
 ```
+
+Leave `SSL_ENABLED=false` for now — flip it to `true` after step 8 (SSL)
+below. Turning it on before nginx has a real certificate breaks all HTTP
+access (Django will redirect every request to an HTTPS that doesn't exist
+yet).
 
 Lock down the file:
 
@@ -143,30 +239,15 @@ uv run python manage.py collectstatic --noinput
 uv run python manage.py createsuperuser
 ```
 
-`tprboard.sqlite3` (the tpr-board vocabulary/task content) is committed
-directly to the repo, not loaded from a fixture - `git pull` already brings
-the populated file. The `migrate --database=tprboard` step only matters when
-a future code change ships a new migration for that app; it's a no-op
-otherwise. `comprehensible_input.sqlite3` is NOT committed (it holds live,
-admin-entered data) - the `migrate --database=comprehensible_input` step
-creates it fresh on the server. `arabicnumbers.sqlite3` (the Arabic numbers
-0-100 content) is committed directly to the repo like `tprboard.sqlite3` -
-the `migrate --database=arabicnumbers` step is likewise a no-op until a
-future migration ships for that app. `prepositions3d.sqlite3` (the
-Acquire Prepositions 3D gloss/translation content) is committed directly to
-the repo like `tprboard.sqlite3` - the `migrate --database=prepositions3d`
-step is likewise a no-op until a future migration ships for that app.
-`saetze.sqlite3` (the Sätze lesson/exercise content) is committed directly to
-the repo like `tprboard.sqlite3` - the `migrate --database=saetze` step is
-likewise a no-op until a future migration ships for that app.
-`egyptiansentences.sqlite3` (the Basic Egyptian Sentences content, with
-precomputed distractors) is committed directly to the repo like
-`tprboard.sqlite3` - the `migrate --database=egyptiansentences` step is
-likewise a no-op until a future migration ships for that app.
-`infinitesentences.sqlite3` (the Infinite Sentences language/sentence/gloss
-content) is committed directly to the repo like `tprboard.sqlite3` - the
-`migrate --database=infinitesentences` step is likewise a no-op until a
-future migration ships for that app.
+All the app-specific `.sqlite3` files (`tprboard`, `comprehensible_input`,
+`arabicnumbers`, `prepositions3d`, `saetze`, `egyptiansentences`,
+`infinitesentences`) are committed directly to the repo and arrive
+populated via `git pull` — the `migrate --database=X` steps above only do
+something the first time a migration ships for that app; otherwise they're
+no-ops. This includes `comprehensible_input.sqlite3`: despite holding
+admin-entered video/language data, it's tracked in git like the others (data
+gets added locally through the admin UI and committed same as any other
+change), so it doesn't need special-casing or a separate backup step.
 
 After `createsuperuser`, the account it creates has `is_staff`/`is_superuser`
 but its app-level `role` still defaults to `NEW` - to let it manage
@@ -176,9 +257,9 @@ to `Admin`.
 **One-time note (first deploy after `accounts` was added):** this introduces
 a custom `AUTH_USER_MODEL` (`accounts.User`). Django does not support
 switching `AUTH_USER_MODEL` after `migrate` has already run against the
-built-in `auth.User` - and this Postgres database already has. Before
-running `migrate` on this deploy, drop and recreate the database (safe: no
-real account data exists in prod yet):
+built-in `auth.User`. If this Postgres database previously ran migrations
+under the default user model, drop and recreate it first (safe if no real
+account data exists yet):
 
 ```bash
 sudo -u postgres psql -c "DROP DATABASE linguanodon;"
@@ -194,29 +275,59 @@ sudo systemctl enable --now gunicorn
 sudo systemctl status gunicorn   # should show "active (running)"
 ```
 
+`deploy/gunicorn.service` runs with systemd sandboxing on
+(`ProtectSystem=strict`, `ProtectHome=true`, etc.) with an explicit
+`ReadWritePaths` exception for the repo checkout, since gunicorn needs to
+write to `comprehensible_input.sqlite3` and `staticfiles/`. If you ever move
+the checkout out of `/home/deploy/linguanodon`, update `ReadWritePaths` (and
+`WorkingDirectory`/`ExecStart`) to match.
+
 ### 7. Configure nginx
 
 ```bash
 sudo cp ~/linguanodon/deploy/nginx.conf /etc/nginx/sites-available/linguanodon
-sudo sed -i 's/YOUR_DOMAIN/your-domain-or-ip/' /etc/nginx/sites-available/linguanodon
+sudo sed -i 's/YOUR_DOMAIN/linguanodon.com www.linguanodon.com/' /etc/nginx/sites-available/linguanodon
 sudo ln -s /etc/nginx/sites-available/linguanodon /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-A bare IP works fine here — skip step 8 if you don't have a domain yet.
+The domain is `linguanodon.com` — before step 8, point its DNS `A` record
+(and `www`) at the droplet's IP if you haven't already; propagation can take
+a few minutes to a few hours.
 
-### 8. SSL (requires a real domain, not an IP)
-
-If you're keeping the same domain that pointed at transparent-input, the
-existing certificate covers the domain but not the new nginx server block's
-content — just rerun certbot against it:
+### 8. SSL
 
 ```bash
-sudo certbot --nginx -d your-domain.com
+sudo certbot --nginx -d linguanodon.com -d www.linguanodon.com
 ```
 
 Certbot edits the nginx config in place (adding the HTTPS server block and
-redirect) and sets up auto-renewal.
+redirect) and installs a systemd timer that checks twice daily and renews
+anything within 30 days of expiry — no cron needed. Verify it actually works:
+
+```bash
+sudo certbot renew --dry-run
+```
+
+If reusing the domain that pointed at `transparent-input`, the existing
+certificate covers the domain but not this nginx server block's content —
+rerunning `certbot --nginx -d linguanodon.com -d www.linguanodon.com` as
+above handles that.
+
+Once the cert is live, turn on the HTTPS-only Django settings:
+
+```bash
+sudo nano /etc/linguanodon.env    # change SSL_ENABLED=false to SSL_ENABLED=true
+sudo systemctl restart gunicorn
+```
+
+This flips `SECURE_SSL_REDIRECT`, `SESSION_COOKIE_SECURE`,
+`CSRF_COOKIE_SECURE`, and HSTS all together (`config/settings.py`) — they're
+gated behind one flag so they can't end up half-on. Sanity-check with:
+
+```bash
+uv run python manage.py check --deploy
+```
 
 ---
 

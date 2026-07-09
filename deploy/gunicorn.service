@@ -11,5 +11,19 @@ ExecStart=/home/deploy/linguanodon/.venv/bin/gunicorn config.wsgi --bind 127.0.0
 ExecReload=/bin/kill -s HUP $MAINPID
 Restart=on-failure
 
+# Hardening. ReadWritePaths is required despite ProtectHome/ProtectSystem:
+# gunicorn writes to comprehensible_input.sqlite3 (live admin data) and
+# staticfiles/ (collectstatic) inside the repo checkout.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/home/deploy/linguanodon
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
 [Install]
 WantedBy=multi-user.target

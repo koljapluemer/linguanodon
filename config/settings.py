@@ -33,6 +33,23 @@ DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# nginx terminates TLS and proxies plain HTTP to gunicorn, so Django needs
+# this header to know a request was actually HTTPS - required before
+# SECURE_SSL_REDIRECT is turned on, or it loops redirecting forever.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Single flag for everything that requires a working HTTPS cert (see
+# doc/deploy.md) - deploys start with this off (bare IP/no cert yet) and
+# flip it on once certbot is set up, rather than risking these settings
+# drifting out of sync with each other.
+SSL_ENABLED = os.environ.get('SSL_ENABLED', 'false').lower() == 'true'
+SECURE_SSL_REDIRECT = SSL_ENABLED
+SESSION_COOKIE_SECURE = SSL_ENABLED
+CSRF_COOKIE_SECURE = SSL_ENABLED
+SECURE_HSTS_SECONDS = 31536000 if SSL_ENABLED else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = SSL_ENABLED
+SECURE_HSTS_PRELOAD = SSL_ENABLED
+
 
 # Application definition
 
