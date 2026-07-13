@@ -10,6 +10,8 @@ import { addSurveyResponse, mergeRemoteWatchTime } from "./app/idb.js";
 import { createPlayer } from "./app/player.js";
 import { createWatchTracker } from "./app/watchTracker.js";
 
+console.log("[debug] home.js module evaluated");
+
 const theater = /** @type {HTMLDivElement} */ (document.getElementById("theater"));
 const backdrop = /** @type {HTMLDivElement} */ (document.getElementById("backdrop"));
 const randomUrlTemplate = theater.dataset.randomUrlTemplate ?? "";
@@ -22,15 +24,18 @@ let currentMeta = null;
 /** @param {string} languageCode */
 const loadRandomVideo = (languageCode) => {
   const url = randomUrlTemplate.replace("LANG", encodeURIComponent(languageCode));
+  console.log("[debug] loadRandomVideo firing htmx GET", url);
   window.htmx.ajax("GET", url, { target: "#video-stage", swap: "innerHTML" });
 };
 
 const initVideo = async () => {
+  console.log("[debug] initVideo start");
   tracker?.destroy();
   tracker = null;
   currentMeta = null;
 
   const el = /** @type {HTMLDivElement | null} */ (document.getElementById("video-player-inner"));
+  console.log("[debug] video-player-inner el found?", !!el);
   if (!el) return; // "no videos for this language" fallback markup - nothing to wire up
 
   currentMeta = {
@@ -43,19 +48,27 @@ const initVideo = async () => {
   backdrop.style.backgroundImage = `url(${el.dataset.thumbnailUrl})`;
 
   tracker = createWatchTracker(currentMeta);
+  console.log("[debug] calling createPlayer with youtubeId", el.dataset.youtubeId);
   const player = await createPlayer("player", el.dataset.youtubeId ?? "", (state) => {
     tracker?.setPlaying(state === window.YT.PlayerState.PLAYING);
   });
+  console.log("[debug] createPlayer resolved", player);
   tracker.setPlayer(player);
 };
 
 document.body.addEventListener("htmx:afterSwap", (event) => {
   const target = /** @type {CustomEvent} */ (event).detail?.target;
+  console.log("[debug] htmx:afterSwap on", target?.id);
   if (target?.id !== "video-stage") return;
   void initVideo();
 });
 
+document.body.addEventListener("htmx:responseError", (event) => {
+  console.log("[debug] htmx:responseError", event.detail);
+});
+
 document.addEventListener("language-ready", (event) => {
+  console.log("[debug] language-ready event", /** @type {CustomEvent} */ (event).detail);
   loadRandomVideo(/** @type {CustomEvent} */ (event).detail.code);
 });
 
