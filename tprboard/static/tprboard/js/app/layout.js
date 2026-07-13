@@ -84,38 +84,6 @@ export function createAppLayout(app, options) {
           <div id="scene" class="min-h-0 flex-1"></div>
         </div>
       </div>
-      <footer class="border-t border-base-300 bg-base-100/85 px-4 py-3 text-center text-xs leading-relaxed text-base-content/70 backdrop-blur">
-        <p class="mx-auto max-w-5xl text-balance">
-          Made by
-          <a
-            href="https://koljasam.com/"
-            target="_blank"
-            rel="noreferrer"
-            class="font-medium text-base-content underline decoration-base-content/30 underline-offset-3 transition hover:decoration-base-content"
-          >
-            Kolja Sam
-          </a>.
-          I am tracking nothing but page views with the privacy friendly
-          <a
-            href="https://www.goatcounter.com/"
-            target="_blank"
-            rel="noreferrer"
-            class="font-medium text-base-content underline decoration-base-content/30 underline-offset-3 transition hover:decoration-base-content"
-          >
-            goatcounter
-          </a>.
-          You can support me building more like this on
-          <a
-            href="https://ko-fi.com/S6S81CWUVD"
-            target="_blank"
-            rel="noreferrer"
-            class="font-medium text-base-content underline decoration-base-content/30 underline-offset-3 transition hover:decoration-base-content"
-          >
-            Ko-fi
-          </a>.
-          Functional cookies only.
-        </p>
-      </footer>
       <dialog id="language-modal" class="modal">
         <div class="modal-box max-h-[calc(100vh-4rem)] max-w-2xl overflow-y-auto">
           <div class="mb-4">

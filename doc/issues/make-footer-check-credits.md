@@ -1,0 +1,1 @@
+Make a global, coherent footer. Delete outdated refs. Standardize style. Link to ko-fi.
