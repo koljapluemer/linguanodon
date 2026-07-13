@@ -55,6 +55,10 @@ class AppInfo:
     practice_url_name: str | None
     stats_url_name: str | None = None
     settings_url_name: str | None = None
+    # Optional 5th subnav slot for an app-specific extra page that doesn't fit
+    # home/practice/stats/settings (e.g. a "browse everything" index).
+    extra_nav_url_name: str | None = None
+    extra_nav_label: str = ''
     # Short attribution/credits HTML, rendered `|safe` by _app_footer.html.
     footer_html: str = ''
 
@@ -95,6 +99,8 @@ APPS: list[AppInfo] = [
         home_url_name='comprehensible_input:home',
         practice_url_name=None,
         stats_url_name='comprehensible_input:stats',
+        extra_nav_url_name='comprehensible_input:all_videos',
+        extra_nav_label='All Videos',
     ),
     AppInfo(
         slug='tprboard',

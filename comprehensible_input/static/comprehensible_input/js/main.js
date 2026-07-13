@@ -14,7 +14,7 @@ const tracker = createWatchTracker(config);
 
 createPlayer("player", config.youtubeId, (state) => {
   tracker.setPlaying(state === window.YT.PlayerState.PLAYING);
-});
+}).then((player) => tracker.setPlayer(player));
 
 window.addEventListener("beforeunload", () => tracker.destroy());
 

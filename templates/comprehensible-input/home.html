@@ -1,23 +1,148 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Comprehensible Input{% endblock %}
 
 {% block content %}
-{% include "_app_subnav.html" %}
-<div class="min-h-screen p-4">
-    <div class="flex flex-col items-center gap-6">
-        <h1 class="text-2xl font-bold">Pick a language</h1>
-        <p class="text-sm opacity-70 text-center max-w-xs">Browse superbeginner
-        comprehensible-input videos by language and watch - no account
-        needed.</p>
-        <div class="flex flex-col gap-2 w-full max-w-xs">
-            {% for language in languages %}
-                <a href="{% url 'comprehensible_input:video_list' language.pk %}" class="btn btn-primary">{{ language.name }}</a>
-            {% empty %}
-                <p class="text-center opacity-70">No languages with videos yet.</p>
-            {% endfor %}
+<div class="flex h-screen w-screen flex-col">
+    {% include "_app_subnav.html" %}
+    <div id="theater" class="relative min-h-0 flex-1 overflow-hidden bg-base-300"
+         data-random-url-template="{% url 'comprehensible_input:random_video' 'LANG' %}">
+        <div id="backdrop" class="absolute inset-0 bg-cover bg-center scale-110 blur-2xl opacity-50 transition-[background-image] duration-500"></div>
+
+        <div id="video-stage" class="absolute inset-0 flex items-center justify-center p-4 md:p-8">
+            <p class="text-base-content/60 text-sm">Loading video…</p>
         </div>
+
+        <button type="button"
+                class="btn btn-primary fixed right-4 top-1/2 z-20 -translate-y-1/2 shadow-lg"
+                onclick="document.getElementById('end-watch-modal').showModal()">
+            End Watch
+        </button>
+
+        <dialog id="language-modal" class="modal"
+                x-data="{
+                    open: false,
+                    languages: [{% for language in languages %}{ code: '{{ language.code|escapejs }}', name: '{{ language.name|escapejs }}' }{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    init() {
+                        const stored = localStorage.getItem('comprehensible-input.language-code');
+                        if (stored && this.languages.some((l) => l.code === stored)) {
+                            document.dispatchEvent(new CustomEvent('language-ready', { detail: { code: stored } }));
+                        } else {
+                            this.open = true;
+                        }
+                    },
+                    choose(code) {
+                        localStorage.setItem('comprehensible-input.language-code', code);
+                        this.open = false;
+                        document.dispatchEvent(new CustomEvent('language-ready', { detail: { code } }));
+                    },
+                }"
+                x-effect="open ? $el.showModal() : $el.close()"
+                @cancel.prevent>
+            <div class="modal-box">
+                <h3 class="text-lg font-semibold">Which language do you want to learn?</h3>
+                <p class="mt-1 text-sm opacity-70">Pick once — this is remembered on this device.</p>
+                <div class="mt-4 flex flex-col gap-2">
+                    <template x-for="language in languages" :key="language.code">
+                        <button type="button" class="btn btn-primary" @click="choose(language.code)" x-text="language.name"></button>
+                    </template>
+                    <template x-if="languages.length === 0">
+                        <p class="text-center text-sm opacity-70">No languages with videos yet.</p>
+                    </template>
+                </div>
+            </div>
+        </dialog>
+
+        <dialog id="end-watch-modal" class="modal"
+                x-data="{
+                    comprehension: null,
+                    listening: null,
+                    rewatch: null,
+                    reset() {
+                        this.comprehension = null;
+                        this.listening = null;
+                        this.rewatch = null;
+                    },
+                }">
+            <div class="modal-box max-w-lg">
+                <h3 class="text-lg font-semibold">How did that go?</h3>
+                <form id="end-watch-form"
+                      class="mt-4 flex flex-col gap-6"
+                      @submit.prevent="document.dispatchEvent(new CustomEvent('survey-submit', { detail: { comprehension, listening, rewatch } })); reset(); $el.closest('dialog').close()">
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">I understood what was going on</legend>
+                        <div class="flex justify-between gap-1">
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="comprehension" class="radio radio-sm" value="1" x-model.number="comprehension">
+                                <span>Strongly disagree</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="comprehension" class="radio radio-sm" value="2" x-model.number="comprehension">
+                                <span>Disagree</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="comprehension" class="radio radio-sm" value="3" x-model.number="comprehension">
+                                <span>Neutral</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="comprehension" class="radio radio-sm" value="4" x-model.number="comprehension">
+                                <span>Agree</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="comprehension" class="radio radio-sm" value="5" x-model.number="comprehension">
+                                <span>Strongly agree</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">I understood the spoken language intuitively</legend>
+                        <div class="flex justify-between gap-1">
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="listening" class="radio radio-sm" value="1" x-model.number="listening">
+                                <span>Strongly disagree</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="listening" class="radio radio-sm" value="2" x-model.number="listening">
+                                <span>Disagree</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="listening" class="radio radio-sm" value="3" x-model.number="listening">
+                                <span>Neutral</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="listening" class="radio radio-sm" value="4" x-model.number="listening">
+                                <span>Agree</span>
+                            </label>
+                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
+                                <input type="radio" name="listening" class="radio radio-sm" value="5" x-model.number="listening">
+                                <span>Strongly agree</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">I want to watch this video further/again</legend>
+                        <div class="join w-full">
+                            <input type="radio" name="rewatch" class="btn join-item flex-1" aria-label="No" value="no" x-model="rewatch">
+                            <input type="radio" name="rewatch" class="btn join-item flex-1" aria-label="Yes" value="yes" x-model="rewatch">
+                            <input type="radio" name="rewatch" class="btn join-item flex-1" aria-label="Certainly!" value="certainly" x-model="rewatch">
+                        </div>
+                    </fieldset>
+
+                    <div class="modal-action">
+                        <button type="submit" class="btn btn-primary" :disabled="!comprehension || !listening || !rewatch">Submit &amp; next video</button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/htmx.org@2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script type="module" src="{% static 'comprehensible_input/js/home.js' %}"></script>
 {% include "_app_footer.html" %}
 {% endblock %}

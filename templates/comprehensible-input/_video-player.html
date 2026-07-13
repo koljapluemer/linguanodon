@@ -1,0 +1,14 @@
+{% if video %}
+<div id="video-player-inner"
+     class="flex h-full w-full items-center justify-center"
+     data-video-id="{{ video.pk }}"
+     data-youtube-id="{{ video.youtube_id }}"
+     data-language-id="{{ video.language_id }}"
+     data-language-name="{{ video.language.name }}"
+     data-video-title="{{ video.title }}"
+     data-thumbnail-url="{{ video.thumbnail_url_large }}">
+    <div id="player" class="aspect-video max-h-full max-w-full w-full"></div>
+</div>
+{% else %}
+<p class="text-base-content/60 text-sm">No videos for {{ language.name }} yet.</p>
+{% endif %}

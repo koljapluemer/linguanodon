@@ -13,6 +13,9 @@
         {% if app_info.settings_url_name %}
         <a href="{% url app_info.settings_url_name %}" class="tab{% if current_page == 'settings' %} tab-active{% endif %}">Settings</a>
         {% endif %}
+        {% if app_info.extra_nav_url_name %}
+        <a href="{% url app_info.extra_nav_url_name %}" class="tab{% if current_page == 'extra' %} tab-active{% endif %}">{{ app_info.extra_nav_label }}</a>
+        {% endif %}
     </div>
 </div>
 {% endif %}

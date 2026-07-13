@@ -10,13 +10,33 @@ from comprehensible_input.models import Language, Video
 from core.apps_registry import nav_context
 
 
-class LanguageListView(ListView):
+class InfiniteWatchView(ListView):
     template_name = 'comprehensible-input/home.html'
     context_object_name = 'languages'
     extra_context = nav_context('comprehensible_input', 'home')
 
     def get_queryset(self):
         return Language.objects.filter(videos__isnull=False).distinct()
+
+
+class LanguageListView(ListView):
+    template_name = 'comprehensible-input/all-videos.html'
+    context_object_name = 'languages'
+    extra_context = nav_context('comprehensible_input', 'extra')
+
+    def get_queryset(self):
+        return Language.objects.filter(videos__isnull=False).distinct()
+
+
+class RandomVideoPartialView(TemplateView):
+    template_name = 'comprehensible-input/_video-player.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        language = get_object_or_404(Language, code=self.kwargs['language_code'])
+        context['language'] = language
+        context['video'] = Video.objects.filter(language=language).order_by('?').first()
+        return context
 
 
 class VideoListView(ListView):

@@ -26,3 +26,7 @@ class Video(models.Model):
     @property
     def thumbnail_url(self):
         return f'https://img.youtube.com/vi/{self.youtube_id}/mqdefault.jpg'
+
+    @property
+    def thumbnail_url_large(self):
+        return f'https://img.youtube.com/vi/{self.youtube_id}/hqdefault.jpg'

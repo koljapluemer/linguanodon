@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}All Videos — Comprehensible Input{% endblock %}
+
+{% block content %}
+{% include "_app_subnav.html" %}
+<div class="min-h-screen p-4">
+    <div class="flex flex-col items-center gap-6">
+        <h1 class="text-2xl font-bold">Pick a language</h1>
+        <p class="text-sm opacity-70 text-center max-w-xs">Browse superbeginner
+        comprehensible-input videos by language and watch - no account
+        needed.</p>
+        <div class="flex flex-col gap-2 w-full max-w-xs">
+            {% for language in languages %}
+                <a href="{% url 'comprehensible_input:video_list' language.pk %}" class="btn btn-primary">{{ language.name }}</a>
+            {% empty %}
+                <p class="text-center opacity-70">No languages with videos yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% include "_app_footer.html" %}
+{% endblock %}
