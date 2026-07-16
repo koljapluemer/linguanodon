@@ -4,21 +4,75 @@
 {% block title %}Comprehensible Input{% endblock %}
 
 {% block content %}
-<div class="flex h-screen w-screen flex-col">
+<div class="flex w-full min-h-0 flex-1 flex-col">
     {% include "_app_subnav.html" %}
-    <div id="theater" class="relative min-h-0 flex-1 overflow-hidden bg-base-300"
+    <div id="theater" class="relative min-h-0 flex-1 overflow-hidden bg-base-300 flex flex-col md:flex-row"
          data-random-url-template="{% url 'comprehensible_input:random_video' 'LANG' %}">
-        <div id="backdrop" class="absolute inset-0 bg-cover bg-center scale-110 blur-2xl opacity-50 transition-[background-image] duration-500"></div>
+        <div id="video-area" class="relative min-h-0 flex-1 overflow-hidden md:min-w-0">
+            <div id="backdrop" class="absolute inset-0 bg-cover bg-center scale-110 blur-2xl opacity-50 transition-[background-image] duration-500"></div>
 
-        <div id="video-stage" class="absolute inset-0 flex items-center justify-center p-4 md:p-8">
-            <p class="text-base-content/60 text-sm">Loading video…</p>
+            <div id="video-stage" class="absolute inset-0 flex items-center justify-center">
+                <p class="text-base-content/60 text-sm">Loading video…</p>
+            </div>
         </div>
 
-        <button type="button"
-                class="btn btn-primary fixed right-4 top-1/2 z-20 -translate-y-1/2 shadow-lg"
-                onclick="document.getElementById('end-watch-modal').showModal()">
-            End Watch
-        </button>
+        <div id="rating-panel"
+             class="shrink-0 w-full border-t border-base-300 bg-base-100 md:w-80 md:overflow-y-auto md:border-t-0 md:border-l lg:w-96"
+             x-data="{
+                comprehension: null,
+                listening: null,
+                rewatch: null,
+                reset() {
+                    this.comprehension = null;
+                    this.listening = null;
+                    this.rewatch = null;
+                },
+            }">
+            <form id="end-watch-form"
+                  class="flex h-full flex-col justify-center gap-2 p-3 md:justify-start md:gap-6 md:p-6"
+                  @submit.prevent="document.dispatchEvent(new CustomEvent('survey-submit', { detail: { comprehension, listening, rewatch } })); reset()">
+                <fieldset class="fieldset py-0.5 md:py-1">
+                    <legend class="fieldset-legend text-xs md:text-sm">I understood what was going on</legend>
+                    <div class="join w-full">
+                        <input type="radio" name="comprehension" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="1" value="1" x-model.number="comprehension">
+                        <input type="radio" name="comprehension" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="2" value="2" x-model.number="comprehension">
+                        <input type="radio" name="comprehension" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="3" value="3" x-model.number="comprehension">
+                        <input type="radio" name="comprehension" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="4" value="4" x-model.number="comprehension">
+                        <input type="radio" name="comprehension" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="5" value="5" x-model.number="comprehension">
+                    </div>
+                    <div class="mt-0.5 flex justify-between text-[10px] opacity-60 md:text-xs">
+                        <span>Strongly disagree</span>
+                        <span>Strongly agree</span>
+                    </div>
+                </fieldset>
+
+                <fieldset class="fieldset py-0.5 md:py-1">
+                    <legend class="fieldset-legend text-xs md:text-sm">I understood the spoken language intuitively</legend>
+                    <div class="join w-full">
+                        <input type="radio" name="listening" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="1" value="1" x-model.number="listening">
+                        <input type="radio" name="listening" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="2" value="2" x-model.number="listening">
+                        <input type="radio" name="listening" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="3" value="3" x-model.number="listening">
+                        <input type="radio" name="listening" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="4" value="4" x-model.number="listening">
+                        <input type="radio" name="listening" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="5" value="5" x-model.number="listening">
+                    </div>
+                    <div class="mt-0.5 flex justify-between text-[10px] opacity-60 md:text-xs">
+                        <span>Strongly disagree</span>
+                        <span>Strongly agree</span>
+                    </div>
+                </fieldset>
+
+                <fieldset class="fieldset py-0.5 md:py-1">
+                    <legend class="fieldset-legend text-xs md:text-sm">I want to watch this video further/again</legend>
+                    <div class="join w-full">
+                        <input type="radio" name="rewatch" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="No" value="no" x-model="rewatch">
+                        <input type="radio" name="rewatch" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="Yes" value="yes" x-model="rewatch">
+                        <input type="radio" name="rewatch" class="btn join-item btn-xs flex-1 md:btn-sm" aria-label="Certainly!" value="certainly" x-model="rewatch">
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="btn btn-primary btn-sm md:btn-md" :disabled="!comprehension || !listening || !rewatch">Submit &amp; next video</button>
+            </form>
+        </div>
 
         <dialog id="language-modal" class="modal"
                 x-data="{
@@ -51,90 +105,6 @@
                         <p class="text-center text-sm opacity-70">No languages with videos yet.</p>
                     </template>
                 </div>
-            </div>
-        </dialog>
-
-        <dialog id="end-watch-modal" class="modal"
-                x-data="{
-                    comprehension: null,
-                    listening: null,
-                    rewatch: null,
-                    reset() {
-                        this.comprehension = null;
-                        this.listening = null;
-                        this.rewatch = null;
-                    },
-                }">
-            <div class="modal-box max-w-lg">
-                <h3 class="text-lg font-semibold">How did that go?</h3>
-                <form id="end-watch-form"
-                      class="mt-4 flex flex-col gap-6"
-                      @submit.prevent="document.dispatchEvent(new CustomEvent('survey-submit', { detail: { comprehension, listening, rewatch } })); reset(); $el.closest('dialog').close()">
-                    <fieldset class="fieldset">
-                        <legend class="fieldset-legend">I understood what was going on</legend>
-                        <div class="flex justify-between gap-1">
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="comprehension" class="radio radio-sm" value="1" x-model.number="comprehension">
-                                <span>Strongly disagree</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="comprehension" class="radio radio-sm" value="2" x-model.number="comprehension">
-                                <span>Disagree</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="comprehension" class="radio radio-sm" value="3" x-model.number="comprehension">
-                                <span>Neutral</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="comprehension" class="radio radio-sm" value="4" x-model.number="comprehension">
-                                <span>Agree</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="comprehension" class="radio radio-sm" value="5" x-model.number="comprehension">
-                                <span>Strongly agree</span>
-                            </label>
-                        </div>
-                    </fieldset>
-
-                    <fieldset class="fieldset">
-                        <legend class="fieldset-legend">I understood the spoken language intuitively</legend>
-                        <div class="flex justify-between gap-1">
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="listening" class="radio radio-sm" value="1" x-model.number="listening">
-                                <span>Strongly disagree</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="listening" class="radio radio-sm" value="2" x-model.number="listening">
-                                <span>Disagree</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="listening" class="radio radio-sm" value="3" x-model.number="listening">
-                                <span>Neutral</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="listening" class="radio radio-sm" value="4" x-model.number="listening">
-                                <span>Agree</span>
-                            </label>
-                            <label class="flex w-14 flex-col items-center gap-1 text-center text-xs">
-                                <input type="radio" name="listening" class="radio radio-sm" value="5" x-model.number="listening">
-                                <span>Strongly agree</span>
-                            </label>
-                        </div>
-                    </fieldset>
-
-                    <fieldset class="fieldset">
-                        <legend class="fieldset-legend">I want to watch this video further/again</legend>
-                        <div class="join w-full">
-                            <input type="radio" name="rewatch" class="btn join-item flex-1" aria-label="No" value="no" x-model="rewatch">
-                            <input type="radio" name="rewatch" class="btn join-item flex-1" aria-label="Yes" value="yes" x-model="rewatch">
-                            <input type="radio" name="rewatch" class="btn join-item flex-1" aria-label="Certainly!" value="certainly" x-model="rewatch">
-                        </div>
-                    </fieldset>
-
-                    <div class="modal-action">
-                        <button type="submit" class="btn btn-primary" :disabled="!comprehension || !listening || !rewatch">Submit &amp; next video</button>
-                    </div>
-                </form>
             </div>
         </dialog>
     </div>

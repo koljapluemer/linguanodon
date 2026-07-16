@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/lucide@1.16.0/dist/umd/lucide.js"></script>
 </head>
 
-<body class="min-h-screen bg-base-200" data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
+<body class="flex min-h-screen flex-col bg-base-200" data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
     <div class="navbar bg-base-100 shadow-sm px-4">
         <a href="{% url 'index' %}"  class="flex-1 flex flex gap-4 flex-row items-center">
             <img src="{% static 'core/logo.webp' %}" alt="" class="h-12 object-contain">
