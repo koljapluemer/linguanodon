@@ -7,7 +7,8 @@ from django.db import transaction
 from django.db.models import Sum
 from django.db.models.functions import TruncDate
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 
@@ -122,15 +123,18 @@ def state(request, app_label):
     return JsonResponse(payload)
 
 
-@login_required
-@require_GET
-def dashboard(request):
+def dashboard_data(user):
+    """Build the last-30-days-per-app activity chart data for `user`.
+
+    Shared by the account page (accounts.views.profile), which renders this
+    above the account options as the single merged "activity + account" view.
+    """
     today = timezone.localdate()
     cutoff = today - timedelta(days=DASHBOARD_WINDOW_DAYS - 1)
 
     rows = list(
         ActivityEvent.objects
-        .filter(user=request.user, event_type__in=('trial', 'active_time'), occurred_at__date__gte=cutoff)
+        .filter(user=user, event_type__in=('trial', 'active_time'), occurred_at__date__gte=cutoff)
         .annotate(day=TruncDate('occurred_at'))
         .values('day', 'app_label', 'event_type')
         .annotate(total=Sum('magnitude'))
@@ -150,11 +154,16 @@ def dashboard(request):
         elif row['event_type'] == 'active_time':
             active_minutes[day_key][row['app_label']] = row['total'] / 60000
 
-    data = {
+    return {
         'days': [day.isoformat() for day in days],
         'apps': apps,
         'trials': trials,
         'activeMinutes': active_minutes,
     }
 
-    return render(request, 'tracking/dashboard.html', {'data_json': json.dumps(data)})
+
+@login_required
+@require_GET
+def dashboard(request):
+    """Old standalone activity URL - now merged into the account page."""
+    return redirect(reverse_lazy('accounts:profile'))

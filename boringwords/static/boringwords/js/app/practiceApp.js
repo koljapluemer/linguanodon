@@ -48,12 +48,12 @@ export const PracticeAppComponent = {
     return { ...session, Rating, tokenizeMarkdown, backdropLayers, combinedCredit };
   },
   template: `
-    <div class="relative min-h-[calc(100vh-8rem)] w-full overflow-hidden">
+    <div class="relative min-h-screen w-full overflow-hidden">
       <div v-for="(layer, i) in backdropLayers" :key="i"
            class="absolute inset-0 bg-cover bg-center transition-opacity duration-700 ease-in-out"
            :style="{ backgroundImage: layer.url ? 'url(' + layer.url + ')' : 'none', opacity: layer.opacity }"></div>
 
-      <div class="relative z-10 flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center gap-6 p-4">
+      <div class="relative z-10 flex min-h-screen flex-col items-center justify-center gap-6 p-4">
         <div v-if="loading" class="glass rounded-box p-8">
           <span class="loading loading-spinner loading-lg"></span>
         </div>

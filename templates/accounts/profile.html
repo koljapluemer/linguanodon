@@ -1,11 +1,28 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}{{ user.username }} — Linguanodon{% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen items-center justify-center p-4">
+<link rel="stylesheet" href="{% static 'core/css/chart-theme.css' %}">
+
+<div class="chart-theme max-w-4xl mx-auto p-6 space-y-10">
+    <div>
+        <h1 class="text-2xl font-semibold" style="color: var(--text-primary)">Your activity</h1>
+        <p class="text-sm mt-1" style="color: var(--text-secondary)">Last 30 days, across every app.</p>
+    </div>
+
+    <section id="trials-chart-section" aria-label="Trials per day per app"></section>
+    <section id="active-time-chart-section" aria-label="Active minutes per day per app"></section>
+</div>
+
+<script id="tracking-dashboard-data" type="application/json">{{ data_json|safe }}</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.js"></script>
+<script type="module" src="{% static 'tracking/js/dashboard.js' %}"></script>
+
+<div class="flex justify-center px-6 pb-10">
     <div class="card w-full max-w-sm bg-base-100 p-6 shadow-sm flex flex-col gap-4">
-        <h1 class="text-xl font-semibold">Profile</h1>
+        <h2 class="text-xl font-semibold">Account</h2>
 
         <div class="flex flex-col gap-1">
             <span class="text-sm opacity-70">Name</span>

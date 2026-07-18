@@ -4,9 +4,7 @@
 {% block title %}Settings — TPR Board{% endblock %}
 
 {% block content %}
-{% include "_app_subnav.html" %}
 <div id="app" class="min-h-screen p-4"></div>
 <script id="tprboard-settings-config" type="application/json">{{ config_json|safe }}</script>
 <script type="module" src="{% static 'tprboard/js/settings-page.js' %}"></script>
-{% include "_app_footer.html" %}
 {% endblock %}

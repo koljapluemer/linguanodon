@@ -188,16 +188,12 @@ APPS: list[AppInfo] = [
         code='BW',
         description=(
             'FSRS flashcards for the small, unglamorous function words '
-            '(conjunctions, prepositions) that hold sentences together.'
+            'that hold the language together together.'
         ),
         state=AppState.PROOF_OF_CONCEPT,
         home_url_name='boringwords:home',
         practice_url_name=None,
-        footer_html=(
-            'Background photography from <a href="https://unsplash.com" class="link">Unsplash</a>, '
-            'photographer credited per card. Spaced repetition powered by '
-            '<a href="https://github.com/open-spaced-repetition/ts-fsrs" class="link">ts-fsrs</a> (MIT).'
-        ),
+        footer_html=("Enjoy."),
     ),
 ]
 

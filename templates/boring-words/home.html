@@ -3,10 +3,9 @@
 {% block title %}Boring Words — Linguanodon{% endblock %}
 
 {% block content %}
-{% include "_app_subnav.html" %}
 <div class="relative flex-1">
     {% if backdrop %}
-    <div class="absolute inset-0 bg-cover bg-center"
+    <div class="fixed inset-0 -z-10 bg-cover bg-center"
          style="background-image: url('/static/boringwords/{{ backdrop.language }}/{{ backdrop.filename }}.webp')"></div>
     {% endif %}
     <div class="relative z-10">
@@ -23,5 +22,4 @@
         </div>
     </div>
 </div>
-{% include "_app_footer.html" %}
 {% endblock %}

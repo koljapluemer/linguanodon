@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -6,6 +8,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import CreateView
 
 from accounts.forms import SignupForm
+from tracking.views import dashboard_data
 
 
 class SignupView(CreateView):
@@ -21,7 +24,9 @@ class SignupView(CreateView):
 
 @login_required
 def profile(request):
-    return render(request, 'accounts/profile.html')
+    return render(request, 'accounts/profile.html', {
+        'data_json': json.dumps(dashboard_data(request.user)),
+    })
 
 
 @login_required

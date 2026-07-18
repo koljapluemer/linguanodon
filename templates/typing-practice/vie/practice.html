@@ -4,7 +4,6 @@
 {% block title %}Vietnamese Typing Practice{% endblock %}
 
 {% block content %}
-{% include "_app_subnav.html" %}
 <div class="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
     <div class="stats shadow bg-base-100">
         <div class="stat place-items-center">
@@ -33,5 +32,4 @@
 
 <script id="typingpractice-config" type="application/json">{{ config_json|safe }}</script>
 <script type="module" src="{% static 'typingpractice/js/main.js' %}"></script>
-{% include "_app_footer.html" %}
 {% endblock %}

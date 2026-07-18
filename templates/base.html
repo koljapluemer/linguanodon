@@ -16,23 +16,67 @@
     <script src="https://cdn.jsdelivr.net/npm/lucide@1.16.0/dist/umd/lucide.js"></script>
 </head>
 
-<body class="flex min-h-screen flex-col bg-base-200" data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
-    <div class="navbar bg-base-100 shadow-sm px-4">
-        <a href="{% url 'index' %}"  class="flex-1 flex flex gap-4 flex-row items-center">
-            <img src="{% static 'core/logo.webp' %}" alt="" class="h-12 object-contain">
-            <span class="hidden md:block link link-hover">Linguanodon</span>
-        </a>
-        <div class="flex-none flex items-center gap-4">
+<body class="flex min-h-screen flex-col" data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
+    <div class="absolute w-full top-0 z-50 flex flex-wrap items-start justify-between gap-2 p-3">
+        <div class="flex flex-wrap items-center justify-start gap-2">
+
+            <a href="{% url 'index' %}"
+                class="shrink-0 rounded-full bg-base-100 shadow-md p-2 flex items-center justify-center">
+                <img src="{% static 'core/logo.webp' %}" alt="Linguanodon" class="h-7 w-7 object-contain">
+            </a>
+            {% if app_info %}
+            {% if app_info.home_url_name %}
+            <a href="{% url app_info.home_url_name %}"
+                class="btn btn-sm border-none rounded-full bg-base-100 shadow-md{% if current_page == 'home' %} btn-active{% endif %}">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full text-lg font-bold shadow"
+                    style="color: #7a29e9; background-color: #210b3f;">{{ app_info.code }}</div>
+                {{app_info.name}}
+            </a>
+            {% endif %}
+            {% if app_info.practice_url_name %}
+            <a href="{% url app_info.practice_url_name %}"
+                class="btn btn-sm border-none rounded-full bg-base-100 shadow-md{% if current_page == 'practice' %} btn-active{% endif %}">Practice</a>
+            {% endif %}
+            {% if app_info.stats_url_name %}
+            <a href="{% url app_info.stats_url_name %}"
+                class="btn btn-sm border-none rounded-full bg-base-100 shadow-md{% if current_page == 'stats' %} btn-active{% endif %}">Stats</a>
+            {% endif %}
+            {% if app_info.settings_url_name %}
+            <a href="{% url app_info.settings_url_name %}"
+                class="btn btn-sm border-none rounded-full bg-base-100 shadow-md{% if current_page == 'settings' %} btn-active{% endif %}">Settings</a>
+            {% endif %}
+            {% if app_info.extra_nav_url_name %}
+            <a href="{% url app_info.extra_nav_url_name %}"
+                class="btn btn-sm border-none rounded-full bg-base-100 shadow-md{% if current_page == 'extra' %} btn-active{% endif %}">{{app_info.extra_nav_label }}</a>
+            {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-2">
+
+
             {% if user.is_authenticated %}
-            <a href="{% url 'tracking:dashboard' %}" class="link">Activity</a>
-            <a href="{% url 'accounts:profile' %}" class="link">{{ user.username }}</a>
+            <a href="{% url 'accounts:profile' %}"
+                class="btn btn-sm border-none rounded-full bg-base-100 shadow-md">{{user.username }}</a>
             {% else %}
-            <a href="{% url 'accounts:login' %}" class="link">Sign in</a>
-            <a href="{% url 'accounts:signup' %}" class="link">Sign up</a>
+            <a href="{% url 'accounts:login' %}" class="btn btn-sm border-none rounded-full bg-base-100 shadow-md">Sign
+                in</a>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-sm border-none rounded-full bg-base-100 shadow-md">Sign
+                up</a>
             {% endif %}
         </div>
     </div>
+    <main class="flex-1">
     {% block content %}{% endblock %}
+    </main>
+    <div
+        class="flex justify-center p-4 -mt-16 mx-auto bottom-0 max-w-xl rounded-2xl bg-base-100 shadow-md text-xs text-center opacity-70">
+        <p>Made by Kolja Sam.&nbsp;</p>
+        <p>
+            {{ app_info.footer_html|safe }}
+        </p>
+    </div>
+
 </body>
 
 </html>
