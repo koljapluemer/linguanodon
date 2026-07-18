@@ -17,7 +17,8 @@
     "prepositions3d/static/prepositions3d/js/**/*.js",
     "saetze/static/saetze/js/**/*.js",
     "egyptiansentences/static/egyptiansentences/js/**/*.js",
-    "infinitesentences/static/infinitesentences/js/**/*.js"
+    "infinitesentences/static/infinitesentences/js/**/*.js",
+    "boringwords/static/boringwords/js/**/*.js"
   ],
   "exclude": ["**/vendor/**"]
 }

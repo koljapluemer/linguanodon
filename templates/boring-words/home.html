@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Boring Words — Linguanodon{% endblock %}
+
+{% block content %}
+{% include "_app_subnav.html" %}
+<div class="relative flex-1">
+    {% if backdrop %}
+    <div class="absolute inset-0 bg-cover bg-center"
+         style="background-image: url('/static/boringwords/{{ backdrop.language }}/{{ backdrop.filename }}.webp')"></div>
+    {% endif %}
+    <div class="relative z-10">
+        {% include "_app_hero.html" %}
+        <div class="max-w-4xl mx-auto px-4 pb-10 flex flex-col sm:flex-row gap-4 justify-center">
+            {% for language in languages %}
+            <a href="{% url 'boringwords:practice' language.code %}"
+               class="card glass shadow-xl flex-1 hover:shadow-2xl transition-shadow">
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title">{{ language.name }}</h2>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% include "_app_footer.html" %}
+{% endblock %}

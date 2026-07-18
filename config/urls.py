@@ -32,4 +32,5 @@ urlpatterns = [
     path('saetze/', include('saetze.urls')),
     path('egyptian-sentences/', include('egyptiansentences.urls')),
     path('infinite-sentences/', include('infinitesentences.urls')),
+    path('boring-words/', include('boringwords.urls')),
 ]

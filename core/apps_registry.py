@@ -182,6 +182,23 @@ APPS: list[AppInfo] = [
         practice_url_name='typingpractice:practice_vie',
         settings_url_name='typingpractice:settings_vie',
     ),
+    AppInfo(
+        slug='boringwords',
+        name='Boring Words',
+        code='BW',
+        description=(
+            'FSRS flashcards for the small, unglamorous function words '
+            '(conjunctions, prepositions) that hold sentences together.'
+        ),
+        state=AppState.PROOF_OF_CONCEPT,
+        home_url_name='boringwords:home',
+        practice_url_name=None,
+        footer_html=(
+            'Background photography from <a href="https://unsplash.com" class="link">Unsplash</a>, '
+            'photographer credited per card. Spaced repetition powered by '
+            '<a href="https://github.com/open-spaced-repetition/ts-fsrs" class="link">ts-fsrs</a> (MIT).'
+        ),
+    ),
 ]
 
 APPS_BY_SLUG: dict[str, AppInfo] = {app.slug: app for app in APPS}

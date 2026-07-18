@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'saetze',
     'egyptiansentences',
     'infinitesentences',
+    'boringwords',
 ]
 
 MIDDLEWARE = [
@@ -201,6 +202,16 @@ DATABASES['egyptiansentences'] = {
 DATABASES['infinitesentences'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'infinitesentences.sqlite3',
+}
+
+# boringwords's Word/Background content (a small, hand-authored deck of
+# abstract function words per language, plus a pool of Unsplash background
+# photos with attribution) is a fixed, hand-maintained dataset - read-only
+# in normal operation, so it lives in its own committed SQLite file.
+# Routed here automatically by DATABASE_ROUTERS below.
+DATABASES['boringwords'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'boringwords.sqlite3',
 }
 
 DATABASE_ROUTERS = ['config.db_router.AppLabelRouter']
