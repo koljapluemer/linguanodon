@@ -4,7 +4,6 @@
 {% block title %}Comprehensible Input{% endblock %}
 
 {% block content %}
-<div class="flex w-full min-h-0 flex-1 flex-col">
     <div id="theater" class="relative min-h-0 flex-1 overflow-hidden bg-base-300 flex flex-col md:flex-row"
          data-random-url-template="{% url 'comprehensible_input:random_video' 'LANG' %}">
         <div id="video-area" class="relative min-h-0 flex-1 overflow-hidden md:min-w-0">
@@ -107,7 +106,6 @@
             </div>
         </dialog>
     </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/htmx.org@2"></script>
 <script src="https://www.youtube.com/iframe_api"></script>

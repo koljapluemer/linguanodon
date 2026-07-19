@@ -75,7 +75,7 @@ export const PracticeAppComponent = {
                   </template>
                 </p>
 
-                <button v-if="!revealed" type="button" class="btn btn-primary" @click="reveal">Show answer</button>
+                <button v-if="!revealed" type="button" class="btn" @click="reveal">Show answer</button>
 
                 <template v-else>
                   <div class="divider"></div>
@@ -89,10 +89,10 @@ export const PracticeAppComponent = {
                   </p>
 
                   <div class="grid grid-cols-4 gap-2 w-full mt-2">
-                    <button type="button" class="btn btn-error btn-sm sm:btn-md" @click="rate(Rating.Again)">Again</button>
-                    <button type="button" class="btn btn-warning btn-sm sm:btn-md" @click="rate(Rating.Hard)">Hard</button>
-                    <button type="button" class="btn btn-success btn-sm sm:btn-md" @click="rate(Rating.Good)">Good</button>
-                    <button type="button" class="btn btn-info btn-sm sm:btn-md" @click="rate(Rating.Easy)">Easy</button>
+                    <button type="button" class="btn btn-sm sm:btn-md" @click="rate(Rating.Again)">Again</button>
+                    <button type="button" class="btn  btn-sm sm:btn-md" @click="rate(Rating.Hard)">Hard</button>
+                    <button type="button" class="btn  btn-sm sm:btn-md" @click="rate(Rating.Good)">Good</button>
+                    <button type="button" class="btn  btn-sm sm:btn-md" @click="rate(Rating.Easy)">Easy</button>
                   </div>
                 </template>
               </div>

@@ -20,6 +20,7 @@ uv run python manage.py migrate --database=prepositions3d
 uv run python manage.py migrate --database=saetze
 uv run python manage.py migrate --database=egyptiansentences
 uv run python manage.py migrate --database=infinitesentences
+uv run python manage.py migrate --database=boringwords
 uv run python manage.py collectstatic --noinput
 sudo systemctl restart gunicorn
 ```

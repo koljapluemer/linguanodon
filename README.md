@@ -31,6 +31,7 @@ uv run python manage.py migrate --database=prepositions3d  # after changing prep
 uv run python manage.py migrate --database=saetze  # after changing saetze/models
 uv run python manage.py migrate --database=egyptiansentences  # after changing egyptiansentences/models
 uv run python manage.py migrate --database=infinitesentences  # after changing infinitesentences/models
+uv run python manage.py migrate --database=boringwords
 uv run python manage.py shell              # Django shell with app context
 uv run python manage.py check              # sanity-check the project
 uv run python manage.py generate_favicons  # regen each app's favicon.svg from its 2-letter code in core/apps_registry.py
