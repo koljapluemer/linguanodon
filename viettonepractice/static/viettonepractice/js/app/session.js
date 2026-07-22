@@ -287,6 +287,13 @@ export function createPracticeSession(config) {
 
   const handleAudioTimeUpdate = () => updateCurrentListeningMs();
 
+  // Native audio controls hijack arrow/space keys for seeking and play/pause
+  // whenever the <audio> element has focus. Blur it immediately so those
+  // shortcuts always reach handleKeydown instead.
+  const handleAudioFocus = () => {
+    audioRef.value?.blur();
+  };
+
   const handleAudioSeek = () => {
     const audio = audioRef.value;
     if (!audio || lastAudioPositionSeconds.value === null) return;
@@ -495,6 +502,7 @@ export function createPracticeSession(config) {
     disabledButtonIndex,
     handleAnswer,
     handleAudioEnded,
+    handleAudioFocus,
     handleAudioPause,
     handleAudioPlay,
     handleAudioSeek,

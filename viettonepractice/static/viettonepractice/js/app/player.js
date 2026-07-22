@@ -43,11 +43,13 @@ export const PlayerComponent = {
                   preload="auto"
                   controls
                   autoplay
+                  tabindex="-1"
                   @ended="handleAudioEnded"
                   @pause="handleAudioPause"
                   @play="handleAudioPlay"
                   @seeking="handleAudioSeek"
                   @timeupdate="handleAudioTimeUpdate"
+                  @focus="handleAudioFocus"
                 ></audio>
 
                 <div v-if="autoplayHint" class="alert alert-warning">
